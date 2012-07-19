@@ -10,28 +10,63 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tim Vandecasteele"]
   s.date = "2012-07-19"
-  s.description = "TODO: longer description of your gem"
+  s.description = "A simple way to add proper auto generated documentation - that can be displayed with swagger - to your inline described grape API"
   s.email = "tim.vandecasteele@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
-    "README.rdoc"
+    "README.markdown"
   ]
   s.files = [
     ".document",
+    ".rvmrc",
     "Gemfile",
+    "Gemfile.lock",
     "LICENSE.txt",
-    "README.rdoc",
+    "README.markdown",
     "Rakefile",
     "VERSION",
+    "grape-swagger.gemspec",
     "lib/grape-swagger.rb",
-    "test/helper.rb",
-    "test/test_grape-swagger.rb"
+    "test/dummy/README.rdoc",
+    "test/dummy/Rakefile",
+    "test/dummy/app/assets/javascripts/application.js",
+    "test/dummy/app/assets/stylesheets/application.css",
+    "test/dummy/app/controllers/application_controller.rb",
+    "test/dummy/app/helpers/application_helper.rb",
+    "test/dummy/app/mailers/.gitkeep",
+    "test/dummy/app/models/.gitkeep",
+    "test/dummy/app/views/layouts/application.html.erb",
+    "test/dummy/config.ru",
+    "test/dummy/config/application.rb",
+    "test/dummy/config/boot.rb",
+    "test/dummy/config/database.yml",
+    "test/dummy/config/environment.rb",
+    "test/dummy/config/environments/development.rb",
+    "test/dummy/config/environments/production.rb",
+    "test/dummy/config/environments/test.rb",
+    "test/dummy/config/initializers/backtrace_silencers.rb",
+    "test/dummy/config/initializers/inflections.rb",
+    "test/dummy/config/initializers/mime_types.rb",
+    "test/dummy/config/initializers/secret_token.rb",
+    "test/dummy/config/initializers/session_store.rb",
+    "test/dummy/config/initializers/wrap_parameters.rb",
+    "test/dummy/config/locales/en.yml",
+    "test/dummy/config/routes.rb",
+    "test/dummy/lib/assets/.gitkeep",
+    "test/dummy/log/.gitkeep",
+    "test/dummy/public/404.html",
+    "test/dummy/public/422.html",
+    "test/dummy/public/500.html",
+    "test/dummy/public/favicon.ico",
+    "test/dummy/script/rails",
+    "test/grape-swagger_test.rb",
+    "test/test_helper.rb"
   ]
   s.homepage = "http://github.com/tim-vandecasteele/grape-swagger"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.24"
-  s.summary = "Adds swagger compliant documentation to your grape API"
+  s.summary = "Add swagger compliant documentation to your grape API"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
@@ -42,12 +77,18 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_development_dependency(%q<bundler>, ["> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.8.4"])
+      s.add_development_dependency(%q<jquery-rails>, [">= 0"])
+      s.add_development_dependency(%q<rails>, ["~> 3.2"])
+      s.add_development_dependency(%q<sqlite3>, [">= 0"])
     else
       s.add_dependency(%q<grape>, [">= 0"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_dependency(%q<bundler>, ["> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.8.4"])
+      s.add_dependency(%q<jquery-rails>, [">= 0"])
+      s.add_dependency(%q<rails>, ["~> 3.2"])
+      s.add_dependency(%q<sqlite3>, [">= 0"])
     end
   else
     s.add_dependency(%q<grape>, [">= 0"])
@@ -55,6 +96,9 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rdoc>, ["~> 3.12"])
     s.add_dependency(%q<bundler>, ["> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.8.4"])
+    s.add_dependency(%q<jquery-rails>, [">= 0"])
+    s.add_dependency(%q<rails>, ["~> 3.2"])
+    s.add_dependency(%q<sqlite3>, [">= 0"])
   end
 end
 

@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "grape-swagger"
   gem.homepage = "http://github.com/tim-vandecasteele/grape-swagger"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Add swagger compliant documentation to your grape API}
+  gem.description = %Q{A simple way to add proper auto generated documentation - that can be displayed with swagger - to your inline described grape API}
   gem.email = "tim.vandecasteele@gmail.com"
   gem.authors = ["Tim Vandecasteele"]
   # dependencies defined in Gemfile
@@ -30,14 +30,6 @@ Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
   test.pattern = 'test/**/test_*.rb'
   test.verbose = true
-end
-
-require 'rcov/rcovtask'
-Rcov::RcovTask.new do |test|
-  test.libs << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-  test.rcov_opts << '--exclude "gems/*"'
 end
 
 task :default => :test

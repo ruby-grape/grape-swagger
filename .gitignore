@@ -1,10 +1,3 @@
-# rcov generated
-coverage
-coverage.data
-
-# rdoc generated
-rdoc
-
 # yard generated
 doc
 .yardoc
@@ -15,7 +8,14 @@ doc
 # jeweler generated
 pkg
 
-# Have editor/IDE/OS specific files you need to ignore? Consider using a global gitignore: 
+# rails stuff
+log/*.log
+test/dummy/db/*.sqlite3
+test/dummy/log/*.log
+test/dummy/tmp/
+test/dummy/.sass-cache
+
+# Have editor/IDE/OS specific files you need to ignore? Consider using a global gitignore:
 #
 # * Create a file at ~/.gitignore
 # * Include files you want ignored
@@ -28,22 +28,4 @@ pkg
 #
 # For MacOS:
 #
-#.DS_Store
-
-# For TextMate
-#*.tmproj
-#tmtags
-
-# For emacs:
-#*~
-#\#*
-#.\#*
-
-# For vim:
-#*.swp
-
-# For redcar:
-#.redcar
-
-# For rubinius:
-#*.rbc
+.DS_Store

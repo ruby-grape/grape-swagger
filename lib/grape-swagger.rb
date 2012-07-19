@@ -60,6 +60,8 @@ module Grape
 
           desc 'Swagger compatible API description'
           get '/swagger_doc' do
+            header['Access-Control-Allow-Origin'] = '*'
+            header['Access-Control-Request-Method'] = '*'
             routes = @@target_class::combined_routes
 
             routes_array = routes.keys.map do |route|
@@ -79,6 +81,8 @@ module Grape
               "name" => { :desc => "Class name of mounted API", :type => "string", :required => true },
             }
           get '/swagger_doc/:name' do
+            header['Access-Control-Allow-Origin'] = '*'
+            header['Access-Control-Request-Method'] = '*'
             routes = @@target_class::combined_routes[params[:name]]
             routes_array = routes.map do |route|
               {

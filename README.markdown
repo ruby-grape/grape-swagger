@@ -35,6 +35,12 @@ end
 
 To explore your API, either download [Swagger UI](https://github.com/wordnik/swagger-ui) and set it up yourself or go to the [online swagger demo](http://petstore.swagger.wordnik.com/) and enter your localhost url documentation root in the url field (probably something in the line of http://localhost:3000/swagger_doc.json)
 
+## Configure
+You can pass a hash with some configuration possibilities to ```add_swagger_documentation```, all of these are optional:
+* ```:mount_path``` The path were the API documentation is loaded, default '/swagger_doc'
+* ```:api_version``` Version of the API that's being exposed
+* ```:base_path``` Basepath of the API that's being exposed
+
 ## Contributing to grape-swagger
 
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.

@@ -104,7 +104,7 @@ module Grape
                   paramType: paramType,
                   name: param,
                   description: description,
-                  dataType: "String",
+                  dataType: dataType,
                   required: required
                 }
               end

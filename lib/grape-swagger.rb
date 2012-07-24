@@ -21,6 +21,7 @@ module Grape
       private
 
       def create_documentation_class
+
         Class.new(Grape::API) do
           class << self
             def name

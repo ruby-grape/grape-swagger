@@ -78,7 +78,7 @@ module Grape
                     :summary => route.route_description || '',
                     :nickname   => Random.rand(1000000),
                     :httpMethod => route.route_method,
-                    :parameters => parse_params(route.route_params)
+                    :parameters => parse_params(route.route_params, route.route_path, route.route_method)
                   }]
                 }
               end
@@ -95,12 +95,14 @@ module Grape
 
 
           helpers do
-            def parse_params(params)
+            def parse_params(params, path, method)
               params.map do |param, value|
+                value[:type] = 'file' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
+
                 dataType = value.is_a?(Hash) ? value[:type]||'String' : 'String'
                 description = value.is_a?(Hash) ? value[:desc] : ''
                 required = value.is_a?(Hash) ? !!value[:required] : false
-                paramType = 'path'
+                paramType = path.match(":#{param}") ? 'path' : (method == 'POST') ? 'body' : 'query'
                 {
                   paramType: paramType,
                   name: param,

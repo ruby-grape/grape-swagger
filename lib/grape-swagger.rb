@@ -21,6 +21,7 @@ module Grape
       private
 
       def create_documentation_class
+
         Class.new(Grape::API) do
           class << self
             def name
@@ -40,8 +41,8 @@ module Grape
             @@target_class = options[:target_class]
             @@mount_path = options[:mount_path]
             @@class_name = options[:class_name] || options[:mount_path].gsub('/','')
-            @@api_version = options[:api_version]
-            @@base_path = options[:base_path]
+            api_version = options[:api_version]
+            base_path = options[:base_path]
 
             desc 'Swagger compatible API description'
             get @@mount_path do
@@ -53,9 +54,9 @@ module Grape
                   { :path => "#{@@mount_path}/#{route}.{format}" }
               end
               {
-                apiVersion: @@api_version,
+                apiVersion: api_version,
                 swaggerVersion: "1.1",
-                basePath: @@base_path || "http://#{env['HTTP_HOST']}",
+                basePath: base_path || "http://#{env['HTTP_HOST']}",
                 operations:[],
                 apis: routes_array
               }
@@ -83,9 +84,9 @@ module Grape
               end
 
               {
-                apiVersion: @@api_version,
+                apiVersion: api_version,
                 swaggerVersion: "1.1",
-                basePath: @@base_path || "http://#{env['HTTP_HOST']}",
+                basePath: base_path || "http://#{env['HTTP_HOST']}",
                 resourcePath: "",
                 apis: routes_array
               }

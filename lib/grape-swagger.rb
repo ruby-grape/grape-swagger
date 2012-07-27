@@ -8,7 +8,11 @@ module Grape
       def mount(mounts)
         original_mount mounts
         @combined_routes ||= {}
-        @combined_routes[mounts.name.split('::').last.downcase] = mounts::routes
+        mounts::routes.each do |route|
+          resource = route.route_path.match('\/(.*?)[\.\/\(]').captures.first || '/'
+          @combined_routes[resource.downcase] ||= []
+          @combined_routes[resource.downcase] << route
+        end
       end
 
       def add_swagger_documentation(options={})

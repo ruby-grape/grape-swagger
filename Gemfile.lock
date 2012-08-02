@@ -52,6 +52,7 @@ GEM
       railties (>= 3.2.0, < 5.0)
       thor (~> 0.14)
     json (1.7.3)
+    kramdown (0.13.7)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -126,6 +127,7 @@ DEPENDENCIES
   grape
   jeweler (~> 1.8.4)
   jquery-rails
+  kramdown
   rack-test
   rails (~> 3.2)
   rdoc (~> 3.12)

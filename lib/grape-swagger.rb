@@ -1,3 +1,5 @@
+require 'kramdown'
+
 module Grape
   class API
     class << self
@@ -68,17 +70,18 @@ module Grape
 
             desc 'Swagger compatible API description for specific API', :params =>
               {
-                "name" => { :desc => "Class name of mounted API", :type => "string", :required => true },
+                "name" => { :desc => "Resource name of mounted API", :type => "string", :required => true },
               }
             get "#{@@mount_path}/:name" do
               header['Access-Control-Allow-Origin'] = '*'
               header['Access-Control-Request-Method'] = '*'
               routes = @@target_class::combined_routes[params[:name]]
               routes_array = routes.map do |route|
+                notes = route.route_notes ? Kramdown::Document.new(route.route_notes.strip_heredoc).to_html : nil
                 {
                   :path => parse_path(route.route_path),
                   :operations => [{
-                    :notes => route.route_notes,
+                    :notes => notes,
                     :summary => route.route_description || '',
                     :nickname   => Random.rand(1000000),
                     :httpMethod => route.route_method,
@@ -127,5 +130,14 @@ module Grape
         end
       end
     end
+  end
+end
+
+class String
+  # strip_heredoc from rails
+  # File activesupport/lib/active_support/core_ext/string/strip.rb, line 22
+  def strip_heredoc
+    indent = scan(/^[ \t]*(?=\S)/).min.try(:size) || 0
+    gsub(/^[ \t]{#{indent}}/, '')
   end
 end

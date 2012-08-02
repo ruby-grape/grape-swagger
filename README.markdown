@@ -41,6 +41,33 @@ You can pass a hash with some configuration possibilities to ```add_swagger_docu
 * ```:api_version``` Version of the API that's being exposed
 * ```:base_path``` Basepath of the API that's being exposed
 
+## Swagger additions
+grape-swagger allows you to add an explanation in markdown in the notes field. Which would result in proper formatted markdown in Swagger UI. The default Swagger UI doesn't allow HTML in the notes field, so you need to use an adapted version of Swagger UI (you can find one at https://github.com/tim-vandecasteele/swagger-ui/tree/vasco).
+
+We're using [kramdown](http://kramdown.rubyforge.org) for parsing the markdown, specific syntax can be found [here](http://kramdown.rubyforge.org/syntax.html).
+
+
+``` ruby
+desc "Reserve a virgin in heaven", {
+  :notes => <<-NOTE
+    Virgins in heaven
+    -----------------
+
+    > A virgin doesn't come for free
+
+    If you want to reserve a virgin in heaven, you have to do
+    some crazy stuff on earth.
+
+        def do_good
+          puts 'help people'
+        end
+
+    * _Will go to Heaven:_ Probably
+    * _Will go to Hell:_ Probably not
+  NOTE
+}
+```
+
 ## Contributing to grape-swagger
 
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.

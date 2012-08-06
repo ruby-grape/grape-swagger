@@ -40,12 +40,14 @@ You can pass a hash with some configuration possibilities to ```add_swagger_docu
 * ```:mount_path``` The path were the API documentation is loaded, default '/swagger_doc'
 * ```:api_version``` Version of the API that's being exposed
 * ```:base_path``` Basepath of the API that's being exposed
+* ```:markdown``` Allow markdown in `notes`, default `false`
 
 ## Swagger additions
 grape-swagger allows you to add an explanation in markdown in the notes field. Which would result in proper formatted markdown in Swagger UI. The default Swagger UI doesn't allow HTML in the notes field, so you need to use an adapted version of Swagger UI (you can find one at https://github.com/tim-vandecasteele/swagger-ui/tree/vasco).
 
 We're using [kramdown](http://kramdown.rubyforge.org) for parsing the markdown, specific syntax can be found [here](http://kramdown.rubyforge.org/syntax.html).
 
+Be sure to enable markdown in the `add_swagger_documentation` call: ':markdown => true'
 
 ``` ruby
 desc "Reserve a virgin in heaven", {

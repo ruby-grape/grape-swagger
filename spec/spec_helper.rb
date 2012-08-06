@@ -7,6 +7,9 @@ require 'grape-swagger'
 
 require 'rubygems'
 require 'bundler'
+
+require 'pry'
+
 Bundler.setup :default, :test
 
 

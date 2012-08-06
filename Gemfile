@@ -13,13 +13,10 @@ group :development do
   gem "rdoc", "~> 3.12"
   gem "bundler", "> 1.0.0"
   gem "jeweler", "~> 1.8.4"
-  # jquery-rails is used by the dummy application
-  gem "jquery-rails"
-  gem "rails", "~> 3.2"
-  gem "sqlite3"
+
+  gem "pry"
 
   gem "rack-test"
 
-  gem "rspec-rails"
   gem "rspec"
 end

@@ -41,12 +41,14 @@ module Grape
               :mount_path => '/swagger_doc',
               :base_path => nil,
               :api_version => '0.1',
+              :markdown => false
             }
             options = defaults.merge(options)
 
             @@target_class = options[:target_class]
             @@mount_path = options[:mount_path]
             @@class_name = options[:class_name] || options[:mount_path].gsub('/','')
+            @@markdown = options[:markdown]
             api_version = options[:api_version]
             base_path = options[:base_path]
 
@@ -77,7 +79,7 @@ module Grape
               header['Access-Control-Request-Method'] = '*'
               routes = @@target_class::combined_routes[params[:name]]
               routes_array = routes.map do |route|
-                notes = route.route_notes ? Kramdown::Document.new(route.route_notes.strip_heredoc).to_html : nil
+                notes = route.route_notes && @@markdown ? Kramdown::Document.new(route.route_notes.strip_heredoc).to_html : route.route_notes
                 {
                   :path => parse_path(route.route_path),
                   :operations => [{
@@ -130,6 +132,16 @@ module Grape
         end
       end
     end
+  end
+end
+
+class Object
+  ##
+  #   @person ? @person.name : nil
+  # vs
+  #   @person.try(:name)
+  def try(method)
+    send method if respond_to? method
   end
 end
 

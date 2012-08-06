@@ -26,9 +26,8 @@ describe "options: " do
     end
 
     it "retrieves the same given base-path for mounted-api" do
-      Random.stub(:rand) { 0 }
       get '/swagger_doc/something'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"#{SimpleApiWithBasePath::NON_DEFAULT_BASE_PATH}\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>0, :httpMethod=>\"GET\", :parameters=>[]}]}]}"
+      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"#{SimpleApiWithBasePath::NON_DEFAULT_BASE_PATH}\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
     end
   end
 
@@ -57,9 +56,8 @@ describe "options: " do
     end
 
     it "retrieves the same api version for mounted-api" do
-      Random.stub(:rand) { 0 }
       get '/swagger_doc/something'
-      last_response.body.should == "{:apiVersion=>\"#{SimpleApiWithApiVersion::API_VERSION}\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>0, :httpMethod=>\"GET\", :parameters=>[]}]}]}"
+      last_response.body.should == "{:apiVersion=>\"#{SimpleApiWithApiVersion::API_VERSION}\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
     end
   end
 
@@ -88,9 +86,8 @@ describe "options: " do
     end
 
     it "retrieves the same given base-path for mounted-api" do
-      Random.stub(:rand) { 0 }
       get '/api_doc/something'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>0, :httpMethod=>\"GET\", :parameters=>[]}]}]}"
+      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
     end
 
     it "does not respond to swagger_doc" do
@@ -119,9 +116,8 @@ describe "options: " do
     def app; SimpleApiWithMarkdown end
 
     it "parses markdown for a mounted-api" do
-      Random.stub(:rand) { 0 }
       get '/swagger_doc/something'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>\"<p><em>test</em></p>\\n\", :summary=>\"this gets something\", :nickname=>0, :httpMethod=>\"GET\", :parameters=>[]}]}]}"
+      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>\"<p><em>test</em></p>\\n\", :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
     end
   end
 

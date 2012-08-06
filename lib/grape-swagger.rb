@@ -85,7 +85,7 @@ module Grape
                   :operations => [{
                     :notes => notes,
                     :summary => route.route_description || '',
-                    :nickname   => Random.rand(1000000),
+                    :nickname   => route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-'),
                     :httpMethod => route.route_method,
                     :parameters => parse_params(route.route_params, route.route_path, route.route_method)
                   }]

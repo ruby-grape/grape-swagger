@@ -140,8 +140,14 @@ class Object
   #   @person ? @person.name : nil
   # vs
   #   @person.try(:name)
-  def try(method)
-    send method if respond_to? method
+  # 
+  # File activesupport/lib/active_support/core_ext/object/try.rb#L32
+   def try(*a, &b)
+    if a.empty? && block_given?
+      yield self
+    else
+      __send__(*a, &b)
+    end
   end
 end
 

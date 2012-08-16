@@ -1,4 +1,5 @@
 require 'spec_helper'
+
 describe "helpers" do
 
 	before(:all) do
@@ -14,32 +15,41 @@ describe "helpers" do
 
 	end
 	
-	it "should parse params as query strings for a GET" do
-		params = {
-			name: {type: 'String', :desc =>"A name", required: true },
-			level: 'max' 
-		}
-		path = "/coolness"
-		method = "GET"
-		@api.parse_params(params, path, method).should == 
-		[	
-			{paramType: "query", name: :name, description:"A name", dataType: "String", required: true},
-			{paramType: "query", name: :level, description:"", dataType: "String", required: false}
-		]
+	context "parsing parameters" do
+		it "should parse params as query strings for a GET" do
+			params = {
+				name: {type: 'String', :@api => "A name", required: true },
+				level: 'max' 
+			}
+			path = "/coolness"
+			method = "GET"
+			@api.parse_params(params, path, method).should == 
+			[	
+				{paramType: "query", name: :name, description:"A name", dataType: "String", required: true},
+				{paramType: "query", name: :level, description:"", dataType: "String", required: false}
+			]
+		end
+		
+		it "should parse params as body for a POST" do
+			params = {
+				name: {type: 'String', :@api =>"A name", required: true },
+				level: 'max' 
+			}
+			path = "/coolness"
+			method = "POST"
+			@api.parse_params(params, path, method).should == 
+			[	
+				{paramType: "body", name: :name, description:"A name", dataType: "String", required: true},
+				{paramType: "body", name: :level, description:"", dataType: "String", required: false}
+			]
+		end
 	end
 	
-	it "should parse params as body for a POST" do
-		params = {
-			name: {type: 'String', :desc =>"A name", required: true },
-			level: 'max' 
-		}
-		path = "/coolness"
-		method = "POST"
-		@api.parse_params(params, path, method).should == 
-		[	
-			{paramType: "body", name: :name, description:"A name", dataType: "String", required: true},
-			{paramType: "body", name: :level, description:"", dataType: "String", required: false}
-		]
+	context "parsing the path" do
+		it "should parse the path" do
+			path = ":abc/def(.:format)"
+			@api.parse_path(path).should == "{abc}/def.{format}"
+		end
 	end
 	
 end

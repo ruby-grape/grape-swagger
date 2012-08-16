@@ -48,7 +48,12 @@ describe "helpers" do
 	context "parsing the path" do
 		it "should parse the path" do
 			path = ":abc/def(.:format)"
-			@api.parse_path(path).should == "{abc}/def.{format}"
+			@api.parse_path(path, nil).should == "{abc}/def.{format}"
+		end
+		
+		it "should parse the path with a specified version" do
+			path = ":abc/{version}/def(.:format)"
+			@api.parse_path(path, 'v1').should == "{abc}/v1/def.{format}"
 		end
 	end
 	

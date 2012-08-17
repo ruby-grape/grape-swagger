@@ -81,7 +81,7 @@ module Grape
               routes_array = routes.map do |route|
                 notes = route.route_notes && @@markdown ? Kramdown::Document.new(route.route_notes.strip_heredoc).to_html : route.route_notes
                 {
-                  :path => parse_path(route.route_path),
+                  :path => parse_path(route.route_path, api_version),
                   :operations => [{
                     :notes => notes,
                     :summary => route.route_description || '',
@@ -122,11 +122,13 @@ module Grape
               end
             end
 
-            def parse_path(path)
+            def parse_path(path, version)
               # adapt format to swagger format
               parsed_path = path.gsub('(.:format)', '.{format}')
-              # adapt params to swagger format
-              parsed_path.gsub(/:([a-z]+)/, '{\1}')
+              parsed_path = parsed_path.gsub(/:([a-z]+)/, '{\1}')
+              # add the version
+              parsed_path = parsed_path.gsub('{version}', version) if version
+              parsed_path
             end
           end
         end

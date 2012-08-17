@@ -120,5 +120,32 @@ describe "options: " do
       last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>\"<p><em>test</em></p>\\n\", :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
     end
   end
+  
+  context "versioned API" do
+    before(:all) do
+      class VersionedMountedApi < Grape::API
+        prefix 'api'
+        version 'v1'
+  
+        desc 'this gets something'
+        get '/something' do
+          {:bla => 'something'}
+        end
+      end
+  
+      class SimpleApiWithVersion < Grape::API
+        mount VersionedMountedApi
+        add_swagger_documentation :api_version => "v1"
+      end
+    end
+  
+    def app; SimpleApiWithVersion end
+  
+    it "parses version and places it in the path" do
+      get '/swagger_doc/api'
+      last_response.body.should == "{:apiVersion=>\"v1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/api/v1/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>\"GET-api--version-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
+    end
+  end
+
 
 end

@@ -42,6 +42,26 @@ You can pass a hash with some configuration possibilities to ```add_swagger_docu
 * ```:base_path``` Basepath of the API that's being exposed
 * ```:markdown``` Allow markdown in `notes`, default `false`
 
+## Swagger Header Parameters
+
+Swagger also supports the documentation of parameters passed in the header. Since grape's ```params[]``` doesn't return header parameters we can 
+to specify header parameters seperately in a block after the description.
+
+``` ruby
+desc "Return super-secret information", {
+  headers: {
+    "XAuthToken" => {
+      description: "Valdates your identity",
+      required: true 
+    },
+    XOptionalHeader" => {
+      description: "Not reallly needed",
+      required: false 
+    }
+  }
+}
+```
+
 ## Swagger additions
 grape-swagger allows you to add an explanation in markdown in the notes field. Which would result in proper formatted markdown in Swagger UI. The default Swagger UI doesn't allow HTML in the notes field, so you need to use an adapted version of Swagger UI (you can find one at https://github.com/tim-vandecasteele/swagger-ui/tree/vasco).
 

@@ -130,15 +130,14 @@ module Grape
 
             def parse_header_params(params)
               if params
-                params.map do |details|
-                  name = details[:name]
+                params.map do |param, value|
                   dataType = 'String'
-                  description = details[:description]
-                  required = details[:required]
+                  description = value.is_a?(Hash) ? value[:description] : ''
+                  required = value.is_a?(Hash) ? !!value[:required] : false
                   paramType = "header"
                   {
                     paramType: paramType,
-                    name: name,
+                    name: param,
                     description: description,
                     dataType: dataType,
                     required: required

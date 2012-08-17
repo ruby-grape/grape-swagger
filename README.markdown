@@ -49,18 +49,16 @@ to specify header parameters seperately in a block after the description.
 
 ``` ruby
 desc "Return super-secret information", {
-  headers: [
-    {
-      name: "XAuthToken",
+  headers: {
+    "XAuthToken" => {
       description: "Valdates your identity",
       required: true 
     },
-    {
-      name: "XOptionalHeader",
+    XOptionalHeader" => {
       description: "Not reallly needed",
       required: false 
     }
-  ]
+  }
 }
 ```
 

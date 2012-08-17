@@ -11,7 +11,10 @@ describe "a simple mounted api" do
       end
       
       desc 'this gets something else', {
-        :headers => [{name: "XAuthToken", description: "A required header.", required: true}]
+        :headers => {
+          "XAuthToken" => {description: "A required header.", required: true}, 
+          "XOtherHeader" => {description: "An optional header.", required: false}
+        }
       }
       get '/simple_with_headers' do
         {:bla => 'something_else'}
@@ -38,6 +41,6 @@ describe "a simple mounted api" do
 
   it "retrieves the documentation for mounted-api that includes headers" do
     get '/swagger_doc/simple_with_headers'
-    last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/simple_with_headers.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something else\", :nickname=>\"GET-simple_with_headers---format-\", :httpMethod=>\"GET\", :parameters=>[{:paramType=>\"header\", :name=>\"XAuthToken\", :description=>\"A required header.\", :dataType=>\"String\", :required=>true}]}]}]}"
+    last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/simple_with_headers.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something else\", :nickname=>\"GET-simple_with_headers---format-\", :httpMethod=>\"GET\", :parameters=>[{:paramType=>\"header\", :name=>\"XAuthToken\", :description=>\"A required header.\", :dataType=>\"String\", :required=>true}, {:paramType=>\"header\", :name=>\"XOtherHeader\", :description=>\"An optional header.\", :dataType=>\"String\", :required=>false}]}]}]}"
   end
 end

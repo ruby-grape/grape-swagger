@@ -59,7 +59,7 @@ describe "helpers" do
 	
 	context "parsing header parameters" do
 		it "should parse params for the header" do
-			params = [{name: "XAuthToken", description: "A required header.", required: true}]
+			params = {"XAuthToken" => { description: "A required header.", required: true}}
 			@api.parse_header_params(params).should == 
 			[	
 				{paramType: "header", name: "XAuthToken", description:"A required header.", dataType: "String", required: true}

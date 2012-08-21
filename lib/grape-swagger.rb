@@ -126,7 +126,7 @@ module Grape
               # adapt format to swagger format
               parsed_path = path.gsub('(.:format)', '.{format}')
               # adapt params to swagger format
-              parsed_path.gsub(/:([a-z]+)/, '{\1}')
+              parsed_path.gsub(/:(\w+)/, '{\1}')
             end
           end
         end

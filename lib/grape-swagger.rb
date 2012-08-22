@@ -11,7 +11,11 @@ module Grape
         original_mount mounts
         @combined_routes ||= {}
         mounts::routes.each do |route|
-          resource = route.route_path.match('\/(.*?)[\.\/\(]').captures.first || '/'
+          if versions.empty?
+            resource = route.route_path.match('\/(.*?)[\.\/\(]').captures.first || '/'
+          else
+            resource = route.route_path.match('^.:version.(\w+)').captures.first
+          end
           @combined_routes[resource.downcase] ||= []
           @combined_routes[resource.downcase] << route
         end
@@ -19,7 +23,6 @@ module Grape
 
       def add_swagger_documentation(options={})
         documentation_class = create_documentation_class
-
         documentation_class.setup({:target_class => self}.merge(options))
         mount(documentation_class)
       end
@@ -57,9 +60,12 @@ module Grape
               header['Access-Control-Allow-Origin'] = '*'
               header['Access-Control-Request-Method'] = '*'
               routes = @@target_class::combined_routes
-
               routes_array = routes.keys.map do |route|
+                if options[:api_version].empty?
                   { :path => "#{@@mount_path}/#{route}.{format}" }
+                else
+                  { :path => "/#{options[:api_version]}#{@@mount_path}/#{route}.{format}" }
+                end
               end
               {
                 apiVersion: api_version,
@@ -125,7 +131,7 @@ module Grape
             def parse_path(path, version)
               # adapt format to swagger format
               parsed_path = path.gsub('(.:format)', '.{format}')
-              parsed_path = parsed_path.gsub(/:([a-z]+)/, '{\1}')
+              parsed_path = parsed_path.gsub(/:(\w+)/, '{\1}')
               # add the version
               parsed_path = parsed_path.gsub('{version}', version) if version
               parsed_path

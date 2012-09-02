@@ -103,6 +103,7 @@ module Grape
                   }
                 end
               end
+              routes_array.flatten!
               {
                 apiVersion: api_version,
                 swaggerVersion: "1.1",

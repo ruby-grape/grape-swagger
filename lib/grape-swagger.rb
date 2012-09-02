@@ -10,10 +10,12 @@ module Grape
       def mount(mounts)
         original_mount mounts
         @combined_routes ||= {}
+
+
         mounts::routes.each do |route|
-          resource = route.route_path.match('\/(.*?)[\.\/\(]').captures.first || '/'
-          @combined_routes[resource.downcase] ||= []
-          @combined_routes[resource.downcase] << route
+          resource = route.instance_variable_get("@options")[:namespace].gsub("/", '').to_sym || 'global'
+          @combined_routes[resource] ||= []
+          @combined_routes[resource] << route
         end
       end
 
@@ -21,6 +23,7 @@ module Grape
         documentation_class = create_documentation_class
 
         documentation_class.setup({:target_class => self}.merge(options))
+
         mount(documentation_class)
       end
 
@@ -36,6 +39,8 @@ module Grape
           end
 
           def self.setup(options)
+
+
             defaults = {
               :target_class => nil,
               :mount_path => '/swagger_doc',
@@ -52,6 +57,8 @@ module Grape
             api_version = options[:api_version]
             base_path = options[:base_path]
 
+
+
             desc 'Swagger compatible API description'
             get @@mount_path do
               header['Access-Control-Allow-Origin'] = '*'
@@ -61,6 +68,7 @@ module Grape
               routes_array = routes.keys.map do |route|
                   { :path => "#{@@mount_path}/#{route}.{format}" }
               end
+
               {
                 apiVersion: api_version,
                 swaggerVersion: "1.1",
@@ -77,21 +85,24 @@ module Grape
             get "#{@@mount_path}/:name" do
               header['Access-Control-Allow-Origin'] = '*'
               header['Access-Control-Request-Method'] = '*'
-              routes = @@target_class::combined_routes[params[:name]]
-              routes_array = routes.map do |route|
-                notes = route.route_notes && @@markdown ? Kramdown::Document.new(route.route_notes.strip_heredoc).to_html : route.route_notes
-                {
-                  :path => parse_path(route.route_path, api_version),
-                  :operations => [{
-                    :notes => notes,
-                    :summary => route.route_description || '',
-                    :nickname   => route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-'),
-                    :httpMethod => route.route_method,
-                    :parameters => parse_params(route.route_params, route.route_path, route.route_method)
-                  }]
-                }
+              routes = @@target_class::combined_routes
+          
+              
+              routes_array = routes.map do |k,route_classes|
+                route_classes.map do |route|
+                  notes = route.route_notes && @@markdown ? Kramdown::Document.new(route.route_notes.strip_heredoc).to_html : route.route_notes
+                  {
+                    :path => parse_path(route.route_path, api_version),
+                    :operations => [{
+                      :notes => notes,
+                      :summary => route.route_description || '',
+                      :nickname   => route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-'),
+                      :httpMethod => route.route_method,
+                      :parameters => parse_params(route.route_params, route.route_path, route.route_method)
+                    }]
+                  }
+                end
               end
-
               {
                 apiVersion: api_version,
                 swaggerVersion: "1.1",

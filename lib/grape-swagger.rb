@@ -87,7 +87,8 @@ module Grape
                     :summary => route.route_description || '',
                     :nickname   => route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-'),
                     :httpMethod => route.route_method,
-                    :parameters => parse_params(route.route_params, route.route_path, route.route_method)
+                    :parameters => parse_header_params(route.route_headers) +
+                      parse_params(route.route_params, route.route_path, route.route_method)
                   }]
                 }
               end
@@ -105,19 +106,46 @@ module Grape
 
           helpers do
             def parse_params(params, path, method)
-              params.map do |param, value|
-                value[:type] = 'file' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
-                dataType = value.is_a?(Hash) ? value[:type]||'String' : 'String'
-                description = value.is_a?(Hash) ? value[:desc] : ''
-                required = value.is_a?(Hash) ? !!value[:required] : false
-                paramType = path.match(":#{param}") ? 'path' : (method == 'POST') ? 'body' : 'query'
-                {
-                  paramType: paramType,
-                  name: value[:full_name] || param,
-                  description: description,
-                  dataType: dataType,
-                  required: required
-                }
+              if params
+                params.map do |param, value|
+                  value[:type] = 'file' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
+
+                  dataType = value.is_a?(Hash) ? value[:type]||'String' : 'String'
+                  description = value.is_a?(Hash) ? value[:desc] : ''
+                  required = value.is_a?(Hash) ? !!value[:required] : false
+                  paramType = path.match(":#{param}") ? 'path' : (method == 'POST') ? 'body' : 'query'
+                  name = (value.is_a?(Hash) && value[:full_name]) || param
+                  {
+                    paramType: paramType,
+                    name: name,
+                    description: description,
+                    dataType: dataType,
+                    required: required
+                  }
+                end
+              else
+                []
+              end
+            end
+
+
+            def parse_header_params(params)
+              if params
+                params.map do |param, value|
+                  dataType = 'String'
+                  description = value.is_a?(Hash) ? value[:description] : ''
+                  required = value.is_a?(Hash) ? !!value[:required] : false
+                  paramType = "header"
+                  {
+                    paramType: paramType,
+                    name: param,
+                    description: description,
+                    dataType: dataType,
+                    required: required
+                  }
+                end
+              else
+                []
               end
             end
 

@@ -107,14 +107,13 @@ module Grape
             def parse_params(params, path, method)
               params.map do |param, value|
                 value[:type] = 'file' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
-
                 dataType = value.is_a?(Hash) ? value[:type]||'String' : 'String'
                 description = value.is_a?(Hash) ? value[:desc] : ''
                 required = value.is_a?(Hash) ? !!value[:required] : false
                 paramType = path.match(":#{param}") ? 'path' : (method == 'POST') ? 'body' : 'query'
                 {
                   paramType: paramType,
-                  name: param,
+                  name: value[:full_name] || param,
                   description: description,
                   dataType: dataType,
                   required: required
@@ -142,7 +141,7 @@ class Object
   #   @person ? @person.name : nil
   # vs
   #   @person.try(:name)
-  # 
+  #
   # File activesupport/lib/active_support/core_ext/object/try.rb#L32
    def try(*a, &b)
     if a.empty? && block_given?

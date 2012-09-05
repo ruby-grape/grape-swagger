@@ -114,9 +114,10 @@ module Grape
                   description = value.is_a?(Hash) ? value[:desc] : ''
                   required = value.is_a?(Hash) ? !!value[:required] : false
                   paramType = path.match(":#{param}") ? 'path' : (method == 'POST') ? 'body' : 'query'
+                  name = (value.is_a?(Hash) && value[:full_name]) || param
                   {
                     paramType: paramType,
-                    name: value[:full_name] || param,
+                    name: name,
                     description: description,
                     dataType: dataType,
                     required: required

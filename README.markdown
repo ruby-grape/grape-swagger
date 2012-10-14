@@ -54,7 +54,7 @@ desc "Return super-secret information", {
       description: "Valdates your identity",
       required: true 
     },
-    XOptionalHeader" => {
+    "XOptionalHeader" => {
       description: "Not reallly needed",
       required: false 
     }

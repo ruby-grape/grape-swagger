@@ -51,6 +51,24 @@ describe "helpers" do
 			@api.parse_path(path, nil).should == "{abc}/def.{format}"
 		end
 
+    it "should parse a path that has vars with underscores in the name" do
+      path = "abc/:def_g(.:format)"
+			@api.parse_path(path, nil).should == "abc/{def_g}.{format}"
+      
+    end
+
+    it "should parse a path that has vars with numbers in the name" do
+      path = "abc/:sha1(.:format)"
+			@api.parse_path(path, nil).should == "abc/{sha1}.{format}"
+    end
+
+    it "should parse a path that has multiple variables" do
+      path1 = "abc/:def/:geh(.:format)"
+      path2 = "abc/:def:geh(.:format)"
+			@api.parse_path(path1, nil).should == "abc/{def}/{geh}.{format}"
+			@api.parse_path(path2, nil).should == "abc/{def}{geh}.{format}"
+    end
+
 		it "should parse the path with a specified version" do
 			path = ":abc/{version}/def(.:format)"
 			@api.parse_path(path, 'v1').should == "{abc}/v1/def.{format}"

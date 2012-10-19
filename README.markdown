@@ -41,6 +41,7 @@ You can pass a hash with some configuration possibilities to ```add_swagger_docu
 * ```:api_version``` Version of the API that's being exposed
 * ```:base_path``` Basepath of the API that's being exposed
 * ```:markdown``` Allow markdown in `notes`, default `false`
+* ```:hide_documentation_path``` Don't show the '/swagger_doc' path in the generated swagger documentation
 
 ## Swagger Header Parameters
 

@@ -41,7 +41,8 @@ module Grape
               :mount_path => '/swagger_doc',
               :base_path => nil,
               :api_version => '0.1',
-              :markdown => false
+              :markdown => false,
+              :hide_documentation_path => false
             }
             options = defaults.merge(options)
 
@@ -49,6 +50,7 @@ module Grape
             @@mount_path = options[:mount_path]
             @@class_name = options[:class_name] || options[:mount_path].gsub('/','')
             @@markdown = options[:markdown]
+            @@hide_documentation_path = options[:hide_documentation_path]
             api_version = options[:api_version]
             base_path = options[:base_path]
 
@@ -57,6 +59,10 @@ module Grape
               header['Access-Control-Allow-Origin'] = '*'
               header['Access-Control-Request-Method'] = '*'
               routes = @@target_class::combined_routes
+
+              if @@hide_documentation_path
+                routes.reject!{ |route, value| "/#{route}/".index(parse_path(@@mount_path, nil) << '/') == 0 }
+              end
 
               routes_array = routes.keys.map do |route|
                   { :path => "#{@@mount_path}/#{route}.{format}" }

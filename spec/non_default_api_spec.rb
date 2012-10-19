@@ -61,6 +61,29 @@ describe "options: " do
     end
   end
 
+  context "overruling hiding the documentation paths" do
+    before(:all) do
+      class HideDocumentationPathMountedApi < Grape::API
+        desc 'this gets something'
+        get '/something' do
+          {:bla => 'something'}
+        end
+      end
+
+      class SimpleApiWithHiddenDocumentation < Grape::API
+        mount HideDocumentationPathMountedApi
+        add_swagger_documentation :hide_documentation_path => true
+      end
+    end
+
+    def app; SimpleApiWithHiddenDocumentation end
+
+    it "it doesn't show the documentation path on /swagger_doc" do
+      get '/swagger_doc'
+      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :operations=>[], :apis=>[{:path=>\"/swagger_doc/something.{format}\"}]}" 
+    end
+  end
+
   context "overruling the mount-path" do
     before(:all) do
       class DifferentMountMountedApi < Grape::API

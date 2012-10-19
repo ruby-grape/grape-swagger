@@ -158,7 +158,12 @@ module Grape
             def parse_path(path, version)
               # adapt format to swagger format
               parsed_path = path.gsub('(.:format)', '.{format}')
-              parsed_path = parsed_path.gsub(/:([a-z]+)/, '{\1}')
+              # This is attempting to emulate the behavior of 
+              # Rack::Mount::Strexp. We cannot use Strexp directly because 
+              # all it does is generate regular expressions for parsing URLs. 
+              # TODO: Implement a Racc tokenizer to properly generate the 
+              # parsed path.
+              parsed_path = parsed_path.gsub(/:([a-zA-Z_]\w*)/, '{\1}')
               # add the version
               parsed_path = parsed_path.gsub('{version}', version) if version
               parsed_path

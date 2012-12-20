@@ -33,7 +33,15 @@ module API
 end
 ```
 
-To explore your API, either download [Swagger UI](https://github.com/wordnik/swagger-ui) and set it up yourself or go to the [online swagger demo](http://petstore.swagger.wordnik.com/) and enter your localhost url documentation root in the url field (probably something in the line of http://localhost:3000/swagger_doc.json)
+To explore your API, either download [Swagger UI](https://github.com/wordnik/swagger-ui) and set it up yourself or go to the [online swagger demo](http://petstore.swagger.wordnik.com/) and enter your localhost url documentation root in the url field (probably something in the line of http://localhost:3000/swagger_doc.json). 
+If you use the online demo, make sure your API supports foreign requests by enabling CORS in grape, otherwise you'll see the API description, but requests on the API won't return. You can do this by putting below code in your Grape API definition:
+
+```` ruby
+before do
+    header['Access-Control-Allow-Origin'] = '*'
+    header['Access-Control-Request-Method'] = '*'
+end
+````
 
 ## Configure
 You can pass a hash with some configuration possibilities to ```add_swagger_documentation```, all of these are optional:

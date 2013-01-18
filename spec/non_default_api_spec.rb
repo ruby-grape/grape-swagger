@@ -61,6 +61,38 @@ describe "options: " do
     end
   end
 
+  context "mounting in a versioned api" do
+    before(:all) do
+      class SimpleApiToMountInVersionedApi < Grape::API
+        desc 'this gets something'
+        get '/something' do
+          {:bla => 'something'}
+        end
+      end
+
+      class SimpleApiWithVersionInPath < Grape::API
+        version 'v1', :using => :path
+
+        mount SimpleApiToMountInVersionedApi
+        add_swagger_documentation
+      end
+    end
+
+    def app; SimpleApiWithVersionInPath end
+
+    it "should get the documentation on a versioned path /v1/swagger_doc" do
+      get '/v1/swagger_doc'
+      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :operations=>[], :apis=>[{:path=>\"/v1/swagger_doc/something.{format}\"}, {:path=>\"/v1/swagger_doc/swagger_doc.{format}\"}]}"
+    end
+
+    it "should get the resource specific documentation on a versioned path /v1/swagger_doc/something" do
+      get '/v1/swagger_doc/something'
+      last_response.status.should == 200
+    end
+
+  end
+
+
   context "overruling hiding the documentation paths" do
     before(:all) do
       class HideDocumentationPathMountedApi < Grape::API
@@ -80,7 +112,7 @@ describe "options: " do
 
     it "it doesn't show the documentation path on /swagger_doc" do
       get '/swagger_doc'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :operations=>[], :apis=>[{:path=>\"/swagger_doc/something.{format}\"}]}" 
+      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :operations=>[], :apis=>[{:path=>\"/swagger_doc/something.{format}\"}]}"
     end
   end
 
@@ -143,27 +175,27 @@ describe "options: " do
       last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>\"<p><em>test</em></p>\\n\", :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
     end
   end
-  
+
   context "versioned API" do
     before(:all) do
       class VersionedMountedApi < Grape::API
         prefix 'api'
         version 'v1'
-  
+
         desc 'this gets something'
         get '/something' do
           {:bla => 'something'}
         end
       end
-  
+
       class SimpleApiWithVersion < Grape::API
         mount VersionedMountedApi
         add_swagger_documentation :api_version => "v1"
       end
     end
-  
+
     def app; SimpleApiWithVersion end
-  
+
     it "parses version and places it in the path" do
       get '/swagger_doc/api'
       last_response.body.should == "{:apiVersion=>\"v1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/api/v1/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>\"GET-api--version-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"

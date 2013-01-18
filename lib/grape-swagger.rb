@@ -64,8 +64,8 @@ module Grape
                 routes.reject!{ |route, value| "/#{route}/".index(parse_path(@@mount_path, nil) << '/') == 0 }
               end
 
-              routes_array = routes.keys.map do |route|
-                  { :path => "#{@@mount_path}/#{route}.{format}" }
+              routes_array = routes.keys.map do |local_route|
+                  { :path => "#{parse_path(route.route_path.gsub('(.:format)', ''),route.route_version)}/#{local_route}.{format}" }
               end
               {
                 apiVersion: api_version,
@@ -158,10 +158,10 @@ module Grape
             def parse_path(path, version)
               # adapt format to swagger format
               parsed_path = path.gsub('(.:format)', '.{format}')
-              # This is attempting to emulate the behavior of 
-              # Rack::Mount::Strexp. We cannot use Strexp directly because 
-              # all it does is generate regular expressions for parsing URLs. 
-              # TODO: Implement a Racc tokenizer to properly generate the 
+              # This is attempting to emulate the behavior of
+              # Rack::Mount::Strexp. We cannot use Strexp directly because
+              # all it does is generate regular expressions for parsing URLs.
+              # TODO: Implement a Racc tokenizer to properly generate the
               # parsed path.
               parsed_path = parsed_path.gsub(/:([a-zA-Z_]\w*)/, '{\1}')
               # add the version

@@ -70,7 +70,7 @@ module Grape
               {
                 apiVersion: api_version,
                 swaggerVersion: "1.1",
-                basePath: base_path || "http://#{env['HTTP_HOST']}",
+                basePath: base_path || request.base_url,
                 operations:[],
                 apis: routes_array
               }
@@ -102,7 +102,7 @@ module Grape
               {
                 apiVersion: api_version,
                 swaggerVersion: "1.1",
-                basePath: base_path || "http://#{env['HTTP_HOST']}",
+                basePath: base_path || request.base_url,
                 resourcePath: "",
                 apis: routes_array
               }

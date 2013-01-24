@@ -87,16 +87,19 @@ module Grape
               routes = @@target_class::combined_routes[params[:name]]
               routes_array = routes.map do |route|
                 notes = route.route_notes && @@markdown ? Kramdown::Document.new(route.route_notes.strip_heredoc).to_html : route.route_notes
-                {
-                  :path => parse_path(route.route_path, api_version),
-                  :operations => [{
+                http_codes = parse_http_codes route.route_http_codes
+                operations = {
                     :notes => notes,
                     :summary => route.route_description || '',
                     :nickname   => route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-'),
                     :httpMethod => route.route_method,
                     :parameters => parse_header_params(route.route_headers) +
                       parse_params(route.route_params, route.route_path, route.route_method)
-                  }]
+                }
+                operations.merge!({:errorResponses => http_codes}) unless http_codes.empty?
+                {
+                  :path => parse_path(route.route_path, api_version),
+                  :operations => [operations]
                 }
               end
 
@@ -168,6 +171,12 @@ module Grape
               # add the version
               parsed_path = parsed_path.gsub('{version}', version) if version
               parsed_path
+            end
+            def parse_http_codes codes
+              codes ||= {}
+              codes.collect do |k, v|
+                {:code => k, :reason => v}
+              end
             end
           end
         end

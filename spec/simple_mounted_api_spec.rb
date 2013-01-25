@@ -3,16 +3,21 @@ require 'spec_helper'
 describe "a simple mounted api" do
   before(:all) do
     class SimpleMountedApi < Grape::API
+      desc "Document root"
+      get do
+      end
+
       desc 'this gets something', {
         :notes => '_test_'
       }
+
       get '/simple' do
         {:bla => 'something'}
       end
-      
+
       desc 'this gets something else', {
         :headers => {
-          "XAuthToken" => {description: "A required header.", required: true}, 
+          "XAuthToken" => {description: "A required header.", required: true},
           "XOtherHeader" => {description: "An optional header.", required: false}
         },
 	:http_codes => {

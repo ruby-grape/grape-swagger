@@ -85,4 +85,11 @@ describe "helpers" do
     end
   end
 
+  context "parsing object_fields" do
+    it "should parse object_fields" do
+      object_fields = {:id=>{:type=>'String', :desc=>'description test'}, :type => 'User', :desc => 'user description', :required => true}
+      @api.parse_object_fields(object_fields).should == 
+        [{paramType: 'body', name: 'User', dataType: 'User', description: 'user description', required: true}]
+    end
+  end
 end

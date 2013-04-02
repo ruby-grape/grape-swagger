@@ -1,20 +1,27 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (3.2.6)
-      i18n (~> 0.6)
+    activesupport (3.2.13)
+      i18n (= 0.6.1)
       multi_json (~> 1.0)
+    backports (2.6.7)
+    builder (3.2.0)
     coderay (1.0.7)
+    descendants_tracker (0.0.1)
     diff-lcs (1.1.3)
     git (1.2.5)
-    grape (0.2.1)
-      hashie (~> 1.2)
-      multi_json
-      multi_xml
-      rack
+    grape (0.4.0)
+      activesupport
+      builder
+      hashie (>= 1.2.0)
+      multi_json (>= 1.3.2)
+      multi_xml (>= 0.5.2)
+      rack (>= 1.3.0)
+      rack-accept
       rack-mount
-    hashie (1.2.0)
-    i18n (0.6.0)
+      virtus
+    hashie (2.0.3)
+    i18n (0.6.1)
     jeweler (1.8.4)
       bundler (~> 1.0)
       git (>= 1.2.5)
@@ -23,13 +30,15 @@ GEM
     json (1.7.3)
     kramdown (0.13.7)
     method_source (0.8)
-    multi_json (1.3.6)
-    multi_xml (0.5.1)
+    multi_json (1.7.2)
+    multi_xml (0.5.3)
     pry (0.9.10)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.3.1)
-    rack (1.4.1)
+    rack (1.5.2)
+    rack-accept (0.4.5)
+      rack (>= 0.4)
     rack-mount (0.8.3)
       rack (>= 1.0.0)
     rack-test (0.6.1)
@@ -52,13 +61,16 @@ GEM
     shoulda-matchers (1.2.0)
       activesupport (>= 3.0.0)
     slop (3.3.2)
+    virtus (0.5.4)
+      backports (~> 2.6.1)
+      descendants_tracker (~> 0.0.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   bundler (> 1.0.0)
-  grape (~> 0.2.0)
+  grape (>= 0.2.0)
   jeweler (~> 1.8.4)
   kramdown
   pry

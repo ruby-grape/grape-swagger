@@ -192,11 +192,11 @@ class Object
   #   @person.try(:name)
   #
   # File activesupport/lib/active_support/core_ext/object/try.rb#L32
-   def try(*a, &b)
+  def try(*a, &b)
     if a.empty? && block_given?
       yield self
     else
-      __send__(*a, &b)
+      public_send(*a, &b) if respond_to?(a.first)
     end
   end
 end

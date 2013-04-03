@@ -86,7 +86,7 @@ module Grape
               header['Access-Control-Request-Method'] = '*'
               routes = @@target_class::combined_routes[params[:name]]
               routes_array = routes.map do |route|
-                notes = route.route_notes && @@markdown ? Kramdown::Document.new(route.route_notes.strip_heredoc).to_html : route.route_notes
+                notes = route.route_notes && @@markdown ? Kramdown::Document.new(strip_heredoc(route.route_notes)).to_html : route.route_notes
                 http_codes = parse_http_codes route.route_http_codes
                 operations = {
                     :notes => notes,
@@ -178,34 +178,22 @@ module Grape
                 {:code => k, :reason => v}
               end
             end
+
+            def try(*a, &b)
+              if a.empty? && block_given?
+                yield self
+              else
+                public_send(*a, &b) if respond_to?(a.first)
+              end
+            end
+
+            def strip_heredoc(string)
+              indent = string.scan(/^[ \t]*(?=\S)/).min.try(:size) || 0
+              string.gsub(/^[ \t]{#{indent}}/, '')
+            end
           end
         end
       end
     end
-  end
-end
-
-class Object
-  ##
-  #   @person ? @person.name : nil
-  # vs
-  #   @person.try(:name)
-  #
-  # File activesupport/lib/active_support/core_ext/object/try.rb#L32
-  def try(*a, &b)
-    if a.empty? && block_given?
-      yield self
-    else
-      public_send(*a, &b) if respond_to?(a.first)
-    end
-  end
-end
-
-class String
-  # strip_heredoc from rails
-  # File activesupport/lib/active_support/core_ext/string/strip.rb, line 22
-  def strip_heredoc
-    indent = scan(/^[ \t]*(?=\S)/).min.try(:size) || 0
-    gsub(/^[ \t]{#{indent}}/, '')
   end
 end

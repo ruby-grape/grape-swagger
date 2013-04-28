@@ -43,7 +43,8 @@ module Grape
               :base_path => nil,
               :api_version => '0.1',
               :markdown => false,
-              :hide_documentation_path => false
+              :hide_documentation_path => false,
+              :hide_format => false
             }
             options = defaults.merge(options)
 
@@ -52,6 +53,7 @@ module Grape
             @@class_name = options[:class_name] || options[:mount_path].gsub('/','')
             @@markdown = options[:markdown]
             @@hide_documentation_path = options[:hide_documentation_path]
+            @@hide_format = options[:hide_format]
             api_version = options[:api_version]
             base_path = options[:base_path]
 
@@ -66,7 +68,7 @@ module Grape
               end
 
               routes_array = routes.keys.map do |local_route|
-                  { :path => "#{parse_path(route.route_path.gsub('(.:format)', ''),route.route_version)}/#{local_route}.{format}" }
+                  { :path => "#{parse_path(route.route_path.gsub('(.:format)', ''),route.route_version)}/#{local_route}#{@@hide_format ? '' : '.{format}'}" }
               end
               {
                 apiVersion: api_version,
@@ -161,7 +163,7 @@ module Grape
 
             def parse_path(path, version)
               # adapt format to swagger format
-              parsed_path = path.gsub('(.:format)', '.{format}')
+              parsed_path = path.gsub '(.:format)', ( @@hide_format ? '' : '.{format}')
               # This is attempting to emulate the behavior of
               # Rack::Mount::Strexp. We cannot use Strexp directly because
               # all it does is generate regular expressions for parsing URLs.
@@ -169,9 +171,9 @@ module Grape
               # parsed path.
               parsed_path = parsed_path.gsub(/:([a-zA-Z_]\w*)/, '{\1}')
               # add the version
-              parsed_path = parsed_path.gsub('{version}', version) if version
-              parsed_path
+              version ? parsed_path.gsub('{version}', version) : parsed_path
             end
+
             def parse_http_codes codes
               codes ||= {}
               codes.collect do |k, v|

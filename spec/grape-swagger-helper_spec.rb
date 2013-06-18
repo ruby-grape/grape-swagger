@@ -30,7 +30,7 @@ describe "helpers" do
       ]
     end
 
-    it "should parse params as body for a POST" do
+    it "should parse params as form for a POST" do
       params = {
         name: {type: 'String', :desc =>"A name", required: true },
         level: 'max'
@@ -39,8 +39,8 @@ describe "helpers" do
       method = "POST"
       @api.parse_params(params, path, method).should ==
         [
-          {paramType: "body", name: :name, description:"A name", dataType: "String", required: true},
-          {paramType: "body", name: :level, description:"", dataType: "String", required: false}
+          {paramType: "form", name: :name, description:"A name", dataType: "String", required: true},
+          {paramType: "form", name: :level, description:"", dataType: "String", required: false}
       ]
     end
   end

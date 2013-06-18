@@ -1,7 +1,9 @@
 ### Next Release
 
 * Added Rails 4 support - [@jrhe](https://github.com/jrhe).
+* Support both `:desc` and `:description` when describing parameters - [@dblock](https://github.com/dblock).
 * Fix: document APIs at root level - [@dblock](https://github.com/dblock).
+* Fix: allow parameters such as `name[]` - [@dblock](https://github.com/dblock).
 
 ### 0.5.0 (March 28, 2013)
 

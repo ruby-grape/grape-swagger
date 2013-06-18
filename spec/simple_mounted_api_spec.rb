@@ -20,13 +20,22 @@ describe "a simple mounted api" do
           "XAuthToken" => {description: "A required header.", required: true},
           "XOtherHeader" => {description: "An optional header.", required: false}
         },
-	:http_codes => {
-		403 => "invalid pony",
-		405 => "no ponies left!"
-	}
+        :http_codes => {
+        	403 => "invalid pony",
+        	405 => "no ponies left!"
+        }
       }
       get '/simple_with_headers' do
         {:bla => 'something_else'}
+      end
+
+      desc 'this takes an array of parameters', {
+        :params => {
+          "items[]" => { :description => "array of items" }
+        }
+      }
+      post '/items' do
+        {}
       end
     end
 
@@ -40,7 +49,7 @@ describe "a simple mounted api" do
 
   it "retrieves swagger-documentation on /swagger_doc" do
     get '/swagger_doc'
-    last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :operations=>[], :apis=>[{:path=>\"/swagger_doc/simple.{format}\"}, {:path=>\"/swagger_doc/simple_with_headers.{format}\"}, {:path=>\"/swagger_doc/swagger_doc.{format}\"}]}"
+    last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :operations=>[], :apis=>[{:path=>\"/swagger_doc/simple.{format}\"}, {:path=>\"/swagger_doc/simple_with_headers.{format}\"}, {:path=>\"/swagger_doc/items.{format}\"}, {:path=>\"/swagger_doc/swagger_doc.{format}\"}]}"
   end
 
   it "retrieves the documentation for mounted-api" do
@@ -51,5 +60,10 @@ describe "a simple mounted api" do
   it "retrieves the documentation for mounted-api that includes headers" do
     get '/swagger_doc/simple_with_headers'
     last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/simple_with_headers.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something else\", :nickname=>\"GET-simple_with_headers---format-\", :httpMethod=>\"GET\", :parameters=>[{:paramType=>\"header\", :name=>\"XAuthToken\", :description=>\"A required header.\", :dataType=>\"String\", :required=>true}, {:paramType=>\"header\", :name=>\"XOtherHeader\", :description=>\"An optional header.\", :dataType=>\"String\", :required=>false}], :errorResponses=>[{:code=>403, :reason=>\"invalid pony\"}, {:code=>405, :reason=>\"no ponies left!\"}]}]}]}"
+  end
+
+  it "retrieves the documentation for mounted-api that supports multiple parameters" do
+    get '/swagger_doc/items'
+    last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/items.{format}\", :operations=>[{:notes=>nil, :summary=>\"this takes an array of parameters\", :nickname=>\"POST-items---format-\", :httpMethod=>\"POST\", :parameters=>[{:paramType=>\"form\", :name=>\"items[]\", :description=>\"array of items\", :dataType=>\"String\", :required=>false}]}]}]}"
   end
 end

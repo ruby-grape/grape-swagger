@@ -3,6 +3,8 @@
 * Added Rails 4 support - [@jrhe](https://github.com/jrhe).
 * Fix: document APIs at root level - [@dblock](https://github.com/dblock).
 * Added support for procs in basepath - [@tim-vandecasteele](https://github.com/tim-vandecasteele).
+* Support both `:desc` and `:description` when describing parameters - [@dblock](https://github.com/dblock).
+* Fix: allow parameters such as `name[]` - [@dblock](https://github.com/dblock).
 
 ### 0.5.0 (March 28, 2013)
 

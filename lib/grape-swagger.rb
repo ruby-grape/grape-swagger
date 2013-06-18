@@ -120,9 +120,9 @@ module Grape
                   value[:type] = 'file' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
 
                   dataType = value.is_a?(Hash) ? value[:type]||'String' : 'String'
-                  description = value.is_a?(Hash) ? value[:desc] : ''
+                  description = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
                   required = value.is_a?(Hash) ? !!value[:required] : false
-                  paramType = path.match(":#{param}") ? 'path' : (method == 'POST') ? 'form' : 'query'
+                  paramType = path.include?(":#{param}") ? 'path' : (method == 'POST') ? 'form' : 'query'
                   name = (value.is_a?(Hash) && value[:full_name]) || param
                   {
                     paramType: paramType,

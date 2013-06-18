@@ -229,4 +229,27 @@ describe "options: " do
       last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"https://example.org:80\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
     end
   end
+
+  context ":hide_format" do
+    before(:all) do
+      class HidePathsApi < Grape::API
+        desc 'this gets something'
+        get '/something' do
+          {:bla => 'something'}
+        end
+      end
+
+      class SimpleApiWithHiddenPaths < Grape::API
+        mount ProtectedApi
+        add_swagger_documentation :hide_format => true
+      end
+    end
+
+    def app; SimpleApiWithHiddenPaths; end
+
+    it "has no formats" do
+      get '/swagger_doc/something'
+      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/something\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
+    end
+  end
 end

@@ -5,24 +5,21 @@ module Grape
     class << self
       attr_reader :combined_routes
 
-      alias original_mount mount
-
-      def mount(mounts)
-        original_mount mounts
-        @combined_routes ||= {}
-        mounts::routes.each do |route|
-          resource = route.route_path.match('\/(\w*?)[\.\/\(]').captures.first
-          next if resource.empty?
-          @combined_routes[resource.downcase] ||= []
-          @combined_routes[resource.downcase] << route
-        end
-      end
-
       def add_swagger_documentation(options={})
         documentation_class = create_documentation_class
 
         documentation_class.setup({:target_class => self}.merge(options))
         mount(documentation_class)
+
+        @combined_routes = {}
+        routes.each do |route|
+          resource = route.route_path.match('\/(\w*?)[\.\/\(]').captures.first
+          next if resource.empty?
+          resource.downcase!
+          @combined_routes[resource] ||= []
+          @combined_routes[resource] << route
+        end
+
       end
 
       private

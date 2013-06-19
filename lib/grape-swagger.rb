@@ -70,7 +70,7 @@ module Grape
               {
                 apiVersion: api_version,
                 swaggerVersion: "1.1",
-                basePath: base_path || request.base_url,
+                basePath: parse_base_path(base_path, request),
                 operations:[],
                 apis: routes_array
               }
@@ -105,7 +105,7 @@ module Grape
               {
                 apiVersion: api_version,
                 swaggerVersion: "1.1",
-                basePath: base_path || request.base_url,
+                basePath: parse_base_path(base_path, request),
                 resourcePath: "",
                 apis: routes_array
               }
@@ -189,6 +189,10 @@ module Grape
             def strip_heredoc(string)
               indent = string.scan(/^[ \t]*(?=\S)/).min.try(:size) || 0
               string.gsub(/^[ \t]{#{indent}}/, '')
+            end
+
+            def parse_base_path(base_path, request)
+              (base_path.is_a?(Proc) ? base_path.call(request) : base_path) || request.base_url
             end
           end
         end

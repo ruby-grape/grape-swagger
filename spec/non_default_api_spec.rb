@@ -31,6 +31,34 @@ describe "options: " do
     end
   end
 
+  context "overruling the basepath with a proc" do
+    before(:all) do
+      class ProcBasePathMountedApi < Grape::API
+        desc 'this gets something'
+        get '/something' do
+          {:bla => 'something'}
+        end
+      end
+
+      class SimpleApiWithProcBasePath < Grape::API
+        mount ProcBasePathMountedApi
+        add_swagger_documentation :base_path => lambda { |request| "#{request.base_url}/some_value" }
+      end
+    end
+
+    def app; SimpleApiWithProcBasePath end
+
+    it "retrieves the given base-path on /swagger_doc" do
+      get '/swagger_doc'
+      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org/some_value\", :operations=>[], :apis=>[{:path=>\"/swagger_doc/something.{format}\"}, {:path=>\"/swagger_doc/swagger_doc.{format}\"}]}"
+    end
+
+    it "retrieves the same given base-path for mounted-api" do
+      get '/swagger_doc/something'
+      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org/some_value\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
+    end
+  end
+
   context "overruling the version" do
     before(:all) do
       class ApiVersionMountedApi < Grape::API

@@ -2,6 +2,7 @@
 
 * Added Rails 4 support - [@jrhe](https://github.com/jrhe).
 * Fix: document APIs at root level - [@dblock](https://github.com/dblock).
+* Added support for procs in basepath - [@tim-vandecasteele](https://github.com/tim-vandecasteele).
 
 ### 0.5.0 (March 28, 2013)
 

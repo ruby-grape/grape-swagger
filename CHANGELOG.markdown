@@ -1,5 +1,7 @@
 ### Next Release
 
+### 0.6.0 (June 19, 2013)
+
 * Added Rails 4 support - [@jrhe](https://github.com/jrhe).
 * Fix: document APIs at root level - [@dblock](https://github.com/dblock).
 * Added support for procs in basepath - [@tim-vandecasteele](https://github.com/tim-vandecasteele).

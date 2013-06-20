@@ -10,6 +10,4 @@ describe Grape::API do
     Grape::API.should respond_to :add_swagger_documentation
   end
 
-
-
 end

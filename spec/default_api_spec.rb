@@ -2,11 +2,12 @@ require 'spec_helper'
 
 describe "Default API" do
 
-  before(:all) do
+  before :all do
     class NotAMountedApi < Grape::API
-      desc 'this gets something'
+      format :json
+      desc 'This gets something.'
       get '/something' do
-        {:bla => 'something'}
+        { bla: 'something' }
       end
       add_swagger_documentation
     end
@@ -16,7 +17,16 @@ describe "Default API" do
 
   it "should document something" do
     get '/swagger_doc'
-    last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :operations=>[], :apis=>[{:path=>\"/swagger_doc/something.{format}\"}, {:path=>\"/swagger_doc/swagger_doc.{format}\"}]}"
+    JSON.parse(last_response.body).should == {
+      "apiVersion" => "0.1",
+      "swaggerVersion" => "1.1",
+      "basePath" => "http://example.org",
+      "operations" => [],
+      "apis" => [
+        { "path" => "/swagger_doc/something.{format}" },
+        { "path" => "/swagger_doc/swagger_doc.{format}" }
+      ]
+    }
   end
 
 end

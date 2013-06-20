@@ -1,70 +1,74 @@
 require 'spec_helper'
 
 describe "options: " do
-  context "overruling the basepath" do
-    before(:all) do
+  context "overriding the basepath" do
+    before :all do
+
       class BasePathMountedApi < Grape::API
-        desc 'this gets something'
+        desc 'This gets something.'
         get '/something' do
-          {:bla => 'something'}
+          { bla: 'something' }
         end
       end
 
       class SimpleApiWithBasePath < Grape::API
-        NON_DEFAULT_BASE_PATH= "http://www.breakcoregivesmewood.com"
+        NON_DEFAULT_BASE_PATH = "http://www.breakcoregivesmewood.com"
 
         mount BasePathMountedApi
         add_swagger_documentation :base_path => NON_DEFAULT_BASE_PATH
       end
+
     end
 
     def app; SimpleApiWithBasePath end
 
     it "retrieves the given base-path on /swagger_doc" do
-      get '/swagger_doc'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"#{SimpleApiWithBasePath::NON_DEFAULT_BASE_PATH}\", :operations=>[], :apis=>[{:path=>\"/swagger_doc/something.{format}\"}, {:path=>\"/swagger_doc/swagger_doc.{format}\"}]}"
+      get '/swagger_doc.json'
+      JSON.parse(last_response.body)["basePath"].should == SimpleApiWithBasePath::NON_DEFAULT_BASE_PATH
     end
 
     it "retrieves the same given base-path for mounted-api" do
-      get '/swagger_doc/something'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"#{SimpleApiWithBasePath::NON_DEFAULT_BASE_PATH}\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
+      get '/swagger_doc/something.json'
+      JSON.parse(last_response.body)["basePath"].should == SimpleApiWithBasePath::NON_DEFAULT_BASE_PATH
     end
   end
 
-  context "overruling the basepath with a proc" do
-    before(:all) do
+  context "overriding the basepath with a proc" do
+    before :all do
+
       class ProcBasePathMountedApi < Grape::API
-        desc 'this gets something'
+        desc 'This gets something.'
         get '/something' do
-          {:bla => 'something'}
+          { bla: 'something' }
         end
       end
 
       class SimpleApiWithProcBasePath < Grape::API
         mount ProcBasePathMountedApi
-        add_swagger_documentation :base_path => lambda { |request| "#{request.base_url}/some_value" }
+        add_swagger_documentation base_path: lambda { |request| "#{request.base_url}/some_value" }
       end
     end
 
     def app; SimpleApiWithProcBasePath end
 
     it "retrieves the given base-path on /swagger_doc" do
-      get '/swagger_doc'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org/some_value\", :operations=>[], :apis=>[{:path=>\"/swagger_doc/something.{format}\"}, {:path=>\"/swagger_doc/swagger_doc.{format}\"}]}"
+      get '/swagger_doc.json'
+      JSON.parse(last_response.body)["basePath"].should == "http://example.org/some_value"
     end
 
     it "retrieves the same given base-path for mounted-api" do
-      get '/swagger_doc/something'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org/some_value\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
+      get '/swagger_doc/something.json'
+      JSON.parse(last_response.body)["basePath"].should == "http://example.org/some_value"
     end
   end
 
-  context "overruling the version" do
-    before(:all) do
+  context "overriding the version" do
+    before :all do
+
       class ApiVersionMountedApi < Grape::API
-        desc 'this gets something'
+        desc 'This gets something.'
         get '/something' do
-          {:bla => 'something'}
+          { bla: 'something' }
         end
       end
 
@@ -79,22 +83,23 @@ describe "options: " do
     def app; SimpleApiWithApiVersion end
 
     it "retrieves the api version on /swagger_doc" do
-      get '/swagger_doc'
-      last_response.body.should == "{:apiVersion=>\"#{SimpleApiWithApiVersion::API_VERSION}\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :operations=>[], :apis=>[{:path=>\"/swagger_doc/something.{format}\"}, {:path=>\"/swagger_doc/swagger_doc.{format}\"}]}"
+      get '/swagger_doc.json'
+      JSON.parse(last_response.body)["apiVersion"].should == SimpleApiWithApiVersion::API_VERSION
     end
 
     it "retrieves the same api version for mounted-api" do
-      get '/swagger_doc/something'
-      last_response.body.should == "{:apiVersion=>\"#{SimpleApiWithApiVersion::API_VERSION}\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
+      get '/swagger_doc/something.json'
+      JSON.parse(last_response.body)["apiVersion"].should == SimpleApiWithApiVersion::API_VERSION
     end
   end
 
   context "mounting in a versioned api" do
-    before(:all) do
+    before :all do
+
       class SimpleApiToMountInVersionedApi < Grape::API
-        desc 'this gets something'
+        desc 'This gets something.'
         get '/something' do
-          {:bla => 'something'}
+          { bla: 'something' }
         end
       end
 
@@ -108,25 +113,48 @@ describe "options: " do
 
     def app; SimpleApiWithVersionInPath end
 
-    it "should get the documentation on a versioned path /v1/swagger_doc" do
-      get '/v1/swagger_doc'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :operations=>[], :apis=>[{:path=>\"/v1/swagger_doc/something.{format}\"}, {:path=>\"/v1/swagger_doc/swagger_doc.{format}\"}]}"
+    it "gets the documentation on a versioned path /v1/swagger_doc" do
+      get '/v1/swagger_doc.json'
+      JSON.parse(last_response.body).should == {
+        "apiVersion" => "0.1",
+        "swaggerVersion" => "1.1",
+        "basePath" => "http://example.org",
+        "operations" => [],
+        "apis" => [
+          { "path" => "/v1/swagger_doc/something.{format}" },
+          { "path" => "/v1/swagger_doc/swagger_doc.{format}" }
+        ]
+      }
     end
 
-    it "should get the resource specific documentation on a versioned path /v1/swagger_doc/something" do
-      get '/v1/swagger_doc/something'
+    it "gets the resource specific documentation on a versioned path /v1/swagger_doc/something" do
+      get '/v1/swagger_doc/something.json'
       last_response.status.should == 200
+      JSON.parse(last_response.body).should == {
+        "apiVersion" => "0.1",
+        "swaggerVersion" => "1.1",
+        "basePath" => "http://example.org",
+        "resourcePath" => "",
+        "apis" => [
+          {
+            "path" => "/0.1/something.{format}",
+            "operations" => [
+              { "notes" => nil, "summary" => "This gets something.", "nickname" => "GET--version-something---format-", "httpMethod" => "GET", "parameters" => [] }
+            ]
+          }
+        ]
+      }
     end
 
   end
 
+  context "overriding hiding the documentation paths" do
+    before :all do
 
-  context "overruling hiding the documentation paths" do
-    before(:all) do
       class HideDocumentationPathMountedApi < Grape::API
-        desc 'this gets something'
+        desc 'This gets something.'
         get '/something' do
-          {:bla => 'something'}
+          { bla: 'something' }
         end
       end
 
@@ -139,17 +167,25 @@ describe "options: " do
     def app; SimpleApiWithHiddenDocumentation end
 
     it "it doesn't show the documentation path on /swagger_doc" do
-      get '/swagger_doc'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :operations=>[], :apis=>[{:path=>\"/swagger_doc/something.{format}\"}]}"
+      get '/swagger_doc.json'
+      JSON.parse(last_response.body).should == {
+        "apiVersion" => "0.1",
+        "swaggerVersion" => "1.1",
+        "basePath" => "http://example.org",
+        "operations" => [],
+        "apis" => [
+          { "path" => "/swagger_doc/something.{format}" }
+        ]
+      }
     end
   end
 
-  context "overruling the mount-path" do
-    before(:all) do
+  context "overriding the mount-path" do
+    before :all do
       class DifferentMountMountedApi < Grape::API
-        desc 'this gets something'
+        desc 'This gets something.'
         get '/something' do
-          {:bla => 'something'}
+          { bla: 'something' }
         end
       end
 
@@ -164,29 +200,33 @@ describe "options: " do
     def app; SimpleApiWithDifferentMount end
 
     it "retrieves the given base-path on /api_doc" do
-      get '/api_doc'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :operations=>[], :apis=>[{:path=>\"/api_doc/something.{format}\"}, {:path=>\"/api_doc/api_doc.{format}\"}]}"
+      get '/api_doc.json'
+      JSON.parse(last_response.body)["apis"].each do |api|
+        api["path"].should start_with SimpleApiWithDifferentMount::MOUNT_PATH
+      end
     end
 
     it "retrieves the same given base-path for mounted-api" do
-      get '/api_doc/something'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
+      get '/api_doc/something.json'
+      JSON.parse(last_response.body)["apis"].each do |api|
+        api["path"].should_not start_with SimpleApiWithDifferentMount::MOUNT_PATH
+      end
     end
 
     it "does not respond to swagger_doc" do
-      get '/swagger_doc'
+      get '/swagger_doc.json'
       last_response.status.should be == 404
     end
   end
 
-  context "overruling the markdown" do
-    before(:all) do
+  context "overriding the markdown" do
+    before :all do
       class MarkDownMountedApi < Grape::API
-        desc 'this gets something', {
+        desc 'This gets something.', {
           :notes => '_test_'
         }
         get '/something' do
-          {:bla => 'something'}
+          { bla: 'something' }
         end
       end
 
@@ -199,20 +239,33 @@ describe "options: " do
     def app; SimpleApiWithMarkdown end
 
     it "parses markdown for a mounted-api" do
-      get '/swagger_doc/something'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>\"<p><em>test</em></p>\\n\", :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
+      get '/swagger_doc/something.json'
+      JSON.parse(last_response.body).should ==  {
+        "apiVersion" => "0.1",
+        "swaggerVersion" => "1.1",
+        "basePath" => "http://example.org",
+        "resourcePath" => "",
+        "apis" => [
+          {
+            "path" => "/something.{format}",
+            "operations" => [
+              { "notes" => "<p><em>test</em></p>\n", "summary" => "This gets something.", "nickname" => "GET-something---format-", "httpMethod" => "GET", "parameters" => [] }
+            ]
+          }
+        ]
+      }
     end
   end
 
   context "versioned API" do
-    before(:all) do
+    before :all do
       class VersionedMountedApi < Grape::API
         prefix 'api'
         version 'v1'
 
-        desc 'this gets something'
+        desc 'This gets something.'
         get '/something' do
-          {:bla => 'something'}
+          { bla: 'something' }
         end
       end
 
@@ -225,17 +278,19 @@ describe "options: " do
     def app; SimpleApiWithVersion end
 
     it "parses version and places it in the path" do
-      get '/swagger_doc/api'
-      last_response.body.should == "{:apiVersion=>\"v1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/api/v1/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>\"GET-api--version-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
+      get '/swagger_doc/api.json'
+      JSON.parse(last_response.body)["apis"].each do |api|
+        api["path"].should start_with "/api/v1/"
+      end
     end
   end
 
   context "protected API" do
-    before(:all) do
+    before :all do
       class ProtectedApi < Grape::API
-        desc 'this gets something'
+        desc 'This gets something.'
         get '/something' do
-          {:bla => 'something'}
+          { bla: 'something' }
         end
       end
 
@@ -247,23 +302,23 @@ describe "options: " do
 
     def app; SimpleApiWithProtection; end
 
-    it "should use https schema in mount point" do
-      get '/swagger_doc', {}, 'rack.url_scheme' => 'https'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"https://example.org:80\", :operations=>[], :apis=>[{:path=>\"/swagger_doc/something.{format}\"}, {:path=>\"/swagger_doc/swagger_doc.{format}\"}]}"
+    it "uses https schema in mount point" do
+      get '/swagger_doc.json', {}, 'rack.url_scheme' => 'https'
+      JSON.parse(last_response.body)["basePath"].should == "https://example.org:80"
     end
 
-    it "should use https schema in endpoint doc" do
-      get '/swagger_doc/something', {}, 'rack.url_scheme' => 'https'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"https://example.org:80\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
+    it "uses https schema in endpoint doc" do
+      get '/swagger_doc/something.json', {}, 'rack.url_scheme' => 'https'
+      JSON.parse(last_response.body)["basePath"].should == "https://example.org:80"
     end
   end
 
   context ":hide_format" do
-    before(:all) do
+    before :all do
       class HidePathsApi < Grape::API
-        desc 'this gets something'
+        desc 'This gets something.'
         get '/something' do
-          {:bla => 'something'}
+          { bla: 'something' }
         end
       end
 
@@ -276,8 +331,10 @@ describe "options: " do
     def app; SimpleApiWithHiddenPaths; end
 
     it "has no formats" do
-      get '/swagger_doc/something'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/something\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
+      get '/swagger_doc/something.json'
+      JSON.parse(last_response.body)["apis"].each do |api|
+        api["path"].should_not end_with ".{format}"
+      end
     end
   end
 end

@@ -1,5 +1,8 @@
 ### Next Release
 
+* Fix: translate parameter `type` to String, enables using Mongoid fields as parameter definitions - [@dblock](https://github.com/dblock).
+* Your Contribution Here
+
 ### 0.6.0 (June 19, 2013)
 
 * Added Rails 4 support - [@jrhe](https://github.com/jrhe).

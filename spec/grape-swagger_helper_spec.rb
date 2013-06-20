@@ -44,6 +44,24 @@ describe "helpers" do
         { paramType: "form", name: :level, description: "", dataType: "String", required: false }
       ]
     end
+
+    context "custom type" do
+      before :all do
+        class CustomType
+        end
+      end
+      it "parses a custom parameters" do
+        params = {
+          option: { type: CustomType, desc: "Custom option" }
+        }
+        path = "/coolness"
+        method = "GET"
+        @api.parse_params(params, path, method).should == [
+          { paramType: "query", name: :option, description: "Custom option", dataType: "CustomType", required: false }
+        ]
+      end
+    end
+
   end
 
   context "parsing the path" do

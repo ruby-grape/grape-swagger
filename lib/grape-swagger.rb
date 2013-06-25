@@ -96,7 +96,7 @@ module Grape
                     :parameters => parse_header_params(route.route_headers) +
                       parse_params(route.route_params, route.route_path, route.route_method)
                 }
-                operations.merge!({ :errorResponses => http_codes}) unless http_codes.empty?
+                operations.merge!({:errorResponses => http_codes}) unless http_codes.empty?
                 {
                   :path => parse_path(route.route_path, api_version),
                   :operations => [operations]

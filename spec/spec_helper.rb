@@ -9,24 +9,15 @@ require 'rubygems'
 require 'bundler'
 
 require 'pry'
+require 'json'
 
 Bundler.setup :default, :test
 
-
 require 'rack/test'
 
-# Load support files
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
-
 RSpec.configure do |config|
-  # Remove this line if you don't want RSpec's should and should_not
-  # methods or matchers
   require 'rspec/expectations'
   config.include RSpec::Matchers
-
-  # == Mock Framework
   config.mock_with :rspec
-
   config.include Rack::Test::Methods
-  #config.include Rack::Test::Methods::Patch
 end

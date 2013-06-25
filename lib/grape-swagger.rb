@@ -67,6 +67,7 @@ module Grape
               routes_array = routes.keys.map do |local_route|
                   { :path => "#{parse_path(route.route_path.gsub('(.:format)', ''),route.route_version)}/#{local_route}#{@@hide_format ? '' : '.{format}'}" }
               end
+
               {
                 apiVersion: api_version,
                 swaggerVersion: "1.1",
@@ -174,7 +175,7 @@ module Grape
             def parse_http_codes codes
               codes ||= {}
               codes.collect do |k, v|
-                {:code => k, :reason => v}
+                { code: k, reason: v }
               end
             end
 

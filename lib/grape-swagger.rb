@@ -12,14 +12,22 @@ module Grape
         mount(documentation_class)
 
         @combined_routes = {}
+
         routes.each do |route|
           resource = route.route_path.match('\/(\w*?)[\.\/\(]').captures.first
+
           next if resource.empty?
           resource.downcase!
           @combined_routes[resource] ||= []
           @combined_routes[resource] << route
-        end
+          
+         #route_version = route.route_version.to_s
+         #@combined_routes[route_version] ||= {} 
+         #@combined_routes[route_version][resource] ||= []
+         #@combined_routes[route_version][resource] << route
 
+        end
+        p "#-- api routes: ", @combined_routes
       end
 
       private
@@ -58,6 +66,13 @@ module Grape
             get @@mount_path do
               header['Access-Control-Allow-Origin'] = '*'
               header['Access-Control-Request-Method'] = '*'
+
+             p "#-----------------"
+             p @@target_class::combined_routes
+             p "route version: #{route.route_version.to_s}"
+             # p @@target_class::combined_routes[route.route_version.to_s]
+             # routes = @@target_class::combined_routes[route.route_version]
+
               routes = @@target_class::combined_routes
 
               if @@hide_documentation_path
@@ -119,7 +134,6 @@ module Grape
               accepted_file_classes = ['Rack::Multipart::UploadedFile', 'Hash']
               if params
                 params.map do |param, value|
-                  #value[:type] = 'file' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
                   value[:type] = 'file' if value.is_a?(Hash) and accepted_file_classes.include?(value[:type])
                   
                   dataType = value.is_a?(Hash) ? value[:type]||'String' : 'String'

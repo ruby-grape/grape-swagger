@@ -24,18 +24,22 @@ module GrapeSwaggerHandlers
 	    get @@mount_path do
 	      header['Access-Control-Allow-Origin'] = '*'
 	      header['Access-Control-Request-Method'] = '*'
-	      routes = @@target_class::combined_routes[@@api_version]
+	        
+        requested_api_version = params[:route_info].route_version
+        p "#--- Requested API Version: #{requested_api_version}"
+       
+        routes = @@target_class::combined_routes[requested_api_version]
 
 	      if @@hide_documentation_path
 	        routes.reject!{ |route, value| "/#{route}/".index(parse_path(@@mount_path, nil) << '/') == 0 }
 	      end
 
 	      routes_array = routes.keys.map do |local_route|
-	          { :path => "#{parse_path(route.route_path.gsub('(.:format)', ''),route.route_version)}/#{local_route}#{@@hide_format ? '' : '.{format}'}" }
+	          { :path => "#{parse_path(route.route_path.gsub('(.:format)', ''), route.route_version, @@hide_format)
+                          }/#{local_route}#{@@hide_format ? '' : '.{format}'}" }
 	      end
-
 	      {
-	        apiVersion: @@api_version,
+	        apiVersion: requested_api_version,
 	        swaggerVersion: "1.1",
 	        basePath: parse_base_path(@@base_path, request),
 	        operations:[],
@@ -56,11 +60,17 @@ module GrapeSwaggerHandlers
       header['Access-Control-Allow-Origin'] = '*'
       header['Access-Control-Request-Method'] = '*'
 
-      routes = @@target_class::combined_routes[@@api_version][params[:name]]
+      #routes = @@target_class::combined_routes[@@api_version][params[:name]]
+        
+      requested_api_version = params[:route_info].route_version
+      requested_resource = params[:name]
+      p "#--- Requested API Version: #{requested_api_version}"
+     
+      routes = @@target_class::combined_routes[requested_api_version][requested_resource]
 
       routes_array = routes.map do |route|
         notes = route.route_notes && @@markdown ? Kramdown::Document.new(strip_heredoc(route.route_notes)).to_html : route.route_notes
-        http_codes = parse_http_codes route.route_http_codes
+        http_codes = parse_http_codes(route.route_http_codes)
         operations = {
             :notes => notes,
             :summary => route.route_description || '',
@@ -71,7 +81,7 @@ module GrapeSwaggerHandlers
         }
         operations.merge!({:errorResponses => http_codes}) unless http_codes.empty?
         {
-          :path => parse_path(route.route_path, @@api_version),
+          :path => parse_path(route.route_path, requested_api_version, @@hide_format),
           :operations => [operations]
         }
       end

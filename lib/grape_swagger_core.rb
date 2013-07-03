@@ -1,3 +1,5 @@
+require 'singleton'
+
 require_relative 'helpers/parser_helpers'
 require 'grape_swagger_handlers'
 
@@ -30,13 +32,16 @@ module GrapeSwaggerCore
   end
 
   def add_swagger_documentation(options={})
+    p "#-- target_class: #{self.name}"
     options = {:target_class => self}.merge(options)
     options = SWAGGER_DEFAULTS.merge(options)
     
     documentation_class = create_documentation_class
     documentation_class.register_handlers(options)
-
-    mount(documentation_class)
+    
+    #p "#-- targets class routes", documentation_class.routes
+    p "Should mount: #{combined_routes.empty?}" 
+    mount(documentation_class)  #if combined_routes.empty?
 
     add_combined_routes(routes)
     p "#-----------", combined_routes
@@ -44,6 +49,7 @@ module GrapeSwaggerCore
 
   def create_documentation_class
     Class.new(Grape::API) do
+      include Singleton
       extend GrapeSwaggerHandlers
 
       class << self

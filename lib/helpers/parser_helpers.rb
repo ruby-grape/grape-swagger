@@ -43,10 +43,9 @@ module ParserHelpers
     end
   end
 
-  def parse_path(path, version)
+  def parse_path(path, version, hide_format)
     # adapt format to swagger format
-    #parsed_path = path.gsub '(.:format)', ( @@hide_format ? '' : '.{format}')
-    parsed_path = path.gsub '(.:format)', ( false ? '' : '.{format}')
+    parsed_path = path.gsub '(.:format)', (hide_format ? '' : '.{format}')
     # This is attempting to emulate the behavior of
     # Rack::Mount::Strexp. We cannot use Strexp directly because
     # all it does is generate regular expressions for parsing URLs.

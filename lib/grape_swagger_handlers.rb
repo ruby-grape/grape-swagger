@@ -4,45 +4,45 @@
 =end
 
 module GrapeSwaggerHandlers
-	def register_handlers(options)
+  def register_handlers(options)
     @@target_class = options[:target_class]
 
     @@mount_path = options[:mount_path]
     @@class_name = options[:class_name] || options[:mount_path].gsub('/','')
 
-		register_root_handler
+    register_root_handler
     register_resource_handler
-	end
-	def register_root_handler()
-	    desc 'Swagger compatible API description'
-	    get @@mount_path do
-	      header['Access-Control-Allow-Origin'] = '*'
-	      header['Access-Control-Request-Method'] = '*'
-	        
+  end
+  def register_root_handler()
+      desc 'Swagger compatible API description'
+      get @@mount_path do
+        header['Access-Control-Allow-Origin'] = '*'
+        header['Access-Control-Request-Method'] = '*'
+
         requested_api_version = get_requested_version(params)
-       
+
         routes = @@target_class::combined_routes[requested_api_version]
         doc_options = @@target_class::documentation_options[requested_api_version]
 
-	      if doc_options[:hide_documentation_path]
+        if doc_options[:hide_documentation_path]
           parsed_path =  parse_path(doc_options[:mount_path], requested_api_version, nil) 
-	        routes.reject!{ |route, value| "/#{route}/".index(parsed_path << '/') == 0 }
-	      end
+          routes.reject!{ |route, value| "/#{route}/".index(parsed_path << '/') == 0 }
+        end
 
-	      routes_array = routes.keys.map do |local_route|
+        routes_array = routes.keys.map do |local_route|
           parsed_path = parse_path(route.route_path.gsub('(.:format)', ''), route.route_version, doc_options[:hide_format])
-	        {:path => "#{parsed_path}/#{local_route}#{doc_options[:hide_format] ? '' : '.{format}'}" }
-	      end
+          {:path => "#{parsed_path}/#{local_route}#{doc_options[:hide_format] ? '' : '.{format}'}" }
+        end
 
-	      {
-	        apiVersion: requested_api_version,
-	        swaggerVersion: "1.1",
-	        basePath: parse_base_path(doc_options[:base_path], request),
-	        operations:[],
-	        apis: routes_array
-	      }
-	    end
-	end
+        {
+          apiVersion: requested_api_version,
+          swaggerVersion: "1.1",
+          basePath: parse_base_path(doc_options[:base_path], request),
+          operations:[],
+          apis: routes_array
+        }
+      end
+  end
 
   def register_resource_handler
     desc 'Swagger compatible API description for specific API',

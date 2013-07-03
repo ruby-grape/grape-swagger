@@ -51,12 +51,17 @@ module GrapeSwaggerCore
   def add_swagger_documentation(options={})
     version = routes.first.route_version.to_s
     add_documentation_options(version, options)
-    
+
+    p "adding doc for : #{version}" 
     documentation_class = create_documentation_class
     documentation_class.register_handlers(documentation_options[version])
     
     mount(documentation_class)
 
+    if @@combined_routes.has_key?(version)
+       p "#{self.name} wants to add new routes for already existing version - going to remove previous urls."
+       @@combined_routes[version] = {}
+    end
     add_combined_routes(routes)
   end
 

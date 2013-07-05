@@ -28,10 +28,19 @@ Gem::Specification.new do |s|
     "README.markdown",
     "Rakefile",
     "VERSION",
+    "grape-swagger-fork-0.0.1.gem",
+    "grape-swagger-fork.gemspec",
+    "lib/grape-swagger-fork.rb",
     "lib/grape_swagger_core.rb",
     "lib/grape_swagger_handlers.rb",
     "lib/helpers/handler_helpers.rb",
-    "lib/helpers/parser_helpers.rb"
+    "lib/helpers/parser_helpers.rb",
+    "spec_temp/default_api_spec.rb",
+    "spec_temp/grape-swagger_helper_spec.rb",
+    "spec_temp/grape-swagger_spec.rb",
+    "spec_temp/non_default_api_spec.rb",
+    "spec_temp/simple_mounted_api_spec.rb",
+    "spec_temp/spec_helper.rb"
   ]
   s.homepage = "https://github.com/timgluz/grape-swagger"
   s.licenses = ["MIT"]

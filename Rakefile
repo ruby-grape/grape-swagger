@@ -14,13 +14,13 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "grape-swagger"
-  gem.homepage = "http://github.com/tim-vandecasteele/grape-swagger"
+  gem.name = "grape-swagger-fork"
+  gem.homepage = "https://github.com/timgluz/grape-swagger"
   gem.license = "MIT"
   gem.summary = %Q{Add swagger compliant documentation to your grape API}
   gem.description = %Q{A simple way to add proper auto generated documentation - that can be displayed with swagger - to your inline described grape API}
-  gem.email = "tim.vandecasteele@gmail.com"
-  gem.authors = ["Tim Vandecasteele"]
+  gem.email = "timo@versioneye.com"
+  gem.authors = ["Tim Gluz"]
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
@@ -34,4 +34,4 @@ require 'rspec/core/rake_task'
 
 RSpec::Core::RakeTask.new(:spec)
 
-task :default => :spec
+#task :default => :spec

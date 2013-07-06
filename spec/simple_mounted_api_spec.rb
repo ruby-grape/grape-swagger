@@ -28,6 +28,13 @@ describe "a simple mounted api" do
       get '/simple_with_headers' do
         {:bla => 'something_else'}
       end
+
+      desc 'this gets something else', {
+        :object_fields => {:type => 'TestType', :desc => 'Object description', :field_1 => {:type => 'String', :desc => 'Field 1'}, :field_2 => {:type => 'String', :desc => 'Field 2'}} 
+      }
+      get '/simple_with_object_fields' do
+        {:bla => 'something'}
+      end
     end
 
     class SimpleApi < Grape::API
@@ -40,12 +47,17 @@ describe "a simple mounted api" do
 
   it "retrieves swagger-documentation on /swagger_doc" do
     get '/swagger_doc'
-    last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :operations=>[], :apis=>[{:path=>\"/swagger_doc/simple.{format}\"}, {:path=>\"/swagger_doc/simple_with_headers.{format}\"}, {:path=>\"/swagger_doc/swagger_doc.{format}\"}]}"
+    last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :operations=>[], :apis=>[{:path=>\"/swagger_doc/simple.{format}\"}, {:path=>\"/swagger_doc/simple_with_headers.{format}\"}, {:path=>\"/swagger_doc/simple_with_object_fields.{format}\"}, {:path=>\"/swagger_doc/swagger_doc.{format}\"}]}"
   end
 
   it "retrieves the documentation for mounted-api" do
     get '/swagger_doc/simple'
     last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/simple.{format}\", :operations=>[{:notes=>\"_test_\", :summary=>\"this gets something\", :nickname=>\"GET-simple---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
+  end
+
+  it "retrives the documentation for with a object fields" do
+    get '/swagger_doc/simple_with_object_fields'
+    last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"http://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/simple_with_object_fields.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something else\", :nickname=>\"GET-simple_with_object_fields---format-\", :httpMethod=>\"GET\", :parameters=>[{:paramType=>\"body\", :name=>\"TestType\", :description=>\"Object description\", :dataType=>\"TestType\", :required=>false}]}]}], :models=>{\"TestType\"=>{:properties=>{:field_1=>{:type=>\"String\"}, :field_2=>{:type=>\"String\"}}}}}"
   end
 
   it "retrieves the documentation for mounted-api that includes headers" do

@@ -71,6 +71,45 @@ desc "Return super-secret information", {
 }
 ```
 
+### Grape Entities
+
+Add the [grape-entity](https://github.com/agileanimal/grape-entity) gem to your Gemfile.
+Please refer to the [grape-entity documentation](https://github.com/agileanimal/grape-entity/blob/master/README.markdown)
+for more details.
+
+The following example exposes statuses. And exposes statuses documentation adding :type and :desc.
+
+```ruby
+module API
+
+  module Entities
+    class Status < Grape::Entity
+      expose :type, "Status"
+      expose :desc, "Example description for Status"
+      expose :user_name
+      expose :text, :documentation => { :type => "string", :desc => "Status update text." }
+      expose :ip, :if => { :type => :full }
+      expose :user_type, user_id, :if => lambda{ |status, options| status.user.public? }
+      expose :digest { |status, options| Digest::MD5.hexdigest(status.txt) }
+      expose :replies, :using => API::Status, :as => :replies
+    end
+  end
+
+  class Statuses < Grape::API
+    version 'v1'
+
+    desc 'Statuses index', {
+      :object_fields => API::Entities::Status.documentation
+    }
+    get '/statuses' do
+      statuses = Status.all
+      type = current_user.admin? ? :full : :default
+      present statuses, with: API::Entities::Status, :type => type
+    end
+  end
+end
+```
+
 ## Swagger additions
 grape-swagger allows you to add an explanation in markdown in the notes field. Which would result in proper formatted markdown in Swagger UI. The default Swagger UI doesn't allow HTML in the notes field, so you need to use an adapted version of Swagger UI (you can find one at https://github.com/tim-vandecasteele/swagger-ui/tree/vasco).
 

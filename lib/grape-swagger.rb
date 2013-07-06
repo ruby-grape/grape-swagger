@@ -85,16 +85,25 @@ module Grape
               header['Access-Control-Allow-Origin'] = '*'
               header['Access-Control-Request-Method'] = '*'
               routes = @@target_class::combined_routes[params[:name]]
+              models = {}
               routes_array = routes.map do |route|
                 notes = route.route_notes && @@markdown ? Kramdown::Document.new(route.route_notes.strip_heredoc).to_html : route.route_notes
                 http_codes = parse_http_codes route.route_http_codes
+                parameters = []
+                if (route.route_object_fields)
+                  parameters = parse_object_fields(route.route_object_fields)                
+                  models[parameters[0][:dataType]] = {
+                    properties: parse_model_parameters(route.route_object_fields)
+                  }
+                else
+                  parameters = parse_params(route.route_params, route.route_path, route.route_method)
+                end
                 operations = {
                     :notes => notes,
                     :summary => route.route_description || '',
                     :nickname   => route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-'),
                     :httpMethod => route.route_method,
-                    :parameters => parse_header_params(route.route_headers) +
-                      parse_params(route.route_params, route.route_path, route.route_method)
+                    :parameters => parse_header_params(route.route_headers) + parameters
                 }
                 operations.merge!({:errorResponses => http_codes}) unless http_codes.empty?
                 {
@@ -103,13 +112,15 @@ module Grape
                 }
               end
 
-              {
+              api_description = {
                 apiVersion: api_version,
                 swaggerVersion: "1.1",
                 basePath: base_path || request.base_url,
                 resourcePath: "",
                 apis: routes_array
               }
+              api_description[:models] = models unless models.empty?
+              api_description
             end
           end
 
@@ -138,6 +149,34 @@ module Grape
               end
             end
 
+            def parse_object_fields(params)
+              if params
+                [{
+                  paramType: 'body',
+                  name: params[:type],
+                  description: params[:desc],
+                  dataType: params[:type],
+                  required: !!params[:required]
+                }]
+              else
+                []
+              end
+            end
+
+            def parse_model_parameters(params)
+              if params
+                model_params = params.select do |param, value| 
+                  param != :type && param != :desc && value.class != String
+                end
+                model = {}
+                model_params.each_pair do |param, value|
+                  model[param] = {:type => value[:type]}
+                end 
+                model
+              else
+               []
+              end
+            end
 
             def parse_header_params(params)
               if params

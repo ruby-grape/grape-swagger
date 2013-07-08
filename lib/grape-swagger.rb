@@ -94,7 +94,8 @@ module Grape
                     :nickname   => route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-'),
                     :httpMethod => route.route_method,
                     :parameters => parse_header_params(route.route_headers) +
-                      parse_params(route.route_params, route.route_path, route.route_method)
+                      parse_params(route.route_params, route.route_path, route.route_method,
+                                   route.route_body_param)
                 }
                 operations.merge!({:errorResponses => http_codes}) unless http_codes.empty?
                 {
@@ -115,27 +116,40 @@ module Grape
 
 
           helpers do
-            def parse_params(params, path, method)
+            def parse_params(params, path, method, body_param)
+              res = []
               if params
-                params.map do |param, value|
+                params.each do |param, value|
+                  path_param = path.include?(":#{param}")
+                  if body_param && !path_param
+                    next if !body_param.is_a?(Array) || body_param.include?(param)
+                  end
                   value[:type] = 'file' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
 
                   dataType = value.is_a?(Hash) ? value[:type]||'String' : 'String'
                   description = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
                   required = value.is_a?(Hash) ? !!value[:required] : false
-                  paramType = path.include?(":#{param}") ? 'path' : (method == 'POST') ? 'form' : 'query'
+                  paramType = path_param ? 'path' : (method == 'POST') ? 'form' : 'query'
                   name = (value.is_a?(Hash) && value[:full_name]) || param
-                  {
+                  res.push({
                     paramType: paramType,
                     name: name,
                     description: description,
                     dataType: dataType,
                     required: required
-                  }
+                  })
                 end
-              else
-                []
               end
+              if body_param
+                res.push({
+                  paramType: "body",
+                  name: :body,
+                  dataType: "String",
+                  description: "",
+                  required: true
+                })
+              end
+              res
             end
 
 

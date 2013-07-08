@@ -19,29 +19,57 @@ describe "helpers" do
   end
 
   context "parsing parameters" do
-    it "parses params as query strings for a GET" do
-      params = {
+    before do
+      @params = {
         name: { type: 'String', desc: "A name", required: true },
         level: 'max'
       }
-      path = "/coolness"
+      @path = "/coolness"
+    end
+
+    it "parses params as query strings for a GET" do
       method = "GET"
-      @api.parse_params(params, path, method).should == [
+      @api.parse_params(@params, @path, method, nil).should == [
         { paramType: "query", name: :name, description: "A name", dataType: "String", required: true },
         { paramType: "query", name: :level, description: "", dataType: "String", required: false }
       ]
     end
 
     it "parses params as form for a POST" do
-      params = {
-        name: { type: 'String', :desc => "A name", required: true },
-        level: 'max'
-      }
-      path = "/coolness"
       method = "POST"
-      @api.parse_params(params, path, method).should == [
+      @api.parse_params(@params, @path, method, nil).should == [
         { paramType: "form", name: :name, description: "A name", dataType: "String", required: true },
         { paramType: "form", name: :level, description: "", dataType: "String", required: false }
+      ]
+    end
+
+    it "parses params as body with explicit option" do
+      method = "POST"
+      @api.parse_params(@params, @path, method, true).should == [
+        { paramType: "body", name: :body, description: "", dataType: "String", required: true }
+      ]
+    end
+
+    it "parses specific params as body if body_param is an array" do
+      method = "POST"
+      @api.parse_params(@params, @path, method, [:level]).should == [
+        { paramType: "form", name: :name, description: "A name", dataType: "String", required: true },
+        { paramType: "body", name: :body, description: "", dataType: "String", required: true }
+      ]
+    end
+
+    it "does not include path params in body" do
+      method = "FOO"
+      @api.parse_params(@params, "/:level", method, true).should == [
+        { paramType: "path", name: :level, description: "", dataType: "String", required: false },
+        { paramType: "body", name: :body, description: "", dataType: "String", required: true }
+      ]
+    end
+
+    it "body param does not require any parameters to be defined" do
+      method = "FOO"
+      @api.parse_params(nil, @path, method, true).should == [
+        { paramType: "body", name: :body, description: "", dataType: "String", required: true }
       ]
     end
   end

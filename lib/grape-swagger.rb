@@ -71,7 +71,7 @@ module Grape
               {
                 apiVersion: api_version,
                 swaggerVersion: "1.1",
-                basePath: base_path || request.base_url,
+                basePath: URI.join(request.base_url, base_path || '').to_s,
                 operations:[],
                 apis: routes_array
               }
@@ -106,7 +106,7 @@ module Grape
               {
                 apiVersion: api_version,
                 swaggerVersion: "1.1",
-                basePath: base_path || request.base_url,
+                basePath: URI.join(request.base_url, base_path || '').to_s,
                 resourcePath: "",
                 apis: routes_array
               }
@@ -192,7 +192,7 @@ class Object
   #   @person.try(:name)
   #
   # File activesupport/lib/active_support/core_ext/object/try.rb#L32
-   def try(*a, &b)
+  def try(*a, &b)
     if a.empty? && block_given?
       yield self
     else

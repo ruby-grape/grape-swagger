@@ -13,7 +13,11 @@ module Grape
 
         @combined_routes = {}
         routes.each do |route|
-          resource = route.route_path.match('\/(\w*?)[\.\/\(]').captures.first
+          if prefix.nil?
+            resource = route.route_path.match('\/(\w*?)[\.\/\(]').captures.first
+          else
+            resource = route.route_path.match('\/'+prefix.gsub(/^\/+/, '')+'\/(\w*?)[\.\/\(]').captures.first
+          end
           next if resource.empty?
           resource.downcase!
           @combined_routes[resource] ||= []

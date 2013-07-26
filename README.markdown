@@ -33,7 +33,7 @@ module API
 end
 ```
 
-To explore your API, either download [Swagger UI](https://github.com/wordnik/swagger-ui) and set it up yourself or go to the [online swagger demo](http://petstore.swagger.wordnik.com/) and enter your localhost url documentation root in the url field (probably something in the line of http://localhost:3000/swagger_doc.json). 
+To explore your API, either download [Swagger UI](https://github.com/wordnik/swagger-ui) and set it up yourself or go to the [online swagger demo](http://petstore.swagger.wordnik.com/) and enter your localhost url documentation root in the url field (probably something in the line of http://localhost:3000/swagger_doc.json).
 If you use the online demo, make sure your API supports foreign requests by enabling CORS in grape, otherwise you'll see the API description, but requests on the API won't return. You can do this by putting below code in your Grape API definition:
 
 ```` ruby
@@ -53,7 +53,7 @@ You can pass a hash with some configuration possibilities to ```add_swagger_docu
 
 ## Swagger Header Parameters
 
-Swagger also supports the documentation of parameters passed in the header. Since grape's ```params[]``` doesn't return header parameters we can 
+Swagger also supports the documentation of parameters passed in the header. Since grape's ```params[]``` doesn't return header parameters we can
 to specify header parameters seperately in a block after the description.
 
 ``` ruby
@@ -61,14 +61,45 @@ desc "Return super-secret information", {
   headers: {
     "XAuthToken" => {
       description: "Valdates your identity",
-      required: true 
+      required: true
     },
     "XOptionalHeader" => {
       description: "Not reallly needed",
-      required: false 
+      required: false
     }
   }
 }
+```
+### Grape Entities
+
+Add the [grape-entity](https://github.com/agileanimal/grape-entity) gem to our Gemfile.
+Please refer to the [grape-entity documentation](https://github.com/gileanimal/grape-entity/blob/master/README.markdown)
+for more details.
+
+The following example exposes statuses. And exposes statuses documentation adding :type and :desc.
+
+```ruby
+module API
+
+  module Entities
+    class Status < Grape::Entity
+      expose :text, :documentation => { :type => "string", :desc => Status update text." }
+    end
+  end
+
+  class Statuses < Grape::API
+    version 'v1'
+
+    desc 'Statuses index', {
+      :entity => API::Entities::Status
+    }
+    get '/statuses' do
+      statuses = Status.all
+      type = current_user.admin? ? :full : :default
+      present statuses, with: API::Entities::Status, :type => type
+    end
+  end
+end
 ```
 
 ## Swagger additions

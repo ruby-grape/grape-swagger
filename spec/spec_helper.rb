@@ -4,6 +4,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'support'))
 
 require 'grape'
 require 'grape-swagger'
+require 'grape-entity'
 
 require 'rubygems'
 require 'bundler'

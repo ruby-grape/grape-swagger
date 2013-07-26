@@ -83,7 +83,7 @@ module API
 
   module Entities
     class Status < Grape::Entity
-      expose :text, :documentation => { :type => "string", :desc => Status update text." }
+      expose :text, :documentation => { :type => "string", :desc => "Status update text." }
     end
   end
 

@@ -9,7 +9,7 @@ describe "API Models" do
       end
     end
 
-    class NotAMountedApi < Grape::API
+    class ModelsApi < Grape::API
       format :json
       desc 'This gets something.', {
         entity: Entities::Something
@@ -22,7 +22,7 @@ describe "API Models" do
     end
   end
 
-  def app; NotAMountedApi; end
+  def app; ModelsApi; end
 
   it "should document specified models" do
     get '/swagger_doc'

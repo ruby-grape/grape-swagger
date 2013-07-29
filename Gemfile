@@ -4,6 +4,7 @@ source "http://rubygems.org"
 #   gem "activesupport", ">= 2.3.5"
 
 gem 'grape', '>= 0.2.0'
+gem 'grape-entity', '~> 0.3.0'
 gem 'kramdown'
 
 # Add dependencies to develop your gem here.

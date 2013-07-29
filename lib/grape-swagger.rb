@@ -101,6 +101,21 @@ module Grape
                 }
                 operations.merge!({:responseClass => route.route_entity.to_s.split('::')[-1]}) if route.route_entity
                 operations.merge!({:errorResponses => http_codes}) unless http_codes.empty?
+                if docuementation = route.route_documentation
+                  if docuementation[:example_request]
+                    operations.merge!({:exampleRequest => docuementation[:example_request]})
+                  end
+                  if docuementation[:example_response]
+                    headers = docuementation[:example_response][:headers] || {}
+                    operations.merge!({
+                      :exampleResponse => {
+                        :code => docuementation[:example_response][:code] || 200,
+                        :headers => { 'Content-Type' => "application/json" }.merge(headers),
+                        :body => docuementation[:example_response][:body]
+                      }
+                    })
+                  end
+                end
                 {
                   :path => parse_path(route.route_path, api_version),
                   :operations => [operations]

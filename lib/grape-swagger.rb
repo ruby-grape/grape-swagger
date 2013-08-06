@@ -144,7 +144,11 @@ module Grape
                   dataType = value.is_a?(Hash) ? value[:type]||'String' : 'String'
                   description = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
                   required = value.is_a?(Hash) ? !!value[:required] : false
-                  paramType = path.include?(":#{param}") ? 'path' : (method == 'POST') ? 'form' : 'query'
+                  paramType = if path.include?(":#{param}")
+                    'path'
+                  else
+                    %w[ POST PUT PATCH ].include?(method) ? 'form' : 'query'
+                  end
                   name = (value.is_a?(Hash) && value[:full_name]) || param
                   {
                     paramType: paramType,

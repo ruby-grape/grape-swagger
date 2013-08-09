@@ -17,7 +17,10 @@ module Grape
           next if resource.empty?
           resource.downcase!
           @combined_routes[resource] ||= []
-          @combined_routes[resource] << route
+
+          unless @@hide_documentation_path and route.route_path.include? @@mount_path
+            @combined_routes[resource] << route
+          end
         end
 
       end

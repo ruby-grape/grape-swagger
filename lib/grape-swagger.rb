@@ -45,7 +45,7 @@ module Grape
             }
             options = defaults.merge(options)
 
-            @@target_class = options[:target_class]
+            target_class = options[:target_class]
             @@mount_path = options[:mount_path]
             @@class_name = options[:class_name] || options[:mount_path].gsub('/','')
             @@markdown = options[:markdown]
@@ -58,7 +58,7 @@ module Grape
             get @@mount_path do
               header['Access-Control-Allow-Origin'] = '*'
               header['Access-Control-Request-Method'] = '*'
-              routes = @@target_class::combined_routes
+              routes = target_class::combined_routes
 
               if @@hide_documentation_path
                 routes.reject!{ |route, value| "/#{route}/".index(parse_path(@@mount_path, nil) << '/') == 0 }
@@ -84,7 +84,7 @@ module Grape
             get "#{@@mount_path}/:name" do
               header['Access-Control-Allow-Origin'] = '*'
               header['Access-Control-Request-Method'] = '*'
-              routes = @@target_class::combined_routes[params[:name]]
+              routes = target_class::combined_routes[params[:name]]
               routes_array = routes.map do |route|
                 notes = route.route_notes && @@markdown ? Kramdown::Document.new(strip_heredoc(route.route_notes)).to_html : route.route_notes
                 http_codes = parse_http_codes route.route_http_codes

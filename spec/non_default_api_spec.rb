@@ -257,7 +257,7 @@ describe "options: " do
     end
   end
 
-  context "versioned API" do
+  context "prefixed and versioned API" do
     before :all do
       class VersionedMountedApi < Grape::API
         prefix 'api'
@@ -278,7 +278,8 @@ describe "options: " do
     def app; SimpleApiWithVersion end
 
     it "parses version and places it in the path" do
-      get '/swagger_doc/api.json'
+      get '/swagger_doc/something.json'
+
       JSON.parse(last_response.body)["apis"].each do |api|
         api["path"].should start_with "/api/v1/"
       end

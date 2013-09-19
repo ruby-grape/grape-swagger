@@ -337,4 +337,32 @@ describe "options: " do
       end
     end
   end
+
+  context ":formatting" do
+    before :all do
+      class JSONDefaultFormatAPI < Grape::API
+        desc 'This gets something.'
+        get '/something' do
+          { bla: 'something' }
+        end
+      end
+
+      class SimpleJSONFormattedAPI < Grape::API
+        mount JSONDefaultFormatAPI
+        add_swagger_documentation formatting: {format: :json,
+                                               default_format: :json,
+                                               default_error_formatter: :json} 
+      end
+    end
+
+    def app; SimpleJSONFormattedAPI; end
+
+    it "defaults to JSON format when none is specified" do
+      get '/swagger_doc/something'
+
+      lambda{ JSON.parse(last_response.body) }.should_not raise_error
+    end
+
+  end
+
 end

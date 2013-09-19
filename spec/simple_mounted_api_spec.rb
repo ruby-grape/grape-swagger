@@ -15,6 +15,14 @@ describe "a simple mounted api" do
         { bla: 'something' }
       end
 
+      desc 'This gets something for URL using - separator.', {
+        :notes => '_test_'
+      }
+
+      get '/simple-test' do
+        { bla: 'something' }
+      end
+
       desc 'this gets something else', {
         :headers => {
           "XAuthToken" => {description: "A required header.", required: true},
@@ -37,6 +45,7 @@ describe "a simple mounted api" do
       post '/items' do
         {}
       end
+
     end
 
     class SimpleApi < Grape::API
@@ -56,6 +65,7 @@ describe "a simple mounted api" do
       "operations" => [],
       "apis" => [
         { "path" => "/swagger_doc/simple.{format}" },
+        { "path" => "/swagger_doc/simple-test.{format}" },
         { "path" => "/swagger_doc/simple_with_headers.{format}" },
         { "path" => "/swagger_doc/items.{format}" },
         { "path" => "/swagger_doc/swagger_doc.{format}" }
@@ -81,6 +91,23 @@ describe "a simple mounted api" do
     }
   end
 
+  it "retrieves the documentation for mounted-api with '-' in URL" do
+    get '/swagger_doc/simple-test.json'
+    JSON.parse(last_response.body).should == {
+      "apiVersion" => "0.1",
+      "swaggerVersion" => "1.1",
+      "basePath" => "http://example.org",
+      "resourcePath" => "",
+      "apis" => [
+        {
+          "path" => "/simple-test.{format}",
+          "operations" => [
+            { "notes" => "_test_", "summary" => "This gets something for URL using - separator.", "nickname" => "GET-simple-test---format-", "httpMethod" => "GET", "parameters" => [] }
+          ]
+        }
+      ]
+    }
+  end
   it "retrieves the documentation for mounted-api that includes headers" do
     get '/swagger_doc/simple_with_headers.json'
     JSON.parse(last_response.body).should == {

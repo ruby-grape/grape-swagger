@@ -49,6 +49,7 @@ module Grape
               :markdown                 => false,
               :hide_documentation_path  => false,
               :hide_format              => false,
+              :format                   => nil,
               :models                   => [],
               :info                     => {},
               :authorizations           => nil,
@@ -71,6 +72,12 @@ module Grape
             extra_info       = options[:info]
 
             @@hide_documentation_path = options[:hide_documentation_path]
+
+            if options[:format]
+              [:format, :default_format, :default_error_formatter].each do |method|
+                send(method, options[:format])
+              end
+            end
 
             desc 'Swagger compatible API description'
             get @@mount_path do

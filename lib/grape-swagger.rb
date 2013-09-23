@@ -66,8 +66,9 @@ module Grape
               end
 
               routes_array = routes.keys.map do |local_route|
+                  next if routes[local_route].any? { |route| route.route_hidden }
                   { :path => "#{parse_path(route.route_path.gsub('(.:format)', ''),route.route_version)}/#{local_route}#{@@hide_format ? '' : '.{format}'}" }
-              end
+              end.compact
 
               {
                 apiVersion: api_version,

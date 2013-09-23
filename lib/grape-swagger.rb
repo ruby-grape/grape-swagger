@@ -231,7 +231,7 @@ module Grape
             end
 
             def parse_base_path(base_path, request)
-              (base_path.is_a?(Proc) ? base_path.call(request) : base_path) || request.base_url
+              (base_path.is_a?(Proc) ? base_path.call(request) : base_path) || "#{request.url}/api"
             end
           end
         end

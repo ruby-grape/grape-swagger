@@ -24,7 +24,7 @@ describe "a hide mounted api" do
 
   def app; HideApi end
 
-  it "retrieves swagger-documentation on /swagger_doc" do
+  it "retrieves swagger-documentation that doesn't include hidden endpoint" do
     get '/swagger_doc.json'
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",

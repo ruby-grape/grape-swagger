@@ -5,14 +5,14 @@ describe "a hide mounted api" do
     class HideMountedApi < Grape::API
       desc 'Show this endpoint'
       get '/simple' do
-        { :bla => 'something' }
+        { :foo => 'bar' }
       end
 
       desc 'Hide this endpoint', {
         :hidden => true
       }
       get '/hide' do
-        { :bla => 'something_else' }
+        { :foo => 'bar' }
       end
     end
 

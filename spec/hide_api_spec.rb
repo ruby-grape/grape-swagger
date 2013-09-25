@@ -64,7 +64,7 @@ describe "a hide mounted api with same namespace" do
 
   def app; HideNamespaceApi end
 
-  it "retrieves the documentation for mounted-api" do
+  it "retrieves swagger-documentation on /swagger_doc" do
     get '/swagger_doc.json'
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",
@@ -78,7 +78,7 @@ describe "a hide mounted api with same namespace" do
     }
   end
 
-  it "retrieves the documentation for mounted-api that doesn't include hidden paths" do
+  it "retrieves the documentation for mounted-api that doesn't include hidden endpoints" do
     get '/swagger_doc/simple.json'
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",

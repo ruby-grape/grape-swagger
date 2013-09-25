@@ -65,8 +65,8 @@ module Grape
               end
 
               routes_array = routes.keys.map { |local_route|
-                  next if routes[local_route].any? { |route| route.route_hidden }
-                  { :path => "#{parse_path(route.route_path.gsub('(.:format)', ''),route.route_version)}/#{local_route}#{@@hide_format ? '' : '.{format}'}" }
+                next if routes[local_route].all? { |route| route.route_hidden }
+                { :path => "#{parse_path(route.route_path.gsub('(.:format)', ''),route.route_version)}/#{local_route}#{@@hide_format ? '' : '.{format}'}" }
               }.compact
 
               {
@@ -86,7 +86,8 @@ module Grape
               header['Access-Control-Allow-Origin'] = '*'
               header['Access-Control-Request-Method'] = '*'
               routes = @@target_class::combined_routes[params[:name]]
-              routes_array = routes.map do |route|
+              routes_array = routes.map { |route|
+                next if route.route_hidden
                 notes = route.route_notes && @@markdown ? Kramdown::Document.new(strip_heredoc(route.route_notes)).to_html : route.route_notes
                 http_codes = parse_http_codes route.route_http_codes
                 operations = {
@@ -102,7 +103,7 @@ module Grape
                   :path => parse_path(route.route_path, api_version),
                   :operations => [operations]
                 }
-              end
+              }.compact
 
               {
                 apiVersion: api_version,

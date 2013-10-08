@@ -13,11 +13,14 @@ module Grape
 
         @combined_routes = {}
         routes.each do |route|
-          resource = route.route_path.match('\/([\w|-]*?)[\.\/\(]').captures.first
+          resource = route.route_path.split(route.route_prefix).last.match('\/([\w|-]*?)[\.\/\(]').captures.first
           next if resource.empty?
           resource.downcase!
           @combined_routes[resource] ||= []
-          @combined_routes[resource] << route
+
+          unless @@hide_documentation_path and route.route_path.include? @@mount_path
+            @combined_routes[resource] << route
+          end
         end
 
       end

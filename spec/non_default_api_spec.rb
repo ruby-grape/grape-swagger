@@ -115,6 +115,7 @@ describe "options: " do
 
     it "gets the documentation on a versioned path /v1/swagger_doc" do
       get '/v1/swagger_doc.json'
+
       JSON.parse(last_response.body).should == {
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.1",
@@ -150,7 +151,6 @@ describe "options: " do
 
   context "overriding hiding the documentation paths" do
     before :all do
-
       class HideDocumentationPathMountedApi < Grape::API
         desc 'This gets something.'
         get '/something' do
@@ -178,6 +178,88 @@ describe "options: " do
         ]
       }
     end
+  end
+
+  context "overriding hiding the documentation paths in prefixed API" do
+    before :all do
+      class HideDocumentationPathPrefixedMountedApi < Grape::API
+        desc 'This gets something.'
+        get '/something' do
+          { bla: 'something' }
+        end
+      end
+
+      class PrefixedApiWithHiddenDocumentation < Grape::API
+        prefix "abc"
+        mount HideDocumentationPathPrefixedMountedApi
+        add_swagger_documentation :hide_documentation_path => true
+      end
+
+    end
+
+    def app; PrefixedApiWithHiddenDocumentation end
+
+    it "it doesn't show the documentation path on /abc/swagger_doc/something.json" do
+      get '/abc/swagger_doc/something.json'
+
+      JSON.parse(last_response.body).should == {
+          "apiVersion"=>"0.1",
+          "swaggerVersion"=>"1.1",
+          "basePath"=>"http://example.org",
+          "resourcePath"=>"",
+          "apis"=>
+              [{"path"=>"/abc/something.{format}",
+                "operations"=>
+                    [{"notes"=>nil,
+                      "summary"=>"This gets something.",
+                      "nickname"=>"GET-abc-something---format-",
+                      "httpMethod"=>"GET",
+                      "parameters"=>[]}]}
+          ]}
+    end
+
+  end
+
+  context "overriding hiding the documentation paths in prefixed and versioned API" do
+    before :all do
+      class HideDocumentationPathMountedApi2 < Grape::API
+        desc 'This gets something.'
+        get '/something' do
+          { bla: 'something' }
+        end
+      end
+
+      class PrefixedAndVersionedApiWithHiddenDocumentation < Grape::API
+        prefix "abc"
+        version 'v20', :using => :path
+
+        mount HideDocumentationPathMountedApi2
+
+        add_swagger_documentation :hide_documentation_path => true, :api_version => self.version
+      end
+    end
+
+    def app; PrefixedAndVersionedApiWithHiddenDocumentation end
+
+    it "it doesn't show the documentation path on /abc/v1/swagger_doc/something.json" do
+      get '/abc/v20/swagger_doc/something.json'
+
+      JSON.parse(last_response.body).should == {
+          "apiVersion"=>"v20",
+          "swaggerVersion"=>"1.1",
+          "basePath"=>"http://example.org",
+          "resourcePath"=>"",
+          "apis"=>
+              [{"path"=>"/abc/v20/something.{format}",
+                "operations"=>
+                    [{"notes"=>nil,
+                      "summary"=>"This gets something.",
+                      "nickname"=>"GET-abc--version-something---format-",
+                      "httpMethod"=>"GET",
+                      "parameters"=>[]}]}
+              ]}
+    end
+
   end
 
   context "overriding the mount-path" do
@@ -257,7 +339,7 @@ describe "options: " do
     end
   end
 
-  context "versioned API" do
+  context "prefixed and versioned API" do
     before :all do
       class VersionedMountedApi < Grape::API
         prefix 'api'
@@ -278,7 +360,8 @@ describe "options: " do
     def app; SimpleApiWithVersion end
 
     it "parses version and places it in the path" do
-      get '/swagger_doc/api.json'
+      get '/swagger_doc/something.json'
+
       JSON.parse(last_response.body)["apis"].each do |api|
         api["path"].should start_with "/api/v1/"
       end

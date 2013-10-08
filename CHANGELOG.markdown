@@ -2,6 +2,7 @@
 
 * Fix: translate parameter `type` to String, enables using Mongoid fields as parameter definitions - [@dblock](https://github.com/dblock).
 * Adding support for generating swagger responseClass and models from Grape Entities - [@calebwoods](https://github.com/calebwoods).
+* Adding hidden endpoints - [@arturoherrero](https://github.com/arturoherrero).
 * Your Contribution Here
 
 ### 0.6.0 (June 19, 2013)

@@ -53,8 +53,7 @@ You can pass a hash with some configuration possibilities to ```add_swagger_docu
 
 ## Swagger Header Parameters
 
-Swagger also supports the documentation of parameters passed in the header. Since grape's ```params[]``` doesn't return header parameters we can
-to specify header parameters seperately in a block after the description.
+Swagger also supports the documentation of parameters passed in the header. Since grape's ```params[]``` doesn't return header parameters we can specify header parameters seperately in a block after the description.
 
 ``` ruby
 desc "Return super-secret information", {
@@ -70,7 +69,18 @@ desc "Return super-secret information", {
   }
 }
 ```
-### Grape Entities
+
+## Hiding an endpoint
+
+You can hide an endpoint by adding ```:hidden => true``` in the description of the endpoint:
+
+``` ruby
+desc 'Hide this endpoint', {
+  :hidden => true
+}
+```
+
+## Grape Entities
 
 Add the [grape-entity](https://github.com/agileanimal/grape-entity) gem to our Gemfile.
 Please refer to the [grape-entity documentation](https://github.com/gileanimal/grape-entity/blob/master/README.markdown)

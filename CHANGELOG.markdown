@@ -4,6 +4,7 @@
 * Adding support for generating swagger responseClass and models from Grape Entities - [@calebwoods](https://github.com/calebwoods).
 * Adding hidden endpoints - [@arturoherrero](https://github.com/arturoherrero).
 * Fix: allow urls with `-` - [@dadario](https://github.com/dadario).
+* Fix: mounting multiple documentations - [@Drakula2k](https://github.com/Drakula2k).
 * Your Contribution Here
 
 ### 0.6.0 (June 19, 2013)

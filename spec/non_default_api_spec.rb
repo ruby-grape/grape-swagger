@@ -337,4 +337,59 @@ describe "options: " do
       end
     end
   end
+
+  context "multiple documentations" do
+    before :all do
+      class FirstApi < Grape::API
+        desc 'This is the first API'
+        get '/first' do
+          { first: 'hip' }
+        end
+
+        add_swagger_documentation mount_path: '/first/swagger_doc'
+      end
+
+      class SecondApi < Grape::API
+        desc 'This is the second API'
+        get '/second' do
+          { second: 'hop' }
+        end
+
+        add_swagger_documentation mount_path: '/second/swagger_doc'
+      end
+
+      class SimpleApiWithMultipleMountedDocumentations < Grape::API
+        mount FirstApi
+        mount SecondApi
+      end
+    end
+
+    def app; SimpleApiWithMultipleMountedDocumentations; end
+
+    it "retrieves the first swagger-documentation on /first/swagger_doc" do
+      get '/first/swagger_doc.json'
+      JSON.parse(last_response.body).should == {
+        "apiVersion" => "0.1",
+        "swaggerVersion" => "1.1",
+        "basePath" => "http://example.org",
+        "operations" => [],
+        "apis" => [
+          { "path" => "/first/swagger_doc/first.{format}" }
+        ]
+      }
+    end
+
+    it "retrieves the first swagger-documentation on /second/swagger_doc" do
+      get '/second/swagger_doc.json'
+      JSON.parse(last_response.body).should == {
+        "apiVersion" => "0.1",
+        "swaggerVersion" => "1.1",
+        "basePath" => "http://example.org",
+        "operations" => [],
+        "apis" => [
+          { "path" => "/second/swagger_doc/second.{format}" }
+        ]
+      }
+    end
+  end
 end

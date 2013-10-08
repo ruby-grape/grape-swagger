@@ -42,7 +42,7 @@ module Grape
               :markdown => false,
               :hide_documentation_path => false,
               :hide_format => false,
-              :formatting => {}
+              :format => nil,
             }
             options = defaults.merge(options)
 
@@ -55,9 +55,10 @@ module Grape
             api_version = options[:api_version]
             base_path = options[:base_path]
 
-            [:format, :default_format, :default_error_formatter].each do |method|
-              next unless options[:formatting][method]
-              send(method, options[:formatting][method])
+            if options[:format]
+              [:format, :default_format, :default_error_formatter].each do |method|
+                send(method, options[:format])
+              end
             end
 
             desc 'Swagger compatible API description'

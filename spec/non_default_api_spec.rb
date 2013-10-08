@@ -349,9 +349,7 @@ describe "options: " do
 
       class SimpleJSONFormattedAPI < Grape::API
         mount JSONDefaultFormatAPI
-        add_swagger_documentation formatting: {format: :json,
-                                               default_format: :json,
-                                               default_error_formatter: :json} 
+        add_swagger_documentation format: :json
       end
     end
 

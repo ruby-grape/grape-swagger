@@ -182,7 +182,7 @@ describe "options: " do
 
   context "overriding hiding the documentation paths in prefixed API" do
     before :all do
-      class HideDocumentationPathMountedApi < Grape::API
+      class HideDocumentationPathPrefixedMountedApi < Grape::API
         desc 'This gets something.'
         get '/something' do
           { bla: 'something' }
@@ -191,7 +191,7 @@ describe "options: " do
 
       class PrefixedApiWithHiddenDocumentation < Grape::API
         prefix "abc"
-        mount HideDocumentationPathMountedApi
+        mount HideDocumentationPathPrefixedMountedApi
         add_swagger_documentation :hide_documentation_path => true
       end
 
@@ -199,8 +199,8 @@ describe "options: " do
 
     def app; PrefixedApiWithHiddenDocumentation end
 
-    it "it doesn't show the documentation path on /abc/swagger_doc/abc.json" do
-      get '/abc/swagger_doc/abc.json'
+    it "it doesn't show the documentation path on /abc/swagger_doc/something.json" do
+      get '/abc/swagger_doc/something.json'
 
       JSON.parse(last_response.body).should == {
           "apiVersion"=>"0.1",
@@ -241,8 +241,8 @@ describe "options: " do
 
     def app; PrefixedAndVersionedApiWithHiddenDocumentation end
 
-    it "it doesn't show the documentation path on /abc/v1/swagger_doc/abc.json" do
-      get '/abc/v20/swagger_doc/abc.json'
+    it "it doesn't show the documentation path on /abc/v1/swagger_doc/something.json" do
+      get '/abc/v20/swagger_doc/something.json'
 
       JSON.parse(last_response.body).should == {
           "apiVersion"=>"v20",

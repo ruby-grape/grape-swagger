@@ -20,6 +20,9 @@ GEM
       rack-accept
       rack-mount
       virtus
+    grape-entity (0.3.0)
+      activesupport
+      multi_json (>= 1.3.2)
     hashie (2.0.5)
     i18n (0.6.1)
     jeweler (1.8.4)
@@ -71,6 +74,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (> 1.0.0)
   grape (>= 0.2.0)
+  grape-entity (~> 0.3.0)
   jeweler (~> 1.8.4)
   kramdown
   pry

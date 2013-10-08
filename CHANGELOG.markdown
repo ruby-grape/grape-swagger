@@ -6,6 +6,7 @@
 * Fix: allow urls with `-` - [@dadario](https://github.com/dadario).
 * Fix: mounting multiple documentations - [@Drakula2k](https://github.com/Drakula2k).
 * Fix: resource groupings for prefixed APIs - [@aew](https://github.com/aew).
+* Fix: hide_documentation_path on prefixed APIs - [@spier](https://github.com/spier).
 * Your Contribution Here
 
 ### 0.6.0 (June 19, 2013)

@@ -93,7 +93,7 @@ module Grape
               routes = target_class::combined_routes[params[:name]]
               routes_array = routes.map {|route|
                 next if route.route_hidden
-                notes = route.route_notes && @@markdown ? Kramdown::Document.new(strip_heredoc(route.route_notes)).to_html : route.route_notes
+                notes = as_markdown(route.route_notes)
                 http_codes = parse_http_codes route.route_http_codes
                 models << route.route_entity if route.route_entity
                 operations = {
@@ -126,6 +126,11 @@ module Grape
 
 
           helpers do
+
+            def as_markdown(description)
+              description && @@markdown ? Kramdown::Document.new(strip_heredoc(description)).to_html : description
+            end
+
             def parse_params(params, path, method)
               if params
                 params.map do |param, value|
@@ -139,7 +144,7 @@ module Grape
                   {
                     paramType: paramType,
                     name: name,
-                    description: description,
+                    description: as_markdown(description),
                     dataType: dataType,
                     required: required
                   }
@@ -160,7 +165,7 @@ module Grape
                   {
                     paramType: paramType,
                     name: param,
-                    description: description,
+                    description: as_markdown(description),
                     dataType: dataType,
                     required: required
                   }

@@ -13,11 +13,14 @@ module Grape
 
         @combined_routes = {}
         routes.each do |route|
-          resource = route.route_path.match('\/([\w|-]*?)[\.\/\(]').captures.first
+          resource = route.route_path.split(route.route_prefix).last.match('\/([\w|-]*?)[\.\/\(]').captures.first
           next if resource.empty?
           resource.downcase!
           @combined_routes[resource] ||= []
-          @combined_routes[resource] << route
+
+          unless @@hide_documentation_path and route.route_path.include? @@mount_path
+            @combined_routes[resource] << route
+          end
         end
 
       end
@@ -41,11 +44,12 @@ module Grape
               :api_version => '0.1',
               :markdown => false,
               :hide_documentation_path => false,
-              :hide_format => false
+              :hide_format => false,
+              :models => []
             }
             options = defaults.merge(options)
 
-            @@target_class = options[:target_class]
+            target_class = options[:target_class]
             @@mount_path = options[:mount_path]
             @@class_name = options[:class_name] || options[:mount_path].gsub('/','')
             @@markdown = options[:markdown]
@@ -58,15 +62,16 @@ module Grape
             get @@mount_path do
               header['Access-Control-Allow-Origin'] = '*'
               header['Access-Control-Request-Method'] = '*'
-              routes = @@target_class::combined_routes
+              routes = target_class::combined_routes
 
               if @@hide_documentation_path
                 routes.reject!{ |route, value| "/#{route}/".index(parse_path(@@mount_path, nil) << '/') == 0 }
               end
 
-              routes_array = routes.keys.map do |local_route|
-                  { :path => "#{parse_path(route.route_path.gsub('(.:format)', ''),route.route_version)}/#{local_route}#{@@hide_format ? '' : '.{format}'}" }
-              end
+              routes_array = routes.keys.map { |local_route|
+                next if routes[local_route].all? { |route| route.route_hidden }
+                { :path => "#{parse_path(route.route_path.gsub('(.:format)', ''),route.route_version)}/#{local_route}#{@@hide_format ? '' : '.{format}'}" }
+              }.compact
 
               {
                 apiVersion: api_version,
@@ -84,10 +89,13 @@ module Grape
             get "#{@@mount_path}/:name" do
               header['Access-Control-Allow-Origin'] = '*'
               header['Access-Control-Request-Method'] = '*'
-              routes = @@target_class::combined_routes[params[:name]]
-              routes_array = routes.map do |route|
+              models = []
+              routes = target_class::combined_routes[params[:name]]
+              routes_array = routes.map {|route|
+                next if route.route_hidden
                 notes = route.route_notes && @@markdown ? Kramdown::Document.new(strip_heredoc(route.route_notes)).to_html : route.route_notes
                 http_codes = parse_http_codes route.route_http_codes
+                models << route.route_entity if route.route_entity
                 operations = {
                     :notes => notes,
                     :summary => route.route_description || '',
@@ -96,20 +104,23 @@ module Grape
                     :parameters => parse_header_params(route.route_headers) +
                       parse_params(route.route_params, route.route_path, route.route_method)
                 }
+                operations.merge!({:responseClass => route.route_entity.to_s.split('::')[-1]}) if route.route_entity
                 operations.merge!({:errorResponses => http_codes}) unless http_codes.empty?
                 {
                   :path => parse_path(route.route_path, api_version),
                   :operations => [operations]
                 }
-              end
+              }.compact
 
-              {
+              api_description = {
                 apiVersion: api_version,
                 swaggerVersion: "1.1",
                 basePath: parse_base_path(base_path, request),
                 resourcePath: "",
                 apis: routes_array
               }
+              api_description[:models] = parse_entity_models(models) unless models.empty?
+              api_description
             end
           end
 
@@ -120,7 +131,7 @@ module Grape
                 params.map do |param, value|
                   value[:type] = 'file' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
 
-                  dataType = value.is_a?(Hash) ? value[:type]||'String' : 'String'
+                  dataType = value.is_a?(Hash) ? (value[:type] || 'String').to_s : 'String'
                   description = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
                   required = value.is_a?(Hash) ? !!value[:required] : false
                   paramType = path.include?(":#{param}") ? 'path' : (method == 'POST') ? 'form' : 'query'
@@ -170,6 +181,19 @@ module Grape
               parsed_path = parsed_path.gsub(/:([a-zA-Z_]\w*)/, '{\1}')
               # add the version
               version ? parsed_path.gsub('{version}', version) : parsed_path
+            end
+
+            def parse_entity_models(models)
+              result = {}
+              models.each do |model|
+                name = model.to_s.split('::')[-1]
+                result[name] = {
+                  id: name,
+                  name: name,
+                  properties: model.documentation
+                }
+              end
+              result
             end
 
             def parse_http_codes codes

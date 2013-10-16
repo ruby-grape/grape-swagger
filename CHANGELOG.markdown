@@ -1,5 +1,14 @@
 ### Next Release
 
+* Fix: translate parameter `type` to String, enables using Mongoid fields as parameter definitions - [@dblock](https://github.com/dblock).
+* Adding support for generating swagger responseClass and models from Grape Entities - [@calebwoods](https://github.com/calebwoods).
+* Adding hidden endpoints - [@arturoherrero](https://github.com/arturoherrero).
+* Fix: allow urls with `-` - [@dadario](https://github.com/dadario).
+* Fix: mounting multiple documentations - [@Drakula2k](https://github.com/Drakula2k).
+* Fix: resource groupings for prefixed APIs - [@aew](https://github.com/aew).
+* Fix: hide_documentation_path on prefixed APIs - [@spier](https://github.com/spier).
+* Your Contribution Here
+
 ### 0.6.0 (June 19, 2013)
 
 * Added Rails 4 support - [@jrhe](https://github.com/jrhe).

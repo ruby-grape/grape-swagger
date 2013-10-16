@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe "a simple mounted api" do
   before :all do
+    class CustomType; end
+
     class SimpleMountedApi < Grape::API
       desc "Document root"
       get do
@@ -25,8 +27,8 @@ describe "a simple mounted api" do
 
       desc 'this gets something else', {
         :headers => {
-          "XAuthToken" => {description: "A required header.", required: true},
-          "XOtherHeader" => {description: "An optional header.", required: false}
+          "XAuthToken" => { description: "A required header.", required: true },
+          "XOtherHeader" => { description: "An optional header.", required: false }
         },
         :http_codes => {
         	403 => "invalid pony",
@@ -39,7 +41,7 @@ describe "a simple mounted api" do
 
       desc 'this takes an array of parameters', {
         :params => {
-          "items[]" => { :description => "array of items" }
+          "items[]" => { description: "array of items" }
         }
       }
       post '/items' do
@@ -68,6 +70,7 @@ describe "a simple mounted api" do
         { "path" => "/swagger_doc/simple-test.{format}" },
         { "path" => "/swagger_doc/simple_with_headers.{format}" },
         { "path" => "/swagger_doc/items.{format}" },
+        { "path" => "/swagger_doc/custom.{format}" },
         { "path" => "/swagger_doc/swagger_doc.{format}" }
       ]
     }
@@ -139,28 +142,61 @@ describe "a simple mounted api" do
     }
   end
 
-  it "retrieves the documentation for mounted-api that supports multiple parameters" do
-    get '/swagger_doc/items.json'
+    it "includes headers" do
+      get '/swagger_doc/simple_with_headers.json'
+      JSON.parse(last_response.body)["apis"].should == [{
+        "path" => "/simple_with_headers.{format}",
+        "operations" => [
+          {
+            "notes" => nil,
+            "summary" => "this gets something else",
+            "nickname" => "GET-simple_with_headers---format-",
+            "httpMethod" => "GET",
+            "parameters" => [
+              { "paramType" => "header", "name" => "XAuthToken", "description" => "A required header.", "dataType" => "String", "required" => true },
+              { "paramType" => "header", "name" => "XOtherHeader", "description" => "An optional header.", "dataType" => "String", "required" => false }
+            ],
+            "errorResponses" => [
+              { "code" => 403, "reason" => "invalid pony" },
+              { "code" => 405, "reason" => "no ponies left!" }
+            ]
+          }
+        ]
+      }]
+    end
 
-    JSON.parse(last_response.body).should == {
-      "apiVersion" => "0.1",
-      "swaggerVersion" => "1.1",
-      "basePath" => "http://example.org",
-      "resourcePath" => "",
-      "apis" => [
-        {
-          "path" => "/items.{format}",
-          "operations" => [
-            {
-              "notes" => nil,
-              "summary" => "this takes an array of parameters",
-              "nickname" => "POST-items---format-",
-              "httpMethod" => "POST",
-              "parameters" => [ { "paramType" => "form", "name" => "items[]", "description" => "array of items", "dataType" => "String", "required" => false } ]
-            }
-          ]
-        }
-      ]
-    }
+    it "supports multiple parameters" do
+      get '/swagger_doc/items.json'
+      JSON.parse(last_response.body)["apis"].should == [{
+        "path" => "/items.{format}",
+        "operations" => [
+          {
+            "notes" => nil,
+            "summary" => "this takes an array of parameters",
+            "nickname" => "POST-items---format-",
+            "httpMethod" => "POST",
+            "parameters" => [ { "paramType" => "form", "name" => "items[]", "description" => "array of items", "dataType" => "String", "required" => false } ]
+          }
+        ]
+      }]
+    end
+
+    it "supports custom types" do
+      get '/swagger_doc/custom.json'
+      JSON.parse(last_response.body)["apis"].should == [{
+        "path" => "/custom.{format}",
+        "operations" => [
+          {
+            "notes" => nil,
+            "summary" => "this uses a custom parameter",
+            "nickname" => "GET-custom---format-",
+            "httpMethod" => "GET",
+            "parameters" => [ { "paramType" => "query", "name" => "custom", "description" => "array of items", "dataType" => "CustomType", "required" => false } ]
+          }
+        ]
+      }]
+    end
+
   end
+
 end

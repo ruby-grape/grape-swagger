@@ -193,8 +193,8 @@ module Grape
               models.each do |model|
                 name = model.to_s.split('::')[-1]
                 result[name] = {
-                  id: name,
-                  name: name,
+                  id: model.instance_variable_get(:@root) || name,
+                  name: model.instance_variable_get(:@root) || name,
                   properties: model.documentation
                 }
               end
@@ -204,7 +204,7 @@ module Grape
             def parse_http_codes codes
               codes ||= {}
               codes.collect do |k, v|
-                { code: k, reason: v }
+                { code: k, message: v }
               end
             end
 

@@ -136,8 +136,8 @@ describe "a simple mounted api" do
                                                                 { "paramType" => "header", "name" => "XOtherHeader", "description" => "An optional header.", "dataType" => "String", "required" => false }
                                                               ],
                                                               "errorResponses" => [
-                                                                { "code" => 403, "reason" => "invalid pony" },
-                                                                { "code" => 405, "reason" => "no ponies left!" }
+                                                                { "code" => 403, "message" => "invalid pony" },
+                                                                { "code" => 405, "message" => "no ponies left!" }
                                                               ]
                                                             }
                                                           ]

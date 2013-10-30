@@ -211,18 +211,7 @@ module Grape
                 items = {}
 
                 raw_data_type = value.is_a?(Hash) ? (value[:type] || 'string').to_s : 'string'
-                dataType      = case raw_data_type
-                                when "Boolean", "Date", "Integer", "String"
-                                  raw_data_type.downcase
-                                when "BigDecimal"
-                                  "long"
-                                when "DateTime"
-                                  "dateTime"
-                                when "Numeric"
-                                  "double"
-                                else
-                                  parse_entity_name(raw_data_type)
-                                end
+                dataType      = data_type_from_raw_data_type(raw_data_type)
                 description   = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
                 required      = value.is_a?(Hash) ? !!value[:required] : false
                 defaultValue  = value.is_a?(Hash) ? value[:defaultValue] : nil
@@ -287,6 +276,23 @@ module Grape
                 termsOfServiceUrl:  info[:terms_of_service_url],
                 title:              info[:title]
               }.delete_if{|_, value| value.blank?}
+            end
+
+            def data_type_from_raw_data_type(raw_data_type)
+              case raw_data_type
+              when "Virtus::Attribute::Boolean"
+                "boolean"
+              when "Boolean", "Date", "Integer", "String"
+                raw_data_type.downcase
+              when "BigDecimal"
+                "long"
+              when "DateTime"
+                "dateTime"
+              when "Numeric"
+                "double"
+              else
+                parse_entity_name(raw_data_type)
+              end
             end
 
             def parse_header_params(params)

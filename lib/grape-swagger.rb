@@ -95,7 +95,7 @@ module Grape
               routes = target_class::combined_routes[params[:name]]
               routes_array = routes.map {|route|
                 next if route.route_hidden
-                notes = route.route_notes && @@markdown ? Kramdown::Document.new(strip_heredoc(route.route_notes)).to_html : route.route_notes
+                notes = as_markdown(route.route_notes)
                 http_codes = parse_http_codes route.route_http_codes
                 models << route.route_entity if route.route_entity
                 operations = {
@@ -128,6 +128,11 @@ module Grape
 
 
           helpers do
+
+            def as_markdown(description)
+              description && @@markdown ? Kramdown::Document.new(strip_heredoc(description)).to_html : description
+            end
+
             def parse_params(params, path, method)
               if params
                 params.map do |param, value|
@@ -141,7 +146,7 @@ module Grape
                   {
                     paramType: paramType,
                     name: name,
-                    description: description,
+                    description: as_markdown(description),
                     dataType: dataType,
                     required: required
                   }
@@ -162,7 +167,7 @@ module Grape
                   {
                     paramType: paramType,
                     name: param,
-                    description: description,
+                    description: as_markdown(description),
                     dataType: dataType,
                     required: required
                   }
@@ -190,8 +195,8 @@ module Grape
               models.each do |model|
                 name = model.to_s.split('::')[-1]
                 result[name] = {
-                  id: name,
-                  name: name,
+                  id: model.instance_variable_get(:@root) || name,
+                  name: model.instance_variable_get(:@root) || name,
                   properties: model.documentation
                 }
               end
@@ -201,7 +206,7 @@ module Grape
             def parse_http_codes codes
               codes ||= {}
               codes.collect do |k, v|
-                { code: k, reason: v }
+                { code: k, message: v }
               end
             end
 

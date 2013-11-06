@@ -86,14 +86,14 @@ Add the [grape-entity](https://github.com/agileanimal/grape-entity) gem to our G
 Please refer to the [grape-entity documentation](https://github.com/gileanimal/grape-entity/blob/master/README.markdown)
 for more details.
 
-The following example exposes statuses. And exposes statuses documentation adding :type and :desc.
+The following example exposes statuses. And exposes statuses documentation adding :type and :description.
 
 ```ruby
 module API
 
   module Entities
     class Status < Grape::Entity
-      expose :text, :documentation => { :type => "string", :desc => "Status update text." }
+      expose :text, :documentation => { :type => "string", :description => "Status update text." }
     end
   end
 

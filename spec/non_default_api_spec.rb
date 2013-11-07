@@ -62,6 +62,35 @@ describe "options: " do
     end
   end
 
+  context "relative base_path" do
+    before :all do
+
+      class RelativeBasePathMountedApi < Grape::API
+        desc 'This gets something.'
+        get '/something' do
+          { bla: 'something' }
+        end
+      end
+
+      class SimpleApiWithRelativeBasePath < Grape::API
+        mount RelativeBasePathMountedApi
+        add_swagger_documentation base_path: "/some_value"
+      end
+    end
+
+    def app; SimpleApiWithRelativeBasePath end
+
+    it "retrieves the given base-path on /swagger_doc" do
+      get '/swagger_doc.json'
+      JSON.parse(last_response.body)["basePath"].should == "http://example.org/some_value"
+    end
+
+    it "retrieves the same given base-path for mounted-api" do
+      get '/swagger_doc/something.json'
+      JSON.parse(last_response.body)["basePath"].should == "http://example.org/some_value"
+    end
+  end
+
   context "overriding the version" do
     before :all do
 

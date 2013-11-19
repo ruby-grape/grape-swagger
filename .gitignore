@@ -29,3 +29,6 @@ test/dummy/.sass-cache
 # For MacOS:
 #
 .DS_Store
+
+#Eclipse
+/.project

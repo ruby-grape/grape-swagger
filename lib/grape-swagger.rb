@@ -199,10 +199,20 @@ module Grape
               result = {}
               models.each do |model|
                 name = model.to_s.split('::')[-1]
+                properties = {}
+                model.exposures.each do |exposure|
+                  exposure_name = exposure[0]
+                  if exposure[1].has_key?(:as)
+                    exposure_name = exposure[1][:as]
+                  end
+                  if exposure[1].has_key?(:documentation)
+                    properties[exposure_name] = exposure[1][:documentation]
+                  end
+                end
                 result[name] = {
                   id: name,
                   name: name,
-                  properties: model.documentation
+                  properties: properties
                 }
               end
               result

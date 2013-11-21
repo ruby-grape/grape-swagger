@@ -8,7 +8,7 @@ describe "API Models" do
         expose :text, :documentation => { :type => "string", :desc => "Content of something." }
       end
       class SomethingElse < Grape::Entity
-        expose :text, :documentation => { :type => "string", :desc => "Content of something else." }
+        expose :text, as: :alternate_text, :documentation => { :type => "string", :desc => "Content of something else." }
       end
     end
 
@@ -111,7 +111,7 @@ describe "API Models" do
           "id" => "SomethingElse",
           "name" => "SomethingElse",
           "properties" => {
-            "text" => {
+            "alternate_text" => {
               "type" => "string",
               "desc" => "Content of something else."
             }

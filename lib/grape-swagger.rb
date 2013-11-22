@@ -97,7 +97,13 @@ module Grape
                 next if route.route_hidden
                 notes = route.route_notes && @@markdown ? Kramdown::Document.new(strip_heredoc(route.route_notes)).to_html : route.route_notes
                 http_codes = parse_http_codes route.route_http_codes
-                models << route.route_entity if route.route_entity
+                if route.route_entity
+                  if route.route_entity.kind_of?(Array)
+                    models = models.concat(route.route_entity)
+                  else
+                    models << route.route_entity
+                  end              
+                end
                 operations = {
                     :notes => notes,
                     :summary => route.route_description || '',
@@ -106,7 +112,7 @@ module Grape
                     :parameters => parse_header_params(route.route_headers) +
                       parse_params(route.route_params, route.route_path, route.route_method)
                 }
-                operations.merge!({:responseClass => route.route_entity.to_s.split('::')[-1]}) if route.route_entity
+                operations.merge!({:responseClass => models[-1].to_s}) if route.route_entity
                 operations.merge!({:errorResponses => http_codes}) unless http_codes.empty?
                 {
                   :path => parse_path(route.route_path, api_version),
@@ -136,7 +142,11 @@ module Grape
                   dataType = value.is_a?(Hash) ? (value[:type] || 'String').to_s : 'String'
                   description = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
                   required = value.is_a?(Hash) ? !!value[:required] : false
-                  paramType = path.include?(":#{param}") ? 'path' : (method == 'POST') ? 'form' : 'query'
+                    paramType = if path.include?(":#{param}")
+                      'path'
+                    else
+                      %w[ POST PUT PATCH ].include?(method) ? 'form' : 'query'
+                    end
                   name = (value.is_a?(Hash) && value[:full_name]) || param
                   {
                     paramType: paramType,
@@ -188,11 +198,21 @@ module Grape
             def parse_entity_models(models)
               result = {}
               models.each do |model|
-                name = model.to_s.split('::')[-1]
+                name = model.to_s
+                properties = {}
+                model.exposures.each do |exposure|
+                  exposure_name = exposure[0]
+                  if exposure[1].has_key?(:as)
+                    exposure_name = exposure[1][:as]
+                  end
+                  if exposure[1].has_key?(:documentation)
+                    properties[exposure_name] = exposure[1][:documentation]
+                  end
+                end
                 result[name] = {
                   id: name,
                   name: name,
-                  properties: model.documentation
+                  properties: properties
                 }
               end
               result

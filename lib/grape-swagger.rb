@@ -112,7 +112,7 @@ module Grape
                     :parameters => parse_header_params(route.route_headers) +
                       parse_params(route.route_params, route.route_path, route.route_method)
                 }
-                operations.merge!({:responseClass => models[-1].to_s.split('::')[-1]}) if route.route_entity
+                operations.merge!({:responseClass => models[-1].to_s}) if route.route_entity
                 operations.merge!({:errorResponses => http_codes}) unless http_codes.empty?
                 {
                   :path => parse_path(route.route_path, api_version),
@@ -198,7 +198,7 @@ module Grape
             def parse_entity_models(models)
               result = {}
               models.each do |model|
-                name = model.to_s.split('::')[-1]
+                name = model.to_s
                 properties = {}
                 model.exposures.each do |exposure|
                   exposure_name = exposure[0]

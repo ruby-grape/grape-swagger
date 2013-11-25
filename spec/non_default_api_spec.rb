@@ -120,6 +120,7 @@ describe "options: " do
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.1",
         "basePath" => "http://example.org",
+        "info" => {},
         "operations" => [],
         "apis" => [
           { "path" => "/v1/swagger_doc/something.{format}" },
@@ -172,6 +173,7 @@ describe "options: " do
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.1",
         "basePath" => "http://example.org",
+        "info" => {},
         "operations" => [],
         "apis" => [
           { "path" => "/swagger_doc/something.{format}" }
@@ -455,6 +457,7 @@ describe "options: " do
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.1",
         "basePath" => "http://example.org",
+        "info" => {},
         "operations" => [],
         "apis" => [
           { "path" => "/first/swagger_doc/first.{format}" }
@@ -468,6 +471,7 @@ describe "options: " do
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.1",
         "basePath" => "http://example.org",
+        "info" => {},
         "operations" => [],
         "apis" => [
           { "path" => "/second/swagger_doc/second.{format}" }

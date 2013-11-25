@@ -47,9 +47,10 @@ module Grape
               :markdown => false,
               :hide_documentation_path => false,
               :hide_format => false,
-              :models => []
+              :models => [],
+              :info => {}
             }
-            options = defaults.merge(options)
+            options.reverse_merge!(defaults)
 
             target_class = options[:target_class]
             @@mount_path = options[:mount_path]
@@ -59,6 +60,7 @@ module Grape
             @@hide_format = options[:hide_format]
             api_version = options[:api_version]
             base_path = options[:base_path]
+            info = options[:info]
 
             desc 'Swagger compatible API description'
             get @@mount_path do
@@ -80,7 +82,8 @@ module Grape
                 swaggerVersion: "1.1",
                 basePath: parse_base_path(base_path, request),
                 operations:[],
-                apis: routes_array
+                apis: routes_array,
+                info: parse_info(info)
               }
             end
 
@@ -114,15 +117,15 @@ module Grape
                 }
               }.compact
 
-              api_description = {
+              {
                 apiVersion: api_version,
                 swaggerVersion: "1.1",
                 basePath: parse_base_path(base_path, request),
                 resourcePath: "",
                 apis: routes_array
-              }
-              api_description[:models] = parse_entity_models(models) unless models.empty?
-              api_description
+              }.tap do |api_description|
+                api_description[:models] = parse_entity_models(models) unless models.empty?
+              end
             end
           end
 
@@ -151,6 +154,16 @@ module Grape
               end
             end
 
+            def parse_info(info)
+              {
+                contact: info[:contact],
+                description: info[:description],
+                license: info[:license],
+                licenseUrl: info[:license_url],
+                termsOfServiceUrl: info[:terms_of_service_url],
+                title: info[:title]
+              }.delete_if { |key, value| value.blank? }
+            end
 
             def parse_header_params(params)
               if params

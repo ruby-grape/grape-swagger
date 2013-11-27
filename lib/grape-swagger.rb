@@ -40,25 +40,36 @@ module Grape
 
           def self.setup(options)
             defaults = {
-              :target_class => nil,
-              :mount_path => '/swagger_doc',
-              :base_path => nil,
-              :api_version => '0.1',
-              :markdown => false,
-              :hide_documentation_path => false,
-              :hide_format => false,
-              :models => []
+              :models        => [],
+              :target_class  => nil,
+              :mount_path    => '/swagger_doc',
+              :base_path     => nil,
+              :api_version   => '0.1',
+              :markdown      => false,
+              :info          => { title: '', description: '', contact: '', 
+                                  license: '', licenseUrl: '', termsOfServiceUrl: ''},
+              :hide_format   => false,
+              :authorization => nil,
+              :root_base_path => true, 
+              :include_base_url => true,
+              :hide_documentation_path => false
             }
+            
             options = defaults.merge(options)
 
-            target_class = options[:target_class]
-            @@mount_path = options[:mount_path]
-            @@class_name = options[:class_name] || options[:mount_path].gsub('/','')
-            @@markdown = options[:markdown]
+            target_class     = options[:target_class]
+            @@mount_path     = options[:mount_path]
+            @@class_name     = options[:class_name] || options[:mount_path].gsub('/','')
+            @@markdown       = options[:markdown]
+            @@hide_format    = options[:hide_format]
+            api_version      = options[:api_version]
+            base_path        = options[:base_path]
+            authorizations   = options[:authorizations]
+            include_base_url = options[:include_base_url]
+            root_base_path   = options[:root_base_path]
+            extra_info       = options[:info]
+
             @@hide_documentation_path = options[:hide_documentation_path]
-            @@hide_format = options[:hide_format]
-            api_version = options[:api_version]
-            base_path = options[:base_path]
 
             desc 'Swagger compatible API description'
             get @@mount_path do
@@ -72,16 +83,21 @@ module Grape
 
               routes_array = routes.keys.map { |local_route|
                 next if routes[local_route].all? { |route| route.route_hidden }
-                { :path => "#{parse_path(route.route_path.gsub('(.:format)', ''),route.route_version)}/#{local_route}#{@@hide_format ? '' : '.{format}'}" }
+                { :path => "#{include_base_url ? parse_path(route.route_path.gsub('(.:format)', ''),route.route_version) : ''}/#{local_route}#{@@hide_format ? '' : '.{format}'}" }
               }.compact
 
-              {
-                apiVersion: api_version,
-                swaggerVersion: "1.1",
-                basePath: parse_base_path(base_path, request),
-                operations:[],
-                apis: routes_array
+              output = {
+                apiVersion:     api_version,
+                swaggerVersion: "1.2",
+                apis:           routes_array
               }
+
+              basePath = parse_base_path(base_path, request)
+              output[:basePath]       = basePath        if basePath && basePath.size > 0 && root_base_path != false
+              output[:authorizations] = authorizations  if authorizations
+              output[:info]           = extra_info      if extra_info
+
+              output
             end
 
             desc 'Swagger compatible API description for specific API', :params =>
@@ -89,24 +105,24 @@ module Grape
                 "name" => { :desc => "Resource name of mounted API", :type => "string", :required => true },
               }
             get "#{@@mount_path}/:name" do
-              header['Access-Control-Allow-Origin'] = '*'
+              header['Access-Control-Allow-Origin']   = '*'
               header['Access-Control-Request-Method'] = '*'
               models = []
               routes = target_class::combined_routes[params[:name]]
               routes_array = routes.map {|route|
                 next if route.route_hidden
-                notes = route.route_notes && @@markdown ? Kramdown::Document.new(strip_heredoc(route.route_notes)).to_html : route.route_notes
+                notes = as_markdown(route.route_notes)
                 http_codes = parse_http_codes route.route_http_codes
                 models << route.route_entity if route.route_entity
                 operations = {
                     :notes => notes,
                     :summary => route.route_description || '',
-                    :nickname   => route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-'),
+                    :nickname   => (route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-'))),
                     :httpMethod => route.route_method,
                     :parameters => parse_header_params(route.route_headers) +
                       parse_params(route.route_params, route.route_path, route.route_method)
                 }
-                operations.merge!({:responseClass => route.route_entity.to_s.split('::')[-1]}) if route.route_entity
+                operations.merge!({:type => route.route_entity.to_s.split('::')[-1]}) if route.route_entity
                 operations.merge!({:errorResponses => http_codes}) unless http_codes.empty?
                 {
                   :path => parse_path(route.route_path, api_version),
@@ -116,18 +132,26 @@ module Grape
 
               api_description = {
                 apiVersion: api_version,
-                swaggerVersion: "1.1",
-                basePath: parse_base_path(base_path, request),
+                swaggerVersion: "1.2",
                 resourcePath: "",
                 apis: routes_array
               }
-              api_description[:models] = parse_entity_models(models) unless models.empty?
+
+              basePath                   = parse_base_path(base_path, request)
+              api_description[:basePath] = basePath if basePath && basePath.size > 0
+              api_description[:models]   = parse_entity_models(models) unless models.empty?
+              
               api_description
             end
           end
 
 
           helpers do
+
+            def as_markdown(description)
+              description && @@markdown ? Kramdown::Document.new(strip_heredoc(description)).to_html : description
+            end
+
             def parse_params(params, path, method)
               if params
                 params.map do |param, value|
@@ -141,7 +165,7 @@ module Grape
                   {
                     paramType: paramType,
                     name: name,
-                    description: description,
+                    description: as_markdown(description),
                     dataType: dataType,
                     required: required
                   }
@@ -162,7 +186,7 @@ module Grape
                   {
                     paramType: paramType,
                     name: param,
-                    description: description,
+                    description: as_markdown(description),
                     dataType: dataType,
                     required: required
                   }
@@ -190,8 +214,8 @@ module Grape
               models.each do |model|
                 name = model.to_s.split('::')[-1]
                 result[name] = {
-                  id: name,
-                  name: name,
+                  id: model.instance_variable_get(:@root) || name,
+                  name: model.instance_variable_get(:@root) || name,
                   properties: model.documentation
                 }
               end
@@ -201,7 +225,7 @@ module Grape
             def parse_http_codes codes
               codes ||= {}
               codes.collect do |k, v|
-                { code: k, reason: v }
+                { code: k, message: v }
               end
             end
 

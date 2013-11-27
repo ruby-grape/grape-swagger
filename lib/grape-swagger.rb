@@ -46,20 +46,25 @@ module Grape
               :base_path     => nil,
               :api_version   => '0.1',
               :markdown      => false,
+              :info          => { title: '', description: '', contact: '', 
+                                  license: '', licenseUrl: '', termsOfServiceUrl: ''},
               :hide_format   => false,
               :authorization => nil,
+              :include_base_url => true,
               :hide_documentation_path => false
             }
             options = defaults.merge(options)
 
-            target_class   = options[:target_class]
-            @@mount_path   = options[:mount_path]
-            @@class_name   = options[:class_name] || options[:mount_path].gsub('/','')
-            @@markdown     = options[:markdown]
-            @@hide_format  = options[:hide_format]
-            api_version    = options[:api_version]
-            base_path      = options[:base_path]
-            authorizations = options[:authorizations]
+            target_class     = options[:target_class]
+            @@mount_path     = options[:mount_path]
+            @@class_name     = options[:class_name] || options[:mount_path].gsub('/','')
+            @@markdown       = options[:markdown]
+            @@hide_format    = options[:hide_format]
+            api_version      = options[:api_version]
+            base_path        = options[:base_path]
+            authorizations   = options[:authorizations]
+            include_base_url = options[:include_base_url]
+            extra_info       = options[:include_base_url]
 
             @@hide_documentation_path = options[:hide_documentation_path]
 
@@ -75,7 +80,7 @@ module Grape
 
               routes_array = routes.keys.map { |local_route|
                 next if routes[local_route].all? { |route| route.route_hidden }
-                { :path => "#{parse_path(route.route_path.gsub('(.:format)', ''),route.route_version)}/#{local_route}#{@@hide_format ? '' : '.{format}'}" }
+                { :path => "#{include_base_url ? parse_path(route.route_path.gsub('(.:format)', ''),route.route_version) : ''}/#{local_route}#{@@hide_format ? '' : '.{format}'}" }
               }.compact
 
               output = {
@@ -87,6 +92,7 @@ module Grape
               }
 
               output.merge!(authorizations: authorizations) if authorizations
+              output.merge!(info: extra_info) if extra_info
 
               output
             end

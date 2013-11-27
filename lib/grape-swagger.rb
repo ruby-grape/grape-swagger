@@ -40,14 +40,14 @@ module Grape
 
           def self.setup(options)
             defaults = {
-              :models        => []
+              :models        => [],
               :target_class  => nil,
               :mount_path    => '/swagger_doc',
               :base_path     => nil,
               :api_version   => '0.1',
               :markdown      => false,
               :hide_format   => false,
-              :authorization => nil
+              :authorization => nil,
               :hide_documentation_path => false
             }
             options = defaults.merge(options)

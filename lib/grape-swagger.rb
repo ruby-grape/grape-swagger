@@ -50,9 +50,11 @@ module Grape
                                   license: '', licenseUrl: '', termsOfServiceUrl: ''},
               :hide_format   => false,
               :authorization => nil,
+              :root_base_path => true, 
               :include_base_url => true,
               :hide_documentation_path => false
             }
+            
             options = defaults.merge(options)
 
             target_class     = options[:target_class]
@@ -64,6 +66,7 @@ module Grape
             base_path        = options[:base_path]
             authorizations   = options[:authorizations]
             include_base_url = options[:include_base_url]
+            root_base_path   = options[:root_base_path]
             extra_info       = options[:info]
 
             @@hide_documentation_path = options[:hide_documentation_path]
@@ -90,7 +93,7 @@ module Grape
               }
 
               basePath = parse_base_path(base_path, request)
-              output[:basePath]       = basePath        if basePath && basePath.size > 0
+              output[:basePath]       = basePath        if basePath && basePath.size > 0 && root_base_path != false
               output[:authorizations] = authorizations  if authorizations
               output[:info]           = extra_info      if extra_info
 

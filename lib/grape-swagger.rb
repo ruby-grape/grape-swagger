@@ -52,14 +52,14 @@ module Grape
             }
             options = defaults.merge(options)
 
-            target_class  = options[:target_class]
-            @@mount_path  = options[:mount_path]
-            @@class_name  = options[:class_name] || options[:mount_path].gsub('/','')
-            @@markdown    = options[:markdown]
-            @@hide_format = options[:hide_format]
-            api_version   = options[:api_version]
-            base_path     = options[:base_path]
-            authorization = options[:authorization]
+            target_class   = options[:target_class]
+            @@mount_path   = options[:mount_path]
+            @@class_name   = options[:class_name] || options[:mount_path].gsub('/','')
+            @@markdown     = options[:markdown]
+            @@hide_format  = options[:hide_format]
+            api_version    = options[:api_version]
+            base_path      = options[:base_path]
+            authorizations = options[:authorizations]
 
             @@hide_documentation_path = options[:hide_documentation_path]
 
@@ -86,7 +86,7 @@ module Grape
                 apis:           routes_array
               }
 
-              output.merge!(authorization: authorization) if authorization
+              output.merge!(authorizations: authorizations) if authorizations
 
               output
             end

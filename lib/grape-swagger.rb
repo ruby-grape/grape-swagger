@@ -86,12 +86,13 @@ module Grape
               output = {
                 apiVersion:     api_version,
                 swaggerVersion: "1.2",
-                basePath:       parse_base_path(base_path, request),
                 apis:           routes_array
               }
 
-              output.merge!(authorizations: authorizations) if authorizations
-              output.merge!(info: extra_info) if extra_info
+              basePath = parse_base_path(base_path, request)
+              output[:basePath]       = basePath        if basePath && basePath.size > 0
+              output[:authorizations] = authorizations  if authorizations
+              output[:info]           = extra_info      if extra_info
 
               output
             end
@@ -129,11 +130,14 @@ module Grape
               api_description = {
                 apiVersion: api_version,
                 swaggerVersion: "1.2",
-                basePath: parse_base_path(base_path, request),
                 resourcePath: "",
                 apis: routes_array
               }
-              api_description[:models] = parse_entity_models(models) unless models.empty?
+
+              basePath                   = parse_base_path(base_path, request)
+              api_description[:basePath] = basePath if basePath && basePath.size > 0
+              api_description[:models]   = parse_entity_models(models) unless models.empty?
+              
               api_description
             end
           end

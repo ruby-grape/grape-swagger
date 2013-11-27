@@ -40,25 +40,28 @@ module Grape
 
           def self.setup(options)
             defaults = {
-              :target_class => nil,
-              :mount_path => '/swagger_doc',
-              :base_path => nil,
-              :api_version => '0.1',
-              :markdown => false,
-              :hide_documentation_path => false,
-              :hide_format => false,
-              :models => []
+              :models        => []
+              :target_class  => nil,
+              :mount_path    => '/swagger_doc',
+              :base_path     => nil,
+              :api_version   => '0.1',
+              :markdown      => false,
+              :hide_format   => false,
+              :authorization => nil
+              :hide_documentation_path => false
             }
             options = defaults.merge(options)
 
-            target_class = options[:target_class]
-            @@mount_path = options[:mount_path]
-            @@class_name = options[:class_name] || options[:mount_path].gsub('/','')
-            @@markdown = options[:markdown]
-            @@hide_documentation_path = options[:hide_documentation_path]
+            target_class  = options[:target_class]
+            @@mount_path  = options[:mount_path]
+            @@class_name  = options[:class_name] || options[:mount_path].gsub('/','')
+            @@markdown    = options[:markdown]
             @@hide_format = options[:hide_format]
-            api_version = options[:api_version]
-            base_path = options[:base_path]
+            api_version   = options[:api_version]
+            base_path     = options[:base_path]
+            authorization = options[:authorization]
+
+            @@hide_documentation_path = options[:hide_documentation_path]
 
             desc 'Swagger compatible API description'
             get @@mount_path do
@@ -75,13 +78,17 @@ module Grape
                 { :path => "#{parse_path(route.route_path.gsub('(.:format)', ''),route.route_version)}/#{local_route}#{@@hide_format ? '' : '.{format}'}" }
               }.compact
 
-              {
-                apiVersion: api_version,
-                swaggerVersion: "1.1",
-                basePath: parse_base_path(base_path, request),
-                operations:[],
-                apis: routes_array
+              output = {
+                apiVersion:     api_version,
+                swaggerVersion: "1.2",
+                basePath:       parse_base_path(base_path, request),
+                operations:     [],
+                apis:           routes_array
               }
+
+              output.merge!(authorization: authorization) if authorization
+
+              output
             end
 
             desc 'Swagger compatible API description for specific API', :params =>
@@ -89,7 +96,7 @@ module Grape
                 "name" => { :desc => "Resource name of mounted API", :type => "string", :required => true },
               }
             get "#{@@mount_path}/:name" do
-              header['Access-Control-Allow-Origin'] = '*'
+              header['Access-Control-Allow-Origin']   = '*'
               header['Access-Control-Request-Method'] = '*'
               models = []
               routes = target_class::combined_routes[params[:name]]
@@ -116,7 +123,7 @@ module Grape
 
               api_description = {
                 apiVersion: api_version,
-                swaggerVersion: "1.1",
+                swaggerVersion: "1.2",
                 basePath: parse_base_path(base_path, request),
                 resourcePath: "",
                 apis: routes_array

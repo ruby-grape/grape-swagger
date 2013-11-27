@@ -114,7 +114,7 @@ module Grape
                 operations = {
                     :notes => notes,
                     :summary => route.route_description || '',
-                    :nickname   => route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-'),
+                    :nickname   => (route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-'))),
                     :httpMethod => route.route_method,
                     :parameters => parse_header_params(route.route_headers) +
                       parse_params(route.route_params, route.route_path, route.route_method)

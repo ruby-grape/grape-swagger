@@ -87,7 +87,6 @@ module Grape
                 apiVersion:     api_version,
                 swaggerVersion: "1.2",
                 basePath:       parse_base_path(base_path, request),
-                operations:     [],
                 apis:           routes_array
               }
 

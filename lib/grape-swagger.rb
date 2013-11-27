@@ -64,7 +64,7 @@ module Grape
             base_path        = options[:base_path]
             authorizations   = options[:authorizations]
             include_base_url = options[:include_base_url]
-            extra_info       = options[:include_base_url]
+            extra_info       = options[:info]
 
             @@hide_documentation_path = options[:hide_documentation_path]
 

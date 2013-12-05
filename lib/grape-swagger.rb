@@ -87,6 +87,7 @@ module Grape
               output = {
                 apiVersion:     api_version,
                 swaggerVersion: "1.2",
+                operations:     [],
                 apis:           routes_array
               }
 

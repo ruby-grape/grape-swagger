@@ -46,8 +46,6 @@ module Grape
               :base_path     => nil,
               :api_version   => '0.1',
               :markdown      => false,
-              :info          => { title: '', description: '', contact: '', 
-                                  license: '', licenseUrl: '', termsOfServiceUrl: ''},
               :hide_format   => false,
               :authorization => nil,
               :root_base_path => true, 

@@ -28,7 +28,7 @@ describe "a hide mounted api" do
     get '/swagger_doc.json'
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",
-      "swaggerVersion" => "1.1",
+      "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
       "operations" => [],
       "apis" => [
@@ -68,7 +68,7 @@ describe "a hide mounted api with same namespace" do
     get '/swagger_doc.json'
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",
-      "swaggerVersion" => "1.1",
+      "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
       "operations" => [],
       "apis" => [
@@ -82,7 +82,7 @@ describe "a hide mounted api with same namespace" do
     get '/swagger_doc/simple.json'
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",
-      "swaggerVersion" => "1.1",
+      "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
       "resourcePath" => "",
       "apis" => [

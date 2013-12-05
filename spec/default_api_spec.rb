@@ -19,7 +19,7 @@ describe "Default API" do
     get '/swagger_doc'
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",
-      "swaggerVersion" => "1.1",
+      "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
       "operations" => [],
       "apis" => [

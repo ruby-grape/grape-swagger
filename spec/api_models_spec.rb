@@ -38,7 +38,7 @@ describe "API Models" do
     }
   end
 
-  it "should include response_class when specified" do
+  it "should include type when specified" do
     get '/swagger_doc/something.json'
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",
@@ -49,7 +49,7 @@ describe "API Models" do
         { "path" => "/something.{format}",
           "operations" => [
             { "notes" => nil,
-              "responseClass" => "Something",
+              "type" => "Something",
               "summary" => "This gets something.",
               "nickname" => "GET-something---format-",
               "httpMethod" => "GET",

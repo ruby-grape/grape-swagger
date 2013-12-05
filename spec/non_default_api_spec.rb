@@ -201,8 +201,6 @@ describe "options: " do
 
     it "it doesn't show the documentation path on /abc/swagger_doc/something.json" do
       get '/abc/swagger_doc/something.json'
-
-    puts "last_response.body: #{JSON.parse(last_response.body).inspect}"
       JSON.parse(last_response.body).should == {
         "apiVersion"=>"0.1",
         "swaggerVersion"=>"1.2",

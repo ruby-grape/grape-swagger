@@ -59,7 +59,7 @@ module Grape
 
             target_class     = options[:target_class]
             @@mount_path     = options[:mount_path]
-            @@class_name     = options[:class_name] || options[:mount_path].gsub('/','')
+            @@class_name     = options[:class_name] || options[:mount_path].gsub('/', '')
             @@markdown       = options[:markdown]
             @@hide_format    = options[:hide_format]
             api_version      = options[:api_version]
@@ -73,8 +73,9 @@ module Grape
 
             desc 'Swagger compatible API description'
             get @@mount_path do
-              header['Access-Control-Allow-Origin'] = '*'
+              header['Access-Control-Allow-Origin']   = '*'
               header['Access-Control-Request-Method'] = '*'
+              
               routes = target_class::combined_routes
 
               if @@hide_documentation_path
@@ -154,52 +155,49 @@ module Grape
             end
 
             def parse_params(params, path, method)
-              if params
-                params.map do |param, value|
-                  value[:type] = 'file' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
+              params ||= []
+              
+              params.map do |param, value|
+                value[:type] = 'file' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
 
-                  dataType = value.is_a?(Hash) ? (value[:type] || 'String').to_s : 'String'
-                  description = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
-                  required = value.is_a?(Hash) ? !!value[:required] : false
-                  paramType = path.include?(":#{param}") ? 'path' : (method == 'POST') ? 'form' : 'query'
-                  name = (value.is_a?(Hash) && value[:full_name]) || param
-                  {
-                    paramType: paramType,
-                    name: name,
-                    description: as_markdown(description),
-                    dataType: dataType,
-                    required: required
-                  }
-                end
-              else
-                []
+                dataType    = value.is_a?(Hash) ? (value[:type] || 'String').to_s : 'String'
+                description = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
+                required    = value.is_a?(Hash) ? !!value[:required] : false
+                paramType   = path.include?(":#{param}") ? 'path' : (method == 'POST') ? 'form' : 'query'
+                name        = (value.is_a?(Hash) && value[:full_name]) || param
+                
+                {
+                  paramType:    paramType,
+                  name:         name,
+                  description:  as_markdown(description),
+                  type:         dataType,
+                  required:     required
+                }
               end
             end
 
-
             def parse_header_params(params)
-              if params
-                params.map do |param, value|
-                  dataType = 'String'
-                  description = value.is_a?(Hash) ? value[:description] : ''
-                  required = value.is_a?(Hash) ? !!value[:required] : false
-                  paramType = "header"
-                  {
-                    paramType: paramType,
-                    name: param,
-                    description: as_markdown(description),
-                    dataType: dataType,
-                    required: required
-                  }
-                end
-              else
-                []
+              params ||= []
+              
+              params.map do |param, value|
+                dataType    = 'String'
+                description = value.is_a?(Hash) ? value[:description] : ''
+                required    = value.is_a?(Hash) ? !!value[:required] : false
+                paramType   = "header"
+                
+                {
+                  paramType:    paramType,
+                  name:         param,
+                  description:  as_markdown(description),
+                  type:         dataType,
+                  required:     required
+                }
               end
             end
 
             def parse_path(path, version)
               # adapt format to swagger format
-              parsed_path = path.gsub '(.:format)', ( @@hide_format ? '' : '.{format}')
+              parsed_path = path.gsub('(.:format)', @@hide_format ? '' : '.{format}')
               # This is attempting to emulate the behavior of
               # Rack::Mount::Strexp. We cannot use Strexp directly because
               # all it does is generate regular expressions for parsing URLs.
@@ -215,8 +213,8 @@ module Grape
               models.each do |model|
                 name = model.to_s.split('::')[-1]
                 result[name] = {
-                  id: model.instance_variable_get(:@root) || name,
-                  name: model.instance_variable_get(:@root) || name,
+                  id:         model.instance_variable_get(:@root) || name,
+                  name:       model.instance_variable_get(:@root) || name,
                   properties: model.documentation
                 }
               end
@@ -230,11 +228,11 @@ module Grape
               end
             end
 
-            def try(*a, &b)
-              if a.empty? && block_given?
+            def try(*args, &block)
+              if args.empty? && block_given?
                 yield self
-              else
-                public_send(*a, &b) if respond_to?(a.first)
+              elsif respond_to?(args.first)
+                public_send(*args, &block)
               end
             end
 

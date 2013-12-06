@@ -82,19 +82,24 @@ module Grape
                 routes.reject!{ |route, value| "/#{route}/".index(parse_path(@@mount_path, nil) << '/') == 0 }
               end
 
-              routes_array = routes.keys.map { |local_route|
-                next if routes[local_route].all? { |route| route.route_hidden }
-                { :path => "#{include_base_url ? parse_path(route.route_path.gsub('(.:format)', ''),route.route_version) : ''}/#{local_route}#{@@hide_format ? '' : '.{format}'}" }
-              }.compact
+              routes_array = routes.keys.map do |local_route|
+                next if routes[local_route].all?(&:route_hidden)
+                
+                url_base    = parse_path(route.route_path.gsub('(.:format)', ''), route.route_version) if include_base_url
+                url_format  = '.{format}' unless @@hide_format
+                
+                { :path => "#{url_base}/#{local_route}#{url_format}" }
+              end.compact
 
               output = {
                 apiVersion:     api_version,
                 swaggerVersion: "1.2",
+                produces:       target_class.content_types.values.uniq,
                 operations:     [],
                 apis:           routes_array
               }
 
-              basePath = parse_base_path(base_path, request)
+              basePath                = parse_base_path(base_path, request)
               output[:basePath]       = basePath        if basePath && basePath.size > 0 && root_base_path != false
               output[:authorizations] = authorizations  if authorizations
               output[:info]           = extra_info      if extra_info
@@ -102,27 +107,34 @@ module Grape
               output
             end
 
-            desc 'Swagger compatible API description for specific API', :params =>
-              {
-                "name" => { :desc => "Resource name of mounted API", :type => "string", :required => true },
+            desc 'Swagger compatible API description for specific API', :params => {
+              "name" => {
+                :desc     => "Resource name of mounted API",
+                :type     => "string",
+                :required => true
               }
+            }
             get "#{@@mount_path}/:name" do
               header['Access-Control-Allow-Origin']   = '*'
               header['Access-Control-Request-Method'] = '*'
+              
               models = []
               routes = target_class::combined_routes[params[:name]]
-              routes_array = routes.map {|route|
-                next if route.route_hidden
-                notes = as_markdown(route.route_notes)
-                http_codes = parse_http_codes route.route_http_codes
+              
+              routes_array = routes.reject(&:route_hidden).map do |route|
+                notes       = as_markdown(route.route_notes)
+                http_codes  = parse_http_codes(route.route_http_codes)
+                
                 models << route.route_entity if route.route_entity
+                
                 operations = {
-                    :notes => notes,
-                    :summary => route.route_description || '',
-                    :nickname   => (route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-'))),
-                    :httpMethod => route.route_method,
-                    :parameters => parse_header_params(route.route_headers) +
-                      parse_params(route.route_params, route.route_path, route.route_method)
+                  :produces   => target_class.content_types.values.uniq,
+                  :notes      => notes,
+                  :summary    => route.route_description || '',
+                  :nickname   => route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-')),
+                  :httpMethod => route.route_method,
+                  :parameters => parse_header_params(route.route_headers) +
+                    parse_params(route.route_params, route.route_path, route.route_method)
                 }
                 operations.merge!(:type => route.route_entity.to_s.split('::')[-1]) if route.route_entity
                 operations.merge!(:responseMessages => http_codes) unless http_codes.empty?
@@ -131,7 +143,7 @@ module Grape
                   :path       => parse_path(route.route_path, api_version),
                   :operations => [operations]
                 }
-              }.compact
+              end.compact
 
               api_description = {
                 apiVersion:     api_version,

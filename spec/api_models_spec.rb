@@ -53,7 +53,7 @@ describe "API Models" do
           "produces" => [
             "application/json"
           ],
-          "notes" => nil,
+          "notes" => "",
           "type" => "Something",
           "summary" => "This gets something.",
           "nickname" => "GET-something---format-",

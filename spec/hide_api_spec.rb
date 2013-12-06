@@ -112,6 +112,7 @@ describe "a hide mounted api with same namespace" do
             "text/plain"
           ],
           "notes" => nil,
+          "notes" => "",
           "summary" => "Show this endpoint",
           "nickname" => "GET-simple-show---format-",
           "httpMethod" => "GET",

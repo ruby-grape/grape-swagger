@@ -155,6 +155,7 @@ describe "options: " do
               "text/plain"
             ],
             "notes" => nil,
+            "notes" => "",
             "summary" => "This gets something.",
             "nickname" => "GET--version-something---format-",
             "httpMethod" => "GET",
@@ -242,6 +243,7 @@ describe "options: " do
               "text/plain"
             ],
             "notes"=>nil,
+            "notes"=>"",
             "summary"=>"This gets something.",
             "nickname"=>"GET-abc-something---format-",
             "httpMethod"=>"GET",
@@ -293,6 +295,7 @@ describe "options: " do
               "text/plain"
             ],
             "notes"=>nil,
+            "notes"=>"",
             "summary"=>"This gets something.",
             "nickname"=>"GET-abc--version-something---format-",
             "httpMethod"=>"GET",

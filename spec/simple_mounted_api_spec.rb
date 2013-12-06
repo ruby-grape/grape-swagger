@@ -160,6 +160,7 @@ describe "a simple mounted api" do
             "text/plain"
           ],
           "notes" => nil,
+          "notes" => "",
           "summary" => "this gets something else",
           "nickname" => "GET-simple_with_headers---format-",
           "httpMethod" => "GET",
@@ -188,6 +189,7 @@ describe "a simple mounted api" do
             "text/plain"
           ],
           "notes" => nil,
+          "notes" => "",
           "summary" => "this takes an array of parameters",
           "nickname" => "POST-items---format-",
           "httpMethod" => "POST",
@@ -209,6 +211,7 @@ describe "a simple mounted api" do
             "text/plain"
           ],
           "notes" => nil,
+          "notes" => "",
           "summary" => "this uses a custom parameter",
           "nickname" => "GET-custom---format-",
           "httpMethod" => "GET",

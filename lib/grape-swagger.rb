@@ -130,7 +130,7 @@ module Grape
                 
                 operations = {
                   :produces   => target_class.content_types.values.uniq,
-                  :notes      => notes,
+                  :notes      => notes.to_s,
                   :summary    => route.route_description || '',
                   :nickname   => route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-')),
                   :httpMethod => route.route_method,

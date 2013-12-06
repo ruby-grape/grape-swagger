@@ -235,23 +235,27 @@ module Grape
 
             def parse_entity_models(models)
               result = {}
-              properties = {}
-              model.documentation.each do |property_name, property_info|
-                properties[property_name] = property_info
-                
-                # rename Grape Entity's "desc" to "description"
-                if property_description = property_info.delete(:desc)
-                  property[:description] = property_description
-                end
-              end
+              
               models.each do |model|
-                name = model.to_s.split('::')[-1]
+                name        = model.to_s.split('::')[-1]
+                properties  = {}
+                
+                model.documentation.each do |property_name, property_info|
+                  properties[property_name] = property_info
+                  
+                  # rename Grape Entity's "desc" to "description"
+                  if property_description = property_info.delete(:desc)
+                    property_info[:description] = property_description
+                  end
+                end
+                
                 result[name] = {
                   id:         model.instance_variable_get(:@root) || name,
                   name:       model.instance_variable_get(:@root) || name,
                   properties: properties
                 }
               end
+              
               result
             end
 

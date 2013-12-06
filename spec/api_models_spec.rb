@@ -68,7 +68,7 @@ describe "API Models" do
           "properties" => {
             "text" => {
               "type" => "string",
-              "desc" => "Content of something."
+              "description" => "Content of something."
             }
           }
         }

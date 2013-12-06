@@ -72,6 +72,7 @@ describe "a simple mounted api" do
       "apiVersion" => "0.1",
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
+      "info" => {},
       "produces" => [
         "application/xml",
         "application/json",

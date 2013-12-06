@@ -42,17 +42,18 @@ module Grape
 
           def self.setup(options)
             defaults = {
-              :models                   => [],
               :target_class             => nil,
               :mount_path               => '/swagger_doc',
               :base_path                => nil,
               :api_version              => '0.1',
               :markdown                 => false,
+              :hide_documentation_path  => false,
               :hide_format              => false,
+              :models                   => [],
+              :info                     => {},
               :authorizations           => nil,
               :root_base_path           => true, 
-              :include_base_url         => true,
-              :hide_documentation_path  => false
+              :include_base_url         => true
             }
             
             options = defaults.merge(options)
@@ -96,13 +97,13 @@ module Grape
                 swaggerVersion: "1.2",
                 produces:       target_class.content_types.values.uniq,
                 operations:     [],
-                apis:           routes_array
+                apis:           routes_array,
+                info:           parse_info(extra_info)
               }
 
               basePath                = parse_base_path(base_path, request)
               output[:basePath]       = basePath        if basePath && basePath.size > 0 && root_base_path != false
               output[:authorizations] = authorizations  if authorizations
-              output[:info]           = extra_info      if extra_info
 
               output
             end
@@ -187,6 +188,17 @@ module Grape
                   required:     required
                 }
               end
+            end
+
+            def parse_info(info)
+              {
+                contact:            info[:contact],
+                description:        info[:description],
+                license:            info[:license],
+                licenseUrl:         info[:license_url],
+                termsOfServiceUrl:  info[:terms_of_service_url],
+                title:              info[:title]
+              }.delete_if{|_, value| value.blank?}
             end
 
             def parse_header_params(params)

@@ -12,15 +12,17 @@ module Grape
         mount(documentation_class)
 
         @combined_routes = {}
+        
         routes.each do |route|
           route_match = route.route_path.split(route.route_prefix).last.match('\/([\w|-]*?)[\.\/\(]')
           next if route_match.nil?
           resource = route_match.captures.first
           next if resource.empty?
           resource.downcase!
+          
           @combined_routes[resource] ||= []
 
-          unless @@hide_documentation_path and route.route_path.include? @@mount_path
+          unless @@hide_documentation_path and route.route_path.include?(@@mount_path)
             @combined_routes[resource] << route
           end
         end
@@ -40,17 +42,17 @@ module Grape
 
           def self.setup(options)
             defaults = {
-              :models        => [],
-              :target_class  => nil,
-              :mount_path    => '/swagger_doc',
-              :base_path     => nil,
-              :api_version   => '0.1',
-              :markdown      => false,
-              :hide_format   => false,
-              :authorization => nil,
-              :root_base_path => true, 
-              :include_base_url => true,
-              :hide_documentation_path => false
+              :models                   => [],
+              :target_class             => nil,
+              :mount_path               => '/swagger_doc',
+              :base_path                => nil,
+              :api_version              => '0.1',
+              :markdown                 => false,
+              :hide_format              => false,
+              :authorizations           => nil,
+              :root_base_path           => true, 
+              :include_base_url         => true,
+              :hide_documentation_path  => false
             }
             
             options = defaults.merge(options)

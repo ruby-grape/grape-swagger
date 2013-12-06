@@ -73,13 +73,7 @@ describe "a simple mounted api" do
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
       "info" => {},
-      "produces" => [
-        "application/xml",
-        "application/json",
-        "application/atom+xml",
-        "application/rss+xml",
-        "text/plain"
-      ],
+      "produces" => ["application/xml", "application/json", "text/plain"],
       "operations" => [],
       "apis" => [
         { "path" => "/swagger_doc/simple.{format}" },
@@ -102,13 +96,7 @@ describe "a simple mounted api" do
       "apis" => [{
         "path" => "/simple.{format}",
         "operations" => [{
-          "produces" => [
-            "application/xml",
-            "application/json",
-            "application/atom+xml",
-            "application/rss+xml",
-            "text/plain"
-          ],
+          "produces" => ["application/xml", "application/json", "text/plain"],
           "notes" => "_test_",
           "summary" => "This gets something.",
           "nickname" => "GET-simple---format-",
@@ -130,13 +118,7 @@ describe "a simple mounted api" do
         "apis" => [{
           "path" => "/simple-test.{format}",
           "operations" => [{
-            "produces" => [
-              "application/xml",
-              "application/json",
-              "application/atom+xml",
-              "application/rss+xml",
-              "text/plain"
-            ],
+            "produces" => ["application/xml", "application/json", "text/plain"],
             "notes" => "_test_",
             "summary" => "This gets something for URL using - separator.",
             "nickname" => "GET-simple-test---format-",
@@ -152,13 +134,7 @@ describe "a simple mounted api" do
       JSON.parse(last_response.body)["apis"].should == [{
         "path" => "/simple_with_headers.{format}",
         "operations" => [{
-          "produces" => [
-            "application/xml",
-            "application/json",
-            "application/atom+xml",
-            "application/rss+xml",
-            "text/plain"
-          ],
+          "produces" => ["application/xml", "application/json", "text/plain"],
           "notes" => nil,
           "notes" => "",
           "summary" => "this gets something else",
@@ -181,13 +157,7 @@ describe "a simple mounted api" do
       JSON.parse(last_response.body)["apis"].should == [{
         "path" => "/items.{format}",
         "operations" => [{
-          "produces" => [
-            "application/xml",
-            "application/json",
-            "application/atom+xml",
-            "application/rss+xml",
-            "text/plain"
-          ],
+          "produces" => ["application/xml", "application/json", "text/plain"],
           "notes" => nil,
           "notes" => "",
           "summary" => "this takes an array of parameters",
@@ -203,13 +173,7 @@ describe "a simple mounted api" do
       JSON.parse(last_response.body)["apis"].should == [{
         "path" => "/custom.{format}",
         "operations" => [{
-          "produces" => [
-            "application/xml",
-            "application/json",
-            "application/atom+xml",
-            "application/rss+xml",
-            "text/plain"
-          ],
+          "produces" => ["application/xml", "application/json", "text/plain"],
           "notes" => nil,
           "notes" => "",
           "summary" => "this uses a custom parameter",

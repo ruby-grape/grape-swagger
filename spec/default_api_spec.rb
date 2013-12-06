@@ -23,9 +23,7 @@ describe "Default API" do
         "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
         "info" => {},
-        "produces" => [
-          "application/json"
-        ],
+        "produces" => ["application/json"],
         "operations" => [],
         "apis" => [
           { "path" => "/swagger_doc/something.{format}" },

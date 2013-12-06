@@ -89,13 +89,16 @@ module Grape
                 url_base    = parse_path(route.route_path.gsub('(.:format)', ''), route.route_version) if include_base_url
                 url_format  = '.{format}' unless @@hide_format
                 
-                { :path => "#{url_base}/#{local_route}#{url_format}" }
+                {
+                  :path => "#{url_base}/#{local_route}#{url_format}",
+                  #:description => "..."
+                }
               end.compact
 
               output = {
                 apiVersion:     api_version,
                 swaggerVersion: "1.2",
-                produces:       target_class.content_types.values.uniq,
+                produces:       content_types_for(target_class),
                 operations:     [],
                 apis:           routes_array,
                 info:           parse_info(extra_info)
@@ -129,7 +132,7 @@ module Grape
                 models << route.route_entity if route.route_entity
                 
                 operations = {
-                  :produces   => target_class.content_types.values.uniq,
+                  :produces   => content_types_for(target_class),
                   :notes      => notes.to_s,
                   :summary    => route.route_description || '',
                   :nickname   => route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-')),
@@ -161,7 +164,6 @@ module Grape
             end
           end
 
-
           helpers do
 
             def as_markdown(description)
@@ -188,6 +190,18 @@ module Grape
                   required:     required
                 }
               end
+            end
+            
+            def content_types_for(target_class)
+              content_types = (target_class.settings[:content_types] || {}).values
+              
+              if content_types.empty?
+                formats       = [target_class.settings[:format], target_class.settings[:default_format]].compact.uniq
+                formats       = Grape::Formatter::Base.formatters({}).keys if formats.empty?
+                content_types = Grape::ContentTypes::CONTENT_TYPES.select{|content_type, mime_type| formats.include? content_type}.values
+              end
+              
+              content_types.uniq
             end
 
             def parse_info(info)

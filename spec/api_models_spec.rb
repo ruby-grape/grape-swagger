@@ -30,6 +30,7 @@ describe "API Models" do
       "apiVersion" => "0.1",
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
+      "produces" => ["application/json"],
       "operations" => [],
       "apis" => [
         { "path" => "/swagger_doc/something.{format}" },
@@ -45,19 +46,20 @@ describe "API Models" do
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
       "resourcePath" => "",
-      "apis" => [
-        { "path" => "/something.{format}",
-          "operations" => [
-            { "notes" => nil,
-              "type" => "Something",
-              "summary" => "This gets something.",
-              "nickname" => "GET-something---format-",
-              "httpMethod" => "GET",
-              "parameters" => []
-            }
-          ]
-        }
-      ],
+      "apis" => [{
+        "path" => "/something.{format}",
+        "operations" => [{
+          "produces" => [
+            "application/json"
+          ],
+          "notes" => nil,
+          "type" => "Something",
+          "summary" => "This gets something.",
+          "nickname" => "GET-something---format-",
+          "httpMethod" => "GET",
+          "parameters" => []
+        }]
+      }],
       "models" => {
         "Something" => {
           "id" => "Something",

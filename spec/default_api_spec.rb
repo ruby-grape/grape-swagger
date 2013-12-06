@@ -21,12 +21,24 @@ describe "Default API" do
       "apiVersion" => "0.1",
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
+      "produces" => [
+        "application/json"
+      ],
       "operations" => [],
       "apis" => [
         { "path" => "/swagger_doc/something.{format}" },
         { "path" => "/swagger_doc/swagger_doc.{format}" }
       ]
     }
+  end
+  
+  context "path inside the apis array" do
+    it "should start with a forward slash" do
+      get '/swagger_doc'
+      JSON.parse(last_response.body)['apis'].each do |api|
+        api['path'].should start_with "/"
+      end
+    end
   end
 
 end

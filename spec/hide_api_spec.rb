@@ -30,6 +30,13 @@ describe "a hide mounted api" do
       "apiVersion" => "0.1",
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
+      "produces" => [
+        "application/xml",
+        "application/json",
+        "application/atom+xml",
+        "application/rss+xml",
+        "text/plain"
+      ],
       "operations" => [],
       "apis" => [
         { "path" => "/swagger_doc/simple.{format}" },
@@ -70,6 +77,13 @@ describe "a hide mounted api with same namespace" do
       "apiVersion" => "0.1",
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
+      "produces" => [
+        "application/xml",
+        "application/json",
+        "application/atom+xml",
+        "application/rss+xml",
+        "text/plain"
+      ],
       "operations" => [],
       "apis" => [
         { "path" => "/swagger_doc/simple.{format}" },
@@ -85,20 +99,23 @@ describe "a hide mounted api with same namespace" do
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
       "resourcePath" => "",
-      "apis" => [
-        {
-          "path" => "/simple/show.{format}",
-          "operations" => [
-            {
-              "notes" => nil,
-              "summary" => "Show this endpoint",
-              "nickname" => "GET-simple-show---format-",
-              "httpMethod" => "GET",
-              "parameters" => []
-            }
-          ]
-        }
-      ]
+      "apis" => [{
+        "path" => "/simple/show.{format}",
+        "operations" => [{
+          "produces" => [
+            "application/xml",
+            "application/json",
+            "application/atom+xml",
+            "application/rss+xml",
+            "text/plain"
+          ],
+          "notes" => nil,
+          "summary" => "Show this endpoint",
+          "nickname" => "GET-simple-show---format-",
+          "httpMethod" => "GET",
+          "parameters" => []
+        }]
+      }]
     }
   end
 end

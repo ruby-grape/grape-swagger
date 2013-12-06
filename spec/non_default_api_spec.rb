@@ -120,6 +120,13 @@ describe "options: " do
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
+        "produces" => [
+          "application/xml",
+          "application/json",
+          "application/atom+xml",
+          "application/rss+xml",
+          "text/plain"
+        ],
         "operations" => [],
         "apis" => [
           { "path" => "/v1/swagger_doc/something.{format}" },
@@ -136,14 +143,23 @@ describe "options: " do
         "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
         "resourcePath" => "",
-        "apis" => [
-          {
-            "path" => "/0.1/something.{format}",
-            "operations" => [
-              { "notes" => nil, "summary" => "This gets something.", "nickname" => "GET--version-something---format-", "httpMethod" => "GET", "parameters" => [] }
-            ]
-          }
-        ]
+        "apis" => [{
+          "path" => "/0.1/something.{format}",
+          "operations" => [{
+            "produces" => [
+              "application/xml",
+              "application/json",
+              "application/atom+xml",
+              "application/rss+xml",
+              "text/plain"
+            ],
+            "notes" => nil,
+            "summary" => "This gets something.",
+            "nickname" => "GET--version-something---format-",
+            "httpMethod" => "GET",
+            "parameters" => []
+          }]
+        }]
       }
     end
 
@@ -172,6 +188,13 @@ describe "options: " do
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
+        "produces" => [
+          "application/xml",
+          "application/json",
+          "application/atom+xml",
+          "application/rss+xml",
+          "text/plain"
+        ],
         "operations" => [],
         "apis" => [
           { "path" => "/swagger_doc/something.{format}" }
@@ -209,6 +232,13 @@ describe "options: " do
         "apis"=> [{
           "path"=>"/abc/something.{format}",
           "operations"=> [{
+            "produces" => [
+              "application/xml",
+              "application/json",
+              "application/atom+xml",
+              "application/rss+xml",
+              "text/plain"
+            ],
             "notes"=>nil,
             "summary"=>"This gets something.",
             "nickname"=>"GET-abc-something---format-",
@@ -253,6 +283,13 @@ describe "options: " do
         "apis"=>[{
           "path"=>"/abc/v20/something.{format}",
           "operations"=>[{
+            "produces" => [
+              "application/xml",
+              "application/json",
+              "application/atom+xml",
+              "application/rss+xml",
+              "text/plain"
+            ],
             "notes"=>nil,
             "summary"=>"This gets something.",
             "nickname"=>"GET-abc--version-something---format-",
@@ -333,6 +370,13 @@ describe "options: " do
         "apis" => [{
           "path" => "/something.{format}",
           "operations" => [{
+            "produces" => [
+              "application/xml",
+              "application/json",
+              "application/atom+xml",
+              "application/rss+xml",
+              "text/plain"
+            ],
             "notes" => "<p><em>test</em></p>\n",
             "summary" => "This gets something.",
             "nickname" => "GET-something---format-",
@@ -460,6 +504,13 @@ describe "options: " do
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
+        "produces" => [
+          "application/xml",
+          "application/json",
+          "application/atom+xml",
+          "application/rss+xml",
+          "text/plain"
+        ],
         "operations" => [],
         "apis" => [
           { "path" => "/first/swagger_doc/first.{format}" }
@@ -473,6 +524,13 @@ describe "options: " do
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
+        "produces" => [
+          "application/xml",
+          "application/json",
+          "application/atom+xml",
+          "application/rss+xml",
+          "text/plain"
+        ],
         "operations" => [],
         "apis" => [
           { "path" => "/second/swagger_doc/second.{format}" }

@@ -124,19 +124,20 @@ module Grape
                     :parameters => parse_header_params(route.route_headers) +
                       parse_params(route.route_params, route.route_path, route.route_method)
                 }
-                operations.merge!({:type => route.route_entity.to_s.split('::')[-1]}) if route.route_entity
-                operations.merge!({:errorResponses => http_codes}) unless http_codes.empty?
+                operations.merge!(:type => route.route_entity.to_s.split('::')[-1]) if route.route_entity
+                operations.merge!(:responseMessages => http_codes) unless http_codes.empty?
+                
                 {
-                  :path => parse_path(route.route_path, api_version),
+                  :path       => parse_path(route.route_path, api_version),
                   :operations => [operations]
                 }
               }.compact
 
               api_description = {
-                apiVersion: api_version,
+                apiVersion:     api_version,
                 swaggerVersion: "1.2",
-                resourcePath: "",
-                apis: routes_array
+                resourcePath:   "",
+                apis:           routes_array
               }
 
               basePath                   = parse_base_path(base_path, request)
@@ -223,8 +224,12 @@ module Grape
 
             def parse_http_codes codes
               codes ||= {}
-              codes.collect do |k, v|
-                { code: k, message: v }
+              codes.map do |k, v|
+                {
+                  code: k,
+                  message: v,
+                  #responseModel: ...
+                }
               end
             end
 

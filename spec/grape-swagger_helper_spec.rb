@@ -27,8 +27,8 @@ describe "helpers" do
       path = "/coolness"
       method = "GET"
       @api.parse_params(params, path, method).should == [
-        { paramType: "query", name: :name, description: "A name", dataType: "String", required: true },
-        { paramType: "query", name: :level, description: "", dataType: "String", required: false }
+        { paramType: "query", name: :name, description: "A name", type: "String", required: true },
+        { paramType: "query", name: :level, description: "", type: "String", required: false }
       ]
     end
 
@@ -40,8 +40,8 @@ describe "helpers" do
       path = "/coolness"
       method = "POST"
       @api.parse_params(params, path, method).should == [
-        { paramType: "form", name: :name, description: "A name", dataType: "String", required: true },
-        { paramType: "form", name: :level, description: "", dataType: "String", required: false }
+        { paramType: "form", name: :name, description: "A name", type: "String", required: true },
+        { paramType: "form", name: :level, description: "", type: "String", required: false }
       ]
     end
 
@@ -57,7 +57,7 @@ describe "helpers" do
         path = "/coolness"
         method = "GET"
         @api.parse_params(params, path, method).should == [
-          { paramType: "query", name: :option, description: "Custom option", dataType: "CustomType", required: false }
+          { paramType: "query", name: :option, description: "Custom option", type: "CustomType", required: false }
         ]
       end
     end
@@ -99,7 +99,7 @@ describe "helpers" do
         "XAuthToken" => { description: "A required header.", required: true }
       }
       @api.parse_header_params(params).should == [
-        { paramType: "header", name: "XAuthToken", description: "A required header.", dataType: "String", required: true }
+        { paramType: "header", name: "XAuthToken", description: "A required header.", type: "String", required: true }
       ]
     end
   end

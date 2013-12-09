@@ -118,8 +118,10 @@ describe "options: " do
 
       JSON.parse(last_response.body).should == {
         "apiVersion" => "0.1",
-        "swaggerVersion" => "1.1",
+        "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
+        "info" => {},
+        "produces" => ["application/xml", "application/json", "text/plain"],
         "operations" => [],
         "apis" => [
           { "path" => "/v1/swagger_doc/something.{format}" },
@@ -133,17 +135,21 @@ describe "options: " do
       last_response.status.should == 200
       JSON.parse(last_response.body).should == {
         "apiVersion" => "0.1",
-        "swaggerVersion" => "1.1",
+        "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
         "resourcePath" => "",
-        "apis" => [
-          {
-            "path" => "/0.1/something.{format}",
-            "operations" => [
-              { "notes" => nil, "summary" => "This gets something.", "nickname" => "GET--version-something---format-", "httpMethod" => "GET", "parameters" => [] }
-            ]
-          }
-        ]
+        "apis" => [{
+          "path" => "/0.1/something.{format}",
+          "operations" => [{
+            "produces" => ["application/xml", "application/json", "text/plain"],
+            "notes" => nil,
+            "notes" => "",
+            "summary" => "This gets something.",
+            "nickname" => "GET--version-something---format-",
+            "httpMethod" => "GET",
+            "parameters" => []
+          }]
+        }]
       }
     end
 
@@ -170,8 +176,10 @@ describe "options: " do
       get '/swagger_doc.json'
       JSON.parse(last_response.body).should == {
         "apiVersion" => "0.1",
-        "swaggerVersion" => "1.1",
+        "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
+        "info" => {},
+        "produces" => ["application/xml", "application/json", "text/plain"],
         "operations" => [],
         "apis" => [
           { "path" => "/swagger_doc/something.{format}" }
@@ -201,21 +209,24 @@ describe "options: " do
 
     it "it doesn't show the documentation path on /abc/swagger_doc/something.json" do
       get '/abc/swagger_doc/something.json'
-
       JSON.parse(last_response.body).should == {
-          "apiVersion"=>"0.1",
-          "swaggerVersion"=>"1.1",
-          "basePath"=>"http://example.org",
-          "resourcePath"=>"",
-          "apis"=>
-              [{"path"=>"/abc/something.{format}",
-                "operations"=>
-                    [{"notes"=>nil,
-                      "summary"=>"This gets something.",
-                      "nickname"=>"GET-abc-something---format-",
-                      "httpMethod"=>"GET",
-                      "parameters"=>[]}]}
-          ]}
+        "apiVersion"=>"0.1",
+        "swaggerVersion"=>"1.2",
+        "basePath"=>"http://example.org",
+        "resourcePath"=>"",
+        "apis"=> [{
+          "path"=>"/abc/something.{format}",
+          "operations"=> [{
+            "produces" => ["application/xml", "application/json", "text/plain"],
+            "notes"=>nil,
+            "notes"=>"",
+            "summary"=>"This gets something.",
+            "nickname"=>"GET-abc-something---format-",
+            "httpMethod"=>"GET",
+            "parameters"=>[]
+          }]
+        }]
+      }
     end
 
   end
@@ -245,19 +256,23 @@ describe "options: " do
       get '/abc/v20/swagger_doc/something.json'
 
       JSON.parse(last_response.body).should == {
-          "apiVersion"=>"v20",
-          "swaggerVersion"=>"1.1",
-          "basePath"=>"http://example.org",
-          "resourcePath"=>"",
-          "apis"=>
-              [{"path"=>"/abc/v20/something.{format}",
-                "operations"=>
-                    [{"notes"=>nil,
-                      "summary"=>"This gets something.",
-                      "nickname"=>"GET-abc--version-something---format-",
-                      "httpMethod"=>"GET",
-                      "parameters"=>[]}]}
-              ]}
+        "apiVersion"=>"v20",
+        "swaggerVersion"=>"1.2",
+        "basePath"=>"http://example.org",
+        "resourcePath"=>"",
+        "apis"=>[{
+          "path"=>"/abc/v20/something.{format}",
+          "operations"=>[{
+            "produces" => ["application/xml", "application/json", "text/plain"],
+            "notes"=>nil,
+            "notes"=>"",
+            "summary"=>"This gets something.",
+            "nickname"=>"GET-abc--version-something---format-",
+            "httpMethod"=>"GET",
+            "parameters"=>[]
+          }]
+        }]
+      }
     end
 
   end
@@ -324,17 +339,20 @@ describe "options: " do
       get '/swagger_doc/something.json'
       JSON.parse(last_response.body).should ==  {
         "apiVersion" => "0.1",
-        "swaggerVersion" => "1.1",
+        "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
         "resourcePath" => "",
-        "apis" => [
-          {
-            "path" => "/something.{format}",
-            "operations" => [
-              { "notes" => "<p><em>test</em></p>\n", "summary" => "This gets something.", "nickname" => "GET-something---format-", "httpMethod" => "GET", "parameters" => [] }
-            ]
-          }
-        ]
+        "apis" => [{
+          "path" => "/something.{format}",
+          "operations" => [{
+            "produces" => ["application/xml", "application/json", "text/plain"],
+            "notes" => "<p><em>test</em></p>\n",
+            "summary" => "This gets something.",
+            "nickname" => "GET-something---format-",
+            "httpMethod" => "GET",
+            "parameters" => []
+          }]
+        }]
       }
     end
   end
@@ -453,8 +471,10 @@ describe "options: " do
       get '/first/swagger_doc.json'
       JSON.parse(last_response.body).should == {
         "apiVersion" => "0.1",
-        "swaggerVersion" => "1.1",
+        "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
+        "info" => {},
+        "produces" => ["application/xml", "application/json", "text/plain"],
         "operations" => [],
         "apis" => [
           { "path" => "/first/swagger_doc/first.{format}" }
@@ -466,8 +486,10 @@ describe "options: " do
       get '/second/swagger_doc.json'
       JSON.parse(last_response.body).should == {
         "apiVersion" => "0.1",
-        "swaggerVersion" => "1.1",
+        "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
+        "info" => {},
+        "produces" => ["application/xml", "application/json", "text/plain"],
         "operations" => [],
         "apis" => [
           { "path" => "/second/swagger_doc/second.{format}" }

@@ -31,8 +31,8 @@ describe "a simple mounted api" do
           "XOtherHeader" => { description: "An optional header.", required: false }
         },
         :http_codes => {
-        	403 => "invalid pony",
-        	405 => "no ponies left!"
+          403 => "invalid pony",
+          405 => "no ponies left!"
         }
       }
       get '/simple_with_headers' do
@@ -70,8 +70,10 @@ describe "a simple mounted api" do
     get '/swagger_doc.json'
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",
-      "swaggerVersion" => "1.1",
+      "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
+      "info" => {},
+      "produces" => ["application/xml", "application/json", "text/plain"],
       "operations" => [],
       "apis" => [
         { "path" => "/swagger_doc/simple.{format}" },
@@ -88,17 +90,20 @@ describe "a simple mounted api" do
     get '/swagger_doc/simple.json'
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",
-      "swaggerVersion" => "1.1",
+      "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
       "resourcePath" => "",
-      "apis" => [
-        {
-          "path" => "/simple.{format}",
-          "operations" => [
-            { "notes" => "_test_", "summary" => "This gets something.", "nickname" => "GET-simple---format-", "httpMethod" => "GET", "parameters" => [] }
-          ]
-        }
-      ]
+      "apis" => [{
+        "path" => "/simple.{format}",
+        "operations" => [{
+          "produces" => ["application/xml", "application/json", "text/plain"],
+          "notes" => "_test_",
+          "summary" => "This gets something.",
+          "nickname" => "GET-simple---format-",
+          "httpMethod" => "GET",
+          "parameters" => []
+        }]
+      }]
     }
   end
 
@@ -107,17 +112,20 @@ describe "a simple mounted api" do
       get '/swagger_doc/simple-test.json'
       JSON.parse(last_response.body).should == {
         "apiVersion" => "0.1",
-        "swaggerVersion" => "1.1",
+        "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
         "resourcePath" => "",
-        "apis" => [
-          {
-            "path" => "/simple-test.{format}",
-            "operations" => [
-              { "notes" => "_test_", "summary" => "This gets something for URL using - separator.", "nickname" => "GET-simple-test---format-", "httpMethod" => "GET", "parameters" => [] }
-            ]
-          }
-        ]
+        "apis" => [{
+          "path" => "/simple-test.{format}",
+          "operations" => [{
+            "produces" => ["application/xml", "application/json", "text/plain"],
+            "notes" => "_test_",
+            "summary" => "This gets something for URL using - separator.",
+            "nickname" => "GET-simple-test---format-",
+            "httpMethod" => "GET",
+            "parameters" => []
+          }]
+        }]
       }
     end
 
@@ -125,22 +133,22 @@ describe "a simple mounted api" do
       get '/swagger_doc/simple_with_headers.json'
       JSON.parse(last_response.body)["apis"].should == [{
         "path" => "/simple_with_headers.{format}",
-        "operations" => [
-          {
-            "notes" => nil,
-            "summary" => "this gets something else",
-            "nickname" => "GET-simple_with_headers---format-",
-            "httpMethod" => "GET",
-            "parameters" => [
-              { "paramType" => "header", "name" => "XAuthToken", "description" => "A required header.", "dataType" => "String", "required" => true },
-              { "paramType" => "header", "name" => "XOtherHeader", "description" => "An optional header.", "dataType" => "String", "required" => false }
-            ],
-            "errorResponses" => [
-              { "code" => 403, "reason" => "invalid pony" },
-              { "code" => 405, "reason" => "no ponies left!" }
-            ]
-          }
-        ]
+        "operations" => [{
+          "produces" => ["application/xml", "application/json", "text/plain"],
+          "notes" => nil,
+          "notes" => "",
+          "summary" => "this gets something else",
+          "nickname" => "GET-simple_with_headers---format-",
+          "httpMethod" => "GET",
+          "parameters" => [
+            { "paramType" => "header", "name" => "XAuthToken", "description" => "A required header.", "type" => "String", "required" => true },
+            { "paramType" => "header", "name" => "XOtherHeader", "description" => "An optional header.", "type" => "String", "required" => false }
+          ],
+          "responseMessages" => [
+            { "code" => 403, "message" => "invalid pony" },
+            { "code" => 405, "message" => "no ponies left!" }
+          ]
+        }]
       }]
     end
 
@@ -148,15 +156,15 @@ describe "a simple mounted api" do
       get '/swagger_doc/items.json'
       JSON.parse(last_response.body)["apis"].should == [{
         "path" => "/items.{format}",
-        "operations" => [
-          {
-            "notes" => nil,
-            "summary" => "this takes an array of parameters",
-            "nickname" => "POST-items---format-",
-            "httpMethod" => "POST",
-            "parameters" => [ { "paramType" => "form", "name" => "items[]", "description" => "array of items", "dataType" => "String", "required" => false } ]
-          }
-        ]
+        "operations" => [{
+          "produces" => ["application/xml", "application/json", "text/plain"],
+          "notes" => nil,
+          "notes" => "",
+          "summary" => "this takes an array of parameters",
+          "nickname" => "POST-items---format-",
+          "httpMethod" => "POST",
+          "parameters" => [ { "paramType" => "form", "name" => "items[]", "description" => "array of items", "type" => "String", "required" => false } ]
+        }]
       }]
     end
 
@@ -164,15 +172,15 @@ describe "a simple mounted api" do
       get '/swagger_doc/custom.json'
       JSON.parse(last_response.body)["apis"].should == [{
         "path" => "/custom.{format}",
-        "operations" => [
-          {
-            "notes" => nil,
-            "summary" => "this uses a custom parameter",
-            "nickname" => "GET-custom---format-",
-            "httpMethod" => "GET",
-            "parameters" => [ { "paramType" => "query", "name" => "custom", "description" => "array of items", "dataType" => "CustomType", "required" => false } ]
-          }
-        ]
+        "operations" => [{
+          "produces" => ["application/xml", "application/json", "text/plain"],
+          "notes" => nil,
+          "notes" => "",
+          "summary" => "this uses a custom parameter",
+          "nickname" => "GET-custom---format-",
+          "httpMethod" => "GET",
+          "parameters" => [ { "paramType" => "query", "name" => "custom", "description" => "array of items", "type" => "CustomType", "required" => false } ]
+        }]
       }]
     end
 

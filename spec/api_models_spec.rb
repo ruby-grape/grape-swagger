@@ -28,8 +28,10 @@ describe "API Models" do
     get '/swagger_doc'
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",
-      "swaggerVersion" => "1.1",
+      "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
+      "info" => {},
+      "produces" => ["application/json"],
       "operations" => [],
       "apis" => [
         { "path" => "/swagger_doc/something.{format}" },
@@ -38,26 +40,27 @@ describe "API Models" do
     }
   end
 
-  it "should include response_class when specified" do
+  it "should include type when specified" do
     get '/swagger_doc/something.json'
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",
-      "swaggerVersion" => "1.1",
+      "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
       "resourcePath" => "",
-      "apis" => [
-        { "path" => "/something.{format}",
-          "operations" => [
-            { "notes" => nil,
-              "responseClass" => "Something",
-              "summary" => "This gets something.",
-              "nickname" => "GET-something---format-",
-              "httpMethod" => "GET",
-              "parameters" => []
-            }
-          ]
-        }
-      ],
+      "apis" => [{
+        "path" => "/something.{format}",
+        "operations" => [{
+          "produces" => [
+            "application/json"
+          ],
+          "notes" => "",
+          "type" => "Something",
+          "summary" => "This gets something.",
+          "nickname" => "GET-something---format-",
+          "httpMethod" => "GET",
+          "parameters" => []
+        }]
+      }],
       "models" => {
         "Something" => {
           "id" => "Something",
@@ -65,7 +68,7 @@ describe "API Models" do
           "properties" => {
             "text" => {
               "type" => "string",
-              "desc" => "Content of something."
+              "description" => "Content of something."
             }
           }
         }

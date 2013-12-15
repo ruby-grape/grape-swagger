@@ -140,6 +140,16 @@ desc "Reserve a virgin in heaven", {
 }
 ```
 
+You can also document the HTTP status codes that your API returns with this syntax:
+
+``` ruby
+get '/', :http_codes => [
+  [400, "Invalid parameter entry"],
+] do
+  ...
+end
+```
+
 ## Contributing to grape-swagger
 
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.

@@ -21,14 +21,14 @@ describe "helpers" do
   context "parsing parameters" do
     it "parses params as query strings for a GET" do
       params = {
-        name: { type: 'String', desc: "A name", required: true },
+        name: { type: 'String', desc: "A name", required: true, defaultValue: 'default' },
         level: 'max'
       }
       path = "/coolness"
       method = "GET"
       @api.parse_params(params, path, method).should == [
-        { paramType: "query", name: :name, description: "A name", type: "String", required: true },
-        { paramType: "query", name: :level, description: "", type: "String", required: false }
+        { paramType: "query", name: :name, description: "A name", type: "String", required: true, defaultValue: 'default' },
+        { paramType: "query", name: :level, description: "", type: "String", required: false, defaultValue: nil }
       ]
     end
 
@@ -40,8 +40,8 @@ describe "helpers" do
       path = "/coolness"
       method = "POST"
       @api.parse_params(params, path, method).should == [
-        { paramType: "form", name: :name, description: "A name", type: "String", required: true },
-        { paramType: "form", name: :level, description: "", type: "String", required: false }
+        { paramType: "form", name: :name, description: "A name", type: "String", required: true, defaultValue: nil },
+        { paramType: "form", name: :level, description: "", type: "String", required: false, defaultValue: nil }
       ]
     end
 
@@ -57,7 +57,7 @@ describe "helpers" do
         path = "/coolness"
         method = "GET"
         @api.parse_params(params, path, method).should == [
-          { paramType: "query", name: :option, description: "Custom option", type: "CustomType", required: false }
+          { paramType: "query", name: :option, description: "Custom option", type: "CustomType", required: false, defaultValue: nil }
         ]
       end
     end
@@ -96,10 +96,10 @@ describe "helpers" do
   context "parsing header parameters" do
     it "parses params for the header" do
       params = {
-        "XAuthToken" => { description: "A required header.", required: true }
+        "XAuthToken" => { description: "A required header.", required: true, defaultValue: 'default' }
       }
       @api.parse_header_params(params).should == [
-        { paramType: "header", name: "XAuthToken", description: "A required header.", type: "String", required: true }
+        { paramType: "header", name: "XAuthToken", description: "A required header.", type: "String", required: true, defaultValue: 'default' }
       ]
     end
   end

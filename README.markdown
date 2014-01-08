@@ -47,9 +47,10 @@ end
 You can pass a hash with some configuration possibilities to ```add_swagger_documentation```, all of these are optional:
 * ```:mount_path``` The path were the API documentation is loaded, default '/swagger_doc'
 * ```:api_version``` Version of the API that's being exposed
-* ```:base_path``` Basepath of the API that's being exposed
+* ```:base_path``` Basepath of the API that's being exposed, this configuration parameter accepts a Proc to evaluate base_path, useful when you need to use request attributes to determine the base_path.
 * ```:markdown``` Allow markdown in `notes`, default `false`
 * ```:hide_documentation_path``` Don't show the '/swagger_doc' path in the generated swagger documentation
+
 
 ## Swagger Header Parameters
 

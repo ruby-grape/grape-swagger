@@ -196,6 +196,7 @@ module Grape
                   name:         name,
                   description:  as_markdown(description),
                   type:         dataType,
+                  dataType:     dataType,
                   required:     required
                 }
 

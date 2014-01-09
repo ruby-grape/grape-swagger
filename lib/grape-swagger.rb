@@ -12,14 +12,13 @@ module Grape
         mount(documentation_class)
 
         @combined_routes = {}
-        
         routes.each do |route|
           route_match = route.route_path.split(route.route_prefix).last.match('\/([\w|-]*?)[\.\/\(]')
           next if route_match.nil?
           resource = route_match.captures.first
           next if resource.empty?
           resource.downcase!
-          
+
           @combined_routes[resource] ||= []
 
           unless @@hide_documentation_path and route.route_path.include?(@@mount_path)
@@ -52,10 +51,10 @@ module Grape
               :models                   => [],
               :info                     => {},
               :authorizations           => nil,
-              :root_base_path           => true, 
+              :root_base_path           => true,
               :include_base_url         => true
             }
-            
+
             options = defaults.merge(options)
 
             target_class     = options[:target_class]
@@ -76,19 +75,18 @@ module Grape
             get @@mount_path do
               header['Access-Control-Allow-Origin']   = '*'
               header['Access-Control-Request-Method'] = '*'
-              
-              routes = target_class::combined_routes
 
+              routes = target_class::combined_routes
               if @@hide_documentation_path
                 routes.reject!{ |route, value| "/#{route}/".index(parse_path(@@mount_path, nil) << '/') == 0 }
               end
 
               routes_array = routes.keys.map do |local_route|
                 next if routes[local_route].all?(&:route_hidden)
-                
+
                 url_base    = parse_path(route.route_path.gsub('(.:format)', ''), route.route_version) if include_base_url
                 url_format  = '.{format}' unless @@hide_format
-                
+
                 {
                   :path => "#{url_base}/#{local_route}#{url_format}",
                   #:description => "..."
@@ -121,16 +119,16 @@ module Grape
             get "#{@@mount_path}/:name" do
               header['Access-Control-Allow-Origin']   = '*'
               header['Access-Control-Request-Method'] = '*'
-              
+
               models = []
               routes = target_class::combined_routes[params[:name]]
-              
+
               routes_array = routes.reject(&:route_hidden).map do |route|
                 notes       = as_markdown(route.route_notes)
                 http_codes  = parse_http_codes(route.route_http_codes)
-                
+
                 models << route.route_entity if route.route_entity
-                
+
                 operations = {
                   :produces   => content_types_for(target_class),
                   :notes      => notes.to_s,
@@ -142,7 +140,7 @@ module Grape
                 }
                 operations.merge!(:type => route.route_entity.to_s.split('::')[-1]) if route.route_entity
                 operations.merge!(:responseMessages => http_codes) unless http_codes.empty?
-                
+
                 {
                   :path       => parse_path(route.route_path, api_version),
                   :operations => [operations]
@@ -159,7 +157,7 @@ module Grape
               basePath                   = parse_base_path(base_path, request)
               api_description[:basePath] = basePath if basePath && basePath.size > 0
               api_description[:models]   = parse_entity_models(models) unless models.empty?
-              
+
               api_description
             end
           end
@@ -172,7 +170,7 @@ module Grape
 
             def parse_params(params, path, method)
               params ||= []
-              
+
               params.map do |param, value|
                 value[:type] = 'file' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
 
@@ -181,26 +179,27 @@ module Grape
                 required    = value.is_a?(Hash) ? !!value[:required] : false
                 paramType   = path.include?(":#{param}") ? 'path' : (method == 'POST') ? 'form' : 'query'
                 name        = (value.is_a?(Hash) && value[:full_name]) || param
-                
+
                 {
                   paramType:    paramType,
                   name:         name,
                   description:  as_markdown(description),
                   type:         dataType,
+                  dataType:     dataType,
                   required:     required
                 }
               end
             end
-            
+
             def content_types_for(target_class)
               content_types = (target_class.settings[:content_types] || {}).values
-              
+
               if content_types.empty?
                 formats       = [target_class.settings[:format], target_class.settings[:default_format]].compact.uniq
                 formats       = Grape::Formatter::Base.formatters({}).keys if formats.empty?
                 content_types = Grape::ContentTypes::CONTENT_TYPES.select{|content_type, mime_type| formats.include? content_type}.values
               end
-              
+
               content_types.uniq
             end
 
@@ -217,13 +216,13 @@ module Grape
 
             def parse_header_params(params)
               params ||= []
-              
+
               params.map do |param, value|
                 dataType    = 'String'
                 description = value.is_a?(Hash) ? value[:description] : ''
                 required    = value.is_a?(Hash) ? !!value[:required] : false
                 paramType   = "header"
-                
+
                 {
                   paramType:    paramType,
                   name:         param,
@@ -249,27 +248,27 @@ module Grape
 
             def parse_entity_models(models)
               result = {}
-              
+
               models.each do |model|
                 name        = model.to_s.split('::')[-1]
                 properties  = {}
-                
+
                 model.documentation.each do |property_name, property_info|
                   properties[property_name] = property_info
-                  
+
                   # rename Grape Entity's "desc" to "description"
                   if property_description = property_info.delete(:desc)
                     property_info[:description] = property_description
                   end
                 end
-                
+
                 result[name] = {
                   id:         model.instance_variable_get(:@root) || name,
                   name:       model.instance_variable_get(:@root) || name,
                   properties: properties
                 }
               end
-              
+
               result
             end
 

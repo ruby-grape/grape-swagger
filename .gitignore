@@ -30,3 +30,4 @@ test/dummy/.sass-cache
 #
 .DS_Store
 .project
+*.gem

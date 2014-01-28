@@ -1,17 +1,34 @@
+PATH
+  remote: .
+  specs:
+    grape-swagger (0.6.0)
+      grape
+      grape-entity
+      kramdown
+
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (3.2.13)
-      i18n (= 0.6.1)
-      multi_json (~> 1.0)
-    backports (3.3.2)
+    activesupport (4.0.2)
+      i18n (~> 0.6, >= 0.6.4)
+      minitest (~> 4.2)
+      multi_json (~> 1.3)
+      thread_safe (~> 0.1)
+      tzinfo (~> 0.3.37)
+    atomic (1.1.14)
+    atomic (1.1.14-java)
+    axiom-types (0.0.5)
+      descendants_tracker (~> 0.0.1)
+      ice_nine (~> 0.9)
     builder (3.2.2)
-    coderay (1.0.7)
-    descendants_tracker (0.0.1)
-    diff-lcs (1.1.3)
+    coderay (1.1.0)
+    coercible (1.0.0)
+      descendants_tracker (~> 0.0.1)
+    descendants_tracker (0.0.3)
+    diff-lcs (1.2.5)
+    equalizer (0.0.9)
     ffi (1.9.3-java)
-    git (1.2.5)
-    grape (0.5.0)
+    grape (0.6.1)
       activesupport
       builder
       hashie (>= 1.2.0)
@@ -20,75 +37,76 @@ GEM
       rack (>= 1.3.0)
       rack-accept
       rack-mount
-      virtus
-    grape-entity (0.3.0)
+      virtus (>= 1.0.0)
+    grape-entity (0.4.0)
       activesupport
       multi_json (>= 1.3.2)
     hashie (2.0.5)
-    i18n (0.6.1)
-    jeweler (1.8.4)
-      bundler (~> 1.0)
-      git (>= 1.2.5)
-      rake
-      rdoc
-    json (1.7.3)
-    json (1.7.3-java)
-    kramdown (0.13.7)
-    method_source (0.8)
-    multi_json (1.7.7)
-    multi_xml (0.5.4)
-    pry (0.9.10)
-      coderay (~> 1.0.5)
+    i18n (0.6.9)
+    ice_nine (0.11.0)
+    json (1.8.1)
+    json (1.8.1-java)
+    kramdown (1.3.1)
+    method_source (0.8.2)
+    minitest (4.7.5)
+    multi_json (1.8.4)
+    multi_xml (0.5.5)
+    pry (0.9.12.6)
+      coderay (~> 1.0)
       method_source (~> 0.8)
-      slop (~> 3.3.1)
-    pry (0.9.10-java)
-      coderay (~> 1.0.5)
+      slop (~> 3.4)
+    pry (0.9.12.6-java)
+      coderay (~> 1.0)
       method_source (~> 0.8)
-      slop (~> 3.3.1)
+      slop (~> 3.4)
       spoon (~> 0.0)
     rack (1.5.2)
     rack-accept (0.4.5)
       rack (>= 0.4)
     rack-mount (0.8.3)
       rack (>= 1.0.0)
-    rack-test (0.6.1)
+    rack-test (0.6.2)
       rack (>= 1.0)
-    rake (0.9.2.2)
-    rdoc (3.12)
+    rake (10.1.1)
+    rdoc (4.1.1)
       json (~> 1.4)
-    rspec (2.11.0)
-      rspec-core (~> 2.11.0)
-      rspec-expectations (~> 2.11.0)
-      rspec-mocks (~> 2.11.0)
-    rspec-core (2.11.1)
-    rspec-expectations (2.11.1)
-      diff-lcs (~> 1.1.3)
-    rspec-mocks (2.11.1)
-    shoulda (3.1.1)
-      shoulda-context (~> 1.0)
-      shoulda-matchers (~> 1.2)
-    shoulda-context (1.0.0)
-    shoulda-matchers (1.2.0)
+    rspec (2.14.1)
+      rspec-core (~> 2.14.0)
+      rspec-expectations (~> 2.14.0)
+      rspec-mocks (~> 2.14.0)
+    rspec-core (2.14.7)
+    rspec-expectations (2.14.4)
+      diff-lcs (>= 1.1.3, < 2.0)
+    rspec-mocks (2.14.4)
+    shoulda (3.5.0)
+      shoulda-context (~> 1.0, >= 1.0.1)
+      shoulda-matchers (>= 1.4.1, < 3.0)
+    shoulda-context (1.1.6)
+    shoulda-matchers (2.5.0)
       activesupport (>= 3.0.0)
-    slop (3.3.2)
+    slop (3.4.7)
     spoon (0.0.4)
       ffi
-    virtus (0.5.5)
-      backports (~> 3.3)
+    thread_safe (0.1.3)
+      atomic
+    thread_safe (0.1.3-java)
+      atomic
+    tzinfo (0.3.38)
+    virtus (1.0.1)
+      axiom-types (~> 0.0.5)
+      coercible (~> 1.0)
       descendants_tracker (~> 0.0.1)
+      equalizer (~> 0.0.7)
 
 PLATFORMS
   java
   ruby
 
 DEPENDENCIES
-  bundler (> 1.0.0)
-  grape (>= 0.2.0)
-  grape-entity (~> 0.3.0)
-  jeweler (~> 1.8.4)
-  kramdown
+  grape-swagger!
   pry
   rack-test
-  rdoc (~> 3.12)
+  rake
+  rdoc
   rspec
   shoulda

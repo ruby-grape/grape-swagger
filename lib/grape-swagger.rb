@@ -126,52 +126,52 @@ module Grape
               routes = target_class::combined_routes[params[:name]]
               
               ops = routes.reject(&:route_hidden).group_by do |route|
-                              parse_path(route.route_path, api_version)
-                            end
+                parse_path(route.route_path, api_version)
+              end
 
-                            apis = []
+              apis = []
 
-                            ops.each do |path, routes|
-                              operations = routes.map do |route|
-                                notes       = as_markdown(route.route_notes)
-                                http_codes  = parse_http_codes(route.route_http_codes)
-                                
-                                models << route.route_entity if route.route_entity
-                                
-                                operation = {
-                                  :produces   => content_types_for(target_class),
-                                  :notes      => notes.to_s,
-                                  :summary    => route.route_description ? as_markdown(route.route_description) : '',
-                                  :nickname   => route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-')),
-                                  :httpMethod => route.route_method,
-                                  :parameters => parse_header_params(route.route_headers) +
-                                    parse_params(route.route_params, route.route_path, route.route_method)
-                                }
-                                if route.route_entity
-                                  entity_parts = route.route_entity.to_s.split('::')
-                                  operation.merge!(:type => entity_parts.take(entity_parts.length - 1).join("_").downcase)
-                                end
-                                operation.merge!(:responseMessages => http_codes) unless http_codes.empty?
-                                operation
-                              end.compact
-                              apis << {
-                                path: path,
-                                operations: operations
-                              }
-                            end
+              ops.each do |path, routes|
+                operations = routes.map do |route|
+                  notes       = as_markdown(route.route_notes)
+                  http_codes  = parse_http_codes(route.route_http_codes)
+                  
+                  models << route.route_entity if route.route_entity
+                  
+                  operation = {
+                    :produces   => content_types_for(target_class),
+                    :notes      => notes.to_s,
+                    :summary    => route.route_description ? as_markdown(route.route_description) : '',
+                    :nickname   => route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-')),
+                    :httpMethod => route.route_method,
+                    :parameters => parse_header_params(route.route_headers) +
+                      parse_params(route.route_params, route.route_path, route.route_method)
+                  }
+                  if route.route_entity
+                    entity_parts = route.route_entity.to_s.split('::')
+                    operation.merge!(:type => entity_parts.take(entity_parts.length - 1).join("_").downcase)
+                  end
+                  operation.merge!(:responseMessages => http_codes) unless http_codes.empty?
+                  operation
+                end.compact
+                apis << {
+                  path: path,
+                  operations: operations
+                }
+              end
 
-                            api_description = {
-                              apiVersion:     api_version,
-                              swaggerVersion: "1.2",
-                              resourcePath:   "",
-                              apis:           apis
-                            }
+              api_description = {
+                apiVersion:     api_version,
+                swaggerVersion: "1.2",
+                resourcePath:   "",
+                apis:           apis
+              }
 
-                            basePath                   = parse_base_path(base_path, request)
-                            api_description[:basePath] = basePath if basePath && basePath.size > 0
-                            api_description[:models]   = parse_entity_models(models) unless models.empty?
-                            
-                            api_description
+              basePath                   = parse_base_path(base_path, request)
+              api_description[:basePath] = basePath if basePath && basePath.size > 0
+              api_description[:models]   = parse_entity_models(models) unless models.empty?
+              
+              api_description
             end
           end
 

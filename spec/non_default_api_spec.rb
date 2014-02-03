@@ -124,8 +124,8 @@ describe "options: " do
         "produces" => ["application/xml", "application/json", "text/plain"],
         "operations" => [],
         "apis" => [
-          { "path" => "/v1/swagger_doc/something.{format}" },
-          { "path" => "/v1/swagger_doc/swagger_doc.{format}" }
+          { "path" => "/v1/something.{format}" },
+          { "path" => "/v1/swagger_doc.{format}" }
         ]
       }
     end
@@ -182,7 +182,7 @@ describe "options: " do
         "produces" => ["application/xml", "application/json", "text/plain"],
         "operations" => [],
         "apis" => [
-          { "path" => "/swagger_doc/something.{format}" }
+          { "path" => "/something.{format}" }
         ]
       }
     end
@@ -296,12 +296,6 @@ describe "options: " do
 
     def app; SimpleApiWithDifferentMount end
 
-    it "retrieves the given base-path on /api_doc" do
-      get '/api_doc.json'
-      JSON.parse(last_response.body)["apis"].each do |api|
-        api["path"].should start_with SimpleApiWithDifferentMount::MOUNT_PATH
-      end
-    end
 
     it "retrieves the same given base-path for mounted-api" do
       get '/api_doc/something.json'
@@ -477,7 +471,7 @@ describe "options: " do
         "produces" => ["application/xml", "application/json", "text/plain"],
         "operations" => [],
         "apis" => [
-          { "path" => "/first/swagger_doc/first.{format}" }
+          { "path" => "/first.{format}" }
         ]
       }
     end
@@ -492,7 +486,7 @@ describe "options: " do
         "produces" => ["application/xml", "application/json", "text/plain"],
         "operations" => [],
         "apis" => [
-          { "path" => "/second/swagger_doc/second.{format}" }
+          { "path" => "/second.{format}" }
         ]
       }
     end

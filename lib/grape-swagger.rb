@@ -196,6 +196,7 @@ module Grape
                   name:         name,
                   description:  as_markdown(description),
                   type:         dataType,
+                  dataType:     dataType,
                   required:     required
                 }
 
@@ -243,6 +244,7 @@ module Grape
                   name:         param,
                   description:  as_markdown(description),
                   type:         dataType,
+                  dataType:     dataType,
                   required:     required
                 }
 

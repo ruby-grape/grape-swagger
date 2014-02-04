@@ -1,4 +1,4 @@
-require 'github/markdown'
+require 'kramdown'
 
 module Grape
   class API
@@ -182,7 +182,7 @@ module Grape
           helpers do
 
             def as_markdown(description)
-              description && @@markdown ? GitHub::Markdown.render_gfm(strip_heredoc(description)) : description
+              description && @@markdown ? Kramdown::Document.new(strip_heredoc(description)).to_html : description
             end
 
             def parse_params(params, path, method)

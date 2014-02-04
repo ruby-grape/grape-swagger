@@ -5,7 +5,7 @@ source "http://rubygems.org"
 
 gem 'grape', '>= 0.2.0'
 gem 'grape-entity', '>= 0.3.0'
-gem 'github-markdown'
+gem 'kramdown'
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.

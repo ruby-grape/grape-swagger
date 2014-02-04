@@ -85,7 +85,7 @@ DEPENDENCIES
   bundler (> 1.0.0)
   github-markdown
   grape (>= 0.2.0)
-  grape-entity (~> 0.3.0)
+  grape-entity (>= 0.3.0)
   jeweler (~> 1.8.4)
   pry
   rack-test

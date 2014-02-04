@@ -153,8 +153,8 @@ describe "options: " do
         "produces" => ["application/xml", "application/json", "text/plain"],
         "operations" => [],
         "apis" => [
-          { "path" => "/v1/something.{format}" },
-          { "path" => "/v1/swagger_doc.{format}" }
+          { "path" => "/something" },
+          { "path" => "/swagger_doc" }
         ]
       }
     end
@@ -168,7 +168,7 @@ describe "options: " do
         "basePath" => "http://example.org",
         "resourcePath" => "",
         "apis" => [{
-          "path" => "/0.1/something.{format}",
+          "path" => "/v1/something.{format}",
           "operations" => [{
             "produces" => ["application/xml", "application/json", "text/plain"],
             "notes" => nil,
@@ -211,7 +211,7 @@ describe "options: " do
         "produces" => ["application/xml", "application/json", "text/plain"],
         "operations" => [],
         "apis" => [
-          { "path" => "/something.{format}" }
+          { "path" => "/something" }
         ]
       }
     end
@@ -500,7 +500,7 @@ describe "options: " do
         "produces" => ["application/xml", "application/json", "text/plain"],
         "operations" => [],
         "apis" => [
-          { "path" => "/first.{format}" }
+          { "path" => "/first" }
         ]
       }
     end
@@ -515,7 +515,7 @@ describe "options: " do
         "produces" => ["application/xml", "application/json", "text/plain"],
         "operations" => [],
         "apis" => [
-          { "path" => "/second.{format}" }
+          { "path" => "/second" }
         ]
       }
     end

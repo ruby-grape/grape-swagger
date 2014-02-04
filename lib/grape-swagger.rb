@@ -92,12 +92,8 @@ module Grape
 
               routes_array = routes.keys.map do |local_route|
                 next if routes[local_route].all?(&:route_hidden)
-
-                parsed_path = route.route_version ? "/#{route.route_version}" : ""
-                parsed_path += "/#{local_route}"
-                parsed_path += '.{format}' unless @@hide_format
                 {
-                  :path => parsed_path,
+                  :path => "/#{local_route}",
                   #:description => "..."
                 }
               end.compact
@@ -130,10 +126,11 @@ module Grape
               header['Access-Control-Request-Method'] = '*'
 
               models = []
+
               routes = target_class::combined_routes[params[:name]]
 
               ops = routes.reject(&:route_hidden).group_by do |route|
-                parse_path(route.route_path, api_version)
+                parse_path(route.route_path, route.route_version)
               end
 
               apis = []

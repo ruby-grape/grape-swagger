@@ -82,15 +82,15 @@ module Grape
               if @@hide_documentation_path
                 routes.reject!{ |route, value| "/#{route}/".index(parse_path(@@mount_path, nil) << '/') == 0 }
               end
-
+              
               routes_array = routes.keys.map do |local_route|
                 next if routes[local_route].all?(&:route_hidden)
                 
-                url_base    = parse_path(route.route_path.gsub('(.:format)', ''), route.route_version) if include_base_url
-                url_format  = '.{format}' unless @@hide_format
-                
+                parsed_path = route.route_version ? "/#{route.route_version}" : ""
+                parsed_path += "/#{local_route}"
+                parsed_path += '.{format}' unless @@hide_format
                 {
-                  :path => "#{url_base}/#{local_route}#{url_format}",
+                  :path => parsed_path,
                   #:description => "..."
                 }
               end.compact
@@ -125,35 +125,43 @@ module Grape
               models = []
               routes = target_class::combined_routes[params[:name]]
               
-              routes_array = routes.reject(&:route_hidden).map do |route|
-                notes       = as_markdown(route.route_notes)
-                http_codes  = parse_http_codes(route.route_http_codes)
-                
-                models << route.route_entity if route.route_entity
-                
-                operations = {
-                  :produces   => content_types_for(target_class),
-                  :notes      => notes.to_s,
-                  :summary    => route.route_description || '',
-                  :nickname   => route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-')),
-                  :httpMethod => route.route_method,
-                  :parameters => parse_header_params(route.route_headers) +
-                    parse_params(route.route_params, route.route_path, route.route_method)
+              ops = routes.reject(&:route_hidden).group_by do |route|
+                parse_path(route.route_path, api_version)
+              end
+
+              apis = []
+
+              ops.each do |path, routes|
+                operations = routes.map do |route|
+                  notes       = as_markdown(route.route_notes)
+                  http_codes  = parse_http_codes(route.route_http_codes)
+                  
+                  models << route.route_entity if route.route_entity
+                  
+                  operation = {
+                    :produces   => content_types_for(target_class),
+                    :notes      => notes.to_s,
+                    :summary    => route.route_description || '',
+                    :nickname   => route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-')),
+                    :httpMethod => route.route_method,
+                    :parameters => parse_header_params(route.route_headers) +
+                      parse_params(route.route_params, route.route_path, route.route_method)
+                  }
+                  operation.merge!(:type => route.route_entity.to_s.split('::')[-1]) if route.route_entity
+                  operation.merge!(:responseMessages => http_codes) unless http_codes.empty?
+                  operation
+                end.compact
+                apis << {
+                  path: path,
+                  operations: operations
                 }
-                operations.merge!(:type => route.route_entity.to_s.split('::')[-1]) if route.route_entity
-                operations.merge!(:responseMessages => http_codes) unless http_codes.empty?
-                
-                {
-                  :path       => parse_path(route.route_path, api_version),
-                  :operations => [operations]
-                }
-              end.compact
+              end
 
               api_description = {
                 apiVersion:     api_version,
                 swaggerVersion: "1.2",
                 resourcePath:   "",
-                apis:           routes_array
+                apis:           apis
               }
 
               basePath                   = parse_base_path(base_path, request)

@@ -82,15 +82,18 @@ module Grape
               if @@hide_documentation_path
                 routes.reject!{ |route, value| "/#{route}/".index(parse_path(@@mount_path, nil) << '/') == 0 }
               end
-
+              
               routes_array = routes.keys.map do |local_route|
                 next if routes[local_route].all?(&:route_hidden)
-                
-                url_base    = parse_path(route.route_path.gsub('(.:format)', ''), route.route_version) if include_base_url
+
+                # url_base    = parse_path(route.route_path.gsub('(.:format)', ''), route.route_version) if include_base_url
                 url_format  = '.{format}' unless @@hide_format
-                
+
+                # puts "URL BASE", url_base
+                parsed_path = "/#{local_route}#{url_format}"
+                parsed_path = "/#{route.route_version}#{parsed_path}" if route.route_version
                 {
-                  :path => "/#{local_route}#{url_format}",
+                  :path => parsed_path,
                   #:description => "..."
                 }
               end.compact
@@ -141,16 +144,13 @@ module Grape
                   operation = {
                     :produces   => content_types_for(target_class),
                     :notes      => notes.to_s,
-                    :summary    => route.route_description ? as_markdown(route.route_description) : '',
+                    :summary    => route.route_description || '',
                     :nickname   => route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-')),
                     :httpMethod => route.route_method,
                     :parameters => parse_header_params(route.route_headers) +
                       parse_params(route.route_params, route.route_path, route.route_method)
                   }
-                  if route.route_entity
-                    entity_parts = route.route_entity.to_s.split('::')
-                    operation.merge!(:type => entity_parts.take(entity_parts.length - 1).join("_").downcase)
-                  end
+                  operation.merge!(:type => route.route_entity.to_s.split('::')[-1]) if route.route_entity
                   operation.merge!(:responseMessages => http_codes) unless http_codes.empty?
                   operation
                 end.compact

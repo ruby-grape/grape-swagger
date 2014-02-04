@@ -85,13 +85,10 @@ module Grape
               
               routes_array = routes.keys.map do |local_route|
                 next if routes[local_route].all?(&:route_hidden)
-
-                # url_base    = parse_path(route.route_path.gsub('(.:format)', ''), route.route_version) if include_base_url
-                url_format  = '.{format}' unless @@hide_format
-
-                # puts "URL BASE", url_base
-                parsed_path = "/#{local_route}#{url_format}"
-                parsed_path = "/#{route.route_version}#{parsed_path}" if route.route_version
+                
+                parsed_path = route.route_version ? "/#{route.route_version}" : ""
+                parsed_path += "/#{local_route}"
+                parsed_path += '.{format}' unless @@hide_format
                 {
                   :path => parsed_path,
                   #:description => "..."

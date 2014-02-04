@@ -141,8 +141,8 @@ describe "a simple mounted api" do
           "nickname" => "GET-simple_with_headers---format-",
           "httpMethod" => "GET",
           "parameters" => [
-            { "paramType" => "header", "name" => "XAuthToken", "description" => "A required header.", "type" => "String", "required" => true },
-            { "paramType" => "header", "name" => "XOtherHeader", "description" => "An optional header.", "type" => "String", "required" => false }
+            { "paramType" => "header", "name" => "XAuthToken", "description" => "A required header.", "type" => "String", "dataType" => "String", "required" => true },
+            { "paramType" => "header", "name" => "XOtherHeader", "description" => "An optional header.", "type" => "String", "dataType" => "String", "required" => false }
           ],
           "responseMessages" => [
             { "code" => 403, "message" => "invalid pony" },
@@ -163,7 +163,7 @@ describe "a simple mounted api" do
           "summary" => "this takes an array of parameters",
           "nickname" => "POST-items---format-",
           "httpMethod" => "POST",
-          "parameters" => [ { "paramType" => "form", "name" => "items[]", "description" => "array of items", "type" => "String", "required" => false } ]
+          "parameters" => [ { "paramType" => "form", "name" => "items[]", "description" => "array of items", "type" => "String", "dataType" => "String", "required" => false } ]
         }]
       }]
     end
@@ -179,7 +179,7 @@ describe "a simple mounted api" do
           "summary" => "this uses a custom parameter",
           "nickname" => "GET-custom---format-",
           "httpMethod" => "GET",
-          "parameters" => [ { "paramType" => "query", "name" => "custom", "description" => "array of items", "type" => "CustomType", "required" => false } ]
+          "parameters" => [ { "paramType" => "query", "name" => "custom", "description" => "array of items", "type" => "CustomType", "dataType" => "CustomType", "required" => false } ]
         }]
       }]
     end

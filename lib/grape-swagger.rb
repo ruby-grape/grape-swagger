@@ -182,7 +182,7 @@ module Grape
           helpers do
 
             def as_markdown(description)
-              description && @@markdown ? Kramdown::Document.new(strip_heredoc(description)).to_html : description
+              description && @@markdown ? Kramdown::Document.new(strip_heredoc(description), :input => 'GFM', :enable_coderay => false).to_html : description
             end
 
             def parse_params(params, path, method)

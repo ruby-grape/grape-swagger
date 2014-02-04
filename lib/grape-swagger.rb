@@ -187,16 +187,21 @@ module Grape
                 dataType    = value.is_a?(Hash) ? (value[:type] || 'String').to_s : 'String'
                 description = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
                 required    = value.is_a?(Hash) ? !!value[:required] : false
+                defaultValue = value.is_a?(Hash) ? value[:defaultValue] : nil
                 paramType   = path.include?(":#{param}") ? 'path' : (method == 'POST') ? 'form' : 'query'
                 name        = (value.is_a?(Hash) && value[:full_name]) || param
 
-                {
+                parsed_params = {
                   paramType:    paramType,
                   name:         name,
                   description:  as_markdown(description),
                   type:         dataType,
                   required:     required
                 }
+
+                parsed_params.merge!({defaultValue: defaultValue}) if defaultValue
+
+                parsed_params
               end
             end
 
@@ -230,15 +235,20 @@ module Grape
                 dataType    = 'String'
                 description = value.is_a?(Hash) ? value[:description] : ''
                 required    = value.is_a?(Hash) ? !!value[:required] : false
+                defaultValue = value.is_a?(Hash) ? value[:defaultValue] : nil
                 paramType   = "header"
 
-                {
+                parsed_params = {
                   paramType:    paramType,
                   name:         param,
                   description:  as_markdown(description),
                   type:         dataType,
                   required:     required
                 }
+
+                parsed_params.merge!({defaultValue: defaultValue}) if defaultValue
+
+                parsed_params
               end
             end
 

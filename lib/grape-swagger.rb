@@ -140,7 +140,11 @@ module Grape
                   :parameters => parse_header_params(route.route_headers) +
                     parse_params(route.route_params, route.route_path, route.route_method)
                 }
-                operations.merge!(:type => route.route_entity.to_s.split('::')[-1]) if route.route_entity
+                if route.route_entity
+                  entity_parts = route.route_entity.to_s.split('::')
+                  entity_parts.reject! {|p| p == "Entity" || p == "Entities"}
+                  operations.merge!(:type => entity_parts.join("::"))
+                end
                 operations.merge!(:responseMessages => http_codes) unless http_codes.empty?
                 
                 {
@@ -251,7 +255,9 @@ module Grape
               result = {}
               
               models.each do |model|
-                name        = model.to_s.split('::')[-1]
+                entity_parts = model.to_s.split('::')
+                entity_parts.reject! {|p| p == "Entity" || p == "Entities"}
+                name        = entity_parts.join("::")
                 properties  = {}
                 
                 model.documentation.each do |property_name, property_info|

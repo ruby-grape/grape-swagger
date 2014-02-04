@@ -324,7 +324,13 @@ module Grape
             end
 
             def parse_base_path(base_path, request)
-              (base_path.is_a?(Proc) ? base_path.call(request) : base_path) || request.base_url
+              if base_path.is_a?(Proc)
+                base_path.call(request)
+              elsif base_path.is_a?(String)
+                URI(base_path).relative? ? URI.join(request.base_url, base_path).to_s : base_path
+              else
+                request.base_url
+              end
             end
           end
         end

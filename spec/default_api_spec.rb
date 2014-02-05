@@ -26,8 +26,8 @@ describe "Default API" do
         "produces" => ["application/json"],
         "operations" => [],
         "apis" => [
-          { "path" => "/something.{format}" },
-          { "path" => "/swagger_doc.{format}" }
+          { "path" => "/something" },
+          { "path" => "/swagger_doc" }
         ]
       }
     end

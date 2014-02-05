@@ -76,12 +76,12 @@ describe "a simple mounted api" do
       "produces" => ["application/xml", "application/json", "text/plain"],
       "operations" => [],
       "apis" => [
-        { "path" => "/simple.{format}" },
-        { "path" => "/simple-test.{format}" },
-        { "path" => "/simple_with_headers.{format}" },
-        { "path" => "/items.{format}" },
-        { "path" => "/custom.{format}" },
-        { "path" => "/swagger_doc.{format}" }
+        { "path" => "/simple" },
+        { "path" => "/simple-test" },
+        { "path" => "/simple_with_headers" },
+        { "path" => "/items" },
+        { "path" => "/custom" },
+        { "path" => "/swagger_doc" }
       ]
     }
   end

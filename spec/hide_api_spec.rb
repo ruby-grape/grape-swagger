@@ -34,8 +34,8 @@ describe "a hide mounted api" do
       "produces" => ["application/xml", "application/json", "text/plain"],
       "operations" => [],
       "apis" => [
-        { "path" => "/simple.{format}" },
-        { "path" => "/swagger_doc.{format}" }
+        { "path" => "/simple" },
+        { "path" => "/swagger_doc" }
       ]
     }
   end
@@ -76,8 +76,8 @@ describe "a hide mounted api with same namespace" do
       "produces" => ["application/xml", "application/json", "text/plain"],
       "operations" => [],
       "apis" => [
-        { "path" => "/simple.{format}" },
-        { "path" => "/swagger_doc.{format}" }
+        { "path" => "/simple" },
+        { "path" => "/swagger_doc" }
       ]
     }
   end

@@ -50,9 +50,9 @@ describe "API Models" do
       "produces" => ["application/json"],
       "operations" => [],
       "apis" => [
-        { "path" => "/something.{format}" },
-        { "path" => "/thing.{format}" },
-        { "path" => "/swagger_doc.{format}" }
+        { "path" => "/swagger_doc/something.{format}" },
+        { "path" => "/swagger_doc/thing.{format}" },
+        { "path" => "/swagger_doc/swagger_doc.{format}" }
       ]
     }
   end

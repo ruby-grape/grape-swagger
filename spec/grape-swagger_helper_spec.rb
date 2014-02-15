@@ -21,7 +21,7 @@ describe "helpers" do
   context "parsing parameters" do
     it "parses params as query strings for a GET" do
       params = {
-        name: { type: 'String', desc: "A name", required: true, defaultValue: 'default' },
+        name: { type: 'String', desc: "A name", required: true, default: 'default' },
         level: 'max'
       }
       path = "/coolness"

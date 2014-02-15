@@ -193,7 +193,7 @@ module Grape
                 dataType    = value.is_a?(Hash) ? (value[:type] || 'String').to_s : 'String'
                 description = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
                 required    = value.is_a?(Hash) ? !!value[:required] : false
-                defaultValue = value.is_a?(Hash) ? value[:defaultValue] : nil
+                defaultValue = value.is_a?(Hash) ? value[:default] : nil
                 paramType = if path.include?(":#{param}")
                    'path'
                 else

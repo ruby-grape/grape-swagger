@@ -95,7 +95,7 @@ desc 'Hide this endpoint', {
 ## Grape Entities
 
 Add the [grape-entity](https://github.com/agileanimal/grape-entity) gem to our Gemfile.
-Please refer to the [grape-entity documentation](https://github.com/gileanimal/grape-entity/blob/master/README.markdown)
+Please refer to the [grape-entity documentation](https://github.com/intridea/grape-entity/blob/master/README.md)
 for more details.
 
 The following example exposes statuses. And exposes statuses documentation adding :type and :desc.

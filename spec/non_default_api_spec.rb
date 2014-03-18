@@ -359,7 +359,7 @@ describe "options: " do
 
       class SimpleApiWithMarkdown < Grape::API
         mount MarkDownMountedApi
-        add_swagger_documentation :markdown => true
+        add_swagger_documentation :markdown => true, :info => { :description => "_test_" }
       end
     end
 
@@ -383,6 +383,22 @@ describe "options: " do
             "parameters" => []
           }]
         }]
+      }
+    end
+
+    it "parses markdown for swagger info" do
+      get '/swagger_doc.json'
+      JSON.parse(last_response.body).should == {
+        "apiVersion" => "0.1",
+        "swaggerVersion" => "1.2",
+        "produces" => ["application/xml", "application/json", "text/plain"],
+        "operations" => [],
+        "apis" => [
+          {"path" => "/swagger_doc/something.{format}"},
+          {"path" => "/swagger_doc/swagger_doc.{format}"}
+        ],
+        "info"=> { "description"=>"<p><em>test</em></p>\n"},
+        "basePath"=>"http://example.org"
       }
     end
   end

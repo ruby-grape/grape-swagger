@@ -552,4 +552,29 @@ describe "options: " do
     end
 
   end
+
+  context "documented namespace description" do
+    before :all do
+      class NamespaceWithDescAPI < Grape::API
+        namespace :aspace, desc: "Description for aspace" do
+          desc 'This gets something.'
+          get '/something' do
+            { bla: 'something' }
+          end
+        end
+        add_swagger_documentation format: :json
+      end
+      get '/swagger_doc'
+    end
+
+    def app; NamespaceWithDescAPI; end
+
+    subject do
+      JSON.parse(last_response.body)['apis'][0]
+    end
+
+    it "shows the namespace description in the json spec" do
+      expect(subject['description']).to eql('Description for aspace')
+    end
+  end
 end

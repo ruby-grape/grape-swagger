@@ -190,6 +190,8 @@ module Grape
               params.map do |param, value|
                 value[:type] = 'file' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
 
+                allowMultiple    = value.is_a?(Hash) && !value[:values].nil?
+                enum          = value.is_a?(Hash) && !value[:values].nil? ? (value[:values] || []) : []
                 dataType    = value.is_a?(Hash) ? (value[:type] || 'String').to_s : 'String'
                 description = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
                 required    = value.is_a?(Hash) ? !!value[:required] : false
@@ -211,6 +213,8 @@ module Grape
                 }
 
                 parsed_params.merge!({defaultValue: defaultValue}) if defaultValue
+                parsed_params.merge!({enum: enum}) if allowMultiple
+                parsed_params.merge!({allowMultiple: true}) if allowMultiple
 
                 parsed_params
               end

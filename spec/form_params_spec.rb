@@ -7,6 +7,13 @@ describe "Form Params" do
       format :json
 
       params do
+        requires :name, type: String, values: ['foo', 'bar'], default: 'foo', desc: "name of item"
+      end
+      get '/items' do
+        {}
+      end
+
+      params do
         requires :name, type: String, desc: "name of item"
       end
       post '/items' do
@@ -47,6 +54,14 @@ describe "Form Params" do
         {
           "path" => "/items.{format}",
           "operations" => [
+            {
+              "produces" => ["application/json"],
+              "notes" => "",
+              "summary" => "",
+              "nickname" => "GET-items---format-",
+              "httpMethod" => "GET",
+              "parameters" => [{"paramType"=>"query", "name"=>"name", "description"=>"name of item", "type"=>"String", "dataType"=>"String", "required"=>true, "allowMultiple"=>true, "enum"=>["foo", "bar"]}]
+            },
             {
               "produces" => ["application/json"],
               "notes" => "",

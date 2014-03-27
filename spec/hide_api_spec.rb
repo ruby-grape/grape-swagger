@@ -31,7 +31,7 @@ describe "a hide mounted api" do
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
       "info" => {},
-      "produces" => ["application/xml", "application/json", "text/plain"],
+      "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
       "operations" => [],
       "apis" => [
         { "path" => "/swagger_doc/simple.{format}" },
@@ -73,7 +73,7 @@ describe "a hide mounted api with same namespace" do
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
       "info" => {},
-      "produces" => ["application/xml", "application/json", "text/plain"],
+      "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
       "operations" => [],
       "apis" => [
         { "path" => "/swagger_doc/simple.{format}" },
@@ -92,7 +92,7 @@ describe "a hide mounted api with same namespace" do
       "apis" => [{
         "path" => "/simple/show.{format}",
         "operations" => [{
-          "produces" => ["application/xml", "application/json", "text/plain"],
+          "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
           "notes" => nil,
           "notes" => "",
           "summary" => "Show this endpoint",

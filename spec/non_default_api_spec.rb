@@ -454,7 +454,7 @@ describe "options: " do
       end
 
       class SimpleApiWithHiddenPaths < Grape::API
-        mount ProtectedApi
+        mount HidePathsApi
         add_swagger_documentation :hide_format => true
       end
     end

@@ -178,6 +178,7 @@ module Grape
                     end
                   end
 
+                  operation[:nickname] = route.route_nickname if route.route_nickname
                   operation
                 end.compact
                 apis << {

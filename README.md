@@ -92,6 +92,18 @@ desc 'Hide this endpoint', {
 }
 ```
 
+
+# Overriding auto generated nickname for an endpoint
+
+You can specify a swagger nickname to use instead of the auto generated name by adding ```:nickname => 'string'``` in the description of the endpoint.
+
+``` ruby
+desc 'get a full list of Pets', {
+  :nickname => 'getAllPets'
+}
+```
+
+
 ## Grape Entities
 
 Add the [grape-entity](https://github.com/agileanimal/grape-entity) gem to our Gemfile.

@@ -590,4 +590,26 @@ describe 'options: ' do
       expect(subject['description']).to eql('Description for aspace')
     end
   end
+
+  context 'override nickname' do
+    before :all do
+      class NicknameAPI < Grape::API
+        desc 'This gets something.', nickname: 'getSomething'
+        get '/something' do
+          { bla: 'something' }
+        end
+        add_swagger_documentation
+      end
+    end
+
+    def app
+      NicknameAPI
+    end
+
+    it 'documents the user-specified nickname' do
+      get '/swagger_doc/something.json'
+      ret = JSON.parse(last_response.body)
+      ret['apis'][0]['operations'][0]['nickname'].should == 'getSomething'
+    end
+  end
 end

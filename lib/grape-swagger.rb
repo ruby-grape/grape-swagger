@@ -84,6 +84,8 @@ module Grape
               header['Access-Control-Allow-Origin']   = '*'
               header['Access-Control-Request-Method'] = '*'
 
+              api_version = params[:version] if params[:version].present?
+
               routes = target_class::combined_routes
 
               if @@hide_documentation_path
@@ -128,10 +130,16 @@ module Grape
               header['Access-Control-Allow-Origin']   = '*'
               header['Access-Control-Request-Method'] = '*'
 
+              api_version = params[:version] if params[:version].present?
+
               models = []
               routes = target_class::combined_routes[params[:name]]
 
-              ops = routes.reject(&:route_hidden).group_by do |route|
+              versioned_routes = routes.select do |route|
+                (route.route_version =~ /#{api_version}/).present?
+              end
+
+              ops = versioned_routes.reject(&:route_hidden).group_by do |route|
                 parse_path(route.route_path, api_version)
               end
 

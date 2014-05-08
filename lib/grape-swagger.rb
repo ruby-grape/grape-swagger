@@ -26,7 +26,6 @@ module Grape
             @combined_routes[resource] << route
           end
         end
-
       end
 
       private
@@ -295,6 +294,11 @@ module Grape
 
                 model.documentation.each do |property_name, property_info|
                   properties[property_name] = property_info
+
+                  if is_array = property_info.delete(:is_array)
+                    property_info[:items] = {"$ref" => property_info[:type]}
+                    property_info[:type] = "array"
+                  end
 
                   # rename Grape Entity's "desc" to "description"
                   if property_description = property_info.delete(:desc)

@@ -145,13 +145,15 @@ module Grape
                   models << route.route_entity if route.route_entity
 
                   operation = {
+                    :consumes   => [ "application/json" ],
                     :produces   => content_types_for(target_class),
                     :notes      => notes.to_s,
                     :summary    => route.route_description || '',
                     :nickname   => route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-')),
+                    :method     => route.route_method,
                     :httpMethod => route.route_method,
-                    :parameters => parse_header_params(route.route_headers) +
-                      parse_params(route.route_params, route.route_path, route.route_method)
+                    :parameters => parse_header_params(route.route_headers) + parse_params(route.route_params, route.route_path, route.route_method),
+                    :type       => "void"
                   }
                   operation.merge!(:type => parse_entity_name(route.route_entity)) if route.route_entity
                   operation.merge!(:responseMessages => http_codes) unless http_codes.empty?
@@ -197,17 +199,18 @@ module Grape
                 paramType = if path.include?(":#{param}")
                    'path'
                 else
-                  %w[ POST PUT PATCH ].include?(method) ? 'form' : 'query'
+                                %w[ POST PUT PATCH ].include?(method) ? 'body' : 'query'
                 end
                 name        = (value.is_a?(Hash) && value[:full_name]) || param
 
                 parsed_params = {
-                  paramType:    paramType,
-                  name:         name,
-                  description:  as_markdown(description),
-                  type:         dataType,
-                  dataType:     dataType,
-                  required:     required
+                  paramType:     paramType,
+                  name:          name,
+                  description:   as_markdown(description),
+                  type:          dataType,
+                  dataType:      dataType,
+                  required:      required,
+                  allowMultiple: is_array
                 }
 
                 parsed_params.merge!({defaultValue: defaultValue}) if defaultValue

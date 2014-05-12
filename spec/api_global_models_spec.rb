@@ -37,10 +37,12 @@ describe "API Global Models" do
       "apis"=> [{
         "path"=>"/thing.{format}",
         "operations"=>[{
+          "consumes"=>["application/json"],
           "produces"=>["application/xml", "application/json", "text/plain"],
           "notes"=>"",
           "summary"=>"This gets thing.",
           "nickname"=>"GET-thing---format-",
+          "method"=>"GET",
           "httpMethod"=>"GET",
           "parameters"=>[{
             "paramType"=>"query",
@@ -48,7 +50,9 @@ describe "API Global Models" do
             "description"=>"Content of something.",
             "type"=>"string",
             "dataType"=>"string",
-            "required"=>false}]
+            "required"=>false,
+            "allowMultiple"=>false}],
+          "type"=>"void"
           }]
         }],
         "basePath"=>"http://example.org",

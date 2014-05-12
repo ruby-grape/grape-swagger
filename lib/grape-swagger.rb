@@ -184,7 +184,6 @@ module Grape
               api_description[:basePath] = basePath if basePath && basePath.size > 0
               api_description[:models]   = parse_entity_models(models) unless models.empty?
 
-
               api_description
             end
           end
@@ -213,19 +212,17 @@ module Grape
                     dataType  = "array"
                   end
                 else
-                  paramType   = if path.include?(":#{param}")
-                                 'path'
+                  paramType   = case
+                                when path.include?(":#{param}")
+                                  'path'
+                                when %w[ POST PUT PATCH ].include?(method)
+                                  # 'body'
+                                  'form'
                                 else
-                                  %w[ POST PUT PATCH ].include?(method) ? 'body' : 'query'
+                                  'query'
                                 end
-                  paramType = if path.include?(":#{param}")
-                     'path'
-                  else
-                    %w[ POST PUT PATCH ].include?(method) ? 'form' : 'query'
-                  end
                 end
                 name          = (value.is_a?(Hash) && value[:full_name]) || param
-                name = (value.is_a?(Hash) && value[:full_name]) || param
 
                 parsed_params = {
                   paramType:     paramType,
@@ -236,9 +233,7 @@ module Grape
                   required:      required,
                   allowMultiple: is_array
                 }
-
                 parsed_params.merge!({items: items}) if items.present?
-
                 parsed_params.merge!({defaultValue: defaultValue}) if defaultValue
 
                 parsed_params
@@ -331,7 +326,6 @@ module Grape
                     property_info[:description] = property_description
                   end
                 end
-
 
                 result[name] = {
                   id:         model.instance_variable_get(:@root) || name,

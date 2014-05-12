@@ -170,13 +170,16 @@ describe "options: " do
         "apis" => [{
           "path" => "/0.1/something.{format}",
           "operations" => [{
+            "consumes" => ["application/json"],
             "produces" => ["application/xml", "application/json", "text/plain"],
             "notes" => nil,
             "notes" => "",
             "summary" => "This gets something.",
             "nickname" => "GET--version-something---format-",
+            "method" => "GET",
             "httpMethod" => "GET",
-            "parameters" => []
+            "parameters" => [],
+            "type" => "void"
           }]
         }]
       }
@@ -246,13 +249,16 @@ describe "options: " do
         "apis"=> [{
           "path"=>"/abc/something.{format}",
           "operations"=> [{
+            "consumes" => ["application/json"],
             "produces" => ["application/xml", "application/json", "text/plain"],
             "notes"=>nil,
             "notes"=>"",
             "summary"=>"This gets something.",
             "nickname"=>"GET-abc-something---format-",
+            "method"=>"GET",
             "httpMethod"=>"GET",
-            "parameters"=>[]
+            "parameters"=>[],
+            "type" => "void"
           }]
         }]
       }
@@ -292,13 +298,16 @@ describe "options: " do
         "apis"=>[{
           "path"=>"/abc/v20/something.{format}",
           "operations"=>[{
+            "consumes" => ["application/json"],
             "produces" => ["application/xml", "application/json", "text/plain"],
             "notes"=>nil,
             "notes"=>"",
             "summary"=>"This gets something.",
             "nickname"=>"GET-abc--version-something---format-",
+            "method"=>"GET",
             "httpMethod"=>"GET",
-            "parameters"=>[]
+            "parameters"=>[],
+            "type" => "void"
           }]
         }]
       }
@@ -375,12 +384,15 @@ describe "options: " do
         "apis" => [{
           "path" => "/something.{format}",
           "operations" => [{
+            "consumes" => ["application/json"],
             "produces" => ["application/xml", "application/json", "text/plain"],
             "notes" => "<p><em>test</em></p>\n",
             "summary" => "This gets something.",
             "nickname" => "GET-something---format-",
+            "method" => "GET",
             "httpMethod" => "GET",
-            "parameters" => []
+            "parameters" => [],
+            "type" => "void"
           }]
         }]
       }

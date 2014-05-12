@@ -67,6 +67,9 @@ describe "API Models" do
       "apis" => [{
         "path" => "/something.{format}",
         "operations" => [{
+          "consumes" => [
+            "application/json"
+          ],
           "produces" => [
             "application/json"
           ],
@@ -74,6 +77,7 @@ describe "API Models" do
           "type" => "Something",
           "summary" => "This gets something.",
           "nickname" => "GET-something---format-",
+          "method" => "GET",
           "httpMethod" => "GET",
           "parameters" => []
         }]
@@ -103,6 +107,9 @@ describe "API Models" do
       "apis" => [{
         "path" => "/thing.{format}",
         "operations" => [{
+          "consumes" => [
+            "application/json"
+          ],
           "produces" => [
             "application/json"
           ],
@@ -110,6 +117,7 @@ describe "API Models" do
           "type" => "Some::Thing",
           "summary" => "This gets thing.",
           "nickname" => "GET-thing---format-",
+          "method" => "GET",
           "httpMethod" => "GET",
           "parameters" => []
         }]

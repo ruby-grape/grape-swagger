@@ -48,32 +48,41 @@ describe "Form Params" do
           "path" => "/items.{format}",
           "operations" => [
             {
+              "consumes" => ["application/json"],
               "produces" => ["application/json"],
               "notes" => "",
               "summary" => "",
               "nickname" => "POST-items---format-",
+              "method" => "POST",
               "httpMethod" => "POST",
-              "parameters" => [ { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "String", "dataType" => "String", "required" => true } ]
+              "parameters" => [ { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "String", "dataType" => "String", "required" => true, "allowMultiple" => false } ],
+              "type" => "void"
             }
           ]
         }, {
           "path" => "/items/{id}.{format}",
           "operations" => [
             {
+              "consumes" => ["application/json"],
               "produces" => ["application/json"],
               "notes" => "",
               "summary" => "",
               "nickname" => "PUT-items--id---format-",
+              "method" => "PUT",
               "httpMethod" => "PUT",
-              "parameters" => [ { "paramType" => "path", "name" => "id", "description" => "id of item", "type" => "Integer", "dataType" => "Integer", "required" => true }, { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "String", "dataType" => "String", "required" => true } ]
+              "parameters" => [ { "paramType" => "path", "name" => "id", "description" => "id of item", "type" => "Integer", "dataType" => "Integer", "required" => true, "allowMultiple" => false }, { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "String", "dataType" => "String", "required" => true, "allowMultiple" => false } ],
+              "type" => "void"
             },
             {
+              "consumes" => ["application/json"],
               "produces" => ["application/json"],
               "notes" => "",
               "summary" => "",
               "nickname" => "PATCH-items--id---format-",
+              "method" => "PATCH",
               "httpMethod" => "PATCH",
-              "parameters" => [ { "paramType" => "path", "name" => "id", "description" => "id of item", "type" => "Integer", "dataType" => "Integer", "required" => true }, { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "String", "dataType" => "String", "required" => true } ]
+              "parameters" => [ { "paramType" => "path", "name" => "id", "description" => "id of item", "type" => "Integer", "dataType" => "Integer", "required" => true, "allowMultiple" => false }, { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "String", "dataType" => "String", "required" => true, "allowMultiple" => false } ],
+              "type" => "void"
             }
           ]
         }

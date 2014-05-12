@@ -92,13 +92,16 @@ describe "a hide mounted api with same namespace" do
       "apis" => [{
         "path" => "/simple/show.{format}",
         "operations" => [{
+          "consumes" => ["application/json"],
           "produces" => ["application/xml", "application/json", "text/plain"],
           "notes" => nil,
           "notes" => "",
           "summary" => "Show this endpoint",
           "nickname" => "GET-simple-show---format-",
+          "method" => "GET",
           "httpMethod" => "GET",
-          "parameters" => []
+          "parameters" => [],
+          "type" => "void"
         }]
       }]
     }

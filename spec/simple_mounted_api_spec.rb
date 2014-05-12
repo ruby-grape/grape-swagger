@@ -96,12 +96,15 @@ describe "a simple mounted api" do
       "apis" => [{
         "path" => "/simple.{format}",
         "operations" => [{
+          "consumes" => ["application/json"],
           "produces" => ["application/xml", "application/json", "text/plain"],
           "notes" => "_test_",
           "summary" => "This gets something.",
           "nickname" => "GET-simple---format-",
+          "method" => "GET",
           "httpMethod" => "GET",
-          "parameters" => []
+          "parameters" => [],
+          "type" => "void"
         }]
       }]
     }
@@ -118,12 +121,15 @@ describe "a simple mounted api" do
         "apis" => [{
           "path" => "/simple-test.{format}",
           "operations" => [{
+            "consumes" => ["application/json"],
             "produces" => ["application/xml", "application/json", "text/plain"],
             "notes" => "_test_",
             "summary" => "This gets something for URL using - separator.",
             "nickname" => "GET-simple-test---format-",
+            "method" => "GET",
             "httpMethod" => "GET",
-            "parameters" => []
+            "parameters" => [],
+            "type" => "void"
           }]
         }]
       }
@@ -134,16 +140,19 @@ describe "a simple mounted api" do
       JSON.parse(last_response.body)["apis"].should == [{
         "path" => "/simple_with_headers.{format}",
         "operations" => [{
+          "consumes" => ["application/json"],
           "produces" => ["application/xml", "application/json", "text/plain"],
           "notes" => nil,
           "notes" => "",
           "summary" => "this gets something else",
           "nickname" => "GET-simple_with_headers---format-",
+          "method" => "GET",
           "httpMethod" => "GET",
           "parameters" => [
             { "paramType" => "header", "name" => "XAuthToken", "description" => "A required header.", "type" => "String", "dataType" => "String", "required" => true },
             { "paramType" => "header", "name" => "XOtherHeader", "description" => "An optional header.", "type" => "String", "dataType" => "String", "required" => false }
           ],
+          "type" => "void",
           "responseMessages" => [
             { "code" => 403, "message" => "invalid pony" },
             { "code" => 405, "message" => "no ponies left!" }
@@ -157,13 +166,16 @@ describe "a simple mounted api" do
       JSON.parse(last_response.body)["apis"].should == [{
         "path" => "/items.{format}",
         "operations" => [{
+          "consumes" => ["application/json"],
           "produces" => ["application/xml", "application/json", "text/plain"],
           "notes" => nil,
           "notes" => "",
           "summary" => "this takes an array of parameters",
           "nickname" => "POST-items---format-",
+          "method" => "POST",
           "httpMethod" => "POST",
-          "parameters" => [ { "paramType" => "form", "name" => "items[]", "description" => "array of items", "type" => "String", "dataType" => "String", "required" => false } ]
+          "parameters" => [ { "paramType" => "form", "name" => "items[]", "description" => "array of items", "type" => "String", "dataType" => "String", "required" => false, "allowMultiple" => false } ],
+          "type" => "void"
         }]
       }]
     end
@@ -173,13 +185,16 @@ describe "a simple mounted api" do
       JSON.parse(last_response.body)["apis"].should == [{
         "path" => "/custom.{format}",
         "operations" => [{
+          "consumes" => ["application/json"],
           "produces" => ["application/xml", "application/json", "text/plain"],
           "notes" => nil,
           "notes" => "",
           "summary" => "this uses a custom parameter",
           "nickname" => "GET-custom---format-",
+          "method" => "GET",
           "httpMethod" => "GET",
-          "parameters" => [ { "paramType" => "query", "name" => "custom", "description" => "array of items", "type" => "CustomType", "dataType" => "CustomType", "required" => false } ]
+          "parameters" => [ { "paramType" => "query", "name" => "custom", "description" => "array of items", "type" => "CustomType", "dataType" => "CustomType", "required" => false, "allowMultiple" => false } ],
+          "type" => "void"
         }]
       }]
     end

@@ -438,7 +438,7 @@ describe "options: " do
       end
 
       class SimpleApiWithProtection < Grape::API
-        mount ProtectedApi
+        mount ::ProtectedApi
         add_swagger_documentation
       end
     end

@@ -69,6 +69,7 @@ module Grape
             include_base_url = options[:include_base_url]
             root_base_path   = options[:root_base_path]
             extra_info       = options[:info]
+            @@models         = options[:models] || []
 
             @@hide_documentation_path = options[:hide_documentation_path]
 
@@ -141,7 +142,15 @@ module Grape
                   notes       = as_markdown(route.route_notes)
                   http_codes  = parse_http_codes(route.route_http_codes)
 
-                  models << route.route_entity if route.route_entity
+
+                  models <<  if @@models.present?
+                    @@models
+                  else route.route_entity.present?
+                    route.route_entity
+                  end
+
+                  models = models.flatten.compact
+
 
                   operation = {
                     :consumes   => [ "application/json" ],
@@ -175,6 +184,7 @@ module Grape
               api_description[:basePath] = basePath if basePath && basePath.size > 0
               api_description[:models]   = parse_entity_models(models) unless models.empty?
 
+
               api_description
             end
           end
@@ -187,7 +197,6 @@ module Grape
 
             def parse_params(params, path, method)
               params ||= []
-
               params.map do |param, value|
                 value[:type] = 'file' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
                 items = {}
@@ -209,8 +218,14 @@ module Grape
                                 else
                                   %w[ POST PUT PATCH ].include?(method) ? 'body' : 'query'
                                 end
+                  paramType = if path.include?(":#{param}")
+                     'path'
+                  else
+                    %w[ POST PUT PATCH ].include?(method) ? 'form' : 'query'
+                  end
                 end
                 name          = (value.is_a?(Hash) && value[:full_name]) || param
+                name = (value.is_a?(Hash) && value[:full_name]) || param
 
                 parsed_params = {
                   paramType:     paramType,
@@ -223,6 +238,7 @@ module Grape
                 }
 
                 parsed_params.merge!({items: items}) if items.present?
+
                 parsed_params.merge!({defaultValue: defaultValue}) if defaultValue
 
                 parsed_params
@@ -298,7 +314,6 @@ module Grape
 
             def parse_entity_models(models)
               result = {}
-
               models.each do |model|
                 name        = parse_entity_name(model)
                 properties  = {}
@@ -316,6 +331,7 @@ module Grape
                     property_info[:description] = property_description
                   end
                 end
+
 
                 result[name] = {
                   id:         model.instance_variable_get(:@root) || name,

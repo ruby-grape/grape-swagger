@@ -200,7 +200,8 @@ module Grape
                 value[:type] = 'file' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
                 items = {}
 
-                dataType      = parse_entity_name(value.is_a?(Hash) ? (value[:type] || 'String').to_s : 'String')
+                raw_data_type = value.is_a?(Hash) ? (value[:type] || 'String').to_s : 'String'
+                dataType      = parse_entity_name(raw_data_type)
                 description   = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
                 required      = value.is_a?(Hash) ? !!value[:required] : false
                 defaultValue  = value.is_a?(Hash) ? value[:defaultValue] : nil
@@ -216,8 +217,11 @@ module Grape
                                 when path.include?(":#{param}")
                                   'path'
                                 when %w[ POST PUT PATCH ].include?(method)
-                                  # 'body'
-                                  'form'
+                                  if dataType != raw_data_type
+                                    'body'
+                                  else
+                                    'form'
+                                  end
                                 else
                                   'query'
                                 end

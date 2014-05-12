@@ -190,17 +190,27 @@ module Grape
 
               params.map do |param, value|
                 value[:type] = 'file' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
+                items = {}
 
-                dataType    = value.is_a?(Hash) ? (value[:type] || 'String').to_s : 'String'
-                description = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
-                required    = value.is_a?(Hash) ? !!value[:required] : false
-                defaultValue = value.is_a?(Hash) ? value[:defaultValue] : nil
-                paramType = if path.include?(":#{param}")
-                   'path'
+                dataType      = parse_entity_name(value.is_a?(Hash) ? (value[:type] || 'String').to_s : 'String')
+                description   = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
+                required      = value.is_a?(Hash) ? !!value[:required] : false
+                defaultValue  = value.is_a?(Hash) ? value[:defaultValue] : nil
+                is_array      = value.is_a?(Hash) ? (value[:is_array] || false) : false
+                if value.is_a?(Hash) && value.key?(:param_type)
+                  paramType   = value[:param_type]
+                  if is_array
+                    items     = {"$ref" => dataType}
+                    dataType  = "array"
+                  end
                 else
-                                %w[ POST PUT PATCH ].include?(method) ? 'body' : 'query'
+                  paramType   = if path.include?(":#{param}")
+                                 'path'
+                                else
+                                  %w[ POST PUT PATCH ].include?(method) ? 'body' : 'query'
+                                end
                 end
-                name        = (value.is_a?(Hash) && value[:full_name]) || param
+                name          = (value.is_a?(Hash) && value[:full_name]) || param
 
                 parsed_params = {
                   paramType:     paramType,
@@ -212,6 +222,7 @@ module Grape
                   allowMultiple: is_array
                 }
 
+                parsed_params.merge!({items: items}) if items.present?
                 parsed_params.merge!({defaultValue: defaultValue}) if defaultValue
 
                 parsed_params

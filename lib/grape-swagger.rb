@@ -142,17 +142,16 @@ module Grape
                   notes       = as_markdown(route.route_notes)
                   http_codes  = parse_http_codes(route.route_http_codes)
 
-
                   models <<  if @@models.present?
-                    @@models
-                  else route.route_entity.present?
-                    route.route_entity
-                  end
+                               @@models
+                             else route.route_entity.present?
+                               route.route_entity
+                             end
 
                   models = models.flatten.compact
 
-
                   operation = {
+                    # authorizations
                     :consumes   => [ "application/json" ],
                     :produces   => content_types_for(target_class),
                     :notes      => notes.to_s,

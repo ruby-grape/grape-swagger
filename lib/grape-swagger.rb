@@ -151,14 +151,11 @@ module Grape
                   models = models.flatten.compact
 
                   operation = {
-                    # authorizations
-                    :consumes   => [ "application/json" ],
-                    :produces   => content_types_for(target_class),
+                    :authorizations => route.route_authorizations || {},
                     :notes      => notes.to_s,
                     :summary    => route.route_description || '',
                     :nickname   => route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-')),
                     :method     => route.route_method,
-                    :httpMethod => route.route_method,
                     :parameters => parse_header_params(route.route_headers) + parse_params(route.route_params, route.route_path, route.route_method),
                     :type       => "void"
                   }
@@ -175,13 +172,15 @@ module Grape
               api_description = {
                 apiVersion:     api_version,
                 swaggerVersion: "1.2",
-                resourcePath:   "",
+                resourcePath:   "/#{params[:name]}",
+                produces:       content_types_for(target_class),
                 apis:           apis
               }
 
-              basePath                   = parse_base_path(base_path, request)
-              api_description[:basePath] = basePath if basePath && basePath.size > 0
-              api_description[:models]   = parse_entity_models(models) unless models.empty?
+              basePath                         = parse_base_path(base_path, request)
+              api_description[:basePath]       = basePath        if basePath && basePath.size > 0 && root_base_path != false
+              api_description[:models]         = parse_entity_models(models) unless models.empty?
+              api_description[:authorizations] = authorizations  if authorizations
 
               api_description
             end
@@ -232,7 +231,6 @@ module Grape
                   name:          name,
                   description:   as_markdown(description),
                   type:          dataType,
-                  dataType:      dataType,
                   required:      required,
                   allowMultiple: is_array
                 }

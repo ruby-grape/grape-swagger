@@ -322,8 +322,10 @@ module Grape
                   end
 
                   if p.delete(:is_array)
-                    p[:items] = {"$ref" => p[:type]}
+                    p[:items] = generate_typeref(p[:type])
                     p[:type] = "array"
+                  else
+                    p.merge! generate_typeref(p.delete(:type))
                   end
 
                   # rename Grape Entity's "desc" to "description"
@@ -342,6 +344,18 @@ module Grape
               end
 
               result
+            end
+
+            def is_primitive?(type)
+              %w(integer long float double string byte boolean date dateTime).include? type
+            end
+
+            def generate_typeref(type)
+              if is_primitive? type
+                { "type" => type }
+              else
+                { "$ref" => type }
+              end
             end
 
             def parse_http_codes codes

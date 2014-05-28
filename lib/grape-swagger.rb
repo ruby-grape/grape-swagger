@@ -105,13 +105,13 @@ module Grape
                 apiVersion:     api_version,
                 swaggerVersion: "1.2",
                 produces:       content_types_for(target_class),
-                operations:     [],
+                # operations:     [],
                 apis:           routes_array,
                 info:           parse_info(extra_info)
               }
 
               basePath                = parse_base_path(base_path, request)
-              output[:basePath]       = basePath        if basePath && basePath.size > 0 && root_base_path != false
+              # output[:basePath]       = basePath        if basePath && basePath.size > 0 && root_base_path != false
               output[:authorizations] = authorizations  if authorizations
 
               output

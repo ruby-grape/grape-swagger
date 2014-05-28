@@ -96,8 +96,8 @@ module Grape
                 url_base    = parse_path(route.route_path.gsub('(.:format)', ''), route.route_version) if include_base_url
                 url_format  = '.{format}' unless @@hide_format
                 {
-                  :path => "#{url_base}/#{local_route}#{url_format}",
-                  #:description => "..."
+                  :path => "/#{local_route}#{url_format}",
+                  :description => "Operations about #{local_route.pluralize}"
                 }
               end.compact
 

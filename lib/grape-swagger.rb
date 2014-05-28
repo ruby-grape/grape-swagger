@@ -315,24 +315,28 @@ module Grape
                 required   = []
 
                 model.documentation.each do |property_name, property_info|
-                  properties[property_name] = property_info
+                  p = property_info.dup
 
-                  required << property_name.to_s if property_info[:required]
+                  if p.delete(:required)
+                    required << property_name.to_s
+                  end
 
-                  if property_info.delete(:is_array)
-                    property_info[:items] = {"$ref" => property_info[:type]}
-                    property_info[:type] = "array"
+                  if p.delete(:is_array)
+                    p[:items] = {"$ref" => p[:type]}
+                    p[:type] = "array"
                   end
 
                   # rename Grape Entity's "desc" to "description"
-                  if property_description = property_info.delete(:desc)
-                    property_info[:description] = property_description
+                  if property_description = p.delete(:desc)
+                    p[:description] = property_description
                   end
+
+                  properties[property_name] = p
                 end
 
                 result[name] = {
                   id:         model.instance_variable_get(:@root) || name,
-                  properties: properties.reject { | k, _ | (k == :is_array) || (k == :required) },
+                  properties: properties,
                   required:   required
                 }
               end

@@ -71,17 +71,15 @@ describe "a simple mounted api" do
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",
       "swaggerVersion" => "1.2",
-      "basePath" => "http://example.org",
       "info" => {},
       "produces" => ["application/xml", "application/json", "text/plain"],
-      "operations" => [],
       "apis" => [
-        { "path" => "/swagger_doc/simple.{format}" },
-        { "path" => "/swagger_doc/simple-test.{format}" },
-        { "path" => "/swagger_doc/simple_with_headers.{format}" },
-        { "path" => "/swagger_doc/items.{format}" },
-        { "path" => "/swagger_doc/custom.{format}" },
-        { "path" => "/swagger_doc/swagger_doc.{format}" }
+        { "path" => "/simple.{format}", "description" => "Operations about simples" },
+        { "path" => "/simple-test.{format}", "description" => "Operations about simple-tests" },
+        { "path" => "/simple_with_headers.{format}", "description" => "Operations about simple_with_headers" },
+        { "path" => "/items.{format}", "description" => "Operations about items" },
+        { "path" => "/custom.{format}", "description" => "Operations about customs" },
+        { "path" => "/swagger_doc.{format}", "description" => "Operations about swagger_docs" }
       ]
     }
   end
@@ -92,17 +90,15 @@ describe "a simple mounted api" do
       "apiVersion" => "0.1",
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
-      "resourcePath" => "",
+      "resourcePath" => "/simple",
+      "produces" => ["application/xml", "application/json", "text/plain"],
       "apis" => [{
         "path" => "/simple.{format}",
         "operations" => [{
-          "consumes" => ["application/json"],
-          "produces" => ["application/xml", "application/json", "text/plain"],
           "notes" => "_test_",
           "summary" => "This gets something.",
           "nickname" => "GET-simple---format-",
           "method" => "GET",
-          "httpMethod" => "GET",
           "parameters" => [],
           "type" => "void"
         }]
@@ -117,17 +113,15 @@ describe "a simple mounted api" do
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
-        "resourcePath" => "",
+        "resourcePath" => "/simple-test",
+        "produces" => ["application/xml", "application/json", "text/plain"],
         "apis" => [{
           "path" => "/simple-test.{format}",
           "operations" => [{
-            "consumes" => ["application/json"],
-            "produces" => ["application/xml", "application/json", "text/plain"],
             "notes" => "_test_",
             "summary" => "This gets something for URL using - separator.",
             "nickname" => "GET-simple-test---format-",
             "method" => "GET",
-            "httpMethod" => "GET",
             "parameters" => [],
             "type" => "void"
           }]
@@ -140,17 +134,13 @@ describe "a simple mounted api" do
       JSON.parse(last_response.body)["apis"].should == [{
         "path" => "/simple_with_headers.{format}",
         "operations" => [{
-          "consumes" => ["application/json"],
-          "produces" => ["application/xml", "application/json", "text/plain"],
-          "notes" => nil,
           "notes" => "",
           "summary" => "this gets something else",
           "nickname" => "GET-simple_with_headers---format-",
           "method" => "GET",
-          "httpMethod" => "GET",
           "parameters" => [
-            { "paramType" => "header", "name" => "XAuthToken", "description" => "A required header.", "type" => "String", "dataType" => "String", "required" => true },
-            { "paramType" => "header", "name" => "XOtherHeader", "description" => "An optional header.", "type" => "String", "dataType" => "String", "required" => false }
+            { "paramType" => "header", "name" => "XAuthToken", "description" => "A required header.", "type" => "String", "required" => true },
+            { "paramType" => "header", "name" => "XOtherHeader", "description" => "An optional header.", "type" => "String", "required" => false }
           ],
           "type" => "void",
           "responseMessages" => [
@@ -166,15 +156,11 @@ describe "a simple mounted api" do
       JSON.parse(last_response.body)["apis"].should == [{
         "path" => "/items.{format}",
         "operations" => [{
-          "consumes" => ["application/json"],
-          "produces" => ["application/xml", "application/json", "text/plain"],
-          "notes" => nil,
           "notes" => "",
           "summary" => "this takes an array of parameters",
           "nickname" => "POST-items---format-",
           "method" => "POST",
-          "httpMethod" => "POST",
-          "parameters" => [ { "paramType" => "form", "name" => "items[]", "description" => "array of items", "type" => "String", "dataType" => "String", "required" => false, "allowMultiple" => false } ],
+          "parameters" => [ { "paramType" => "form", "name" => "items[]", "description" => "array of items", "type" => "String", "required" => false, "allowMultiple" => false } ],
           "type" => "void"
         }]
       }]
@@ -185,15 +171,11 @@ describe "a simple mounted api" do
       JSON.parse(last_response.body)["apis"].should == [{
         "path" => "/custom.{format}",
         "operations" => [{
-          "consumes" => ["application/json"],
-          "produces" => ["application/xml", "application/json", "text/plain"],
-          "notes" => nil,
           "notes" => "",
           "summary" => "this uses a custom parameter",
           "nickname" => "GET-custom---format-",
           "method" => "GET",
-          "httpMethod" => "GET",
-          "parameters" => [ { "paramType" => "query", "name" => "custom", "description" => "array of items", "type" => "CustomType", "dataType" => "CustomType", "required" => false, "allowMultiple" => false } ],
+          "parameters" => [ { "paramType" => "query", "name" => "custom", "description" => "array of items", "type" => "CustomType", "required" => false, "allowMultiple" => false } ],
           "type" => "void"
         }]
       }]

@@ -21,17 +21,15 @@ describe "Default API" do
       JSON.parse(last_response.body).should == {
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.2",
-        "basePath" => "http://example.org",
         "info" => {},
         "produces" => ["application/json"],
-        "operations" => [],
         "apis" => [
-          { "path" => "/swagger_doc/something.{format}" },
-          { "path" => "/swagger_doc/swagger_doc.{format}" }
+          { "path" => "/something.{format}", "description" => "Operations about somethings" },
+          { "path" => "/swagger_doc.{format}", "description" => "Operations about swagger_docs" }
         ]
       }
     end
-    
+
     context "path inside the apis array" do
       it "should start with a forward slash" do
         get '/swagger_doc'

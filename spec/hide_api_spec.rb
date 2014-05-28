@@ -29,13 +29,11 @@ describe "a hide mounted api" do
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",
       "swaggerVersion" => "1.2",
-      "basePath" => "http://example.org",
       "info" => {},
       "produces" => ["application/xml", "application/json", "text/plain"],
-      "operations" => [],
       "apis" => [
-        { "path" => "/swagger_doc/simple.{format}" },
-        { "path" => "/swagger_doc/swagger_doc.{format}" }
+        { "path" => "/simple.{format}", "description" => "Operations about simples" },
+        { "path" => "/swagger_doc.{format}", "description" => "Operations about swagger_docs" }
       ]
     }
   end
@@ -71,13 +69,11 @@ describe "a hide mounted api with same namespace" do
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",
       "swaggerVersion" => "1.2",
-      "basePath" => "http://example.org",
       "info" => {},
       "produces" => ["application/xml", "application/json", "text/plain"],
-      "operations" => [],
       "apis" => [
-        { "path" => "/swagger_doc/simple.{format}" },
-        { "path" => "/swagger_doc/swagger_doc.{format}" }
+        { "path" => "/simple.{format}", "description" => "Operations about simples" },
+        { "path" => "/swagger_doc.{format}", "description" => "Operations about swagger_docs" }
       ]
     }
   end
@@ -88,18 +84,15 @@ describe "a hide mounted api with same namespace" do
       "apiVersion" => "0.1",
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
-      "resourcePath" => "",
+      "resourcePath" => "/simple",
+      "produces" => ["application/xml", "application/json", "text/plain"],
       "apis" => [{
         "path" => "/simple/show.{format}",
         "operations" => [{
-          "consumes" => ["application/json"],
-          "produces" => ["application/xml", "application/json", "text/plain"],
-          "notes" => nil,
           "notes" => "",
           "summary" => "Show this endpoint",
           "nickname" => "GET-simple-show---format-",
           "method" => "GET",
-          "httpMethod" => "GET",
           "parameters" => [],
           "type" => "void"
         }]

@@ -27,8 +27,8 @@ describe "helpers" do
       path = "/coolness"
       method = "GET"
       @api.parse_params(params, path, method).should == [
-        { paramType: "query", name: :name, description: "A name", type: "String", dataType: "String", required: true, allowMultiple: false, defaultValue: 'default' },
-        { paramType: "query", name: :level, description: "", type: "String", dataType: "String", required: false, allowMultiple: false }
+        { paramType: "query", name: :name, description: "A name", type: "String", required: true, allowMultiple: false, defaultValue: 'default' },
+        { paramType: "query", name: :level, description: "", type: "String", required: false, allowMultiple: false }
       ]
     end
 
@@ -40,8 +40,8 @@ describe "helpers" do
       path = "/coolness"
       method = "POST"
       @api.parse_params(params, path, method).should == [
-        { paramType: "form", name: :name, description: "A name", type: "String", dataType: "String", required: true, allowMultiple: false },
-        { paramType: "form", name: :level, description: "", type: "String", dataType: "String", required: false, allowMultiple: false }
+        { paramType: "form", name: :name, description: "A name", type: "String", required: true, allowMultiple: false },
+        { paramType: "form", name: :level, description: "", type: "String", required: false, allowMultiple: false }
       ]
     end
 
@@ -57,7 +57,7 @@ describe "helpers" do
         path = "/coolness"
         method = "GET"
         @api.parse_params(params, path, method).should == [
-          { paramType: "query", name: :option, description: "Custom option", type: "CustomType", dataType: "CustomType", required: false, allowMultiple: false }
+          { paramType: "query", name: :option, description: "Custom option", type: "CustomType", required: false, allowMultiple: false }
         ]
       end
     end
@@ -99,7 +99,7 @@ describe "helpers" do
         "XAuthToken" => { description: "A required header.", required: true, defaultValue: 'default' }
       }
       @api.parse_header_params(params).should == [
-        { paramType: "header", name: "XAuthToken", description: "A required header.", type: "String", dataType: "String", required: true, defaultValue: 'default' }
+        { paramType: "header", name: "XAuthToken", description: "A required header.", type: "String", required: true, defaultValue: 'default' }
       ]
     end
   end

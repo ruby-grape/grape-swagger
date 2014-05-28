@@ -33,23 +33,20 @@ describe "API Global Models" do
     JSON.parse(last_response.body).should == {
       "apiVersion"=>"0.1",
       "swaggerVersion"=>"1.2",
-      "resourcePath"=>"",
+      "resourcePath"=>"/thing",
+      "produces"=>["application/xml", "application/json", "text/plain"],
       "apis"=> [{
         "path"=>"/thing.{format}",
         "operations"=>[{
-          "consumes"=>["application/json"],
-          "produces"=>["application/xml", "application/json", "text/plain"],
           "notes"=>"",
           "summary"=>"This gets thing.",
           "nickname"=>"GET-thing---format-",
           "method"=>"GET",
-          "httpMethod"=>"GET",
           "parameters"=>[{
             "paramType"=>"query",
             "name"=>"text",
             "description"=>"Content of something.",
             "type"=>"string",
-            "dataType"=>"string",
             "required"=>false,
             "allowMultiple"=>false}],
           "type"=>"void"

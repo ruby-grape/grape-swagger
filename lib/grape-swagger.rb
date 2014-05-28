@@ -109,7 +109,7 @@ module Grape
                 info:           parse_info(extra_info)
               }
 
-              output[:authorizations] = authorizations  if authorizations
+              output[:authorizations] = authorizations unless (authorizations.nil? || authorizations.empty?)
 
               output
             end
@@ -148,7 +148,6 @@ module Grape
                   models = models.flatten.compact
 
                   operation = {
-                    :authorizations => route.route_authorizations || {},
                     :notes      => notes.to_s,
                     :summary    => route.route_description || '',
                     :nickname   => route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-')),
@@ -156,6 +155,7 @@ module Grape
                     :parameters => parse_header_params(route.route_headers) + parse_params(route.route_params, route.route_path, route.route_method),
                     :type       => "void"
                   }
+                  operation[:authorizations] = route.route_authorizations unless (route.route_authorizations.nil? || route.route_authorizations.empty?)
                   if operation[:parameters].any? { | param | param[:type] == "File" }
                     operation.merge!(:consumes => [ "multipart/form-data" ])
                   end
@@ -279,7 +279,6 @@ module Grape
                   name:         param,
                   description:  as_markdown(description),
                   type:         dataType,
-                  dataType:     dataType,
                   required:     required
                 }
 

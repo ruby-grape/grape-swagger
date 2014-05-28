@@ -159,6 +159,9 @@ module Grape
                     :parameters => parse_header_params(route.route_headers) + parse_params(route.route_params, route.route_path, route.route_method),
                     :type       => "void"
                   }
+                  if operation[:parameters].any? { | param | param[:type] == "File" }
+                    operation.merge!(:consumes => [ "multipart/form-data" ])
+                  end
                   operation.merge!(:type => parse_entity_name(route.route_entity)) if route.route_entity
                   operation.merge!(:responseMessages => http_codes) unless http_codes.empty?
                   operation
@@ -195,7 +198,7 @@ module Grape
             def parse_params(params, path, method)
               params ||= []
               params.map do |param, value|
-                value[:type] = 'file' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
+                value[:type] = 'File' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
                 items = {}
 
                 raw_data_type = value.is_a?(Hash) ? (value[:type] || 'String').to_s : 'String'
@@ -215,7 +218,7 @@ module Grape
                                 when path.include?(":#{param}")
                                   'path'
                                 when %w[ POST PUT PATCH ].include?(method)
-                                  if dataType != raw_data_type
+                                  if (dataType == "File") || (dataType != raw_data_type)
                                     'body'
                                   else
                                     'form'

@@ -310,13 +310,16 @@ module Grape
             def parse_entity_models(models)
               result = {}
               models.each do |model|
-                name        = parse_entity_name(model)
-                properties  = {}
+                name       = parse_entity_name(model)
+                properties = {}
+                required   = []
 
                 model.documentation.each do |property_name, property_info|
                   properties[property_name] = property_info
 
-                  if is_array = property_info.delete(:is_array)
+                  required << property_name.to_s if property_info[:required]
+
+                  if property_info.delete(:is_array)
                     property_info[:items] = {"$ref" => property_info[:type]}
                     property_info[:type] = "array"
                   end
@@ -329,8 +332,8 @@ module Grape
 
                 result[name] = {
                   id:         model.instance_variable_get(:@root) || name,
-                  name:       model.instance_variable_get(:@root) || name,
-                  properties: properties
+                  properties: properties.reject { | k, _ | (k == :is_array) || (k == :required) },
+                  required:   required
                 }
               end
 

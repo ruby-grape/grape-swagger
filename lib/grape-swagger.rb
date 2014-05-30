@@ -210,8 +210,19 @@ module Grape
                 value[:type] = 'File' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
                 items = {}
 
-                raw_data_type = value.is_a?(Hash) ? (value[:type] || 'String').to_s : 'String'
-                dataType      = parse_entity_name(raw_data_type)
+                raw_data_type = value.is_a?(Hash) ? (value[:type] || 'string').to_s : 'string'
+                dataType      = case raw_data_type
+                                when "Boolean", "Date", "Integer", "String"
+                                  raw_data_type.downcase
+                                when "BigDecimal"
+                                  "long"
+                                when "DateTime"
+                                  "dateTime"
+                                when "Numeric"
+                                  "double"
+                                else
+                                  parse_entity_name(raw_data_type)
+                                end
                 description   = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
                 required      = value.is_a?(Hash) ? !!value[:required] : false
                 defaultValue  = value.is_a?(Hash) ? value[:defaultValue] : nil
@@ -246,6 +257,8 @@ module Grape
                   required:      required,
                   allowMultiple: is_array
                 }
+                parsed_params.merge!({format: "int32"}) if dataType == "integer"
+                parsed_params.merge!({format: "int64"}) if dataType == "long"
                 parsed_params.merge!({items: items}) if items.present?
                 parsed_params.merge!({defaultValue: defaultValue}) if defaultValue
 

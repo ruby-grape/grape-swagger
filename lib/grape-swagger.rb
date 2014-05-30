@@ -159,8 +159,20 @@ module Grape
                   if operation[:parameters].any? { | param | param[:type] == "File" }
                     operation.merge!(:consumes => [ "multipart/form-data" ])
                   end
-                  operation.merge!(:type => parse_entity_name(route.route_entity)) if route.route_entity
                   operation.merge!(:responseMessages => http_codes) unless http_codes.empty?
+
+                  if route.route_entity
+                    type = parse_entity_name(route.route_entity)
+                    if route.instance_variable_get(:@options)[:is_array]
+                      operation.merge!({
+                        "type" => "array",
+                        "items" => generate_typeref(type)
+                      })
+                    else
+                      operation.merge!("type" => type)
+                    end
+                  end
+
                   operation
                 end.compact
                 apis << {

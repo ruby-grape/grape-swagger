@@ -27,8 +27,8 @@ describe "helpers" do
       path = "/coolness"
       method = "GET"
       @api.parse_params(params, path, method).should == [
-        { paramType: "query", name: :name, description: "A name", type: "String", required: true, allowMultiple: false, defaultValue: 'default' },
-        { paramType: "query", name: :level, description: "", type: "String", required: false, allowMultiple: false }
+        { paramType: "query", name: :name, description: "A name", type: "string", required: true, allowMultiple: false, defaultValue: 'default' },
+        { paramType: "query", name: :level, description: "", type: "string", required: false, allowMultiple: false }
       ]
     end
 
@@ -40,8 +40,8 @@ describe "helpers" do
       path = "/coolness"
       method = "POST"
       @api.parse_params(params, path, method).should == [
-        { paramType: "form", name: :name, description: "A name", type: "String", required: true, allowMultiple: false },
-        { paramType: "form", name: :level, description: "", type: "String", required: false, allowMultiple: false }
+        { paramType: "form", name: :name, description: "A name", type: "string", required: true, allowMultiple: false },
+        { paramType: "form", name: :level, description: "", type: "string", required: false, allowMultiple: false }
       ]
     end
 

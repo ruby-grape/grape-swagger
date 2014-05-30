@@ -160,7 +160,7 @@ describe "a simple mounted api" do
           "summary" => "this takes an array of parameters",
           "nickname" => "POST-items---format-",
           "method" => "POST",
-          "parameters" => [ { "paramType" => "form", "name" => "items[]", "description" => "array of items", "type" => "String", "required" => false, "allowMultiple" => false } ],
+          "parameters" => [ { "paramType" => "form", "name" => "items[]", "description" => "array of items", "type" => "string", "required" => false, "allowMultiple" => false } ],
           "type" => "void"
         }]
       }]

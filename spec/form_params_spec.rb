@@ -53,7 +53,7 @@ describe "Form Params" do
               "summary" => "",
               "nickname" => "POST-items---format-",
               "method" => "POST",
-              "parameters" => [ { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "String", "required" => true, "allowMultiple" => false } ],
+              "parameters" => [ { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "string", "required" => true, "allowMultiple" => false } ],
               "type" => "void"
             }
           ]
@@ -65,7 +65,7 @@ describe "Form Params" do
               "summary" => "",
               "nickname" => "PUT-items--id---format-",
               "method" => "PUT",
-              "parameters" => [ { "paramType" => "path", "name" => "id", "description" => "id of item", "type" => "Integer", "required" => true, "allowMultiple" => false }, { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "String", "required" => true, "allowMultiple" => false } ],
+              "parameters" => [ { "paramType" => "path", "name" => "id", "description" => "id of item", "type" => "integer", "required" => true, "allowMultiple" => false, "format" => "int32" }, { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "string", "required" => true, "allowMultiple" => false } ],
               "type" => "void"
             },
             {
@@ -73,7 +73,7 @@ describe "Form Params" do
               "summary" => "",
               "nickname" => "PATCH-items--id---format-",
               "method" => "PATCH",
-              "parameters" => [ { "paramType" => "path", "name" => "id", "description" => "id of item", "type" => "Integer", "required" => true, "allowMultiple" => false }, { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "String", "required" => true, "allowMultiple" => false } ],
+              "parameters" => [ { "paramType" => "path", "name" => "id", "description" => "id of item", "type" => "integer", "required" => true, "allowMultiple" => false, "format" => "int32" }, { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "string", "required" => true, "allowMultiple" => false } ],
               "type" => "void"
             }
           ]

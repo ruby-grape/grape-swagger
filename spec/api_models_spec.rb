@@ -77,7 +77,6 @@ describe "API Models" do
       "models" => {
         "Something" => {
           "id" => "Something",
-          "name" => "Something",
           "properties" => {
             "text" => {
               "type" => "string",
@@ -111,7 +110,6 @@ describe "API Models" do
       "models" => {
         "Some::Thing" => {
           "id" => "Some::Thing",
-          "name" => "Some::Thing",
           "properties" => {
             "text" => {
               "type" => "string",

@@ -56,7 +56,6 @@ describe "API Global Models" do
         "models"=>{
           "Some::Thing"=>{
             "id"=>"Some::Thing",
-            "name"=>"Some::Thing",
             "properties"=>{
               "text"=>{"type"=>"string", "description"=>"Content of something."}
             }

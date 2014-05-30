@@ -238,10 +238,10 @@ module Grape
                                 when path.include?(":#{param}")
                                   'path'
                                 when %w[ POST PUT PATCH ].include?(method)
-                                  if (dataType == "File") || (dataType != raw_data_type)
-                                    'body'
-                                  else
+                                  if is_primitive?(dataType)
                                     'form'
+                                  else
+                                    'body'
                                   end
                                 else
                                   'query'
@@ -363,9 +363,9 @@ module Grape
 
                 result[name] = {
                   id:         model.instance_variable_get(:@root) || name,
-                  properties: properties,
-                  required:   required
+                  properties: properties
                 }
+                result[name].merge!(required: required) unless required.empty?
               end
 
               result

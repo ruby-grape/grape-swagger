@@ -2,41 +2,49 @@ require 'spec_helper'
 
 describe "responseModel" do
   before :all do
-    module Entities
-      class Something < Grape::Entity
-        expose :text, :documentation => { :type => "string", :desc => "Content of something." }
-      end
+    module MyAPI
+      module Entities
+        class BaseEntity < Grape::Entity
+          def self.entity_name
+            self.name.sub(/^MyAPI::Entities::/, '')
+          end
+        end
 
-      class Error < Grape::Entity
-        expose :code, :documentation => { :type => "string", :desc => "Error code" }
-        expose :message, :documentation => { :type => "string", :desc => "Error message" }
-      end
-    end
+        class Something < BaseEntity
+          expose :text, :documentation => { :type => "string", :desc => "Content of something." }
+        end
 
-    class ResponseModelApi < Grape::API
-      format :json
-      desc 'This returns something or an error', {
-        entity: Entities::Something,
-        http_codes: [
-          [200, "OK", Entities::Something],
-          [403, "Refused to return something", Entities::Error]
-        ]
-      }
-      get '/something/:id' do
-        if params[:id] == 1
-          something = OpenStruct.new text: 'something'
-          present something, with: Entities::Something
-        else
-          error = OpenStruct.new code: 'some_error', message: "Some error"
-          present error, with: Entities::Error
+        class Error < BaseEntity
+          expose :code, :documentation => { :type => "string", :desc => "Error code" }
+          expose :message, :documentation => { :type => "string", :desc => "Error message" }
         end
       end
 
-      add_swagger_documentation
+      class ResponseModelApi < Grape::API
+        format :json
+        desc 'This returns something or an error', {
+          entity: Entities::Something,
+          http_codes: [
+            [200, "OK", Entities::Something],
+            [403, "Refused to return something", Entities::Error]
+          ]
+        }
+        get '/something/:id' do
+          if params[:id] == 1
+            something = OpenStruct.new text: 'something'
+            present something, with: Entities::Something
+          else
+            error = OpenStruct.new code: 'some_error', message: "Some error"
+            present error, with: Entities::Error
+          end
+        end
+
+        add_swagger_documentation
+      end
     end
   end
 
-  def app; ResponseModelApi; end
+  def app; MyAPI::ResponseModelApi; end
 
   it "should document specified models" do
     get '/swagger_doc/something'

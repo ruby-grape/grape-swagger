@@ -192,7 +192,15 @@ module Grape
 
                 dataType    = value.is_a?(Hash) ? (value[:type] || 'String').to_s : 'String'
                 description = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
-                required    = value.is_a?(Hash) ? !!value[:required] : false
+
+                # If the parameter is part of a group, ignore the 'required' field. We have no way to process
+                # Grape parameter groups properly, since they're not part of the Swagger spec.
+                required = if value.is_a?(Hash) && !param_is_part_of_group?(param)
+                  !!value[:required]
+                else
+                  false
+                end
+
                 defaultValue = value.is_a?(Hash) ? value[:defaultValue] : nil
                 paramType = if path.include?(":#{param}")
                    'path'
@@ -226,6 +234,10 @@ module Grape
               end
 
               content_types.uniq
+            end
+
+            def param_is_part_of_group?(param)
+              param =~ /^.+\[.+\]$/
             end
 
             def parse_info(info)

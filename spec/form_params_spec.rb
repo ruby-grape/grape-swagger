@@ -24,6 +24,10 @@ describe "Form Params" do
       params do
         requires :id, type: Integer, desc: "id of item"
         requires :name, type: String, desc: "name of item"
+        group :media do
+          requires :url, type: String, desc: "url of item"
+          optional :image_url, type: String, desc: "image url of item"
+        end
       end
       patch '/items/:id' do
         {}
@@ -73,7 +77,7 @@ describe "Form Params" do
               "summary" => "",
               "nickname" => "PATCH-items--id---format-",
               "httpMethod" => "PATCH",
-              "parameters" => [ { "paramType" => "path", "name" => "id", "description" => "id of item", "type" => "Integer", "dataType" => "Integer", "required" => true }, { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "String", "dataType" => "String", "required" => true } ]
+              "parameters" => [ { "paramType" => "path", "name" => "id", "description" => "id of item", "type" => "Integer", "dataType" => "Integer", "required" => true }, { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "String", "dataType" => "String", "required" => true }, { "paramType" => "form", "name" => "media[url]", "description" => "url of item", "type" => "String", "dataType" => "String", "required" => false }, { "paramType" => "form", "name" => "media[image_url]", "description" => "image url of item", "type" => "String", "dataType" => "String", "required" => false } ]
             }
           ]
         }

@@ -140,9 +140,8 @@ module Grape
               ops.each do |path, routes|
                 operations = routes.map do |route|
                   notes       = as_markdown(route.route_notes)
-                  http_codes  = parse_http_codes(route.route_http_codes)
-
                   models << route.route_entity if route.route_entity
+                  http_codes  = parse_http_codes(route.route_http_codes, models)
 
                   operation = {
                     :produces   => content_types_for(target_class),
@@ -309,13 +308,14 @@ module Grape
               result
             end
 
-            def parse_http_codes codes
+            def parse_http_codes codes, models
               codes ||= {}
-              codes.map do |k, v|
+              codes.map do |k, v, m|
+                models << m if m
                 {
                   code: k,
                   message: v,
-                  #responseModel: ...
+                  responseModel: (parse_entity_name(m) if m)
                 }
               end
             end

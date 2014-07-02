@@ -303,6 +303,8 @@ module Grape
                 properties  = {}
 
                 model.documentation.each do |property_name, property_info|
+                  next if property_info[:hidden]
+
                   properties[property_name] = property_info
 
                   # rename Grape Entity's "desc" to "description"

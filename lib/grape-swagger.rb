@@ -297,6 +297,9 @@ module Grape
                   if property_description = property_info.delete(:desc)
                     property_info[:description] = property_description
                   end
+                  
+                  # make sure the type is a string
+                  property_info[:type] = property_info[:type].to_s if property_info[:type]
                 end
 
                 result[name] = {

@@ -41,39 +41,40 @@ describe "Form Params" do
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",
       "swaggerVersion" => "1.2",
-      "resourcePath" => "",
+      "resourcePath" => "/items",
       "basePath"=>"http://example.org",
+      "produces" => ["application/json"],
       "apis" => [
         {
           "path" => "/items.{format}",
           "operations" => [
             {
-              "produces" => ["application/json"],
               "notes" => "",
               "summary" => "",
               "nickname" => "POST-items---format-",
-              "httpMethod" => "POST",
-              "parameters" => [ { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "String", "dataType" => "String", "required" => true } ]
+              "method" => "POST",
+              "parameters" => [ { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "string", "required" => true, "allowMultiple" => false } ],
+              "type" => "void"
             }
           ]
         }, {
           "path" => "/items/{id}.{format}",
           "operations" => [
             {
-              "produces" => ["application/json"],
               "notes" => "",
               "summary" => "",
               "nickname" => "PUT-items--id---format-",
-              "httpMethod" => "PUT",
-              "parameters" => [ { "paramType" => "path", "name" => "id", "description" => "id of item", "type" => "Integer", "dataType" => "Integer", "required" => true }, { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "String", "dataType" => "String", "required" => true } ]
+              "method" => "PUT",
+              "parameters" => [ { "paramType" => "path", "name" => "id", "description" => "id of item", "type" => "integer", "required" => true, "allowMultiple" => false, "format" => "int32" }, { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "string", "required" => true, "allowMultiple" => false } ],
+              "type" => "void"
             },
             {
-              "produces" => ["application/json"],
               "notes" => "",
               "summary" => "",
               "nickname" => "PATCH-items--id---format-",
-              "httpMethod" => "PATCH",
-              "parameters" => [ { "paramType" => "path", "name" => "id", "description" => "id of item", "type" => "Integer", "dataType" => "Integer", "required" => true }, { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "String", "dataType" => "String", "required" => true } ]
+              "method" => "PATCH",
+              "parameters" => [ { "paramType" => "path", "name" => "id", "description" => "id of item", "type" => "integer", "required" => true, "allowMultiple" => false, "format" => "int32" }, { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "string", "required" => true, "allowMultiple" => false } ],
+              "type" => "void"
             }
           ]
         }

@@ -45,12 +45,21 @@ end
 
 ## Configure
 You can pass a hash with some configuration possibilities to ```add_swagger_documentation```, all of these are optional:
-* ```:mount_path``` The path were the API documentation is loaded, default '/swagger_doc'
+
+* ```:target_class``` The API class to document, default `self`
+* ```:mount_path``` The path where the API documentation is loaded, default '/swagger_doc'
+* ```:class_name```
+* ```:markdown``` Allow markdown in `notes`, default `false`
+* ```:hide_format``` , Don't add '.(format)' to the end of URLs, default `false`
 * ```:api_version``` Version of the API that's being exposed
 * ```:base_path``` Basepath of the API that's being exposed, this configuration parameter accepts a Proc to evaluate base_path, useful when you need to use request attributes to determine the base_path.
-* ```:markdown``` Allow markdown in `notes`, default `false`
+* ```:authorizations``` Added to the `authorizations` key in the JSON documentation
+* ```:include_base_url``` Add base path to the URLs, default `true`
+* ```:root_base_path``` Add `basePath` key to the JSON documentation, default `true`
+* ```:info``` Added to the `info` key in the JSON documentation
+* ```:models``` Allows adds an array with the entities for build models specifications. You need to use grape-entity gem.
 * ```:hide_documentation_path``` Don't show the '/swagger_doc' path in the generated swagger documentation
-
+* ```:format```
 
 ## Swagger Header Parameters
 
@@ -113,6 +122,71 @@ module API
 end
 ```
 
+### Relationships
+
+1xN
+
+```ruby
+module API
+  module Entities
+    class Client < Grape::Entity
+      expose :name, :documentation => { :type => "string", :desc => "Name" }
+      expose :addresses, using: Entities::Address, documentation: {type: 'Address', desc: 'Addresses.', param_type: 'body', is_array: true}
+    end
+
+    class Address < Grape::Entity
+      expose :street, :documentation => { :type => "string", :desc => "Street." }
+    end
+
+  end
+
+  class Clients < Grape::API
+    version 'v1'
+
+    desc 'Clients index', {
+      params: Entities::Client.documentation
+    }
+    get '/clients' do
+      ...
+    end
+  end
+  add_swagger_documentation models: [Entities::Client, Entities::Address]
+end
+```
+
+1x1
+
+Note: is_array is false by default
+
+```ruby
+module API
+  module Entities
+    class Client < Grape::Entity
+      expose :name, :documentation => { :type => "string", :desc => "Name" }
+      expose :address, using: Entities::Address, documentation: {type: 'Address', desc: 'Addresses.', param_type: 'body', is_array: false}
+    end
+
+    class Address < Grape::Entity
+      expose :street, :documentation => { :type => "string", :desc => "Street" }
+    end
+
+  end
+
+  class Clients < Grape::API
+    version 'v1'
+
+    desc 'Clients index', {
+      params: Entities::Client.documentation
+    }
+    get '/clients' do
+      ...
+    end
+  end
+  add_swagger_documentation models: [Entities::Client, Entities::Address]
+end
+```
+
+
 ## Swagger additions
 grape-swagger allows you to add an explanation in markdown in the notes field. Which would result in proper formatted markdown in Swagger UI. The default Swagger UI doesn't allow HTML in the notes field, so you need to use an adapted version of Swagger UI (you can find one at https://github.com/tim-vandecasteele/swagger-ui/tree/vasco).
 
@@ -165,4 +239,3 @@ end
 
 Copyright (c) 2012 Tim Vandecasteele. See LICENSE.txt for
 further details.
-

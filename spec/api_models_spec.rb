@@ -45,14 +45,12 @@ describe "API Models" do
     JSON.parse(last_response.body).should == {
       "apiVersion" => "0.1",
       "swaggerVersion" => "1.2",
-      "basePath" => "http://example.org",
       "info" => {},
       "produces" => ["application/json"],
-      "operations" => [],
       "apis" => [
-        { "path" => "/swagger_doc/something.{format}" },
-        { "path" => "/swagger_doc/thing.{format}" },
-        { "path" => "/swagger_doc/swagger_doc.{format}" }
+        { "path" => "/something.{format}", "description" => "Operations about somethings" },
+        { "path" => "/thing.{format}", "description" => "Operations about things" },
+        { "path" => "/swagger_doc.{format}", "description" => "Operations about swagger_docs" }
       ]
     }
   end
@@ -63,25 +61,22 @@ describe "API Models" do
       "apiVersion" => "0.1",
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
-      "resourcePath" => "",
+      "resourcePath" => "/something",
+      "produces" => [ "application/json" ],
       "apis" => [{
         "path" => "/something.{format}",
         "operations" => [{
-          "produces" => [
-            "application/json"
-          ],
           "notes" => "",
           "type" => "Something",
           "summary" => "This gets something.",
           "nickname" => "GET-something---format-",
-          "httpMethod" => "GET",
+          "method" => "GET",
           "parameters" => []
         }]
       }],
       "models" => {
         "Something" => {
           "id" => "Something",
-          "name" => "Something",
           "properties" => {
             "text" => {
               "type" => "string",
@@ -99,25 +94,22 @@ describe "API Models" do
       "apiVersion" => "0.1",
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
-      "resourcePath" => "",
+      "resourcePath" => "/thing",
+      "produces" => [ "application/json" ],
       "apis" => [{
         "path" => "/thing.{format}",
         "operations" => [{
-          "produces" => [
-            "application/json"
-          ],
           "notes" => "",
           "type" => "Some::Thing",
           "summary" => "This gets thing.",
           "nickname" => "GET-thing---format-",
-          "httpMethod" => "GET",
+          "method" => "GET",
           "parameters" => []
         }]
       }],
       "models" => {
         "Some::Thing" => {
           "id" => "Some::Thing",
-          "name" => "Some::Thing",
           "properties" => {
             "text" => {
               "type" => "string",

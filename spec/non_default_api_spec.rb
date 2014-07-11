@@ -22,10 +22,10 @@ describe "options: " do
 
     def app; SimpleApiWithBasePath end
 
-    it "retrieves the given base-path on /swagger_doc" do
-      get '/swagger_doc.json'
-      JSON.parse(last_response.body)["basePath"].should == SimpleApiWithBasePath::NON_DEFAULT_BASE_PATH
-    end
+    # it "retrieves the given base-path on /swagger_doc" do
+    #   get '/swagger_doc.json'
+    #   JSON.parse(last_response.body)["basePath"].should == SimpleApiWithBasePath::NON_DEFAULT_BASE_PATH
+    # end
 
     it "retrieves the same given base-path for mounted-api" do
       get '/swagger_doc/something.json'
@@ -51,10 +51,10 @@ describe "options: " do
 
     def app; SimpleApiWithProcBasePath end
 
-    it "retrieves the given base-path on /swagger_doc" do
-      get '/swagger_doc.json'
-      JSON.parse(last_response.body)["basePath"].should == "http://example.org/some_value"
-    end
+    # it "retrieves the given base-path on /swagger_doc" do
+    #   get '/swagger_doc.json'
+    #   JSON.parse(last_response.body)["basePath"].should == "http://example.org/some_value"
+    # end
 
     it "retrieves the same given base-path for mounted-api" do
       get '/swagger_doc/something.json'
@@ -80,10 +80,10 @@ describe "options: " do
 
     def app; SimpleApiWithRelativeBasePath end
 
-    it "retrieves the given base-path on /swagger_doc" do
-      get '/swagger_doc.json'
-      JSON.parse(last_response.body)["basePath"].should == "http://example.org/some_value"
-    end
+    # it "retrieves the given base-path on /swagger_doc" do
+    #   get '/swagger_doc.json'
+    #   JSON.parse(last_response.body)["basePath"].should == "http://example.org/some_value"
+    # end
 
     it "retrieves the same given base-path for mounted-api" do
       get '/swagger_doc/something.json'
@@ -148,13 +148,11 @@ describe "options: " do
       JSON.parse(last_response.body).should == {
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.2",
-        "basePath" => "http://example.org",
         "info" => {},
         "produces" => ["application/xml", "application/json", "text/plain"],
-        "operations" => [],
         "apis" => [
-          { "path" => "/v1/swagger_doc/something.{format}" },
-          { "path" => "/v1/swagger_doc/swagger_doc.{format}" }
+          { "path" => "/something.{format}", "description" => "Operations about somethings" },
+          { "path" => "/swagger_doc.{format}", "description" => "Operations about swagger_docs" }
         ]
       }
     end
@@ -166,17 +164,17 @@ describe "options: " do
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
-        "resourcePath" => "",
+        "resourcePath" => "/something",
+        "produces" => ["application/xml", "application/json", "text/plain"],
         "apis" => [{
           "path" => "/0.1/something.{format}",
           "operations" => [{
-            "produces" => ["application/xml", "application/json", "text/plain"],
-            "notes" => nil,
             "notes" => "",
             "summary" => "This gets something.",
             "nickname" => "GET--version-something---format-",
-            "httpMethod" => "GET",
-            "parameters" => []
+            "method" => "GET",
+            "parameters" => [],
+            "type" => "void"
           }]
         }]
       }
@@ -206,12 +204,10 @@ describe "options: " do
       JSON.parse(last_response.body).should == {
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.2",
-        "basePath" => "http://example.org",
         "info" => {},
         "produces" => ["application/xml", "application/json", "text/plain"],
-        "operations" => [],
         "apis" => [
-          { "path" => "/swagger_doc/something.{format}" }
+          { "path" => "/something.{format}", "description" => "Operations about somethings" }
         ]
       }
     end
@@ -242,17 +238,17 @@ describe "options: " do
         "apiVersion"=>"0.1",
         "swaggerVersion"=>"1.2",
         "basePath"=>"http://example.org",
-        "resourcePath"=>"",
+        "resourcePath"=>"/something",
+        "produces" => ["application/xml", "application/json", "text/plain"],
         "apis"=> [{
           "path"=>"/abc/something.{format}",
           "operations"=> [{
-            "produces" => ["application/xml", "application/json", "text/plain"],
-            "notes"=>nil,
             "notes"=>"",
             "summary"=>"This gets something.",
             "nickname"=>"GET-abc-something---format-",
-            "httpMethod"=>"GET",
-            "parameters"=>[]
+            "method"=>"GET",
+            "parameters"=>[],
+            "type" => "void"
           }]
         }]
       }
@@ -288,17 +284,18 @@ describe "options: " do
         "apiVersion"=>"v20",
         "swaggerVersion"=>"1.2",
         "basePath"=>"http://example.org",
-        "resourcePath"=>"",
+        "resourcePath"=>"/something",
+        "produces" => ["application/xml", "application/json", "text/plain"],
         "apis"=>[{
           "path"=>"/abc/v20/something.{format}",
           "operations"=>[{
-            "produces" => ["application/xml", "application/json", "text/plain"],
             "notes"=>nil,
             "notes"=>"",
             "summary"=>"This gets something.",
             "nickname"=>"GET-abc--version-something---format-",
-            "httpMethod"=>"GET",
-            "parameters"=>[]
+            "method"=>"GET",
+            "parameters"=>[],
+            "type" => "void"
           }]
         }]
       }
@@ -326,12 +323,12 @@ describe "options: " do
     def app; SimpleApiWithDifferentMount end
 
 
-    it "retrieves the given base-path on /api_doc" do
-      get '/api_doc.json'
-        JSON.parse(last_response.body)["apis"].each do |api|
-        api["path"].should start_with SimpleApiWithDifferentMount::MOUNT_PATH
-      end
-    end
+    # it "retrieves the given base-path on /api_doc" do
+    #   get '/api_doc.json'
+    #     JSON.parse(last_response.body)["apis"].each do |api|
+    #     api["path"].should start_with SimpleApiWithDifferentMount::MOUNT_PATH
+    #   end
+    # end
 
     it "retrieves the same given base-path for mounted-api" do
       get '/api_doc/something.json'
@@ -371,16 +368,17 @@ describe "options: " do
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
-        "resourcePath" => "",
+        "resourcePath" => "/something",
+        "produces" => ["application/xml", "application/json", "text/plain"],
         "apis" => [{
           "path" => "/something.{format}",
           "operations" => [{
-            "produces" => ["application/xml", "application/json", "text/plain"],
             "notes" => "<p><em>test</em></p>\n",
             "summary" => "This gets something.",
             "nickname" => "GET-something---format-",
-            "httpMethod" => "GET",
-            "parameters" => []
+            "method" => "GET",
+            "parameters" => [],
+            "type" => "void"
           }]
         }]
       }
@@ -426,17 +424,17 @@ describe "options: " do
       end
 
       class SimpleApiWithProtection < Grape::API
-        mount ProtectedApi
+        mount ::ProtectedApi
         add_swagger_documentation
       end
     end
 
     def app; SimpleApiWithProtection; end
 
-    it "uses https schema in mount point" do
-      get '/swagger_doc.json', {}, 'rack.url_scheme' => 'https'
-      JSON.parse(last_response.body)["basePath"].should == "https://example.org:80"
-    end
+    # it "uses https schema in mount point" do
+    #   get '/swagger_doc.json', {}, 'rack.url_scheme' => 'https'
+    #   JSON.parse(last_response.body)["basePath"].should == "https://example.org:80"
+    # end
 
     it "uses https schema in endpoint doc" do
       get '/swagger_doc/something.json', {}, 'rack.url_scheme' => 'https'
@@ -502,12 +500,10 @@ describe "options: " do
       JSON.parse(last_response.body).should == {
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.2",
-        "basePath" => "http://example.org",
         "info" => {},
         "produces" => ["application/xml", "application/json", "text/plain"],
-        "operations" => [],
         "apis" => [
-          { "path" => "/first/swagger_doc/first.{format}" }
+          { "path" => "/first.{format}", "description" => "Operations about firsts" }
         ]
       }
     end
@@ -517,12 +513,10 @@ describe "options: " do
       JSON.parse(last_response.body).should == {
         "apiVersion" => "0.1",
         "swaggerVersion" => "1.2",
-        "basePath" => "http://example.org",
         "info" => {},
         "produces" => ["application/xml", "application/json", "text/plain"],
-        "operations" => [],
         "apis" => [
-          { "path" => "/second/swagger_doc/second.{format}" }
+          { "path" => "/second.{format}", "description" => "Operations about seconds" }
         ]
       }
     end

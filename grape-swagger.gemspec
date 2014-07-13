@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
   s.files = [
     ".document",
     ".rspec",
-    ".rvmrc",
     ".travis.yml",
     "CHANGELOG.markdown",
     "Gemfile",

@@ -131,6 +131,7 @@ module Grape
               ops.each do |path, op_routes|
                 operations = op_routes.map do |route|
                   notes       = as_markdown(route.route_notes)
+
                   http_codes  = parse_http_codes(route.route_http_codes, models)
 
                   models << if @@models.present?
@@ -320,10 +321,15 @@ module Grape
               version ? parsed_path.gsub('{version}', version) : parsed_path
             end
 
-            def parse_entity_name(name)
-              entity_parts = name.to_s.split('::')
-              entity_parts.reject! { |p| p == 'Entity' || p == 'Entities' }
-              entity_parts.join('::')
+            def parse_entity_name(model)
+              if model.respond_to?(:entity_name)
+                model.entity_name
+              else
+                name = model.to_s
+                entity_parts = name.split('::')
+                entity_parts.reject! { |p| p == 'Entity' || p == 'Entities' }
+                entity_parts.join('::')
+              end
             end
 
             def parse_entity_models(models)
@@ -378,12 +384,12 @@ module Grape
               codes ||= {}
               codes.map do |k, v, m|
                 models << m if m
-                code = {
+                http_code_hash = {
                   code: k,
                   message: v
                 }
-                code[:responseModel] = parse_entity_name(m) if m
-                code
+                http_code_hash[:responseModel] = parse_entity_name(m) if m
+                http_code_hash
               end
             end
 

@@ -1,0 +1,36 @@
+AllCops:
+  Excludes:
+    - vendor/**/*
+
+LineLength:
+  Enabled: false
+
+MethodLength:
+  Enabled: false
+
+ClassLength:
+  Enabled: false
+
+Documentation:
+  # don't require classes to be documented
+  Enabled: false
+
+Encoding:
+  # no need to always specify encoding
+  Enabled: false
+
+FileName:
+  # allow grape-swagger.rb
+  Enabled: false
+
+PredicateName:
+  Enabled: false
+
+DoubleNegation:
+  Enabled: false
+
+CyclomaticComplexity:
+  Enabled: false
+
+ClassVars:
+  Enabled: false

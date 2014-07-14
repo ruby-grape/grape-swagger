@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Default API" do
+describe 'Default API' do
 
   context 'with no additional options' do
     before :all do
@@ -14,27 +14,29 @@ describe "Default API" do
       end
     end
 
-    def app; NotAMountedApi; end
+    def app
+      NotAMountedApi
+    end
 
-    it "should document something" do
+    it 'should document something' do
       get '/swagger_doc'
       JSON.parse(last_response.body).should == {
-        "apiVersion" => "0.1",
-        "swaggerVersion" => "1.2",
-        "info" => {},
-        "produces" => ["application/json"],
-        "apis" => [
-          { "path" => "/something.{format}", "description" => "Operations about somethings" },
-          { "path" => "/swagger_doc.{format}", "description" => "Operations about swagger_docs" }
+        'apiVersion' => '0.1',
+        'swaggerVersion' => '1.2',
+        'info' => {},
+        'produces' => ['application/json'],
+        'apis' => [
+          { 'path' => '/something.{format}', 'description' => 'Operations about somethings' },
+          { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
         ]
       }
     end
 
-    context "path inside the apis array" do
-      it "should start with a forward slash" do
+    context 'path inside the apis array' do
+      it 'should start with a forward slash' do
         get '/swagger_doc'
         JSON.parse(last_response.body)['apis'].each do |api|
-          api['path'].should start_with "/"
+          api['path'].should start_with '/'
         end
       end
     end
@@ -56,7 +58,9 @@ describe "Default API" do
       get '/swagger_doc'
     end
 
-    def app; ApiInfoTest; end
+    def app
+      ApiInfoTest
+    end
 
     subject do
       JSON.parse(last_response.body)['info']

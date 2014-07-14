@@ -9,6 +9,7 @@
 * Fix: hide_documentation_path on prefixed APIs - [@spier](https://github.com/spier).
 * Rewritten .gemspec and removed Jeweler - [@dblock](https://github.com/dblock).
 * Added `GrapeEntity::VERSION` - [@dblock](https://github.com/dblock).
+* Added Rubocop, Ruby-style linter - [@dblock](https://github.com/dblock).
 * Your Contribution Here
 
 ### 0.6.0 (June 19, 2013)

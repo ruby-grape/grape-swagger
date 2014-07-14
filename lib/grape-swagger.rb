@@ -6,10 +6,10 @@ module Grape
     class << self
       attr_reader :combined_routes
 
-      def add_swagger_documentation(options={})
+      def add_swagger_documentation(options = {})
         documentation_class = create_documentation_class
 
-        documentation_class.setup({:target_class => self}.merge(options))
+        documentation_class.setup({ target_class: self }.merge(options))
         mount(documentation_class)
 
         @combined_routes = {}
@@ -20,19 +20,15 @@ module Grape
           resource = route_match.captures.first
           next if resource.empty?
           resource.downcase!
-
           @combined_routes[resource] ||= []
-
-          unless @@hide_documentation_path and route.route_path.include?(@@mount_path)
-            @combined_routes[resource] << route
-          end
+          next if @@hide_documentation_path && route.route_path.include?(@@mount_path)
+          @combined_routes[resource] << route
         end
       end
 
       private
 
       def create_documentation_class
-
         Class.new(Grape::API) do
           class << self
             def name
@@ -42,19 +38,18 @@ module Grape
 
           def self.setup(options)
             defaults = {
-              :target_class             => nil,
-              :mount_path               => '/swagger_doc',
-              :base_path                => nil,
-              :api_version              => '0.1',
-              :markdown                 => false,
-              :hide_documentation_path  => false,
-              :hide_format              => false,
-              :format                   => nil,
-              :models                   => [],
-              :info                     => {},
-              :authorizations           => nil,
-              :root_base_path           => true,
-              :include_base_url         => true
+              target_class: nil,
+              mount_path: '/swagger_doc',
+              base_path: nil,
+              api_version: '0.1',
+              markdown: false,
+              hide_documentation_path: false,
+              hide_format: false,
+              format: nil,
+              models: [],
+              info: {},
+              authorizations: nil,
+              root_base_path: true
             }
 
             options = defaults.merge(options)
@@ -67,7 +62,6 @@ module Grape
             api_version      = options[:api_version]
             base_path        = options[:base_path]
             authorizations   = options[:authorizations]
-            include_base_url = options[:include_base_url]
             root_base_path   = options[:root_base_path]
             extra_info       = options[:info]
             @@models         = options[:models] || []
@@ -85,41 +79,40 @@ module Grape
               header['Access-Control-Allow-Origin']   = '*'
               header['Access-Control-Request-Method'] = '*'
 
-              routes = target_class::combined_routes
+              routes = target_class.combined_routes
 
               if @@hide_documentation_path
-                routes.reject!{ |route, value| "/#{route}/".index(parse_path(@@mount_path, nil) << '/') == 0 }
+                routes.reject! { |route, _value| "/#{route}/".index(parse_path(@@mount_path, nil) << '/') == 0 }
               end
 
               routes_array = routes.keys.map do |local_route|
                 next if routes[local_route].all?(&:route_hidden)
 
-                url_base    = parse_path(route.route_path.gsub('(.:format)', ''), route.route_version) if include_base_url
                 url_format  = '.{format}' unless @@hide_format
                 {
-                  :path => "/#{local_route}#{url_format}",
-                  :description => "Operations about #{local_route.pluralize}"
+                  path: "/#{local_route}#{url_format}",
+                  description: "Operations about #{local_route.pluralize}"
                 }
               end.compact
 
               output = {
                 apiVersion:     api_version,
-                swaggerVersion: "1.2",
+                swaggerVersion: '1.2',
                 produces:       content_types_for(target_class),
                 apis:           routes_array,
                 info:           parse_info(extra_info)
               }
 
-              output[:authorizations] = authorizations unless (authorizations.nil? || authorizations.empty?)
+              output[:authorizations] = authorizations unless authorizations.nil? || authorizations.empty?
 
               output
             end
 
-            desc 'Swagger compatible API description for specific API', :params => {
-              "name" => {
-                :desc     => "Resource name of mounted API",
-                :type     => "string",
-                :required => true
+            desc 'Swagger compatible API description for specific API', params: {
+              'name' => {
+                desc: 'Resource name of mounted API',
+                type: 'string',
+                required: true
               }
             }
             get "#{@@mount_path}/:name" do
@@ -127,7 +120,7 @@ module Grape
               header['Access-Control-Request-Method'] = '*'
 
               models = []
-              routes = target_class::combined_routes[params[:name]]
+              routes = target_class.combined_routes[params[:name]]
 
               ops = routes.reject(&:route_hidden).group_by do |route|
                 parse_path(route.route_path, api_version)
@@ -135,42 +128,42 @@ module Grape
 
               apis = []
 
-              ops.each do |path, routes|
-                operations = routes.map do |route|
+              ops.each do |path, op_routes|
+                operations = op_routes.map do |route|
                   notes       = as_markdown(route.route_notes)
                   http_codes  = parse_http_codes(route.route_http_codes)
 
-                  models <<  if @@models.present?
-                               @@models
-                             else route.route_entity.present?
-                               route.route_entity
-                             end
+                  models << if @@models.present?
+                              @@models
+                            elsif route.route_entity.present?
+                              route.route_entity
+                            end
 
                   models = models.flatten.compact
 
                   operation = {
-                    :notes      => notes.to_s,
-                    :summary    => route.route_description || '',
-                    :nickname   => route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-')),
-                    :method     => route.route_method,
-                    :parameters => parse_header_params(route.route_headers) + parse_params(route.route_params, route.route_path, route.route_method),
-                    :type       => "void"
+                    notes: notes.to_s,
+                    summary: route.route_description || '',
+                    nickname: route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/, '-')),
+                    method: route.route_method,
+                    parameters: parse_header_params(route.route_headers) + parse_params(route.route_params, route.route_path, route.route_method),
+                    type: 'void'
                   }
-                  operation[:authorizations] = route.route_authorizations unless (route.route_authorizations.nil? || route.route_authorizations.empty?)
-                  if operation[:parameters].any? { | param | param[:type] == "File" }
-                    operation.merge!(:consumes => [ "multipart/form-data" ])
+                  operation[:authorizations] = route.route_authorizations unless route.route_authorizations.nil? || route.route_authorizations.empty?
+                  if operation[:parameters].any? { | param | param[:type] == 'File' }
+                    operation.merge!(consumes: ['multipart/form-data'])
                   end
-                  operation.merge!(:responseMessages => http_codes) unless http_codes.empty?
+                  operation.merge!(responseMessages: http_codes) unless http_codes.empty?
 
                   if route.route_entity
                     type = parse_entity_name(route.route_entity)
                     if route.instance_variable_get(:@options)[:is_array]
-                      operation.merge!({
-                        "type" => "array",
-                        "items" => generate_typeref(type)
-                      })
+                      operation.merge!(
+                        'type' => 'array',
+                        'items' => generate_typeref(type)
+                      )
                     else
-                      operation.merge!("type" => type)
+                      operation.merge!('type' => type)
                     end
                   end
 
@@ -184,16 +177,16 @@ module Grape
 
               api_description = {
                 apiVersion:     api_version,
-                swaggerVersion: "1.2",
+                swaggerVersion: '1.2',
                 resourcePath:   "/#{params[:name]}",
                 produces:       content_types_for(target_class),
                 apis:           apis
               }
 
-              basePath                         = parse_base_path(base_path, request)
-              api_description[:basePath]       = basePath        if basePath && basePath.size > 0 && root_base_path != false
+              base_path                        = parse_base_path(base_path, request)
+              api_description[:basePath]       = base_path if base_path && base_path.size > 0 && root_base_path != false
               api_description[:models]         = parse_entity_models(models) unless models.empty?
-              api_description[:authorizations] = authorizations  if authorizations
+              api_description[:authorizations] = authorizations if authorizations
 
               api_description
             end
@@ -202,7 +195,7 @@ module Grape
           helpers do
 
             def as_markdown(description)
-              description && @@markdown ? Kramdown::Document.new(strip_heredoc(description), :input => 'GFM', :enable_coderay => false).to_html : description
+              description && @@markdown ? Kramdown::Document.new(strip_heredoc(description), input: 'GFM', enable_coderay: false).to_html : description
             end
 
             def parse_params(params, path, method)
@@ -212,34 +205,34 @@ module Grape
                 items = {}
 
                 raw_data_type = value.is_a?(Hash) ? (value[:type] || 'string').to_s : 'string'
-                dataType      = case raw_data_type
-                                when "Boolean", "Date", "Integer", "String"
+                data_type     = case raw_data_type
+                                when 'Boolean', 'Date', 'Integer', 'String'
                                   raw_data_type.downcase
-                                when "BigDecimal"
-                                  "long"
-                                when "DateTime"
-                                  "dateTime"
-                                when "Numeric"
-                                  "double"
+                                when 'BigDecimal'
+                                  'long'
+                                when 'DateTime'
+                                  'dateTime'
+                                when 'Numeric'
+                                  'double'
                                 else
                                   parse_entity_name(raw_data_type)
                                 end
                 description   = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
                 required      = value.is_a?(Hash) ? !!value[:required] : false
-                defaultValue  = value.is_a?(Hash) ? value[:defaultValue] : nil
+                default_value = value.is_a?(Hash) ? value[:defaultValue] : nil
                 is_array      = value.is_a?(Hash) ? (value[:is_array] || false) : false
                 if value.is_a?(Hash) && value.key?(:param_type)
-                  paramType   = value[:param_type]
+                  param_type  = value[:param_type]
                   if is_array
-                    items     = {"$ref" => dataType}
-                    dataType  = "array"
+                    items     = { '$ref' => data_type }
+                    data_type = 'array'
                   end
                 else
-                  paramType   = case
+                  param_type  = case
                                 when path.include?(":#{param}")
                                   'path'
-                                when %w[ POST PUT PATCH ].include?(method)
-                                  if is_primitive?(dataType)
+                                when %w(POST PUT PATCH).include?(method)
+                                  if is_primitive?(data_type)
                                     'form'
                                   else
                                     'body'
@@ -251,17 +244,17 @@ module Grape
                 name          = (value.is_a?(Hash) && value[:full_name]) || param
 
                 parsed_params = {
-                  paramType:     paramType,
+                  paramType:     param_type,
                   name:          name,
                   description:   as_markdown(description),
-                  type:          dataType,
+                  type:          data_type,
                   required:      required,
                   allowMultiple: is_array
                 }
-                parsed_params.merge!({format: "int32"}) if dataType == "integer"
-                parsed_params.merge!({format: "int64"}) if dataType == "long"
-                parsed_params.merge!({items: items}) if items.present?
-                parsed_params.merge!({defaultValue: defaultValue}) if defaultValue
+                parsed_params.merge!(format: 'int32') if data_type == 'integer'
+                parsed_params.merge!(format: 'int64') if data_type == 'long'
+                parsed_params.merge!(items: items) if items.present?
+                parsed_params.merge!(defaultValue: default_value) if default_value
 
                 parsed_params
               end
@@ -273,7 +266,7 @@ module Grape
               if content_types.empty?
                 formats       = [target_class.settings[:format], target_class.settings[:default_format]].compact.uniq
                 formats       = Grape::Formatter::Base.formatters({}).keys if formats.empty?
-                content_types = Grape::ContentTypes::CONTENT_TYPES.select{|content_type, mime_type| formats.include? content_type}.values
+                content_types = Grape::ContentTypes::CONTENT_TYPES.select { |content_type, _mime_type| formats.include? content_type }.values
               end
 
               content_types.uniq
@@ -287,28 +280,28 @@ module Grape
                 licenseUrl:         info[:license_url],
                 termsOfServiceUrl:  info[:terms_of_service_url],
                 title:              info[:title]
-              }.delete_if{|_, value| value.blank?}
+              }.delete_if { |_, value| value.blank? }
             end
 
             def parse_header_params(params)
               params ||= []
 
               params.map do |param, value|
-                dataType    = 'String'
-                description = value.is_a?(Hash) ? value[:description] : ''
-                required    = value.is_a?(Hash) ? !!value[:required] : false
-                defaultValue = value.is_a?(Hash) ? value[:defaultValue] : nil
-                paramType   = "header"
+                data_type     = 'String'
+                description   = value.is_a?(Hash) ? value[:description] : ''
+                required      = value.is_a?(Hash) ? !!value[:required] : false
+                default_value = value.is_a?(Hash) ? value[:defaultValue] : nil
+                param_type    = 'header'
 
                 parsed_params = {
-                  paramType:    paramType,
+                  paramType:    param_type,
                   name:         param,
                   description:  as_markdown(description),
-                  type:         dataType,
+                  type:         data_type,
                   required:     required
                 }
 
-                parsed_params.merge!({defaultValue: defaultValue}) if defaultValue
+                parsed_params.merge!(defaultValue: default_value) if default_value
 
                 parsed_params
               end
@@ -329,8 +322,8 @@ module Grape
 
             def parse_entity_name(name)
               entity_parts = name.to_s.split('::')
-              entity_parts.reject! {|p| p == "Entity" || p == "Entities"}
-              entity_parts.join("::")
+              entity_parts.reject! { |p| p == 'Entity' || p == 'Entities' }
+              entity_parts.join('::')
             end
 
             def parse_entity_models(models)
@@ -343,21 +336,18 @@ module Grape
                 model.documentation.each do |property_name, property_info|
                   p = property_info.dup
 
-                  if p.delete(:required)
-                    required << property_name.to_s
-                  end
+                  required << property_name.to_s if p.delete(:required)
 
                   if p.delete(:is_array)
                     p[:items] = generate_typeref(p[:type])
-                    p[:type] = "array"
+                    p[:type] = 'array'
                   else
                     p.merge! generate_typeref(p.delete(:type))
                   end
 
                   # rename Grape Entity's "desc" to "description"
-                  if property_description = p.delete(:desc)
-                    p[:description] = property_description
-                  end
+                  property_description = p.delete(:desc)
+                  p[:description] = property_description if property_description
 
                   properties[property_name] = p
                 end
@@ -378,19 +368,19 @@ module Grape
 
             def generate_typeref(type)
               if is_primitive? type
-                { "type" => type }
+                { 'type' => type }
               else
-                { "$ref" => type }
+                { '$ref' => type }
               end
             end
 
-            def parse_http_codes codes
+            def parse_http_codes(codes)
               codes ||= {}
               codes.map do |k, v|
                 {
                   code: k,
                   message: v,
-                  #responseModel: ...
+                  # responseModel: ...
                 }
               end
             end

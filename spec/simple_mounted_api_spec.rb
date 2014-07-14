@@ -72,7 +72,7 @@ describe "a simple mounted api" do
       "apiVersion" => "0.1",
       "swaggerVersion" => "1.2",
       "info" => {},
-      "produces" => ["application/xml", "application/json", "text/plain"],
+      "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
       "apis" => [
         { "path" => "/simple.{format}", "description" => "Operations about simples" },
         { "path" => "/simple-test.{format}", "description" => "Operations about simple-tests" },
@@ -91,7 +91,7 @@ describe "a simple mounted api" do
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
       "resourcePath" => "/simple",
-      "produces" => ["application/xml", "application/json", "text/plain"],
+      "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
       "apis" => [{
         "path" => "/simple.{format}",
         "operations" => [{
@@ -114,7 +114,7 @@ describe "a simple mounted api" do
         "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
         "resourcePath" => "/simple-test",
-        "produces" => ["application/xml", "application/json", "text/plain"],
+        "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
         "apis" => [{
           "path" => "/simple-test.{format}",
           "operations" => [{

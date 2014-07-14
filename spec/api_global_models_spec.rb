@@ -34,7 +34,7 @@ describe "API Global Models" do
       "apiVersion"=>"0.1",
       "swaggerVersion"=>"1.2",
       "resourcePath"=>"/thing",
-      "produces"=>["application/xml", "application/json", "text/plain"],
+      "produces"=>["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
       "apis"=> [{
         "path"=>"/thing.{format}",
         "operations"=>[{

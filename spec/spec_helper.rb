@@ -9,7 +9,6 @@ require 'grape-entity'
 require 'rubygems'
 require 'bundler'
 
-require 'pry'
 require 'json'
 
 Bundler.setup :default, :test

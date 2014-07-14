@@ -1,4 +1,5 @@
 require 'kramdown'
+require 'grape-swagger/version'
 
 module Grape
   class API

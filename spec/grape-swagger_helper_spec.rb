@@ -21,7 +21,7 @@ describe 'helpers' do
   context 'parsing parameters' do
     it 'parses params as query strings for a GET' do
       params = {
-        name: { type: 'String', desc: 'A name', required: true, defaultValue: 'default' },
+        name: { type: 'String', desc: 'A name', required: true, default: 'default' },
         level: 'max'
       }
       path = '/coolness'
@@ -96,7 +96,7 @@ describe 'helpers' do
   context 'parsing header parameters' do
     it 'parses params for the header' do
       params = {
-        'XAuthToken' => { description: 'A required header.', required: true, defaultValue: 'default' }
+        'XAuthToken' => { description: 'A required header.', required: true, default: 'default' }
       }
       @api.parse_header_params(params).should == [
         { paramType: 'header', name: 'XAuthToken', description: 'A required header.', type: 'String', required: true, defaultValue: 'default' }

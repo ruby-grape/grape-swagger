@@ -1,18 +1,28 @@
 ### Next Release
 
-* Fix: translate parameter `type` to String, enables using Mongoid fields as parameter definitions - [@dblock](https://github.com/dblock).
-* Adding support for generating swagger responseClass and models from Grape Entities - [@calebwoods](https://github.com/calebwoods).
-* Adding hidden endpoints - [@arturoherrero](https://github.com/arturoherrero).
-* Fix: allow urls with `-` - [@dadario](https://github.com/dadario).
-* Fix: mounting multiple documentations - [@Drakula2k](https://github.com/Drakula2k).
-* Fix: resource groupings for prefixed APIs - [@aew](https://github.com/aew).
-* Fix: hide_documentation_path on prefixed APIs - [@spier](https://github.com/spier).
-* [#87](https://github.com/tim-vandecasteele/grape-swagger/pull/87) - Fix: mapping of `default` to `defaultValue` - [@m-o-e](https://github.com/m-o-e).
 * Rewritten .gemspec and removed Jeweler - [@dblock](https://github.com/dblock).
 * Added `GrapeEntity::VERSION` - [@dblock](https://github.com/dblock).
 * Added Rubocop, Ruby-style linter - [@dblock](https://github.com/dblock).
-
+* [#105](https://github.com/tim-vandecasteele/grape-swagger/pull/105): Fixed compatibility with Swagger-UI - [@CraigCottingham](https://github.com/CraigCottingham).
+* [#87](https://github.com/tim-vandecasteele/grape-swagger/pull/87): Fixed mapping of `default` to `defaultValue` - [@m-o-e](https://github.com/m-o-e).
 * Your Contribution Here
+
+### 0.7.2 (February 6, 2014)
+
+* [#84](https://github.com/tim-vandecasteele/grape-swagger/pull/84): Markdown is now Github Flavored Markdown - [@jeromegn](https://github.com/jeromegn).
+* [#83](https://github.com/tim-vandecasteele/grape-swagger/pull/83): Improved support for nested Entity types - [@jeromegn](https://github.com/jeromegn).
+* [#79](https://github.com/tim-vandecasteele/grape-swagger/pull/79): Added `dataType` to the `params` output - [@Phobos98](https://github.com/Phobos98).
+* [#75](https://github.com/tim-vandecasteele/grape-swagger/pull/75), [#82](https://github.com/tim-vandecasteele/grape-swagger/pull/82): Added Swagger 1.2 support - [@joelvh](https://github.com/joelvh), [@jeromegn](https://github.com/jeromegn).
+* [#73](https://github.com/tim-vandecasteele/grape-swagger/pull/73): Added the ability to add additional API `info` - [@mattbeedle](https://github.com/mattbeedle).
+* [#69](https://github.com/tim-vandecasteele/grape-swagger/pull/69): Make relative `base_path` values absolute - [@dm1try](https://github.com/dm1try).
+* [#66](https://github.com/tim-vandecasteele/grape-swagger/pull/66): Fixed documentation generated for paths that don't match the base URL pattern - [@swistaczek](https://github.com/swistaczek).
+* [#63](https://github.com/tim-vandecasteele/grape-swagger/pull/63): Added support for hiding endpoints from the documentation - [@arturoherrero](https://github.com/arturoherrero).
+* [#62](https://github.com/tim-vandecasteele/grape-swagger/pull/62): Fixed handling of URLs with the `-` character - [@dadario](https://github.com/dadario).
+* [#57](https://github.com/tim-vandecasteele/grape-swagger/pull/57): Fixed documenting of multiple API versions - [@Drakula2k](https://github.com/Drakula2k).
+* [#58](https://github.com/tim-vandecasteele/grape-swagger/pull/58): Fixed resource groupings for prefixed APIs - [@aew](https://github.com/aew).
+* [#56](https://github.com/tim-vandecasteele/grape-swagger/pull/56): Fixed `hide_documentation_path` on prefixed APIs - [@spier](https://github.com/spier).
+* [#54](https://github.com/tim-vandecasteele/grape-swagger/pull/54): Adding support for generating swagger `responseClass` and models from Grape Entities - [@calebwoods](https://github.com/calebwoods).
+* [#46](https://github.com/tim-vandecasteele/grape-swagger/pull/46): Fixed translating parameter `type` to String, enables using Mongoid fields as parameter definitions - [@dblock](https://github.com/dblock).
 
 ### 0.6.0 (June 19, 2013)
 

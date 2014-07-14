@@ -373,7 +373,7 @@ describe 'options: ' do
 
       class SimpleApiWithMarkdown < Grape::API
         mount MarkDownMountedApi
-        add_swagger_documentation markdown: true
+        add_swagger_documentation markdown: true, info: { description: '_test_' }
       end
     end
 
@@ -383,24 +383,12 @@ describe 'options: ' do
 
     it 'parses markdown for a mounted-api' do
       get '/swagger_doc/something.json'
-      JSON.parse(last_response.body).should ==  {
-        'apiVersion' => '0.1',
-        'swaggerVersion' => '1.2',
-        'basePath' => 'http://example.org',
-        'resourcePath' => '/something',
-        'produces' => ['application/xml', 'application/json', 'application/vnd.api+json', 'text/plain'],
-        'apis' => [{
-          'path' => '/something.{format}',
-          'operations' => [{
-            'notes' => "<p><em>test</em></p>\n",
-            'summary' => 'This gets something.',
-            'nickname' => 'GET-something---format-',
-            'method' => 'GET',
-            'parameters' => [],
-            'type' => 'void'
-          }]
-        }]
-      }
+      JSON.parse(last_response.body)['apis'][0]['operations'][0]['notes'].should eq("<p><em>test</em></p>\n")
+    end
+
+    it 'parses markdown for swagger info' do
+      get '/swagger_doc.json'
+      JSON.parse(last_response.body)['info'].should eq('description' => "<p><em>test</em></p>\n")
     end
   end
 

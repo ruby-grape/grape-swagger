@@ -286,7 +286,7 @@ module Grape
             def parse_info(info)
               {
                 contact:            info[:contact],
-                description:        info[:description],
+                description:        as_markdown(info[:description]),
                 license:            info[:license],
                 licenseUrl:         info[:license_url],
                 termsOfServiceUrl:  info[:terms_of_service_url],

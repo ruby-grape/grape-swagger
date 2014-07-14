@@ -48,26 +48,26 @@ end
 
 You can pass a hash with some configuration possibilities to ```add_swagger_documentation```, all of these are optional:
 
-* ```:target_class``` The API class to document, default `self`
-* ```:mount_path``` The path where the API documentation is loaded, default '/swagger_doc'
+* ```:target_class``` The API class to document, default `self`.
+* ```:mount_path``` The path where the API documentation is loaded, default '/swagger_doc'.
 * ```:class_name```
-* ```:markdown``` Allow markdown in `notes`, default `false`
-* ```:hide_format``` , Don't add '.(format)' to the end of URLs, default `false`
-* ```:api_version``` Version of the API that's being exposed
+* ```:markdown``` Allow markdown in `notes`, default `false`.
+* ```:hide_format``` , Don't add '.(format)' to the end of URLs, default `false`.
+* ```:api_version``` Version of the API that's being exposed.
 * ```:base_path``` Basepath of the API that's being exposed, this configuration parameter accepts a Proc to evaluate base_path, useful when you need to use request attributes to determine the base_path.
-* ```:authorizations``` Added to the `authorizations` key in the JSON documentation
-* ```:include_base_url``` Add base path to the URLs, default `true`
-* ```:root_base_path``` Add `basePath` key to the JSON documentation, default `true`
-* ```:info``` Added to the `info` key in the JSON documentation
+* ```:authorizations``` Added to the `authorizations` key in the JSON documentation.
+* ```:include_base_url``` Add base path to the URLs, default `true`.
+* ```:root_base_path``` Add `basePath` key to the JSON documentation, default `true`.
+* ```:info``` Added to the `info` key in the JSON documentation.
 * ```:models``` Allows adds an array with the entities for build models specifications. You need to use grape-entity gem.
-* ```:hide_documentation_path``` Don't show the '/swagger_doc' path in the generated swagger documentation
+* ```:hide_documentation_path``` Don't show the '/swagger_doc' path in the generated swagger documentation.
 * ```:format```
 * ```:title:``` The API title to be displayed on the API homepage.
 * ```:description:``` A description of the API.
-* ```:contact:``` Contact email
-* ```:license:``` The name of the license
-* ```:license_url:``` The URL of the license
-* ```:terms_of_service_url:``` The URL of the API terms and conditions
+* ```:contact:``` Contact email.
+* ```:license:``` The name of the license.
+* ```:license_url:``` The URL of the license.
+* ```:terms_of_service_url:``` The URL of the API terms and conditions.
 
 ## Swagger Header Parameters
 

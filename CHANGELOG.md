@@ -1,5 +1,6 @@
 ### Next Release
 
+* [#94](https://github.com/tim-vandecasteele/grape-swagger/pull/94): Added support for namespace descriptions - [@renier](https://github.com/renier).
 * [#110](https://github.com/tim-vandecasteele/grape-swagger/pull/110), [#111](https://github.com/tim-vandecasteele/grape-swagger/pull/111) - Added `responseModel` support - [@bagilevi](https://github.com/bagilevi).
 * [#105](https://github.com/tim-vandecasteele/grape-swagger/pull/105): Fixed compatibility with Swagger-UI - [@CraigCottingham](https://github.com/CraigCottingham).
 * [#87](https://github.com/tim-vandecasteele/grape-swagger/pull/87): Fixed mapping of `default` to `defaultValue` - [@m-o-e](https://github.com/m-o-e).

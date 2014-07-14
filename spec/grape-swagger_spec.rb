@@ -10,4 +10,7 @@ describe Grape::API do
     Grape::API.should respond_to :add_swagger_documentation
   end
 
+  it 'added combined-namespaces' do
+    Grape::API.should respond_to :combined_namespaces
+  end
 end

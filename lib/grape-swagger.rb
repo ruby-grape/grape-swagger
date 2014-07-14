@@ -4,7 +4,7 @@ require 'grape-swagger/version'
 module Grape
   class API
     class << self
-      attr_reader :combined_routes
+      attr_reader :combined_routes, :combined_namespaces
 
       def add_swagger_documentation(options = {})
         documentation_class = create_documentation_class
@@ -13,7 +13,6 @@ module Grape
         mount(documentation_class)
 
         @combined_routes = {}
-
         routes.each do |route|
           route_match = route.route_path.split(route.route_prefix).last.match('\/([\w|-]*?)[\.\/\(]')
           next if route_match.nil?
@@ -23,6 +22,12 @@ module Grape
           @combined_routes[resource] ||= []
           next if @@hide_documentation_path && route.route_path.include?(@@mount_path)
           @combined_routes[resource] << route
+        end
+
+        @combined_namespaces = {}
+        endpoints.each do |endpoint|
+          ns = endpoint.settings.stack.last[:namespace]
+          @combined_namespaces[ns.space] = ns if ns
         end
       end
 
@@ -80,6 +85,7 @@ module Grape
               header['Access-Control-Request-Method'] = '*'
 
               routes = target_class.combined_routes
+              namespaces = target_class.combined_namespaces
 
               if @@hide_documentation_path
                 routes.reject! { |route, _value| "/#{route}/".index(parse_path(@@mount_path, nil) << '/') == 0 }
@@ -89,9 +95,13 @@ module Grape
                 next if routes[local_route].all?(&:route_hidden)
 
                 url_format  = '.{format}' unless @@hide_format
+
+                description = namespaces[local_route] && namespaces[local_route].options[:desc]
+                description ||= "Operations about #{local_route.pluralize}"
+
                 {
                   path: "/#{local_route}#{url_format}",
-                  description: "Operations about #{local_route.pluralize}"
+                  description: description
                 }
               end.compact
 

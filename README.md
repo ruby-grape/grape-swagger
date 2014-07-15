@@ -106,6 +106,16 @@ module API
   module Entities
     class Status < Grape::Entity
       expose :text, :documentation => { :type => "string", :desc => "Status update text." }
+      expose :links, using: Link, :documentation => { type: 'link', is_array: true }
+    end
+    
+    class Link < Grape::Entity
+      def self.entity_name 
+        'link'
+      end
+    
+      expose :href, :documentation => { :type => 'url' }
+      expose :rel, :documentation => { :type => 'string'}
     end
   end
 

@@ -7,6 +7,7 @@
 * Rewritten .gemspec and removed Jeweler - [@dblock](https://github.com/dblock).
 * Added `GrapeEntity::VERSION` - [@dblock](https://github.com/dblock).
 * Added Rubocop, Ruby-style linter - [@dblock](https://github.com/dblock).
+* Adding support for generating nested models from composed Grape Entities [@dspaeth-faber](https://github.com/dspaeth-faber)
 * Your Contribution Here
 
 ### 0.7.2 (February 6, 2014)

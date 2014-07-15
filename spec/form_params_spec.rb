@@ -97,29 +97,11 @@ describe 'Form Params' do
   it 'retrieves the documentation for group parameters' do
     get '/swagger_doc/groups.json'
 
-    JSON.parse(last_response.body).should == {
-      'apiVersion' => '0.1',
-      'swaggerVersion' => '1.2',
-      'resourcePath' => '/groups',
-      'basePath' => 'http://example.org',
-      'produces' => ['application/json'],
-      'apis' => [
-        {
-          'path' => '/groups.{format}',
-          'operations' => [
-            {
-              'notes' => '',
-              'summary' => '',
-              'nickname' => 'POST-groups---format-',
-              'method' => 'POST',
-              'parameters' => [
-                { 'paramType' => 'form', 'name' => 'required_group[required_param_1]', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false },
-                { 'paramType' => 'form', 'name' => 'required_group[required_param_2]', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false }],
-              'type' => 'void'
-            }
-          ]
-        }
-      ]
-    }
+    body = JSON.parse last_response.body
+    parameters = body['apis'].first['operations'].first['parameters']
+    parameters.should == [
+      { 'paramType' => 'form', 'name' => 'required_group[required_param_1]', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false },
+      { 'paramType' => 'form', 'name' => 'required_group[required_param_2]', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false }]
+
   end
 end

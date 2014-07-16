@@ -58,16 +58,16 @@ You can pass a hash with some configuration possibilities to ```add_swagger_docu
 * ```:authorizations``` Added to the `authorizations` key in the JSON documentation.
 * ```:include_base_url``` Add base path to the URLs, default `true`.
 * ```:root_base_path``` Add `basePath` key to the JSON documentation, default `true`.
-* ```:info``` Added to the `info` key in the JSON documentation.
 * ```:models``` Allows adds an array with the entities for build models specifications. You need to use grape-entity gem.
 * ```:hide_documentation_path``` Don't show the '/swagger_doc' path in the generated swagger documentation.
 * ```:format```
-* ```:title:``` The API title to be displayed on the API homepage.
-* ```:description:``` A description of the API.
-* ```:contact:``` Contact email.
-* ```:license:``` The name of the license.
-* ```:license_url:``` The URL of the license.
-* ```:terms_of_service_url:``` The URL of the API terms and conditions.
+* ```:info``` Added to the `info` key in the JSON documentation.  `info` is a hash that may contain:
+  * ```:title:``` The API title to be displayed on the API homepage.
+  * ```:description:``` A description of the API.
+  * ```:contact:``` Contact email.
+  * ```:license:``` The name of the license.
+  * ```:license_url:``` The URL of the license.
+  * ```:terms_of_service_url:``` The URL of the API terms and conditions.
 
 ## Swagger Header Parameters
 

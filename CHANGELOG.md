@@ -1,5 +1,6 @@
 ### Next Release
 
+* [#100](https://github.com/tim-vandecasteele/grape-swagger/pull/100): Added ability to specify a nickname for an endpoint - [@lhorne](https://github.com/lhorne).
 * [#94](https://github.com/tim-vandecasteele/grape-swagger/pull/94): Added support for namespace descriptions - [@renier](https://github.com/renier).
 * [#110](https://github.com/tim-vandecasteele/grape-swagger/pull/110), [#111](https://github.com/tim-vandecasteele/grape-swagger/pull/111) - Added `responseModel` support - [@bagilevi](https://github.com/bagilevi).
 * [#105](https://github.com/tim-vandecasteele/grape-swagger/pull/105): Fixed compatibility with Swagger-UI - [@CraigCottingham](https://github.com/CraigCottingham).

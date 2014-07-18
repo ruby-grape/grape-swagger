@@ -81,7 +81,7 @@ desc "Return super-secret information", {
       required: true
     },
     "XOptionalHeader" => {
-      description: "Not reallly needed",
+      description: "Not really needed",
       required: false
     }
   }

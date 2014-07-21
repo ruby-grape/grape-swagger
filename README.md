@@ -129,6 +129,24 @@ A hash merged into the `info` key of the JSON documentation. This may contain:
 * `:license_url`: The URL of the license.
 * `:terms_of_service_url`: The URL of the API terms and conditions.
 
+#### api_documentation
+
+Customize the Swagger API documentation route, typically contains a `desc` field. The default description is "Swagger compatible API description".
+
+``` ruby
+add_swagger_documentation \
+   api_documentation: { desc: 'Reticulated splines API swagger-compatible documentation.' }
+```
+
+#### specific_api_documentation
+
+Customize the Swagger API specific documentation route, typically contains a `desc` field. The default description is "Swagger compatible API description for specific API".
+
+``` ruby
+add_swagger_documentation \
+   specific_api_documentation: { desc: 'Reticulated splines API swagger-compatible endpoint documentation.' }
+```
+
 ## Swagger Header Parameters
 
 Swagger also supports the documentation of parameters passed in the header. Since grape's ```params[]``` doesn't return header parameters we can specify header parameters seperately in a block after the description.

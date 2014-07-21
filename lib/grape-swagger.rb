@@ -54,7 +54,9 @@ module Grape
               models: [],
               info: {},
               authorizations: nil,
-              root_base_path: true
+              root_base_path: true,
+              api_documentation: { desc: 'Swagger compatible API description' },
+              specific_api_documentation: { desc: 'Swagger compatible API description for specific API' }
             }
 
             options = defaults.merge(options)
@@ -69,6 +71,8 @@ module Grape
             authorizations   = options[:authorizations]
             root_base_path   = options[:root_base_path]
             extra_info       = options[:info]
+            api_doc          = options[:api_documentation].dup
+            specific_api_doc = options[:specific_api_documentation].dup
             @@models         = options[:models] || []
 
             @@hide_documentation_path = options[:hide_documentation_path]
@@ -79,7 +83,8 @@ module Grape
               end
             end
 
-            desc 'Swagger compatible API description'
+            desc api_doc.delete(:desc), params: api_doc.delete(:params)
+            @last_description.merge!(api_doc)
             get @@mount_path do
               header['Access-Control-Allow-Origin']   = '*'
               header['Access-Control-Request-Method'] = '*'
@@ -118,13 +123,14 @@ module Grape
               output
             end
 
-            desc 'Swagger compatible API description for specific API', params: {
+            desc specific_api_doc.delete(:desc), params: {
               'name' => {
                 desc: 'Resource name of mounted API',
                 type: 'string',
                 required: true
               }
-            }
+            }.merge(specific_api_doc.delete(:params) || {})
+            @last_description.merge!(specific_api_doc)
             get "#{@@mount_path}/:name" do
               header['Access-Control-Allow-Origin']   = '*'
               header['Access-Control-Request-Method'] = '*'

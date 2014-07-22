@@ -634,4 +634,29 @@ describe 'options: ' do
       expect(ret['apis'][0]['operations'][0]['nickname']).to eq 'getSomething'
     end
   end
+
+  context 'invalid name' do
+    subject do
+      Class.new(Grape::API) do
+        get 'hidden', hidden: true
+        add_swagger_documentation
+      end
+    end
+
+    def app
+      subject
+    end
+
+    it 'returns a 404 for an non-existent route' do
+      get '/swagger_doc/invalid.json'
+      expect(last_response.status).to eq 404
+      expect(JSON.parse(last_response.body)).to eq('error' => 'Not Found')
+    end
+
+    it 'returns a 404 for a hidden route' do
+      get '/swagger_doc/hidden.json'
+      expect(last_response.status).to eq 404
+      expect(JSON.parse(last_response.body)).to eq('error' => 'Not Found')
+    end
+  end
 end

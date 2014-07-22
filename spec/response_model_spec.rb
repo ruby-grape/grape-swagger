@@ -48,10 +48,13 @@ describe 'responseModel' do
     MyAPI::ResponseModelApi
   end
 
-  it 'should document specified models' do
+  subject do
     get '/swagger_doc/something'
-    parsed_response = JSON.parse(last_response.body)
-    parsed_response['apis'][0]['operations'][0]['responseMessages'].should eq(
+    JSON.parse(last_response.body)
+  end
+
+  it 'should document specified models' do
+    expect(subject['apis'][0]['operations'][0]['responseMessages']).to eq(
       [
         {
           'code' => 200,
@@ -65,13 +68,13 @@ describe 'responseModel' do
         }
       ]
     )
-    parsed_response['models'].keys.should include 'Error'
-    parsed_response['models']['Error'].should == {
+    expect(subject['models'].keys).to include 'Error'
+    expect(subject['models']['Error']).to eq(
       'id' => 'Error',
       'properties' => {
         'code' => { 'type' => 'string', 'description' => 'Error code' },
         'message' => { 'type' => 'string', 'description' => 'Error message' }
       }
-    }
+    )
   end
 end

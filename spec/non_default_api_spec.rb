@@ -24,20 +24,23 @@ describe 'options: ' do
       SimpleApiWithBasePath
     end
 
+    subject do
+      get '/swagger_doc/something.json'
+      JSON.parse(last_response.body)
+    end
+
     # it "retrieves the given base-path on /swagger_doc" do
     #   get '/swagger_doc.json'
     #   JSON.parse(last_response.body)["basePath"].should == SimpleApiWithBasePath::NON_DEFAULT_BASE_PATH
     # end
 
     it 'retrieves the same given base-path for mounted-api' do
-      get '/swagger_doc/something.json'
-      JSON.parse(last_response.body)['basePath'].should == SimpleApiWithBasePath::NON_DEFAULT_BASE_PATH
+      expect(subject['basePath']).to eq SimpleApiWithBasePath::NON_DEFAULT_BASE_PATH
     end
   end
 
   context 'overriding the basepath with a proc' do
     before :all do
-
       class ProcBasePathMountedApi < Grape::API
         desc 'This gets something.'
         get '/something' do
@@ -55,20 +58,23 @@ describe 'options: ' do
       SimpleApiWithProcBasePath
     end
 
+    subject do
+      get '/swagger_doc/something.json'
+      JSON.parse(last_response.body)
+    end
+
     # it "retrieves the given base-path on /swagger_doc" do
     #   get '/swagger_doc.json'
     #   JSON.parse(last_response.body)["basePath"].should == "http://example.org/some_value"
     # end
 
     it 'retrieves the same given base-path for mounted-api' do
-      get '/swagger_doc/something.json'
-      JSON.parse(last_response.body)['basePath'].should == 'http://example.org/some_value'
+      expect(subject['basePath']).to eq 'http://example.org/some_value'
     end
   end
 
   context 'relative base_path' do
     before :all do
-
       class RelativeBasePathMountedApi < Grape::API
         desc 'This gets something.'
         get '/something' do
@@ -86,6 +92,11 @@ describe 'options: ' do
       SimpleApiWithRelativeBasePath
     end
 
+    subject do
+      get '/swagger_doc/something.json'
+      JSON.parse(last_response.body)
+    end
+
     # it "retrieves the given base-path on /swagger_doc" do
     #   get '/swagger_doc.json'
     #   JSON.parse(last_response.body)["basePath"].should == "http://example.org/some_value"
@@ -93,13 +104,12 @@ describe 'options: ' do
 
     it 'retrieves the same given base-path for mounted-api' do
       get '/swagger_doc/something.json'
-      JSON.parse(last_response.body)['basePath'].should == 'http://example.org/some_value'
+      expect(subject['basePath']).to eq 'http://example.org/some_value'
     end
   end
 
   context 'overriding the version' do
     before :all do
-
       class ApiVersionMountedApi < Grape::API
         desc 'This gets something.'
         get '/something' do
@@ -121,18 +131,17 @@ describe 'options: ' do
 
     it 'retrieves the api version on /swagger_doc' do
       get '/swagger_doc.json'
-      JSON.parse(last_response.body)['apiVersion'].should == SimpleApiWithApiVersion::API_VERSION
+      expect(JSON.parse(last_response.body)['apiVersion']).to eq SimpleApiWithApiVersion::API_VERSION
     end
 
     it 'retrieves the same api version for mounted-api' do
       get '/swagger_doc/something.json'
-      JSON.parse(last_response.body)['apiVersion'].should == SimpleApiWithApiVersion::API_VERSION
+      expect(JSON.parse(last_response.body)['apiVersion']).to eq SimpleApiWithApiVersion::API_VERSION
     end
   end
 
   context 'mounting in a versioned api' do
     before :all do
-
       class SimpleApiToMountInVersionedApi < Grape::API
         desc 'This gets something.'
         get '/something' do
@@ -154,8 +163,8 @@ describe 'options: ' do
 
     it 'gets the documentation on a versioned path /v1/swagger_doc' do
       get '/v1/swagger_doc.json'
-
-      JSON.parse(last_response.body).should == {
+      expect(last_response.status).to eq 200
+      expect(JSON.parse(last_response.body)).to eq(
         'apiVersion' => '0.1',
         'swaggerVersion' => '1.2',
         'info' => {},
@@ -164,13 +173,13 @@ describe 'options: ' do
           { 'path' => '/something.{format}', 'description' => 'Operations about somethings' },
           { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
         ]
-      }
+      )
     end
 
     it 'gets the resource specific documentation on a versioned path /v1/swagger_doc/something' do
       get '/v1/swagger_doc/something.json'
-      last_response.status.should eq 200
-      JSON.parse(last_response.body).should == {
+      expect(last_response.status).to eq 200
+      expect(JSON.parse(last_response.body)).to eq(
         'apiVersion' => '0.1',
         'swaggerVersion' => '1.2',
         'basePath' => 'http://example.org',
@@ -187,9 +196,8 @@ describe 'options: ' do
             'type' => 'void'
           }]
         }]
-      }
+      )
     end
-
   end
 
   context 'overriding hiding the documentation paths' do
@@ -211,9 +219,13 @@ describe 'options: ' do
       SimpleApiWithHiddenDocumentation
     end
 
-    it "it doesn't show the documentation path on /swagger_doc" do
+    subject do
       get '/swagger_doc.json'
-      JSON.parse(last_response.body).should == {
+      JSON.parse(last_response.body)
+    end
+
+    it "it doesn't show the documentation path on /swagger_doc" do
+      expect(subject).to eq(
         'apiVersion' => '0.1',
         'swaggerVersion' => '1.2',
         'info' => {},
@@ -221,7 +233,7 @@ describe 'options: ' do
         'apis' => [
           { 'path' => '/something.{format}', 'description' => 'Operations about somethings' }
         ]
-      }
+      )
     end
   end
 
@@ -246,9 +258,13 @@ describe 'options: ' do
       PrefixedApiWithHiddenDocumentation
     end
 
-    it "it doesn't show the documentation path on /abc/swagger_doc/something.json" do
+    subject do
       get '/abc/swagger_doc/something.json'
-      JSON.parse(last_response.body).should == {
+      JSON.parse(last_response.body)
+    end
+
+    it "it doesn't show the documentation path on /abc/swagger_doc/something.json" do
+      expect(subject).to eq(
         'apiVersion' => '0.1',
         'swaggerVersion' => '1.2',
         'basePath' => 'http://example.org',
@@ -265,7 +281,7 @@ describe 'options: ' do
             'type' => 'void'
           }]
         }]
-      }
+      )
     end
 
   end
@@ -293,10 +309,13 @@ describe 'options: ' do
       PrefixedAndVersionedApiWithHiddenDocumentation
     end
 
-    it "it doesn't show the documentation path on /abc/v1/swagger_doc/something.json" do
+    subject do
       get '/abc/v20/swagger_doc/something.json'
+      JSON.parse(last_response.body)
+    end
 
-      JSON.parse(last_response.body).should == {
+    it "it doesn't show the documentation path on /abc/v1/swagger_doc/something.json" do
+      expect(subject).to eq(
         'apiVersion' => 'v20',
         'swaggerVersion' => '1.2',
         'basePath' => 'http://example.org',
@@ -314,7 +333,7 @@ describe 'options: ' do
             'type' => 'void'
           }]
         }]
-      }
+      )
     end
 
   end
@@ -350,22 +369,20 @@ describe 'options: ' do
     it 'retrieves the same given base-path for mounted-api' do
       get '/api_doc/something.json'
       JSON.parse(last_response.body)['apis'].each do |api|
-        api['path'].should_not start_with SimpleApiWithDifferentMount::MOUNT_PATH
+        expect(api['path']).to_not start_with SimpleApiWithDifferentMount::MOUNT_PATH
       end
     end
 
     it 'does not respond to swagger_doc' do
       get '/swagger_doc.json'
-      last_response.status.should be == 404
+      expect(last_response.status).to eq 404
     end
   end
 
   context 'overriding the markdown' do
     before :all do
       class MarkDownMountedApi < Grape::API
-        desc 'This gets something.',
-             notes: '_test_'
-
+        desc 'This gets something.', notes: '_test_'
         get '/something' do
           { bla: 'something' }
         end
@@ -383,12 +400,12 @@ describe 'options: ' do
 
     it 'parses markdown for a mounted-api' do
       get '/swagger_doc/something.json'
-      JSON.parse(last_response.body)['apis'][0]['operations'][0]['notes'].should eq("<p><em>test</em></p>\n")
+      expect(JSON.parse(last_response.body)['apis'][0]['operations'][0]['notes']).to eq("<p><em>test</em></p>\n")
     end
 
     it 'parses markdown for swagger info' do
       get '/swagger_doc.json'
-      JSON.parse(last_response.body)['info'].should eq('description' => "<p><em>test</em></p>\n")
+      expect(JSON.parse(last_response.body)['info']).to eq('description' => "<p><em>test</em></p>\n")
     end
   end
 
@@ -418,7 +435,7 @@ describe 'options: ' do
       get '/swagger_doc/something.json'
 
       JSON.parse(last_response.body)['apis'].each do |api|
-        api['path'].should start_with '/api/v1/'
+        expect(api['path']).to start_with '/api/v1/'
       end
     end
   end
@@ -449,7 +466,7 @@ describe 'options: ' do
 
     it 'uses https schema in endpoint doc' do
       get '/swagger_doc/something.json', {}, 'rack.url_scheme' => 'https'
-      JSON.parse(last_response.body)['basePath'].should == 'https://example.org:80'
+      expect(JSON.parse(last_response.body)['basePath']).to eq 'https://example.org:80'
     end
   end
 
@@ -475,7 +492,7 @@ describe 'options: ' do
     it 'has no formats' do
       get '/swagger_doc/something.json'
       JSON.parse(last_response.body)['apis'].each do |api|
-        api['path'].should_not end_with '.{format}'
+        expect(api['path']).to_not end_with '.{format}'
       end
     end
   end
@@ -512,7 +529,7 @@ describe 'options: ' do
 
     it 'retrieves the first swagger-documentation on /first/swagger_doc' do
       get '/first/swagger_doc.json'
-      JSON.parse(last_response.body).should == {
+      expect(JSON.parse(last_response.body)).to eq(
         'apiVersion' => '0.1',
         'swaggerVersion' => '1.2',
         'info' => {},
@@ -520,12 +537,12 @@ describe 'options: ' do
         'apis' => [
           { 'path' => '/first.{format}', 'description' => 'Operations about firsts' }
         ]
-      }
+      )
     end
 
     it 'retrieves the second swagger-documentation on /second/swagger_doc' do
       get '/second/swagger_doc.json'
-      JSON.parse(last_response.body).should == {
+      expect(JSON.parse(last_response.body)).to eq(
         'apiVersion' => '0.1',
         'swaggerVersion' => '1.2',
         'info' => {},
@@ -533,7 +550,7 @@ describe 'options: ' do
         'apis' => [
           { 'path' => '/second.{format}', 'description' => 'Operations about seconds' }
         ]
-      }
+      )
     end
   end
 
@@ -556,10 +573,15 @@ describe 'options: ' do
       SimpleJSONFormattedAPI
     end
 
+    subject do
+      get '/swagger_doc/something'
+      last_response
+    end
+
     it 'defaults to JSON format when none is specified' do
       get '/swagger_doc/something'
-
-      -> { JSON.parse(last_response.body) }.should_not raise_error
+      expect(subject.headers['Content-Type']).to eq 'application/json'
+      expect(-> { JSON.parse(subject.body) }).to_not raise_error
     end
 
   end
@@ -609,7 +631,7 @@ describe 'options: ' do
     it 'documents the user-specified nickname' do
       get '/swagger_doc/something.json'
       ret = JSON.parse(last_response.body)
-      ret['apis'][0]['operations'][0]['nickname'].should == 'getSomething'
+      expect(ret['apis'][0]['operations'][0]['nickname']).to eq 'getSomething'
     end
   end
 end

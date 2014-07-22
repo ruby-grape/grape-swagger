@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake'
   s.add_development_dependency 'shoulda'
   s.add_development_dependency 'rdoc'
-  s.add_development_dependency 'rspec', '~> 2.9'
+  s.add_development_dependency 'rspec', '~> 3.0'
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'rack-test'
   s.add_development_dependency 'rubocop', '0.24.1'

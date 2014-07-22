@@ -68,7 +68,7 @@ describe 'a simple mounted api' do
 
   it 'retrieves swagger-documentation on /swagger_doc' do
     get '/swagger_doc.json'
-    JSON.parse(last_response.body).should == {
+    expect(JSON.parse(last_response.body)).to eq(
       'apiVersion' => '0.1',
       'swaggerVersion' => '1.2',
       'info' => {},
@@ -81,12 +81,12 @@ describe 'a simple mounted api' do
         { 'path' => '/custom.{format}', 'description' => 'Operations about customs' },
         { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
       ]
-    }
+    )
   end
 
   it 'retrieves the documentation for mounted-api' do
     get '/swagger_doc/simple.json'
-    JSON.parse(last_response.body).should == {
+    expect(JSON.parse(last_response.body)).to eq(
       'apiVersion' => '0.1',
       'swaggerVersion' => '1.2',
       'basePath' => 'http://example.org',
@@ -103,13 +103,13 @@ describe 'a simple mounted api' do
           'type' => 'void'
         }]
       }]
-    }
+    )
   end
 
   context 'retrieves the documentation for mounted-api that' do
     it "contains '-' in URL" do
       get '/swagger_doc/simple-test.json'
-      JSON.parse(last_response.body).should == {
+      expect(JSON.parse(last_response.body)).to eq(
         'apiVersion' => '0.1',
         'swaggerVersion' => '1.2',
         'basePath' => 'http://example.org',
@@ -126,12 +126,12 @@ describe 'a simple mounted api' do
             'type' => 'void'
           }]
         }]
-      }
+      )
     end
 
     it 'includes headers' do
       get '/swagger_doc/simple_with_headers.json'
-      JSON.parse(last_response.body)['apis'].should == [{
+      expect(JSON.parse(last_response.body)['apis']).to eq [{
         'path' => '/simple_with_headers.{format}',
         'operations' => [{
           'notes' => '',
@@ -153,7 +153,7 @@ describe 'a simple mounted api' do
 
     it 'supports multiple parameters' do
       get '/swagger_doc/items.json'
-      JSON.parse(last_response.body)['apis'].should == [{
+      expect(JSON.parse(last_response.body)['apis']).to eq [{
         'path' => '/items.{format}',
         'operations' => [{
           'notes' => '',
@@ -168,7 +168,7 @@ describe 'a simple mounted api' do
 
     it 'supports custom types' do
       get '/swagger_doc/custom.json'
-      JSON.parse(last_response.body)['apis'].should == [{
+      expect(JSON.parse(last_response.body)['apis']).to eq [{
         'path' => '/custom.{format}',
         'operations' => [{
           'notes' => '',
@@ -180,7 +180,5 @@ describe 'a simple mounted api' do
         }]
       }]
     end
-
   end
-
 end

@@ -38,134 +38,76 @@ describe 'API Models' do
         expose :part, using: Entities::ComposedOfElse, documentation: { type: 'composes' }
       end
     end
+  end
 
-    class ModelsApi < Grape::API
+  def app
+    Class.new(Grape::API) do
       format :json
-      desc 'This gets something.',
-           entity: Entities::Something
+      desc 'This gets something.', entity: Entities::Something
 
       get '/something' do
         something = OpenStruct.new text: 'something'
         present something, with: Entities::Something
       end
 
-      desc 'This gets thing.',
-           entity: Entities::Some::Thing
-
+      desc 'This gets thing.', entity: Entities::Some::Thing
       get '/thing' do
         thing = OpenStruct.new text: 'thing'
         present thing, with: Entities::Some::Thing
       end
 
-      desc 'This gets somthing else.',
-           entity: Entities::SomeThingElse
+      desc 'This gets somthing else.', entity: Entities::SomeThingElse
       get '/somethingelse' do
         part = OpenStruct.new part_text: 'part thing'
         thing = OpenStruct.new else_text: 'else thing', parts: [part], part: part
 
         present thing, with: Entities::SomeThingElse
       end
+
       add_swagger_documentation
     end
   end
 
-  def app
-    ModelsApi
+  context 'swagger_doc' do
+    subject do
+      get '/swagger_doc'
+      JSON.parse(last_response.body)
+    end
+
+    it 'returns a swagger-compatible doc' do
+      expect(subject).to include(
+        'apiVersion' => '0.1',
+        'swaggerVersion' => '1.2',
+        'info' => {},
+        'produces' => ['application/json']
+      )
+    end
+
+    it 'documents apis' do
+      expect(subject['apis']).to eq [
+        { 'path' => '/something.{format}', 'description' => 'Operations about somethings' },
+        { 'path' => '/thing.{format}', 'description' => 'Operations about things' },
+        { 'path' => '/somethingelse.{format}', 'description' => 'Operations about somethingelses' },
+        { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
+      ]
+    end
   end
 
-  it 'should document specified models' do
-    get '/swagger_doc'
-    result = JSON.parse(last_response.body)
-
-    expect(result).to include('apiVersion' => '0.1',
-                              'swaggerVersion' => '1.2',
-                              'info' => {},
-                              'produces' => ['application/json'])
-
-    expect(result['apis']).to eq [
-      { 'path' => '/something.{format}', 'description' => 'Operations about somethings' },
-      { 'path' => '/thing.{format}', 'description' => 'Operations about things' },
-      { 'path' => '/somethingelse.{format}',
-        'description' => 'Operations about somethingelses' },
-      { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
-    ]
-  end
-
-  it 'should include type when specified' do
+  it 'returns type' do
     get '/swagger_doc/something.json'
-    JSON.parse(last_response.body).should == {
-      'apiVersion' => '0.1',
-      'swaggerVersion' => '1.2',
-      'basePath' => 'http://example.org',
-      'resourcePath' => '/something',
-      'produces' => ['application/json'],
-      'apis' => [{
-        'path' => '/something.{format}',
-        'operations' => [{
-          'notes' => '',
-          'type' => 'Something',
-          'summary' => 'This gets something.',
-          'nickname' => 'GET-something---format-',
-          'method' => 'GET',
-          'parameters' => []
-        }]
-      }],
-      'models' => {
-        'Something' => {
-          'id' => 'Something',
-          'properties' => {
-            'text' => {
-              'type' => 'string',
-              'description' => 'Content of something.'
-            }
-          }
-        }
-      }
-    }
+    result = JSON.parse(last_response.body)
+    expect(result['apis'].first['operations'].first['type']).to eq 'Something'
   end
 
-  it 'should include nested type when specified' do
+  it 'includes nested type' do
     get '/swagger_doc/thing.json'
-    JSON.parse(last_response.body).should == {
-      'apiVersion' => '0.1',
-      'swaggerVersion' => '1.2',
-      'basePath' => 'http://example.org',
-      'resourcePath' => '/thing',
-      'produces' => ['application/json'],
-      'apis' => [{
-        'path' => '/thing.{format}',
-        'operations' => [{
-          'notes' => '',
-          'type' => 'Some::Thing',
-          'summary' => 'This gets thing.',
-          'nickname' => 'GET-thing---format-',
-          'method' => 'GET',
-          'parameters' => []
-        }]
-      }],
-      'models' => {
-        'Some::Thing' => {
-          'id' => 'Some::Thing',
-          'properties' => {
-            'text' => {
-              'type' => 'string',
-              'description' => 'Content of something.'
-            }
-          }
-        }
-      }
-    }
+    result = JSON.parse(last_response.body)
+    expect(result['apis'].first['operations'].first['type']).to eq 'Some::Thing'
   end
 
-  it 'should include entities which are only used as composition' do
+  it 'includes entities which are only used as composition' do
     get '/swagger_doc/somethingelse.json'
     result = JSON.parse(last_response.body)
-
-    expect(result).to include('apiVersion' => '0.1',
-                              'swaggerVersion' => '1.2',
-                              'basePath' => 'http://example.org',
-                              'resourcePath' => '/somethingelse')
-
     expect(result['apis']).to eq([{
                                    'path' => '/somethingelse.{format}',
                                    'operations' => [{
@@ -215,5 +157,4 @@ describe 'API Models' do
                                                       }
                                                     )
   end
-
 end

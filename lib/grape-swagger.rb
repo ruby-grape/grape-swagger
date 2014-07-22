@@ -131,10 +131,13 @@ module Grape
 
               models = []
               routes = target_class.combined_routes[params[:name]]
+              error!('Not Found', 404) unless routes
 
               ops = routes.reject(&:route_hidden).group_by do |route|
                 parse_path(route.route_path, api_version)
               end
+
+              error!('Not Found', 404) unless ops.any?
 
               apis = []
 

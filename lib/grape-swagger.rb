@@ -147,11 +147,9 @@ module Grape
 
                   http_codes  = parse_http_codes(route.route_http_codes, models)
 
-                  models << if @@models.present?
-                              @@models
-                            elsif route.route_entity.present?
-                              route.route_entity
-                            end
+                  models << @@models if @@models.present?
+
+                  models << route.route_entity if route.route_entity.present?
 
                   models = models_with_included_presenters(models.flatten.compact)
 

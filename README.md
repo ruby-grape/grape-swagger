@@ -310,11 +310,12 @@ desc "Reserve a virgin in heaven", {
 }
 ```
 
-You can also document the HTTP status codes that your API returns with the following syntax.
+You can also document the HTTP status codes with a description and a specified model that your API returns with the following syntax.
 
 ``` ruby
 get '/', http_codes: [
-  [400, "Invalid parameter entry"],
+  [200, 'Ok', Entities::Client],
+  [400, "Invalid parameter entry"]
 ] do
   ...
 end

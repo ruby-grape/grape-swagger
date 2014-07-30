@@ -15,7 +15,7 @@ describe 'Form Params' do
       params do
         requires :id, type: Integer, desc: 'id of item'
         requires :name, type: String, desc: 'name of item'
-        requires :conditions, type: Integer, desc: 'conditions of item', values: [1,2,3]
+        requires :conditions, type: Integer, desc: 'conditions of item', values: [1, 2, 3]
       end
       put '/items/:id' do
         {}
@@ -24,7 +24,7 @@ describe 'Form Params' do
       params do
         requires :id, type: Integer, desc: 'id of item'
         requires :name, type: String, desc: 'name of item'
-        optional :conditions, type: String, desc: 'conditions of item', values: Proc.new {['1','2']}
+        optional :conditions, type: String, desc: 'conditions of item', values: proc { %w(1 2) }
       end
       patch '/items/:id' do
         {}
@@ -63,9 +63,9 @@ describe 'Form Params' do
             'nickname' => 'PUT-items--id---format-',
             'method' => 'PUT',
             'parameters' => [
-                { 'paramType' => 'path', 'name' => 'id', 'description' => 'id of item', 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32' },
-                { 'paramType' => 'form', 'name' => 'name', 'description' => 'name of item', 'type' => 'string', 'required' => true, 'allowMultiple' => false },
-                { 'paramType' => 'form', 'name' => 'conditions', 'description' => 'conditions of item', 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32', 'enum' => [1,2,3] }
+              { 'paramType' => 'path', 'name' => 'id', 'description' => 'id of item', 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32' },
+              { 'paramType' => 'form', 'name' => 'name', 'description' => 'name of item', 'type' => 'string', 'required' => true, 'allowMultiple' => false },
+              { 'paramType' => 'form', 'name' => 'conditions', 'description' => 'conditions of item', 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32', 'enum' => [1, 2, 3] }
             ],
             'type' => 'void'
           },
@@ -75,9 +75,9 @@ describe 'Form Params' do
             'nickname' => 'PATCH-items--id---format-',
             'method' => 'PATCH',
             'parameters' => [
-                { 'paramType' => 'path', 'name' => 'id', 'description' => 'id of item', 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32' },
-                { 'paramType' => 'form', 'name' => 'name', 'description' => 'name of item', 'type' => 'string', 'required' => true, 'allowMultiple' => false },
-                { 'paramType' => 'form', 'name' => 'conditions', 'description' => 'conditions of item', 'type' => 'string', 'required' => false, 'allowMultiple' => false, 'enum' => ['1','2'] }
+              { 'paramType' => 'path', 'name' => 'id', 'description' => 'id of item', 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32' },
+              { 'paramType' => 'form', 'name' => 'name', 'description' => 'name of item', 'type' => 'string', 'required' => true, 'allowMultiple' => false },
+              { 'paramType' => 'form', 'name' => 'conditions', 'description' => 'conditions of item', 'type' => 'string', 'required' => false, 'allowMultiple' => false, 'enum' => %w(1 2) }
             ],
             'type' => 'void'
           }

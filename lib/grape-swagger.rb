@@ -240,10 +240,9 @@ module Grape
                 required      = value.is_a?(Hash) ? !!value[:required] : false
                 default_value = value.is_a?(Hash) ? value[:default] : nil
                 is_array      = value.is_a?(Hash) ? (value[:is_array] || false) : false
-                enum_values        = value.is_a?(Hash) ? value[:values] : nil
-                if enum_values && enum_values.is_a?(Proc)
-                  enum_values = enum_values.call
-                end
+                enum_values   = value.is_a?(Hash) ? value[:values] : nil
+                enum_values   = enum_values.call if enum_values && enum_values.is_a?(Proc)
+
                 if value.is_a?(Hash) && value.key?(:param_type)
                   param_type  = value[:param_type]
                   if is_array
@@ -377,7 +376,15 @@ module Grape
                   property_description = p.delete(:desc)
                   p[:description] = property_description if property_description
 
+                  # rename Grape's 'values' to 'enum'
+                  select_values = p.delete(:values)
+                  if select_values
+                    select_values = select_values.call if select_values.is_a?(Proc)
+                    p[:enum] = select_values
+                  end
+
                   properties[property_name] = p
+
                 end
 
                 result[name] = {

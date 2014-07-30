@@ -13,6 +13,7 @@
 * [#126](https://github.com/tim-vandecasteele/grape-swagger/pull/126): Rewritten demo in the `test` folder with CORS enabled - [@dblock](https://github.com/dblock).
 * [#127](https://github.com/tim-vandecasteele/grape-swagger/pull/127): Fixed `undefined method 'reject' for nil:NilClass` error for an invalid route, now returning 404 Not Found - [@dblock](https://github.com/dblock).
 * [#128](https://github.com/tim-vandecasteele/grape-swagger/pull/128): Combine global models and endpoint entities - [@dspaeth-faber](https://github.com/dspaeth-faber).
+* Added support for values in form parameters - [@Antek-drzewiecki](https://github.com/Antek-drzewiecki)
 * Your Contribution Here
 
 ### 0.7.2 (February 6, 2014)

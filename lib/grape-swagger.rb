@@ -240,6 +240,10 @@ module Grape
                 required      = value.is_a?(Hash) ? !!value[:required] : false
                 default_value = value.is_a?(Hash) ? value[:default] : nil
                 is_array      = value.is_a?(Hash) ? (value[:is_array] || false) : false
+                enum_values        = value.is_a?(Hash) ? value[:values] : nil
+                if enum_values && enum_values.is_a?(Proc)
+                  enum_values = enum_values.call
+                end
                 if value.is_a?(Hash) && value.key?(:param_type)
                   param_type  = value[:param_type]
                   if is_array
@@ -274,7 +278,7 @@ module Grape
                 parsed_params.merge!(format: 'int64') if data_type == 'long'
                 parsed_params.merge!(items: items) if items.present?
                 parsed_params.merge!(defaultValue: default_value) if default_value
-
+                parsed_params.merge!(enum: enum_values) if enum_values
                 parsed_params
               end
             end

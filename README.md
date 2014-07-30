@@ -194,6 +194,7 @@ module API
     class Status < Grape::Entity
       expose :text, documentation: { type: 'string', desc: 'Status update text.' }
       expose :links, using: Link, documentation: { type: 'link', is_array: true }
+      expose :numbers, documentation: { type: 'integer', desc: 'favourite number', values: [1,2,3,4] }
     end
 
     class Link < Grape::Entity
@@ -214,6 +215,11 @@ module API
       statuses = Status.all
       type = current_user.admin? ? :full : :default
       present statuses, with: API::Entities::Status, type: type
+    end
+    
+    desc 'Creates a new status', entity: API::Entities::Status, params: API::Entities::Status.documentation
+    post '/statuses' do
+        ...
     end
   end
 end

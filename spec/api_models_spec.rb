@@ -10,6 +10,13 @@ describe 'API Models' do
     end
 
     module Entities
+      class EnumValues < Grape::Entity
+        expose :gender, documentation: { type: 'string', desc: 'Content of something.', values: %w(Male Female) }
+        expose :number, documentation: { type: 'integer', desc: 'Content of something.', values: proc { [1, 2] } }
+      end
+    end
+
+    module Entities
       module Some
         class Thing < Grape::Entity
           expose :text, documentation: { type: 'string', desc: 'Content of something.' }
@@ -64,6 +71,14 @@ describe 'API Models' do
         present thing, with: Entities::SomeThingElse
       end
 
+      desc 'This tests the enum values in params and documentation.', entity: Entities::EnumValues, params: Entities::EnumValues.documentation
+      get '/enum_description_in_entity' do
+
+        enum_value = OpenStruct.new gender: 'Male', number: 1
+
+        present enum_value, with: Entities::EnumValues
+      end
+
       add_swagger_documentation
     end
   end
@@ -88,6 +103,7 @@ describe 'API Models' do
         { 'path' => '/something.{format}', 'description' => 'Operations about somethings' },
         { 'path' => '/thing.{format}', 'description' => 'Operations about things' },
         { 'path' => '/somethingelse.{format}', 'description' => 'Operations about somethingelses' },
+        { 'path' => '/enum_description_in_entity.{format}', 'description' => 'Operations about enum_description_in_entities' },
         { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
       ]
     end
@@ -156,5 +172,27 @@ describe 'API Models' do
 
                                                       }
                                                     )
+  end
+
+  it 'includes enum values in params and documentation.' do
+    get '/swagger_doc/enum_description_in_entity.json'
+    result = JSON.parse(last_response.body)
+    expect(result['models']['EnumValues']).to eq(
+                                                  'id' => 'EnumValues',
+                                                  'properties' => {
+                                                    'gender' => { 'type' => 'string', 'description' => 'Content of something.', 'enum' => %w(Male Female) },
+                                                    'number' => { 'type' => 'integer', 'description' => 'Content of something.', 'enum' => [1, 2] }
+                                                  }
+                                              )
+
+    expect(result['apis'][0]['operations'][0]).to include(
+                                                      'parameters' =>
+                                                         [
+                                                           { 'paramType' => 'query', 'name' => 'gender', 'description' => 'Content of something.', 'type' => 'string', 'required' => false, 'allowMultiple' => false, 'enum' => %w(Male Female) },
+                                                           { 'paramType' => 'query', 'name' => 'number', 'description' => 'Content of something.', 'type' => 'integer', 'required' => false, 'allowMultiple' => false, 'format' => 'int32', 'enum' => [1, 2] }
+                                                         ],
+                                                      'type' => 'EnumValues'
+                                                  )
+
   end
 end

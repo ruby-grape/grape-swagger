@@ -98,10 +98,6 @@ Base path of the API that's being exposed. This configuration parameter accepts 
 
 This value is added to the `authorizations` key in the JSON documentation.
 
-#### include_base_url
-
-Add base path to the URLs, default is `true`.
-
 #### root_base_path
 
 Add `basePath` key to the JSON documentation, default is `true`.

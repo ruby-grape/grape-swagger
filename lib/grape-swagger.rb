@@ -401,15 +401,10 @@ module Grape
               all_models = models
 
               models.each do |model|
-                properties = model.exposures
-                documented_properties = {}
-
-                model.documentation.keys.each_with_object(documented_properties) do |k, hash|
-                  hash[k] = properties[k] if properties.key?(k)
-                end
-
-                properties_configuration = documented_properties.values
-                additional_models = properties_configuration.map { |config| config[:using] }.compact
+                # get model references from exposures with a documentation
+                additional_models = model.exposures.map do |_, config|
+                  config[:using] if config.key?(:documentation)
+                end.compact
 
                 all_models += additional_models
               end

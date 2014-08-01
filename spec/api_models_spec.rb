@@ -45,6 +45,12 @@ describe 'API Models' do
         expose :part, using: Entities::ComposedOfElse, documentation: { type: 'composes' }
       end
     end
+
+    module Entities
+      class AliasedThing < Grape::Entity
+        expose :something, as: :post, using: Entities::Something, documentation: { type: 'Something', desc: 'Reference to something.' }
+      end
+    end
   end
 
   def app
@@ -79,6 +85,12 @@ describe 'API Models' do
         present enum_value, with: Entities::EnumValues
       end
 
+      desc 'This gets an aliased thing.', entity: Entities::AliasedThing
+      get '/aliasedthing' do
+        something = OpenStruct.new(something: OpenStruct.new(text: 'something'))
+        present something, with: Entities::AliasedThing
+      end
+
       add_swagger_documentation
     end
   end
@@ -104,6 +116,7 @@ describe 'API Models' do
         { 'path' => '/thing.{format}', 'description' => 'Operations about things' },
         { 'path' => '/somethingelse.{format}', 'description' => 'Operations about somethingelses' },
         { 'path' => '/enum_description_in_entity.{format}', 'description' => 'Operations about enum_description_in_entities' },
+        { 'path' => '/aliasedthing.{format}', 'description' => 'Operations about aliasedthings' },
         { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
       ]
     end
@@ -194,5 +207,23 @@ describe 'API Models' do
                                                       'type' => 'EnumValues'
                                                   )
 
+  end
+
+  it 'includes referenced models in those with aliased references.' do
+    get '/swagger_doc/aliasedthing.json'
+    result = JSON.parse(last_response.body)
+    expect(result['models']['AliasedThing']).to eq(
+                                                    'id' => 'AliasedThing',
+                                                    'properties' => {
+                                                      'post' => { '$ref' => 'Something', 'description' => 'Reference to something.' }
+                                                    }
+                                                )
+
+    expect(result['models']['Something']).to eq(
+                                                 'id' => 'Something',
+                                                 'properties' => {
+                                                   'text' => { 'type' => 'string', 'description' => 'Content of something.' }
+                                                 }
+                                             )
   end
 end

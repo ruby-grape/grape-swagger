@@ -14,7 +14,7 @@
 * [#127](https://github.com/tim-vandecasteele/grape-swagger/pull/127): Fixed `undefined method 'reject' for nil:NilClass` error for an invalid route, now returning 404 Not Found - [@dblock](https://github.com/dblock).
 * [#128](https://github.com/tim-vandecasteele/grape-swagger/pull/128): Combine global models and endpoint entities - [@dspaeth-faber](https://github.com/dspaeth-faber).
 * [#132](https://github.com/tim-vandecasteele/grape-swagger/pull/132): Addes support for enum values in entity documentation and form parameters - [@Antek-drzewiecki](https://github.com/Antek-drzewiecki).
-* Fixed model inclusion in models with aliased references - [@cdarne](https://github.com/cdarne).
+* [#135](https://github.com/tim-vandecasteele/grape-swagger/pull/135): Fixed model inclusion in models with aliased references - [@cdarne](https://github.com/cdarne).
 * Your Contribution Here
 
 ### 0.7.2 (February 6, 2014)

@@ -25,13 +25,19 @@ module Grape
         end
 
         @combined_namespaces = {}
-        endpoints.each do |endpoint|
-          ns = endpoint.settings.stack.last[:namespace]
-          @combined_namespaces[ns.space] = ns if ns
-        end
+        combine_namespaces(self)
       end
 
       private
+
+      def combine_namespaces(app)
+        app.endpoints.each do |endpoint|
+          ns = endpoint.settings.stack.last[:namespace]
+          @combined_namespaces[ns.space] = ns if ns
+
+          combine_namespaces(endpoint.options[:app]) if endpoint.options[:app]
+        end
+      end
 
       def create_documentation_class
         Class.new(Grape::API) do

@@ -583,7 +583,6 @@ describe 'options: ' do
       expect(subject.headers['Content-Type']).to eq 'application/json'
       expect(-> { JSON.parse(subject.body) }).to_not raise_error
     end
-
   end
 
   context 'documented namespace description' do

@@ -588,6 +588,15 @@ describe 'options: ' do
 
   context 'documented namespace description' do
     before :all do
+      class NestedNamespaceWithDescAPI < Grape::API
+        namespace :nestedspace, desc: 'Description for nested space' do
+          desc 'Nested get'
+          get '/somethingelse' do
+            { foo: 'bar' }
+          end
+        end
+      end
+
       class NamespaceWithDescAPI < Grape::API
         namespace :aspace, desc: 'Description for aspace' do
           desc 'This gets something.'
@@ -595,6 +604,9 @@ describe 'options: ' do
             { bla: 'something' }
           end
         end
+
+        mount NestedNamespaceWithDescAPI
+
         add_swagger_documentation format: :json
       end
       get '/swagger_doc'
@@ -605,11 +617,15 @@ describe 'options: ' do
     end
 
     subject do
-      JSON.parse(last_response.body)['apis'][0]
+      JSON.parse(last_response.body)['apis']
     end
 
     it 'shows the namespace description in the json spec' do
-      expect(subject['description']).to eql('Description for aspace')
+      expect(subject[0]['description']).to eql('Description for aspace')
+    end
+
+    it 'shows the nested namespace description in the json spec' do
+      expect(subject[1]['description']).to eql('Description for nested space')
     end
   end
 

@@ -46,6 +46,44 @@ describe 'helpers' do
       ]
     end
 
+    it 'parses file param' do
+      params = {
+        rack: {
+          type: 'Rack::Multipart::UploadedFile',
+          desc: 'rack file',
+          datafile: 'content',
+          required: true
+        },
+        rails: {
+          type: 'Hash',
+          desc: 'rails file',
+          datafile: 'content',
+          required: true
+        }
+      }
+      path = '/coolness'
+      method = 'POST'
+      expect(subject.parse_params(params, path, method)).to eq [
+        {
+          paramType: 'body',
+          name: :rack,
+          description: 'rack file',
+          type: 'File',
+          required: true,
+          allowMultiple: false
+        },
+        {
+          paramType: 'body',
+          name: :rails,
+          description: 'rails file',
+          type: 'File',
+          required: true,
+          allowMultiple: false
+        }
+      ]
+
+    end
+
     context 'custom type' do
       before :all do
         class CustomType

@@ -46,14 +46,14 @@ class Api < Grape::API
       @@splines.values
     end
 
-    #TEST api for testing uploading
-    #curl --form file=@splines.png http://localhost:9292/splines/upload
+    # TEST api for testing uploading
+    # curl --form file=@splines.png http://localhost:9292/splines/upload
     desc 'Update image'
-    post "upload" do
+    post 'upload' do
       filename = params[:file][:filename]
-      content_type "application/octet-stream"
+      content_type 'application/octet-stream'
       env['api.format'] = :binary # there's no formatter for :binary, data will be returned "as is"
-      header "Content-Disposition", "attachment; filename*=UTF-8''#{URI.escape(filename)}"
+      header 'Content-Disposition', "attachment; filename*=UTF-8''#{URI.escape(filename)}"
       params[:file][:tempfile].read
     end
   end

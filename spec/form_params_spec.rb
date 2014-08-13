@@ -40,7 +40,6 @@ describe 'Form Params' do
   end
 
   it 'retrieves the documentation form params' do
-    puts subject['apis']
     expect(subject['apis']).to eq([
       {
         'path' => '/items.{format}',

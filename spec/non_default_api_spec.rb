@@ -390,7 +390,7 @@ describe 'options: ' do
 
       class SimpleApiWithMarkdown < Grape::API
         mount MarkDownMountedApi
-        add_swagger_documentation markdown: true, info: { description: '_test_' }
+        add_swagger_documentation markdown: GrapeSwagger::Markdown::KramdownAdapter.new, info: { description: '_test_' }
       end
     end
 

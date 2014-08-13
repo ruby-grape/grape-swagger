@@ -1,5 +1,8 @@
-require 'kramdown'
 require 'grape-swagger/version'
+require 'grape-swagger/errors'
+require 'grape-swagger/markdown'
+require 'grape-swagger/markdown/kramdown_adapter'
+require 'grape-swagger/markdown/redcarpet_adapter'
 
 module Grape
   class API
@@ -53,7 +56,7 @@ module Grape
               mount_path: '/swagger_doc',
               base_path: nil,
               api_version: '0.1',
-              markdown: false,
+              markdown: nil,
               hide_documentation_path: false,
               hide_format: false,
               format: nil,
@@ -70,7 +73,7 @@ module Grape
             target_class     = options[:target_class]
             @@mount_path     = options[:mount_path]
             @@class_name     = options[:class_name] || options[:mount_path].gsub('/', '')
-            @@markdown       = options[:markdown]
+            @@markdown       = options[:markdown] ? GrapeSwagger::Markdown.new(options[:markdown]) : nil
             @@hide_format    = options[:hide_format]
             api_version      = options[:api_version]
             base_path        = options[:base_path]
@@ -220,7 +223,7 @@ module Grape
           helpers do
 
             def as_markdown(description)
-              description && @@markdown ? Kramdown::Document.new(strip_heredoc(description), input: 'GFM', enable_coderay: false).to_html : description
+              description && @@markdown ? @@markdown.as_markdown(strip_heredoc(description)) : description
             end
 
             def parse_params(params, path, method)

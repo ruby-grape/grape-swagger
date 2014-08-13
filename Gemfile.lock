@@ -4,7 +4,6 @@ PATH
     grape-swagger (0.7.2)
       grape
       grape-entity
-      kramdown
 
 GEM
   remote: http://rubygems.org/
@@ -44,7 +43,7 @@ GEM
     i18n (0.6.11)
     ice_nine (0.11.0)
     json (1.8.1)
-    kramdown (1.4.0)
+    kramdown (1.4.1)
     minitest (5.4.0)
     multi_json (1.10.1)
     multi_xml (0.5.5)
@@ -64,6 +63,8 @@ GEM
     rake (10.3.2)
     rdoc (4.1.1)
       json (~> 1.4)
+    redcarpet (3.1.2)
+    rouge (1.6.1)
     rspec (3.0.0)
       rspec-core (~> 3.0.0)
       rspec-expectations (~> 3.0.0)
@@ -93,11 +94,11 @@ GEM
     thread_safe (0.3.4)
     tzinfo (1.2.1)
       thread_safe (~> 0.1)
-    virtus (1.0.2)
+    virtus (1.0.3)
       axiom-types (~> 0.1)
       coercible (~> 1.0)
-      descendants_tracker (~> 0.0.3)
-      equalizer (~> 0.0.9)
+      descendants_tracker (~> 0.0, >= 0.0.3)
+      equalizer (~> 0.0, >= 0.0.9)
 
 PLATFORMS
   ruby
@@ -105,10 +106,13 @@ PLATFORMS
 DEPENDENCIES
   bundler
   grape-swagger!
+  kramdown (~> 1.4.1)
   rack-cors
   rack-test
   rake
   rdoc
+  redcarpet (~> 3.1.2)
+  rouge (~> 1.6.1)
   rspec (~> 3.0)
   rubocop (= 0.24.1)
   shoulda

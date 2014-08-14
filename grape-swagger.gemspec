@@ -13,7 +13,6 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'grape'
   s.add_runtime_dependency 'grape-entity'
-  s.add_runtime_dependency 'kramdown'
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'shoulda'
@@ -23,6 +22,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rack-test'
   s.add_development_dependency 'rack-cors'
   s.add_development_dependency 'rubocop', '0.24.1'
+  s.add_development_dependency 'kramdown', '~> 1.4.1'
+  s.add_development_dependency 'redcarpet', '~> 3.1.2' unless RUBY_PLATFORM.eql? 'java'
+  s.add_development_dependency 'rouge', '~> 1.6.1'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec}/*`.split("\n")

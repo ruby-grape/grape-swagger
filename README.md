@@ -80,7 +80,7 @@ API class name.
 
 #### markdown
 
-Allow markdown in `notes`, default is `false`. See below for details.
+Allow markdown in `notes`, default is `nil`. (disabled) See below for details.
 
 #### hide_format
 
@@ -285,11 +285,28 @@ end
 
 ## Markdown in Notes
 
-The grape-swagger gem allows you to add an explanation in markdown in the notes field. Which would result in proper formatted markdown in Swagger UI. The default Swagger UI doesn't allow HTML in the notes field, so you need to use an adapted version of Swagger UI (you can find one at https://github.com/tim-vandecasteele/swagger-ui/tree/vasco).
+The grape-swagger gem allows you to add an explanation in markdown in the notes field. Which would result in proper formatted markdown in Swagger UI.
+Grape-swagger uses adapters for several markdown formatters. It includes adapters for [kramdown](http://kramdown.rubyforge.org) (kramdown [syntax](http://kramdown.rubyforge.org/syntax.html)) and [redcarpet](https://github.com/vmg/redcarpet).
+The adapters are packed in the GrapeSwagger::Markdown modules. We do not include the markdown gems in our gemfile, so be sure to include or install the depended gems.
 
-We're using [kramdown](http://kramdown.rubyforge.org) for parsing the markdown, specific syntax can be found [here](http://kramdown.rubyforge.org/syntax.html).
 
-Be sure to enable markdown in the `add_swagger_documentation` with 'markdown: true'.
+### Kramdown 
+If you want to use kramdown as markdown formatter, you need to add kramdown to your gemfile.
+
+```
+gem 'kramdown'
+```
+
+Configure your api documentation route with:
+
+
+``` ruby
+add_swagger_documentation(
+  markdown: GrapeSwagger::Markdown::KramdownAdapter.new
+)
+```
+
+Finally you can write endpoint descriptions the with markdown enabled. 
 
 ``` ruby
 desc "Reserve a virgin in heaven", {
@@ -311,6 +328,50 @@ desc "Reserve a virgin in heaven", {
   NOTE
 }
 ```
+
+### Redcarpet
+As alternative you can use [redcarpet](https://github.com/vmg/redcarpet) as formatter, you need to include redcarpet in your gemspec. If you also want to use [rouge](https://github.com/jneen/rouge) as syntax highlighter you also need to include it.
+
+```
+gem 'redcarpet'
+gem 'rouge'   
+```
+
+Configure your api documentation route with:
+
+``` ruby
+add_swagger_documentation(
+  markdown: GrapeSwagger::Markdown::RedcarpetAdapter.new(render_options: { highlighter: :rouge })
+)
+```
+
+Alternatively you can disable rouge by adding `:none` as highlighter option. You can add redcarpet extensions and render options trough the `extenstions:` and `render_options:` parameters.
+
+### Custom markdown formatter
+You can also add your custom adapter for your favourite markdown formatter, as long it responds to the method `markdown(text)` and it formats the given text.
+
+``` ruby
+module API
+  
+  class MySuperbMarkdownFormatterAdapter
+   attr_reader :adapter
+ 
+   def initialize(options)
+    require 'superbmarkdownformatter'
+    @adapter = SuperbMarkdownFormatter.new options
+   end
+ 
+   def markdown(text)
+      @adapter.render_supreme(text)
+   end
+  end
+
+  add_swagger_documentation markdown: MySuperbMarkdownFormatterAdapter.new { no_links: true } 
+end
+
+```
+
+## Response documentation
 
 You can also document the HTTP status codes with a description and a specified model that your API returns with the following syntax.
 

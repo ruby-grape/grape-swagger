@@ -11,7 +11,7 @@ describe GrapeSwagger::Markdown do
     end
 
     it 'raises an exception when the class does not respond to markdown' do
-      expect { GrapeSwagger::Markdown.new(Class.new) }.to raise_error(StandardError)
+      expect { GrapeSwagger::Markdown.new(Class.new) }.to raise_error(ArgumentError, 'The configured markdown adapter should implement the method markdown')
     end
   end
 

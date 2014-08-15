@@ -8,7 +8,7 @@ module GrapeSwagger
     # The adapters are responsible of loading the required markdown dependencies and throw errors.
     ###
     def initialize(adapter)
-      fail StandardError "The configured markdown adapter should implement a method #{ :markdown }." unless adapter.respond_to? :markdown
+      fail(ArgumentError, "The configured markdown adapter should implement the method #{ :markdown }") unless adapter.respond_to? :markdown
       @adapter = adapter
     end
 

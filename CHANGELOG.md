@@ -17,6 +17,7 @@
 * [#132](https://github.com/tim-vandecasteele/grape-swagger/pull/132): Addes support for enum values in entity documentation and form parameters - [@Antek-drzewiecki](https://github.com/Antek-drzewiecki).
 * [#135](https://github.com/tim-vandecasteele/grape-swagger/pull/135): Fixed model inclusion in models with aliased references - [@cdarne](https://github.com/cdarne).
 * [#142](https://github.com/tim-vandecasteele/grape-swagger/pull/142), [#143](https://github.com/tim-vandecasteele/grape-swagger/pull/143): Added support for kramdown, redcarpet and custom formatters - [@Antek-drzewiecki](https://github.com/Antek-drzewiecki).
+* Updated CONTRIBUTING.md - [@CraigCottingham](https://github.com/CraigCottingham).
 * Your Contribution Here
 
 ### 0.7.2 (February 6, 2014)

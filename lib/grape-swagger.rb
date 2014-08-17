@@ -227,9 +227,11 @@ module Grape
             end
 
             def parse_params(params, path, method)
+              accepted_file_classes = ['Rack::Multipart::UploadedFile', 'Hash'] # 1.st for Rack, 2nd for Rails
+
               params ||= []
               params.map do |param, value|
-                value[:type] = 'File' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
+                value[:type] = 'File' if value.is_a?(Hash) && accepted_file_classes.include?(value[:type])
                 items = {}
 
                 raw_data_type = value.is_a?(Hash) ? (value[:type] || 'string').to_s : 'string'

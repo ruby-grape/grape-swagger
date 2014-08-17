@@ -1,5 +1,6 @@
 ### Next Release
 
+* [#139](https://github.com/tim-vandecasteele/grape-swagger/pull/139): Added support for `Rack::Multipart::UploadedFile` parameters - [@timgluz](https://github.com/timgluz).
 * [#136](https://github.com/tim-vandecasteele/grape-swagger/pull/136), [#94](https://github.com/tim-vandecasteele/grape-swagger/pull/94): Recurse combination of namespaces when using mounted apps - [@renier](https://github.com/renier).
 * [#100](https://github.com/tim-vandecasteele/grape-swagger/pull/100): Added ability to specify a nickname for an endpoint - [@lhorne](https://github.com/lhorne).
 * [#94](https://github.com/tim-vandecasteele/grape-swagger/pull/94): Added support for namespace descriptions - [@renier](https://github.com/renier).

@@ -394,18 +394,46 @@ describe 'options: ' do
       end
     end
 
+    subject do
+      Class.new(Grape::API) do
+        mount MarkDownMountedApi
+      end
+    end
+
     def app
       SimpleApiWithMarkdown
     end
 
-    it 'parses markdown for a mounted-api' do
-      get '/swagger_doc/something.json'
-      expect(JSON.parse(last_response.body)['apis'][0]['operations'][0]['notes']).to eq("<p><em>test</em></p>\n")
+    context 'with instance' do
+      before do
+        subject.add_swagger_documentation markdown: GrapeSwagger::Markdown::KramdownAdapter.new, info: { description: '_test_' }
+      end
+
+      it 'parses markdown for a mounted-api' do
+        get '/swagger_doc/something.json'
+        expect(JSON.parse(last_response.body)['apis'][0]['operations'][0]['notes']).to eq("<p><em>test</em></p>\n")
+      end
+
+      it 'parses markdown for swagger info' do
+        get '/swagger_doc.json'
+        expect(JSON.parse(last_response.body)['info']).to eq('description' => "<p><em>test</em></p>\n")
+      end
     end
 
-    it 'parses markdown for swagger info' do
-      get '/swagger_doc.json'
-      expect(JSON.parse(last_response.body)['info']).to eq('description' => "<p><em>test</em></p>\n")
+    context 'with class' do
+      before do
+        subject.add_swagger_documentation markdown: GrapeSwagger::Markdown::KramdownAdapter, info: { description: '_test_' }
+      end
+
+      it 'parses markdown for a mounted-api' do
+        get '/swagger_doc/something.json'
+        expect(JSON.parse(last_response.body)['apis'][0]['operations'][0]['notes']).to eq("<p><em>test</em></p>\n")
+      end
+
+      it 'parses markdown for swagger info' do
+        get '/swagger_doc.json'
+        expect(JSON.parse(last_response.body)['info']).to eq('description' => "<p><em>test</em></p>\n")
+      end
     end
   end
 

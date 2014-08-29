@@ -19,6 +19,10 @@ Add to your Gemfile:
 
 ```gem 'grape-swagger'```
 
+## Upgrade
+
+Please see [UPGRADING](UPGRADING.md) when upgrading from a previous version.
+
 ## Usage
 
 Mount all your different APIs (with ```Grape::API``` superclass) on a root node. In the root class definition, include ```add_swagger_documentation```, this sets up the system and registers the documentation on '/swagger_doc.json'. See [test/api.rb](test/api.rb) for a simple demo.
@@ -212,7 +216,7 @@ module API
       type = current_user.admin? ? :full : :default
       present statuses, with: API::Entities::Status, type: type
     end
-    
+
     desc 'Creates a new status', entity: API::Entities::Status, params: API::Entities::Status.documentation
     post '/statuses' do
         ...
@@ -290,7 +294,7 @@ Grape-swagger uses adapters for several markdown formatters. It includes adapter
 The adapters are packed in the GrapeSwagger::Markdown modules. We do not include the markdown gems in our gemfile, so be sure to include or install the depended gems.
 
 
-### Kramdown 
+### Kramdown
 If you want to use kramdown as markdown formatter, you need to add kramdown to your gemfile.
 
 ```
@@ -302,11 +306,11 @@ Configure your api documentation route with:
 
 ``` ruby
 add_swagger_documentation(
-  markdown: GrapeSwagger::Markdown::KramdownAdapter.new
+  markdown: GrapeSwagger::Markdown::KramdownAdapter
 )
 ```
 
-Finally you can write endpoint descriptions the with markdown enabled. 
+Finally you can write endpoint descriptions the with markdown enabled.
 
 ``` ruby
 desc "Reserve a virgin in heaven", {
@@ -334,7 +338,7 @@ As alternative you can use [redcarpet](https://github.com/vmg/redcarpet) as form
 
 ```
 gem 'redcarpet'
-gem 'rouge'   
+gem 'rouge'
 ```
 
 Configure your api documentation route with:
@@ -352,21 +356,21 @@ You can also add your custom adapter for your favourite markdown formatter, as l
 
 ``` ruby
 module API
-  
+
   class MySuperbMarkdownFormatterAdapter
    attr_reader :adapter
- 
+
    def initialize(options)
     require 'superbmarkdownformatter'
     @adapter = SuperbMarkdownFormatter.new options
    end
- 
+
    def markdown(text)
       @adapter.render_supreme(text)
    end
   end
 
-  add_swagger_documentation markdown: MySuperbMarkdownFormatterAdapter.new { no_links: true } 
+  add_swagger_documentation markdown: MySuperbMarkdownFormatterAdapter, { no_links: true }
 end
 
 ```

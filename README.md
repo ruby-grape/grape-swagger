@@ -370,7 +370,7 @@ module API
    end
   end
 
-  add_swagger_documentation markdown: MySuperbMarkdownFormatterAdapter, { no_links: true }
+  add_swagger_documentation markdown: MySuperbMarkdownFormatterAdapter.new(no_links: true)
 end
 
 ```

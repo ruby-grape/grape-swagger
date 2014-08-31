@@ -1,3 +1,7 @@
+### 0.8.1 (Next)
+
+* Your contribution here.
+
 ### 0.8.0 (August 30, 2014)
 
 #### Features

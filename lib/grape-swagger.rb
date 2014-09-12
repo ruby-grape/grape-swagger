@@ -1,5 +1,8 @@
-require 'kramdown'
 require 'grape-swagger/version'
+require 'grape-swagger/errors'
+require 'grape-swagger/markdown'
+require 'grape-swagger/markdown/kramdown_adapter'
+require 'grape-swagger/markdown/redcarpet_adapter'
 
 module Grape
   class API
@@ -25,13 +28,19 @@ module Grape
         end
 
         @combined_namespaces = {}
-        endpoints.each do |endpoint|
-          ns = endpoint.settings.stack.last[:namespace]
-          @combined_namespaces[ns.space] = ns if ns
-        end
+        combine_namespaces(self)
       end
 
       private
+
+      def combine_namespaces(app)
+        app.endpoints.each do |endpoint|
+          ns = endpoint.settings.stack.last[:namespace]
+          @combined_namespaces[ns.space] = ns if ns
+
+          combine_namespaces(endpoint.options[:app]) if endpoint.options[:app]
+        end
+      end
 
       def create_documentation_class
         Class.new(Grape::API) do
@@ -47,14 +56,16 @@ module Grape
               mount_path: '/swagger_doc',
               base_path: nil,
               api_version: '0.1',
-              markdown: false,
+              markdown: nil,
               hide_documentation_path: false,
               hide_format: false,
               format: nil,
               models: [],
               info: {},
               authorizations: nil,
-              root_base_path: true
+              root_base_path: true,
+              api_documentation: { desc: 'Swagger compatible API description' },
+              specific_api_documentation: { desc: 'Swagger compatible API description for specific API' }
             }
 
             options = defaults.merge(options)
@@ -62,13 +73,15 @@ module Grape
             target_class     = options[:target_class]
             @@mount_path     = options[:mount_path]
             @@class_name     = options[:class_name] || options[:mount_path].gsub('/', '')
-            @@markdown       = options[:markdown]
+            @@markdown       = options[:markdown] ? GrapeSwagger::Markdown.new(options[:markdown]) : nil
             @@hide_format    = options[:hide_format]
             api_version      = options[:api_version]
             base_path        = options[:base_path]
             authorizations   = options[:authorizations]
             root_base_path   = options[:root_base_path]
             extra_info       = options[:info]
+            api_doc          = options[:api_documentation].dup
+            specific_api_doc = options[:specific_api_documentation].dup
             @@models         = options[:models] || []
 
             @@hide_documentation_path = options[:hide_documentation_path]
@@ -79,7 +92,8 @@ module Grape
               end
             end
 
-            desc 'Swagger compatible API description'
+            desc api_doc.delete(:desc), params: api_doc.delete(:params)
+            @last_description.merge!(api_doc)
             get @@mount_path do
               header['Access-Control-Allow-Origin']   = '*'
               header['Access-Control-Request-Method'] = '*'
@@ -118,23 +132,27 @@ module Grape
               output
             end
 
-            desc 'Swagger compatible API description for specific API', params: {
+            desc specific_api_doc.delete(:desc), params: {
               'name' => {
                 desc: 'Resource name of mounted API',
                 type: 'string',
                 required: true
               }
-            }
+            }.merge(specific_api_doc.delete(:params) || {})
+            @last_description.merge!(specific_api_doc)
             get "#{@@mount_path}/:name" do
               header['Access-Control-Allow-Origin']   = '*'
               header['Access-Control-Request-Method'] = '*'
 
               models = []
               routes = target_class.combined_routes[params[:name]]
+              error!('Not Found', 404) unless routes
 
               ops = routes.reject(&:route_hidden).group_by do |route|
                 parse_path(route.route_path, api_version)
               end
+
+              error!('Not Found', 404) unless ops.any?
 
               apis = []
 
@@ -144,13 +162,11 @@ module Grape
 
                   http_codes  = parse_http_codes(route.route_http_codes, models)
 
-                  models << if @@models.present?
-                              @@models
-                            elsif route.route_entity.present?
-                              route.route_entity
-                            end
+                  models << @@models if @@models.present?
 
-                  models = models.flatten.compact
+                  models << route.route_entity if route.route_entity.present?
+
+                  models = models_with_included_presenters(models.flatten.compact)
 
                   operation = {
                     notes: notes.to_s,
@@ -178,6 +194,7 @@ module Grape
                     end
                   end
 
+                  operation[:nickname] = route.route_nickname if route.route_nickname
                   operation
                 end.compact
                 apis << {
@@ -206,13 +223,13 @@ module Grape
           helpers do
 
             def as_markdown(description)
-              description && @@markdown ? Kramdown::Document.new(strip_heredoc(description), input: 'GFM', enable_coderay: false).to_html : description
+              description && @@markdown ? @@markdown.as_markdown(strip_heredoc(description)) : description
             end
 
             def parse_params(params, path, method)
               params ||= []
               params.map do |param, value|
-                value[:type] = 'File' if value.is_a?(Hash) && value[:type] == 'Rack::Multipart::UploadedFile'
+                value[:type] = 'File' if value.is_a?(Hash) && ['Rack::Multipart::UploadedFile', 'Hash'].include?(value[:type])
                 items = {}
 
                 raw_data_type = value.is_a?(Hash) ? (value[:type] || 'string').to_s : 'string'
@@ -232,6 +249,9 @@ module Grape
                 required      = value.is_a?(Hash) ? !!value[:required] : false
                 default_value = value.is_a?(Hash) ? value[:default] : nil
                 is_array      = value.is_a?(Hash) ? (value[:is_array] || false) : false
+                enum_values   = value.is_a?(Hash) ? value[:values] : nil
+                enum_values   = enum_values.call if enum_values && enum_values.is_a?(Proc)
+
                 if value.is_a?(Hash) && value.key?(:param_type)
                   param_type  = value[:param_type]
                   if is_array
@@ -266,7 +286,7 @@ module Grape
                 parsed_params.merge!(format: 'int64') if data_type == 'long'
                 parsed_params.merge!(items: items) if items.present?
                 parsed_params.merge!(defaultValue: default_value) if default_value
-
+                parsed_params.merge!(enum: enum_values) if enum_values
                 parsed_params
               end
             end
@@ -365,7 +385,15 @@ module Grape
                   property_description = p.delete(:desc)
                   p[:description] = property_description if property_description
 
+                  # rename Grape's 'values' to 'enum'
+                  select_values = p.delete(:values)
+                  if select_values
+                    select_values = select_values.call if select_values.is_a?(Proc)
+                    p[:enum] = select_values
+                  end
+
                   properties[property_name] = p
+
                 end
 
                 result[name] = {
@@ -376,6 +404,21 @@ module Grape
               end
 
               result
+            end
+
+            def models_with_included_presenters(models)
+              all_models = models
+
+              models.each do |model|
+                # get model references from exposures with a documentation
+                additional_models = model.exposures.map do |_, config|
+                  config[:using] if config.key?(:documentation)
+                end.compact
+
+                all_models += additional_models
+              end
+
+              all_models
             end
 
             def is_primitive?(type)

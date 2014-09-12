@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'API Global Models' do
+describe 'Global Models' do
 
   before :all do
     module Entities
@@ -8,60 +8,69 @@ describe 'API Global Models' do
         class Thing < Grape::Entity
           expose :text, documentation: { type: 'string', desc: 'Content of something.' }
         end
+
+        class CombinedThing < Grape::Entity
+          expose :text, documentation: { type: 'string', desc: 'Content of something.' }
+        end
       end
     end
+  end
 
-    class ModelsGlobalApi < Grape::API
-      desc 'This gets thing.',
-           params: Entities::Some::Thing.documentation
-
+  subject do
+    Class.new(Grape::API) do
+      desc 'This gets thing.', params: Entities::Some::Thing.documentation
       get '/thing' do
         thing = OpenStruct.new text: 'thing'
         present thing, with: Entities::Some::Thing
       end
 
-      add_swagger_documentation models:  [Entities::Some::Thing]
-    end
+      desc 'This gets combined thing.',
+           params: Entities::Some::CombinedThing.documentation,
+           entity: Entities::Some::CombinedThing
+      get '/combined_thing' do
+        thing = OpenStruct.new text: 'thing'
+        present thing, with: Entities::Some::CombinedThing
+      end
 
+      add_swagger_documentation models: [Entities::Some::Thing]
+    end
   end
 
   def app
-    ModelsGlobalApi
+    subject
   end
 
-  it 'should include globals models specified' do
+  it 'includes models specified' do
     get '/swagger_doc/thing.json'
-    JSON.parse(last_response.body).should == {
-      'apiVersion' => '0.1',
-      'swaggerVersion' => '1.2',
-      'resourcePath' => '/thing',
-      'produces' => ['application/xml', 'application/json', 'application/vnd.api+json', 'text/plain'],
-      'apis' => [{
-        'path' => '/thing.{format}',
-        'operations' => [{
-          'notes' => '',
-          'summary' => 'This gets thing.',
-          'nickname' => 'GET-thing---format-',
-          'method' => 'GET',
-          'parameters' => [{
-            'paramType' => 'query',
-            'name' => 'text',
-            'description' => 'Content of something.',
-            'type' => 'string',
-            'required' => false,
-            'allowMultiple' => false }],
-          'type' => 'void'
-        }]
-      }],
-      'basePath' => 'http://example.org',
-      'models' => {
+    json = JSON.parse(last_response.body)
+    expect(json['models']).to eq(
         'Some::Thing' => {
           'id' => 'Some::Thing',
           'properties' => {
             'text' => { 'type' => 'string', 'description' => 'Content of something.' }
           }
-        }
-      }
-    }
+        })
+  end
+
+  it 'uses global models and route endpoint specific entities together' do
+    get '/swagger_doc/combined_thing.json'
+    json = JSON.parse(last_response.body)
+
+    expect(json['models']).to include(
+                                  'Some::Thing' => {
+                                    'id' => 'Some::Thing',
+                                    'properties' => {
+                                      'text' => { 'type' => 'string', 'description' => 'Content of something.' }
+                                    }
+                                  })
+
+    expect(json['models']).to include(
+                                  'Some::CombinedThing' => {
+                                    'id' => 'Some::CombinedThing',
+                                    'properties' => {
+                                      'text' => { 'type' => 'string', 'description' => 'Content of something.' }
+                                    }
+                                  })
+
   end
 end

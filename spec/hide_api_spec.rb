@@ -26,9 +26,13 @@ describe 'a hide mounted api' do
     HideApi
   end
 
-  it "retrieves swagger-documentation that doesn't include hidden endpoints" do
+  subject do
     get '/swagger_doc.json'
-    JSON.parse(last_response.body).should == {
+    JSON.parse(last_response.body)
+  end
+
+  it "retrieves swagger-documentation that doesn't include hidden endpoints" do
+    expect(subject).to eq(
       'apiVersion' => '0.1',
       'swaggerVersion' => '1.2',
       'info' => {},
@@ -37,7 +41,7 @@ describe 'a hide mounted api' do
         { 'path' => '/simple.{format}', 'description' => 'Operations about simples' },
         { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
       ]
-    }
+    )
   end
 end
 
@@ -69,7 +73,7 @@ describe 'a hide mounted api with same namespace' do
 
   it 'retrieves swagger-documentation on /swagger_doc' do
     get '/swagger_doc.json'
-    JSON.parse(last_response.body).should == {
+    expect(JSON.parse(last_response.body)).to eq(
       'apiVersion' => '0.1',
       'swaggerVersion' => '1.2',
       'info' => {},
@@ -78,12 +82,12 @@ describe 'a hide mounted api with same namespace' do
         { 'path' => '/simple.{format}', 'description' => 'Operations about simples' },
         { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
       ]
-    }
+    )
   end
 
   it "retrieves the documentation for mounted-api that doesn't include hidden endpoints" do
     get '/swagger_doc/simple.json'
-    JSON.parse(last_response.body).should == {
+    expect(JSON.parse(last_response.body)).to eq(
       'apiVersion' => '0.1',
       'swaggerVersion' => '1.2',
       'basePath' => 'http://example.org',
@@ -100,6 +104,6 @@ describe 'a hide mounted api with same namespace' do
           'type' => 'void'
         }]
       }]
-    }
+    )
   end
 end

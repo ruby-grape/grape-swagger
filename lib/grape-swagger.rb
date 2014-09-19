@@ -228,7 +228,13 @@ module Grape
 
             def parse_params(params, path, method)
               params ||= []
-              params.map do |param, value|
+
+              non_nested_parent_params = params.reject do |param, _|
+                is_nested_param = /^#{ Regexp.quote param }\[.+\]$/
+                params.keys.any? { |p| p.match is_nested_param }
+              end
+
+              non_nested_parent_params.map do |param, value|
                 value[:type] = 'File' if value.is_a?(Hash) && ['Rack::Multipart::UploadedFile', 'Hash'].include?(value[:type])
                 items = {}
 

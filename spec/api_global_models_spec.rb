@@ -7,10 +7,12 @@ describe 'Global Models' do
       module Some
         class Thing < Grape::Entity
           expose :text, documentation: { type: 'string', desc: 'Content of something.' }
+          expose :name, documentation: { type: String, desc: 'Name of something.' }
         end
 
         class CombinedThing < Grape::Entity
           expose :text, documentation: { type: 'string', desc: 'Content of something.' }
+          expose :created_at, documentation: { type: DateTime, desc: 'Creation of something.' }
         end
       end
     end
@@ -47,7 +49,8 @@ describe 'Global Models' do
         'Some::Thing' => {
           'id' => 'Some::Thing',
           'properties' => {
-            'text' => { 'type' => 'string', 'description' => 'Content of something.' }
+            'text' => { 'type' => 'string', 'description' => 'Content of something.' },
+            'name' => { 'type' => 'string', 'description' => 'Name of something.' }
           }
         })
   end
@@ -60,7 +63,8 @@ describe 'Global Models' do
                                   'Some::Thing' => {
                                     'id' => 'Some::Thing',
                                     'properties' => {
-                                      'text' => { 'type' => 'string', 'description' => 'Content of something.' }
+                                      'text' => { 'type' => 'string', 'description' => 'Content of something.' },
+                                      'name' => { 'type' => 'string', 'description' => 'Name of something.' }
                                     }
                                   })
 
@@ -68,7 +72,8 @@ describe 'Global Models' do
                                   'Some::CombinedThing' => {
                                     'id' => 'Some::CombinedThing',
                                     'properties' => {
-                                      'text' => { 'type' => 'string', 'description' => 'Content of something.' }
+                                      'text' => { 'type' => 'string', 'description' => 'Content of something.' },
+                                      'created_at' => { 'type' => 'dateTime', 'description' => 'Creation of something.' }
                                     }
                                   })
 

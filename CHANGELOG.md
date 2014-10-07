@@ -1,6 +1,7 @@
 ### 0.8.1 (Next)
 
 * Your contribution here.
+* [#154](https://github.com/tim-vandecasteele/grape-swagger/pull/154):  Allow Classes for type declarations inside documentation - [@mrmargolis](https://github.com/mrmargolis).
 
 ### 0.8.0 (August 30, 2014)
 

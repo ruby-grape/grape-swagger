@@ -426,6 +426,7 @@ module Grape
             end
 
             def generate_typeref(type)
+              type = type.to_s.sub(/^[A-Z]/) { |f| f.downcase } if type.is_a?(Class)
               if is_primitive? type
                 { 'type' => type }
               else

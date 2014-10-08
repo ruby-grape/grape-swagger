@@ -30,6 +30,16 @@ describe 'Form Params' do
         {}
       end
 
+      params do
+        requires :required_group, type: Hash do
+          requires :required_param_1
+          requires :required_param_2
+        end
+      end
+      post '/groups' do
+        {}
+      end
+
       add_swagger_documentation
     end
   end
@@ -82,5 +92,16 @@ describe 'Form Params' do
           }
         ]
       }])
+  end
+
+  it 'retrieves the documentation for group parameters' do
+    get '/swagger_doc/groups.json'
+
+    body = JSON.parse last_response.body
+    parameters = body['apis'].first['operations'].first['parameters']
+    parameters.should == [
+      { 'paramType' => 'form', 'name' => 'required_group[required_param_1]', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false },
+      { 'paramType' => 'form', 'name' => 'required_group[required_param_2]', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false }]
+
   end
 end

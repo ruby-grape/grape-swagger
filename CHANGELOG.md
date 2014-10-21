@@ -1,7 +1,8 @@
 ### 0.8.1 (Next)
 
+* [#91](https://github.com/tim-vandecasteele/grape-swagger/issues/91): Fixed empty field for group parameters' name with type hash or Array - [@dukedave](https://github.com/dukedave).
+* [#154](https://github.com/tim-vandecasteele/grape-swagger/pull/154): Allow Classes for type declarations inside documentation - [@mrmargolis](https://github.com/mrmargolis).
 * Your contribution here.
-* [#154](https://github.com/tim-vandecasteele/grape-swagger/pull/154):  Allow Classes for type declarations inside documentation - [@mrmargolis](https://github.com/mrmargolis).
 
 ### 0.8.0 (August 30, 2014)
 

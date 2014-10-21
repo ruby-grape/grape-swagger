@@ -34,6 +34,10 @@ class Api < Grape::API
     desc 'Create a spline.'
     params do
       optional :reticulated, type: Boolean, default: true, desc: 'True if the spline is reticulated.'
+      requires :required_group, type: Hash do
+        requires :required_param_1
+        requires :required_param_2
+      end
     end
     post do
       spline = { id: @@splines.size + 1, reticulated: params[:reticulated] }

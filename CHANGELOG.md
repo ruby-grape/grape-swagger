@@ -1,5 +1,6 @@
 ### 0.8.1 (Next)
 
+* [#162](https://github.com/tim-vandecasteele/grape-swagger/pull/162): Make sure models array has unique list of models, otherwise it piles up duplicates from previous calls and affects performance severely. - [@elado](https://github.com/elado).
 * [#91](https://github.com/tim-vandecasteele/grape-swagger/issues/91): Fixed empty field for group parameters' name with type hash or Array - [@dukedave](https://github.com/dukedave).
 * [#154](https://github.com/tim-vandecasteele/grape-swagger/pull/154): Allow classes for type declarations inside documentation - [@mrmargolis](https://github.com/mrmargolis).
 * [#162](https://github.com/tim-vandecasteele/grape-swagger/pull/162): Fix performance issue related to having a large number of models - [@elado](https://github.com/elado).

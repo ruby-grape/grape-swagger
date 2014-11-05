@@ -93,7 +93,6 @@ module Grape
             end
 
             desc api_doc.delete(:desc), params: api_doc.delete(:params)
-            @last_description.merge!(api_doc)
             get @@mount_path do
               header['Access-Control-Allow-Origin']   = '*'
               header['Access-Control-Request-Method'] = '*'
@@ -139,7 +138,7 @@ module Grape
                 required: true
               }
             }.merge(specific_api_doc.delete(:params) || {})
-            @last_description.merge!(specific_api_doc)
+
             get "#{@@mount_path}/:name" do
               header['Access-Control-Allow-Origin']   = '*'
               header['Access-Control-Request-Method'] = '*'

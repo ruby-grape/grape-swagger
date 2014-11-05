@@ -35,7 +35,7 @@ module Grape
 
       def combine_namespaces(app)
         app.endpoints.each do |endpoint|
-          ns = endpoint.settings.stack.last[:namespace]
+          ns = endpoint.namespace_stackable(:namespace).last
           @combined_namespaces[ns.space] = ns if ns
 
           combine_namespaces(endpoint.options[:app]) if endpoint.options[:app]
@@ -297,10 +297,10 @@ module Grape
             end
 
             def content_types_for(target_class)
-              content_types = (target_class.settings[:content_types] || {}).values
+              content_types = (target_class.content_types || {}).values
 
               if content_types.empty?
-                formats       = [target_class.settings[:format], target_class.settings[:default_format]].compact.uniq
+                formats       = [target_class.format, target_class.default_format].compact.uniq
                 formats       = Grape::Formatter::Base.formatters({}).keys if formats.empty?
                 content_types = Grape::ContentTypes::CONTENT_TYPES.select { |content_type, _mime_type| formats.include? content_type }.values
               end

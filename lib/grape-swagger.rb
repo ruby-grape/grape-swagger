@@ -76,7 +76,6 @@ module Grape
             @@markdown       = options[:markdown] ? GrapeSwagger::Markdown.new(options[:markdown]) : nil
             @@hide_format    = options[:hide_format]
             api_version      = options[:api_version]
-            base_path        = options[:base_path]
             authorizations   = options[:authorizations]
             root_base_path   = options[:root_base_path]
             extra_info       = options[:info]
@@ -211,7 +210,7 @@ module Grape
                 apis:           apis
               }
 
-              base_path                        = parse_base_path(base_path, request)
+              base_path                        = parse_base_path(options[:base_path], request)
               api_description[:basePath]       = base_path if base_path && base_path.size > 0 && root_base_path != false
               api_description[:models]         = parse_entity_models(models) unless models.empty?
               api_description[:authorizations] = authorizations if authorizations

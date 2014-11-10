@@ -4,6 +4,7 @@
 * [#154](https://github.com/tim-vandecasteele/grape-swagger/pull/154): Allow classes for type declarations inside documentation - [@mrmargolis](https://github.com/mrmargolis).
 * [#162](https://github.com/tim-vandecasteele/grape-swagger/pull/162): Fix performance issue related to having a large number of models - [@elado](https://github.com/elado).
 * [#169](https://github.com/tim-vandecasteele/grape-swagger/pull/169): Test against multiple versions of Grape - [@dblock](https://github.com/dblock).
+* [#166](https://github.com/tim-vandecasteele/grape-swagger/pull/166): Ensure compatibility with Grape 0.8.0 or newer - [@dblock](https://github.com/dblock).
 * Your contribution here.
 
 ### 0.8.0 (August 30, 2014)

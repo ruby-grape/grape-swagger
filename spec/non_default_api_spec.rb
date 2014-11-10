@@ -168,7 +168,7 @@ describe 'options: ' do
         'apiVersion' => '0.1',
         'swaggerVersion' => '1.2',
         'info' => {},
-        'produces' => ['application/xml', 'application/json', 'application/vnd.api+json', 'text/plain'],
+        'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
         'apis' => [
           { 'path' => '/something.{format}', 'description' => 'Operations about somethings' },
           { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
@@ -184,7 +184,7 @@ describe 'options: ' do
         'swaggerVersion' => '1.2',
         'basePath' => 'http://example.org',
         'resourcePath' => '/something',
-        'produces' => ['application/xml', 'application/json', 'application/vnd.api+json', 'text/plain'],
+        'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
         'apis' => [{
           'path' => '/0.1/something.{format}',
           'operations' => [{
@@ -229,7 +229,7 @@ describe 'options: ' do
         'apiVersion' => '0.1',
         'swaggerVersion' => '1.2',
         'info' => {},
-        'produces' => ['application/xml', 'application/json', 'application/vnd.api+json', 'text/plain'],
+        'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
         'apis' => [
           { 'path' => '/something.{format}', 'description' => 'Operations about somethings' }
         ]
@@ -269,7 +269,7 @@ describe 'options: ' do
         'swaggerVersion' => '1.2',
         'basePath' => 'http://example.org',
         'resourcePath' => '/something',
-        'produces' => ['application/xml', 'application/json', 'application/vnd.api+json', 'text/plain'],
+        'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
         'apis' => [{
           'path' => '/abc/something.{format}',
           'operations' => [{
@@ -320,7 +320,7 @@ describe 'options: ' do
         'swaggerVersion' => '1.2',
         'basePath' => 'http://example.org',
         'resourcePath' => '/something',
-        'produces' => ['application/xml', 'application/json', 'application/vnd.api+json', 'text/plain'],
+        'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
         'apis' => [{
           'path' => '/abc/v20/something.{format}',
           'operations' => [{
@@ -561,7 +561,7 @@ describe 'options: ' do
         'apiVersion' => '0.1',
         'swaggerVersion' => '1.2',
         'info' => {},
-        'produces' => ['application/xml', 'application/json', 'application/vnd.api+json', 'text/plain'],
+        'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
         'apis' => [
           { 'path' => '/first.{format}', 'description' => 'Operations about firsts' }
         ]
@@ -574,7 +574,7 @@ describe 'options: ' do
         'apiVersion' => '0.1',
         'swaggerVersion' => '1.2',
         'info' => {},
-        'produces' => ['application/xml', 'application/json', 'application/vnd.api+json', 'text/plain'],
+        'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
         'apis' => [
           { 'path' => '/second.{format}', 'description' => 'Operations about seconds' }
         ]

@@ -227,6 +227,8 @@ end
 
 ### Relationships
 
+Put the full name of the relationship's class in `type`, leaving out any modules named `Entities` or `Entity`. So for the entity class `API::Entities::Address`, you would put `type: 'API::Address'`.
+
 #### 1xN
 
 ```ruby
@@ -235,7 +237,7 @@ module API
     class Client < Grape::Entity
       expose :name, documentation: { type: 'string', desc: 'Name' }
       expose :addresses, using: Entities::Address,
-        documentation: { type: 'Address', desc: 'Addresses.', param_type: 'body', is_array: true }
+        documentation: { type: 'API::Address', desc: 'Addresses.', param_type: 'body', is_array: true }
     end
 
     class Address < Grape::Entity
@@ -266,7 +268,7 @@ module API
     class Client < Grape::Entity
       expose :name, documentation: { type: 'string', desc: 'Name' }
       expose :address, using: Entities::Address,
-        documentation: { type: 'Address', desc: 'Addresses.', param_type: 'body', is_array: false }
+        documentation: { type: 'API::Address', desc: 'Addresses.', param_type: 'body', is_array: false }
     end
 
     class Address < Grape::Entity

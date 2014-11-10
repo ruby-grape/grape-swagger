@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'rack-test'
   s.add_development_dependency 'rack-cors'
-  s.add_development_dependency 'rubocop', '0.24.1'
+  s.add_development_dependency 'rubocop', '0.27.0'
   s.add_development_dependency 'kramdown', '~> 1.4.1'
   s.add_development_dependency 'redcarpet', '~> 3.1.2' unless RUBY_PLATFORM.eql? 'java'
   s.add_development_dependency 'rouge', '~> 1.6.1'

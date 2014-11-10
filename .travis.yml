@@ -1,8 +1,19 @@
+language: ruby
+
+sudo: false
+
 rvm:
-  - jruby-19mode
-  - 1.9.3
+  - 2.1.1
   - 2.0.0
-  - 2.1.2
+  - 1.9.3
   - rbx-2.2.10
+  - jruby-19mode
 
+env:
+  - GRAPE_VERSION=0.8.0
+  - GRAPE_VERSION=0.9.0
+  - GRAPE_VERSION=HEAD
 
+matrix:
+  allow_failures:
+    - env: GRAPE_VERSION=HEAD

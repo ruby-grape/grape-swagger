@@ -17,7 +17,7 @@ module Grape
 
         @combined_routes = {}
         routes.each do |route|
-          route_match = route.route_path.split(route.route_prefix).last.match('\/([\w|-]*?)[\.\/\(]')
+          route_match = route.route_path.split(/^.*?#{route.route_prefix.to_s}/).last.match('\/([\w|-]*?)[\.\/\(]')
           next if route_match.nil?
           resource = route_match.captures.first
           next if resource.empty?

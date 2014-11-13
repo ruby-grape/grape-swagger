@@ -5,6 +5,8 @@
 * [#162](https://github.com/tim-vandecasteele/grape-swagger/pull/162): Fix performance issue related to having a large number of models - [@elado](https://github.com/elado).
 * [#169](https://github.com/tim-vandecasteele/grape-swagger/pull/169): Test against multiple versions of Grape - [@dblock](https://github.com/dblock).
 * [#166](https://github.com/tim-vandecasteele/grape-swagger/pull/166): Ensure compatibility with Grape 0.8.0 or newer - [@dblock](https://github.com/dblock).
+* [#174](https://github.com/tim-vandecasteele/grape-swagger/pull/172): Fix problem with using prefix name somewhere in api paths - [@grzesiek](https://github.com/grzesiek).
+
 * Your contribution here.
 
 ### 0.8.0 (August 30, 2014)

@@ -313,14 +313,14 @@ add_swagger_documentation(
 Finally you can write endpoint descriptions the with markdown enabled.
 
 ``` ruby
-desc "Reserve a virgin in heaven", {
+desc "Reserve a burger in heaven", {
   notes: <<-NOTE
-    Virgins in Heaven
+    Veggie Burgers in Heaven
     -----------------
 
-    > A virgin doesn't come for free
+    > A veggie burger doesn't come for free
 
-    If you want to reserve a virgin in heaven, you have to do
+    If you want to reserve a veggie burger in heaven, you have to do
     some crazy stuff on earth.
 
         def do_good

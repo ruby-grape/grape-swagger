@@ -51,6 +51,24 @@ describe 'API Models' do
         expose :something, as: :post, using: Entities::Something, documentation: { type: 'Something', desc: 'Reference to something.' }
       end
     end
+
+    module Entities
+      class FourthLevel < Grape::Entity
+        expose :text, documentation: { type: 'string' }
+      end
+
+      class ThirdLevel < Grape::Entity
+        expose :parts, using: Entities::FourthLevel, documentation: { type: 'FourthLevel' }
+      end
+
+      class SecondLevel < Grape::Entity
+        expose :parts, using: Entities::ThirdLevel, documentation: { type: 'ThirdLevel' }
+      end
+
+      class FirstLevel < Grape::Entity
+        expose :parts, using: Entities::SecondLevel, documentation: { type: 'SecondLevel' }
+      end
+    end
   end
 
   def app
@@ -91,6 +109,16 @@ describe 'API Models' do
         present something, with: Entities::AliasedThing
       end
 
+      desc 'This gets all nested entities.', entity: Entities::FirstLevel
+      get '/nesting' do
+        fourth_level = OpenStruct.new text: 'something'
+        third_level  = OpenStruct.new parts: [fourth_level]
+        second_level = OpenStruct.new parts: [third_level]
+        first_level  = OpenStruct.new parts: [second_level]
+
+        present first_level, with: Entities::FirstLevel
+      end
+
       add_swagger_documentation
     end
   end
@@ -117,6 +145,7 @@ describe 'API Models' do
         { 'path' => '/somethingelse.{format}', 'description' => 'Operations about somethingelses' },
         { 'path' => '/enum_description_in_entity.{format}', 'description' => 'Operations about enum_description_in_entities' },
         { 'path' => '/aliasedthing.{format}', 'description' => 'Operations about aliasedthings' },
+        { 'path' => '/nesting.{format}', 'description' => 'Operations about nestings' },
         { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
       ]
     end
@@ -225,5 +254,12 @@ describe 'API Models' do
                                                    'text' => { 'type' => 'string', 'description' => 'Content of something.' }
                                                  }
                                              )
+  end
+
+  it 'includes all entities with four levels of nesting' do
+    get '/swagger_doc/nesting.json'
+    result = JSON.parse(last_response.body)
+
+    expect(result['models']).to include('FirstLevel', 'SecondLevel', 'ThirdLevel', 'FourthLevel')
   end
 end

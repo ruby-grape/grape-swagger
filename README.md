@@ -23,6 +23,14 @@ Add to your Gemfile:
 
 ### Swagger UI
 
+#### Using gems
+
+There are multiple Rails gems available for instance:
+
+*  grape-swagger-rails
+
+#### Integrate swagger directly
+
 You can integrate Swagger UI directly into your application. For this you have to
 clone Swagger UI from https://github.com/wordnik/swagger-ui and provide all files within
  `dist` folder as static files. 

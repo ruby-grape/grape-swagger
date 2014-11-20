@@ -6,6 +6,7 @@
 * [#169](https://github.com/tim-vandecasteele/grape-swagger/pull/169): Test against multiple versions of Grape - [@dblock](https://github.com/dblock).
 * [#166](https://github.com/tim-vandecasteele/grape-swagger/pull/166): Ensure compatibility with Grape 0.8.0 or newer - [@dblock](https://github.com/dblock).
 * [#174](https://github.com/tim-vandecasteele/grape-swagger/pull/172): Fix problem with using prefix name somewhere in api paths - [@grzesiek](https://github.com/grzesiek).
+* [#176](https://github.com/tim-vandecasteele/grape-swagger/pull/176): Added ability to load nested models recursively - [@sergey-verevkin](https://github.com/sergey-verevkin).
 
 * Your contribution here.
 

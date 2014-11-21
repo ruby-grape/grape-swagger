@@ -420,9 +420,14 @@ module Grape
 
               models.each do |model|
                 # get model references from exposures with a documentation
-                additional_models = model.exposures.map do |_, config|
+                nested_models = model.exposures.map do |_, config|
                   config[:using] if config.key?(:documentation)
                 end.compact
+
+                # get all nested models recursively
+                additional_models = nested_models.map do |nested_model|
+                  models_with_included_presenters([nested_model])
+                end.flatten
 
                 all_models += additional_models
               end

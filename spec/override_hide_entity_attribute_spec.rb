@@ -25,7 +25,7 @@ describe "an API with hidden entity attributes" do
 
   def app; HideEntityAttributeApi end
 
-  it "retrieves swagger-documentation that doesn't include hidden attributes in entities" do
+  it "retrieves swagger-documentation that does include hidden attributes in entities" do
     get '/swagger_doc/items.json'
     JSON.parse(last_response.body).should ==  {
       "apiVersion" => "0.1",

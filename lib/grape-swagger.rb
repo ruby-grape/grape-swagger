@@ -54,7 +54,8 @@ module Grape
               :info                     => {},
               :authorizations           => nil,
               :root_base_path           => true,
-              :include_base_url         => true
+              :include_base_url         => true,
+              :override_hidden          => -> (request) { false }
             }
 
             options = defaults.merge(options)
@@ -71,6 +72,7 @@ module Grape
             root_base_path   = options[:root_base_path]
             extra_info       = options[:info]
 
+            @@override_hidden  = options[:override_hidden]
             @@hide_documentation_path = options[:hide_documentation_path]
 
             if options[:format]
@@ -91,7 +93,7 @@ module Grape
               end
 
               routes_array = routes.keys.map do |local_route|
-                next if routes[local_route].all?(&:route_hidden)
+                next if routes[local_route].all?(&:route_hidden) && !@@override_hidden.call(request)
 
                 url_base    = parse_path(route.route_path.gsub('(.:format)', ''), route.route_version) if include_base_url
                 url_format  = '.{format}' unless @@hide_format
@@ -131,7 +133,7 @@ module Grape
               models = []
               routes = target_class::combined_routes[params[:name]]
 
-              ops = routes.reject(&:route_hidden).group_by do |route|
+              ops = (@@override_hidden.call(request) ? routes : routes.reject(&:route_hidden)).group_by do |route|
                 parse_path(route.route_path, api_version)
               end
 
@@ -303,7 +305,7 @@ module Grape
                 properties  = {}
 
                 model.documentation.each do |property_name, property_info|
-                  next if property_info[:hidden]
+                  next if property_info[:hidden] && !@@override_hidden.call(request)
 
                   properties[property_name] = property_info
 

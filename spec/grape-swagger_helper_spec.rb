@@ -53,12 +53,6 @@ describe 'helpers' do
           desc: 'rack file',
           datafile: 'content',
           required: true
-        },
-        rails: {
-          type: 'Hash',
-          desc: 'rails file',
-          datafile: 'content',
-          required: true
         }
       }
       path = '/coolness'
@@ -68,14 +62,6 @@ describe 'helpers' do
           paramType: 'body',
           name: :rack,
           description: 'rack file',
-          type: 'File',
-          required: true,
-          allowMultiple: false
-        },
-        {
-          paramType: 'body',
-          name: :rails,
-          description: 'rails file',
           type: 'File',
           required: true,
           allowMultiple: false

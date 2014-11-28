@@ -8,6 +8,7 @@
 * [#174](https://github.com/tim-vandecasteele/grape-swagger/pull/172): Fix problem with using prefix name somewhere in api paths - [@grzesiek](https://github.com/grzesiek).
 * [#176](https://github.com/tim-vandecasteele/grape-swagger/pull/176): Added ability to load nested models recursively - [@sergey-verevkin](https://github.com/sergey-verevkin).
 * [#179](https://github.com/tim-vandecasteele/grape-swagger/pull/179): Document `Virtus::Attribute::Boolean` as boolean - [@eashman](https://github.com/eashman), [@dblock](https://github.com/dblock).
+* [#178](https://github.com/tim-vandecasteele/grape-swagger/issues/178): Fixed `Hash` parameters, now exposed as Swagger `object` types - [@dblock](https://github.com/dblock).
 
 * Your contribution here.
 

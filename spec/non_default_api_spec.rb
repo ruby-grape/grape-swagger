@@ -50,7 +50,7 @@ describe 'options: ' do
 
       class SimpleApiWithProcBasePath < Grape::API
         mount ProcBasePathMountedApi
-        add_swagger_documentation base_path: proc { |request| "#{request.base_url}/some_value" }
+        add_swagger_documentation base_path: proc { |request| [request.base_url, request.params[:base_path], 'some_value'].compact.join('/') }
       end
     end
 
@@ -58,18 +58,26 @@ describe 'options: ' do
       SimpleApiWithProcBasePath
     end
 
-    subject do
-      get '/swagger_doc/something.json'
-      JSON.parse(last_response.body)
+    context 'default' do
+      subject do
+        get '/swagger_doc/something.json'
+        JSON.parse(last_response.body)
+      end
+
+      it 'retrieves the same given base-path for mounted-api' do
+        expect(subject['basePath']).to eq 'http://example.org/some_value'
+      end
     end
 
-    # it "retrieves the given base-path on /swagger_doc" do
-    #   get '/swagger_doc.json'
-    #   JSON.parse(last_response.body)["basePath"].should == "http://example.org/some_value"
-    # end
+    context 'param' do
+      subject do
+        get '/swagger_doc/something.json?base_path=foobar'
+        JSON.parse(last_response.body)
+      end
 
-    it 'retrieves the same given base-path for mounted-api' do
-      expect(subject['basePath']).to eq 'http://example.org/some_value'
+      it 're-evaluates base-path' do
+        expect(subject['basePath']).to eq 'http://example.org/foobar/some_value'
+      end
     end
   end
 
@@ -96,11 +104,6 @@ describe 'options: ' do
       get '/swagger_doc/something.json'
       JSON.parse(last_response.body)
     end
-
-    # it "retrieves the given base-path on /swagger_doc" do
-    #   get '/swagger_doc.json'
-    #   JSON.parse(last_response.body)["basePath"].should == "http://example.org/some_value"
-    # end
 
     it 'retrieves the same given base-path for mounted-api' do
       get '/swagger_doc/something.json'

@@ -238,11 +238,14 @@ module Grape
               end
 
               non_nested_parent_params.map do |param, value|
-                value[:type] = 'File' if value.is_a?(Hash) && ['Rack::Multipart::UploadedFile', 'Hash'].include?(value[:type])
                 items = {}
 
                 raw_data_type = value.is_a?(Hash) ? (value[:type] || 'string').to_s : 'string'
                 data_type     = case raw_data_type
+                                when 'Hash'
+                                  'object'
+                                when 'Rack::Multipart::UploadedFile'
+                                  'File'
                                 when 'Virtus::Attribute::Boolean'
                                   'boolean'
                                 when 'Boolean', 'Date', 'Integer', 'String'
@@ -438,7 +441,7 @@ module Grape
             end
 
             def is_primitive?(type)
-              %w(integer long float double string byte boolean date dateTime).include? type
+              %w(object integer long float double string byte boolean date dateTime).include? type
             end
 
             def generate_typeref(type)

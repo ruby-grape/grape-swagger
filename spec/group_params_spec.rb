@@ -20,7 +20,7 @@ describe 'Group Params' do
   end
 
   it 'retrieves the documentation for group parameters' do
-    get '/swagger_doc/groups.json'
+    get '/swagger_doc/groups'
 
     body = JSON.parse last_response.body
     parameters = body['apis'].first['operations'].first['parameters']

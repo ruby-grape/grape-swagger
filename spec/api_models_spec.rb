@@ -152,31 +152,21 @@ describe 'API Models' do
   end
 
   it 'returns type' do
-    get '/swagger_doc/something.json'
+    get '/swagger_doc/something'
     result = JSON.parse(last_response.body)
     expect(result['apis'].first['operations'].first['type']).to eq 'Something'
   end
 
   it 'includes nested type' do
-    get '/swagger_doc/thing.json'
+    get '/swagger_doc/thing'
     result = JSON.parse(last_response.body)
     expect(result['apis'].first['operations'].first['type']).to eq 'Some::Thing'
   end
 
   it 'includes entities which are only used as composition' do
-    get '/swagger_doc/somethingelse.json'
+    get '/swagger_doc/somethingelse'
     result = JSON.parse(last_response.body)
-    expect(result['apis']).to eq([{
-                                   'path' => '/somethingelse.{format}',
-                                   'operations' => [{
-                                     'notes' => '',
-                                     'type' => 'SomeThingElse',
-                                     'summary' => 'This gets somthing else.',
-                                     'nickname' => 'GET-somethingelse---format-',
-                                     'method' => 'GET',
-                                     'parameters' => []
-                                   }]
-                                 }])
+    expect(result['apis'][0]['path']).to start_with '/somethingelse'
 
     expect(result['models']['SomeThingElse']).to include('id' => 'SomeThingElse',
                                                          'properties' => {
@@ -217,7 +207,7 @@ describe 'API Models' do
   end
 
   it 'includes enum values in params and documentation.' do
-    get '/swagger_doc/enum_description_in_entity.json'
+    get '/swagger_doc/enum_description_in_entity'
     result = JSON.parse(last_response.body)
     expect(result['models']['EnumValues']).to eq(
                                                   'id' => 'EnumValues',
@@ -239,7 +229,7 @@ describe 'API Models' do
   end
 
   it 'includes referenced models in those with aliased references.' do
-    get '/swagger_doc/aliasedthing.json'
+    get '/swagger_doc/aliasedthing'
     result = JSON.parse(last_response.body)
     expect(result['models']['AliasedThing']).to eq(
                                                     'id' => 'AliasedThing',
@@ -257,7 +247,7 @@ describe 'API Models' do
   end
 
   it 'includes all entities with four levels of nesting' do
-    get '/swagger_doc/nesting.json'
+    get '/swagger_doc/nesting'
     result = JSON.parse(last_response.body)
 
     expect(result['models']).to include('FirstLevel', 'SecondLevel', 'ThirdLevel', 'FourthLevel')

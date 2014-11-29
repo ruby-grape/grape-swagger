@@ -16,7 +16,7 @@ describe 'Boolean Params' do
   end
 
   subject do
-    get '/swagger_doc/splines.json'
+    get '/swagger_doc/splines'
     expect(last_response.status).to eq 200
     body = JSON.parse last_response.body
     body['apis'].first['operations'].first['parameters']

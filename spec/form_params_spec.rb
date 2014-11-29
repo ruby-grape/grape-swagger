@@ -35,52 +35,16 @@ describe 'Form Params' do
   end
 
   subject do
-    get '/swagger_doc/items.json'
+    get '/swagger_doc/items'
     JSON.parse(last_response.body)
   end
 
   it 'retrieves the documentation form params' do
-    expect(subject['apis']).to eq([
-      {
-        'path' => '/items.{format}',
-        'operations' => [
-          {
-            'notes' => '',
-            'summary' => '',
-            'nickname' => 'POST-items---format-',
-            'method' => 'POST',
-            'parameters' => [{ 'paramType' => 'form', 'name' => 'name', 'description' => 'name of item', 'type' => 'string', 'required' => true, 'allowMultiple' => false }],
-            'type' => 'void'
-          }
-        ]
-      }, {
-        'path' => '/items/{id}.{format}',
-        'operations' => [
-          {
-            'notes' => '',
-            'summary' => '',
-            'nickname' => 'PUT-items--id---format-',
-            'method' => 'PUT',
-            'parameters' => [
-              { 'paramType' => 'path', 'name' => 'id', 'description' => 'id of item', 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32' },
-              { 'paramType' => 'form', 'name' => 'name', 'description' => 'name of item', 'type' => 'string', 'required' => true, 'allowMultiple' => false },
-              { 'paramType' => 'form', 'name' => 'conditions', 'description' => 'conditions of item', 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32', 'enum' => [1, 2, 3] }
-            ],
-            'type' => 'void'
-          },
-          {
-            'notes' => '',
-            'summary' => '',
-            'nickname' => 'PATCH-items--id---format-',
-            'method' => 'PATCH',
-            'parameters' => [
-              { 'paramType' => 'path', 'name' => 'id', 'description' => 'id of item', 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32' },
-              { 'paramType' => 'form', 'name' => 'name', 'description' => 'name of item', 'type' => 'string', 'required' => true, 'allowMultiple' => false },
-              { 'paramType' => 'form', 'name' => 'conditions', 'description' => 'conditions of item', 'type' => 'string', 'required' => false, 'allowMultiple' => false, 'enum' => %w(1 2) }
-            ],
-            'type' => 'void'
-          }
-        ]
-      }])
+    expect(subject['apis'].count).to eq 2
+    expect(subject['apis'][0]['path']).to start_with '/items'
+    expect(subject['apis'][0]['operations'][0]['method']).to eq 'POST'
+    expect(subject['apis'][1]['path']).to start_with '/items/{id}'
+    expect(subject['apis'][1]['operations'][0]['method']).to eq 'PUT'
+    expect(subject['apis'][1]['operations'][1]['method']).to eq 'PATCH'
   end
 end

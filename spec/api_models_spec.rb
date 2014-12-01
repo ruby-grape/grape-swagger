@@ -6,6 +6,7 @@ describe 'API Models' do
     module Entities
       class Something < Grape::Entity
         expose :text, documentation: { type: 'string', desc: 'Content of something.' }
+        expose :links, documentation: { type: 'link', is_array: true }
       end
     end
 
@@ -241,7 +242,8 @@ describe 'API Models' do
     expect(result['models']['Something']).to eq(
                                                  'id' => 'Something',
                                                  'properties' => {
-                                                   'text' => { 'type' => 'string', 'description' => 'Content of something.' }
+                                                   'text' => { 'type' => 'string', 'description' => 'Content of something.' },
+                                                   'links' => { 'type' => 'array', 'items' => { '$ref' => 'link' } }
                                                  }
                                              )
   end

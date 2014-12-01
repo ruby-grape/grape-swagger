@@ -4,19 +4,11 @@ describe 'helpers' do
 
   before :all do
     class HelperTestAPI < Grape::API
-      add_swagger_documentation
     end
   end
 
   subject do
-    api = Object.new
-
-    # after injecting grape-swagger into the Test API we get the helper methods
-    # back from the first endpoint's class (the API mounted by grape-swagger
-    # to serve the swagger_doc
-
-    api.extend HelperTestAPI.endpoints.first.options[:app].helpers
-    api
+    HelperTestAPI.add_swagger_documentation
   end
 
   context 'parsing parameters' do

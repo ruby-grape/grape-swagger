@@ -298,14 +298,6 @@ module Grape
               end
             end
 
-            def try(*args, &block)
-              if args.empty? && block_given?
-                yield self
-              elsif respond_to?(args.first)
-                public_send(*args, &block)
-              end
-            end
-
             def strip_heredoc(string)
               indent = string.scan(/^[ \t]*(?=\S)/).min.try(:size) || 0
               string.gsub(/^[ \t]{#{indent}}/, '')
@@ -455,14 +447,7 @@ module Grape
 
                     if route.route_entity
                       type = @@documentation_class.parse_entity_name(route.route_entity)
-                      if route.instance_variable_get(:@options)[:is_array]
-                        operation.merge!(
-                          'type' => 'array',
-                          'items' => generate_typeref(type)
-                        )
-                      else
-                        operation.merge!('type' => type)
-                      end
+                      operation.merge!('type' => type)
                     end
 
                     operation[:nickname] = route.route_nickname if route.route_nickname

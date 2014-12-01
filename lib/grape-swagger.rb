@@ -26,7 +26,7 @@ module Grape
           next if resource.empty?
           resource.downcase!
           @combined_routes[resource] ||= []
-          next if @@hide_documentation_path && route.route_path.include?(@@mount_path)
+          next if documentation_class.hide_documentation_path && route.route_path.include?(documentation_class.mount_path)
           @combined_routes[resource] << route
         end
 
@@ -311,6 +311,14 @@ module Grape
               else
                 request.base_url
               end
+            end
+
+            def hide_documentation_path
+              @@hide_documentation_path
+            end
+
+            def mount_path
+              @@mount_path
             end
 
             def setup(options)

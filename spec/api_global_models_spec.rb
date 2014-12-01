@@ -20,15 +20,13 @@ describe 'Global Models' do
 
   subject do
     Class.new(Grape::API) do
-      desc 'This gets thing.', params: Entities::Some::Thing.documentation
+      desc 'This gets thing.'
       get '/thing' do
         thing = OpenStruct.new text: 'thing'
         present thing, with: Entities::Some::Thing
       end
 
-      desc 'This gets combined thing.',
-           params: Entities::Some::CombinedThing.documentation,
-           entity: Entities::Some::CombinedThing
+      desc 'This gets combined thing.', entity: Entities::Some::CombinedThing
       get '/combined_thing' do
         thing = OpenStruct.new text: 'thing'
         present thing, with: Entities::Some::CombinedThing

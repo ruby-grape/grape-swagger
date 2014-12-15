@@ -258,7 +258,10 @@ module Grape
               models.each do |model|
                 # get model references from exposures with a documentation
                 nested_models = model.exposures.map do |_, config|
-                  config[:using] if config.key?(:documentation)
+                  if config.key?(:documentation)
+                    model = config[:using]
+                    model.respond_to?(:constantize) ? model.constantize : model
+                  end
                 end.compact
 
                 # get all nested models recursively

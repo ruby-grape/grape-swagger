@@ -10,6 +10,7 @@
 * [#179](https://github.com/tim-vandecasteele/grape-swagger/pull/179): Document `Virtus::Attribute::Boolean` as boolean - [@eashman](https://github.com/eashman), [@dblock](https://github.com/dblock).
 * [#178](https://github.com/tim-vandecasteele/grape-swagger/issues/178): Fixed `Hash` parameters, now exposed as Swagger `object` types - [@dblock](https://github.com/dblock).
 * [#167](https://github.com/tim-vandecasteele/grape-swagger/pull/167): Support mutli-tenanted APIs, don't cache `base_path` - [@bradrobertson](https://github.com/bradrobertson), (https://github.com/dblock).
+* [#185](https://github.com/tim-vandecasteele/grape-swagger/pull/185): Support strings in `Grape::Entity.expose`'s `:using` option - [@jhollinger](https://github.com/jhollinger).
 * Your contribution here.
 
 ### 0.8.0 (August 30, 2014)

@@ -11,6 +11,11 @@ describe 'responseModel' do
         class Something < Grape::Entity
           expose :text, documentation: { type: 'string', desc: 'Content of something.' }
           expose :kind, using: Kind, documentation: { type: 'MyAPI::Kind', desc: 'The kind of this something.' }
+          expose :relation, using: 'MyAPI::Entities::Relation', documentation: { type: 'MyAPI::Relation', desc: 'A related model.' }
+        end
+
+        class Relation < Grape::Entity
+          expose :name, documentation: { type: 'string', desc: 'Name' }
         end
 
         class Error < Grape::Entity
@@ -82,7 +87,8 @@ describe 'responseModel' do
       'id' => 'MyAPI::Something',
       'properties' => {
         'text' => { 'type' => 'string', 'description' => 'Content of something.' },
-        'kind' => { '$ref' => 'MyAPI::Kind', 'description' => 'The kind of this something.' }
+        'kind' => { '$ref' => 'MyAPI::Kind', 'description' => 'The kind of this something.' },
+        'relation' => { '$ref' => 'MyAPI::Relation', 'description' => 'A related model.' }
       }
     )
 
@@ -91,6 +97,14 @@ describe 'responseModel' do
       'id' => 'MyAPI::Kind',
       'properties' => {
         'title' => { 'type' => 'string', 'description' => 'Title of the kind.' }
+      }
+    )
+
+    expect(subject['models'].keys).to include 'MyAPI::Relation'
+    expect(subject['models']['MyAPI::Relation']).to eq(
+      'id' => 'MyAPI::Relation',
+      'properties' => {
+        'name' => { 'type' => 'string', 'description' => 'Name' }
       }
     )
   end

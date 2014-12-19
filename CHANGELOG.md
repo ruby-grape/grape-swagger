@@ -1,3 +1,7 @@
+### Next Release
+
+* Your contribution here.
+
 ### 0.9.0 (December 19, 2014)
 
 * [#91](https://github.com/tim-vandecasteele/grape-swagger/issues/91): Fixed empty field for group parameters' name with type hash or Array - [@dukedave](https://github.com/dukedave).

@@ -1,4 +1,4 @@
-### 0.8.1 (Next)
+### 0.9.0 (December 19, 2014)
 
 * [#91](https://github.com/tim-vandecasteele/grape-swagger/issues/91): Fixed empty field for group parameters' name with type hash or Array - [@dukedave](https://github.com/dukedave).
 * [#154](https://github.com/tim-vandecasteele/grape-swagger/pull/154): Allow classes for type declarations inside documentation - [@mrmargolis](https://github.com/mrmargolis).
@@ -11,7 +11,6 @@
 * [#178](https://github.com/tim-vandecasteele/grape-swagger/issues/178): Fixed `Hash` parameters, now exposed as Swagger `object` types - [@dblock](https://github.com/dblock).
 * [#167](https://github.com/tim-vandecasteele/grape-swagger/pull/167): Support mutli-tenanted APIs, don't cache `base_path` - [@bradrobertson](https://github.com/bradrobertson), (https://github.com/dblock).
 * [#185](https://github.com/tim-vandecasteele/grape-swagger/pull/185): Support strings in `Grape::Entity.expose`'s `:using` option - [@jhollinger](https://github.com/jhollinger).
-* Your contribution here.
 
 ### 0.8.0 (August 30, 2014)
 

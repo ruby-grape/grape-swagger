@@ -1,6 +1,9 @@
 # grape-swagger
 
-[![Build Status](https://travis-ci.org/tim-vandecasteele/grape-swagger.svg?branch=master)](https://travis-ci.org/tim-vandecasteele/grape-swagger)
+[![Gem Version](http://img.shields.io/gem/v/grape-swagger.svg)](http://badge.fury.io/rb/grape-swagger)
+[![Build Status](http://img.shields.io/travis/tim-vandecasteele/grape-swagger.svg)](https://travis-ci.org/tim-vandecasteele/grape-swagger)
+[![Dependency Status](https://gemnasium.com/tim-vandecasteele/grape-swagger.svg)](https://gemnasium.com/tim-vandecasteele/grape-swagger)
+[![Code Climate](https://codeclimate.com/github/tim-vandecasteele/grape-swagger.svg)](https://codeclimate.com/github/tim-vandecasteele/grape-swagger)
 
 ## What is grape-swagger?
 

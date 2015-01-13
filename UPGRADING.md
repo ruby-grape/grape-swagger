@@ -5,7 +5,7 @@ Upgrading Grape-swagger
 
 #### Changes in Configuration
 
-Remove the `.json` extension from `GrapeSwaggerRails.options.url`.
+If you're using [grape-swagger-rails](https://github.com/BrandyMint/grape-swagger-rails), remove the `.json` extension from `GrapeSwaggerRails.options.url`.
 
 For example, change 
 

@@ -1,6 +1,26 @@
 Upgrading Grape-swagger
 =======================
 
+### Upgrading to >= 0.9.0
+
+#### Changes in Configuration
+
+Remove the `.json` extension from `GrapeSwaggerRails.options.url`.
+
+For example, change 
+
+```ruby
+GrapeSwaggerRails.options.url = '/api/v1/swagger_doc.json'
+```
+
+to
+
+```ruby
+GrapeSwaggerRails.options.url = '/api/v1/swagger_doc'
+```
+
+See [#187](https://github.com/tim-vandecasteele/grape-swagger/issues/187) for more information.
+
 ### Upgrading to >= 0.8.0
 
 #### Changes in Configuration

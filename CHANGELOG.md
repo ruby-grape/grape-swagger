@@ -1,5 +1,6 @@
 ### Next Release
 
+* [#196](https://github.com/tim-vandecasteele/grape-swagger/pull/196): If `:type` is omitted, see if it's available in `:using` - [@jhollinger](https://github.com/jhollinger).
 * Your contribution here.
 
 ### 0.9.0 (December 19, 2014)

@@ -229,7 +229,7 @@ end
 
 ### Relationships
 
-Put the full name of the relationship's class in `type`, leaving out any modules named `Entities` or `Entity`. So for the entity class `API::Entities::Address`, you would put `type: 'API::Address'`.
+You may safely omit `type` from relationships, as it can be inferred. However, if you need to specify or override it, use the full name of the class leaving out any modules named `Entities` or `Entity`.
 
 #### 1xN
 

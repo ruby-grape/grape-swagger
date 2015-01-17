@@ -11,10 +11,17 @@ describe 'responseModel' do
         class Something < Grape::Entity
           expose :text, documentation: { type: 'string', desc: 'Content of something.' }
           expose :kind, using: Kind, documentation: { type: 'MyAPI::Kind', desc: 'The kind of this something.' }
+          expose :kind2, using: Kind, documentation: { desc: 'Secondary kind.' }
+          expose :kind3, using: 'MyAPI::Entities::Kind', documentation: { desc: 'Tertiary kind.' }
+          expose :tags, using: 'MyAPI::Entities::Tag', documentation: { desc: 'Tags.', is_array: true }
           expose :relation, using: 'MyAPI::Entities::Relation', documentation: { type: 'MyAPI::Relation', desc: 'A related model.' }
         end
 
         class Relation < Grape::Entity
+          expose :name, documentation: { type: 'string', desc: 'Name' }
+        end
+
+        class Tag < Grape::Entity
           expose :name, documentation: { type: 'string', desc: 'Name' }
         end
 
@@ -88,6 +95,9 @@ describe 'responseModel' do
       'properties' => {
         'text' => { 'type' => 'string', 'description' => 'Content of something.' },
         'kind' => { '$ref' => 'MyAPI::Kind', 'description' => 'The kind of this something.' },
+        'kind2' => { '$ref' => 'MyAPI::Kind', 'description' => 'Secondary kind.' },
+        'kind3' => { '$ref' => 'MyAPI::Kind', 'description' => 'Tertiary kind.' },
+        'tags' => { 'items' => { '$ref' => 'MyAPI::Tag' }, 'type' => 'array', 'description' => 'Tags.' },
         'relation' => { '$ref' => 'MyAPI::Relation', 'description' => 'A related model.' }
       }
     )

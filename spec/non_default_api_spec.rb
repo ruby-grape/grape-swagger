@@ -495,9 +495,22 @@ describe 'options: ' do
     #   JSON.parse(last_response.body)["basePath"].should == "https://example.org:80"
     # end
 
-    it 'uses https schema in endpoint doc' do
-      get '/swagger_doc/something.json', {}, 'rack.url_scheme' => 'https'
-      expect(JSON.parse(last_response.body)['basePath']).to eq 'https://example.org:80'
+    context 'when in development environment' do
+      before { ENV['RAILS_ENV'] = 'development' }
+
+      it 'uses https schema with base_url in endpoint doc' do
+        get '/swagger_doc/something.json', {}, 'rack.url_scheme' => 'https'
+        expect(JSON.parse(last_response.body)['basePath']).to eq 'https://example.org:80'
+      end
+    end
+
+    context 'when in production environment' do
+      before { ENV['RAILS_ENV'] = 'production' }
+
+      it 'uses https schema with host only in endpoint doc' do
+        get '/swagger_doc/something.json', {}, 'rack.url_scheme' => 'https'
+        expect(JSON.parse(last_response.body)['basePath']).to eq 'https://example.org'
+      end
     end
   end
 

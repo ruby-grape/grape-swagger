@@ -322,6 +322,16 @@ module Grape
               end
             end
 
+            def generate_default_base_path
+              lambda do |request|
+                if %w(development test).include?(ENV['RAILS_ENV'] || ENV['RACK_ENV'])
+                  request.base_url
+                else
+                  "#{request.scheme}://#{request.host}"
+                end
+              end
+            end
+
             def hide_documentation_path
               @@hide_documentation_path
             end
@@ -334,7 +344,7 @@ module Grape
               defaults = {
                 target_class: nil,
                 mount_path: '/swagger_doc',
-                base_path: nil,
+                base_path: generate_default_base_path,
                 api_version: '0.1',
                 markdown: nil,
                 hide_documentation_path: false,

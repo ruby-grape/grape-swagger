@@ -220,11 +220,17 @@ module Grape
 
                   required << property_name.to_s if p.delete(:required)
 
+                  type = if p[:type]
+                           p.delete(:type)
+                         elsif (entity = model.exposures[property_name][:using])
+                           parse_entity_name(entity)
+                         end
+
                   if p.delete(:is_array)
-                    p[:items] = generate_typeref(p[:type])
+                    p[:items] = generate_typeref(type)
                     p[:type] = 'array'
                   else
-                    p.merge! generate_typeref(p.delete(:type))
+                    p.merge! generate_typeref(type)
                   end
 
                   # rename Grape Entity's "desc" to "description"

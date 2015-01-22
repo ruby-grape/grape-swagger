@@ -20,7 +20,7 @@ module Grape
           route_path = route.route_path
           route_match = route_path.split(/^.*?#{route.route_prefix.to_s}/).last
           next unless route_match
-          route_match = route_match.match('\/([\w|-]*?)[\.\/\(]') || route_match.match('\/([\w|-]*)')
+          route_match = route_match.match('\/([\w|-]*?)[\.\/\(]') || route_match.match('\/([a-z]+)')
           next unless route_match
           resource = route_match.captures.first
           next if resource.empty?

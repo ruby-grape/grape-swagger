@@ -12,11 +12,11 @@ Metrics/AbcSize:
 # Offense count: 1
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 397
+  Max: 401
 
 # Offense count: 5
 Metrics/CyclomaticComplexity:
-  Max: 93
+  Max: 94
 
 # Offense count: 195
 # Configuration parameters: AllowURI, URISchemes.
@@ -26,11 +26,11 @@ Metrics/LineLength:
 # Offense count: 13
 # Configuration parameters: CountComments.
 Metrics/MethodLength:
-  Max: 359
+  Max: 362
 
 # Offense count: 4
 Metrics/PerceivedComplexity:
-  Max: 96
+  Max: 97
 
 # Offense count: 7
 Style/ClassVars:

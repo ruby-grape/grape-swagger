@@ -50,6 +50,22 @@ module Grape
         end
       end
 
+      def get_non_nested_params(params)
+        params.each do |param, value|
+          is_nested_param = /^#{ Regexp.quote param }\[.+\]$/
+          params.each do |p, _|
+            if p.match(is_nested_param)
+              params[p][:required] = false unless value[:required].presence
+            end
+          end
+        end
+
+        params.reject do |param, _|
+          is_nested_param = /^#{ Regexp.quote param }\[.+\]$/
+          params.keys.any? { |p| p.match is_nested_param }
+        end
+      end
+
       def create_documentation_class
         Class.new(Grape::API) do
           class << self
@@ -64,10 +80,7 @@ module Grape
             def parse_params(params, path, method)
               params ||= []
 
-              non_nested_parent_params = params.reject do |param, _|
-                is_nested_param = /^#{ Regexp.quote param }\[.+\]$/
-                params.keys.any? { |p| p.match is_nested_param }
-              end
+              non_nested_parent_params = get_non_nested_params(params)
 
               non_nested_parent_params.map do |param, value|
                 items = {}

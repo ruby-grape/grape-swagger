@@ -88,6 +88,8 @@ module Grape
                                   'dateTime'
                                 when 'Numeric'
                                   'double'
+                                when 'Symbol'
+                                  'string'
                                 else
                                   @@documentation_class.parse_entity_name(raw_data_type)
                                 end

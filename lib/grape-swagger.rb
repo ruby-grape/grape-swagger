@@ -80,7 +80,7 @@ module Grape
                                   'File'
                                 when 'Virtus::Attribute::Boolean'
                                   'boolean'
-                                when 'Boolean', 'Date', 'Integer', 'String'
+                                when 'Boolean', 'Date', 'Integer', 'String', 'Float'
                                   raw_data_type.downcase
                                 when 'BigDecimal'
                                   'long'

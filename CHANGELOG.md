@@ -1,5 +1,6 @@
 ### Next Release
 
+* [#209](https://github.com/tim-vandecasteele/grape-swagger/pull/209): Fixed the range `:values` option, now exposed as `enum` parameters - [@u2](https://github.com/u2).
 * [#196](https://github.com/tim-vandecasteele/grape-swagger/pull/196): If `:type` is omitted, see if it's available in `:using` - [@jhollinger](https://github.com/jhollinger).
 * Your contribution here.
 

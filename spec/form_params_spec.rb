@@ -30,6 +30,15 @@ describe 'Form Params' do
         {}
       end
 
+      params do
+        requires :id, type: Integer, desc: 'id of item'
+        requires :name, type: String, desc: 'name of item'
+        optional :conditions, type: Symbol, desc: 'conditions of item', values: [:one, :two]
+      end
+      post '/items/:id' do
+        {}
+      end
+
       add_swagger_documentation
     end
   end
@@ -46,5 +55,11 @@ describe 'Form Params' do
     expect(subject['apis'][1]['path']).to start_with '/items/{id}'
     expect(subject['apis'][1]['operations'][0]['method']).to eq 'PUT'
     expect(subject['apis'][1]['operations'][1]['method']).to eq 'PATCH'
+    expect(subject['apis'][1]['operations'][2]['method']).to eq 'POST'
+  end
+
+  it 'treats Symbol parameter as form param' do
+    expect(subject['apis'][1]['operations'][2]['parameters'][2]['paramType']).to eq 'form'
+    expect(subject['apis'][1]['operations'][2]['parameters'][2]['type']).to eq 'string'
   end
 end

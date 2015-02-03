@@ -30,7 +30,7 @@ describe 'Range Params' do
 
   it 'has letter range values' do
     expect(letter).to eq [
-      { 'paramType' => 'form', 'name' => 'letter', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false, 'enum' => ('a'..'z').to_a },
+      { 'paramType' => 'form', 'name' => 'letter', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false, 'enum' => ('a'..'z').to_a }
     ]
   end
 
@@ -43,7 +43,7 @@ describe 'Range Params' do
 
   it 'has number range values' do
     expect(number).to eq [
-      { 'paramType' => 'form', 'name' => 'number', 'description' => nil, 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32', 'enum' => (-5..5).to_a },
+      { 'paramType' => 'form', 'name' => 'number', 'description' => nil, 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32', 'enum' => (-5..5).to_a }
     ]
   end
 

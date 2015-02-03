@@ -98,6 +98,7 @@ module Grape
                 default_value = value.is_a?(Hash) ? value[:default] : nil
                 is_array      = value.is_a?(Hash) ? (value[:is_array] || false) : false
                 enum_values   = value.is_a?(Hash) ? value[:values] : nil
+                enum_values   = enum_values.to_a if enum_values && enum_values.is_a?(Range)
                 enum_values   = enum_values.call if enum_values && enum_values.is_a?(Proc)
 
                 if value.is_a?(Hash) && value.key?(:param_type)

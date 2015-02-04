@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'helpers' do
-
   before :all do
     class HelperTestAPI < Grape::API
     end
@@ -59,7 +58,6 @@ describe 'helpers' do
           allowMultiple: false
         }
       ]
-
     end
 
     it 'parses symbol param as string' do
@@ -97,7 +95,6 @@ describe 'helpers' do
         ]
       end
     end
-
   end
 
   context 'parsing the path' do
@@ -139,5 +136,4 @@ describe 'helpers' do
       ]
     end
   end
-
 end

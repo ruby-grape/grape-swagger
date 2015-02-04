@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'API Models' do
-
   before :all do
     module Entities
       class Something < Grape::Entity
@@ -98,7 +97,6 @@ describe 'API Models' do
 
       desc 'This tests the enum values in params and documentation.', entity: Entities::EnumValues, params: Entities::EnumValues.documentation
       get '/enum_description_in_entity' do
-
         enum_value = OpenStruct.new gender: 'Male', number: 1
 
         present enum_value, with: Entities::EnumValues
@@ -226,7 +224,6 @@ describe 'API Models' do
                                                          ],
                                                       'type' => 'EnumValues'
                                                   )
-
   end
 
   it 'includes referenced models in those with aliased references.' do

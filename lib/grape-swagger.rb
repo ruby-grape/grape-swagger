@@ -1,3 +1,4 @@
+require 'grape'
 require 'grape-swagger/version'
 require 'grape-swagger/errors'
 require 'grape-swagger/markdown'
@@ -248,7 +249,6 @@ module Grape
                   end
 
                   properties[property_name] = p
-
                 end
 
                 result[name] = {

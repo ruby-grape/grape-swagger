@@ -46,5 +46,4 @@ describe 'Range Params' do
       { 'paramType' => 'form', 'name' => 'number', 'description' => nil, 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32', 'enum' => (-5..5).to_a }
     ]
   end
-
 end

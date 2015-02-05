@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'simple root api' do
-
   before :all do
     class ApiRoot < Grape::API
       format :json

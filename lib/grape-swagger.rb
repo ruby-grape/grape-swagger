@@ -51,6 +51,22 @@ module Grape
         end
       end
 
+      def get_non_nested_params(params)
+        # Duplicate the params as we are going to modify them
+        dup_params = params.each_with_object(Hash.new) do |(param, value), dparams|
+          dparams[param] = value.dup
+        end
+
+        dup_params.reject do |param, value|
+          is_nested_param = /^#{ Regexp.quote param }\[.+\]$/
+          0 < dup_params.count do |p, _|
+            match = p.match(is_nested_param)
+            dup_params[p][:required] = false if match && !value[:required]
+            match
+          end
+        end
+      end
+
       def create_documentation_class
         Class.new(Grape::API) do
           class << self
@@ -65,10 +81,7 @@ module Grape
             def parse_params(params, path, method)
               params ||= []
 
-              non_nested_parent_params = params.reject do |param, _|
-                is_nested_param = /^#{ Regexp.quote param }\[.+\]$/
-                params.keys.any? { |p| p.match is_nested_param }
-              end
+              non_nested_parent_params = get_non_nested_params(params)
 
               non_nested_parent_params.map do |param, value|
                 items = {}

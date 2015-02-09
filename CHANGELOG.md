@@ -4,6 +4,7 @@
 * [#208](https://github.com/tim-vandecasteele/grape-swagger/pull/208): Fixed `Float` parameters, exposed as Swagger `float` types - [@u2](https://github.com/u2).
 * [#196](https://github.com/tim-vandecasteele/grape-swagger/pull/196): If `:type` is omitted, see if it's available in `:using` - [@jhollinger](https://github.com/jhollinger).
 * [#200](https://github.com/tim-vandecasteele/grape-swagger/pull/200): Treat `type: Symbol` as string form parameter - [@ypresto](https://github.com/ypresto).
+* [#207](https://github.com/tim-vandecasteele/grape-swagger/pull/207): Support grape `mutually_exclusive` - [@mintuhouse](https://github.com/mintuhouse).
 * Your contribution here.
 
 ### 0.9.0 (December 19, 2014)

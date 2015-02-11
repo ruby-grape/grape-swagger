@@ -1,4 +1,5 @@
 ### Next Release
+* [#214](https://github.com/tim-vandecasteele/grape-swagger/pull/214): Allow anything that responds to `call` to be used in `:hidden` - [@zbelzer](https://github.com/zbelzer).
 * [#211](https://github.com/tim-vandecasteele/grape-swagger/pull/211): Fixed the dependency, just `require 'grape'` - [@u2](https://github.com/u2).
 * [#210](https://github.com/tim-vandecasteele/grape-swagger/pull/210): Fixed the range `:values` option, now exposed as `enum` parameters - [@u2](https://github.com/u2).
 * [#208](https://github.com/tim-vandecasteele/grape-swagger/pull/208): Fixed `Float` parameters, exposed as Swagger `float` types - [@u2](https://github.com/u2).

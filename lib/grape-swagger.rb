@@ -402,7 +402,7 @@ module Grape
                 end
 
                 routes_array = routes.keys.map do |local_route|
-                  next if routes[local_route].all?(&:route_hidden)
+                  next if routes[local_route].map(&:route_hidden).all? { |value| value.respond_to?(:call) ? value.call : value }
 
                   url_format  = '.{format}' unless @@hide_format
 
@@ -444,7 +444,11 @@ module Grape
                 routes = target_class.combined_routes[params[:name]]
                 error!('Not Found', 404) unless routes
 
-                ops = routes.reject(&:route_hidden).group_by do |route|
+                visible_ops = routes.reject do |route|
+                  route.route_hidden.respond_to?(:call) ? route.route_hidden.call : route.route_hidden
+                end
+
+                ops = visible_ops.group_by do |route|
                   @@documentation_class.parse_path(route.route_path, api_version)
                 end
 

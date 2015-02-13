@@ -1,4 +1,5 @@
 ### Next Release
+
 * [#214](https://github.com/tim-vandecasteele/grape-swagger/pull/214): Allow anything that responds to `call` to be used in `:hidden` - [@zbelzer](https://github.com/zbelzer).
 * [#211](https://github.com/tim-vandecasteele/grape-swagger/pull/211): Fixed the dependency, just `require 'grape'` - [@u2](https://github.com/u2).
 * [#210](https://github.com/tim-vandecasteele/grape-swagger/pull/210): Fixed the range `:values` option, now exposed as `enum` parameters - [@u2](https://github.com/u2).
@@ -6,6 +7,11 @@
 * [#196](https://github.com/tim-vandecasteele/grape-swagger/pull/196): If `:type` is omitted, see if it's available in `:using` - [@jhollinger](https://github.com/jhollinger).
 * [#200](https://github.com/tim-vandecasteele/grape-swagger/pull/200): Treat `type: Symbol` as string form parameter - [@ypresto](https://github.com/ypresto).
 * [#207](https://github.com/tim-vandecasteele/grape-swagger/pull/207): Support grape `mutually_exclusive` - [@mintuhouse](https://github.com/mintuhouse).
+
+#### Fixes
+
+* [#216](https://github.com/tim-vandecasteele/grape-swagger/pull/216): Fix API route paths matching. This prevents the disappearance of the documentation for root endpoints in case you are using `grape ~> 0.10.0`, specific `format` and `:path` versioning. Fixes [#192](https://github.com/tim-vandecasteele/grape-swagger/issues/192), [#189](https://github.com/tim-vandecasteele/grape-swagger/issues/189). - [@dm1try](https://github.com/dm1try) [@minch](https://github.com/minch)
+
 * Your contribution here.
 
 ### 0.9.0 (December 19, 2014)

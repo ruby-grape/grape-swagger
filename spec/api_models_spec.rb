@@ -80,10 +80,13 @@ describe 'API Models' do
     end
 
     class QueryInput < Grape::Entity
-      expose :elements, using: Entities::QueryInputElement,
-        documentation: { type: 'QueryInputElement',
-          desc: 'Set of configuration',
-          param_type: 'body', is_array: true, required: true }
+      expose :elements, using: Entities::QueryInputElement, documentation: {
+        type: 'QueryInputElement',
+        desc: 'Set of configuration',
+        param_type: 'body',
+        is_array: true,
+        required: true
+      }
     end
 
     class QueryResult < Grape::Entity
@@ -139,8 +142,8 @@ describe 'API Models' do
       end
 
       desc 'This tests diffrent entity for input and diffrent for output',
-        entity: [ Entities::QueryResult, Entities::QueryInput ],
-        params: Entities::QueryInput.documentation
+           entity: [Entities::QueryResult, Entities::QueryInput],
+           params: Entities::QueryInput.documentation
       get '/multiple_entities' do
         result = OpenStruct.new(elements_size: params[:elements].size)
         present result, with: Entities::QueryResult

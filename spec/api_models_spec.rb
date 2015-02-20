@@ -71,6 +71,29 @@ describe 'API Models' do
     end
   end
 
+  module Entities
+    class QueryInputElement < Grape::Entity
+      expose :key, documentation: {
+        type: String, desc: 'Name of parameter', required: true }
+      expose :value, documentation: {
+        type: String, desc: 'Value of parameter', required: true }
+    end
+
+    class QueryInput < Grape::Entity
+      expose :elements, using: Entities::QueryInputElement, documentation: {
+        type: 'QueryInputElement',
+        desc: 'Set of configuration',
+        param_type: 'body',
+        is_array: true,
+        required: true
+      }
+    end
+
+    class QueryResult < Grape::Entity
+      expose :elements_size, documentation: { type: Integer, desc: 'Return input elements size' }
+    end
+  end
+
   def app
     Class.new(Grape::API) do
       format :json
@@ -118,6 +141,14 @@ describe 'API Models' do
         present first_level, with: Entities::FirstLevel
       end
 
+      desc 'This tests diffrent entity for input and diffrent for output',
+           entity: [Entities::QueryResult, Entities::QueryInput],
+           params: Entities::QueryInput.documentation
+      get '/multiple_entities' do
+        result = OpenStruct.new(elements_size: params[:elements].size)
+        present result, with: Entities::QueryResult
+      end
+
       add_swagger_documentation
     end
   end
@@ -145,6 +176,7 @@ describe 'API Models' do
         { 'path' => '/enum_description_in_entity.{format}', 'description' => 'Operations about enum_description_in_entities' },
         { 'path' => '/aliasedthing.{format}', 'description' => 'Operations about aliasedthings' },
         { 'path' => '/nesting.{format}', 'description' => 'Operations about nestings' },
+        { 'path' => '/multiple_entities.{format}', 'description' => 'Operations about multiple_entities' },
         { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
       ]
     end
@@ -250,5 +282,12 @@ describe 'API Models' do
     result = JSON.parse(last_response.body)
 
     expect(result['models']).to include('FirstLevel', 'SecondLevel', 'ThirdLevel', 'FourthLevel')
+  end
+
+  it 'includes all entities while using multiple entities' do
+    get '/swagger_doc/multiple_entities'
+    result = JSON.parse(last_response.body)
+
+    expect(result['models']).to include('QueryInput', 'QueryInputElement', 'QueryResult')
   end
 end

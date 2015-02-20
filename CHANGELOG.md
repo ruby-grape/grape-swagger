@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#217](https://github.com/tim-vandecasteele/grape-swagger/pull/217): Support Array of entities for proper rendering of grape-entity input dependencies - [@swistaczek](https://github.com/swistaczek).
 * [#214](https://github.com/tim-vandecasteele/grape-swagger/pull/214): Allow anything that responds to `call` to be used in `:hidden` - [@zbelzer](https://github.com/zbelzer).
 * [#196](https://github.com/tim-vandecasteele/grape-swagger/pull/196): If `:type` is omitted, see if it's available in `:using` - [@jhollinger](https://github.com/jhollinger).
 * [#200](https://github.com/tim-vandecasteele/grape-swagger/pull/200): Treat `type: Symbol` as string form parameter - [@ypresto](https://github.com/ypresto).

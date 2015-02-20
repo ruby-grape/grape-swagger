@@ -464,7 +464,7 @@ module Grape
 
                     models |= @@models if @@models.present?
 
-                    models |= [route.route_entity] if route.route_entity.present?
+                    models |= Array(route.route_entity) if route.route_entity.present?
 
                     models = @@documentation_class.models_with_included_presenters(models.flatten.compact)
 
@@ -483,7 +483,7 @@ module Grape
                     operation.merge!(responseMessages: http_codes) unless http_codes.empty?
 
                     if route.route_entity
-                      type = @@documentation_class.parse_entity_name(route.route_entity)
+                      type = @@documentation_class.parse_entity_name(Array(route.route_entity).first)
                       operation.merge!('type' => type)
                     end
 

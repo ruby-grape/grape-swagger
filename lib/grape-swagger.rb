@@ -8,7 +8,7 @@ require 'grape-swagger/markdown/redcarpet_adapter'
 module Grape
   class API
     class << self
-      attr_reader :combined_routes, :combined_namespaces
+      attr_reader :combined_routes, :combined_namespaces, :combined_namespace_routes, :combined_namespace_identifiers
 
       def add_swagger_documentation(options = {})
         documentation_class = create_documentation_class
@@ -33,6 +33,13 @@ module Grape
 
         @combined_namespaces = {}
         combine_namespaces(self)
+
+        @combined_namespace_routes = {}
+        @combined_namespace_identifiers = {}
+        combine_namespace_routes(@combined_namespaces)
+
+        exclusive_route_keys = @combined_routes.keys - @combined_namespaces.keys
+        exclusive_route_keys.each { |key| @combined_namespace_routes[key] = @combined_routes[key] }
         documentation_class
       end
 
@@ -45,10 +52,75 @@ module Grape
                else
                  endpoint.settings.stack.last[:namespace]
                end
-          @combined_namespaces[ns.space] = ns if ns
+          # use the full namespace here (not the latest level only)
+          # and strip leading slash
+          @combined_namespaces[endpoint.namespace.sub(/^\//, '')] = ns if ns
 
           combine_namespaces(endpoint.options[:app]) if endpoint.options[:app]
         end
+      end
+
+      def combine_namespace_routes(namespaces)
+        # iterate over each single namespace
+        namespaces.each do |name, namespace|
+          # get the parent route for the namespace
+          parent_route_name = name.match(%r{^/?([^/]*).*$})[1]
+          parent_route = @combined_routes[parent_route_name]
+          # fetch all routes that are within the current namespace
+          namespace_routes = parent_route.collect do |route|
+            route if (route.route_path.start_with?("/#{name}") || route.route_path.start_with?("/:version/#{name}")) &&
+                     (route.instance_variable_get(:@options)[:namespace] == "/#{name}" || route.instance_variable_get(:@options)[:namespace] == "/:version/#{name}")
+          end.compact
+
+          if namespace.options.key?(:swagger) && namespace.options[:swagger][:nested] == false
+            # Namespace shall appear as standalone resource, use specified name or use normalized path as name
+            if namespace.options[:swagger].key?(:name)
+              identifier = namespace.options[:swagger][:name].gsub(/ /, '-')
+            else
+              identifier = name.gsub(/_/, '-').gsub(/\//, '_')
+            end
+            @combined_namespace_identifiers[identifier] = name
+            @combined_namespace_routes[identifier] = namespace_routes
+
+            # get all nested namespaces below the current namespace
+            sub_namespaces = standalone_sub_namespaces(name, namespaces)
+            # convert namespace to route names
+            sub_ns_paths = sub_namespaces.collect { |ns_name, _| "/#{ns_name}" }
+            sub_ns_paths_versioned = sub_namespaces.collect { |ns_name, _| "/:version/#{ns_name}" }
+            # get the actual route definitions for the namespace path names
+            sub_routes = parent_route.collect do |route|
+              route if sub_ns_paths.include?(route.instance_variable_get(:@options)[:namespace]) || sub_ns_paths_versioned.include?(route.instance_variable_get(:@options)[:namespace])
+            end.compact
+            # add all determined routes of the sub namespaces to standalone resource
+            @combined_namespace_routes[identifier].push(*sub_routes)
+          else
+            # default case when not explicitly specified or nested == true
+            standalone_namespaces = namespaces.reject { |_, ns| !ns.options.key?(:swagger) || !ns.options[:swagger].key?(:nested) || ns.options[:swagger][:nested] != false }
+            parent_standalone_namespaces = standalone_namespaces.reject { |ns_name, _| !name.start_with?(ns_name) }
+            # add only to the main route if the namespace is not within any other namespace appearing as standalone resource
+            if parent_standalone_namespaces.empty?
+              # default option, append namespace methods to parent route
+              @combined_namespace_routes[parent_route_name] = [] unless @combined_namespace_routes.key?(parent_route_name)
+              @combined_namespace_routes[parent_route_name].push(*namespace_routes)
+            end
+          end
+        end
+      end
+
+      def standalone_sub_namespaces(name, namespaces)
+        # assign all nested namespace routes to this resource, too
+        # (unless they are assigned to another standalone namespace themselves)
+        sub_namespaces = {}
+        # fetch all namespaces that are children of the current namespace
+        namespaces.each { |ns_name, ns| sub_namespaces[ns_name] = ns if ns_name.start_with?(name) && ns_name != name }
+        # remove the sub namespaces if they are assigned to another standalone namespace themselves
+        sub_namespaces.each do |sub_name, sub_ns|
+          # skip if sub_ns is standalone, too
+          next unless sub_ns.options.key?(:swagger) && sub_ns.options[:swagger][:nested] == false
+          # remove all namespaces that are nested below this standalone sub_ns
+          sub_namespaces.each { |sub_sub_name, _| sub_namespaces.delete(sub_sub_name) if sub_sub_name.start_with?(sub_name) }
+        end
+        sub_namespaces
       end
 
       def get_non_nested_params(params)
@@ -394,20 +466,21 @@ module Grape
                 header['Access-Control-Allow-Origin']   = '*'
                 header['Access-Control-Request-Method'] = '*'
 
-                routes = target_class.combined_routes
                 namespaces = target_class.combined_namespaces
+                namespace_routes = target_class.combined_namespace_routes
 
                 if @@hide_documentation_path
-                  routes.reject! { |route, _value| "/#{route}/".index(@@documentation_class.parse_path(@@mount_path, nil) << '/') == 0 }
+                  namespace_routes.reject! { |route, _value| "/#{route}/".index(@@documentation_class.parse_path(@@mount_path, nil) << '/') == 0 }
                 end
 
-                routes_array = routes.keys.map do |local_route|
-                  next if routes[local_route].map(&:route_hidden).all? { |value| value.respond_to?(:call) ? value.call : value }
+                namespace_routes_array = namespace_routes.keys.map do |local_route|
+                  next if namespace_routes[local_route].map(&:route_hidden).all? { |value| value.respond_to?(:call) ? value.call : value }
 
                   url_format  = '.{format}' unless @@hide_format
 
-                  description = namespaces[local_route] && namespaces[local_route].options[:desc]
-                  description ||= "Operations about #{local_route.pluralize}"
+                  original_namespace_name = target_class.combined_namespace_identifiers.key?(local_route) ? target_class.combined_namespace_identifiers[local_route] : local_route
+                  description = namespaces[original_namespace_name] && namespaces[original_namespace_name].options[:desc]
+                  description ||= "Operations about #{original_namespace_name.pluralize}"
 
                   {
                     path: "/#{local_route}#{url_format}",
@@ -419,7 +492,7 @@ module Grape
                   apiVersion:     api_version,
                   swaggerVersion: '1.2',
                   produces:       @@documentation_class.content_types_for(target_class),
-                  apis:           routes_array,
+                  apis:           namespace_routes_array,
                   info:           @@documentation_class.parse_info(extra_info)
                 }
 
@@ -441,7 +514,7 @@ module Grape
                 header['Access-Control-Request-Method'] = '*'
 
                 models = []
-                routes = target_class.combined_routes[params[:name]]
+                routes = target_class.combined_namespace_routes[params[:name]]
                 error!('Not Found', 404) unless routes
 
                 visible_ops = routes.reject do |route|
@@ -496,10 +569,16 @@ module Grape
                   }
                 end
 
+                # use custom resource naming if available
+                if target_class.combined_namespace_identifiers.key? params[:name]
+                  resource_path = target_class.combined_namespace_identifiers[params[:name]]
+                else
+                  resource_path = params[:name]
+                end
                 api_description = {
                   apiVersion:     api_version,
                   swaggerVersion: '1.2',
-                  resourcePath:   "/#{params[:name]}",
+                  resourcePath:   "/#{resource_path}",
                   produces:       @@documentation_class.content_types_for(target_class),
                   apis:           apis
                 }

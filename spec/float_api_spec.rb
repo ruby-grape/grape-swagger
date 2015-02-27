@@ -6,7 +6,7 @@ describe 'Float Params' do
       format :json
 
       params do
-        requires :a_float, type: Virtus::Attribute::Float
+        requires :a_float, type: Float
       end
       post :splines do
       end

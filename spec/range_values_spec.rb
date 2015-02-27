@@ -6,13 +6,13 @@ describe 'Range Params' do
       format :json
 
       params do
-        requires :letter, type: Virtus::Attribute::String, values: 'a'..'z'
+        requires :letter, type: String, values: 'a'..'z'
       end
       post :letter do
       end
 
       params do
-        requires :number, type: Virtus::Attribute::Integer, values: -5..5
+        requires :number, type: Integer, values: -5..5
       end
       post :integer do
       end

@@ -11,6 +11,7 @@
 
 #### Fixes
 
+* [#221](https://github.com/tim-vandecasteele/grape-swagger/pull/221): Fixed group parameters' name with type Array - [@u2](https://github.com/u2).
 * [#211](https://github.com/tim-vandecasteele/grape-swagger/pull/211): Fixed the dependency, just `require 'grape'` - [@u2](https://github.com/u2).
 * [#210](https://github.com/tim-vandecasteele/grape-swagger/pull/210): Fixed the range `:values` option, now exposed as `enum` parameters - [@u2](https://github.com/u2).
 * [#208](https://github.com/tim-vandecasteele/grape-swagger/pull/208): Fixed `Float` parameters, exposed as Swagger `float` types - [@u2](https://github.com/u2).

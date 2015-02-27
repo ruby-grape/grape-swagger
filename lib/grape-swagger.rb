@@ -139,6 +139,25 @@ module Grape
         end
       end
 
+      def parse_array_params(params)
+        modified_params = {}
+        array_param = nil
+        params.each_key do |k|
+          if params[k].is_a?(Hash) && params[k][:type] == 'Array'
+            array_param = k
+          else
+            new_key = k
+            unless array_param.nil?
+              if k.to_s.start_with?(array_param.to_s + '[')
+                new_key = array_param.to_s + '[]' + k.to_s.split(array_param)[1]
+              end
+            end
+            modified_params[new_key] = params[k]
+          end
+        end
+        modified_params
+      end
+
       def create_documentation_class
         Class.new(Grape::API) do
           class << self
@@ -153,7 +172,9 @@ module Grape
             def parse_params(params, path, method)
               params ||= []
 
-              non_nested_parent_params = get_non_nested_params(params)
+              parsed_array_params = parse_array_params(params)
+
+              non_nested_parent_params = get_non_nested_params(parsed_array_params)
 
               non_nested_parent_params.map do |param, value|
                 items = {}
@@ -541,28 +562,12 @@ module Grape
 
                     models = @@documentation_class.models_with_included_presenters(models.flatten.compact)
 
-                    modified_route_params = {}
-                    array_param = nil
-                    route.route_params.each_key do |k|
-                      if route.route_params[k][:type] == 'Array'
-                        array_param = k
-                      else
-                        new_key = k
-                        unless array_param.nil?
-                          if k.to_s.start_with?(array_param.to_s + '[')
-                            new_key = array_param.to_s + '[]' + k.to_s.split(array_param)[1]
-                          end
-                        end
-                        modified_route_params[new_key] = route.route_params[k]
-                      end
-                    end
-
                     operation = {
                       notes: notes.to_s,
                       summary: route.route_description || '',
                       nickname: route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/, '-')),
                       method: route.route_method,
-                      parameters: @@documentation_class.parse_header_params(route.route_headers) + @@documentation_class.parse_params(modified_route_params, route.route_path, route.route_method),
+                      parameters: @@documentation_class.parse_header_params(route.route_headers) + @@documentation_class.parse_params(route.route_params, route.route_path, route.route_method),
                       type: 'void'
                     }
                     operation[:authorizations] = route.route_authorizations unless route.route_authorizations.nil? || route.route_authorizations.empty?

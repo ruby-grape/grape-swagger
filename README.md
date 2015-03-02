@@ -191,6 +191,44 @@ You can specify a swagger nickname to use instead of the auto generated name by 
 desc 'Get a full list of pets', nickname: 'getAllPets'
 ```
 
+## Expose nested namespace as standalone route
+Use the `nested: false` property in the `swagger` option to make nested namespaces appear as standalone resources.
+This option can help to structure and keep the swagger schema simple.
+
+    namespace 'store/order', desc: 'Order operations within a store', swagger: { nested: false } do
+      get :order_id do
+      	...
+      end
+    end
+    
+All routes that belong to this namespace (here: the `GET /order_id`) will then be assigned to the `store_order` route instead of the `store` resource route.
+    
+It is also possible to expose a namspace within another already exposed namespace:
+
+    namespace 'store/order', desc: 'Order operations within a store', swagger: { nested: false } do
+      get :order_id do
+      	...
+      end
+      namespace 'actions', desc: 'Order actions' do, nested: false
+        get 'evaluate' do
+          ...
+        end
+      end
+    end
+
+Here, the `GET /order_id` appears as operation of the `store_order` resource and the `GET /evaluate` as operation of the `store_orders_actions` route.
+
+### With a custom name
+Auto generated names for the standalone version of complex nested resource do not have a nice look.
+You can set a custom name with the `name` property inside the `swagger` option, but only if the namespace gets exposed as standalone route.
+The name should not contain whitespaces or any other special characters due to further issues within swagger-ui.
+
+    namespace 'store/order', desc: 'Order operations within a store', swagger: { nested: false, name: 'Store-orders' } do
+      get :order_id do
+      	...
+      end
+    end
+
 ## Grape Entities
 
 Add the [grape-entity](https://github.com/agileanimal/grape-entity) gem to our Gemfile.

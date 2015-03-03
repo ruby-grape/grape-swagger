@@ -31,6 +31,6 @@ describe 'Mutually exclusive group params' do
     parameters = body['apis'].first['operations'].first['parameters']
     expect(parameters).to eq [
       { 'paramType' => 'form', 'name' => 'required_group[param_group_1][param_1]', 'description' => nil, 'type' => 'string', 'required' => false, 'allowMultiple' => false },
-      { 'paramType' => 'form', 'name' => 'required_group[param_group_2][param_2]', 'description' => nil, 'type' => 'string', 'required' => false, 'allowMultiple' => false }]
+      { 'paramType' => 'form', 'name' => 'required_group[param_group_2][][param_2]', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false }]
   end
 end

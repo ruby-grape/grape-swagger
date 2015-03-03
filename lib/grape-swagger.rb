@@ -139,6 +139,25 @@ module Grape
         end
       end
 
+      def parse_array_params(params)
+        modified_params = {}
+        array_param = nil
+        params.each_key do |k|
+          if params[k].is_a?(Hash) && params[k][:type] == 'Array'
+            array_param = k
+          else
+            new_key = k
+            unless array_param.nil?
+              if k.to_s.start_with?(array_param.to_s + '[')
+                new_key = array_param.to_s + '[]' + k.to_s.split(array_param)[1]
+              end
+            end
+            modified_params[new_key] = params[k]
+          end
+        end
+        modified_params
+      end
+
       def create_documentation_class
         Class.new(Grape::API) do
           class << self
@@ -153,7 +172,9 @@ module Grape
             def parse_params(params, path, method)
               params ||= []
 
-              non_nested_parent_params = get_non_nested_params(params)
+              parsed_array_params = parse_array_params(params)
+
+              non_nested_parent_params = get_non_nested_params(parsed_array_params)
 
               non_nested_parent_params.map do |param, value|
                 items = {}

@@ -1,4 +1,4 @@
-### Next Release
+### 0.10.0 (March 10, 2015)
 
 #### Features
 
@@ -16,8 +16,6 @@
 * [#210](https://github.com/tim-vandecasteele/grape-swagger/pull/210): Fixed the range `:values` option, now exposed as `enum` parameters - [@u2](https://github.com/u2).
 * [#208](https://github.com/tim-vandecasteele/grape-swagger/pull/208): Fixed `Float` parameters, exposed as Swagger `float` types - [@u2](https://github.com/u2).
 * [#216](https://github.com/tim-vandecasteele/grape-swagger/pull/216), [#192](https://github.com/tim-vandecasteele/grape-swagger/issues/192), [#189](https://github.com/tim-vandecasteele/grape-swagger/issues/189): Fixed API route paths matching for root endpoints with `grape ~> 0.10.0`, specific `format` and `:path` versioning - [@dm1try](https://github.com/dm1try), [@minch](https://github.com/minch).
-
-* Your contribution here.
 
 ### 0.9.0 (December 19, 2014)
 

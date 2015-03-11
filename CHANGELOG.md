@@ -1,8 +1,7 @@
-### 0.10.1 (Next)
+### 0.10.1 (March 11, 2015)
 
 * [#227](https://github.com/tim-vandecasteele/grape-swagger/issues/227): Fix: nested routes under prefix not documented - [@dblock](https://github.com/dblock).
 * [#226](https://github.com/tim-vandecasteele/grape-swagger/issues/226): Fix: be defensive with nil exposure types - [@dblock](https://github.com/dblock).
-* Your contribution here.
 
 ### 0.10.0 (March 10, 2015)
 

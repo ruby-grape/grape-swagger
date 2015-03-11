@@ -3,11 +3,11 @@ Upgrading Grape-swagger
 
 ### Upgrading to >= 0.9.0
 
-#### Changes in Configuration
+#### Grape-Swagger-Rails
 
 If you're using [grape-swagger-rails](https://github.com/BrandyMint/grape-swagger-rails), remove the `.json` extension from `GrapeSwaggerRails.options.url`.
 
-For example, change 
+For example, change
 
 ```ruby
 GrapeSwaggerRails.options.url = '/api/v1/swagger_doc.json'
@@ -20,6 +20,10 @@ GrapeSwaggerRails.options.url = '/api/v1/swagger_doc'
 ```
 
 See [#187](https://github.com/tim-vandecasteele/grape-swagger/issues/187) for more information.
+
+#### Grape 0.10.0
+
+If your API uses Grape 0.10.0 or newer with a single `format :json` directive, add `hide_format: true` to `add_swagger_documentation`. Otherwise nested routes will render with `.json` links to your API documentation, which will fail with a 404 Not Found.
 
 ### Upgrading to >= 0.8.0
 

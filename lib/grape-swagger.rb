@@ -216,8 +216,8 @@ module Grape
                 enum_values   = enum_values.to_a if enum_values && enum_values.is_a?(Range)
                 enum_values   = enum_values.call if enum_values && enum_values.is_a?(Proc)
 
-                if value.is_a?(Hash) && value.key?(:param_type)
-                  param_type  = value[:param_type]
+                if value.is_a?(Hash) && value.key?(:documentation) && value[:documentation].key?(:param_type)
+                  param_type  = value[:documentation][:param_type]
                   if is_array
                     items     = { '$ref' => data_type }
                     data_type = 'array'

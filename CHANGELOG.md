@@ -1,6 +1,7 @@
 ### 0.10.2 (Next)
 
 * [#215](https://github.com/tim-vandecasteele/grape-swagger/pull/223): Support swagger `defaultValue` without the need to set a Grape `default` - [@jv-dan](https://github.com/jv-dan).
+* [#225](https://github.com/tim-vandecasteele/grape-swagger/pull/225): Fixed param_type to have it read from parameter's documentation hash - [@zsxking](https://github.com/zsxking).
 * Your contribution here.
 
 ### 0.10.1 (March 11, 2015)

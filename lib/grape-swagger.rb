@@ -68,7 +68,7 @@ module Grape
           parent_route = @combined_routes[parent_route_name]
           # fetch all routes that are within the current namespace
           namespace_routes = parent_route.collect do |route|
-            route if (route.route_path.start_with?("/#{name}") || route.route_path.start_with?("/:version/#{name}")) &&
+            route if (route.route_path.start_with?(route.route_prefix ? "/#{route.route_prefix}/#{name}" : "/#{name}") || route.route_path.start_with?((route.route_prefix ? "/#{route.route_prefix}/:version/#{name}" : "/:version/#{name}"))) &&
                      (route.instance_variable_get(:@options)[:namespace] == "/#{name}" || route.instance_variable_get(:@options)[:namespace] == "/:version/#{name}")
           end.compact
 

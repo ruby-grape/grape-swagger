@@ -332,8 +332,9 @@ module Grape
 
                   type = if p[:type]
                            p.delete(:type)
-                         elsif (entity = model.exposures[property_name][:using])
-                           parse_entity_name(entity)
+                         else
+                           exposure = model.exposures[property_name]
+                           parse_entity_name(exposure[:using]) if exposure
                          end
 
                   if p.delete(:is_array)

@@ -191,6 +191,19 @@ You can specify a swagger nickname to use instead of the auto generated name by 
 desc 'Get a full list of pets', nickname: 'getAllPets'
 ```
 
+## Overriding param type
+
+You can override paramType in POST|PUT methods to query, using the documentation hash.
+
+``` ruby
+params do 
+  requires :action, type: Symbol, values: [:PAUSE, :RESUME, :STOP], documentation: { param_type: 'query' }
+end
+post :act do
+  ...
+end
+``` 
+
 ## Expose nested namespace as standalone route
 Use the `nested: false` property in the `swagger` option to make nested namespaces appear as standalone resources.
 This option can help to structure and keep the swagger schema simple.

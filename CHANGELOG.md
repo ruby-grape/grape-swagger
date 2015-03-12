@@ -1,5 +1,6 @@
 ### 0.10.2 (Next)
 
+* [#215](https://github.com/tim-vandecasteele/grape-swagger/pull/223): Support swagger `defaultValue` without the need to set a Grape `default` - [@jv-dan](https://github.com/jv-dan).
 * Your contribution here.
 
 ### 0.10.1 (March 11, 2015)

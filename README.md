@@ -229,6 +229,28 @@ The name should not contain whitespaces or any other special characters due to f
       end
     end
 
+## Additional documentation
+
+## Setting a Swagger defaultValue
+
+Grape allows for an additional documentation hash to be passed to a parameter.
+
+    params do
+      requires :id, type: Integer, desc: 'Coffee ID'
+      requires :temperature, type: Integer, desc: 'Temperature of the coffee in celcius', documentation: { example: 72 }
+    end
+
+The example parameter will populate the Swagger UI with the example value, and can be used for optional or required parameters.
+
+Grape uses the option `default` to set a default value for optional parameters. This is different in that Grape will set your parameter to the provided default if the parameter is omitted, whereas the example value above will only set the value in the UI itself. This will set the Swagger `defaultValue` to the provided value. Note that the example value will override the Grape default value.
+
+
+    params do
+      requires :id, type: Integer, desc: 'Coffee ID'
+      optional :temperature, type: Integer, desc: 'Temperature of the coffee in celcius', default: 72
+    end
+
+
 ## Grape Entities
 
 Add the [grape-entity](https://github.com/agileanimal/grape-entity) gem to our Gemfile.

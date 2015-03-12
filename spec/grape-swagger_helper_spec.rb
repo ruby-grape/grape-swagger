@@ -24,6 +24,19 @@ describe 'helpers' do
       ]
     end
 
+    it 'parses params as query strings for a GET with an example' do
+      params = {
+        name: { type: 'String', desc: 'A name', required: true, default: 'default api value', documentation: { example: 'default swagger value' } },
+        level: 'max'
+      }
+      path = '/coolness'
+      method = 'GET'
+      expect(subject.parse_params(params, path, method)).to eq [
+        { paramType: 'query', name: :name, description: 'A name', type: 'string', required: true, allowMultiple: false, defaultValue: 'default swagger value' },
+        { paramType: 'query', name: :level, description: '', type: 'string', required: false, allowMultiple: false }
+      ]
+    end
+
     it 'parses params as form for a POST' do
       params = {
         name: { type: 'String', desc: 'A name', required: true },

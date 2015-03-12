@@ -200,9 +200,17 @@ module Grape
                                 else
                                   @@documentation_class.parse_entity_name(raw_data_type)
                                 end
+
+                additional_documentation = value.is_a?(Hash) ? value[:documentation] : nil
+
+                if additional_documentation && value.is_a?(Hash)
+                  value = additional_documentation.merge(value)
+                end
+
                 description   = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
                 required      = value.is_a?(Hash) ? !!value[:required] : false
                 default_value = value.is_a?(Hash) ? value[:default] : nil
+                example       = value.is_a?(Hash) ? value[:example] : nil
                 is_array      = value.is_a?(Hash) ? (value[:is_array] || false) : false
                 enum_values   = value.is_a?(Hash) ? value[:values] : nil
                 enum_values   = enum_values.to_a if enum_values && enum_values.is_a?(Range)
@@ -238,10 +246,14 @@ module Grape
                   required:      required,
                   allowMultiple: is_array
                 }
+
                 parsed_params.merge!(format: 'int32') if data_type == 'integer'
                 parsed_params.merge!(format: 'int64') if data_type == 'long'
                 parsed_params.merge!(items: items) if items.present?
-                parsed_params.merge!(defaultValue: default_value) if default_value
+                parsed_params.merge!(defaultValue: example) if example
+                if default_value && example.blank?
+                  parsed_params.merge!(defaultValue: default_value)
+                end
                 parsed_params.merge!(enum: enum_values) if enum_values
                 parsed_params
               end

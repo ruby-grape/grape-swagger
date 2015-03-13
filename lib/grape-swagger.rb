@@ -145,11 +145,13 @@ module Grape
         params.each_key do |k|
           if params[k].is_a?(Hash) && params[k][:type] == 'Array'
             array_param = k
+            modified_params[k] = params[k]
           else
             new_key = k
             unless array_param.nil?
               if k.to_s.start_with?(array_param.to_s + '[')
                 new_key = array_param.to_s + '[]' + k.to_s.split(array_param)[1]
+                modified_params.delete array_param
               end
             end
             modified_params[new_key] = params[k]

@@ -1,7 +1,13 @@
 ### 0.10.2 (Next)
 
+#### Features
+
 * [#215](https://github.com/tim-vandecasteele/grape-swagger/pull/223): Support swagger `defaultValue` without the need to set a Grape `default` - [@jv-dan](https://github.com/jv-dan).
 * Your contribution here.
+
+#### Fixes
+
+* [#232](https://github.com/tim-vandecasteele/grape-swagger/pull/232): Fixed missing raw array params - [@u2](https://github.com/u2).
 
 ### 0.10.1 (March 11, 2015)
 

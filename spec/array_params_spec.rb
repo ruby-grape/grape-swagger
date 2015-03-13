@@ -14,21 +14,34 @@ describe 'Array Params' do
       post :splines do
       end
 
+      params do
+        optional :raw_array, type: Array
+      end
+      get :raw_array_splines do
+      end
+
       add_swagger_documentation
     end
   end
 
-  subject do
+  it 'gets array types' do
     get '/swagger_doc/splines'
     expect(last_response.status).to eq 200
     body = JSON.parse last_response.body
-    body['apis'].first['operations'].first['parameters']
-  end
-
-  it 'gets array types' do
-    expect(subject).to eq [
+    parameters = body['apis'].first['operations'].first['parameters']
+    expect(parameters).to eq [
       { 'paramType' => 'form', 'name' => 'a_array[][param_1]', 'description' => nil, 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32' },
       { 'paramType' => 'form', 'name' => 'a_array[][param_2]', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false }
+    ]
+  end
+
+  it 'get raw array type' do
+    get '/swagger_doc/raw_array_splines'
+    expect(last_response.status).to eq 200
+    body = JSON.parse last_response.body
+    parameters = body['apis'].first['operations'].first['parameters']
+    expect(parameters).to eq [
+      { 'paramType' => 'query', 'name' => 'raw_array', 'description' => nil, 'type' => 'Array', 'required' => false, 'allowMultiple' => false }
     ]
   end
 end

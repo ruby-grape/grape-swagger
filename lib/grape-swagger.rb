@@ -160,6 +160,16 @@ module Grape
         modified_params
       end
 
+      def parse_enum_values(values)
+        if values.is_a?(Range) && [Integer, String].any? { |klass| values.first.is_a?(klass) }
+          values.to_a
+        elsif values.is_a?(Proc)
+          values.call
+        else
+          values
+        end
+      end
+
       def create_documentation_class
         Class.new(Grape::API) do
           class << self
@@ -214,9 +224,8 @@ module Grape
                 default_value = value.is_a?(Hash) ? value[:default] : nil
                 example       = value.is_a?(Hash) ? value[:example] : nil
                 is_array      = value.is_a?(Hash) ? (value[:is_array] || false) : false
-                enum_values   = value.is_a?(Hash) ? value[:values] : nil
-                enum_values   = enum_values.to_a if enum_values && enum_values.is_a?(Range)
-                enum_values   = enum_values.call if enum_values && enum_values.is_a?(Proc)
+                values        = value.is_a?(Hash) ? value[:values] : nil
+                enum_values   = parse_enum_values(values)
 
                 if value.is_a?(Hash) && value.key?(:documentation) && value[:documentation].key?(:param_type)
                   param_type  = value[:documentation][:param_type]

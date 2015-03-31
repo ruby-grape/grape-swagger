@@ -4,6 +4,7 @@
 
 * [#215](https://github.com/tim-vandecasteele/grape-swagger/pull/223): Support swagger `defaultValue` without the need to set a Grape `default` - [@jv-dan](https://github.com/jv-dan).
 * [#225](https://github.com/tim-vandecasteele/grape-swagger/pull/225): Fixed param_type to have it read from parameter's documentation hash - [@zsxking](https://github.com/zsxking).
+* [#206](https://github.com/tim-vandecasteele/grape-swagger/pull/206): Fixed the bug where 'is_array' in the return entity is ignored - [@igormoochnick](https://github.com/igormoochnick).
 * Your contribution here.
 
 #### Fixes

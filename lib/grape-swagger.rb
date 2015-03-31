@@ -191,8 +191,9 @@ module Grape
               non_nested_parent_params.map do |param, value|
                 items = {}
 
-                raw_data_type = value.is_a?(Hash) ? (value[:type] || 'string').to_s : 'string'
-                data_type     = case raw_data_type
+                raw_data_type = value[:type] if value.is_a?(Hash)
+                raw_data_type ||= 'string'
+                data_type     = case raw_data_type.to_s
                                 when 'Hash'
                                   'object'
                                 when 'Rack::Multipart::UploadedFile'
@@ -200,7 +201,7 @@ module Grape
                                 when 'Virtus::Attribute::Boolean'
                                   'boolean'
                                 when 'Boolean', 'Date', 'Integer', 'String', 'Float'
-                                  raw_data_type.downcase
+                                  raw_data_type.to_s.downcase
                                 when 'BigDecimal'
                                   'long'
                                 when 'DateTime'

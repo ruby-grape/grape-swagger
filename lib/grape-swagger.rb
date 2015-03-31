@@ -419,11 +419,11 @@ module Grape
             end
 
             def generate_typeref(type)
-              type = type.to_s.sub(/^[A-Z]/) { |f| f.downcase } if type.is_a?(Class)
-              if is_primitive? type
-                { 'type' => type }
+              type_s = type.to_s.sub(/^[A-Z]/) { |f| f.downcase }
+              if is_primitive? type_s
+                { 'type' => type_s }
               else
-                { '$ref' => type }
+                { '$ref' => parse_entity_name(type) }
               end
             end
 

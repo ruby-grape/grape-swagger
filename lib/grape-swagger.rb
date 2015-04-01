@@ -593,7 +593,7 @@ module Grape
                       nickname: route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/, '-')),
                       method: route.route_method,
                       parameters: @@documentation_class.parse_header_params(route.route_headers) + @@documentation_class.parse_params(route.route_params, route.route_path, route.route_method),
-                      type: 'void'
+                      type: route.route_is_array ? 'array' : 'void'
                     }
                     operation[:authorizations] = route.route_authorizations unless route.route_authorizations.nil? || route.route_authorizations.empty?
                     if operation[:parameters].any? { | param | param[:type] == 'File' }
@@ -603,7 +603,11 @@ module Grape
 
                     if route.route_entity
                       type = @@documentation_class.parse_entity_name(Array(route.route_entity).first)
-                      operation.merge!('type' => type)
+                      if route.route_is_array
+                        operation.merge!(items: { '$ref' => type })
+                      else
+                        operation.merge!(type: type)
+                      end
                     end
 
                     operation[:nickname] = route.route_nickname if route.route_nickname

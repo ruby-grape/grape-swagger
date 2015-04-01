@@ -3,14 +3,15 @@
 #### Features
 
 * [#215](https://github.com/tim-vandecasteele/grape-swagger/pull/223): Support swagger `defaultValue` without the need to set a Grape `default` - [@jv-dan](https://github.com/jv-dan).
-* [#225](https://github.com/tim-vandecasteele/grape-swagger/pull/225): Fixed param_type to have it read from parameter's documentation hash - [@zsxking](https://github.com/zsxking).
-* [#235](https://github.com/tim-vandecasteele/grape-swagger/pull/235): Fix nested entity names in parameters and as `$ref` in models - [@frodrigo](https://github.com/frodrigo).
 * Your contribution here.
 
 #### Fixes
 
 * [#232](https://github.com/tim-vandecasteele/grape-swagger/pull/232): Fixed missing raw array params - [@u2](https://github.com/u2).
 * [#234](https://github.com/tim-vandecasteele/grape-swagger/pull/234): Fixed range :values with float - [@azhi](https://github.com/azhi).
+* [#225](https://github.com/tim-vandecasteele/grape-swagger/pull/225): Fixed `param_type` to have it read from parameter's documentation hash - [@zsxking](https://github.com/zsxking).
+* [#235](https://github.com/tim-vandecasteele/grape-swagger/pull/235): Fixed nested entity names in parameters and as `$ref` in models - [@frodrigo](https://github.com/frodrigo).
+* [#206](https://github.com/tim-vandecasteele/grape-swagger/pull/206): Fixed 'is_array' in the return entity being ignored - [@igormoochnick](https://github.com/igormoochnick).
 
 ### 0.10.1 (March 11, 2015)
 

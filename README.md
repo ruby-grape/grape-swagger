@@ -27,7 +27,7 @@ Please see [UPGRADING](UPGRADING.md) when upgrading from a previous version.
 
 ## Usage
 
-Mount all your different APIs (with ```Grape::API``` superclass) on a root node. In the root class definition, include ```add_swagger_documentation```, this sets up the system and registers the documentation on '/swagger_doc.json'. See [example/api.rb](example/api.rb) for a simple demo.
+Mount all your different APIs (with ```Grape::API``` superclass) on a root node. In the root class definition, include ```add_swagger_documentation```, this sets up the system and registers the documentation on '/swagger_doc'. See [example/api.rb](example/api.rb) for a simple demo.
 
 
 ``` ruby
@@ -43,7 +43,7 @@ module API
 end
 ```
 
-To explore your API, either download [Swagger UI](https://github.com/wordnik/swagger-ui) and set it up yourself or go to the [online swagger demo](http://petstore.swagger.wordnik.com/) and enter your localhost url documentation root in the url field (probably something in the line of http://localhost:3000/swagger_doc.json).
+To explore your API, either download [Swagger UI](https://github.com/wordnik/swagger-ui) and set it up yourself or go to the [online swagger demo](http://petstore.swagger.wordnik.com/) and enter your localhost url documentation root in the url field (probably something in the line of http://localhost:3000/swagger_doc).
 
 ### CORS
 

@@ -29,6 +29,10 @@ Add to your Gemfile:
 
 Please see [UPGRADING](UPGRADING.md) when upgrading from a previous version.
 
+## Requirement
+
+- Swagger 1.2 specification (Not support newest swagger-ui, Less than v2.0.24 works fine.)
+
 ## Usage
 
 Mount all your different APIs (with ```Grape::API``` superclass) on a root node. In the root class definition, include ```add_swagger_documentation```, this sets up the system and registers the documentation on '/swagger_doc'. See [example/api.rb](example/api.rb) for a simple demo.

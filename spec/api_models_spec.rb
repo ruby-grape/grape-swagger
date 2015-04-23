@@ -93,6 +93,13 @@ describe 'API Models' do
       expose :elements_size, documentation: { type: Integer, desc: 'Return input elements size' }
     end
   end
+  
+  module Entities
+    class ThingWithRoot < Grape::Entity
+      root 'things', 'thing'
+      expose :text, documentation: { type: 'string', desc: 'Content of something.' }
+    end
+  end
 
   def app
     Class.new(Grape::API) do
@@ -148,6 +155,12 @@ describe 'API Models' do
         result = OpenStruct.new(elements_size: params[:elements].size)
         present result, with: Entities::QueryResult
       end
+      
+      desc 'This gets thing_with_root.', entity: Entities::ThingWithRoot
+      get '/thing_with_root' do
+        thing = OpenStruct.new text: 'thing'
+        present thing, with: Entities::ThingWithRoot
+      end
 
       add_swagger_documentation
     end
@@ -177,6 +190,7 @@ describe 'API Models' do
         { 'path' => '/aliasedthing.{format}', 'description' => 'Operations about aliasedthings' },
         { 'path' => '/nesting.{format}', 'description' => 'Operations about nestings' },
         { 'path' => '/multiple_entities.{format}', 'description' => 'Operations about multiple_entities' },
+        { 'path' => '/thing_with_root.{format}', 'description' => 'Operations about thing_with_roots' },
         { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
       ]
     end
@@ -289,5 +303,11 @@ describe 'API Models' do
     result = JSON.parse(last_response.body)
 
     expect(result['models']).to include('QueryInput', 'QueryInputElement', 'QueryResult')
+  end
+  
+  it 'includes an id equal to the model name' do
+    get '/swagger_doc/thing_with_root'
+    result = JSON.parse(last_response.body)
+    expect(result['models']['ThingWithRoot']['id']).to eq('ThingWithRoot')
   end
 end

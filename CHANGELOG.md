@@ -7,6 +7,7 @@
 
 #### Fixes
 
+* [#251](https://github.com/tim-vandecasteele/grape-swagger/pull/251): Fixed model id equal to model name when root existing in entities - [@aitortomas](https://github.com/aitortomas).
 * [#232](https://github.com/tim-vandecasteele/grape-swagger/pull/232): Fixed missing raw array params - [@u2](https://github.com/u2).
 * [#234](https://github.com/tim-vandecasteele/grape-swagger/pull/234): Fixed range :values with float - [@azhi](https://github.com/azhi).
 * [#225](https://github.com/tim-vandecasteele/grape-swagger/pull/225): Fixed `param_type` to have it read from parameter's documentation hash - [@zsxking](https://github.com/zsxking).

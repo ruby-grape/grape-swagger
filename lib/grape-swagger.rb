@@ -383,7 +383,7 @@ module Grape
                 end
 
                 result[name] = {
-                  id:         model.instance_variable_get(:@root) || name,
+                  id:         name,
                   properties: properties
                 }
                 result[name].merge!(required: required) unless required.empty?

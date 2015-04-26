@@ -334,6 +334,8 @@ module Grape
             def parse_entity_name(model)
               if model.respond_to?(:entity_name)
                 model.entity_name
+              elsif model.instance_variable_get(:@root)
+                model.instance_variable_get(:@root)
               else
                 name = model.to_s
                 entity_parts = name.split('::')

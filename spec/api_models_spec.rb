@@ -93,7 +93,7 @@ describe 'API Models' do
       expose :elements_size, documentation: { type: Integer, desc: 'Return input elements size' }
     end
   end
-  
+
   module Entities
     class ThingWithRoot < Grape::Entity
       root 'things', 'thing'
@@ -155,7 +155,7 @@ describe 'API Models' do
         result = OpenStruct.new(elements_size: params[:elements].size)
         present result, with: Entities::QueryResult
       end
-      
+
       desc 'This gets thing_with_root.', entity: Entities::ThingWithRoot
       get '/thing_with_root' do
         thing = OpenStruct.new text: 'thing'
@@ -304,10 +304,10 @@ describe 'API Models' do
 
     expect(result['models']).to include('QueryInput', 'QueryInputElement', 'QueryResult')
   end
-  
+
   it 'includes an id equal to the model name' do
     get '/swagger_doc/thing_with_root'
     result = JSON.parse(last_response.body)
-    expect(result['models']['ThingWithRoot']['id']).to eq('ThingWithRoot')
+    expect(result['models']['thing']['id']).to eq('thing')
   end
 end

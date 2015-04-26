@@ -334,8 +334,6 @@ module Grape
             def parse_entity_name(model)
               if model.respond_to?(:entity_name)
                 model.entity_name
-              elsif model.instance_variable_get(:@root)
-                model.instance_variable_get(:@root)
               else
                 name = model.to_s
                 entity_parts = name.split('::')
@@ -347,7 +345,7 @@ module Grape
             def parse_entity_models(models)
               result = {}
               models.each do |model|
-                name       = parse_entity_name(model)
+                name       = (model.instance_variable_get(:@root) || parse_entity_name(model))
                 properties = {}
                 required   = []
 

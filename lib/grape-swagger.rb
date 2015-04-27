@@ -345,7 +345,7 @@ module Grape
             def parse_entity_models(models)
               result = {}
               models.each do |model|
-                name       = parse_entity_name(model)
+                name       = (model.instance_variable_get(:@root) || parse_entity_name(model))
                 properties = {}
                 required   = []
 
@@ -383,7 +383,7 @@ module Grape
                 end
 
                 result[name] = {
-                  id:         model.instance_variable_get(:@root) || name,
+                  id:         name,
                   properties: properties
                 }
                 result[name].merge!(required: required) unless required.empty?

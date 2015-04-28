@@ -8,16 +8,19 @@ require 'grape-swagger/markdown/redcarpet_adapter'
 module Grape
   class API
     class << self
-      attr_reader :combined_routes, :combined_namespaces, :combined_namespace_routes, :combined_namespace_identifiers
+      attr_accessor :combined_routes, :combined_namespaces, :combined_namespace_routes, :combined_namespace_identifiers
 
       def add_swagger_documentation(options = {})
         documentation_class = create_documentation_class
 
-        documentation_class.setup({ target_class: self }.merge(options))
+        options = { target_class: self }.merge(options)
+        @target_class = options[:target_class]
+
+        documentation_class.setup(options)
         mount(documentation_class)
 
-        @combined_routes = {}
-        routes.each do |route|
+        @target_class.combined_routes = {}
+        @target_class.routes.each do |route|
           route_path = route.route_path
           route_match = route_path.split(/^.*?#{route.route_prefix.to_s}/).last
           next unless route_match
@@ -26,20 +29,20 @@ module Grape
           resource = route_match.captures.first
           next if resource.empty?
           resource.downcase!
-          @combined_routes[resource] ||= []
+          @target_class.combined_routes[resource] ||= []
           next if documentation_class.hide_documentation_path && route.route_path.include?(documentation_class.mount_path)
-          @combined_routes[resource] << route
+          @target_class.combined_routes[resource] << route
         end
 
-        @combined_namespaces = {}
-        combine_namespaces(self)
+        @target_class.combined_namespaces = {}
+        combine_namespaces(@target_class)
 
-        @combined_namespace_routes = {}
-        @combined_namespace_identifiers = {}
-        combine_namespace_routes(@combined_namespaces)
+        @target_class.combined_namespace_routes = {}
+        @target_class.combined_namespace_identifiers = {}
+        combine_namespace_routes(@target_class.combined_namespaces)
 
-        exclusive_route_keys = @combined_routes.keys - @combined_namespaces.keys
-        exclusive_route_keys.each { |key| @combined_namespace_routes[key] = @combined_routes[key] }
+        exclusive_route_keys = @target_class.combined_routes.keys - @target_class.combined_namespaces.keys
+        exclusive_route_keys.each { |key| @target_class.combined_namespace_routes[key] = @target_class.combined_routes[key] }
         documentation_class
       end
 
@@ -54,7 +57,7 @@ module Grape
                end
           # use the full namespace here (not the latest level only)
           # and strip leading slash
-          @combined_namespaces[endpoint.namespace.sub(/^\//, '')] = ns if ns
+          @target_class.combined_namespaces[endpoint.namespace.sub(/^\//, '')] = ns if ns
 
           combine_namespaces(endpoint.options[:app]) if endpoint.options[:app]
         end
@@ -65,7 +68,7 @@ module Grape
         namespaces.each do |name, namespace|
           # get the parent route for the namespace
           parent_route_name = name.match(%r{^/?([^/]*).*$})[1]
-          parent_route = @combined_routes[parent_route_name]
+          parent_route = @target_class.combined_routes[parent_route_name]
           # fetch all routes that are within the current namespace
           namespace_routes = parent_route.collect do |route|
             route if (route.route_path.start_with?(route.route_prefix ? "/#{route.route_prefix}/#{name}" : "/#{name}") || route.route_path.start_with?((route.route_prefix ? "/#{route.route_prefix}/:version/#{name}" : "/:version/#{name}"))) &&
@@ -79,8 +82,8 @@ module Grape
             else
               identifier = name.gsub(/_/, '-').gsub(/\//, '_')
             end
-            @combined_namespace_identifiers[identifier] = name
-            @combined_namespace_routes[identifier] = namespace_routes
+            @target_class.combined_namespace_identifiers[identifier] = name
+            @target_class.combined_namespace_routes[identifier] = namespace_routes
 
             # get all nested namespaces below the current namespace
             sub_namespaces = standalone_sub_namespaces(name, namespaces)
@@ -92,7 +95,7 @@ module Grape
               route if sub_ns_paths.include?(route.instance_variable_get(:@options)[:namespace]) || sub_ns_paths_versioned.include?(route.instance_variable_get(:@options)[:namespace])
             end.compact
             # add all determined routes of the sub namespaces to standalone resource
-            @combined_namespace_routes[identifier].push(*sub_routes)
+            @target_class.combined_namespace_routes[identifier].push(*sub_routes)
           else
             # default case when not explicitly specified or nested == true
             standalone_namespaces = namespaces.reject { |_, ns| !ns.options.key?(:swagger) || !ns.options[:swagger].key?(:nested) || ns.options[:swagger][:nested] != false }
@@ -100,8 +103,8 @@ module Grape
             # add only to the main route if the namespace is not within any other namespace appearing as standalone resource
             if parent_standalone_namespaces.empty?
               # default option, append namespace methods to parent route
-              @combined_namespace_routes[parent_route_name] = [] unless @combined_namespace_routes.key?(parent_route_name)
-              @combined_namespace_routes[parent_route_name].push(*namespace_routes)
+              @target_class.combined_namespace_routes[parent_route_name] = [] unless @target_class.combined_namespace_routes.key?(parent_route_name)
+              @target_class.combined_namespace_routes[parent_route_name].push(*namespace_routes)
             end
           end
         end

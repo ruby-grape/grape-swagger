@@ -34,7 +34,7 @@ describe 'docs mounted separately from api' do
       'info' => {},
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
       'apis' => [
-        { 'path' => '/simple.{format}', 'description' => 'Operations about simples' },
+        { 'path' => '/simple.{format}', 'description' => 'Operations about simples' }
       ]
     )
   end

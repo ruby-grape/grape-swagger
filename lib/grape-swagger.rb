@@ -128,7 +128,7 @@ module Grape
 
       def get_non_nested_params(params)
         # Duplicate the params as we are going to modify them
-        dup_params = params.each_with_object(Hash.new) do |(param, value), dparams|
+        dup_params = params.each_with_object({}) do |(param, value), dparams|
           dparams[param] = value.dup
         end
 
@@ -599,7 +599,7 @@ module Grape
                       type: route.route_is_array ? 'array' : 'void'
                     }
                     operation[:authorizations] = route.route_authorizations unless route.route_authorizations.nil? || route.route_authorizations.empty?
-                    if operation[:parameters].any? { | param | param[:type] == 'File' }
+                    if operation[:parameters].any? { |param| param[:type] == 'File' }
                       operation.merge!(consumes: ['multipart/form-data'])
                     end
                     operation.merge!(responseMessages: http_codes) unless http_codes.empty?

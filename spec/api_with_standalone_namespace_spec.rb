@@ -47,14 +47,14 @@ describe 'Standalone namespace API' do
 
       it 'that contains all api paths' do
         expect(json_body['apis']).to eq(
-                                         [
-                                           { 'path' => '/store.{format}', 'description' => 'Operations about stores' },
-                                           { 'path' => '/store_orders.{format}', 'description' => 'Operations about store/orders' },
-                                           { 'path' => '/store_orders_actions2.{format}', 'description' => 'Operations about store/orders/actions2s' },
-                                           { 'path' => '/specific-store-orders.{format}', 'description' => 'Operations about store/:store_id/orders' },
-                                           { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
-                                         ]
-                                     )
+          [
+            { 'path' => '/store.{format}', 'description' => 'Operations about stores' },
+            { 'path' => '/store_orders.{format}', 'description' => 'Operations about store/orders' },
+            { 'path' => '/store_orders_actions2.{format}', 'description' => 'Operations about store/orders/actions2s' },
+            { 'path' => '/specific-store-orders.{format}', 'description' => 'Operations about store/:store_id/orders' },
+            { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
+          ]
+        )
       end
     end
 
@@ -152,14 +152,14 @@ describe 'Standalone namespace API' do
 
       it 'that contains all api paths' do
         expect(json_body['apis']).to eq(
-                                         [
-                                           { 'path' => '/store.{format}', 'description' => 'Operations about stores' },
-                                           { 'path' => '/store_orders.{format}', 'description' => 'Operations about store/orders' },
-                                           { 'path' => '/store_orders_actions2.{format}', 'description' => 'Operations about store/orders/actions2s' },
-                                           { 'path' => '/specific-store-orders.{format}', 'description' => 'Operations about store/:store_id/orders' },
-                                           { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
-                                         ]
-                                     )
+          [
+            { 'path' => '/store.{format}', 'description' => 'Operations about stores' },
+            { 'path' => '/store_orders.{format}', 'description' => 'Operations about store/orders' },
+            { 'path' => '/store_orders_actions2.{format}', 'description' => 'Operations about store/orders/actions2s' },
+            { 'path' => '/specific-store-orders.{format}', 'description' => 'Operations about store/:store_id/orders' },
+            { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
+          ]
+        )
       end
     end
 

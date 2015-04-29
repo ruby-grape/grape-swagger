@@ -43,13 +43,13 @@ describe 'Global Models' do
     get '/swagger_doc/thing.json'
     json = JSON.parse(last_response.body)
     expect(json['models']).to eq(
-        'Some::Thing' => {
-          'id' => 'Some::Thing',
-          'properties' => {
-            'text' => { 'type' => 'string', 'description' => 'Content of something.' },
-            'name' => { 'type' => 'string', 'description' => 'Name of something.' }
-          }
-        })
+      'Some::Thing' => {
+        'id' => 'Some::Thing',
+        'properties' => {
+          'text' => { 'type' => 'string', 'description' => 'Content of something.' },
+          'name' => { 'type' => 'string', 'description' => 'Name of something.' }
+        }
+      })
   end
 
   it 'uses global models and route endpoint specific entities together' do
@@ -57,21 +57,21 @@ describe 'Global Models' do
     json = JSON.parse(last_response.body)
 
     expect(json['models']).to include(
-                                  'Some::Thing' => {
-                                    'id' => 'Some::Thing',
-                                    'properties' => {
-                                      'text' => { 'type' => 'string', 'description' => 'Content of something.' },
-                                      'name' => { 'type' => 'string', 'description' => 'Name of something.' }
-                                    }
-                                  })
+      'Some::Thing' => {
+        'id' => 'Some::Thing',
+        'properties' => {
+          'text' => { 'type' => 'string', 'description' => 'Content of something.' },
+          'name' => { 'type' => 'string', 'description' => 'Name of something.' }
+        }
+      })
 
     expect(json['models']).to include(
-                                  'Some::CombinedThing' => {
-                                    'id' => 'Some::CombinedThing',
-                                    'properties' => {
-                                      'text' => { 'type' => 'string', 'description' => 'Content of something.' },
-                                      'created_at' => { 'type' => 'dateTime', 'description' => 'Creation of something.' }
-                                    }
-                                  })
+      'Some::CombinedThing' => {
+        'id' => 'Some::CombinedThing',
+        'properties' => {
+          'text' => { 'type' => 'string', 'description' => 'Content of something.' },
+          'created_at' => { 'type' => 'dateTime', 'description' => 'Creation of something.' }
+        }
+      })
   end
 end

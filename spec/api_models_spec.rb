@@ -227,68 +227,68 @@ describe 'API Models' do
                                                          },
                                                          'required' => ['parts']
 
-                                                 )
+                                                        )
 
     expect(result['models']['ComposedOf']).to include(
-                                                        'id' => 'ComposedOf',
-                                                        'properties' => {
-                                                          'part_text' => {
-                                                            'type' => 'string',
-                                                            'description' => 'Content of composedof.'
-                                                          }
-                                                        }
-                                                      )
+      'id' => 'ComposedOf',
+      'properties' => {
+        'part_text' => {
+          'type' => 'string',
+          'description' => 'Content of composedof.'
+        }
+      }
+    )
 
     expect(result['models']['composed']).to include(
-                                                      'id' => 'composed',
-                                                      'properties' => {
-                                                        'part_text' => {
-                                                          'type' => 'string',
-                                                          'description' => 'Content of composedof else.'
-                                                        }
+      'id' => 'composed',
+      'properties' => {
+        'part_text' => {
+          'type' => 'string',
+          'description' => 'Content of composedof else.'
+        }
 
-                                                      }
-                                                    )
+      }
+    )
   end
 
   it 'includes enum values in params and documentation.' do
     get '/swagger_doc/enum_description_in_entity'
     result = JSON.parse(last_response.body)
     expect(result['models']['EnumValues']).to eq(
-                                                  'id' => 'EnumValues',
-                                                  'properties' => {
-                                                    'gender' => { 'type' => 'string', 'description' => 'Content of something.', 'enum' => %w(Male Female) },
-                                                    'number' => { 'type' => 'integer', 'description' => 'Content of something.', 'enum' => [1, 2] }
-                                                  }
-                                              )
+      'id' => 'EnumValues',
+      'properties' => {
+        'gender' => { 'type' => 'string', 'description' => 'Content of something.', 'enum' => %w(Male Female) },
+        'number' => { 'type' => 'integer', 'description' => 'Content of something.', 'enum' => [1, 2] }
+      }
+    )
 
     expect(result['apis'][0]['operations'][0]).to include(
-                                                      'parameters' =>
-                                                         [
-                                                           { 'paramType' => 'query', 'name' => 'gender', 'description' => 'Content of something.', 'type' => 'string', 'required' => false, 'allowMultiple' => false, 'enum' => %w(Male Female) },
-                                                           { 'paramType' => 'query', 'name' => 'number', 'description' => 'Content of something.', 'type' => 'integer', 'required' => false, 'allowMultiple' => false, 'format' => 'int32', 'enum' => [1, 2] }
-                                                         ],
-                                                      'type' => 'EnumValues'
-                                                  )
+      'parameters' =>
+         [
+           { 'paramType' => 'query', 'name' => 'gender', 'description' => 'Content of something.', 'type' => 'string', 'required' => false, 'allowMultiple' => false, 'enum' => %w(Male Female) },
+           { 'paramType' => 'query', 'name' => 'number', 'description' => 'Content of something.', 'type' => 'integer', 'required' => false, 'allowMultiple' => false, 'format' => 'int32', 'enum' => [1, 2] }
+         ],
+      'type' => 'EnumValues'
+    )
   end
 
   it 'includes referenced models in those with aliased references.' do
     get '/swagger_doc/aliasedthing'
     result = JSON.parse(last_response.body)
     expect(result['models']['AliasedThing']).to eq(
-                                                    'id' => 'AliasedThing',
-                                                    'properties' => {
-                                                      'post' => { '$ref' => 'Something', 'description' => 'Reference to something.' }
-                                                    }
-                                                )
+      'id' => 'AliasedThing',
+      'properties' => {
+        'post' => { '$ref' => 'Something', 'description' => 'Reference to something.' }
+      }
+    )
 
     expect(result['models']['Something']).to eq(
-                                                 'id' => 'Something',
-                                                 'properties' => {
-                                                   'text' => { 'type' => 'string', 'description' => 'Content of something.' },
-                                                   'links' => { 'type' => 'array', 'items' => { '$ref' => 'link' } }
-                                                 }
-                                             )
+      'id' => 'Something',
+      'properties' => {
+        'text' => { 'type' => 'string', 'description' => 'Content of something.' },
+        'links' => { 'type' => 'array', 'items' => { '$ref' => 'link' } }
+      }
+    )
   end
 
   it 'includes all entities with four levels of nesting' do

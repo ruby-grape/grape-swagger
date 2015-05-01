@@ -7,6 +7,7 @@
 
 #### Fixes
 
+* [#252](https://github.com/tim-vandecasteele/grape-swagger/pull/252): Allow docs to mounted in separate class than target - [@iangreenleaf](https://github.com/iangreenleaf).
 * [#251](https://github.com/tim-vandecasteele/grape-swagger/pull/251): Fixed model id equal to model name when root existing in entities - [@aitortomas](https://github.com/aitortomas).
 * [#232](https://github.com/tim-vandecasteele/grape-swagger/pull/232): Fixed missing raw array params - [@u2](https://github.com/u2).
 * [#234](https://github.com/tim-vandecasteele/grape-swagger/pull/234): Fixed range :values with float - [@azhi](https://github.com/azhi).

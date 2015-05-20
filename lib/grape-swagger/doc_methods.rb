@@ -300,7 +300,7 @@ module GrapeSwagger
         markdown: nil,
         hide_documentation_path: false,
         hide_format: false,
-        format: nil,
+        format: :json,
         models: [],
         info: {},
         authorizations: nil,

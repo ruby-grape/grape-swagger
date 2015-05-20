@@ -26,7 +26,6 @@ describe 'API with minimally documented models' do
       end
 
       add_swagger_documentation \
-        format: :json,
         models: [Class.new(entity_klass)]
     end
   end

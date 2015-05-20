@@ -14,7 +14,7 @@ describe 'Default API' do
     end
 
     subject do
-      get '/swagger_doc'
+      get '/swagger_doc.json'
       JSON.parse(last_response.body)
     end
 
@@ -29,6 +29,18 @@ describe 'Default API' do
           { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
         ]
       )
+    end
+
+    context ':formatting' do
+      subject do
+        get '/swagger_doc/something.json'
+        last_response
+      end
+
+      it 'defaults to JSON format when none is specified' do
+        expect(subject.headers['Content-Type']).to eq 'application/json'
+        expect(-> { JSON.parse(subject.body) }).to_not raise_error
+      end
     end
 
     context 'path inside the apis array' do
@@ -56,7 +68,7 @@ describe 'Default API' do
     end
 
     subject do
-      get '/swagger_doc'
+      get '/swagger_doc.json'
       JSON.parse(last_response.body)['info']
     end
 

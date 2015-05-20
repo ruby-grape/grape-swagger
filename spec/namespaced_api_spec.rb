@@ -7,7 +7,7 @@ describe 'namespace' do
         namespace :aspace, desc: 'Description for aspace' do
           get '/'
         end
-        add_swagger_documentation format: :json
+        add_swagger_documentation
       end
     end
 
@@ -31,7 +31,7 @@ describe 'namespace' do
 
       Class.new(Grape::API) do
         mount namespaced_api
-        add_swagger_documentation format: :json
+        add_swagger_documentation
       end
     end
 

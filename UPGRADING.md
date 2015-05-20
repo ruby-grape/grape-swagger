@@ -1,6 +1,17 @@
 Upgrading Grape-swagger
 =======================
 
+### Upgrading to >= 0.10.2
+
+Previously, grape-swagger hid the format in the URL by default. This conflicted
+with grape-swagger-rails that required grape-swagger to specify the format (see
+below). Grape-swagger will now assume the `format :json` by default. To
+revert, `add_swagger_documentation(format: nil)`
+
+#### Grape-Swagger-Rails
+
+You will no longer need to specify `add_swagger_documentation(format: :json).`
+
 ### Upgrading to >= 0.9.0
 
 #### Grape-Swagger-Rails

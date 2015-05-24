@@ -504,22 +504,40 @@ describe 'options: ' do
           { bla: 'something' }
         end
       end
+    end
 
-      class SimpleApiWithHiddenPaths < Grape::API
-        mount ProtectedApi
-        add_swagger_documentation hide_format: true
+    shared_examples_for 'an api path without a format suffix' do |options = {}|
+      let(:app) do
+        Class.new(Grape::API) do
+          mount ProtectedApi
+          add_swagger_documentation({ hide_format: true }.merge(options))
+        end
+      end
+
+      it 'has no formats' do
+        get '/swagger_doc/something.json'
+        apis = JSON.parse(last_response.body)['apis']
+        expect(apis.length).to eq 1
+        expect(apis.first['path']).to eq '/something'
       end
     end
 
-    def app
-      SimpleApiWithHiddenPaths
+    it_behaves_like 'an api path without a format suffix'
+
+    context ':format' do
+      it_behaves_like('an api path without a format suffix', format: :json)
     end
 
-    it 'has no formats' do
-      get '/swagger_doc/something.json'
-      JSON.parse(last_response.body)['apis'].each do |api|
-        expect(api['path']).to_not end_with '.{format}'
-      end
+    context ':base_path' do
+      it_behaves_like('an api path without a format suffix', base_path: '/api')
+    end
+
+    context ':api_version' do
+      it_behaves_like('an api path without a format suffix', api_version: 'v1')
+    end
+
+    context 'all settings' do
+      it_behaves_like('an api path without a format suffix', api_version: 'v1', base_path: '/api', format: :json)
     end
   end
 

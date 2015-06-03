@@ -164,14 +164,24 @@ module Grape
         modified_params
       end
 
-      def parse_enum_values(values)
-        if values.is_a?(Range) && [Integer, String].any? { |klass| values.first.is_a?(klass) }
-          values.to_a
-        elsif values.is_a?(Proc)
-          values.call
+      def parse_enum_or_range_values(values)
+        case values
+        when Range
+          parse_range_values(values) if values.first.is_a?(Integer)
+        when Proc
+          values_result = values.call
+          if values_result.is_a?(Range) && values_result.first.is_a?(Integer)
+            parse_range_values(values_result)
+          else
+            { enum: values_result }
+          end
         else
-          values
+          { enum: values } if values
         end
+      end
+
+      def parse_range_values(values)
+        { minimum: values.first, maximum: values.last }
       end
 
       def create_documentation_class

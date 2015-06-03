@@ -47,13 +47,13 @@ module GrapeSwagger
           value = additional_documentation.merge(value)
         end
 
-        description   = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
-        required      = value.is_a?(Hash) ? !!value[:required] : false
-        default_value = value.is_a?(Hash) ? value[:default] : nil
-        example       = value.is_a?(Hash) ? value[:example] : nil
-        is_array      = value.is_a?(Hash) ? (value[:is_array] || false) : false
-        values        = value.is_a?(Hash) ? value[:values] : nil
-        enum_values   = parse_enum_values(values)
+        description          = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
+        required             = value.is_a?(Hash) ? !!value[:required] : false
+        default_value        = value.is_a?(Hash) ? value[:default] : nil
+        example              = value.is_a?(Hash) ? value[:example] : nil
+        is_array             = value.is_a?(Hash) ? (value[:is_array] || false) : false
+        values               = value.is_a?(Hash) ? value[:values] : nil
+        enum_or_range_values = parse_enum_or_range_values(values)
 
         if value.is_a?(Hash) && value.key?(:documentation) && value[:documentation].key?(:param_type)
           param_type  = value[:documentation][:param_type]
@@ -86,14 +86,16 @@ module GrapeSwagger
           allowMultiple: is_array
         }
 
-        parsed_params.merge!(format: 'int32') if data_type == 'integer'
-        parsed_params.merge!(format: 'int64') if data_type == 'long'
-        parsed_params.merge!(items: items) if items.present?
-        parsed_params.merge!(defaultValue: example) if example
+        parsed_params[:format] = 'int32' if data_type == 'integer'
+        parsed_params[:format] = 'int64' if data_type == 'long'
+        parsed_params[:items]  = items   if items.present?
+
+        parsed_params[:defaultValue] = example if example
         if default_value && example.blank?
-          parsed_params.merge!(defaultValue: default_value)
+          parsed_params[:defaultValue] = default_value
         end
-        parsed_params.merge!(enum: enum_values) if enum_values
+
+        parsed_params.merge!(enum_or_range_values) if enum_or_range_values
         parsed_params
       end
     end

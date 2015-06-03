@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'grape_version'
 
-describe 'Convert values to enum' do
+describe 'Convert values to enum or Range' do
   def app
     Class.new(Grape::API) do
       format :json
@@ -64,17 +64,17 @@ describe 'Convert values to enum' do
   context 'Range values' do
     subject(:range_letter) { first_parameter_info('range_letter') }
 
-    it 'has letter range values as array in enum' do
+    it 'has letter range values' do
       expect(range_letter).to eq [
-        { 'paramType' => 'form', 'name' => 'letter', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false, 'enum' => ('a'..'z').to_a }
+        { 'paramType' => 'form', 'name' => 'letter', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false }
       ]
     end
 
     subject(:range_integer) { first_parameter_info('range_integer') }
 
-    it 'has integer range values as array in enum' do
+    it 'has integer range values' do
       expect(range_integer).to eq [
-        { 'paramType' => 'form', 'name' => 'integer', 'description' => nil, 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32', 'enum' => (-5..5).to_a }
+        { 'paramType' => 'form', 'name' => 'integer', 'description' => nil, 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32', 'minimum' => -5, 'maximum' => 5 }
       ]
     end
   end
@@ -121,9 +121,9 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
   context 'Range values' do
     subject(:range_float) { first_parameter_info('range_float') }
 
-    it 'has float range values as string in enum' do
+    it 'has float range values as string' do
       expect(range_float).to eq [
-        { 'paramType' => 'form', 'name' => 'float', 'description' => nil, 'type' => 'float', 'required' => true, 'allowMultiple' => false, 'enum' => '-5.0..5.0' }
+        { 'paramType' => 'form', 'name' => 'float', 'description' => nil, 'type' => 'float', 'required' => true, 'allowMultiple' => false }
       ]
     end
   end

@@ -7,6 +7,7 @@
 
 #### Fixes
 
+* [#260](https://github.com/tim-vandecasteele/grape-swagger/pull/260): Fixed endpoints that would wrongly be hidden if `hide_documentation_path` is set - [@QuickPay](https://github.com/QuickPay).
 * [#259](https://github.com/tim-vandecasteele/grape-swagger/pull/259): Fixed range values and converting integer :values range to a minimum/maximum numeric Range - [@u2](https://github.com/u2).
 * [#252](https://github.com/tim-vandecasteele/grape-swagger/pull/252): Allow docs to mounted in separate class than target - [@iangreenleaf](https://github.com/iangreenleaf).
 * [#251](https://github.com/tim-vandecasteele/grape-swagger/pull/251): Fixed model id equal to model name when root existing in entities - [@aitortomas](https://github.com/aitortomas).

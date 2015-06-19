@@ -62,3 +62,61 @@ describe 'simple api with prefix' do
     end
   end
 end
+
+describe 'simple api with partially same path as docs mount and hidden doc path' do
+  before :all do
+    class SamePathApi < Grape::API
+      desc 'This gets the documents'
+      get '/documents' do
+        { test: 'something' }
+      end
+    end
+
+    class SimpleSamePathApi < Grape::API
+      mount SamePathApi
+      add_swagger_documentation(
+        mount_path: '/doc',
+        hide_documentation_path: true
+      )
+    end
+  end
+
+  def app
+    SimpleSamePathApi
+  end
+
+  it 'retrieves swagger-documentation on /doc that contains documents' do
+    get '/doc.json'
+    expect(JSON.parse(last_response.body)).to eq(
+      'apiVersion' => '0.1',
+      'swaggerVersion' => '1.2',
+      'info' => {},
+      'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
+      'apis' => [
+        { 'path' => '/documents.{format}', 'description' => 'Operations about documents' }
+      ]
+    )
+  end
+
+  it 'retrieves the documentation for apis' do
+    get '/doc/documents.json'
+    expect(JSON.parse(last_response.body)).to eq(
+      'apiVersion' => '0.1',
+      'swaggerVersion' => '1.2',
+      'basePath' => 'http://example.org',
+      'resourcePath' => '/documents',
+      'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
+      'apis' => [{
+        'path' => '/documents.{format}',
+        'operations' => [{
+          'notes' => '',
+          'summary' => 'This gets the documents',
+          'nickname' => 'GET-documents---format-',
+          'method' => 'GET',
+          'parameters' => [],
+          'type' => 'void'
+        }]
+      }]
+    )
+  end
+end

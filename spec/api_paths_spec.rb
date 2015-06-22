@@ -70,6 +70,11 @@ describe 'simple api with partially same path as docs mount and hidden doc path'
       get '/documents' do
         { test: 'something' }
       end
+
+      desc 'This gets the doc types'
+      get '/doc-types' do
+        { test: 'something' }
+      end
     end
 
     class SimpleSamePathApi < Grape::API
@@ -93,7 +98,8 @@ describe 'simple api with partially same path as docs mount and hidden doc path'
       'info' => {},
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
       'apis' => [
-        { 'path' => '/documents.{format}', 'description' => 'Operations about documents' }
+        { 'path' => '/documents.{format}', 'description' => 'Operations about documents' },
+        { 'path' => '/doc-types.{format}', 'description' => 'Operations about doc-types' }
       ]
     )
   end

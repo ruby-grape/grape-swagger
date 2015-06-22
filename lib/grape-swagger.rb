@@ -31,7 +31,7 @@ module Grape
           next if resource.empty?
           resource.downcase!
           @target_class.combined_routes[resource] ||= []
-          next if documentation_class.hide_documentation_path && route.route_path.match(/#{documentation_class.mount_path}(\W|$)/)
+          next if documentation_class.hide_documentation_path && route.route_path.match(/#{documentation_class.mount_path}($|\/|\(\.)/)
           @target_class.combined_routes[resource] << route
         end
 

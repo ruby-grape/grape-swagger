@@ -127,7 +127,7 @@ module GrapeSwagger
       params ||= []
 
       params.map do |param, value|
-        data_type     = 'String'
+        data_type     = 'string'
         description   = value.is_a?(Hash) ? value[:description] : ''
         required      = value.is_a?(Hash) ? !!value[:required] : false
         default_value = value.is_a?(Hash) ? value[:default] : nil

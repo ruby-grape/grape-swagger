@@ -145,7 +145,7 @@ describe 'helpers' do
         'XAuthToken' => { description: 'A required header.', required: true, default: 'default' }
       }
       expect(subject.parse_header_params(params)).to eq [
-        { paramType: 'header', name: 'XAuthToken', description: 'A required header.', type: 'String', required: true, defaultValue: 'default' }
+        { paramType: 'header', name: 'XAuthToken', description: 'A required header.', type: 'string', required: true, defaultValue: 'default' }
       ]
     end
   end

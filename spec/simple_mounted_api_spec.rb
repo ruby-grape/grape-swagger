@@ -139,8 +139,8 @@ describe 'a simple mounted api' do
           'nickname' => 'GET-simple_with_headers---format-',
           'method' => 'GET',
           'parameters' => [
-            { 'paramType' => 'header', 'name' => 'XAuthToken', 'description' => 'A required header.', 'type' => 'String', 'required' => true },
-            { 'paramType' => 'header', 'name' => 'XOtherHeader', 'description' => 'An optional header.', 'type' => 'String', 'required' => false }
+            { 'paramType' => 'header', 'name' => 'XAuthToken', 'description' => 'A required header.', 'type' => 'string', 'required' => true },
+            { 'paramType' => 'header', 'name' => 'XOtherHeader', 'description' => 'An optional header.', 'type' => 'string', 'required' => false }
           ],
           'type' => 'void',
           'responseMessages' => [

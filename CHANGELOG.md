@@ -7,6 +7,7 @@
 
 #### Fixes
 
+* [#264](https://github.com/tim-vandecasteele/grape-swagger/pull/264): Consistent header param types - [@QuickPay](https://github.com/QuickPay).
 * [#260](https://github.com/tim-vandecasteele/grape-swagger/pull/260), [#261](https://github.com/tim-vandecasteele/grape-swagger/pull/261): Fixed endpoints that would wrongly be hidden if `hide_documentation_path` is set - [@QuickPay](https://github.com/QuickPay).
 * [#259](https://github.com/tim-vandecasteele/grape-swagger/pull/259): Fixed range values and converting integer :values range to a minimum/maximum numeric Range - [@u2](https://github.com/u2).
 * [#252](https://github.com/tim-vandecasteele/grape-swagger/pull/252): Allow docs to mounted in separate class than target - [@iangreenleaf](https://github.com/iangreenleaf).

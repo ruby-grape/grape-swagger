@@ -580,37 +580,6 @@ describe 'options: ' do
     end
   end
 
-  context ':formatting' do
-    before :all do
-      class JSONDefaultFormatAPI < Grape::API
-        desc 'This gets something.'
-        get '/something' do
-          { bla: 'something' }
-        end
-      end
-
-      class SimpleJSONFormattedAPI < Grape::API
-        mount JSONDefaultFormatAPI
-        add_swagger_documentation format: :json
-      end
-    end
-
-    def app
-      SimpleJSONFormattedAPI
-    end
-
-    subject do
-      get '/swagger_doc/something'
-      last_response
-    end
-
-    it 'defaults to JSON format when none is specified' do
-      get '/swagger_doc/something'
-      expect(subject.headers['Content-Type']).to eq 'application/json'
-      expect(-> { JSON.parse(subject.body) }).to_not raise_error
-    end
-  end
-
   context 'documented namespace description' do
     before :all do
       class NestedNamespaceWithDescAPI < Grape::API
@@ -632,7 +601,7 @@ describe 'options: ' do
 
         mount NestedNamespaceWithDescAPI
 
-        add_swagger_documentation format: :json
+        add_swagger_documentation
       end
       get '/swagger_doc'
     end

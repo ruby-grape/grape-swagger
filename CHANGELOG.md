@@ -17,6 +17,7 @@
 * [#225](https://github.com/tim-vandecasteele/grape-swagger/pull/225): Fixed `param_type` to have it read from parameter's documentation hash - [@zsxking](https://github.com/zsxking).
 * [#235](https://github.com/tim-vandecasteele/grape-swagger/pull/235): Fixed nested entity names in parameters and as `$ref` in models - [@frodrigo](https://github.com/frodrigo).
 * [#206](https://github.com/tim-vandecasteele/grape-swagger/pull/206): Fixed 'is_array' in the return entity being ignored - [@igormoochnick](https://github.com/igormoochnick).
+* [#266](https://github.com/tim-vandecasteele/grape-swagger/pull/266): Respect primitve mapping on type and format attributs of 1.2 swagger spec - [@frodrigo](https://github.com/frodrigo).
 
 ### 0.10.1 (March 11, 2015)
 

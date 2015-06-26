@@ -258,7 +258,7 @@ describe 'API Models' do
       'id' => 'EnumValues',
       'properties' => {
         'gender' => { 'type' => 'string', 'description' => 'Content of something.', 'enum' => %w(Male Female) },
-        'number' => { 'type' => 'integer', 'description' => 'Content of something.', 'enum' => [1, 2] }
+        'number' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'Content of something.', 'enum' => [1, 2] }
       }
     )
 

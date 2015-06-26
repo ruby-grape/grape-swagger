@@ -123,7 +123,7 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
 
     it 'has float range values as string' do
       expect(range_float).to eq [
-        { 'paramType' => 'form', 'name' => 'float', 'description' => nil, 'type' => 'float', 'required' => true, 'allowMultiple' => false }
+        { 'paramType' => 'form', 'name' => 'float', 'description' => nil, 'type' => 'number', 'format' => 'float', 'required' => true, 'allowMultiple' => false }
       ]
     end
   end

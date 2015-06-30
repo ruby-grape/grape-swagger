@@ -70,7 +70,7 @@ describe 'Global Models' do
         'id' => 'Some::CombinedThing',
         'properties' => {
           'text' => { 'type' => 'string', 'description' => 'Content of something.' },
-          'created_at' => { 'type' => 'dateTime', 'description' => 'Creation of something.' }
+          'created_at' => { 'type' => 'string', 'format' => 'date-time', 'description' => 'Creation of something.' }
         }
       })
   end

@@ -20,6 +20,12 @@ describe 'Array Params' do
       get :raw_array_splines do
       end
 
+      params do
+        optional :raw_array, type: Array[Integer]
+      end
+      get :raw_array_integers do
+      end
+
       add_swagger_documentation
     end
   end
@@ -42,6 +48,16 @@ describe 'Array Params' do
     parameters = body['apis'].first['operations'].first['parameters']
     expect(parameters).to eq [
       { 'paramType' => 'query', 'name' => 'raw_array', 'description' => nil, 'type' => 'Array', 'required' => false, 'allowMultiple' => false }
+    ]
+  end
+
+  it 'get raw array integer' do
+    get '/swagger_doc/raw_array_integers'
+    expect(last_response.status).to eq 200
+    body = JSON.parse last_response.body
+    parameters = body['apis'].first['operations'].first['parameters']
+    expect(parameters).to eq [
+      { 'paramType' => 'query', 'name' => 'raw_array', 'description' => nil, 'type' => 'array', 'required' => false, 'allowMultiple' => false, 'items' => { 'type' => 'integer', 'format' => 'int32' } }
     ]
   end
 end

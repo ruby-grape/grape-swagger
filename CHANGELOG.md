@@ -18,6 +18,7 @@
 * [#235](https://github.com/tim-vandecasteele/grape-swagger/pull/235): Fixed nested entity names in parameters and as `$ref` in models - [@frodrigo](https://github.com/frodrigo).
 * [#206](https://github.com/tim-vandecasteele/grape-swagger/pull/206): Fixed 'is_array' in the return entity being ignored - [@igormoochnick](https://github.com/igormoochnick).
 * [#266](https://github.com/tim-vandecasteele/grape-swagger/pull/266): Respect primitve mapping on type and format attributs of 1.2 swagger spec - [@frodrigo](https://github.com/frodrigo).
+* [#268](https://github.com/tim-vandecasteele/grape-swagger/pull/268): Patch to handle Array Declaration [#237] - [@frodrigo](https://github.com/frodrigo).
 
 ### 0.10.1 (March 11, 2015)
 

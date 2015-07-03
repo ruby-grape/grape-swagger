@@ -47,6 +47,12 @@ module GrapeSwagger
                           'double'
                         when 'Symbol'
                           'string'
+                        when /^\[(?<type>.*)\]$/
+                          items[:type] = Regexp.last_match[:type].downcase
+                          if PRIMITIVE_MAPPINGS.key?(items[:type])
+                            items[:type], items[:format] = PRIMITIVE_MAPPINGS[items[:type]]
+                          end
+                          'array'
                         else
                           @@documentation_class.parse_entity_name(raw_data_type)
                         end

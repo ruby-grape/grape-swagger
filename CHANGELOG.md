@@ -7,6 +7,7 @@
 
 #### Fixes
 
+* [#273](https://github.com/tim-vandecasteele/grape-swagger/pull/273): Fix for hide_format when API class uses a single format with Grape 0.12.0 - [@mattolson](https://github.com/mattolson).
 * [#264](https://github.com/tim-vandecasteele/grape-swagger/pull/264): Consistent header param types - [@QuickPay](https://github.com/QuickPay).
 * [#260](https://github.com/tim-vandecasteele/grape-swagger/pull/260), [#261](https://github.com/tim-vandecasteele/grape-swagger/pull/261): Fixed endpoints that would wrongly be hidden if `hide_documentation_path` is set - [@QuickPay](https://github.com/QuickPay).
 * [#259](https://github.com/tim-vandecasteele/grape-swagger/pull/259): Fixed range values and converting integer :values range to a minimum/maximum numeric Range - [@u2](https://github.com/u2).

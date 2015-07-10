@@ -497,30 +497,62 @@ describe 'options: ' do
   end
 
   context ':hide_format' do
-    before :all do
-      class HidePathsApi < Grape::API
-        desc 'This gets something.'
-        get '/something' do
-          { bla: 'something' }
+    context 'with no explicit api format specified' do
+      before :all do
+        class HidePathsApi < Grape::API
+          desc 'This gets something.'
+          get '/something' do
+            { bla: 'something' }
+          end
+        end
+
+        class SimpleApiWithHiddenPaths < Grape::API
+          mount HidePathsApi
+          add_swagger_documentation hide_format: true
         end
       end
 
-      class SimpleApiWithHiddenPaths < Grape::API
-        mount ProtectedApi
-        add_swagger_documentation hide_format: true
+      def app
+        SimpleApiWithHiddenPaths
+      end
+
+      it 'does not end with format' do
+        get '/swagger_doc/something.json'
+        JSON.parse(last_response.body)['apis'].each do |api|
+          expect(api['path']).to_not end_with '.{format}'
+        end
       end
     end
 
-    def app
-      SimpleApiWithHiddenPaths
-    end
+    context 'with single api format specified' do
+      before :all do
+        class SingleFormatApi < Grape::API
+          format :json
+          desc 'This gets something.'
+          get '/something' do
+            { bla: 'something' }
+          end
+        end
 
-    it 'has no formats' do
-      get '/swagger_doc/something.json'
-      JSON.parse(last_response.body)['apis'].each do |api|
-        expect(api['path']).to_not end_with '.{format}'
+        class SimpleApiWithSingleFormat < Grape::API
+          mount SingleFormatApi
+          add_swagger_documentation hide_format: true
+        end
+      end
+
+      def app
+        SimpleApiWithSingleFormat
+      end
+
+      it 'does not end with format' do
+        get '/swagger_doc/something.json'
+        JSON.parse(last_response.body)['apis'].each do |api|
+          expect(api['path']).to_not end_with '.{format}'
+          expect(api['path']).to_not end_with '(.json)'
+        end
       end
     end
+
   end
 
   context 'multiple documentations' do

@@ -195,15 +195,24 @@ You can specify a swagger nickname to use instead of the auto generated name by 
 desc 'Get a full list of pets', nickname: 'getAllPets'
 ```
 
+## Defining an endpoint as array
+
+You can define an endpoint as array by adding `is_array` in the description:
+
+``` ruby
+desc 'Get a full list of pets', is_array: true
+```
+
 ## Using an options hash
 
-The Grape DSL supports either an options hash or a restricted block to pass settings. Passing the `nickname` and `hidden` options together with response codes is only possible when passing an options hash. 
+The Grape DSL supports either an options hash or a restricted block to pass settings. Passing the `nickname`, `hidden` and `is_array` options together with response codes is only possible when passing an options hash. 
 Since the syntax differs you'll need to adjust it accordingly:
 
 ``` ruby
 
 desc 'Get all kittens!', {
   :hidden => true,
+  :is_array => true,
   :nickname => 'getKittens',
   :entity => Entities::Kitten, # use entity instead of success
   :http_codes => [[401, 'KittenBitesError', Entities::BadKitten]]  # use http_codes instead of failure

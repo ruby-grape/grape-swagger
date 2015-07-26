@@ -205,7 +205,7 @@ desc 'Get a full list of pets', is_array: true
 
 ## Using an options hash
 
-The Grape DSL supports either an options hash or a restricted block to pass settings. Passing the `nickname`, `hidden` and `is_array` options together with response codes is only possible when passing an options hash. 
+The Grape DSL supports either an options hash or a restricted block to pass settings. Passing the `nickname`, `hidden` and `is_array` options together with response codes is only possible when passing an options hash.
 Since the syntax differs you'll need to adjust it accordingly:
 
 ``` ruby
@@ -272,26 +272,6 @@ The name should not contain whitespaces or any other special characters due to f
     end
 
 ## Additional documentation
-
-## Setting a Swagger defaultValue
-
-Grape allows for an additional documentation hash to be passed to a parameter.
-
-    params do
-      requires :id, type: Integer, desc: 'Coffee ID'
-      requires :temperature, type: Integer, desc: 'Temperature of the coffee in celcius', documentation: { example: 72 }
-    end
-
-The example parameter will populate the Swagger UI with the example value, and can be used for optional or required parameters.
-
-Grape uses the option `default` to set a default value for optional parameters. This is different in that Grape will set your parameter to the provided default if the parameter is omitted, whereas the example value above will only set the value in the UI itself. This will set the Swagger `defaultValue` to the provided value. Note that the example value will override the Grape default value.
-
-
-    params do
-      requires :id, type: Integer, desc: 'Coffee ID'
-      optional :temperature, type: Integer, desc: 'Temperature of the coffee in celcius', default: 72
-    end
-
 
 ## Grape Entities
 

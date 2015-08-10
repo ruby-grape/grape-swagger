@@ -14,7 +14,7 @@ describe 'API Description' do
       expect(routes.first.route_description).to eq 'Swagger compatible API description'
       expect(routes.first.route_params).to eq({})
       expect(routes.last.route_description).to eq 'Swagger compatible API description for specific API'
-      expect(routes.last.route_params).to eq('name' => { desc: 'Resource name of mounted API', type: 'string', required: true })
+      expect(routes.last.route_params).to eq('name' => { desc: 'Resource name of mounted API', type: 'String', required: true })
     end
   end
 
@@ -34,7 +34,7 @@ describe 'API Description' do
       expect(routes.first.route_params).to eq(x: 1)
       expect(routes.first.route_xx).to eq(11)
       expect(routes.last.route_description).to eq 'Second'
-      expect(routes.last.route_params).to eq('name' => { desc: 'Resource name of mounted API', type: 'string', required: true }, y: 42)
+      expect(routes.last.route_params).to eq('name' => { desc: 'Resource name of mounted API', type: 'String', required: true }, y: 42)
       expect(routes.last.route_yy).to eq(4242)
     end
   end

@@ -400,14 +400,11 @@ module GrapeSwagger
         output
       end
 
-      desc specific_api_doc.delete(:desc), { params: {
-        'name' => {
-          desc: 'Resource name of mounted API',
-          type: 'string',
-          required: true
-        }
-      }.merge(specific_api_doc.delete(:params) || {}) }.merge(specific_api_doc)
-
+      desc specific_api_doc.delete(:desc), { params:
+        specific_api_doc.delete(:params) || {} }.merge(specific_api_doc)
+      params do
+        requires :name, type: String, desc: 'Resource name of mounted API'
+      end
       get "#{@@mount_path}/:name" do
         header['Access-Control-Allow-Origin']   = '*'
         header['Access-Control-Request-Method'] = '*'

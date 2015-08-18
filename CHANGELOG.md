@@ -20,7 +20,8 @@
 * [#206](https://github.com/tim-vandecasteele/grape-swagger/pull/206): Fixed 'is_array' in the return entity being ignored - [@igormoochnick](https://github.com/igormoochnick).
 * [#266](https://github.com/tim-vandecasteele/grape-swagger/pull/266): Respect primitive mapping on type and format attributes of 1.2 swagger spec - [@frodrigo](https://github.com/frodrigo).
 * [#268](https://github.com/tim-vandecasteele/grape-swagger/pull/268): Fixed handling of `type: Array[...]` - [@frodrigo](https://github.com/frodrigo).
-* [#284](https://github.com/tim-vandecasteele/grape-swagger/pull/284): Use new params syntax for swagger doc endpoint, fix an issue that `:name` params not recognized by `declared` method -[@calfzhou](https://github.com/calfzhou).
+* [#284](https://github.com/tim-vandecasteele/grape-swagger/pull/284): Use new params syntax for swagger doc endpoint, fix an issue that `:name` params not recognized by `declared` method - [@calfzhou](https://github.com/calfzhou).
+* [#286](https://github.com/tim-vandecasteele/grape-swagger/pull/286): Use `detail` value for `notes` - fix an issue where `detail` value specified in a block passed to `desc` was ignored - [@rngtng](https://github.com/rngtng).
 
 ### 0.10.1 (March 11, 2015)
 

@@ -90,7 +90,7 @@ API class name.
 
 #### markdown
 
-Allow markdown in `notes`, default is `nil`. (disabled) See below for details.
+Allow markdown in `detail`/`notes`, default is `nil`. (disabled) See below for details.
 
 #### hide_format
 
@@ -205,11 +205,10 @@ desc 'Get a full list of pets', is_array: true
 
 ## Using an options hash
 
-The Grape DSL supports either an options hash or a restricted block to pass settings. Passing the `nickname`, `hidden` and `is_array` options together with response codes is only possible when passing an options hash. 
+The Grape DSL supports either an options hash or a restricted block to pass settings. Passing the `nickname`, `hidden` and `is_array` options together with response codes is only possible when passing an options hash.
 Since the syntax differs you'll need to adjust it accordingly:
 
 ``` ruby
-
 desc 'Get all kittens!', {
   :hidden => true,
   :is_array => true,
@@ -217,6 +216,17 @@ desc 'Get all kittens!', {
   :entity => Entities::Kitten, # use entity instead of success
   :http_codes => [[401, 'KittenBitesError', Entities::BadKitten]]  # use http_codes instead of failure
   }
+get '/kittens' do
+```
+
+## Specify endpoint details
+
+To specify further details for an endpoint, use the `detail` option within a block passed to `desc`:
+
+``` ruby
+desc 'Get all kittens!' do
+  detail 'this will expose all the kittens'
+end
 get '/kittens' do
 ```
 
@@ -400,9 +410,9 @@ module API
 end
 ```
 
-## Markdown in Notes
+## Markdown in Detail/Notes
 
-The grape-swagger gem allows you to add an explanation in markdown in the notes field. Which would result in proper formatted markdown in Swagger UI.
+The grape-swagger gem allows you to add an explanation in markdown in the detail/notes field. Which would result in proper formatted markdown in Swagger UI.
 Grape-swagger uses adapters for several markdown formatters. It includes adapters for [kramdown](http://kramdown.rubyforge.org) (kramdown [syntax](http://kramdown.rubyforge.org/syntax.html)) and [redcarpet](https://github.com/vmg/redcarpet).
 The adapters are packed in the GrapeSwagger::Markdown modules. We do not include the markdown gems in our gemfile, so be sure to include or install the depended gems.
 
@@ -426,8 +436,8 @@ add_swagger_documentation(
 Finally you can write endpoint descriptions the with markdown enabled.
 
 ``` ruby
-desc "Reserve a burger in heaven", {
-  notes: <<-NOTE
+desc "Reserve a burger in heaven" do
+  detail <<-NOTE
     Veggie Burgers in Heaven
     -----------------
 
@@ -443,7 +453,7 @@ desc "Reserve a burger in heaven", {
     * _Will go to Heaven:_ Probably
     * _Will go to Hell:_ Probably not
   NOTE
-}
+end
 ```
 
 ### Redcarpet

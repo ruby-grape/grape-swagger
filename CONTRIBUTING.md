@@ -1,20 +1,20 @@
 # Contributing to Grape-Swagger
 
-This project is work of [many contributors](https://github.com/tim-vandecasteele/grape-swagger/graphs/contributors).
-You're encouraged to submit [pull requests](https://github.com/tim-vandecasteele/grape-swagger/pulls),
-[propose features and discuss issues](https://github.com/tim-vandecasteele/grape-swagger/issues).
+This project is work of [many contributors](https://github.com/ruby-grape/grape-swagger/graphs/contributors).
+You're encouraged to submit [pull requests](https://github.com/ruby-grape/grape-swagger/pulls),
+[propose features and discuss issues](https://github.com/ruby-grape/grape-swagger/issues).
 When in doubt, ask a question in the [Grape Google Group](http://groups.google.com/group/ruby-grape).
 
 In the examples below, substitute your Github username for `contributor` in URLs.
 
 ## Fork the Project
 
-Fork the [project on Github](https://github.com/tim-vandecasteele/grape-swagger) and check out your copy.
+Fork the [project on Github](https://github.com/ruby-grape/grape-swagger) and check out your copy.
 
 ```
 git clone https://github.com/contributor/grape-swagger.git
 cd grape-swagger
-git remote add upstream https://github.com/tim-vandecasteele/grape-swagger.git
+git remote add upstream https://github.com/ruby-grape/grape-swagger.git
 ```
 
 ## Create a Topic Branch
@@ -47,7 +47,7 @@ We definitely appreciate pull requests that highlight or reproduce a problem, ev
 
 Implement your feature or bug fix.
 
-Ruby style is enforced with [Rubocop](https://github.com/bbatsov/rubocop).
+Ruby style is enforced with [RuboCop](https://github.com/bbatsov/rubocop).
 Run `bundle exec rubocop` and fix any style issues highlighted.
 
 Make sure that `bundle exec rake` completes without errors.
@@ -85,7 +85,7 @@ git push origin my-feature-branch
 
 ## Make a Pull Request
 
-Go to https://github.com/contributor/grape and select your feature branch.
+Go to https://github.com/contributor/grape-swagger and select your feature branch.
 Click the 'Pull Request' button and fill out the form. Pull requests are usually reviewed within a few days.
 
 ## Rebase
@@ -103,7 +103,7 @@ git push origin my-feature-branch -f
 Update the [CHANGELOG](CHANGELOG.md) with the pull request number. A typical entry looks as follows.
 
 ```
-* [#123](https://github.com/tim-vandecasteele/grape-swagger/pull/123): Reticulated splines - [@contributor](https://github.com/contributor).
+* [#123](https://github.com/ruby-grape/grape-swagger/pull/123): Reticulated splines - [@contributor](https://github.com/contributor).
 ```
 
 Amend your previous commit and force push the changes.

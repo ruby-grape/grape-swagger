@@ -22,7 +22,7 @@ Be aware of https://github.com/ruby-grape/grape/issues/920, currently grape acce
 
 #### Grape-Swagger-Rails
 
-If you're using [grape-swagger-rails](https://github.com/BrandyMint/grape-swagger-rails), remove the `.json` extension from `GrapeSwaggerRails.options.url`.
+If you're using [grape-swagger-rails](https://github.com/ruby-grape/grape-swagger-rails), remove the `.json` extension from `GrapeSwaggerRails.options.url`.
 
 For example, change
 
@@ -36,7 +36,7 @@ to
 GrapeSwaggerRails.options.url = '/api/v1/swagger_doc'
 ```
 
-See [#187](https://github.com/tim-vandecasteele/grape-swagger/issues/187) for more information.
+See [#187](https://github.com/ruby-grape/grape-swagger/issues/187) for more information.
 
 #### Grape 0.10.0
 
@@ -85,4 +85,4 @@ add_swagger_documentation (
 )
 ```
 
-See [#142](https://github.com/tim-vandecasteele/grape-swagger/pull/142) and documentation section [Markdown in Notes](https://github.com/tim-vandecasteele/grape-swagger#markdown-in-notes) for more information.
+See [#142](https://github.com/ruby-grape/grape-swagger/pull/142) and documentation section [Markdown in Notes](https://github.com/ruby-grape/grape-swagger#markdown-in-notes) for more information.

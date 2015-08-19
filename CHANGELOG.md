@@ -1,9 +1,8 @@
-### 0.10.2 (Next)
+### 0.10.2 (August 19, 2015)
 
 #### Features
 
 * [#215](https://github.com/ruby-grape/grape-swagger/pull/223): Support swagger `defaultValue` without the need to set a Grape `default` - [@jv-dan](https://github.com/jv-dan).
-* Your contribution here.
 
 #### Fixes
 

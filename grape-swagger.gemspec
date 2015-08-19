@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Tim Vandecasteele']
   s.email       = ['tim.vandecasteele@gmail.com']
-  s.homepage    = 'https://github.com/tim-vandecasteele/grape-swagger'
+  s.homepage    = 'https://github.com/ruby-grape/grape-swagger'
   s.summary     = 'A simple way to add auto generated documentation to your Grape API that can be displayed with Swagger.'
   s.license     = 'MIT'
 

@@ -11,7 +11,7 @@ bundle install
 rake
 ```
 
-Check that the last build succeeded in [Travis CI](https://travis-ci.org/tim-vandecasteele/grape-swagger) for all supported platforms.
+Check that the last build succeeded in [Travis CI](https://travis-ci.org/ruby-grape/grape-swagger) for all supported platforms.
 
 Increment the version, modify [lib/grape-swagger/version.rb](lib/grape-swagger/version.rb).
 

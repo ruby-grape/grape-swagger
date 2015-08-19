@@ -323,7 +323,6 @@ describe 'options: ' do
         'apis' => [{
           'path' => '/abc/v20/something.{format}',
           'operations' => [{
-            'notes' => nil,
             'notes' => '',
             'summary' => 'This gets something.',
             'nickname' => 'GET-abc--version-something---format-',

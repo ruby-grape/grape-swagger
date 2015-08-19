@@ -1,6 +1,23 @@
 Upgrading Grape-swagger
 =======================
 
+### Upgrading to >= 0.10.2
+
+With grape >= 0.12.0, support for `notes` is replaced by passing a block `detail` option specified. For future compatibility, update your code:
+
+```ruby
+desc 'Get all kittens!', notes: 'this will expose all the kittens'
+```
+
+to
+
+``` ruby
+ desc 'Get all kittens!' do
+  detail 'this will expose all the kittens'
+end
+```
+Be aware of https://github.com/ruby-grape/grape/issues/920, currently grape accepts either an option hash OR a block for `desc`.
+
 ### Upgrading to >= 0.9.0
 
 #### Grape-Swagger-Rails

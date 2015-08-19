@@ -427,7 +427,7 @@ module GrapeSwagger
 
         ops.each do |path, op_routes|
           operations = op_routes.map do |route|
-            notes       = @@documentation_class.as_markdown(route.route_notes)
+            notes       = @@documentation_class.as_markdown(route.route_detail || route.route_notes)
 
             http_codes  = @@documentation_class.parse_http_codes(route.route_http_codes, models)
 

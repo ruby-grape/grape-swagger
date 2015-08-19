@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'grape_version'
 
 describe 'Default API' do
   context 'with no additional options' do
@@ -37,6 +38,47 @@ describe 'Default API' do
           expect(api['path']).to start_with '/'
         end
       end
+    end
+
+  end
+  context 'with additional option block given to desc', if: GrapeVersion.satisfy?('>= 0.12.0')  do
+    def app
+      Class.new(Grape::API) do
+        format :json
+        desc 'This gets something.' do
+          detail 'more details about the endpoint'
+        end
+        get '/something' do
+          { bla: 'something' }
+        end
+        add_swagger_documentation
+      end
+    end
+
+    subject do
+      get '/swagger_doc/something'
+      JSON.parse(last_response.body)
+    end
+
+    it 'documents endpoint' do
+      expect(subject).to eq(
+        'apiVersion'     => '0.1',
+        'swaggerVersion' => '1.2',
+        'basePath'       => 'http://example.org',
+        'produces'       => ['application/json'],
+        'resourcePath'   => '/something',
+        'apis'           => [{
+          'path' => '/something.{format}',
+          'operations' => [{
+            'notes'      => 'more details about the endpoint',
+            'summary'    => 'This gets something.',
+            'nickname'   => 'GET-something--json-',
+            'method'     => 'GET',
+            'parameters' => [],
+            'type'       => 'void'
+          }]
+        }]
+      )
     end
   end
 

@@ -79,9 +79,9 @@ module Grape
           if namespace.options.key?(:swagger) && namespace.options[:swagger][:nested] == false
             # Namespace shall appear as standalone resource, use specified name or use normalized path as name
             if namespace.options[:swagger].key?(:name)
-              identifier = namespace.options[:swagger][:name].gsub(/ /, '-')
+              identifier = namespace.options[:swagger][:name].tr(' ', '-')
             else
-              identifier = name.gsub(/_/, '-').gsub(/\//, '_')
+              identifier = name.tr('_', '-').gsub(/\//, '_')
             end
             @target_class.combined_namespace_identifiers[identifier] = name
             @target_class.combined_namespace_routes[identifier] = namespace_routes

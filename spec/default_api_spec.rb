@@ -39,9 +39,8 @@ describe 'Default API' do
         end
       end
     end
-
   end
-  context 'with additional option block given to desc', if: GrapeVersion.satisfy?('>= 0.12.0')  do
+  context 'with additional option block given to desc', if: GrapeVersion.satisfy?('>= 0.12.0') do
     def app
       Class.new(Grape::API) do
         format :json

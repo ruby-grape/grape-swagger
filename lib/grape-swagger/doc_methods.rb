@@ -72,23 +72,23 @@ module GrapeSwagger
         enum_or_range_values = parse_enum_or_range_values(values)
 
         if value.is_a?(Hash) && value.key?(:documentation) && value[:documentation].key?(:param_type)
-          param_type  = value[:documentation][:param_type]
+          param_type = value[:documentation][:param_type]
           if is_array
             items     = { '$ref' => data_type }
             data_type = 'array'
           end
         else
-          param_type  = case
-                        when path.include?(":#{param}")
-                          'path'
-                        when %w(POST PUT PATCH).include?(method)
-                          if is_primitive?(data_type)
-                            'form'
-                          else
-                            'body'
-                          end
-                        else
-                          'query'
+          param_type = case
+                       when path.include?(":#{param}")
+                         'path'
+                       when %w(POST PUT PATCH).include?(method)
+                         if is_primitive?(data_type)
+                           'form'
+                         else
+                           'body'
+                         end
+                       else
+                         'query'
                         end
         end
         name          = (value.is_a?(Hash) && value[:full_name]) || param
@@ -106,7 +106,7 @@ module GrapeSwagger
           parsed_params[:type], parsed_params[:format] = PRIMITIVE_MAPPINGS[data_type]
         end
 
-        parsed_params[:items]  = items   if items.present?
+        parsed_params[:items] = items if items.present?
 
         parsed_params[:defaultValue] = example if example
         if default_value && example.blank?
@@ -339,7 +339,7 @@ module GrapeSwagger
 
       target_class     = options[:target_class]
       @@mount_path     = options[:mount_path]
-      @@class_name     = options[:class_name] || options[:mount_path].gsub('/', '')
+      @@class_name     = options[:class_name] || options[:mount_path].delete('/')
       @@markdown       = options[:markdown] ? GrapeSwagger::Markdown.new(options[:markdown]) : nil
       @@hide_format    = options[:hide_format]
       api_version      = options[:api_version]
@@ -375,7 +375,7 @@ module GrapeSwagger
         namespace_routes_array = namespace_routes.keys.map do |local_route|
           next if namespace_routes[local_route].map(&:route_hidden).all? { |value| value.respond_to?(:call) ? value.call : value }
 
-          url_format  = '.{format}' unless @@hide_format
+          url_format = '.{format}' unless @@hide_format
 
           original_namespace_name = target_class.combined_namespace_identifiers.key?(local_route) ? target_class.combined_namespace_identifiers[local_route] : local_route
           description = namespaces[original_namespace_name] && namespaces[original_namespace_name].options[:desc]

@@ -551,7 +551,6 @@ describe 'options: ' do
         end
       end
     end
-
   end
 
   context 'multiple documentations' do

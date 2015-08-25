@@ -2,8 +2,7 @@ module GrapeSwagger
   module DocMethods
     module OldEntityParser
       def parse_entity_models(models)
-        result = {}
-        models.each do |model|
+        models.each_with_object({}) do |model, result|
           name       = (model.instance_variable_get(:@root) || parse_entity_name(model))
           properties = {}
           required   = []
@@ -51,14 +50,10 @@ module GrapeSwagger
           }
           result[name].merge!(required: required) unless required.empty?
         end
-
-        result
       end
 
       def models_with_included_presenters(models)
-        all_models = models
-
-        models.each do |model|
+        models + models.flat_map do |model|
           # get model references from exposures with a documentation
           nested_models = model.exposures.map do |_, config|
             if config.key?(:documentation)
@@ -68,14 +63,8 @@ module GrapeSwagger
           end.compact
 
           # get all nested models recursively
-          additional_models = nested_models.map do |nested_model|
-            models_with_included_presenters([nested_model])
-          end.flatten
-
-          all_models += additional_models
+          models_with_included_presenters(nested_models)
         end
-
-        all_models
       end
     end
   end

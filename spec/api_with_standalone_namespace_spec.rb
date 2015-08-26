@@ -46,7 +46,7 @@ describe 'Standalone namespace API' do
       before { get '/v1/swagger_doc' }
 
       it 'that contains all api paths' do
-        expect(json_body['apis']).to eq(
+        expect(json_body['paths']).to eq(
           [
             { 'path' => '/store.{format}', 'description' => 'Operations about stores' },
             { 'path' => '/store_orders.{format}', 'description' => 'Operations about store/orders' },
@@ -61,7 +61,7 @@ describe 'Standalone namespace API' do
     describe 'retrieved namespace swagger-documentation on /swagger_doc/store' do
       before { get '/v1/swagger_doc/store' }
       it 'does not include standalone namespaces' do
-        apis = json_body['apis']
+        apis = json_body['paths']
         # shall include 1 route, GET on store
         expect(apis.length).to eql(1)
         expect(apis[0]['operations'][0]['method']).to eql('GET')
@@ -71,7 +71,7 @@ describe 'Standalone namespace API' do
     describe 'retrieved namespace swagger-documentation on /swagger_doc/store_orders' do
       before { get '/v1/swagger_doc/store_orders' }
       it 'does not assign namespaces within standalone namespaces to the general resource' do
-        apis = json_body['apis']
+        apis = json_body['paths']
         # shall include 3 routes, get on store, get with order_id and get dummy on actions
         expect(apis.length).to eql(3)
       end
@@ -80,7 +80,7 @@ describe 'Standalone namespace API' do
     describe 'retrieved namespace swagger-documentation on /swagger_doc/store_orders_actions2' do
       before { get '/v1/swagger_doc/store_orders_actions2' }
       it 'does appear as standalone namespace within another standalone namespace' do
-        apis = json_body['apis']
+        apis = json_body['paths']
         # shall include 2 routes, get on dummy2 and get on dummy22
         expect(apis.length).to eql(2)
         expect(apis[0]['operations'][0]['method']).to eql('GET')
@@ -91,7 +91,7 @@ describe 'Standalone namespace API' do
     describe 'retrieved namespace swagger-documentation on /swagger_doc/specific-store-orders' do
       before { get '/v1/swagger_doc/specific-store-orders' }
       it 'does show the one route' do
-        apis = json_body['apis']
+        apis = json_body['paths']
         # shall include 1 routes, delete action
         expect(apis.length).to eql(1)
         expect(apis[0]['operations'][0]['method']).to eql('DELETE')
@@ -101,7 +101,7 @@ describe 'Standalone namespace API' do
     describe 'retrieved namespace swagger-documentation on /swagger_doc/store_orders' do
       before { get '/v1/swagger_doc/store_orders_actions2' }
       it 'does work with standalone in standalone namespaces' do
-        apis = json_body['apis']
+        apis = json_body['paths']
         # shall include 2 routes, dummy2 and dummy22
         expect(apis.length).to eql(2)
       end
@@ -151,7 +151,7 @@ describe 'Standalone namespace API' do
       before { get 'swagger_doc' }
 
       it 'that contains all api paths' do
-        expect(json_body['apis']).to eq(
+        expect(json_body['paths']).to eq(
           [
             { 'path' => '/store.{format}', 'description' => 'Operations about stores' },
             { 'path' => '/store_orders.{format}', 'description' => 'Operations about store/orders' },
@@ -166,7 +166,7 @@ describe 'Standalone namespace API' do
     describe 'retrieved namespace swagger-documentation on /swagger_doc/store' do
       before { get '/swagger_doc/store' }
       it 'does not include standalone namespaces' do
-        apis = json_body['apis']
+        apis = json_body['paths']
         # shall include 1 route, GET on store
         expect(apis.length).to eql(1)
         expect(apis[0]['operations'][0]['method']).to eql('GET')
@@ -176,7 +176,7 @@ describe 'Standalone namespace API' do
     describe 'retrieved namespace swagger-documentation on /swagger_doc/store_orders' do
       before { get '/swagger_doc/store_orders' }
       it 'does not assign namespaces within standalone namespaces to the general resource' do
-        apis = json_body['apis']
+        apis = json_body['paths']
         # shall include 3 routes, get on store, get with order_id and get dummy on actions
         expect(apis.length).to eql(3)
       end
@@ -185,7 +185,7 @@ describe 'Standalone namespace API' do
     describe 'retrieved namespace swagger-documentation on /swagger_doc/store_orders_actions2' do
       before { get '/swagger_doc/store_orders_actions2' }
       it 'does appear as standalone namespace within another standalone namespace' do
-        apis = json_body['apis']
+        apis = json_body['paths']
         # shall include 2 routes, get on dummy2 and get on dummy22
         expect(apis.length).to eql(2)
         expect(apis[0]['operations'][0]['method']).to eql('GET')
@@ -196,7 +196,7 @@ describe 'Standalone namespace API' do
     describe 'retrieved namespace swagger-documentation on /swagger_doc/specific-store-orders' do
       before { get '/swagger_doc/specific-store-orders' }
       it 'does show the one route' do
-        apis = json_body['apis']
+        apis = json_body['paths']
         # shall include 1 routes, delete action
         expect(apis.length).to eql(1)
         expect(apis[0]['operations'][0]['method']).to eql('DELETE')
@@ -206,7 +206,7 @@ describe 'Standalone namespace API' do
     describe 'retrieved namespace swagger-documentation on /swagger_doc/store_orders' do
       before { get '/swagger_doc/store_orders_actions2' }
       it 'does work with standalone in standalone namespaces' do
-        apis = json_body['apis']
+        apis = json_body['paths']
         # shall include 2 routes, dummy2 and dummy22
         expect(apis.length).to eql(2)
       end

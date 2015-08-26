@@ -41,10 +41,10 @@ describe 'a hide mounted api' do
   it "retrieves swagger-documentation that doesn't include hidden endpoints" do
     expect(subject).to eq(
       'apiVersion' => '0.1',
-      'swaggerVersion' => '1.2',
+      'swagger' => '2.0',
       'info' => {},
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
-      'apis' => [
+      'paths' => [
         { 'path' => '/simple.{format}', 'description' => 'Operations about simples' },
         { 'path' => '/lazy.{format}', 'description' => 'Operations about lazies' },
         { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
@@ -90,10 +90,10 @@ describe 'a hide mounted api with same namespace' do
     get '/swagger_doc.json'
     expect(JSON.parse(last_response.body)).to eq(
       'apiVersion' => '0.1',
-      'swaggerVersion' => '1.2',
+      'swagger' => '2.0',
       'info' => {},
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
-      'apis' => [
+      'paths' => [
         { 'path' => '/simple.{format}', 'description' => 'Operations about simples' },
         { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
       ]
@@ -104,11 +104,11 @@ describe 'a hide mounted api with same namespace' do
     get '/swagger_doc/simple.json'
     expect(JSON.parse(last_response.body)).to eq(
       'apiVersion' => '0.1',
-      'swaggerVersion' => '1.2',
+      'swagger' => '2.0',
       'basePath' => 'http://example.org',
       'resourcePath' => '/simple',
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
-      'apis' => [{
+      'paths' => [{
         'path' => '/simple/show.{format}',
         'operations' => [{
           'notes' => '',

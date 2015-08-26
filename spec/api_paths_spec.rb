@@ -28,10 +28,10 @@ describe 'simple api with prefix' do
     get '/swagger_doc.json'
     expect(JSON.parse(last_response.body)).to eq(
       'apiVersion' => '0.1',
-      'swaggerVersion' => '1.2',
+      'swagger' => '2.0',
       'info' => {},
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
-      'apis' => [
+      'paths' => [
         { 'path' => '/apitest.{format}', 'description' => 'Operations about apitests' },
         { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
       ]
@@ -43,11 +43,11 @@ describe 'simple api with prefix' do
       get '/swagger_doc/apitest.json'
       expect(JSON.parse(last_response.body)).to eq(
         'apiVersion' => '0.1',
-        'swaggerVersion' => '1.2',
+        'swagger' => '2.0',
         'basePath' => 'http://example.org',
         'resourcePath' => '/apitest',
         'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
-        'apis' => [{
+        'paths' => [{
           'path' => '/api/apitest.{format}',
           'operations' => [{
             'notes' => '',
@@ -94,10 +94,10 @@ describe 'simple api with partially same path as docs mount and hidden doc path'
     get '/doc.json'
     expect(JSON.parse(last_response.body)).to eq(
       'apiVersion' => '0.1',
-      'swaggerVersion' => '1.2',
+      'swagger' => '2.0',
       'info' => {},
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
-      'apis' => [
+      'paths' => [
         { 'path' => '/documents.{format}', 'description' => 'Operations about documents' },
         { 'path' => '/doc-types.{format}', 'description' => 'Operations about doc-types' }
       ]
@@ -108,11 +108,11 @@ describe 'simple api with partially same path as docs mount and hidden doc path'
     get '/doc/documents.json'
     expect(JSON.parse(last_response.body)).to eq(
       'apiVersion' => '0.1',
-      'swaggerVersion' => '1.2',
+      'swagger' => '2.0',
       'basePath' => 'http://example.org',
       'resourcePath' => '/documents',
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
-      'apis' => [{
+      'paths' => [{
         'path' => '/documents.{format}',
         'operations' => [{
           'notes' => '',

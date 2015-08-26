@@ -19,7 +19,7 @@ describe 'Hash Params' do
     get '/swagger_doc/splines'
     expect(last_response.status).to eq 200
     body = JSON.parse last_response.body
-    body['apis'].first['operations'].first['parameters']
+    body['paths'].first['operations'].first['parameters']
   end
 
   it 'declares hash types as object' do

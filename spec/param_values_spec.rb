@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'grape_version'
+# require 'grape_version'
 
 describe 'Convert values to enum or Range' do
   def app
@@ -38,7 +38,7 @@ describe 'Convert values to enum or Range' do
     get "/swagger_doc/#{request}"
     expect(last_response.status).to eq 200
     body = JSON.parse last_response.body
-    body['apis'].first['operations'].first['parameters']
+    body['paths'].first['operations'].first['parameters']
   end
 
   context 'Plain array values' do
@@ -105,7 +105,7 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
     get "/swagger_doc/#{request}"
     expect(last_response.status).to eq 200
     body = JSON.parse last_response.body
-    body['apis'].first['operations'].first['parameters']
+    body['paths'].first['operations'].first['parameters']
   end
 
   context 'Non array in proc values' do

@@ -13,7 +13,7 @@ describe 'namespace' do
 
     subject do
       get '/swagger_doc'
-      JSON.parse(last_response.body)['apis'][0]
+      JSON.parse(last_response.body)['paths'][0]
     end
 
     it 'shows the namespace description in the json spec' do
@@ -37,7 +37,7 @@ describe 'namespace' do
 
     subject do
       get '/swagger_doc'
-      JSON.parse(last_response.body)['apis'][0]
+      JSON.parse(last_response.body)['paths'][0]
     end
 
     it 'shows the namespace description in the json spec' do

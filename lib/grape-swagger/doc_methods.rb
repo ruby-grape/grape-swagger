@@ -389,9 +389,9 @@ module GrapeSwagger
 
         output = {
           apiVersion:     api_version,
-          swaggerVersion: '1.2',
+          swagger:        '2.0',
           produces:       @@documentation_class.content_types_for(target_class),
-          apis:           namespace_routes_array,
+          paths:          namespace_routes_array,
           info:           @@documentation_class.parse_info(extra_info)
         }
 
@@ -477,10 +477,10 @@ module GrapeSwagger
         end
         api_description = {
           apiVersion:     api_version,
-          swaggerVersion: '1.2',
+          swagger:        '2.0',
           resourcePath:   "/#{resource_path}",
           produces:       @@documentation_class.content_types_for(target_class),
-          apis:           apis
+          paths:           apis
         }
 
         base_path                        = @@documentation_class.parse_base_path(options[:base_path], request)

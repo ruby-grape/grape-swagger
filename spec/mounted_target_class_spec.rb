@@ -30,10 +30,10 @@ describe 'docs mounted separately from api' do
     get '/swagger_doc.json'
     expect(JSON.parse(last_response.body)).to eq(
       'apiVersion' => '0.1',
-      'swaggerVersion' => '1.2',
+      'swagger' => '2.0',
       'info' => {},
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
-      'apis' => [
+      'paths' => [
         { 'path' => '/simple.{format}', 'description' => 'Operations about simples' }
       ]
     )
@@ -43,11 +43,11 @@ describe 'docs mounted separately from api' do
     get '/swagger_doc/simple.json'
     expect(JSON.parse(last_response.body)).to eq(
       'apiVersion' => '0.1',
-      'swaggerVersion' => '1.2',
+      'swagger' => '2.0',
       'basePath' => 'http://example.org',
       'resourcePath' => '/simple',
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
-      'apis' => [{
+      'paths' => [{
         'path' => '/simple.{format}',
         'operations' => [{
           'notes' => '_test_',

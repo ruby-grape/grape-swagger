@@ -20,7 +20,7 @@ describe 'API with Prefix and Namespace' do
     get '/api/swagger_doc'
     expect(last_response.status).to eq 200
     body = JSON.parse last_response.body
-    body['apis']
+    body['paths']
   end
 
   it 'gets array types' do

@@ -175,14 +175,14 @@ describe 'API Models' do
     it 'returns a swagger-compatible doc' do
       expect(subject).to include(
         'apiVersion' => '0.1',
-        'swaggerVersion' => '1.2',
+        'swagger' => '2.0',
         'info' => {},
         'produces' => ['application/json']
       )
     end
 
     it 'documents apis' do
-      expect(subject['apis']).to eq [
+      expect(subject['paths']).to eq [
         { 'path' => '/something.{format}', 'description' => 'Operations about somethings' },
         { 'path' => '/thing.{format}', 'description' => 'Operations about things' },
         { 'path' => '/somethingelse.{format}', 'description' => 'Operations about somethingelses' },
@@ -199,19 +199,19 @@ describe 'API Models' do
   it 'returns type' do
     get '/swagger_doc/something'
     result = JSON.parse(last_response.body)
-    expect(result['apis'].first['operations'].first['type']).to eq 'Something'
+    expect(result['paths'].first['operations'].first['type']).to eq 'Something'
   end
 
   it 'includes nested type' do
     get '/swagger_doc/thing'
     result = JSON.parse(last_response.body)
-    expect(result['apis'].first['operations'].first['type']).to eq 'Some::Thing'
+    expect(result['paths'].first['operations'].first['type']).to eq 'Some::Thing'
   end
 
   it 'includes entities which are only used as composition' do
     get '/swagger_doc/somethingelse'
     result = JSON.parse(last_response.body)
-    expect(result['apis'][0]['path']).to start_with '/somethingelse'
+    expect(result['paths'][0]['path']).to start_with '/somethingelse'
 
     expect(result['models']['SomeThingElse']).to include('id' => 'SomeThingElse',
                                                          'properties' => {
@@ -262,7 +262,7 @@ describe 'API Models' do
       }
     )
 
-    expect(result['apis'][0]['operations'][0]).to include(
+    expect(result['paths'][0]['operations'][0]).to include(
       'parameters' =>
          [
            { 'paramType' => 'query', 'name' => 'gender', 'description' => 'Content of something.', 'type' => 'string', 'required' => false, 'allowMultiple' => false, 'enum' => %w(Male Female) },

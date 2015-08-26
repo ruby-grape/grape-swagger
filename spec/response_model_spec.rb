@@ -65,7 +65,7 @@ describe 'responseModel' do
   end
 
   it 'should document specified models' do
-    expect(subject['apis'][0]['operations'][0]['responseMessages']).to eq(
+    expect(subject['paths'][0]['operations'][0]['responseMessages']).to eq(
       [
         {
           'code' => 200,

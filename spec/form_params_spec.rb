@@ -49,17 +49,17 @@ describe 'Form Params' do
   end
 
   it 'retrieves the documentation form params' do
-    expect(subject['apis'].count).to eq 2
-    expect(subject['apis'][0]['path']).to start_with '/items'
-    expect(subject['apis'][0]['operations'][0]['method']).to eq 'POST'
-    expect(subject['apis'][1]['path']).to start_with '/items/{id}'
-    expect(subject['apis'][1]['operations'][0]['method']).to eq 'PUT'
-    expect(subject['apis'][1]['operations'][1]['method']).to eq 'PATCH'
-    expect(subject['apis'][1]['operations'][2]['method']).to eq 'POST'
+    expect(subject['paths'].count).to eq 2
+    expect(subject['paths'][0]['path']).to start_with '/items'
+    expect(subject['paths'][0]['operations'][0]['method']).to eq 'POST'
+    expect(subject['paths'][1]['path']).to start_with '/items/{id}'
+    expect(subject['paths'][1]['operations'][0]['method']).to eq 'PUT'
+    expect(subject['paths'][1]['operations'][1]['method']).to eq 'PATCH'
+    expect(subject['paths'][1]['operations'][2]['method']).to eq 'POST'
   end
 
   it 'treats Symbol parameter as form param' do
-    expect(subject['apis'][1]['operations'][2]['parameters'][2]['paramType']).to eq 'form'
-    expect(subject['apis'][1]['operations'][2]['parameters'][2]['type']).to eq 'string'
+    expect(subject['paths'][1]['operations'][2]['parameters'][2]['paramType']).to eq 'form'
+    expect(subject['paths'][1]['operations'][2]['parameters'][2]['type']).to eq 'string'
   end
 end

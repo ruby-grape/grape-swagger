@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'grape_version'
+# require 'grape_version'
 
 describe 'Default API' do
   context 'with no additional options' do
@@ -22,10 +22,10 @@ describe 'Default API' do
     it 'documents api' do
       expect(subject).to eq(
         'apiVersion' => '0.1',
-        'swaggerVersion' => '1.2',
+        'swagger' => '2.0',
         'info' => {},
         'produces' => ['application/json'],
-        'apis' => [
+        'paths' => [
           { 'path' => '/something.{format}', 'description' => 'Operations about somethings' },
           { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
         ]
@@ -34,8 +34,8 @@ describe 'Default API' do
 
     context 'path inside the apis array' do
       it 'starts with a forward slash' do
-        subject['apis'].each do |api|
-          expect(api['path']).to start_with '/'
+        subject['paths'].each do |path|
+          expect(path['path']).to start_with '/'
         end
       end
     end
@@ -62,7 +62,7 @@ describe 'Default API' do
     it 'documents endpoint' do
       expect(subject).to eq(
         'apiVersion'     => '0.1',
-        'swaggerVersion' => '1.2',
+        'swagger' => '2.0',
         'basePath'       => 'http://example.org',
         'produces'       => ['application/json'],
         'resourcePath'   => '/something',

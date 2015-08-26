@@ -19,7 +19,7 @@ describe 'Params Types' do
     get '/swagger_doc/action'
     expect(last_response.status).to eq 200
     body = JSON.parse last_response.body
-    body['apis'].first['operations'].first['parameters']
+    body['paths'].first['operations'].first['parameters']
   end
 
   it 'reads param type correctly' do

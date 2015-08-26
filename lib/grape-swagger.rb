@@ -21,19 +21,7 @@ module Grape
         mount(documentation_class)
 
         @target_class.combined_routes = {}
-        @target_class.routes.each do |route|
-          route_path = route.route_path
-          route_match = route_path.split(/^.*?#{route.route_prefix.to_s}/).last
-          next unless route_match
-          route_match = route_match.match('\/([\w|-]*?)[\.\/\(]') || route_match.match('\/([\w|-]*)$')
-          next unless route_match
-          resource = route_match.captures.first
-          next if resource.empty?
-          resource.downcase!
-          @target_class.combined_routes[resource] ||= []
-          next if documentation_class.hide_documentation_path && route.route_path.match(/#{documentation_class.mount_path}($|\/|\(\.)/)
-          @target_class.combined_routes[resource] << route
-        end
+        combine_routes(@target_class, documentation_class)
 
         @target_class.combined_namespaces = {}
         combine_namespaces(@target_class)
@@ -48,6 +36,22 @@ module Grape
       end
 
       private
+
+      def combine_routes(app, doc_klass)
+        app.routes.each do |route|
+          route_path = route.route_path
+          route_match = route_path.split(/^.*?#{route.route_prefix.to_s}/).last
+          next unless route_match
+          route_match = route_match.match('\/([\w|-]*?)[\.\/\(]') || route_match.match('\/([\w|-]*)$')
+          next unless route_match
+          resource = route_match.captures.first
+          next if resource.empty?
+          resource.downcase!
+          @target_class.combined_routes[resource] ||= []
+          next if doc_klass.hide_documentation_path && route.route_path.match(/#{doc_klass.mount_path}($|\/|\(\.)/)
+          @target_class.combined_routes[resource] << route
+        end
+      end
 
       def combine_namespaces(app)
         app.endpoints.each do |endpoint|

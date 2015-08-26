@@ -34,7 +34,7 @@ describe 'Array Params' do
     get '/swagger_doc/splines'
     expect(last_response.status).to eq 200
     body = JSON.parse last_response.body
-    parameters = body['apis'].first['operations'].first['parameters']
+    parameters = body['paths'].first['operations'].first['parameters']
     expect(parameters).to eq [
       { 'paramType' => 'form', 'name' => 'a_array[][param_1]', 'description' => nil, 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32' },
       { 'paramType' => 'form', 'name' => 'a_array[][param_2]', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false }
@@ -45,7 +45,7 @@ describe 'Array Params' do
     get '/swagger_doc/raw_array_splines'
     expect(last_response.status).to eq 200
     body = JSON.parse last_response.body
-    parameters = body['apis'].first['operations'].first['parameters']
+    parameters = body['paths'].first['operations'].first['parameters']
     expect(parameters).to eq [
       { 'paramType' => 'query', 'name' => 'raw_array', 'description' => nil, 'type' => 'Array', 'required' => false, 'allowMultiple' => false }
     ]
@@ -55,7 +55,7 @@ describe 'Array Params' do
     get '/swagger_doc/raw_array_integers'
     expect(last_response.status).to eq 200
     body = JSON.parse last_response.body
-    parameters = body['apis'].first['operations'].first['parameters']
+    parameters = body['paths'].first['operations'].first['parameters']
     expect(parameters).to eq [
       { 'paramType' => 'query', 'name' => 'raw_array', 'description' => nil, 'type' => 'array', 'required' => false, 'allowMultiple' => false, 'items' => { 'type' => 'integer', 'format' => 'int32' } }
     ]

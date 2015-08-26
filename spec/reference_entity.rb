@@ -51,7 +51,7 @@ describe 'referenceEntity' do
   end
 
   it 'should document specified models' do
-    expect(subject['apis'][0]['operations'][0]['parameters']).to eq [{
+    expect(subject['paths'][0]['operations'][0]['parameters']).to eq [{
       'paramType' => 'query',
       'name' => 'something',
       'description' => 'Something interesting.',

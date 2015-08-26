@@ -23,7 +23,7 @@ describe 'Api with "path" versioning' do
   it 'retrieves swagger-documentation on /swagger_doc that contains :resources api path' do
     get '/v1/swagger_doc'
 
-    expect(json_body['apis']).to eq(
+    expect(json_body['paths']).to eq(
       [
         { 'path' => '/resources.{format}', 'description' => 'Operations about resources' },
         { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }

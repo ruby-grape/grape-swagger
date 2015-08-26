@@ -70,10 +70,10 @@ describe 'a simple mounted api' do
     get '/swagger_doc.json'
     expect(JSON.parse(last_response.body)).to eq(
       'apiVersion' => '0.1',
-      'swaggerVersion' => '1.2',
+      'swagger' => '2.0',
       'info' => {},
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
-      'apis' => [
+      'paths' => [
         { 'path' => '/simple.{format}', 'description' => 'Operations about simples' },
         { 'path' => '/simple-test.{format}', 'description' => 'Operations about simple-tests' },
         { 'path' => '/simple_with_headers.{format}', 'description' => 'Operations about simple_with_headers' },
@@ -88,11 +88,11 @@ describe 'a simple mounted api' do
     get '/swagger_doc/simple.json'
     expect(JSON.parse(last_response.body)).to eq(
       'apiVersion' => '0.1',
-      'swaggerVersion' => '1.2',
+      'swagger' => '2.0',
       'basePath' => 'http://example.org',
       'resourcePath' => '/simple',
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
-      'apis' => [{
+      'paths' => [{
         'path' => '/simple.{format}',
         'operations' => [{
           'notes' => '_test_',
@@ -111,11 +111,11 @@ describe 'a simple mounted api' do
       get '/swagger_doc/simple-test.json'
       expect(JSON.parse(last_response.body)).to eq(
         'apiVersion' => '0.1',
-        'swaggerVersion' => '1.2',
+        'swagger' => '2.0',
         'basePath' => 'http://example.org',
         'resourcePath' => '/simple-test',
         'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
-        'apis' => [{
+        'paths' => [{
           'path' => '/simple-test.{format}',
           'operations' => [{
             'notes' => '_test_',
@@ -131,7 +131,7 @@ describe 'a simple mounted api' do
 
     it 'includes headers' do
       get '/swagger_doc/simple_with_headers.json'
-      expect(JSON.parse(last_response.body)['apis']).to eq [{
+      expect(JSON.parse(last_response.body)['paths']).to eq [{
         'path' => '/simple_with_headers.{format}',
         'operations' => [{
           'notes' => '',
@@ -153,7 +153,7 @@ describe 'a simple mounted api' do
 
     it 'supports multiple parameters' do
       get '/swagger_doc/items.json'
-      expect(JSON.parse(last_response.body)['apis']).to eq [{
+      expect(JSON.parse(last_response.body)['paths']).to eq [{
         'path' => '/items.{format}',
         'operations' => [{
           'notes' => '',
@@ -168,7 +168,7 @@ describe 'a simple mounted api' do
 
     it 'supports custom types' do
       get '/swagger_doc/custom.json'
-      expect(JSON.parse(last_response.body)['apis']).to eq [{
+      expect(JSON.parse(last_response.body)['paths']).to eq [{
         'path' => '/custom.{format}',
         'operations' => [{
           'notes' => '',

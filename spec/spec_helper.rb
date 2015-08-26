@@ -1,6 +1,8 @@
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'support'))
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+Dir[File.join(Dir.getwd, "spec/support/**/*.rb")].each {|f| require f}
+
+require 'grape-swagger'
 
 require 'grape'
 require 'grape-swagger'
@@ -13,6 +15,7 @@ require 'json'
 
 Bundler.setup :default, :test
 
+require 'rack'
 require 'rack/test'
 
 RSpec.configure do |config|

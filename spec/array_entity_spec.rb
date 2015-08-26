@@ -28,7 +28,7 @@ describe 'Array Entity' do
 
   it 'reads param type correctly' do
     expect(subject['models'].keys).to include 'Something'
-    expect(subject['apis'][0]['operations'][0]['type']).to eq('array')
-    expect(subject['apis'][0]['operations'][0]['items']).to eq('$ref' => 'Something')
+    expect(subject['paths'][0]['operations'][0]['type']).to eq('array')
+    expect(subject['paths'][0]['operations'][0]['items']).to eq('$ref' => 'Something')
   end
 end

@@ -476,11 +476,11 @@ module GrapeSwagger
           resource_path = params[:name]
         end
         api_description = {
-          apiVersion:     api_version,
-          swagger:        '2.0',
-          resourcePath:   "/#{resource_path}",
-          produces:       @@documentation_class.content_types_for(target_class),
-          paths:           apis
+          apiVersion:   api_version,
+          swagger:      '2.0',
+          resourcePath: "/#{resource_path}",
+          produces:     @@documentation_class.content_types_for(target_class),
+          paths:        apis
         }
 
         base_path                        = @@documentation_class.parse_base_path(options[:base_path], request)

@@ -75,10 +75,9 @@ module Grape
           parent_route_name = name.match(%r{^/?([^/]*).*$})[1]
           parent_route = @target_class.combined_routes[parent_route_name]
           # fetch all routes that are within the current namespace
-          namespace_routes = parent_route.collect do |route|
-            route if (route.route_path.start_with?(route.route_prefix ? "/#{route.route_prefix}/#{name}" : "/#{name}") || route.route_path.start_with?((route.route_prefix ? "/#{route.route_prefix}/:version/#{name}" : "/:version/#{name}"))) &&
-                     (route.instance_variable_get(:@options)[:namespace] == "/#{name}" || route.instance_variable_get(:@options)[:namespace] == "/:version/#{name}")
-          end.compact
+          namespace_routes = parent_route.reject do |route|
+            !route_path_start_with?(route, name) || !route_instance_variable_equals?(route, name)
+          end
 
           if namespace.options.key?(:swagger) && namespace.options[:swagger][:nested] == false
             # Namespace shall appear as standalone resource, use specified name or use normalized path as name
@@ -90,20 +89,18 @@ module Grape
             @target_class.combined_namespace_identifiers[identifier] = name
             @target_class.combined_namespace_routes[identifier] = namespace_routes
 
-            # get all nested namespaces below the current namespace
+            # # get all nested namespaces below the current namespace
             sub_namespaces = standalone_sub_namespaces(name, namespaces)
-            # convert namespace to route names
-            sub_ns_paths = sub_namespaces.collect { |ns_name, _| "/#{ns_name}" }
-            sub_ns_paths_versioned = sub_namespaces.collect { |ns_name, _| "/:version/#{ns_name}" }
-            # get the actual route definitions for the namespace path names
-            sub_routes = parent_route.collect do |route|
-              route if sub_ns_paths.include?(route.instance_variable_get(:@options)[:namespace]) || sub_ns_paths_versioned.include?(route.instance_variable_get(:@options)[:namespace])
-            end.compact
-            # add all determined routes of the sub namespaces to standalone resource
+            sub_routes = sub_routes_from(parent_route, sub_namespaces)
             @target_class.combined_namespace_routes[identifier].push(*sub_routes)
           else
             # default case when not explicitly specified or nested == true
-            standalone_namespaces = namespaces.reject { |_, ns| !ns.options.key?(:swagger) || !ns.options[:swagger].key?(:nested) || ns.options[:swagger][:nested] != false }
+            standalone_namespaces = namespaces.reject do |_, ns|
+              !ns.options.key?(:swagger) ||
+              !ns.options[:swagger].key?(:nested) ||
+              ns.options[:swagger][:nested] != false
+            end
+
             parent_standalone_namespaces = standalone_namespaces.reject { |ns_name, _| !name.start_with?(ns_name) }
             # add only to the main route if the namespace is not within any other namespace appearing as standalone resource
             if parent_standalone_namespaces.empty?
@@ -113,6 +110,33 @@ module Grape
             end
           end
         end
+      end
+
+      def sub_routes_from(parent_route, sub_namespaces)
+        sub_ns_paths = sub_namespaces.collect { |ns_name, _| ["/#{ns_name}", "/:version/#{ns_name}"] }
+        sub_routes = parent_route.reject do |route|
+          parent_namespace = route_instance_variable(route)
+          !sub_ns_paths.assoc(parent_namespace) && !sub_ns_paths.rassoc(parent_namespace)
+        end
+
+        sub_routes
+      end
+
+      def route_instance_variable(route)
+        route.instance_variable_get(:@options)[:namespace]
+      end
+
+      def route_instance_variable_equals?(route, name)
+        route_instance_variable(route) == "/#{name}" ||
+          route_instance_variable(route) == "/:version/#{name}"
+      end
+
+      def route_path_start_with?(route, name)
+        route_prefix = route.route_prefix ? "/#{route.route_prefix}/#{name}" : "/#{name}"
+        route_versioned_prefix = route.route_prefix ? "/#{route.route_prefix}/:version/#{name}" : "/:version/#{name}"
+
+        route.route_path.start_with?(route_prefix) ||
+          route.route_path.start_with?(route_versioned_prefix)
       end
 
       def standalone_sub_namespaces(name, namespaces)
@@ -156,11 +180,9 @@ module Grape
             modified_params[k] = params[k]
           else
             new_key = k
-            unless array_param.nil?
-              if k.to_s.start_with?(array_param.to_s + '[')
-                new_key = array_param.to_s + '[]' + k.to_s.split(array_param)[1]
-                modified_params.delete array_param
-              end
+            if !array_param.nil? && k.to_s.start_with?(array_param.to_s + '[')
+              new_key = array_param.to_s + '[]' + k.to_s.split(array_param)[1]
+              modified_params.delete array_param
             end
             modified_params[new_key] = params[k]
           end

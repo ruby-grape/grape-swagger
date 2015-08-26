@@ -1,6 +1,6 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
-Dir[File.join(Dir.getwd, "spec/support/**/*.rb")].each {|f| require f}
+Dir[File.join(Dir.getwd, 'spec/support/**/*.rb')].each { |f| require f }
 
 require 'grape-swagger'
 

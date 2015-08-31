@@ -24,7 +24,7 @@ describe 'Hash Params' do
 
   it 'declares hash types as object' do
     expect(subject).to eq [
-      { 'paramType' => 'form', 'name' => 'a_hash', 'description' => nil, 'type' => 'object', 'required' => true, 'allowMultiple' => false }
+      { 'paramType' => 'form', 'name' => 'a_hash', 'description' => '', 'type' => 'object', 'required' => true, 'allowMultiple' => false }
     ]
   end
 end

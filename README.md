@@ -93,6 +93,10 @@ API class name.
 
 Allow markdown in `detail`/`notes`, default is `nil`. (disabled) See below for details.
 
+#### i18n_scope
+
+Translations scope (or array of scopes) default is `:api`. [See below for details](#i18n).
+
 #### hide_format
 
 Don't add `.(format)` to the end of URLs, default is `false`.
@@ -511,6 +515,195 @@ get '/', http_codes: [
   ...
 end
 ```
+
+## I18n
+
+Grape-swagger supports I18n for most messages of the JSON documentation, including:
+
+* API [info](#info)
+* Namespaces/resources description
+* Endpoints description and detail/notes
+* Params (including headers) description
+* Models/entities description
+
+By default, grape-swagger will lookup translations inside `:api` scope. This can be configured by
+set [`i18n_scope`](#i18n_scope) to a custom scope (or an array of scopes) when calling
+`add_swagger_documentation`.
+
+### Translation and Default Message
+
+To localize your API document, you can add a locale file containing translated messages.
+Grape-swagger will try to look up translation for each message. If a translation cannot be found,
+it will use the message specified in the API code, then default to blank.
+
+Take the following sample API for example:
+
+```ruby
+desc 'Gets all kittens' do
+  detail 'This will expose all the kittens.'
+end
+params do
+  optional :sort
+end
+get :kittens do
+end
+```
+
+To generate I18n documentation, you can add a locale file with translated messages:
+
+```yaml
+api:
+  kittens:
+    get:
+      detail: This will return a full list of kittens, and you can change the way of sorting them.
+      params:
+        sort: Specifies the order of results
+```
+
+The endpoint description in generated API document will be "Gets all kittens" - specified in source
+code - because there is no translation defined. And endpoint details will be overwritten by locale
+message - "This will return a full list of kittens, and you can change the way of sorting them.".
+Parameter `:sort` will have a description from locale file too.
+
+### Default Lookup Keys
+
+The following lookup keys are all within the scope given by `i18n_scope`.
+
+#### API Info
+
+The default lookup key of a field in API info is `info.<field>`, i.e.:
+
+* `info.title` for `:title` field.
+* `info.desc` or `info.description` for `:description` field.
+* `info.contact` for `:contact` field.
+* `info.license` for `:license` field.
+* `info.license_url` for `:license_url` field.
+* `info.terms_of_service_url` for `:terms_of_service_url` field.
+
+#### Namespaces/Resources Description
+
+Grape-swagger will give each root namespace a default description, such as "*Operations about
+users*", where `users` is a namespace (pluralized). But you can change it by provide your own
+message under key `<namespace>.desc` or `<namespace>.description` in your locale file. And the
+namespace itself is available as a variable for interpolation.
+
+### Endpoints Description and Detail/Notes
+
+An endpoint's default lookup key is in format of `<namespace>.<path>.<http_method>`. And if there
+are nested namespaces or multi-level path, all parts will be join by `.`. For example for this
+endpoint:
+
+```ruby
+namespace :users do
+  route_params :id do
+    get :'password/strength' do
+    end
+  end
+end
+```
+
+Its corresponding lookup key will be `users.:id.password.strength.get`, let's say that this is
+the key of this endpoint.
+
+So an endpoint's description message can be given under `<endpoint_key>.desc` or
+`<endpoint_key>.description`. And use `<endpoint_key>.detail` or `<endpoint_key>.notes` for the
+message of its further details.
+
+#### Params Description
+
+The first default key of endpoint parameter's description translation is
+`<endpoint_key>.params.<param_name>`. But considering that some endpoints could usually share a
+same parameter, it will be a little annoyed to duplicate its description message everywhere. So if
+no translation found in the first default key, grape-swagger will try to find all its parent keys.
+Take above endpoint for example, it may have a parameter named `:id`, then the lookup keys are:
+
+1. `users.:id.password.strength.get.params.id`
+1. `users.:id.password.strength.params.id`
+1. `users.:id.password.params.id`
+1. `users.:id.params.id`
+1. `users.params.id`
+1. `params.id`
+
+#### Models/Entities Description
+
+A model class' lookup key is by default its class name, without module part, and underscored. Each
+property's key is then `entities.<class_key>.<property_name>`. When not found, grape-swagger will
+try to check the its ancestors, up to a class whose name is `Entity`.
+
+Say if there is model class `User` inherits `Grape::Entity`, and another model `AdminUser` inherits
+`User`, to translate a property named `:email` of `AdminUser`, the lookup keys are:
+
+1. `entities.admin_user.email`
+1. `entities.user.email`
+1. `entities.default.email`
+
+#### Example Locale File
+
+```yaml
+en:
+  api:
+    info:
+      title: My Awesome API
+      desc: Some detail information about this API.
+    entities:
+      default:
+        id: Resource identifier
+      user:
+        name: User's real name
+        email: User's login email address
+        sign_up_at: When the user signed up
+      admin_user:
+        level: Which level the admin is
+      password_strength:
+        level: A 0~4 integer indicates `very_weak` to `strong`
+        crack_time: An estimated time for force cracking the password, in seconds
+    params:
+      locale: Used to change locale of endpoint's responding message
+      sort: To specify the order of result list, default is %{default_sort}
+    users:
+      desc: Operations about not-disabled users
+      get:
+        desc: Gets a list of users
+        detail: You can control how to sort the results.
+      ':id':
+        params:
+          id: User id
+        get:
+          desc: Finds user by id
+        email:
+          put:
+            desc: Changes a user's email
+            params:
+              email: A new email
+        password:
+          strength:
+            get:
+              desc: Gets the strength estimation of a user's password
+              detail: The estimation is done by a well-known algorithm when he changed his password
+    swagger_doc:
+      desc: Endpoints for API documents
+      get:
+        desc: Gets root API document
+      ':name':
+        get:
+          desc: Gets specific resource API document
+          params:
+            name: Resource name
+```
+
+### Customization
+
+The translation can be customized by using different kind/format of message in source code.
+
+* A string or `nil`: It will become the default message when a translation is not defined.
+* A symbol: Looks up translation using the symbol as a key, but will fallback to default key(s).
+* A hash with the following keys:
+  * key: A symbol, defines custom lookup key.
+  * default: A string, defines the default message when translation can not be found.
+  * translate: A boolean (default is `true`), set to `false` to skip translation for this message.
+  * scope: A symbol, or a string, or an array of them. Used to replace the `i18n_scope` config
+    value for a custom lookup scope.
+  * Any other key/value will be sent to the translation function for interpolation.
 
 ## Contributing to grape-swagger
 

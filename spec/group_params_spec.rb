@@ -25,7 +25,7 @@ describe 'Group Params' do
     body = JSON.parse last_response.body
     parameters = body['apis'].first['operations'].first['parameters']
     expect(parameters).to eq [
-      { 'paramType' => 'form', 'name' => 'required_group[required_param_1]', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false },
-      { 'paramType' => 'form', 'name' => 'required_group[required_param_2]', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false }]
+      { 'paramType' => 'form', 'name' => 'required_group[required_param_1]', 'description' => '', 'type' => 'string', 'required' => true, 'allowMultiple' => false },
+      { 'paramType' => 'form', 'name' => 'required_group[required_param_2]', 'description' => '', 'type' => 'string', 'required' => true, 'allowMultiple' => false }]
   end
 end

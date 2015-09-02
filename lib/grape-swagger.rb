@@ -10,6 +10,7 @@ module Grape
   class API
     class << self
       attr_accessor :combined_routes, :combined_namespaces, :combined_namespace_routes, :combined_namespace_identifiers
+      attr_accessor :endpoint_mapping
 
       def add_swagger_documentation(options = {})
         documentation_class = create_documentation_class
@@ -35,6 +36,7 @@ module Grape
           @target_class.combined_routes[resource] << route
         end
 
+        @target_class.endpoint_mapping = {}
         @target_class.combined_namespaces = {}
         combine_namespaces(@target_class)
 
@@ -59,6 +61,10 @@ module Grape
           # use the full namespace here (not the latest level only)
           # and strip leading slash
           @target_class.combined_namespaces[endpoint.namespace.sub(/^\//, '')] = ns if ns
+
+          endpoint.routes.each do |route|
+            @target_class.endpoint_mapping[route.to_s.sub('(.:format)', '')] = endpoint
+          end
 
           combine_namespaces(endpoint.options[:app]) if endpoint.options[:app]
         end

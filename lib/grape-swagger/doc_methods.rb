@@ -14,11 +14,43 @@ module GrapeSwagger
       @@class_name
     end
 
+    def translate(message, scope, default, params = {})
+      if message.is_a?(String)
+        text = message
+      elsif message.is_a?(Symbol)
+        key = message
+      elsif message.is_a?(Hash)
+        message = message.dup
+        key = message.delete(:key)
+        text = message.delete(:default)
+        skip_translate = !message.delete(:translate) if message.key?(:translate)
+        scope = message.delete(:scope) if message.key?(:scope)
+        params = params.merge(message) unless message.empty?
+      end
+
+      return text if skip_translate
+
+      default = Array(default).dup << (text || '')
+      I18n.t(key, params.merge(scope: scope, default: default))
+    end
+
+    def expand_scope(scope)
+      scopes = []
+      scope = scope.to_s
+      until scope.blank?
+        scopes << scope.to_sym
+        scope = scope.rpartition('.')[0]
+      end
+      scopes << :''
+    end
+
     def as_markdown(description)
       description && @@markdown ? @@markdown.as_markdown(strip_heredoc(description)) : description
     end
 
-    def parse_params(params, path, method)
+    def parse_params(params, path, method, options = {})
+      scope = options[:scope]
+      i18n_keys = expand_scope(options[:key])
       params ||= []
 
       parsed_array_params = parse_array_params(params)
@@ -92,6 +124,8 @@ module GrapeSwagger
                         end
         end
         name          = (value.is_a?(Hash) && value[:full_name]) || param
+        description = translate(description, scope,
+                                i18n_keys.map { |key| :"#{key}.params.#{name}" })
 
         parsed_params = {
           paramType:     param_type,
@@ -130,18 +164,22 @@ module GrapeSwagger
       content_types.uniq
     end
 
-    def parse_info(info)
+    def parse_info(info, options = {})
+      scope = options[:scope]
+
       {
-        contact:            info[:contact],
-        description:        as_markdown(info[:description]),
-        license:            info[:license],
-        licenseUrl:         info[:license_url],
-        termsOfServiceUrl:  info[:terms_of_service_url],
-        title:              info[:title]
+        contact:            translate(info[:contact], scope, :'info.contact'),
+        description:        as_markdown(translate(info[:description], scope, [:'info.desc', :'info.description'])),
+        license:            translate(info[:license], scope, :'info.license'),
+        licenseUrl:         translate(info[:license_url], scope, :'info.license_url'),
+        termsOfServiceUrl:  translate(info[:terms_of_service_url], scope, :'info.terms_of_service_url'),
+        title:              translate(info[:title], scope, :'info.title')
       }.delete_if { |_, value| value.blank? }
     end
 
-    def parse_header_params(params)
+    def parse_header_params(params, options = {})
+      scope = options[:scope]
+      i18n_keys = expand_scope(options[:key])
       params ||= []
 
       params.map do |param, value|
@@ -150,6 +188,9 @@ module GrapeSwagger
         required      = value.is_a?(Hash) ? !!value[:required] : false
         default_value = value.is_a?(Hash) ? value[:default] : nil
         param_type    = 'header'
+
+        description = translate(description, scope,
+                                i18n_keys.map { |key| :"#{key}.params.#{param}" })
 
         parsed_params = {
           paramType:    param_type,
@@ -191,12 +232,21 @@ module GrapeSwagger
       end
     end
 
-    def parse_entity_models(models)
+    def parse_entity_models(models, options = {})
+      scope = options[:scope]
       result = {}
       models.each do |model|
         name       = (model.instance_variable_get(:@root) || parse_entity_name(model))
         properties = {}
         required   = []
+
+        i18n_keys = []
+        klass = model
+        until %w(entity object).include? klass.name.demodulize.underscore
+          i18n_keys << klass.name.demodulize.underscore.to_sym
+          klass = klass.superclass
+        end
+        i18n_keys << :default
 
         model.documentation.each do |property_name, property_info|
           p = property_info.dup
@@ -219,7 +269,9 @@ module GrapeSwagger
 
           # rename Grape Entity's "desc" to "description"
           property_description = p.delete(:desc)
-          p[:description] = property_description if property_description
+          property_description = translate(property_description, scope,
+                                           i18n_keys.map { |key| :"entities.#{key}.#{property_name}" })
+          p[:description] = property_description unless property_description.blank?
 
           # rename Grape's 'values' to 'enum'
           select_values = p.delete(:values)
@@ -324,6 +376,7 @@ module GrapeSwagger
         base_path: nil,
         api_version: '0.1',
         markdown: nil,
+        i18n_scope: :api,
         hide_documentation_path: false,
         hide_format: false,
         format: nil,
@@ -349,6 +402,7 @@ module GrapeSwagger
       api_doc          = options[:api_documentation].dup
       specific_api_doc = options[:specific_api_documentation].dup
       @@models         = options[:models] || []
+      i18n_scope       = options[:i18n_scope]
 
       @@hide_documentation_path = options[:hide_documentation_path]
 
@@ -361,7 +415,11 @@ module GrapeSwagger
       @@documentation_class = self
 
       desc api_doc.delete(:desc), api_doc
+      params do
+        optional :locale, type: Symbol, desc: 'Locale of API documentation'
+      end
       get @@mount_path do
+        I18n.locale = params[:locale] || I18n.default_locale
         header['Access-Control-Allow-Origin']   = '*'
         header['Access-Control-Request-Method'] = '*'
 
@@ -376,13 +434,22 @@ module GrapeSwagger
           next if namespace_routes[local_route].map(&:route_hidden).all? { |value| value.respond_to?(:call) ? value.call : value }
 
           url_format = '.{format}' unless @@hide_format
+          url_locale = "?locale=#{params[:locale]}" unless params[:locale].blank?
 
           original_namespace_name = target_class.combined_namespace_identifiers.key?(local_route) ? target_class.combined_namespace_identifiers[local_route] : local_route
           description = namespaces[original_namespace_name] && namespaces[original_namespace_name].options[:desc]
           description ||= "Operations about #{original_namespace_name.pluralize}"
+          description = @@documentation_class.translate(
+            description, i18n_scope,
+            [
+              :"#{original_namespace_name}.desc",
+              :"#{original_namespace_name}.description"
+            ],
+            namespace: original_namespace_name.pluralize
+          )
 
           {
-            path: "/#{local_route}#{url_format}",
+            path: "/#{local_route}#{url_format}#{url_locale}",
             description: description
           }
         end.compact
@@ -392,7 +459,7 @@ module GrapeSwagger
           swaggerVersion: '1.2',
           produces:       @@documentation_class.content_types_for(target_class),
           apis:           namespace_routes_array,
-          info:           @@documentation_class.parse_info(extra_info)
+          info:           @@documentation_class.parse_info(extra_info, scope: i18n_scope)
         }
 
         output[:authorizations] = authorizations unless authorizations.nil? || authorizations.empty?
@@ -403,9 +470,11 @@ module GrapeSwagger
       desc specific_api_doc.delete(:desc), { params:
         specific_api_doc.delete(:params) || {} }.merge(specific_api_doc)
       params do
+        optional :locale, type: Symbol, desc: 'Locale of API documentation'
         requires :name, type: String, desc: 'Resource name of mounted API'
       end
       get "#{@@mount_path}/:name" do
+        I18n.locale = params[:locale] || I18n.default_locale
         header['Access-Control-Allow-Origin']   = '*'
         header['Access-Control-Request-Method'] = '*'
 
@@ -427,7 +496,20 @@ module GrapeSwagger
 
         ops.each do |path, op_routes|
           operations = op_routes.map do |route|
-            notes       = @@documentation_class.as_markdown(route.route_detail || route.route_notes)
+            endpoint = target_class.endpoint_mapping[route.to_s.sub('(.:format)', '')]
+            endpoint_path = endpoint.options[:path] unless endpoint.nil?
+            i18n_key = [route.route_namespace, endpoint_path, route.route_method.downcase].flatten.join('/')
+            i18n_key = i18n_key.split('/').reject(&:empty?).join('.')
+
+            summary = @@documentation_class.translate(
+              route.route_description, i18n_scope,
+              [:"#{i18n_key}.desc", :"#{i18n_key}.description"]
+            )
+            notes = @@documentation_class.translate(
+              route.route_detail || route.route_notes, i18n_scope,
+              [:"#{i18n_key}.detail", :"#{i18n_key}.notes"]
+            )
+            notes       = @@documentation_class.as_markdown(notes)
 
             http_codes  = @@documentation_class.parse_http_codes(route.route_http_codes, models)
 
@@ -439,10 +521,12 @@ module GrapeSwagger
 
             operation = {
               notes: notes.to_s,
-              summary: route.route_description || '',
+              summary: summary,
               nickname: route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/, '-')),
               method: route.route_method,
-              parameters: @@documentation_class.parse_header_params(route.route_headers) + @@documentation_class.parse_params(route.route_params, route.route_path, route.route_method),
+              parameters: @@documentation_class.parse_header_params(route.route_headers, scope: i18n_scope, key: i18n_key) +
+                          @@documentation_class.parse_params(route.route_params, route.route_path, route.route_method,
+                                                             scope: i18n_scope, key: i18n_key),
               type: route.route_is_array ? 'array' : 'void'
             }
             operation[:authorizations] = route.route_authorizations unless route.route_authorizations.nil? || route.route_authorizations.empty?
@@ -485,7 +569,7 @@ module GrapeSwagger
 
         base_path                        = @@documentation_class.parse_base_path(options[:base_path], request)
         api_description[:basePath]       = base_path if base_path && base_path.size > 0 && root_base_path != false
-        api_description[:models]         = @@documentation_class.parse_entity_models(models) unless models.empty?
+        api_description[:models]         = @@documentation_class.parse_entity_models(models, scope: i18n_scope) unless models.empty?
         api_description[:authorizations] = authorizations if authorizations
 
         api_description

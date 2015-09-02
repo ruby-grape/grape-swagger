@@ -15,10 +15,13 @@ Bundler.setup :default, :test
 
 require 'rack/test'
 
+require 'i18n_helper'
+
 RSpec.configure do |config|
   require 'rspec/expectations'
   config.include RSpec::Matchers
   config.mock_with :rspec
   config.include Rack::Test::Methods
   config.raise_errors_for_deprecations!
+  config.include I18nHelper
 end

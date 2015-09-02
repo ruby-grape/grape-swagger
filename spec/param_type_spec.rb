@@ -24,7 +24,7 @@ describe 'Params Types' do
 
   it 'reads param type correctly' do
     expect(subject).to eq [
-      { 'paramType' => 'query', 'name' => 'input', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false }
+      { 'paramType' => 'query', 'name' => 'input', 'description' => '', 'type' => 'string', 'required' => true, 'allowMultiple' => false }
     ]
   end
 

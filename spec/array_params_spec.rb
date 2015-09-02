@@ -36,8 +36,8 @@ describe 'Array Params' do
     body = JSON.parse last_response.body
     parameters = body['apis'].first['operations'].first['parameters']
     expect(parameters).to eq [
-      { 'paramType' => 'form', 'name' => 'a_array[][param_1]', 'description' => nil, 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32' },
-      { 'paramType' => 'form', 'name' => 'a_array[][param_2]', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false }
+      { 'paramType' => 'form', 'name' => 'a_array[][param_1]', 'description' => '', 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32' },
+      { 'paramType' => 'form', 'name' => 'a_array[][param_2]', 'description' => '', 'type' => 'string', 'required' => true, 'allowMultiple' => false }
     ]
   end
 
@@ -47,7 +47,7 @@ describe 'Array Params' do
     body = JSON.parse last_response.body
     parameters = body['apis'].first['operations'].first['parameters']
     expect(parameters).to eq [
-      { 'paramType' => 'query', 'name' => 'raw_array', 'description' => nil, 'type' => 'Array', 'required' => false, 'allowMultiple' => false }
+      { 'paramType' => 'query', 'name' => 'raw_array', 'description' => '', 'type' => 'Array', 'required' => false, 'allowMultiple' => false }
     ]
   end
 
@@ -57,7 +57,7 @@ describe 'Array Params' do
     body = JSON.parse last_response.body
     parameters = body['apis'].first['operations'].first['parameters']
     expect(parameters).to eq [
-      { 'paramType' => 'query', 'name' => 'raw_array', 'description' => nil, 'type' => 'array', 'required' => false, 'allowMultiple' => false, 'items' => { 'type' => 'integer', 'format' => 'int32' } }
+      { 'paramType' => 'query', 'name' => 'raw_array', 'description' => '', 'type' => 'array', 'required' => false, 'allowMultiple' => false, 'items' => { 'type' => 'integer', 'format' => 'int32' } }
     ]
   end
 end

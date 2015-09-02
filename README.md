@@ -310,7 +310,7 @@ Grape uses the option `default` to set a default value for optional parameters. 
 
 ## Grape Entities
 
-Add the [grape-entity](https://github.com/agileanimal/grape-entity) gem to our Gemfile.
+Add the [grape-entity](https://github.com/ruby-grape/grape-entity) gem to our Gemfile.
 
 The following example exposes statuses. And exposes statuses documentation adding :type and :desc.
 

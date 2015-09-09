@@ -133,7 +133,7 @@ module GrapeSwagger
           description:   as_markdown(description),
           type:          data_type,
           required:      required,
-          allowMultiple: is_array
+          allowMultiple: is_array && data_type != 'array' && %w(query header path).include?(param_type)
         }
 
         if PRIMITIVE_MAPPINGS.key?(data_type)

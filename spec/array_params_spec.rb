@@ -21,7 +21,7 @@ describe 'Array Params' do
       end
 
       params do
-        optional :raw_array, type: Array[Integer]
+        optional :raw_array, type: Array[Integer], documentation: { is_array: true }
       end
       get :raw_array_integers do
       end

@@ -103,8 +103,8 @@ module GrapeSwagger
         values               = value.is_a?(Hash) ? value[:values] : nil
         enum_or_range_values = parse_enum_or_range_values(values)
 
-        if value.is_a?(Hash) && value.key?(:documentation) && value[:documentation].key?(:param_type)
-          param_type = value[:documentation][:param_type]
+        if value.is_a?(Hash) && value.key?(:param_type)
+          param_type = value[:param_type]
           if is_array
             items     = { '$ref' => data_type }
             data_type = 'array'

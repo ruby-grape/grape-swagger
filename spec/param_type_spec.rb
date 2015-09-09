@@ -5,8 +5,9 @@ describe 'Params Types' do
     Class.new(Grape::API) do
       format :json
 
+      desc 'description', nickname: 'desc', params: { input1: { type: Integer, param_type: 'query' } }
       params do
-        requires :input, type: String, documentation: { param_type: 'query' }
+        requires :input2, type: String, documentation: { param_type: 'query' }
       end
       post :action do
       end
@@ -19,12 +20,13 @@ describe 'Params Types' do
     get '/swagger_doc/action'
     expect(last_response.status).to eq 200
     body = JSON.parse last_response.body
-    body['apis'].first['operations'].first['parameters']
+    body['apis'].first['operations'].flat_map { |o| o['parameters'] }
   end
 
   it 'reads param type correctly' do
-    expect(subject).to eq [
-      { 'paramType' => 'query', 'name' => 'input', 'description' => '', 'type' => 'string', 'required' => true, 'allowMultiple' => false }
+    expect(subject).to match_array [
+      { 'paramType' => 'query', 'name' => 'input1', 'description' => '', 'type' => 'integer', 'required' => false, 'allowMultiple' => false, 'format' => 'int32' },
+      { 'paramType' => 'query', 'name' => 'input2', 'description' => '', 'type' => 'string', 'required' => true, 'allowMultiple' => false }
     ]
   end
 

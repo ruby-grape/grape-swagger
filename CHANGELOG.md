@@ -1,6 +1,7 @@
 ### 0.10.3 (Next)
 
 * [#292](https://github.com/ruby-grape/grape-swagger/pull/292): Support i18n - [@calfzhou](https://github.com/calfzhou).
+* [#297](https://github.com/ruby-grape/grape-swagger/pull/297): Correct use of documentation param_type - [@fab-girard](https://github.com/fab-girard).
 * Your contribution here.
 
 ### 0.10.2 (August 19, 2015)

@@ -1,5 +1,7 @@
 # grape-swagger
 
+## *don't us it, it is a work in progress version, to upgrade to swagger 2.0 spec*
+
 [![Gem Version](https://badge.fury.io/rb/grape-swagger.svg)](http://badge.fury.io/rb/grape-swagger)
 [![Build Status](https://travis-ci.org/ruby-grape/grape-swagger.svg?branch=master)](https://travis-ci.org/ruby-grape/grape-swagger)
 [![Dependency Status](https://gemnasium.com/ruby-grape/grape-swagger.svg)](https://gemnasium.com/ruby-grape/grape-swagger)
@@ -95,7 +97,8 @@ Allow markdown in `detail`/`notes`, default is `nil`. (disabled) See below for d
 
 #### hide_format
 
-Don't add `.(format)` to the end of URLs, default is `false`.
+~~Don't add `.(format)` to the end of URLs, default is `false`.~~  
+`.(format)` would always be removed.
 
 #### api_version
 
@@ -501,16 +504,36 @@ end
 
 ## Response documentation
 
-You can also document the HTTP status codes with a description and a specified model that your API returns with the following syntax.
+You can also document the HTTP status codes with a description ~~and a specified model~~ that your API returns with one of the following syntax.
+
+``` ruby
+desc 'thing', http_codes: [ { code: 400, message: "Invalid parameter entry" } ]
+get '/thing' do
+  ...
+end
+```
+
+``` ruby
+desc 'thing' do
+  params Entities::Something.documentation
+  http_codes [ { code: 400, message: "Invalid parameter entry" } ]
+end
+get '/thing' do
+  ...
+end
+```
 
 ``` ruby
 get '/', http_codes: [
-  [200, 'Ok', Entities::Client],
-  [400, "Invalid parameter entry"]
+  { code: 200, message: 'Ok' },
+  { code: 400, message: "Invalid parameter entry" }
 ] do
   ...
 end
 ```
+
+If no status code is defined [defaults](/lib/grape-swagger/endpoint.rb#L121) would be taken.
+
 
 ## Contributing to grape-swagger
 

@@ -20,16 +20,17 @@ describe 'Default API' do
     end
 
     it 'documents api' do
-      expect(subject).to eq(
-        'apiVersion' => '0.1',
+      expect(subject).to eq({
         'swagger' => '2.0',
-        'info' => {},
+        'info' => {
+          'title' => 'API title',
+          'version' => '0.1'
+        },
         'produces' => ['application/json'],
         'paths' => [
-          { 'path' => '/something.{format}', 'description' => 'Operations about somethings' },
-          { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
-        ]
-      )
+          {'path' => '/something.{format}', 'description' => 'Operations about somethings'},
+          {'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs'}]
+        })
     end
 
     context 'path inside the apis array' do
@@ -60,24 +61,26 @@ describe 'Default API' do
     end
 
     it 'documents endpoint' do
-      expect(subject).to eq(
-        'apiVersion'     => '0.1',
+      expect(subject).to eq({
+        'info' => {
+          'title' => 'API title',
+          'version' => '0.1'
+        },
         'swagger' => '2.0',
-        'basePath'       => 'http://example.org',
-        'produces'       => ['application/json'],
-        'resourcePath'   => '/something',
-        'apis'           => [{
+        'produces' => ['application/json'],
+        'paths' => [{
           'path' => '/something.{format}',
           'operations' => [{
-            'notes'      => 'more details about the endpoint',
-            'summary'    => 'This gets something.',
-            'nickname'   => 'GET-something--json-',
-            'method'     => 'GET',
+            'notes' => 'more details about the endpoint',
+            'summary' => 'This gets something.',
+            'nickname' => 'GET-something--json-',
+            'method' => 'GET',
             'parameters' => [],
-            'type'       => 'void'
+            'type' => 'void'
           }]
-        }]
-      )
+        }],
+        'basePath' => 'http://example.org'
+      })
     end
   end
 

@@ -28,28 +28,29 @@ describe 'docs mounted separately from api' do
 
   it 'retrieves docs for actual api class' do
     get '/swagger_doc.json'
-    expect(JSON.parse(last_response.body)).to eq(
-      'apiVersion' => '0.1',
+    expect(JSON.parse(last_response.body)).to eq({
       'swagger' => '2.0',
-      'info' => {},
+      'info' => {
+        'title' => 'API title',
+        'version' => '0.1'
+      },
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
       'paths' => [
-        { 'path' => '/simple.{format}', 'description' => 'Operations about simples' }
-      ]
-    )
+        {'path' => '/simple.{format}', 'description' => 'Operations about simples'}
+    ]})
   end
 
   it 'retrieves docs for endpoint in actual api class' do
     get '/swagger_doc/simple.json'
-    expect(JSON.parse(last_response.body)).to eq(
-      'apiVersion' => '0.1',
+    expect(JSON.parse(last_response.body)).to eq({
+      'info' => {
+        'title' => 'API title',
+        'version' => '0.1'
+      },
       'swagger' => '2.0',
-      'basePath' => 'http://example.org',
-      'resourcePath' => '/simple',
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
-      'paths' => [{
-        'path' => '/simple.{format}',
-        'operations' => [{
+      'paths' => [
+        {'path' => '/simple.{format}', 'operations' => [{
           'notes' => '_test_',
           'summary' => 'This gets something.',
           'nickname' => 'GET-simple---format-',
@@ -57,7 +58,8 @@ describe 'docs mounted separately from api' do
           'parameters' => [],
           'type' => 'void'
         }]
-      }]
-    )
+      }],
+      'basePath' => 'http://example.org'
+    })
   end
 end

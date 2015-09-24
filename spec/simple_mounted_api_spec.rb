@@ -68,29 +68,31 @@ describe 'a simple mounted api' do
 
   it 'retrieves swagger-documentation on /swagger_doc' do
     get '/swagger_doc.json'
-    expect(JSON.parse(last_response.body)).to eq(
-      'apiVersion' => '0.1',
+    expect(JSON.parse(last_response.body)).to eq({
       'swagger' => '2.0',
-      'info' => {},
+      'info' => {
+        'title' => 'API title',
+        'version' => '0.1'
+      },
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
       'paths' => [
-        { 'path' => '/simple.{format}', 'description' => 'Operations about simples' },
-        { 'path' => '/simple-test.{format}', 'description' => 'Operations about simple-tests' },
-        { 'path' => '/simple_with_headers.{format}', 'description' => 'Operations about simple_with_headers' },
-        { 'path' => '/items.{format}', 'description' => 'Operations about items' },
-        { 'path' => '/custom.{format}', 'description' => 'Operations about customs' },
-        { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
-      ]
-    )
+        {'path' => '/simple.{format}', 'description' => 'Operations about simples'},
+        {'path' => '/simple-test.{format}', 'description' => 'Operations about simple-tests'},
+        {'path' => '/simple_with_headers.{format}', 'description' => 'Operations about simple_with_headers'},
+        {'path' => '/items.{format}', 'description' => 'Operations about items'},
+        {'path' => '/custom.{format}', 'description' => 'Operations about customs'},
+        {'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs'}
+      ]})
   end
 
   it 'retrieves the documentation for mounted-api' do
     get '/swagger_doc/simple.json'
-    expect(JSON.parse(last_response.body)).to eq(
-      'apiVersion' => '0.1',
+    expect(JSON.parse(last_response.body)).to eq({
+      'info' => {
+        'title' => 'API title',
+        'version' => '0.1'
+      },
       'swagger' => '2.0',
-      'basePath' => 'http://example.org',
-      'resourcePath' => '/simple',
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
       'paths' => [{
         'path' => '/simple.{format}',
@@ -100,20 +102,21 @@ describe 'a simple mounted api' do
           'nickname' => 'GET-simple---format-',
           'method' => 'GET',
           'parameters' => [],
-          'type' => 'void'
-        }]
-      }]
-    )
+          'type' => 'void'}]
+        }],
+        'basePath' => 'http://example.org'
+    })
   end
 
   context 'retrieves the documentation for mounted-api that' do
     it "contains '-' in URL" do
       get '/swagger_doc/simple-test.json'
-      expect(JSON.parse(last_response.body)).to eq(
-        'apiVersion' => '0.1',
+      expect(JSON.parse(last_response.body)).to eq({
+        'info' => {
+          'title' => 'API title',
+          'version' => '0.1'
+        },
         'swagger' => '2.0',
-        'basePath' => 'http://example.org',
-        'resourcePath' => '/simple-test',
         'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
         'paths' => [{
           'path' => '/simple-test.{format}',
@@ -125,8 +128,9 @@ describe 'a simple mounted api' do
             'parameters' => [],
             'type' => 'void'
           }]
-        }]
-      )
+        }],
+        'basePath' => 'http://example.org'
+      })
     end
 
     it 'includes headers' do

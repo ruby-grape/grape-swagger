@@ -132,12 +132,12 @@ describe 'options: ' do
 
     it 'retrieves the api version on /swagger_doc' do
       get '/swagger_doc.json'
-      expect(JSON.parse(last_response.body)['apiVersion']).to eq SimpleApiWithApiVersion::API_VERSION
+      expect(JSON.parse(last_response.body)['info']['version']).to eq SimpleApiWithApiVersion::API_VERSION
     end
 
     it 'retrieves the same api version for mounted-api' do
       get '/swagger_doc/something.json'
-      expect(JSON.parse(last_response.body)['apiVersion']).to eq SimpleApiWithApiVersion::API_VERSION
+      expect(JSON.parse(last_response.body)['info']['version']).to eq SimpleApiWithApiVersion::API_VERSION
     end
   end
 
@@ -165,39 +165,42 @@ describe 'options: ' do
     it 'gets the documentation on a versioned path /v1/swagger_doc' do
       get '/v1/swagger_doc.json'
       expect(last_response.status).to eq 200
-      expect(JSON.parse(last_response.body)).to eq(
-        'apiVersion' => '0.1',
+      expect(JSON.parse(last_response.body)).to eq({
         'swagger' => '2.0',
-        'info' => {},
+        'info' => {
+          'title' => 'API title',
+          'version' => '0.1'
+        },
         'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
         'paths' => [
-          { 'path' => '/something.{format}', 'description' => 'Operations about somethings' },
-          { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
-        ]
-      )
+          {'path' => '/something.{format}', 'description' => 'Operations about somethings'},
+          {'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs'}
+        ]})
     end
 
     it 'gets the resource specific documentation on a versioned path /v1/swagger_doc/something' do
       get '/v1/swagger_doc/something.json'
       expect(last_response.status).to eq 200
-      expect(JSON.parse(last_response.body)).to eq(
-        'apiVersion' => '0.1',
+      expect(JSON.parse(last_response.body)).to eq({
+        'info' => {
+          'title' => 'API title',
+          'version' => '0.1'
+        },
         'swagger' => '2.0',
-        'basePath' => 'http://example.org',
-        'resourcePath' => '/something',
         'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
         'paths' => [{
           'path' => '/0.1/something.{format}',
           'operations' => [{
-            'notes' => '',
+            "notes"=>"",
             'summary' => 'This gets something.',
             'nickname' => 'GET--version-something---format-',
             'method' => 'GET',
             'parameters' => [],
             'type' => 'void'
           }]
-        }]
-      )
+        }],
+        'basePath' => 'http://example.org'
+      })
     end
   end
 
@@ -226,15 +229,16 @@ describe 'options: ' do
     end
 
     it "it doesn't show the documentation path on /swagger_doc" do
-      expect(subject).to eq(
-        'apiVersion' => '0.1',
+      expect(subject).to eq({
         'swagger' => '2.0',
-        'info' => {},
+        'info' => {
+          'title' => 'API title',
+          'version' => '0.1'
+        },
         'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
         'paths' => [
-          { 'path' => '/something.{format}', 'description' => 'Operations about somethings' }
-        ]
-      )
+          {'path' => '/something.{format}', 'description' => 'Operations about somethings'}
+        ]})
     end
   end
 
@@ -264,24 +268,26 @@ describe 'options: ' do
     end
 
     it "it doesn't show the documentation path on /abc/swagger_doc/something.json" do
-      expect(subject).to eq(
-        'apiVersion' => '0.1',
+      expect(subject).to eq({
+        'info' => {
+          'title' => 'API title',
+          'version' => '0.1'
+        },
         'swagger' => '2.0',
-        'basePath' => 'http://example.org',
-        'resourcePath' => '/something',
         'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
         'paths' => [{
           'path' => '/abc/something.{format}',
           'operations' => [{
-            'notes' => '',
+            "notes"=>"",
             'summary' => 'This gets something.',
             'nickname' => 'GET-abc-something---format-',
             'method' => 'GET',
             'parameters' => [],
             'type' => 'void'
           }]
-        }]
-      )
+        }],
+        'basePath' => 'http://example.org'
+      })
     end
   end
 
@@ -314,24 +320,26 @@ describe 'options: ' do
     end
 
     it "it doesn't show the documentation path on /abc/v1/swagger_doc/something.json" do
-      expect(subject).to eq(
-        'apiVersion' => 'v20',
+      expect(subject).to eq({
+        'info' => {
+          'title' => 'API title',
+          'version' => 'v20'
+        },
         'swagger' => '2.0',
-        'basePath' => 'http://example.org',
-        'resourcePath' => '/something',
         'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
         'paths' => [{
           'path' => '/abc/v20/something.{format}',
           'operations' => [{
-            'notes' => '',
+            "notes"=>"",
             'summary' => 'This gets something.',
             'nickname' => 'GET-abc--version-something---format-',
             'method' => 'GET',
             'parameters' => [],
             'type' => 'void'
           }]
-        }]
-      )
+        }],
+        'basePath' => 'http://example.org'
+      })
     end
   end
 
@@ -413,7 +421,8 @@ describe 'options: ' do
 
       it 'parses markdown for swagger info' do
         get '/swagger_doc.json'
-        expect(JSON.parse(last_response.body)['info']).to eq('description' => "<p><em>test</em></p>\n")
+        info = {'title' => 'API title', 'version' => '0.1', 'description'=>"<p><em>test</em></p>\n"}
+        expect(JSON.parse(last_response.body)['info']).to eq info
       end
     end
 
@@ -429,7 +438,8 @@ describe 'options: ' do
 
       it 'parses markdown for swagger info' do
         get '/swagger_doc.json'
-        expect(JSON.parse(last_response.body)['info']).to eq('description' => "<p><em>test</em></p>\n")
+        info = {'title' => 'API title', 'version' => '0.1', 'description'=>"<p><em>test</em></p>\n"}
+        expect(JSON.parse(last_response.body)['info']).to eq info
       end
     end
   end
@@ -585,28 +595,30 @@ describe 'options: ' do
 
     it 'retrieves the first swagger-documentation on /first/swagger_doc' do
       get '/first/swagger_doc.json'
-      expect(JSON.parse(last_response.body)).to eq(
-        'apiVersion' => '0.1',
+      expect(JSON.parse(last_response.body)).to eq({
         'swagger' => '2.0',
-        'info' => {},
+        'info' => {
+          'title' => 'API title',
+          'version' => '0.1'
+        },
         'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
         'paths' => [
-          { 'path' => '/first.{format}', 'description' => 'Operations about firsts' }
-        ]
-      )
+          {'path' => '/first.{format}', 'description' => 'Operations about firsts'}
+      ]})
     end
 
     it 'retrieves the second swagger-documentation on /second/swagger_doc' do
       get '/second/swagger_doc.json'
-      expect(JSON.parse(last_response.body)).to eq(
-        'apiVersion' => '0.1',
+      expect(JSON.parse(last_response.body)).to eq({
         'swagger' => '2.0',
-        'info' => {},
+        'info' => {
+          'title' => 'API title',
+          'version' => '0.1'
+        },
         'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
         'paths' => [
-          { 'path' => '/second.{format}', 'description' => 'Operations about seconds' }
-        ]
-      )
+          {'path' => '/second.{format}', 'description' => 'Operations about seconds'}
+      ]})
     end
   end
 

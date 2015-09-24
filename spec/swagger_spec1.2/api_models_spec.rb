@@ -173,11 +173,20 @@ describe 'API Models' do
     end
 
     it 'returns a swagger-compatible doc' do
-      expect(subject).to include(
-        'apiVersion' => '0.1',
-        'swagger' => '2.0',
-        'info' => {},
-        'produces' => ['application/json']
+    expect(subject).to include(
+      {'swagger' => '2.0',
+        'info' => {'title' => 'API title', 'version' => '0.1'},
+        'produces' => ['application/json'],
+        'paths' => [
+          {'path' => '/something.{format}', 'description' => 'Operations about somethings'},
+          {'path' => '/thing.{format}', 'description' => 'Operations about things'},
+          {'path' => '/somethingelse.{format}', 'description' => 'Operations about somethingelses'},
+          {'path' => '/enum_description_in_entity.{format}', 'description' => 'Operations about enum_description_in_entities'},
+          {'path' => '/aliasedthing.{format}', 'description' => 'Operations about aliasedthings'},
+          {'path' => '/nesting.{format}', 'description' => 'Operations about nestings'},
+          {'path' => '/multiple_entities.{format}', 'description' => 'Operations about multiple_entities'},
+          {'path' => '/thing_with_root.{format}', 'description' => 'Operations about thing_with_roots'},
+          {'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs'}]}
       )
     end
 

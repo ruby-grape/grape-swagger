@@ -19,12 +19,15 @@ describe 'simple root api' do
 
   it 'retrieves swagger-documentation on /swagger_doc' do
     get '/api/swagger_doc'
-    expect(JSON.parse(last_response.body)).to eq(
-      'apiVersion' => '0.1',
+    expect(JSON.parse(last_response.body)).to eq({
       'swagger' => '2.0',
-      'info' => {},
+      'info' => {
+        'title' => 'API title',
+        'version' => '0.1'
+      },
       'produces' => ['application/json'],
-      'paths' => [{ 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }]
+      'paths' => [{'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs'}
+      ]}
     )
   end
 end

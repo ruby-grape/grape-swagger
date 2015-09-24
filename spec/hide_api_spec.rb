@@ -39,16 +39,18 @@ describe 'a hide mounted api' do
   end
 
   it "retrieves swagger-documentation that doesn't include hidden endpoints" do
-    expect(subject).to eq(
-      'apiVersion' => '0.1',
+    expect(subject).to eq({
       'swagger' => '2.0',
-      'info' => {},
+      'info' => {
+        'title' => 'API title',
+        'version' => '0.1'
+      },
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
       'paths' => [
-        { 'path' => '/simple.{format}', 'description' => 'Operations about simples' },
-        { 'path' => '/lazy.{format}', 'description' => 'Operations about lazies' },
-        { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
-      ]
+        {'path' => '/simple.{format}', 'description' => 'Operations about simples'},
+        {'path' => '/lazy.{format}', 'description' => 'Operations about lazies'},
+        {'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs'}
+      ]}
     )
   end
 end
@@ -88,37 +90,39 @@ describe 'a hide mounted api with same namespace' do
 
   it 'retrieves swagger-documentation on /swagger_doc' do
     get '/swagger_doc.json'
-    expect(JSON.parse(last_response.body)).to eq(
-      'apiVersion' => '0.1',
+    expect(JSON.parse(last_response.body)).to eq({
       'swagger' => '2.0',
-      'info' => {},
+      'info' => {
+        'title' => 'API title',
+        'version' => '0.1'
+      },
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
       'paths' => [
         { 'path' => '/simple.{format}', 'description' => 'Operations about simples' },
         { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
-      ]
-    )
+      ]})
   end
 
   it "retrieves the documentation for mounted-api that doesn't include hidden endpoints" do
     get '/swagger_doc/simple.json'
-    expect(JSON.parse(last_response.body)).to eq(
-      'apiVersion' => '0.1',
+    expect(JSON.parse(last_response.body)).to eq({
+      'info' => {
+        'title' => 'API title',
+        'version' => '0.1'
+      },
       'swagger' => '2.0',
-      'basePath' => 'http://example.org',
-      'resourcePath' => '/simple',
       'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
-      'paths' => [{
-        'path' => '/simple/show.{format}',
-        'operations' => [{
-          'notes' => '',
+      'paths' => [
+        {'path' => '/simple/show.{format}', 'operations' => [{
+          "notes"=>"",
           'summary' => 'Show this endpoint',
           'nickname' => 'GET-simple-show---format-',
           'method' => 'GET',
           'parameters' => [],
           'type' => 'void'
         }]
-      }]
-    )
+      }],
+      'basePath' => 'http://example.org'
+    })
   end
 end

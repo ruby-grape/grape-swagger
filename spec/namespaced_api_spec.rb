@@ -44,4 +44,24 @@ describe 'namespace' do
       expect(subject['description']).to eql('Description for aspace')
     end
   end
+
+  context 'dynamic' do
+    def app
+      Class.new(Grape::API) do
+        namespace '/:dynamic', desc: 'Description for dynamic' do
+          get '/'
+        end
+        add_swagger_documentation format: :json
+      end
+    end
+
+    subject do
+      get '/swagger_doc'
+      JSON.parse(last_response.body)['apis'][0]
+    end
+
+    it 'shows the namespace description in the json spec' do
+      expect(subject['description']).to eql('Description for dynamic')
+    end
+  end
 end

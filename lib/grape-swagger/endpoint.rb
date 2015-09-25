@@ -115,7 +115,21 @@ module Grape
 
     def response_object(route)
       codes = default_staus_codes[route.route_method.downcase.to_sym] + (route.route_http_codes || [])
-      codes.inject({}) {|h, v| h[v[:code]] = {description: v[:message].sub('{item}',@item)}; h }
+
+      codes.map!{|x| x.is_a?(Array)? {code: x[0], message: x[1], model: x[2].to_s} : x }
+
+      codes.inject({}) do |h, v|
+        h[v[:code]] = { description: v[:message].sub('{item}',@item) }
+
+        response_model = @item
+        response_model = expose_params_from_model(v[:model]) if v[:model]
+
+        # TODO: proof that the definition exist, if model isn't specified
+        unless response_model.start_with?('Swagger_doc')
+          h[v[:code]][:schema] = { '$ref' => "#/definitions/#{response_model}" }
+        end
+        h
+      end
     end
 
     def default_staus_codes
@@ -156,6 +170,19 @@ module Grape
       properties = params.inject({}) {|h,x| h[x.first] = {type: data_type(x.last)}; h }
 
       @definitions[@item] = {properties: properties}
+    end
+
+    def expose_params_from_model(model)
+      model_name = model.name.split('::').last
+
+      properties = model.documentation.inject({}) do |h,x|
+        h[x.first] = {type: data_type(x.last)}
+        h[x.first][:enum] = x.last[:values] if x.last[:values] && x.last[:values].is_a?(Array)
+        h
+      end
+      @definitions[model_name] = {properties: properties}
+
+      model_name
     end
 
     def parse_request_params(param, value, path, method)

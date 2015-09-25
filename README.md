@@ -504,8 +504,9 @@ end
 
 ## Response documentation
 
-You can also document the HTTP status codes with a description ~~and a specified model~~ that your API returns with one of the following syntax.
+You can also document the HTTP status codes with a description and a specified model, as ref in the schema to the definitions, that your API returns with one of the following syntax.
 
+In the following cases, the schema ref would be taken from route.
 ``` ruby
 desc 'thing', http_codes: [ { code: 400, message: "Invalid parameter entry" } ]
 get '/thing' do
@@ -524,7 +525,7 @@ end
 ```
 
 ``` ruby
-get '/', http_codes: [
+get '/thing', http_codes: [
   { code: 200, message: 'Ok' },
   { code: 400, message: "Invalid parameter entry" }
 ] do
@@ -532,8 +533,36 @@ get '/', http_codes: [
 end
 ```
 
+By adding a `model` key, e.g. this would be taken.
+``` ruby
+get '/thing', http_codes: [
+  { code: 200, message: 'Ok' },
+  { code: 422, message: "Invalid parameter entry", model: Entities::ApiError }
+] do
+  ...
+end
+```
+
 If no status code is defined [defaults](/lib/grape-swagger/endpoint.rb#L121) would be taken.
 
+The result is then something like following:
+
+```json
+"responses": {
+  "200": {
+    "description": "get Horses",
+    "schema": {
+      "$ref": "#/definitions/Thing"
+    }
+  },
+  "401": {
+    "description": "HorsesOutError",
+    "schema": {
+      "$ref": "#/definitions/ApiError"
+    }
+  }
+},
+```
 
 ## Contributing to grape-swagger
 

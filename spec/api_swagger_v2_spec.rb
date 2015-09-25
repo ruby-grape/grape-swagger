@@ -13,7 +13,7 @@ describe 'swagger spec v2.0' do
 
         class EnumValues < Grape::Entity
           expose :gender, documentation: { type: 'string', desc: 'Content of something.', values: %w(Male Female) }
-          expose :number, documentation: { type: 'integer', desc: 'Content of something.', values: proc { [1, 2] } }
+          expose :number, documentation: { type: 'integer', desc: 'Content of something.', values: [1, 2]  }
         end
 
         class ComposedOf < Grape::Entity
@@ -76,6 +76,12 @@ describe 'swagger spec v2.0' do
           root 'things', 'thing'
           expose :text, documentation: { type: 'string', desc: 'Content of something.' }
         end
+
+        class ApiError < Grape::Entity
+          expose :code, documentation: { type: Integer, desc: 'status code' }
+          expose :message, documentation: { type: String, desc: 'error message' }
+        end
+
       end
 
     end
@@ -84,58 +90,70 @@ describe 'swagger spec v2.0' do
       Class.new(Grape::API) do
         format :json
 
-        # # Something stuff
-        # desc 'This gets Somethings.', entity: Entities::Something, params: Entities::Something.documentation
-        # get '/something' do
-        #   something = OpenStruct.new text: 'something'
-        #   present something, with: Entities::Something
-        # end
-        #
-        # desc 'This gets Something.', entity: Entities::Something, params: Entities::Something.documentation
-        # params do
-        #   requires :id, type: Integer, desc: 'Identity'
-        # end
-        # get '/something/:id' do
-        #   something = OpenStruct.new text: 'something'
-        #   present something, with: Entities::Something
-        # end
-        #
-        # desc 'This creates Something.', entity: Entities::Something, params: Entities::Something.documentation
-        # params do
-        #   requires :text, type: String, documentation: { type: 'string', desc: 'Content of something.' }
-        #   requires :links, type: Array, documentation: { type: 'link', is_array: true }
-        # end
-        # post '/something' do
-        #   something = OpenStruct.new text: 'something'
-        #   present something, with: Entities::Something
-        # end
-        #
-        # desc 'This updates Something.', entity: Entities::Something, params: Entities::Something.documentation
-        # params do
-        #   requires :id, type: Integer
-        #   optional :text, type: String, documentation: { type: 'string', desc: 'Content of something.' }
-        #   optional :links, type: Array, documentation: { type: 'link', is_array: true }
-        # end
-        # put '/something/:id' do
-        #   something = OpenStruct.new text: 'something'
-        #   present something, with: Entities::Something
-        # end
-        #
-        # desc 'This deletes something.', entity: Entities::Something, params: Entities::Something.documentation
-        # params do
-        #   requires :id, type: Integer
-        # end
-        # delete '/something/:id' do
-        #   something = OpenStruct.new text: 'something'
-        #   present something, with: Entities::Something
-        # end
+        # Something stuff
+        desc 'This gets Somethings.', entity: Entities::Something, params: Entities::Something.documentation
+        get '/something' do
+          something = OpenStruct.new text: 'something'
+          present something, with: Entities::Something
+        end
+
+        desc 'This gets Something.', entity: Entities::Something, params: Entities::Something.documentation
+        params do
+          requires :id, type: Integer, desc: 'Identity'
+        end
+        get '/something/:id' do
+          something = OpenStruct.new text: 'something'
+          present something, with: Entities::Something
+        end
+
+        desc 'This creates Something.', entity: Entities::Something, params: Entities::Something.documentation
+        params do
+          requires :text, type: String, documentation: { type: 'string', desc: 'Content of something.' }
+          requires :links, type: Array, documentation: { type: 'link', is_array: true }
+        end
+        post '/something' do
+          something = OpenStruct.new text: 'something'
+          present something, with: Entities::Something
+        end
+
+        desc 'This updates Something.', entity: Entities::Something, params: Entities::Something.documentation
+        params do
+          requires :id, type: Integer
+          optional :text, type: String, documentation: { type: 'string', desc: 'Content of something.' }
+          optional :links, type: Array, documentation: { type: 'link', is_array: true }
+        end
+        put '/something/:id' do
+          something = OpenStruct.new text: 'something'
+          present something, with: Entities::Something
+        end
+
+        desc 'This deletes something.', entity: Entities::Something, params: Entities::Something.documentation
+        params do
+          requires :id, type: Integer
+        end
+        delete '/something/:id' do
+          something = OpenStruct.new text: 'something'
+          present something, with: Entities::Something
+        end
 
         #  Thing stuff
         desc 'This gets Things.' do
           params Entities::Something.documentation
-          http_codes [ { code: 401, message: 'Unauthorized' } ]
+          http_codes [ { code: 401, message: 'Unauthorized', model: Entities::ApiError } ]
         end
         get '/thing' do
+          something = OpenStruct.new text: 'something'
+          present something, with: Entities::Something
+        end
+
+        desc 'This gets Things.' do
+          params Entities::Something.documentation
+          http_codes [
+            { code: 200, message: 'get Horses', model: Entities::EnumValues },
+            { code: 401, message: 'HorsesOutError', model: Entities::ApiError }
+          ]
+        end
+        get '/thing2' do
           something = OpenStruct.new text: 'something'
           present something, with: Entities::Something
         end

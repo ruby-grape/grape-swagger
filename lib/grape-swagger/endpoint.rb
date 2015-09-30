@@ -148,9 +148,10 @@ module Grape
     end
 
     def partition_params(route)
+      # require 'pry'; binding.pry
       declared_params = route.route_settings[:declared_params] if route.route_settings[:declared_params].present?
 
-      route_params = route.route_settings[:description][:params]
+      route_params = route.route_params
       required, exposed = route_params.partition { |x| x.first.is_a? String }
 
       unless declared_params.nil?

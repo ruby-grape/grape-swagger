@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'grape'
   s.add_runtime_dependency 'grape-entity'
+  s.add_runtime_dependency 'awesome_print'
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'shoulda'
@@ -27,7 +28,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rouge', '~> 1.6.1'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'pry-byebug'
-  s.add_development_dependency 'awesome_print'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec}/*`.split("\n")

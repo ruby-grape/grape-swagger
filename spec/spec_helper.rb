@@ -2,16 +2,9 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 Dir[File.join(Dir.getwd, 'spec/support/**/*.rb')].each { |f| require f }
 
-require 'grape-swagger'
-
 require 'grape'
 require 'grape-swagger'
 require 'grape-entity'
-
-require 'rubygems'
-require 'bundler'
-
-require 'json'
 
 Bundler.setup :default, :test
 

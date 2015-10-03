@@ -3,73 +3,18 @@ require 'spec_helper'
 describe 'swagger spec v2.0' do
   include_context "swagger example"
 
-  before :all do
-    module Entities
-      class Something < Grape::Entity
-        expose :id, documentation: { type: Integer, desc: 'Identity of Something' }
-        expose :text, documentation: { type: String, desc: 'Content of something.' }
-        expose :links, documentation: { type: 'link', is_array: true }
-        expose :others, documentation: { type: 'text', is_array: false }
-      end
-
-      class EnumValues < Grape::Entity
-        expose :gender, documentation: { type: 'string', desc: 'Content of something.', values: %w(Male Female) }
-        expose :number, documentation: { type: 'integer', desc: 'Content of something.', values: [1, 2]  }
-      end
-
-
-      class AliasedThing < Grape::Entity
-        expose :something, as: :post, using: Entities::Something, documentation: { type: 'Something', desc: 'Reference to something.' }
-      end
-
-      class FourthLevel < Grape::Entity
-        expose :text, documentation: { type: 'string' }
-      end
-
-      class ThirdLevel < Grape::Entity
-        expose :parts, using: Entities::FourthLevel, documentation: { type: 'FourthLevel' }
-      end
-
-      class SecondLevel < Grape::Entity
-        expose :parts, using: Entities::ThirdLevel, documentation: { type: 'ThirdLevel' }
-      end
-
-      class FirstLevel < Grape::Entity
-        expose :parts, using: Entities::SecondLevel, documentation: { type: 'SecondLevel' }
-      end
-
-      class QueryInputElement < Grape::Entity
-        expose :key, documentation: {
-          type: String, desc: 'Name of parameter', required: true }
-        expose :value, documentation: {
-          type: String, desc: 'Value of parameter', required: true }
-      end
-
-      class QueryInput < Grape::Entity
-        expose :elements, using: Entities::QueryInputElement, documentation: {
-          type: 'QueryInputElement',
-          desc: 'Set of configuration',
-          param_type: 'body',
-          is_array: true,
-          required: true
-        }
-      end
-
-      class ApiError < Grape::Entity
-        expose :code, documentation: { type: Integer, desc: 'status code' }
-        expose :message, documentation: { type: String, desc: 'error message' }
-      end
-
-    end
-
-  end
-
   def app
     Class.new(Grape::API) do
       format :json
 
       #  Thing stuff
       desc 'This gets Things.' do
+        detail "
+        #This gets Things
+
+        with the details given, the endpoint can be more verbose described
+        *this* can be done in markdown
+        "
         params Entities::Something.documentation
         http_codes [ { code: 401, message: 'Unauthorized', model: Entities::ApiError } ]
       end
@@ -79,9 +24,8 @@ describe 'swagger spec v2.0' do
       end
 
       desc 'This gets Things.' do
-        params Entities::Something.documentation
         http_codes [
-          { code: 200, message: 'get Horses', model: Entities::EnumValues },
+          { code: 200, message: 'get Horses', model: Entities::Something },
           { code: 401, message: 'HorsesOutError', model: Entities::ApiError }
         ]
       end
@@ -128,6 +72,15 @@ describe 'swagger spec v2.0' do
         requires :id, type: Integer
       end
       delete '/thing/:id' do
+        something = OpenStruct.new text: 'something'
+        present something, with: Entities::Something
+      end
+
+      desc 'dummy route.'
+      params do
+        requires :id, type: Integer
+      end
+      delete '/dummy/:id' do
         something = OpenStruct.new text: 'something'
         present something, with: Entities::Something
       end
@@ -246,8 +199,6 @@ describe 'swagger spec v2.0' do
   end
 
   describe "swgger file" do
-    it "equals example" do
-      expect(json).to eql swagger_json
-    end
+    it { expect(json).to eql swagger_json }
   end
 end

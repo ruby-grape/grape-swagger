@@ -13,18 +13,6 @@ module GrapeSwagger
       @@mount_path
     end
 
-    def content_types_for(target_class)
-      content_types = (target_class.content_types || {}).values
-
-      if content_types.empty?
-        formats       = [target_class.format, target_class.default_format].compact.uniq
-        formats       = Grape::Formatter::Base.formatters({}).keys if formats.empty?
-        content_types = Grape::ContentTypes::CONTENT_TYPES.select { |content_type, _mime_type| formats.include? content_type }.values
-      end
-
-      content_types.uniq
-    end
-
     def setup(options)
       options = defaults.merge(options)
 
@@ -32,8 +20,6 @@ module GrapeSwagger
       # for available options see #defaults
       target_class     = options[:target_class]
       api_version      = options[:api_version]
-      authorizations   = options[:authorizations]
-      root_base_path   = options[:root_base_path]
       extra_info       = options[:info]
       api_doc          = options[:api_documentation].dup
       specific_api_doc = options[:specific_api_documentation].dup
@@ -44,24 +30,51 @@ module GrapeSwagger
         send(method, options[:format])
       end if options[:format]
 
-      @@documentation_class = self
-
+      # getting of the whole swagger2.0 spec file
       desc api_doc.delete(:desc), api_doc
-      get @@mount_path do
+      get mount_path do
         header['Access-Control-Allow-Origin']   = '*'
         header['Access-Control-Request-Method'] = '*'
 
         output = swagger_object(
           info_object(extra_info.merge({version: api_version})),
-          @@documentation_class.content_types_for(target_class),
+          target_class,
+          request,
+          options
         )
 
-        output[:authorizations] = authorizations unless authorizations.nil? || authorizations.empty?
-        output[:host]           = request.env['HTTP_HOST'] || options[:host]
-        output[:basePath]       = request.env['SCRIPT_NAME'] || options[:base_path]
-        paths, definitions      = path_and_definition_objects(target_class, options)
+        target_routes = target_class.combined_namespace_routes
+        paths, definitions      = path_and_definition_objects(target_routes, options)
         output[:paths]          = paths if paths
         output[:definitions]    = definitions if definitions
+
+        output
+      end
+
+      # getting of a specific/named route of the swagger2.0 spec file
+      desc specific_api_doc.delete(:desc), { params:
+        specific_api_doc.delete(:params) || {} }.merge(specific_api_doc)
+      params do
+        requires :name, type: String, desc: 'Resource name of mounted API'
+        optional :locale, type: Symbol, desc: 'Locale of API documentation'
+      end
+      get "#{mount_path}/:name" do
+        I18n.locale = params[:locale] || I18n.default_locale
+
+        combined_routes = target_class.combined_namespace_routes[params[:name]]
+        error!({ error: 'named resource not exist' }, 400) if combined_routes.nil?
+
+        output = swagger_object(
+          info_object(extra_info.merge({version: api_version})),
+          target_class,
+          request,
+          options
+        )
+
+        target_routes = { params[:name] => combined_routes }
+        paths, definitions   = path_and_definition_objects(target_routes, options)
+        output[:paths]       = paths if paths
+        output[:definitions] = definitions if definitions
 
         output
       end

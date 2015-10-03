@@ -163,63 +163,6 @@ module Grape
           extend GrapeSwagger::DocMethods
         end
       end
-
-
-      # def get_non_nested_params(params)
-      #   # Duplicate the params as we are going to modify them
-      #   dup_params = params.each_with_object({}) do |(param, value), dparams|
-      #     dparams[param] = value.dup
-      #   end
-      #
-      #   dup_params.reject do |param, value|
-      #     is_nested_param = /^#{ Regexp.quote param }\[.+\]$/
-      #     0 < dup_params.count do |p, _|
-      #       match = p.match(is_nested_param)
-      #       dup_params[p][:required] = false if match && !value[:required]
-      #       match
-      #     end
-      #   end
-      # end
-      #
-      # def parse_array_params(params)
-      #   modified_params = {}
-      #   array_param = nil
-      #   params.each_key do |k|
-      #     if params[k].is_a?(Hash) && params[k][:type] == 'Array'
-      #       array_param = k
-      #       modified_params[k] = params[k]
-      #     else
-      #       new_key = k
-      #       if !array_param.nil? && k.to_s.start_with?(array_param.to_s + '[')
-      #         new_key = array_param.to_s + '[]' + k.to_s.split(array_param)[1]
-      #         modified_params.delete array_param
-      #       end
-      #       modified_params[new_key] = params[k]
-      #     end
-      #   end
-      #   modified_params
-      # end
-      #
-      # def parse_enum_or_range_values(values)
-      #   case values
-      #   when Range
-      #     parse_range_values(values) if values.first.is_a?(Integer)
-      #   when Proc
-      #     values_result = values.call
-      #     if values_result.is_a?(Range) && values_result.first.is_a?(Integer)
-      #       parse_range_values(values_result)
-      #     else
-      #       { enum: values_result }
-      #     end
-      #   else
-      #     { enum: values } if values
-      #   end
-      # end
-      #
-      # def parse_range_values(values)
-      #   { minimum: values.first, maximum: values.last }
-      # end
-
     end
   end
 end

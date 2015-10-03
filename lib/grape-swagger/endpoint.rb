@@ -11,15 +11,30 @@ module Grape
       'dateTime' => %w(string date-time)
     }
 
+    def content_types_for(target_class)
+      content_types = (target_class.content_types || {}).values
+
+      if content_types.empty?
+        formats       = [target_class.format, target_class.default_format].compact.uniq
+        formats       = Grape::Formatter::Base.formatters({}).keys if formats.empty?
+        content_types = Grape::ContentTypes::CONTENT_TYPES.select { |content_type, _mime_type| formats.include? content_type }.values
+      end
+
+      content_types.uniq
+    end
+
     # swagger spec2.0 related parts
     #
     # required keys for SwaggerObject
-    def swagger_object(info, content_types)
+    def swagger_object(info, target_class, request, options)
       {
-        info:     info,
-        swagger:  '2.0',
-        produces: content_types
-      }
+        info:           info,
+        swagger:        '2.0',
+        produces:       content_types_for(target_class),
+        authorizations: options[:authorizations],
+        host:           request.env['HTTP_HOST'] || options[:host],
+        basePath:       request.env['SCRIPT_NAME'] || options[:base_path]
+      }.delete_if { |_, value| value.blank? }
     end
 
     # building info object
@@ -55,13 +70,12 @@ module Grape
     end
 
     # building path and definitions objects
-    def path_and_definition_objects(target_class, options)
+    def path_and_definition_objects(namespace_routes, options)
       @paths = {}
       @definitions = {}
-      namespace_routes = target_class.combined_namespace_routes
-
       namespace_routes.keys.each do |key|
-        path_item(namespace_routes[key], options)
+        routes = namespace_routes[key]
+        path_item(routes, options)
       end
 
       return @paths, @definitions
@@ -74,9 +88,9 @@ module Grape
         method_definition = {}
 
         path = route.route_path
-
         # always removing format
         path.sub!(/\(\.\w+?\)$/,'')
+        path.sub!("(.:format)",'')
         # ... format parama
         path.gsub!(/:(\w+)/,'{\1}')
         # set Item from path
@@ -157,17 +171,10 @@ module Grape
 
       unless exposed.nil?
         exposed_params = exposed.inject({}) {|h,x| h[x.first] = x.last; h }
-        parse_expose_params(exposed_params, route) if route.route_method == 'GET'
+        parse_expose_params(exposed_params, route) if route.route_method == 'GET' || @definitions[@item].nil?
       end
 
       required_params || {}
-    end
-
-    def parse_expose_params(params, route)
-      return if params.empty?
-      properties = params.inject({}) {|h,x| h[x.first] = {type: data_type(x.last)}; h }
-
-      @definitions[@item] = {properties: properties}
     end
 
     def expose_params_from_model(model)
@@ -178,9 +185,16 @@ module Grape
         h[x.first][:enum] = x.last[:values] if x.last[:values] && x.last[:values].is_a?(Array)
         h
       end
-      @definitions[model_name] = {properties: properties}
+      @definitions[model_name] = {type: 'object', properties: properties}
 
       model_name
+    end
+
+    def parse_expose_params(params, route)
+      return if params.empty?
+      properties = params.inject({}) {|h,x| h[x.first] = {type: data_type(x.last)}; h }
+
+      @definitions[@item] = {properties: properties}
     end
 
     def parse_request_params(param, value, path, method)
@@ -193,19 +207,19 @@ module Grape
         value = additional_documentation.merge(value)
       end
 
-      @description         = value.is_a?(Hash) ? value[:desc] || value[:description] : ''
+      description          = value.is_a?(Hash) ? value[:desc] || value[:description] : nil
       required             = value.is_a?(Hash) ? !!value[:required] : false
       default_value        = value.is_a?(Hash) ? value[:default] : nil
       example              = value.is_a?(Hash) ? value[:example] : nil
       is_array             = value.is_a?(Hash) ? (value[:is_array] || false) : false
       values               = value.is_a?(Hash) ? value[:values] : nil
+      name                 = (value.is_a?(Hash) && value[:full_name]) || param
       enum_or_range_values = parse_enum_or_range_values(values)
-      name          = (value.is_a?(Hash) && value[:full_name]) || param
 
       parsed_params = {
         in:            param_type(value, data_type, path, param, method, is_array),
         name:          name,
-        description:   as_markdown,
+        description:   description,
         type:          data_type,
         required:      required,
         allowMultiple: is_array
@@ -316,8 +330,7 @@ module Grape
       %w(object integer long float double string byte boolean date dateTime).include? type
     end
 
-    def as_markdown
-      @description
+    def as_markdown(details)
       # description && @@markdown ? @@markdown.as_markdown(strip_heredoc(description)) : description
     end
 

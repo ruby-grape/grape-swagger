@@ -9,12 +9,12 @@ describe 'swagger spec v2.0' do
 
       #  Thing stuff
       desc 'This gets Things.' do
-        detail "
-        #This gets Things
+        detail <<-DETAILS
+          # This gets Things
 
-        with the details given, the endpoint can be more verbose described
-        *this* can be done in markdown
-        "
+          with the details given, the endpoint can be more verbose described
+          *this* can be done in markdown
+        DETAILS
         params Entities::Something.documentation
         http_codes [ { code: 401, message: 'Unauthorized', model: Entities::ApiError } ]
       end
@@ -199,6 +199,8 @@ describe 'swagger spec v2.0' do
   end
 
   describe "swgger file" do
-    it { expect(json).to eql swagger_json }
+    it {
+      ap json
+      expect(json).to eql swagger_json }
   end
 end

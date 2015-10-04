@@ -67,10 +67,10 @@ RSpec.shared_context "swagger example" do
        "contact"=>{"contact_name"=>"Contact name", "contact_email"=>"Contact@email.com", "contact_url"=>"Contact URL"},
        "license"=>{"name"=>"The name of the license.", "url"=>"www.The-URL-of-the-license.org"},
        "version"=>"v1"},
-     "swagger"=>"2.0",
-     "produces"=>["application/json"],
-     "host"=>"example.org",
-     "paths"=>
+      "swagger"=>"2.0",
+      "produces"=>["application/json"],
+      "host"=>"example.org",
+      "paths"=>
       {"/otherthing/{elements}"=>
         {"get"=>
           {"produces"=>["application/json"],
@@ -119,11 +119,11 @@ RSpec.shared_context "swagger example" do
           {"produces"=>["application/json"],
            "responses"=>{"200"=>{"description"=>"deleted Dummy", "schema"=>{"$ref"=>"#/definitions/Dummy"}}},
            "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"}]}}},
-     "definitions"=>
+      "definitions"=>
       {"Otherthing"=>{"properties"=>{"elements"=>{"type"=>"QueryInputElement"}}},
-       "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}},
+       "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"string"}, "message"=>{"type"=>"string"}}},
        "Thing"=>{"properties"=>{"id"=>{"type"=>"integer"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}},
-       "Something"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}}}}
+       "Something"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"string"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"string"}, "others"=>{"type"=>"string"}}}}}
   end
 
   let(:http_verbs) { %w[get post put delete]}

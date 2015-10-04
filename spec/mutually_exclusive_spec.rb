@@ -28,7 +28,7 @@ describe 'Mutually exclusive group params' do
     get '/swagger_doc/groups'
 
     body = JSON.parse last_response.body
-    parameters = body['paths'].first['operations'].first['parameters']
+    parameters = body['paths']['/groups']['post']['parameters']
     expect(parameters).to eq [
       { 'paramType' => 'form', 'name' => 'required_group[param_group_1][param_1]', 'description' => nil, 'type' => 'string', 'required' => false, 'allowMultiple' => false },
       { 'paramType' => 'form', 'name' => 'required_group[param_group_2][][param_2]', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false }]

@@ -38,16 +38,21 @@ describe 'Convert values to enum or Range' do
     get "/swagger_doc/#{request}"
     expect(last_response.status).to eq 200
     body = JSON.parse last_response.body
-    body['paths'].first['operations'].first['parameters']
+    body['paths']["/#{request}"]['post']['parameters']
   end
 
   context 'Plain array values' do
     subject(:plain_array) { first_parameter_info('plain_array') }
-
     it 'has values as array in enum' do
-      expect(plain_array).to eq [
-        { 'paramType' => 'form', 'name' => 'letter', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false, 'enum' => %w(a b c) }
-      ]
+      expect(plain_array).to eq [{
+        "in"=>"formData",
+        "name"=>"letter",
+        "description"=>nil,
+        "type"=>"string",
+        "required"=>true,
+        "allowMultiple"=>false,
+        "enum"=>["a", "b", "c"]
+      }]
     end
   end
 
@@ -55,9 +60,15 @@ describe 'Convert values to enum or Range' do
     subject(:array_in_proc) { first_parameter_info('array_in_proc') }
 
     it 'has proc returned values as array in enum' do
-      expect(array_in_proc).to eq [
-        { 'paramType' => 'form', 'name' => 'letter', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false, 'enum' => %w(d e f) }
-      ]
+      expect(array_in_proc).to eq [{
+        "in"=>"formData",
+        "name"=>"letter",
+        "description"=>nil,
+        "type"=>"string",
+        "required"=>true,
+        "allowMultiple"=>false,
+        "enum"=>["d", "e", "f"]
+      }]
     end
   end
 
@@ -65,17 +76,30 @@ describe 'Convert values to enum or Range' do
     subject(:range_letter) { first_parameter_info('range_letter') }
 
     it 'has letter range values' do
-      expect(range_letter).to eq [
-        { 'paramType' => 'form', 'name' => 'letter', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false }
-      ]
+      expect(range_letter).to eq [{
+        "in"=>"formData",
+        "name"=>"letter",
+        "description"=>nil,
+        "type"=>"string",
+        "required"=>true,
+        "allowMultiple"=>false
+      }]
     end
 
     subject(:range_integer) { first_parameter_info('range_integer') }
 
     it 'has integer range values' do
-      expect(range_integer).to eq [
-        { 'paramType' => 'form', 'name' => 'integer', 'description' => nil, 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32', 'minimum' => -5, 'maximum' => 5 }
-      ]
+      expect(range_integer).to eq [{
+        "in"=>"formData",
+        "name"=>"integer",
+        "description"=>nil,
+        "type"=>"integer",
+        "required"=>true,
+        "allowMultiple"=>false,
+        "format"=>"int32",
+        "minimum"=>-5,
+        "maximum"=>5
+      }]
     end
   end
 end
@@ -105,16 +129,22 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
     get "/swagger_doc/#{request}"
     expect(last_response.status).to eq 200
     body = JSON.parse last_response.body
-    body['paths'].first['operations'].first['parameters']
+    body['paths']["/#{request}"]['post']['parameters']
   end
 
   context 'Non array in proc values' do
     subject(:non_array_in_proc) { first_parameter_info('non_array_in_proc') }
 
     it 'has proc returned value as string in enum' do
-      expect(non_array_in_proc).to eq [
-        { 'paramType' => 'form', 'name' => 'letter', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false, 'enum' => 'string' }
-      ]
+      expect(non_array_in_proc).to eq [{
+        "in"=>"formData",
+        "name"=>"letter",
+        "description"=>nil,
+        "type"=>"string",
+        "required"=>true,
+        "allowMultiple"=>false,
+        "enum"=>"string"
+      }]
     end
   end
 
@@ -122,9 +152,15 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
     subject(:range_float) { first_parameter_info('range_float') }
 
     it 'has float range values as string' do
-      expect(range_float).to eq [
-        { 'paramType' => 'form', 'name' => 'float', 'description' => nil, 'type' => 'number', 'format' => 'float', 'required' => true, 'allowMultiple' => false }
-      ]
+      expect(range_float).to eq [{
+        "in"=>"formData",
+        "name"=>"float",
+        "description"=>nil,
+        "type"=>"number",
+        "required"=>true,
+        "allowMultiple"=>false,
+        "format"=>"float"
+      }]
     end
   end
 end

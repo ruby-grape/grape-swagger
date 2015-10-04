@@ -49,17 +49,17 @@ describe 'Form Params' do
   end
 
   it 'retrieves the documentation form params' do
-    expect(subject['paths'].count).to eq 2
-    expect(subject['paths'][0]['path']).to start_with '/items'
-    expect(subject['paths'][0]['operations'][0]['method']).to eq 'POST'
-    expect(subject['paths'][1]['path']).to start_with '/items/{id}'
-    expect(subject['paths'][1]['operations'][0]['method']).to eq 'PUT'
-    expect(subject['paths'][1]['operations'][1]['method']).to eq 'PATCH'
-    expect(subject['paths'][1]['operations'][2]['method']).to eq 'POST'
+    expect(subject['paths'].length).to eq 2
+    expect(subject['paths'].keys).to include('/items','/items/{id}')
+    expect(subject['paths']['/items'].keys).to include 'post'
+    expect(subject['paths']['/items/{id}'].keys).to include('post', 'patch', 'put')
   end
 
   it 'treats Symbol parameter as form param' do
-    expect(subject['paths'][1]['operations'][2]['parameters'][2]['paramType']).to eq 'form'
-    expect(subject['paths'][1]['operations'][2]['parameters'][2]['type']).to eq 'string'
+    expect(subject['paths']['/items/{id}']['post']['parameters']).to eq [
+      {"in"=>"path", "name"=>"id", "description"=>"id of item", "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"},
+      {"in"=>"formData", "name"=>"name", "description"=>"name of item", "type"=>"string", "required"=>true, "allowMultiple"=>false},
+      {"in"=>"formData", "name"=>"conditions", "description"=>"conditions of item", "type"=>"string", "required"=>false, "allowMultiple"=>false, "enum"=>["one", "two"]}
+    ]
   end
 end

@@ -6,7 +6,7 @@ describe 'Params Types' do
       format :json
 
       params do
-        requires :input, type: String, documentation: { param_type: 'query' }
+        requires :input, type: String
       end
       post :action do
       end
@@ -19,13 +19,18 @@ describe 'Params Types' do
     get '/swagger_doc/action'
     expect(last_response.status).to eq 200
     body = JSON.parse last_response.body
-    body['paths'].first['operations'].first['parameters']
+    body['paths']["/action"]['post']['parameters']
   end
 
   it 'reads param type correctly' do
-    expect(subject).to eq [
-      { 'paramType' => 'query', 'name' => 'input', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false }
-    ]
+    expect(subject).to eq [{
+      "in"=>"formData",
+      "name"=>"input",
+      "description"=>nil,
+      "type"=>"string",
+      "required"=>true,
+      "allowMultiple"=>false
+    }]
   end
 
   describe 'header params' do
@@ -46,7 +51,7 @@ describe 'Params Types' do
 
     it 'has consistent types' do
       types = subject.map { |param| param['type'] }
-      expect(types).to eq(%w(string string))
+      expect(types).to eq(%w(string))
     end
   end
 end

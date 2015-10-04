@@ -19,12 +19,12 @@ describe 'Boolean Params' do
     get '/swagger_doc/splines'
     expect(last_response.status).to eq 200
     body = JSON.parse last_response.body
-    body['paths'].first['operations'].first['parameters']
+    body['paths']['/splines']['post']['parameters']
   end
 
   it 'converts boolean types' do
     expect(subject).to eq [
-      { 'paramType' => 'form', 'name' => 'a_boolean', 'description' => nil, 'type' => 'boolean', 'required' => true, 'allowMultiple' => false }
+      {"in"=>"formData", "name"=>"a_boolean", "description"=>nil, "type"=>"boolean", "required"=>true, "allowMultiple"=>false}
     ]
   end
 end

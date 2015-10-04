@@ -1,0 +1,52 @@
+require 'spec_helper'
+
+describe 'docs mounted separately from api' do
+  before :all do
+    class ActualApi < Grape::API
+      desc 'Document root'
+
+      desc 'This gets something.',
+           notes: '_test_'
+      get '/simple' do
+        { bla: 'something' }
+      end
+    end
+
+    class MountedDocs < Grape::API
+      add_swagger_documentation(target_class: ActualApi)
+    end
+
+    class WholeApp < Grape::API
+      mount ActualApi
+      mount MountedDocs
+    end
+  end
+
+  def app
+    WholeApp
+  end
+
+  it 'retrieves docs for actual api class' do
+    get '/swagger_doc.json'
+    expect(JSON.parse(last_response.body)).to eq({
+      "info"=>{"title"=>"API title", "version"=>"v1"},
+      "swagger"=>"2.0",
+      "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
+      "host"=>"example.org",
+      "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"get Simple(s)", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}}},
+      "definitions"=>{}
+    })
+  end
+
+  it 'retrieves docs for endpoint in actual api class' do
+    get '/swagger_doc/simple.json'
+    expect(JSON.parse(last_response.body)).to eq({
+      "info"=>{"title"=>"API title", "version"=>"v1"},
+      "swagger"=>"2.0",
+      "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
+      "host"=>"example.org",
+      "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"get Simple(s)", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}}},
+      "definitions"=>{}
+    })
+  end
+end

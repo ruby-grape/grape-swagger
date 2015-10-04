@@ -32,3 +32,4 @@ Gemfile.lock
 .DS_Store
 .project
 example.json
+swagger_spec1.2/

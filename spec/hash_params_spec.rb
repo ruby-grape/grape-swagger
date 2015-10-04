@@ -1,30 +1,31 @@
 require 'spec_helper'
 
-describe 'Hash Params' do
+describe 'Group Params' do
   def app
     Class.new(Grape::API) do
       format :json
 
       params do
-        requires :a_hash, type: Hash
+        requires :required_group, type: Hash do
+          requires :required_param_1
+          requires :required_param_2
+        end
       end
-      post :splines do
+      post '/groups' do
+        {}
       end
 
       add_swagger_documentation
     end
   end
 
-  subject do
-    get '/swagger_doc/splines'
-    expect(last_response.status).to eq 200
-    body = JSON.parse last_response.body
-    body['paths'].first['operations'].first['parameters']
-  end
+  it 'retrieves the documentation for group parameters' do
+    get '/swagger_doc/groups'
 
-  it 'declares hash types as object' do
-    expect(subject).to eq [
-      { 'paramType' => 'form', 'name' => 'a_hash', 'description' => nil, 'type' => 'object', 'required' => true, 'allowMultiple' => false }
-    ]
+    body = JSON.parse last_response.body
+    parameters = body['paths'].first['operations'].first['parameters']
+    expect(parameters).to eq [
+      { 'paramType' => 'form', 'name' => 'required_group[required_param_1]', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false },
+      { 'paramType' => 'form', 'name' => 'required_group[required_param_2]', 'description' => nil, 'type' => 'string', 'required' => true, 'allowMultiple' => false }]
   end
 end

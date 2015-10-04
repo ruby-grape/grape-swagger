@@ -4,8 +4,8 @@ describe 'namespace' do
   context 'at root level' do
     def app
       Class.new(Grape::API) do
-        namespace :aspace, desc: 'Description for aspace' do
-          get '/'
+        namespace :aspace do
+          get '/', desc: 'Description for aspace'
         end
         add_swagger_documentation format: :json
       end
@@ -13,7 +13,7 @@ describe 'namespace' do
 
     subject do
       get '/swagger_doc'
-      JSON.parse(last_response.body)['paths'][0]
+      JSON.parse(last_response.body)['paths']['/aspace']['get']
     end
 
     it 'shows the namespace description in the json spec' do
@@ -24,8 +24,8 @@ describe 'namespace' do
   context 'mounted' do
     def app
       namespaced_api = Class.new(Grape::API) do
-        namespace :aspace, desc: 'Description for aspace' do
-          get '/'
+        namespace :bspace do
+          get '/', desc: 'Description for aspace'
         end
       end
 
@@ -37,7 +37,7 @@ describe 'namespace' do
 
     subject do
       get '/swagger_doc'
-      JSON.parse(last_response.body)['paths'][0]
+      JSON.parse(last_response.body)['paths']['/bspace']['get']
     end
 
     it 'shows the namespace description in the json spec' do

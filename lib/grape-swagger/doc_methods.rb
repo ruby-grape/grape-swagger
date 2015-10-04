@@ -24,7 +24,7 @@ module GrapeSwagger
       api_doc          = options[:api_documentation].dup
       specific_api_doc = options[:specific_api_documentation].dup
 
-      set_class_variables_from(options)
+      class_variables_from(options)
 
       [:format, :default_format, :default_error_formatter].each do |method|
         send(method, options[:format])
@@ -37,16 +37,16 @@ module GrapeSwagger
         header['Access-Control-Request-Method'] = '*'
 
         output = swagger_object(
-          info_object(extra_info.merge({version: api_version})),
+          info_object(extra_info.merge(version: api_version)),
           target_class,
           request,
           options
         )
 
-        target_routes = target_class.combined_namespace_routes
-        paths, definitions      = path_and_definition_objects(target_routes, options)
-        output[:paths]          = paths if paths
-        output[:definitions]    = definitions if definitions
+        target_routes        = target_class.combined_namespace_routes
+        paths, definitions   = path_and_definition_objects(target_routes, options)
+        output[:paths]       = paths if paths
+        output[:definitions] = definitions if definitions
 
         output
       end
@@ -65,13 +65,13 @@ module GrapeSwagger
         error!({ error: 'named resource not exist' }, 400) if combined_routes.nil?
 
         output = swagger_object(
-          info_object(extra_info.merge({version: api_version})),
+          info_object(extra_info.merge(version: api_version)),
           target_class,
           request,
           options
         )
 
-        target_routes = { params[:name] => combined_routes }
+        target_routes        = { params[:name] => combined_routes }
         paths, definitions   = path_and_definition_objects(target_routes, options)
         output[:paths]       = paths if paths
         output[:definitions] = definitions if definitions
@@ -82,7 +82,7 @@ module GrapeSwagger
 
     def defaults
       {
-        api_version: 'v1.0',
+        api_version: 'v1',
         target_class: nil,
         mount_path: '/swagger_doc',
         host: nil,
@@ -100,7 +100,7 @@ module GrapeSwagger
       }
     end
 
-    def set_class_variables_from(options)
+    def class_variables_from(options)
       @@mount_path              = options[:mount_path]
       @@class_name              = options[:class_name] || options[:mount_path].delete('/')
       @@markdown                = options[:markdown] ? GrapeSwagger::Markdown.new(options[:markdown]) : nil

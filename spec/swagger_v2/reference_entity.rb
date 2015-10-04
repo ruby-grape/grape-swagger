@@ -28,15 +28,17 @@ describe 'referenceEntity' do
              params: Entities::Kind.documentation.slice(:something),
              entity: Entities::Kind,
              http_codes: [
-               [200, 'OK', Entities::Kind]
+               { code: 200, message: 'OK', model: Entities::Kind }
              ]
-
+        params do
+          optional :something, desc: 'something as parameter'
+        end
         get '/kind' do
           kind = OpenStruct.new text: 'kind'
           present kind, with: Entities::Kind
         end
 
-        add_swagger_documentation models: [MyAPI::Entities::Something, MyAPI::Entities::Kind]
+        add_swagger_documentation #models: [MyAPI::Entities::Something, MyAPI::Entities::Kind]
       end
     end
   end
@@ -51,30 +53,23 @@ describe 'referenceEntity' do
   end
 
   it 'should document specified models' do
-    expect(subject['paths'][0]['operations'][0]['parameters']).to eq [{
-      'paramType' => 'query',
-      'name' => 'something',
-      'description' => 'Something interesting.',
-      'type' => 'MySomething',
-      'required' => false,
-      'allowMultiple' => false
+    expect(subject['paths']['/kind']['get']['parameters']).to eq [{
+      "in"=>"query",
+      "name"=>"something",
+      "description"=>"something as parameter",
+      "type"=>"string",
+      "required"=>false,
+      "allowMultiple"=>false
     }]
 
-    expect(subject['models'].keys).to include 'MySomething'
-    expect(subject['models']['MySomething']).to eq(
-      'id' => 'MyAPI::Something',
-      'properties' => {
-        'text' => { 'type' => 'string', 'description' => 'Content of something.' }
-      }
+    expect(subject['definitions'].keys).to include 'Something'
+    expect(subject['definitions']['Something']).to eq(
+      "type"=>"object", "properties"=>{"text"=>{"type"=>"string"}}
     )
 
-    expect(subject['models'].keys).to include 'MyKind'
-    expect(subject['models']['MyKind']).to eq(
-      'id' => 'MyKind',
-      'properties' => {
-        'title' => { 'type' => 'string', 'description' => 'Title of the kind.' },
-        'something' => { '$ref' => 'MySomething', 'description' => 'Something interesting.' }
-      }
+    expect(subject['definitions'].keys).to include 'Kind'
+    expect(subject['definitions']['Kind']).to eq(
+      "properties" => {"something"=>{"$ref"=>"#/definitions/Something"}}
     )
   end
 end

@@ -85,6 +85,7 @@ module Grape
     def path_item(routes, options)
       paths = {}
       routes.each do |route|
+        next if is_hidden?(route)
         method_definition = {}
 
         path = route.route_path
@@ -119,6 +120,8 @@ module Grape
 
       mime_types = options[:format] ? Grape::ContentTypes::CONTENT_TYPES[options[:format]] : Grape::ContentTypes::CONTENT_TYPES[:json]
       methods[:produces] = [mime_types]
+
+      methods[:description] = route.route_desc if route.route_desc
       methods[:responses] = response_object(route)
 
       params = route.route_params
@@ -151,6 +154,7 @@ module Grape
         get: [{code: 200, message: 'get {item}(s)'}],
         post: [{code: 201, message: 'created {item}'}],
         put: [{code: 200, message: 'updated {item}'}],
+        patch: [{code: 200, message: 'patched {item}'}],
         delete: [{code: 200, message: 'deleted {item}'}]
       }
     end
@@ -178,12 +182,19 @@ module Grape
     end
 
     def expose_params_from_model(model)
-      model_name = model.name.split('::').last
+      model_name = model.to_s.split('::').last
 
-      properties = model.documentation.inject({}) do |h,x|
-        h[x.first] = {type: data_type(x.last)}
-        h[x.first][:enum] = x.last[:values] if x.last[:values] && x.last[:values].is_a?(Array)
-        h
+      parameters = model.exposures ? model.exposures : model.documentation
+      properties = parameters.inject({}) do |h,x|
+        if x.last[:using].present?
+          name = expose_params_from_model(x.last[:using])
+          h[x.first] = { '$ref' => "#/definitions/#{name}" }
+          h
+        else
+          h[x.first] = {type: data_type(x.last)}
+          h[x.first][:enum] = x.last[:values] if x.last[:values] && x.last[:values].is_a?(Array)
+          h
+        end
       end
       @definitions[model_name] = {type: 'object', properties: properties}
 
@@ -192,9 +203,34 @@ module Grape
 
     def parse_expose_params(params, route)
       return if params.empty?
-      properties = params.inject({}) {|h,x| h[x.first] = {type: data_type(x.last)}; h }
+
+      properties = params.inject({}) do |h,x|
+        if could_it_be_a_model?(x.last)
+          name = expose_params_from_model(x.last[:type])
+          h[x.first] = { '$ref' => "#/definitions/#{name}" }
+          h
+        else
+          h[x.first] = {type: data_type(x.last)}
+          h
+        end
+      end
 
       @definitions[@item] = {properties: properties}
+    end
+
+    def could_it_be_a_model?(value)
+      value[:type] &&
+      value[:type].is_a?(Class) &&
+      !is_primitive?(value[:type].name.downcase) &&
+      !value[:type] == Array
+    end
+
+    def is_hidden?(route)
+      if route.route_hidden
+        return route.route_hidden.is_a?(Proc) ? route.route_hidden.call : route.route_hidden
+      end
+
+      false
     end
 
     def parse_request_params(param, value, path, method)

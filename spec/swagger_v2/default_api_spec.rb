@@ -20,27 +20,30 @@ describe 'Default API' do
     end
 
     it 'documents api' do
-      expect(subject).to eq({
-        'swagger' => '2.0',
-        'info' => {
-          'title' => 'API title',
-          'version' => '0.1'
-        },
-        'produces' => ['application/json'],
-        'paths' => [
-          {'path' => '/something.{format}', 'description' => 'Operations about somethings'},
-          {'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs'}]
-        })
+      expect(subject).to eq(
+        {
+          "info"=>{"title"=>"API title", "version"=>"v1"},
+          "swagger"=>"2.0",
+          "produces"=>["application/json"],
+          "host"=>"example.org",
+          "paths"=>{
+            "/something"=>{
+              "get"=>{
+                "produces"=>["application/json"],
+                "responses"=>{"200"=>{"description"=>"get Something(s)", "schema"=>{"$ref"=>"#/definitions/Something"}}}}}},
+            "definitions"=>{}}
+      )
     end
 
     context 'path inside the apis array' do
       it 'starts with a forward slash' do
         subject['paths'].each do |path|
-          expect(path['path']).to start_with '/'
+          expect(path.first).to start_with '/'
         end
       end
     end
   end
+
   context 'with additional option block given to desc', if: GrapeVersion.satisfy?('>= 0.12.0') do
     def app
       Class.new(Grape::API) do
@@ -62,24 +65,16 @@ describe 'Default API' do
 
     it 'documents endpoint' do
       expect(subject).to eq({
-        'info' => {
-          'title' => 'API title',
-          'version' => '0.1'
-        },
-        'swagger' => '2.0',
-        'produces' => ['application/json'],
-        'paths' => [{
-          'path' => '/something.{format}',
-          'operations' => [{
-            'notes' => 'more details about the endpoint',
-            'summary' => 'This gets something.',
-            'nickname' => 'GET-something--json-',
-            'method' => 'GET',
-            'parameters' => [],
-            'type' => 'void'
-          }]
-        }],
-        'basePath' => 'http://example.org'
+        "info"=>{"title"=>"API title", "version"=>"v1"},
+        "swagger"=>"2.0",
+        "produces"=>["application/json"],
+        "host"=>"example.org",
+        "paths"=>{
+          "/something"=>{
+            "get"=>{
+              "produces"=>["application/json"],
+              "responses"=>{"200"=>{"description"=>"get Something(s)", "schema"=>{"$ref"=>"#/definitions/Something"}}}}}},
+              "definitions"=>{}
       })
     end
   end
@@ -94,7 +89,7 @@ describe 'Default API' do
           license: 'Apache 2',
           license_url: 'http://test.com',
           terms_of_service_url: 'http://terms.com',
-          contact: 'support@test.com'
+          contact_email: 'support@test.com'
         }
       end
     end
@@ -113,11 +108,11 @@ describe 'Default API' do
     end
 
     it 'should document the license' do
-      expect(subject['license']).to eql('Apache 2')
+      expect(subject['license']['name']).to eql('Apache 2')
     end
 
     it 'documents the license url' do
-      expect(subject['licenseUrl']).to eql('http://test.com')
+      expect(subject['license']['url']).to eql('http://test.com')
     end
 
     it 'documents the terms of service url' do
@@ -125,7 +120,7 @@ describe 'Default API' do
     end
 
     it 'documents the contact email' do
-      expect(subject['contact']).to eql('support@test.com')
+      expect(subject['contact']['contact_email']).to eql('support@test.com')
     end
   end
 end

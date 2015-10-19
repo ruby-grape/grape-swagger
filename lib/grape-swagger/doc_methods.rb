@@ -1,3 +1,5 @@
+require 'set'
+
 module GrapeSwagger
   module DocMethods
     PRIMITIVE_MAPPINGS = {
@@ -478,7 +480,7 @@ module GrapeSwagger
         header['Access-Control-Allow-Origin']   = '*'
         header['Access-Control-Request-Method'] = '*'
 
-        models = []
+        models = Set.new(@@models.dup)
         routes = target_class.combined_namespace_routes[params[:name]]
         error!('Not Found', 404) unless routes
 
@@ -513,11 +515,7 @@ module GrapeSwagger
 
             http_codes  = @@documentation_class.parse_http_codes(route.route_http_codes, models)
 
-            models |= @@models if @@models.present?
-
-            models |= Array(route.route_entity) if route.route_entity.present?
-
-            models = @@documentation_class.models_with_included_presenters(models.flatten.compact)
+            models.merge(Array(route.route_entity)) if route.route_entity.present?
 
             operation = {
               notes: notes.to_s,
@@ -552,6 +550,8 @@ module GrapeSwagger
             operations: operations
           }
         end
+
+        models = @@documentation_class.models_with_included_presenters(models.to_a.flatten.compact)
 
         # use custom resource naming if available
         if target_class.combined_namespace_identifiers.key? params[:name]

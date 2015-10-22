@@ -66,12 +66,12 @@ RSpec.shared_context "swagger example" do
        "termsOfServiceUrl"=>"www.The-URL-of-the-terms-and-service.com",
        "contact"=>{"contact_name"=>"Contact name", "contact_email"=>"Contact@email.com", "contact_url"=>"Contact URL"},
        "license"=>{"name"=>"The name of the license.", "url"=>"www.The-URL-of-the-license.org"},
-       "version"=>"v1"},
+       "version"=>"v3"},
       "swagger"=>"2.0",
       "produces"=>["application/json"],
       "host"=>"example.org",
       "paths"=>
-      {"/otherthing/{elements}"=>
+      {"/v3/otherthing/{elements}"=>
         {"get"=>
           {"produces"=>["application/json"],
            "responses"=>{"200"=>{"description"=>"get Otherthing(s)", "schema"=>{"$ref"=>"#/definitions/Otherthing"}}},

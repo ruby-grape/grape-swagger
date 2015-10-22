@@ -103,8 +103,8 @@ describe 'swagger spec v2.0' do
           end
         end
 
-        add_swagger_documentation api_version: 'v1',
-                                  hide_format: true,
+        version 'v3', using: :path
+        add_swagger_documentation hide_format: true,
                                   base_path: '/api',
                                   info: {
                                     title: "The API title to be displayed on the API homepage.",
@@ -121,7 +121,7 @@ describe 'swagger spec v2.0' do
 
     mounted_paths.each do |expected_path|
       describe "documents only #{expected_path} paths" do
-        let(:mount_path) { "/swagger_doc#{expected_path}" }
+        let(:mount_path) { "/v3/swagger_doc#{expected_path}" }
         subject do
           get mount_path
           JSON.parse(last_response.body)['paths']
@@ -133,7 +133,7 @@ describe 'swagger spec v2.0' do
             unexpected_paths.each do |unexpected_path|
               expect(path).not_to start_with unexpected_path
             end
-            expect(path).to start_with expected_path
+            expect(path).to start_with(expected_path).or include(expected_path)
             expect(subject[path]).to eql swagger_json['paths'][path]
           end
         end

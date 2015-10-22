@@ -17,6 +17,8 @@ module Grape
       def add_swagger_documentation(options = {})
         documentation_class = create_documentation_class
 
+        set_version(options)
+
         options = { target_class: self }.merge(options)
         @target_class = options[:target_class]
 
@@ -39,6 +41,14 @@ module Grape
       end
 
       private
+
+      def set_version(options)
+        if self.version
+          options[:api_version] = self.version
+        else
+          options.delete(:api_version)
+        end
+      end
 
       def combine_routes(app, doc_klass)
         app.routes.each do |route|

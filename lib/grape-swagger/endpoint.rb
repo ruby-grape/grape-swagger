@@ -97,7 +97,8 @@ module Grape
         # set Item from path
         @item = path.gsub(/\/\{(.+?)\}/,"").split('/').last.capitalize.singularize || 'Item'
 
-        # ... replacing version params throuht submitted version
+        # ... replacing version params through submitted version
+
         if options[:api_version]
           path.sub!('{version}', options[:api_version])
         else

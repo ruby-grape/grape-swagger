@@ -102,6 +102,8 @@ describe 'swagger spec v2.0' do
         end
       end
 
+
+      version 'v3', using: :path
       add_swagger_documentation api_version: 'v1',
                                 hide_format: true,
                                 base_path: '/api',
@@ -119,7 +121,7 @@ describe 'swagger spec v2.0' do
   end
 
   before do
-    get '/swagger_doc'
+    get '/v3/swagger_doc'
   end
 
   let(:json) { JSON.parse(last_response.body) }
@@ -198,9 +200,7 @@ describe 'swagger spec v2.0' do
     end
   end
 
-  describe "swgger file" do
-    it {
-      ap json
-      expect(json).to eql swagger_json }
+  describe "swagger file" do
+    it { expect(json).to eql swagger_json }
   end
 end

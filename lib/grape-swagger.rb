@@ -43,11 +43,7 @@ module Grape
       private
 
       def set_version(options)
-        if self.version
-          options[:api_version] = self.version
-        else
-          options.delete(:api_version)
-        end
+        options[:version] = self.version if self.version
       end
 
       def combine_routes(app, doc_klass)

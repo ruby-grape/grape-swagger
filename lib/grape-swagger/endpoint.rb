@@ -99,8 +99,8 @@ module Grape
 
         # ... replacing version params through submitted version
 
-        if options[:api_version]
-          path.sub!('{version}', options[:api_version])
+        if options[:version]
+          path.sub!('{version}', options[:version])
         else
           path.sub!('{version}', '')
         end

@@ -33,7 +33,7 @@ describe 'docs mounted separately from api' do
       "swagger"=>"2.0",
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
-      "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"get Simple(s)", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}}},
+      "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something.", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}}},
       "definitions"=>{}
     })
   end
@@ -45,7 +45,7 @@ describe 'docs mounted separately from api' do
       "swagger"=>"2.0",
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
-      "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"get Simple(s)", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}}},
+      "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something.", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}}},
       "definitions"=>{}
     })
   end

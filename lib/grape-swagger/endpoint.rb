@@ -95,10 +95,9 @@ module Grape
         # ... format parama
         path.gsub!(/:(\w+)/,'{\1}')
         # set Item from path
-        @item = path.gsub(/\/\{(.+?)\}/,"").split('/').last.capitalize.singularize || 'Item'
+        @item = path.gsub(/\/\{(.+?)\}/,"").split('/').last.singularize.underscore.camelize || 'Item'
 
         # ... replacing version params through submitted version
-
         if options[:version]
           path.sub!('{version}', options[:version])
         else
@@ -132,12 +131,15 @@ module Grape
     end
 
     def response_object(route)
-      codes = default_staus_codes[route.route_method.downcase.to_sym] + (route.route_http_codes || [])
+      default_code = default_staus_codes[route.route_method.downcase.to_sym]
+      default_code[:message] = route.route_description || default_code[:message].sub('{item}',@item)
+
+      codes = [default_code] + (route.route_http_codes || [])
 
       codes.map!{|x| x.is_a?(Array)? {code: x[0], message: x[1], model: x[2].to_s} : x }
 
       codes.inject({}) do |h, v|
-        h[v[:code]] = { description: v[:message].sub('{item}',@item) }
+        h[v[:code]] = { description: v[:message] }
 
         response_model = @item
         response_model = expose_params_from_model(v[:model]) if v[:model]
@@ -152,11 +154,11 @@ module Grape
 
     def default_staus_codes
       {
-        get: [{code: 200, message: 'get {item}(s)'}],
-        post: [{code: 201, message: 'created {item}'}],
-        put: [{code: 200, message: 'updated {item}'}],
-        patch: [{code: 200, message: 'patched {item}'}],
-        delete: [{code: 200, message: 'deleted {item}'}]
+        get: {code: 200, message: 'get {item}(s)'},
+        post: {code: 201, message: 'created {item}'},
+        put: {code: 200, message: 'updated {item}'},
+        patch: {code: 200, message: 'patched {item}'},
+        delete: {code: 200, message: 'deleted {item}'}
       }
     end
 
@@ -183,7 +185,7 @@ module Grape
     end
 
     def expose_params_from_model(model)
-      model_name = model.to_s.split('::').last
+      model_name = model.name.demodulize.camelize
 
       parameters = model.exposures ? model.exposures : model.documentation
       properties = parameters.inject({}) do |h,x|

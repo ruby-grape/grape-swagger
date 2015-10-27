@@ -32,6 +32,7 @@ describe 'Array Params' do
 
   it 'gets array types' do
     get '/swagger_doc/splines'
+    require 'pry'; binding.pry
     expect(last_response.status).to eq 200
     body = JSON.parse last_response.body
     parameters = body['paths']['/splines']['post']['parameters']
@@ -41,23 +42,23 @@ describe 'Array Params' do
     ]
   end
 
-  it 'get raw array type' do
-    get '/swagger_doc/raw_array_splines'
-    expect(last_response.status).to eq 200
-    body = JSON.parse last_response.body
-    parameters = body['paths']['/raw_array_splines']['post']['parameters']
-    expect(parameters).to eq [
-      { 'paramType' => 'query', 'name' => 'raw_array', 'description' => nil, 'type' => 'Array', 'required' => false, 'allowMultiple' => false }
-    ]
-  end
-
-  it 'get raw array integer' do
-    get '/swagger_doc/raw_array_integers'
-    expect(last_response.status).to eq 200
-    body = JSON.parse last_response.body
-    parameters = body['paths']['/raw_array_integers']['post']['parameters']
-    expect(parameters).to eq [
-      { 'paramType' => 'query', 'name' => 'raw_array', 'description' => nil, 'type' => 'array', 'required' => false, 'allowMultiple' => false, 'items' => { 'type' => 'integer', 'format' => 'int32' } }
-    ]
-  end
+  # it 'get raw array type' do
+  #   get '/swagger_doc/raw_array_splines'
+  #   expect(last_response.status).to eq 200
+  #   body = JSON.parse last_response.body
+  #   parameters = body['paths']['/raw_array_splines']['post']['parameters']
+  #   expect(parameters).to eq [
+  #     { 'paramType' => 'query', 'name' => 'raw_array', 'description' => nil, 'type' => 'Array', 'required' => false, 'allowMultiple' => false }
+  #   ]
+  # end
+  #
+  # it 'get raw array integer' do
+  #   get '/swagger_doc/raw_array_integers'
+  #   expect(last_response.status).to eq 200
+  #   body = JSON.parse last_response.body
+  #   parameters = body['paths']['/raw_array_integers']['post']['parameters']
+  #   expect(parameters).to eq [
+  #     { 'paramType' => 'query', 'name' => 'raw_array', 'description' => nil, 'type' => 'array', 'required' => false, 'allowMultiple' => false, 'items' => { 'type' => 'integer', 'format' => 'int32' } }
+  #   ]
+  # end
 end

@@ -71,21 +71,21 @@ RSpec.shared_context "swagger example" do
       "produces"=>["application/json"],
       "host"=>"example.org",
       "paths"=>
-      {"/v3/otherthing/{elements}"=>
+      {"/v3/other_thing/{elements}"=>
         {"get"=>
           {"produces"=>["application/json"],
-           "responses"=>{"200"=>{"description"=>"get Otherthing(s)", "schema"=>{"$ref"=>"#/definitions/Otherthing"}}},
+           "responses"=>{"200"=>{"description"=>"nested route inside namespace", "schema"=>{"$ref"=>"#/definitions/OtherThing"}}},
            "parameters"=>[{"in"=>"array", "name"=>"elements", "description"=>"Set of configuration", "type"=>"string", "required"=>true, "allowMultiple"=>true}]}},
        "/thing"=>
         {"get"=>
           {"produces"=>["application/json"],
            "responses"=>
-            {"200"=>{"description"=>"get Thing(s)", "schema"=>{"$ref"=>"#/definitions/Thing"}}, "401"=>{"description"=>"Unauthorized", "schema"=>{"$ref"=>"#/definitions/ApiError"}}},
+            {"200"=>{"description"=>"This gets Things.", "schema"=>{"$ref"=>"#/definitions/Thing"}}, "401"=>{"description"=>"Unauthorized", "schema"=>{"$ref"=>"#/definitions/ApiError"}}},
            "parameters"=>[]},
          "post"=>
           {"produces"=>["application/json"],
            "responses"=>
-            {"201"=>{"description"=>"created Thing", "schema"=>{"$ref"=>"#/definitions/Thing"}},
+            {"201"=>{"description"=>"This creates Thing.", "schema"=>{"$ref"=>"#/definitions/Thing"}},
              "422"=>{"description"=>"Unprocessible Entity", "schema"=>{"$ref"=>"#/definitions/Thing"}}},
            "parameters"=>
             [{"in"=>"formData", "name"=>"text", "description"=>"Content of something.", "type"=>"string", "required"=>true, "allowMultiple"=>false},
@@ -99,14 +99,14 @@ RSpec.shared_context "swagger example" do
            "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"}]},
          "put"=>
           {"produces"=>["application/json"],
-           "responses"=>{"200"=>{"description"=>"updated Thing", "schema"=>{"$ref"=>"#/definitions/Thing"}}},
+           "responses"=>{"200"=>{"description"=>"This updates Thing.", "schema"=>{"$ref"=>"#/definitions/Thing"}}},
            "parameters"=>
             [{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"},
              {"in"=>"formData", "name"=>"text", "description"=>"Content of something.", "type"=>"string", "required"=>false, "allowMultiple"=>false},
              {"in"=>"body", "name"=>"links", "description"=>nil, "type"=>"Array", "required"=>false, "allowMultiple"=>true}]},
          "delete"=>
           {"produces"=>["application/json"],
-           "responses"=>{"200"=>{"description"=>"deleted Thing", "schema"=>{"$ref"=>"#/definitions/Thing"}}},
+           "responses"=>{"200"=>{"description"=>"This deletes Thing.", "schema"=>{"$ref"=>"#/definitions/Thing"}}},
            "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"}]}},
        "/thing2"=>
         {"get"=>
@@ -117,10 +117,10 @@ RSpec.shared_context "swagger example" do
        "/dummy/{id}"=>
         {"delete"=>
           {"produces"=>["application/json"],
-           "responses"=>{"200"=>{"description"=>"deleted Dummy", "schema"=>{"$ref"=>"#/definitions/Dummy"}}},
+           "responses"=>{"200"=>{"description"=>"dummy route.", "schema"=>{"$ref"=>"#/definitions/Dummy"}}},
            "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"}]}}},
       "definitions"=>
-      {"Otherthing"=>{"properties"=>{"elements"=>{"type"=>"QueryInputElement"}}},
+      {"OtherThing"=>{"properties"=>{"elements"=>{"type"=>"QueryInputElement"}}},
        "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"string"}, "message"=>{"type"=>"string"}}},
        "Thing"=>{"properties"=>{"id"=>{"type"=>"integer"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}},
        "Something"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"string"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"string"}, "others"=>{"type"=>"string"}}}}}
@@ -130,5 +130,5 @@ RSpec.shared_context "swagger example" do
 end
 
 def mounted_paths
-  %w[ /thing /otherthing /dummy ]
+  %w[ /thing /other_thing /dummy ]
 end

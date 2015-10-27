@@ -75,17 +75,17 @@ describe 'a simple mounted api' do
         "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
         "host"=>"example.org",
         "paths"=>
-        {"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"get Simple(s)", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}},
-         "/simple-test"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"get Simple-test(s)", "schema"=>{"$ref"=>"#/definitions/Simple-test"}}}}},
+        {"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something.", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}},
+         "/simple-test"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something for URL using - separator.", "schema"=>{"$ref"=>"#/definitions/SimpleTest"}}}}},
          "/simple_with_headers"=>
           {"get"=>
             {"produces"=>["application/json"],
              "responses"=>
-              {"200"=>{"description"=>"get Simple_with_header(s)", "schema"=>{"$ref"=>"#/definitions/Simple_with_header"}},
-               "403"=>{"description"=>"invalid pony", "schema"=>{"$ref"=>"#/definitions/Simple_with_header"}},
-               "405"=>{"description"=>"no ponies left!", "schema"=>{"$ref"=>"#/definitions/Simple_with_header"}}}}},
-         "/items"=>{"post"=>{"produces"=>["application/json"], "responses"=>{"201"=>{"description"=>"created Item", "schema"=>{"$ref"=>"#/definitions/Item"}}}, "parameters"=>[]}},
-         "/custom"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"get Custom(s)", "schema"=>{"$ref"=>"#/definitions/Custom"}}}, "parameters"=>[]}}},
+              {"200"=>{"description"=>"this gets something else", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}},
+               "403"=>{"description"=>"invalid pony", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}},
+               "405"=>{"description"=>"no ponies left!", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}}}}},
+         "/items"=>{"post"=>{"produces"=>["application/json"], "responses"=>{"201"=>{"description"=>"this takes an array of parameters", "schema"=>{"$ref"=>"#/definitions/Item"}}}, "parameters"=>[]}},
+         "/custom"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"this uses a custom parameter", "schema"=>{"$ref"=>"#/definitions/Custom"}}}, "parameters"=>[]}}},
         "definitions"=>{}}
     )
   end
@@ -97,7 +97,7 @@ describe 'a simple mounted api' do
       "swagger"=>"2.0",
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
-      "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"get Simple(s)", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}}},
+      "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something.", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}}},
       "definitions"=>{}})
   end
 
@@ -113,8 +113,8 @@ describe 'a simple mounted api' do
           "/simple-test"=>{"get"=>{
             "produces"=>["application/json"],
             "responses"=>{
-              "200"=>{"description"=>"get Simple-test(s)",
-                "schema"=>{"$ref"=>"#/definitions/Simple-test"}}}}}},
+              "200"=>{"description"=>"This gets something for URL using - separator.",
+                "schema"=>{"$ref"=>"#/definitions/SimpleTest"}}}}}},
                 "definitions"=>{}}
         )
     end
@@ -126,9 +126,9 @@ describe 'a simple mounted api' do
         {"get"=>
           {"produces"=>["application/json"],
            "responses"=>
-            {"200"=>{"description"=>"get Simple_with_header(s)", "schema"=>{"$ref"=>"#/definitions/Simple_with_header"}},
-             "403"=>{"description"=>"invalid pony", "schema"=>{"$ref"=>"#/definitions/Simple_with_header"}},
-             "405"=>{"description"=>"no ponies left!", "schema"=>{"$ref"=>"#/definitions/Simple_with_header"}}}}}}
+            {"200"=>{"description"=>"this gets something else", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}},
+             "403"=>{"description"=>"invalid pony", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}},
+             "405"=>{"description"=>"no ponies left!", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}}}}}}
       )
     end
 
@@ -141,7 +141,7 @@ describe 'a simple mounted api' do
               "produces"=>["application/json"],
               "responses"=>{
                 "201"=>{
-                  "description"=>"created Item",
+                  "description"=>"this takes an array of parameters",
                   "schema"=>{
                     "$ref"=>"#/definitions/Item"}
               }},
@@ -158,7 +158,7 @@ describe 'a simple mounted api' do
               "produces"=>["application/json"],
               "responses"=>{
                 "200"=>{
-                  "description"=>"get Custom(s)",
+                  "description"=>"this uses a custom parameter",
                   "schema"=>{"$ref"=>"#/definitions/Custom"}}},
               "parameters"=>[]}}}
       )

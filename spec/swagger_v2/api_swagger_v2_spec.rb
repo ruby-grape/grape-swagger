@@ -85,7 +85,7 @@ describe 'swagger spec v2.0' do
         present something, with: Entities::Something
       end
 
-      namespace :otherthing do
+      namespace :other_thing do
         desc 'nested route inside namespace', params: Entities::QueryInput.documentation
 
         params do

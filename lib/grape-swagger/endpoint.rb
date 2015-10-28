@@ -92,9 +92,9 @@ module Grape
         # always removing format
         path.sub!(/\(\.\w+?\)$/,'')
         path.sub!("(.:format)",'')
-        # ... format parama
+        # ... format params
         path.gsub!(/:(\w+)/,'{\1}')
-        # set Item from path
+        # set item from path, this is used for the definitions object
         @item = path.gsub(/\/\{(.+?)\}/,"").split('/').last.singularize.underscore.camelize || 'Item'
 
         # ... replacing version params through submitted version
@@ -146,7 +146,11 @@ module Grape
 
         # TODO: proof that the definition exist, if model isn't specified
         unless response_model.start_with?('Swagger_doc')
-          h[v[:code]][:schema] = { '$ref' => "#/definitions/#{response_model}" }
+          if route.route_action == :index
+            h[v[:code]][:schema] = { 'type' => 'array', 'items' => {'$ref' => "#/definitions/#{response_model}"} }
+          else
+            h[v[:code]][:schema] = { '$ref' => "#/definitions/#{response_model}" }
+          end
         end
         h
       end

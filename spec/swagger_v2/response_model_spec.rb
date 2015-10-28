@@ -34,6 +34,15 @@ describe 'responseModel' do
       class ResponseModelApi < Grape::API
         format :json
         desc 'This returns something or an error',
+          action: :index,
+          http_codes: [ { code: 200, message: 'OK', model: Entities::Something } ]
+        get '/something' do
+          something = OpenStruct.new text: 'something'
+          present something, with: Entities::Something
+        end
+
+        # something like an index action
+        desc 'This returns something or an error',
              entity: Entities::Something,
              http_codes: [
                { code: 200, message: 'OK', model: Entities::Something },
@@ -66,7 +75,19 @@ describe 'responseModel' do
     JSON.parse(last_response.body)
   end
 
-  it 'should document specified models' do
+  it "documents index action" do
+    expect(subject['paths']["/something"]["get"]["responses"]).to eq(
+      {
+        "200"=>{
+          "description"=>"OK",
+          "schema"=>{
+            "type"=>"array",
+            "items"=>{"$ref"=>"#/definitions/Something"}}
+        }}
+    )
+  end
+
+  it 'should document specified models as show action' do
     expect(subject['paths']["/something/{id}"]["get"]["responses"]).to eq(
       {
         "200"=>{

@@ -146,7 +146,7 @@ module GrapeSwagger
 
         parsed_params[:defaultValue] = example if example
         if default_value && example.blank?
-          parsed_params[:defaultValue] = default_value
+          parsed_params[:defaultValue] = default_value.respond_to?(:call) ? default_value.call : default_value
         end
 
         parsed_params.merge!(enum_or_range_values) if enum_or_range_values

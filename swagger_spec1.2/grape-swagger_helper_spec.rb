@@ -12,7 +12,6 @@ describe 'helpers' do
 
   context 'parsing parameters' do
     it 'parses params as query strings for a GET' do
-      require 'pry'; binding.pry
       params = {
         name: { type: 'String', desc: 'A name', required: true, default: 'default' },
         level: 'max'

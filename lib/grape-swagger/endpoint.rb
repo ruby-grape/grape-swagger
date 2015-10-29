@@ -146,7 +146,7 @@ module Grape
 
         # TODO: proof that the definition exist, if model isn't specified
         unless response_model.start_with?('Swagger_doc')
-          if route.route_action == :index
+          if route.route_is_array
             h[v[:code]][:schema] = { 'type' => 'array', 'items' => {'$ref' => "#/definitions/#{response_model}"} }
           else
             h[v[:code]][:schema] = { '$ref' => "#/definitions/#{response_model}" }

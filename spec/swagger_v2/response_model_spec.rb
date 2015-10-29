@@ -34,7 +34,7 @@ describe 'responseModel' do
       class ResponseModelApi < Grape::API
         format :json
         desc 'This returns something or an error',
-          action: :index,
+          is_array: true,
           http_codes: [ { code: 200, message: 'OK', model: Entities::Something } ]
         get '/something' do
           something = OpenStruct.new text: 'something'

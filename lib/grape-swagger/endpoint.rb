@@ -127,6 +127,11 @@ module Grape
       params = route.route_params
       methods[:parameters] = params_object(route) unless params.empty?
 
+      if route.route_aws
+        methods['x-amazon-apigateway-auth'] = { type: route.route_aws[:auth] } if route.route_aws[:auth]
+        methods['x-amazon-apigateway-integration'] = route.route_aws[:integration] if route.route_aws[:integration]
+      end
+
       methods
     end
 

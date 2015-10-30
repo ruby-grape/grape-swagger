@@ -86,7 +86,14 @@ describe 'swagger spec v2.0' do
       end
 
       namespace :other_thing do
-        desc 'nested route inside namespace', params: Entities::QueryInput.documentation
+        desc 'nested route inside namespace', params: Entities::QueryInput.documentation,
+          aws: {auth: 'none',
+                integration: {
+            type: 'aws',
+            uri: 'foo_bar_uri',
+            httpMethod: 'get'
+          }
+        }
 
         params do
           requires :elements, documentation: {

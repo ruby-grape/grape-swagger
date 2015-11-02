@@ -548,6 +548,23 @@ get '/thing', http_codes: [
 end
 ```
 
+The amazon api gateway parameters can be added by indicated a aws hash with auth and integration keys, example:
+
+``` ruby
+
+desc 'thing', aws: {auth: 'aws_iam',
+                integration: {
+                  type: 'aws',
+                  uri: 'foo_bar_uri',
+                  httpMethod: 'get'
+                }
+              }
+
+get '/thing' do
+  ...
+end
+```
+
 If no status code is defined [defaults](/lib/grape-swagger/endpoint.rb#L121) would be taken.
 
 The result is then something like following:

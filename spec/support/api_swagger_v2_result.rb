@@ -81,8 +81,7 @@ RSpec.shared_context "swagger example" do
         {"get"=>
           {"produces"=>["application/json"],
            "responses"=>
-            {"200"=>{"description"=>"This gets Things.", "schema"=>{"$ref"=>"#/definitions/Thing"}}, "401"=>{"description"=>"Unauthorized", "schema"=>{"$ref"=>"#/definitions/ApiError"}}},
-           "parameters"=>[]},
+            {"200"=>{"description"=>"This gets Things.", "schema"=>{"$ref"=>"#/definitions/Thing"}}, "401"=>{"description"=>"Unauthorized", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}},
          "post"=>
           {"produces"=>["application/json"],
            "responses"=>

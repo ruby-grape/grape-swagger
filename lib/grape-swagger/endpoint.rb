@@ -125,14 +125,14 @@ module Grape
       methods[:responses] = response_object(route)
 
       params = route.route_params
-      methods[:parameters] = params_object(route) unless params.empty?
+      methods[:parameters] = params_object(route) unless params.blank?
 
       if route.route_aws
         methods['x-amazon-apigateway-auth'] = { type: route.route_aws[:auth] } if route.route_aws[:auth]
         methods['x-amazon-apigateway-integration'] = route.route_aws[:integration] if route.route_aws[:integration]
       end
 
-      methods
+      methods.delete_if { |_, value| value.blank? }
     end
 
     def response_object(route)
@@ -182,7 +182,16 @@ module Grape
       required, exposed = route.route_params.partition { |x| x.first.is_a? String }
 
       unless declared_params.nil?
-        required_params = declared_params.inject({}) {|h,x| h[x] = required.assoc(x.to_s).last; h }
+        required_params = declared_params.inject({}) do |h,x|
+          if x.is_a?(Hash)
+            x.keys.each do |key|
+              x[key].each { |y| h["#{key}[#{y}]"] = required.assoc("#{key}[#{y}]").last }
+            end
+          else
+            h[x] = required.assoc(x.to_s).last
+          end
+          h
+        end
       end
 
       unless exposed.nil?

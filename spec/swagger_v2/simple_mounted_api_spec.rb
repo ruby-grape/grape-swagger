@@ -84,9 +84,8 @@ describe 'a simple mounted api' do
               {"200"=>{"description"=>"this gets something else", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}},
                "403"=>{"description"=>"invalid pony", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}},
                "405"=>{"description"=>"no ponies left!", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}}}}},
-         "/items"=>{"post"=>{"produces"=>["application/json"], "responses"=>{"201"=>{"description"=>"this takes an array of parameters", "schema"=>{"$ref"=>"#/definitions/Item"}}}, "parameters"=>[]}},
-         "/custom"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"this uses a custom parameter", "schema"=>{"$ref"=>"#/definitions/Custom"}}}, "parameters"=>[]}}},
-        "definitions"=>{}}
+         "/items"=>{"post"=>{"produces"=>["application/json"], "responses"=>{"201"=>{"description"=>"this takes an array of parameters", "schema"=>{"$ref"=>"#/definitions/Item"}}}}},
+         "/custom"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"this uses a custom parameter", "schema"=>{"$ref"=>"#/definitions/Custom"}}}}}}}
     )
   end
 
@@ -97,8 +96,7 @@ describe 'a simple mounted api' do
       "swagger"=>"2.0",
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
-      "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something.", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}}},
-      "definitions"=>{}})
+      "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something.", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}}}})
   end
 
   context 'retrieves the documentation for mounted-api that' do
@@ -114,8 +112,7 @@ describe 'a simple mounted api' do
             "produces"=>["application/json"],
             "responses"=>{
               "200"=>{"description"=>"This gets something for URL using - separator.",
-                "schema"=>{"$ref"=>"#/definitions/SimpleTest"}}}}}},
-                "definitions"=>{}}
+                "schema"=>{"$ref"=>"#/definitions/SimpleTest"}}}}}}}
         )
     end
 
@@ -144,8 +141,7 @@ describe 'a simple mounted api' do
                   "description"=>"this takes an array of parameters",
                   "schema"=>{
                     "$ref"=>"#/definitions/Item"}
-              }},
-              "parameters"=>[]}}}
+              }}}}}
         )
     end
 
@@ -159,8 +155,7 @@ describe 'a simple mounted api' do
               "responses"=>{
                 "200"=>{
                   "description"=>"this uses a custom parameter",
-                  "schema"=>{"$ref"=>"#/definitions/Custom"}}},
-              "parameters"=>[]}}}
+                  "schema"=>{"$ref"=>"#/definitions/Custom"}}}}}}
       )
     end
   end

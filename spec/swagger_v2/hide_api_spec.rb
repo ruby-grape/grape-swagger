@@ -42,8 +42,7 @@ describe 'a hide mounted api' do
       "host"=>"example.org",
       "paths"=>{
         "/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}},
-        "/lazy"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Lazily show endpoint", "schema"=>{"$ref"=>"#/definitions/Lazy"}}}}}},
-        "definitions"=>{}
+        "/lazy"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Lazily show endpoint", "schema"=>{"$ref"=>"#/definitions/Lazy"}}}}}}
     })
   end
 end
@@ -85,8 +84,7 @@ describe 'a hide mounted api with same namespace' do
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
       "paths"=>{
-        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint", "schema"=>{"$ref"=>"#/definitions/Show"}}}}}},
-        "definitions"=>{}
+        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint", "schema"=>{"$ref"=>"#/definitions/Show"}}}}}}
       })
   end
 
@@ -98,8 +96,7 @@ describe 'a hide mounted api with same namespace' do
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
       "paths"=>{
-        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint", "schema"=>{"$ref"=>"#/definitions/Show"}}}}}},
-        "definitions"=>{}
+        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint", "schema"=>{"$ref"=>"#/definitions/Show"}}}}}}
       })
   end
 end

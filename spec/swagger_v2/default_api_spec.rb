@@ -30,8 +30,7 @@ describe 'Default API' do
             "/something"=>{
               "get"=>{
                 "produces"=>["application/json"],
-                "responses"=>{"200"=>{"description"=>"This gets something.", "schema"=>{"$ref"=>"#/definitions/Something"}}}}}},
-            "definitions"=>{}}
+                "responses"=>{"200"=>{"description"=>"This gets something.", "schema"=>{"$ref"=>"#/definitions/Something"}}}}}}}
       )
     end
 
@@ -73,8 +72,7 @@ describe 'Default API' do
           "/something"=>{
             "get"=>{
               "produces"=>["application/json"],
-              "responses"=>{"200"=>{"description"=>"This gets something.", "schema"=>{"$ref"=>"#/definitions/Something"}}}}}},
-              "definitions"=>{}
+              "responses"=>{"200"=>{"description"=>"This gets something.", "schema"=>{"$ref"=>"#/definitions/Something"}}}}}}
       })
     end
   end

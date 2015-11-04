@@ -121,9 +121,9 @@ RSpec.shared_context "swagger example" do
            "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"}]}}},
       "definitions"=>
       {"OtherThing"=>{"properties"=>{"elements"=>{"type"=>"QueryInputElement"}}},
-       "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"string"}, "message"=>{"type"=>"string"}}},
+       "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}},
        "Thing"=>{"properties"=>{"id"=>{"type"=>"integer"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}},
-       "Something"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"string"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"string"}, "others"=>{"type"=>"string"}}}}}
+       "Something"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}}}}
   end
 
   let(:http_verbs) { %w[get post put delete]}

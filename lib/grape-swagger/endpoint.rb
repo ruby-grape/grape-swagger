@@ -97,6 +97,9 @@ module Grape
         # set item from path, this is used for the definitions object
         @item = path.gsub(/\/\{(.+?)\}/,"").split('/').last.singularize.underscore.camelize || 'Item'
 
+        entity = route.route_entity
+        expose_params_from_model(entity) if entity
+
         # ... replacing version params through submitted version
         if options[:version]
           path.sub!('{version}', options[:version])
@@ -237,7 +240,7 @@ module Grape
           h[x.first] = { '$ref' => "#/definitions/#{name}" }
           h
         else
-          h[x.first] = {type: data_type(x.last)}
+          h[x.first] = {type: data_type(x.last[:documentation])}
           h[x.first][:enum] = x.last[:values] if x.last[:values] && x.last[:values].is_a?(Array)
           h
         end

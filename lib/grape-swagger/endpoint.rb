@@ -125,7 +125,7 @@ module Grape
       methods[:responses] = response_object(route)
 
       params = route.route_params
-      methods[:parameters] = params_object(route) unless params.blank?
+      methods[:parameters] = params_object(route)
 
       if route.route_aws
         methods['x-amazon-apigateway-auth'] = { type: route.route_aws[:auth] } if route.route_aws[:auth]
@@ -173,7 +173,7 @@ module Grape
 
     def params_object(route)
       partition_params(route).map do |param, value|
-        parse_request_params(param, value, route.route_path, route.route_method)
+        parse_params(param, value, route.route_path, route.route_method)
       end
     end
 
@@ -182,24 +182,49 @@ module Grape
       required, exposed = route.route_params.partition { |x| x.first.is_a? String }
 
       unless declared_params.nil?
-        required_params = declared_params.inject({}) do |h,x|
-          if x.is_a?(Hash)
-            x.keys.each do |key|
-              x[key].each { |y| h["#{key}[#{y}]"] = required.assoc("#{key}[#{y}]").last }
-            end
-          else
-            h[x] = required.assoc(x.to_s).last
-          end
-          h
-        end
+        required_params = parse_request_params(declared_params, required, route.route_params)
       end
 
       unless exposed.nil?
         exposed_params = exposed.inject({}) {|h,x| h[x.first] = x.last; h }
-        parse_expose_params(exposed_params, route) if route.route_method == 'GET' || @definitions[@item].nil?
+        parse_response_params(exposed_params, route) if route.route_method == 'GET' || @definitions[@item].nil?
       end
 
       required_params || {}
+    end
+
+    def parse_request_params(parameters, required, route_paramter)
+      parameters.inject({}) do |h,x|
+        if x.is_a?(Hash)
+          x.keys.each do |key|
+            if route_paramter[key.to_s][:type] == 'Array'
+              x[key].each { |y| h["#{key}[][#{y}]"] = required.assoc("#{key}[#{y}]").last.merge(is_array: true) }
+            else
+              x[key].each { |y| h["#{key}[#{y}]"] = required.assoc("#{key}[#{y}]").last }
+            end
+          end
+        else
+          h[x] = required.assoc(x.to_s).last
+        end
+        h
+      end
+    end
+
+    def parse_response_params(params, route)
+      return if params.empty?
+
+      properties = params.inject({}) do |h,x|
+        if could_it_be_a_model?(x.last)
+          name = expose_params_from_model(x.last[:type])
+          h[x.first] = { '$ref' => "#/definitions/#{name}" }
+          h
+        else
+          h[x.first] = {type: data_type(x.last)}
+          h
+        end
+      end
+
+      @definitions[@item] = {properties: properties} if @definitions[@item].nil?
     end
 
     def expose_params_from_model(model)
@@ -222,23 +247,6 @@ module Grape
       model_name
     end
 
-    def parse_expose_params(params, route)
-      return if params.empty?
-
-      properties = params.inject({}) do |h,x|
-        if could_it_be_a_model?(x.last)
-          name = expose_params_from_model(x.last[:type])
-          h[x.first] = { '$ref' => "#/definitions/#{name}" }
-          h
-        else
-          h[x.first] = {type: data_type(x.last)}
-          h
-        end
-      end
-
-      @definitions[@item] = {properties: properties}
-    end
-
     def could_it_be_a_model?(value)
       value[:type] &&
       value[:type].is_a?(Class) &&
@@ -254,7 +262,7 @@ module Grape
       false
     end
 
-    def parse_request_params(param, value, path, method)
+    def parse_params(param, value, path, method)
       items = {}
 
       additional_documentation = value.is_a?(Hash) ? value[:documentation] : nil

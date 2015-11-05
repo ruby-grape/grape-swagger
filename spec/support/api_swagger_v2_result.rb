@@ -120,10 +120,11 @@ RSpec.shared_context "swagger example" do
            "responses"=>{"200"=>{"description"=>"dummy route.", "schema"=>{"$ref"=>"#/definitions/Dummy"}}},
            "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"}]}}},
       "definitions"=>
-      {"OtherThing"=>{"properties"=>{"elements"=>{"type"=>"QueryInputElement"}}},
-       "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}},
-       "Thing"=>{"properties"=>{"id"=>{"type"=>"integer"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}},
-       "Something"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}}}}
+        {"OtherThing"=>{"properties"=>{"elements"=>{"type"=>"QueryInputElement"}}},
+         "Thing"=>{"properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}},
+         "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}},
+         "Thing2"=>{"properties"=>{"id"=>{"type"=>"integer"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}},
+         "Something"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}}}}
   end
 
   let(:http_verbs) { %w[get post put delete]}

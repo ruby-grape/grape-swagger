@@ -190,7 +190,7 @@ module Grape
 
       unless exposed.nil?
         exposed_params = exposed.inject({}) {|h,x| h[x.first] = x.last; h }
-        parse_response_params(exposed_params, route) if route.route_method == 'GET' || @definitions[@item].nil?
+        parse_response_params(exposed_params) if route.route_method == 'GET' || @definitions[@item].nil?
       end
 
       required_params || {}
@@ -213,39 +213,34 @@ module Grape
       end
     end
 
-    def parse_response_params(params, route)
+    def parse_response_params(params, model_name = nil)
       return if params.empty?
 
       properties = params.inject({}) do |h,x|
-        if could_it_be_a_model?(x.last)
-          name = expose_params_from_model(x.last[:type])
+        x[0] = x.last[:as] if x.last[:as]
+        if x.last[:using].present? || could_it_be_a_model?(x.last)
+          name = expose_params_from_model(x.last[:using] || x.last[:type])
           h[x.first] = { '$ref' => "#/definitions/#{name}" }
           h
         else
-          h[x.first] = {type: data_type(x.last)}
+          h[x.first] = {type: data_type(x.last[:documentation] || x.last)}
+          h[x.first][:enum] = x.last[:values] if x.last[:values] && x.last[:values].is_a?(Array)
           h
         end
       end
 
-      @definitions[@item] = {properties: properties} if @definitions[@item].nil?
+      @definitions[@item] = { properties: properties } if @definitions[@item].nil?
+
+      properties
     end
 
     def expose_params_from_model(model)
       model_name = model.name.demodulize.camelize
 
       parameters = model.exposures ? model.exposures : model.documentation
-      properties = parameters.inject({}) do |h,x|
-        if x.last[:using].present?
-          name = expose_params_from_model(x.last[:using])
-          h[x.first] = { '$ref' => "#/definitions/#{name}" }
-          h
-        else
-          h[x.first] = {type: data_type(x.last[:documentation])}
-          h[x.first][:enum] = x.last[:values] if x.last[:values] && x.last[:values].is_a?(Array)
-          h
-        end
-      end
-      @definitions[model_name] = {type: 'object', properties: properties}
+      properties = parse_response_params(parameters, model_name)
+
+      @definitions[model_name] = { type: 'object', properties: properties }
 
       model_name
     end

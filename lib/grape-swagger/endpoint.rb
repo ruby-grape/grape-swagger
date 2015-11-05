@@ -97,7 +97,7 @@ module Grape
         # set item from path, this is used for the definitions object
         @item = path.gsub(/\/\{(.+?)\}/,"").split('/').last.singularize.underscore.camelize || 'Item'
 
-        entity = route.route_entity
+        entity = route.route_entity || route.route_success
         expose_params_from_model(entity) if entity
 
         # ... replacing version params through submitted version
@@ -141,10 +141,9 @@ module Grape
     def response_object(route)
       default_code = default_staus_codes[route.route_method.downcase.to_sym]
       default_code[:message] = route.route_description || default_code[:message].sub('{item}',@item)
+      codes = [default_code] + (route.route_http_codes || route.route_failure || [])
 
-      codes = [default_code] + (route.route_http_codes || [])
-
-      codes.map!{|x| x.is_a?(Array)? {code: x[0], message: x[1], model: x[2].to_s} : x }
+      codes.map!{|x| x.is_a?(Array)? {code: x[0], message: x[1], model: x[2]} : x }
 
       codes.inject({}) do |h, v|
         h[v[:code]] = { description: v[:message] }
@@ -154,7 +153,7 @@ module Grape
 
         # TODO: proof that the definition exist, if model isn't specified
         unless response_model.start_with?('Swagger_doc')
-          if route.route_is_array
+          if route.route_is_array && v[:code].to_s =~ /^2\d{2}/
             h[v[:code]][:schema] = { 'type' => 'array', 'items' => {'$ref' => "#/definitions/#{response_model}"} }
           else
             h[v[:code]][:schema] = { '$ref' => "#/definitions/#{response_model}" }

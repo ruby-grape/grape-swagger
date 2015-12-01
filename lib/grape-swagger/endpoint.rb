@@ -126,6 +126,7 @@ module Grape
 
       methods[:description] = route.route_desc if route.route_desc
       methods[:responses] = response_object(route)
+      methods[:headers] = route.route_headers if route.route_headers
 
       params = route.route_params
       methods[:parameters] = params_object(route)

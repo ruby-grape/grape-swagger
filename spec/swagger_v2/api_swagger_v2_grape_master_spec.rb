@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'support for grame master' do
+describe 'support for grape master' do
   before :all do
     module GrapeMaster
       module Entities

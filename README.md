@@ -547,24 +547,6 @@ get '/thing', http_codes: [
   ...
 end
 ```
-
-The amazon api gateway parameters can be added by indicated a aws hash with auth and integration keys, example:
-
-``` ruby
-
-desc 'thing', aws: {auth: 'aws_iam',
-                integration: {
-                  type: 'aws',
-                  uri: 'foo_bar_uri',
-                  httpMethod: 'get'
-                }
-              }
-
-get '/thing' do
-  ...
-end
-```
-
 If no status code is defined [defaults](/lib/grape-swagger/endpoint.rb#L121) would be taken.
 
 The result is then something like following:
@@ -585,6 +567,42 @@ The result is then something like following:
   }
 },
 ```
+
+### direct adding of additional swagger information
+
+- The amazon api gateway parameters can be added by indicated a aws hash with auth and integration keys, example:
+
+``` ruby
+desc 'thing',
+  aws: {
+    auth: 'aws_iam',
+    integration: {
+      type: 'aws',
+      uri: 'foo_bar_uri',
+      httpMethod: 'get'
+    }
+  }
+
+  …
+
+```
+
+- defining headers, by adding it to the desc block
+
+```ruby
+desc 'This returns something',
+  headers: {
+    "X-Rate-Limit-Limit": {
+      "description": "The number of allowed requests in the current period",
+      "type": "integer"
+    }
+  }
+
+    …
+
+```
+
+
 
 ## Contributing to grape-swagger
 

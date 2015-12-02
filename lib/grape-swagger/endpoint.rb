@@ -23,6 +23,10 @@ module Grape
       content_types.uniq
     end
 
+    def schemas(options)
+      require 'pry'; binding.pry
+    end
+
     # swagger spec2.0 related parts
     #
     # required keys for SwaggerObject
@@ -33,7 +37,8 @@ module Grape
         produces:       content_types_for(target_class),
         authorizations: options[:authorizations],
         host:           request.env['HTTP_HOST'] || options[:host],
-        basePath:       request.env['SCRIPT_NAME'] || options[:base_path]
+        basePath:       request.env['SCRIPT_NAME'] || options[:base_path],
+        schemes:        options[:scheme]
       }.delete_if { |_, value| value.blank? }
     end
 

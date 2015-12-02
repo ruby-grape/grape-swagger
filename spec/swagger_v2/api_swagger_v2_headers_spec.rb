@@ -21,9 +21,9 @@ describe 'entities exposing an array' do
 
         desc 'This returns something',
           headers:  {
-            "X-Rate-Limit-Limit": {
-              "description": "The number of allowed requests in the current period",
-              "type": "integer"
+            "X-Rate-Limit-Limit" => {
+              "description" => "The number of allowed requests in the current period",
+              "type" => "integer"
           }},
 
           entity: Entities::UseHeader
@@ -56,6 +56,7 @@ describe 'entities exposing an array' do
         "swagger"=>"2.0",
         "produces"=>["application/json"],
         "host"=>"example.org",
+        "schemes" => ["https", "http"],
         "paths"=>{
           "/use_headers"=>{
             "get"=>{

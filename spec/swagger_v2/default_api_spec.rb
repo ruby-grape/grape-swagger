@@ -26,6 +26,7 @@ describe 'Default API' do
           "swagger"=>"2.0",
           "produces"=>["application/json"],
           "host"=>"example.org",
+          "schemes" => ["https", "http"],
           "paths"=>{
             "/something"=>{
               "get"=>{
@@ -68,6 +69,7 @@ describe 'Default API' do
         "swagger"=>"2.0",
         "produces"=>["application/json"],
         "host"=>"example.org",
+        "schemes" => ["https", "http"],
         "paths"=>{
           "/something"=>{
             "get"=>{

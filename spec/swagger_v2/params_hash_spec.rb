@@ -39,6 +39,7 @@ describe 'Group Params as Hash' do
       "swagger"=>"2.0",
       "produces"=>["application/json"],
       "host"=>"example.org",
+      "schemes" => ["https", "http"],
       "paths"=>{
         "/groups"=>{
           "post"=>{
@@ -59,6 +60,7 @@ describe 'Group Params as Hash' do
       "swagger"=>"2.0",
       "produces"=>["application/json"],
       "host"=>"example.org",
+      "schemes" => ["https", "http"],
       "paths"=>{
         "/type_given"=>{
           "post"=>{

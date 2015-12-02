@@ -93,6 +93,7 @@ module GrapeSwagger
         format: nil,
         models: [],
         info: {},
+        scheme: ['https', 'http'],
         authorizations: nil,
         root_base_path: true,
         api_documentation: { desc: 'Swagger compatible API description' },

@@ -10,46 +10,46 @@ describe 'a simple mounted api' do
       end
 
       desc 'This gets something.',
-           notes: '_test_'
+        notes: '_test_'
 
       get '/simple' do
         { bla: 'something' }
       end
 
       desc 'This gets something for URL using - separator.',
-           notes: '_test_'
+        notes: '_test_'
 
       get '/simple-test' do
         { bla: 'something' }
       end
 
       desc 'this gets something else',
-           headers: {
-             'XAuthToken' => { description: 'A required header.', required: true },
-             'XOtherHeader' => { description: 'An optional header.', required: false }
-           },
-           http_codes: [
-             { code: 403, message: 'invalid pony' },
-             { code: 405, message: 'no ponies left!' }
-           ]
+        headers: {
+          'XAuthToken' => { description: 'A required header.', required: true },
+          'XOtherHeader' => { description: 'An optional header.', required: false }
+        },
+        http_codes: [
+          { code: 403, message: 'invalid pony' },
+          { code: 405, message: 'no ponies left!' }
+        ]
 
       get '/simple_with_headers' do
         { bla: 'something_else' }
       end
 
       desc 'this takes an array of parameters',
-           params: {
-             'items[]' => { description: 'array of items' }
-           }
+        params: {
+          'items[]' => { description: 'array of items' }
+        }
 
       post '/items' do
         {}
       end
 
       desc 'this uses a custom parameter',
-           params: {
-             'custom' => { type: CustomType, description: 'array of items' }
-           }
+        params: {
+          'custom' => { type: CustomType, description: 'array of items' }
+        }
 
       get '/custom' do
         {}
@@ -74,6 +74,7 @@ describe 'a simple mounted api' do
         "swagger"=>"2.0",
         "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
         "host"=>"example.org",
+        "schemes" => ["https", "http"],
         "paths"=>
         {"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something.", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}},
          "/simple-test"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something for URL using - separator.", "schema"=>{"$ref"=>"#/definitions/SimpleTest"}}}}},
@@ -83,7 +84,11 @@ describe 'a simple mounted api' do
              "responses"=>
               {"200"=>{"description"=>"this gets something else", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}},
                "403"=>{"description"=>"invalid pony", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}},
-               "405"=>{"description"=>"no ponies left!", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}}}}},
+               "405"=>{"description"=>"no ponies left!", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}}},
+            "headers"=>{
+              'XAuthToken' => {"description"=>'A required header.', "required"=>true },
+              'XOtherHeader' => {"description"=>'An optional header.', "required"=>false }
+            }}},
          "/items"=>{"post"=>{"produces"=>["application/json"], "responses"=>{"201"=>{"description"=>"this takes an array of parameters", "schema"=>{"$ref"=>"#/definitions/Item"}}}}},
          "/custom"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"this uses a custom parameter", "schema"=>{"$ref"=>"#/definitions/Custom"}}}}}}}
     )
@@ -96,6 +101,7 @@ describe 'a simple mounted api' do
       "swagger"=>"2.0",
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
+      "schemes" => ["https", "http"],
       "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something.", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}}}})
   end
 
@@ -107,6 +113,7 @@ describe 'a simple mounted api' do
         "swagger"=>"2.0",
         "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
         "host"=>"example.org",
+        "schemes" => ["https", "http"],
         "paths"=>{
           "/simple-test"=>{"get"=>{
             "produces"=>["application/json"],
@@ -122,6 +129,9 @@ describe 'a simple mounted api' do
       {"/simple_with_headers"=>
         {"get"=>
           {"produces"=>["application/json"],
+          "headers"=>{
+            'XAuthToken' => {"description"=>'A required header.', "required"=>true },
+            'XOtherHeader' => {"description"=>'An optional header.', "required"=>false }},
            "responses"=>
             {"200"=>{"description"=>"this gets something else", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}},
              "403"=>{"description"=>"invalid pony", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}},

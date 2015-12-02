@@ -40,6 +40,7 @@ describe 'a hide mounted api' do
       "swagger"=>"2.0",
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
+      "schemes" => ["https", "http"],
       "paths"=>{
         "/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}},
         "/lazy"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Lazily show endpoint", "schema"=>{"$ref"=>"#/definitions/Lazy"}}}}}}
@@ -83,6 +84,7 @@ describe 'a hide mounted api with same namespace' do
       "swagger"=>"2.0",
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
+      "schemes" => ["https", "http"],
       "paths"=>{
         "/simple/show"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint", "schema"=>{"$ref"=>"#/definitions/Show"}}}}}}
       })
@@ -95,6 +97,7 @@ describe 'a hide mounted api with same namespace' do
       "swagger"=>"2.0",
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
+      "schemes" => ["https", "http"],
       "paths"=>{
         "/simple/show"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint", "schema"=>{"$ref"=>"#/definitions/Show"}}}}}}
       })

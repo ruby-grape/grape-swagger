@@ -80,6 +80,7 @@ describe 'support for grape master' do
       "swagger"=>"2.0",
       "produces"=>["application/json"],
       "host"=>"example.org",
+      "schemes" => ["https", "http"],
       "paths"=>{
         "/some_entity"=>{
           "get"=>{

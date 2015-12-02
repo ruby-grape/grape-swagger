@@ -68,6 +68,7 @@ RSpec.shared_context "swagger example" do
        "license"=>{"name"=>"The name of the license.", "url"=>"www.The-URL-of-the-license.org"},
        "version"=>"v1"},
       "swagger"=>"2.0",
+      "schemes" => ["https", "http"],
       "produces"=>["application/json"],
       "host"=>"example.org",
       "paths"=>

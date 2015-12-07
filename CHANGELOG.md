@@ -1,7 +1,6 @@
-### 0.10.4 (Next)
+### 0.10.4 (December 7, 2015)
 
 * [#315](https://github.com/ruby-grape/grape-swagger/pull/315): Require `grape-entity` < 0.5.0 - [@dblock](https://github.com/dblock).
-* Your contribution here.
 
 ### 0.10.3 (December 7, 2015)
 

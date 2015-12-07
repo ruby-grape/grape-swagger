@@ -1,9 +1,8 @@
-### 0.10.3 (Next)
+### 0.10.3 (December 7, 2015)
 
 * [#292](https://github.com/ruby-grape/grape-swagger/pull/292): Support i18n - [@calfzhou](https://github.com/calfzhou).
 * [#297](https://github.com/ruby-grape/grape-swagger/pull/297): Correct use of documentation param_type - [@fab-girard](https://github.com/fab-girard).
 * [#305](https://github.com/ruby-grape/grape-swagger/pull/305): Speedup by parsing models smarter, not harder - [@jhollinger](https://github.com/jhollinger).
-* Your contribution here.
 
 ### 0.10.2 (August 19, 2015)
 

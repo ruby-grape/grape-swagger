@@ -1,3 +1,7 @@
+### 0.10.4 (Next)
+
+* Your contribution here.
+
 ### 0.10.3 (December 7, 2015)
 
 * [#292](https://github.com/ruby-grape/grape-swagger/pull/292): Support i18n - [@calfzhou](https://github.com/calfzhou).

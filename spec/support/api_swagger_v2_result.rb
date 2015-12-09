@@ -67,65 +67,59 @@ RSpec.shared_context "swagger example" do
        "contact"=>{"contact_name"=>"Contact name", "contact_email"=>"Contact@email.com", "contact_url"=>"Contact URL"},
        "license"=>{"name"=>"The name of the license.", "url"=>"www.The-URL-of-the-license.org"},
        "version"=>"v1"},
-      "swagger"=>"2.0",
-      "schemes" => ["https", "http"],
-      "produces"=>["application/json"],
-      "host"=>"example.org",
-      "paths"=>
+     "swagger"=>"2.0",
+     "produces"=>["application/json"],
+     "host"=>"example.org",
+     "schemes"=>["https", "http"],
+     "paths"=>
       {"/v3/other_thing/{elements}"=>
         {"get"=>
           {"produces"=>["application/json"],
-           "responses"=>{"200"=>{"description"=>"nested route inside namespace", "schema"=>{"$ref"=>"#/definitions/OtherThing"}}},
            "parameters"=>[{"in"=>"array", "name"=>"elements", "description"=>"Set of configuration", "type"=>"string", "required"=>true, "allowMultiple"=>true}],
-           "x-amazon-apigateway-auth"=>{"type"=>"none"}, "x-amazon-apigateway-integration"=>{"type"=>"aws", "uri"=>"foo_bar_uri", "httpMethod"=>"get"}}},
+           "responses"=>{"200"=>{"description"=>"nested route inside namespace", "schema"=>{"$ref"=>"#/definitions/QueryInput"}}},
+           "x-amazon-apigateway-auth"=>{"type"=>"none"},
+           "x-amazon-apigateway-integration"=>{"type"=>"aws", "uri"=>"foo_bar_uri", "httpMethod"=>"get"}}},
        "/thing"=>
         {"get"=>
           {"produces"=>["application/json"],
-           "responses"=>
-            {"200"=>{"description"=>"This gets Things.", "schema"=>{"$ref"=>"#/definitions/Thing"}}, "401"=>{"description"=>"Unauthorized", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}},
+           "responses"=>{"200"=>{"description"=>"This gets Things.", "schema"=>{"$ref"=>"#/definitions/Thing"}}, "401"=>{"description"=>"Unauthorized", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}},
          "post"=>
           {"produces"=>["application/json"],
-           "responses"=>
-            {"201"=>{"description"=>"This creates Thing.", "schema"=>{"$ref"=>"#/definitions/Thing"}},
-             "422"=>{"description"=>"Unprocessible Entity", "schema"=>{"$ref"=>"#/definitions/Thing"}}},
            "parameters"=>
             [{"in"=>"formData", "name"=>"text", "description"=>"Content of something.", "type"=>"string", "required"=>true, "allowMultiple"=>false},
-             {"in"=>"body", "name"=>"links", "description"=>nil, "type"=>"Array", "required"=>true, "allowMultiple"=>true}]}},
+             {"in"=>"body", "name"=>"links", "description"=>nil, "type"=>"Array", "required"=>true, "allowMultiple"=>true}],
+           "responses"=>{"201"=>{"description"=>"This creates Thing.", "schema"=>{"$ref"=>"#/definitions/Something"}}, "422"=>{"description"=>"Unprocessible Entity"}}}},
        "/thing/{id}"=>
         {"get"=>
           {"produces"=>["application/json"],
-           "responses"=>
-            {"200"=>{"description"=>"getting a single thing", "schema"=>{"$ref"=>"#/definitions/Thing"}},
-             "401"=>{"description"=>"Unauthorized", "schema"=>{"$ref"=>"#/definitions/Thing"}}},
-           "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"}]},
+           "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"}],
+           "responses"=>{"200"=>{"description"=>"getting a single thing", "schema"=>{"$ref"=>"#/definitions/Thing"}}, "401"=>{"description"=>"Unauthorized"}}},
          "put"=>
           {"produces"=>["application/json"],
-           "responses"=>{"200"=>{"description"=>"This updates Thing.", "schema"=>{"$ref"=>"#/definitions/Thing"}}},
            "parameters"=>
             [{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"},
              {"in"=>"formData", "name"=>"text", "description"=>"Content of something.", "type"=>"string", "required"=>false, "allowMultiple"=>false},
-             {"in"=>"body", "name"=>"links", "description"=>nil, "type"=>"Array", "required"=>false, "allowMultiple"=>true}]},
+             {"in"=>"body", "name"=>"links", "description"=>nil, "type"=>"Array", "required"=>false, "allowMultiple"=>true}],
+           "responses"=>{"200"=>{"description"=>"This updates Thing.", "schema"=>{"$ref"=>"#/definitions/Something"}}}},
          "delete"=>
           {"produces"=>["application/json"],
-           "responses"=>{"200"=>{"description"=>"This deletes Thing.", "schema"=>{"$ref"=>"#/definitions/Thing"}}},
-           "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"}]}},
+           "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"}],
+           "responses"=>{"200"=>{"description"=>"This deletes Thing.", "schema"=>{"$ref"=>"#/definitions/Something"}}}}},
        "/thing2"=>
         {"get"=>
           {"produces"=>["application/json"],
-           "responses"=>
-            {"200"=>{"description"=>"get Horses", "schema"=>{"$ref"=>"#/definitions/Something"}},
-             "401"=>{"description"=>"HorsesOutError", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}}},
+           "responses"=>{"200"=>{"description"=>"get Horses", "schema"=>{"$ref"=>"#/definitions/Something"}}, "401"=>{"description"=>"HorsesOutError", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}}},
        "/dummy/{id}"=>
         {"delete"=>
           {"produces"=>["application/json"],
-           "responses"=>{"200"=>{"description"=>"dummy route.", "schema"=>{"$ref"=>"#/definitions/Dummy"}}},
-           "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"}]}}},
-      "definitions"=>
-        {"OtherThing"=>{"properties"=>{"elements"=>{"type"=>"QueryInputElement"}}},
-         "Thing"=>{"properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}},
-         "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}},
-         "Thing2"=>{"properties"=>{"id"=>{"type"=>"integer"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}},
-         "Something"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}}}}
+           "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"}],
+           "responses"=>{"200"=>{"description"=>"dummy route."}, "401"=>{"description"=>"Unauthorized"}}}}},
+     "definitions"=>
+      {"QueryInputElement"=>{"type"=>"object", "properties"=>{"key"=>{"type"=>"string"}, "value"=>{"type"=>"string"}}},
+       "QueryInput"=>{"type"=>"object", "properties"=>{"elements"=>{"$ref"=>"#/definitions/QueryInputElement"}}},
+       "Thing"=>{"properties"=>{"id"=>{"type"=>"integer"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}},
+       "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}},
+       "Something"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}}}}
   end
 
   let(:http_verbs) { %w[get post put delete]}

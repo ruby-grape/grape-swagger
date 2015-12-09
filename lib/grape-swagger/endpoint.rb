@@ -23,10 +23,6 @@ module Grape
       content_types.uniq
     end
 
-    def schemas(options)
-      require 'pry'; binding.pry
-    end
-
     # swagger spec2.0 related parts
     #
     # required keys for SwaggerObject
@@ -92,7 +88,6 @@ module Grape
       routes.each do |route|
         next if is_hidden?(route)
         method_definition = {}
-
         path = route.route_path
         # always removing format
         path.sub!(/\(\.\w+?\)$/,'')
@@ -100,10 +95,9 @@ module Grape
         # ... format params
         path.gsub!(/:(\w+)/,'{\1}')
         # set item from path, this is used for the definitions object
-        @item = path.gsub(/\/\{(.+?)\}/,"").split('/').last.singularize.underscore.camelize || 'Item'
 
-        entity = route.route_entity || route.route_success
-        expose_params_from_model(entity) if entity
+        @item = path.gsub(/\/\{(.+?)\}/,"").split('/').last.singularize.underscore.camelize || 'Item'
+        @entity = route.route_entity || route.route_success
 
         # ... replacing version params through submitted version
         if options[:version]
@@ -126,15 +120,15 @@ module Grape
     def method_object(method, route, options)
       methods = {}
 
+      methods[:description] = route.route_desc if route.route_desc
+      methods[:headers] = route.route_headers if route.route_headers
+
       mime_types = options[:format] ? Grape::ContentTypes::CONTENT_TYPES[options[:format]] : Grape::ContentTypes::CONTENT_TYPES[:json]
       methods[:produces] = [mime_types]
 
-      methods[:description] = route.route_desc if route.route_desc
-      methods[:responses] = response_object(route)
-      methods[:headers] = route.route_headers if route.route_headers
-
       params = route.route_params
       methods[:parameters] = params_object(route)
+      methods[:responses] = response_object(route)
 
       if route.route_aws
         methods['x-amazon-apigateway-auth'] = { type: route.route_aws[:auth] } if route.route_aws[:auth]
@@ -146,7 +140,9 @@ module Grape
 
     def response_object(route)
       default_code = default_staus_codes[route.route_method.downcase.to_sym]
+      default_code[:model] = @entity if @entity
       default_code[:message] = route.route_description || default_code[:message].sub('{item}',@item)
+
       codes = [default_code] + (route.route_http_codes || route.route_failure || [])
 
       codes.map!{|x| x.is_a?(Array)? {code: x[0], message: x[1], model: x[2]} : x }
@@ -158,8 +154,9 @@ module Grape
         response_model = expose_params_from_model(v[:model]) if v[:model]
 
         # TODO: proof that the definition exist, if model isn't specified
-        unless response_model.start_with?('Swagger_doc')
-          if route.route_is_array && v[:code].to_s =~ /^2\d{2}/
+        if !response_model.start_with?('Swagger_doc') &&
+          ((!!@definitions[response_model] && v[:code].to_s.start_with?('2')) || v[:model])
+          if route.route_is_array
             h[v[:code]][:schema] = { 'type' => 'array', 'items' => {'$ref' => "#/definitions/#{response_model}"} }
           else
             h[v[:code]][:schema] = { '$ref' => "#/definitions/#{response_model}" }
@@ -193,9 +190,11 @@ module Grape
         required_params = parse_request_params(declared_params, required, route.route_params)
       end
 
-      unless exposed.nil?
+      if !exposed.empty? && !@entity
         exposed_params = exposed.inject({}) {|h,x| h[x.first] = x.last; h }
-        parse_response_params(exposed_params) if route.route_method == 'GET' || @definitions[@item].nil?
+        properties = parse_response_params(exposed_params)
+
+        @definitions[@item] = { properties: properties }
       end
 
       required_params || {}
@@ -233,8 +232,6 @@ module Grape
           h
         end
       end
-
-      @definitions[@item] = { properties: properties } if @definitions[@item].nil?
 
       properties
     end

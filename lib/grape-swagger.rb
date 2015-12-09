@@ -18,7 +18,6 @@ module Grape
         documentation_class = create_documentation_class
 
         set_version(options)
-
         options = { target_class: self }.merge(options)
         @target_class = options[:target_class]
 

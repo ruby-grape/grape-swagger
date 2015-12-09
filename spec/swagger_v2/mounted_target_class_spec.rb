@@ -34,7 +34,7 @@ describe 'docs mounted separately from api' do
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
       "schemes" => ["https", "http"],
-      "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something.", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}}}
+      "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something."}}}}}
     })
   end
 
@@ -46,7 +46,7 @@ describe 'docs mounted separately from api' do
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
       "schemes" => ["https", "http"],
-      "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something.", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}}}
+      "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something."}}}}}
     })
   end
 end

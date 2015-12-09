@@ -42,8 +42,8 @@ describe 'a hide mounted api' do
       "host"=>"example.org",
       "schemes" => ["https", "http"],
       "paths"=>{
-        "/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}},
-        "/lazy"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Lazily show endpoint", "schema"=>{"$ref"=>"#/definitions/Lazy"}}}}}}
+        "/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}},
+        "/lazy"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Lazily show endpoint"}}}}}
     })
   end
 end
@@ -86,7 +86,7 @@ describe 'a hide mounted api with same namespace' do
       "host"=>"example.org",
       "schemes" => ["https", "http"],
       "paths"=>{
-        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint", "schema"=>{"$ref"=>"#/definitions/Show"}}}}}}
+        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}}}
       })
   end
 
@@ -99,7 +99,7 @@ describe 'a hide mounted api with same namespace' do
       "host"=>"example.org",
       "schemes" => ["https", "http"],
       "paths"=>{
-        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint", "schema"=>{"$ref"=>"#/definitions/Show"}}}}}}
+        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}}}
       })
   end
 end

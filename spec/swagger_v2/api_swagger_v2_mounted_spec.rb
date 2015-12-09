@@ -10,12 +10,12 @@ describe 'swagger spec v2.0' do
 
         #  Thing stuff
         desc 'This gets Things.' do
-          detail "
-          #This gets Things
+          detail <<-DETAILS
+            # This gets Things
 
-          with the details given, the endpoint can be more verbose described
-          *this* can be done in markdown
-          "
+            with the details given, the endpoint can be more verbose described
+            *this* can be done in markdown
+          DETAILS
           params Entities::Something.documentation
           http_codes [ { code: 401, message: 'Unauthorized', model: Entities::ApiError } ]
         end
@@ -36,7 +36,6 @@ describe 'swagger spec v2.0' do
         end
 
         desc 'This gets Thing.' do
-          params Entities::Something.documentation
           http_codes [ { code: 200, message: 'getting a single thing' }, { code: 401, message: 'Unauthorized' } ]
         end
         params do
@@ -47,7 +46,8 @@ describe 'swagger spec v2.0' do
           present something, with: Entities::Something
         end
 
-        desc 'This creates Thing.'
+        desc 'This creates Thing.',
+          success: Entities::Something
         params do
           requires :text, type: String, documentation: { type: 'string', desc: 'Content of something.' }
           requires :links, type: Array, documentation: { type: 'link', is_array: true }
@@ -57,7 +57,8 @@ describe 'swagger spec v2.0' do
           present something, with: Entities::Something
         end
 
-        desc 'This updates Thing.'
+        desc 'This updates Thing.',
+          success: Entities::Something
         params do
           requires :id, type: Integer
           optional :text, type: String, desc: 'Content of something.'
@@ -68,7 +69,8 @@ describe 'swagger spec v2.0' do
           present something, with: Entities::Something
         end
 
-        desc 'This deletes Thing.'
+        desc 'This deletes Thing.',
+          entity: Entities::Something
         params do
           requires :id, type: Integer
         end
@@ -77,22 +79,22 @@ describe 'swagger spec v2.0' do
           present something, with: Entities::Something
         end
 
-        desc 'dummy route.'
+        desc 'dummy route.',
+          failure: [{ code: 401, message: 'Unauthorized' }]
         params do
           requires :id, type: Integer
         end
         delete '/dummy/:id' do
-          something = OpenStruct.new text: 'something'
-          present something, with: Entities::Something
         end
 
         namespace :other_thing do
-          desc 'nested route inside namespace', params: Entities::QueryInput.documentation,
+          desc 'nested route inside namespace',
+            entity: Entities::QueryInput,
             aws: {auth: 'none',
-             integration: {
+                  integration: {
               type: 'aws',
               uri: 'foo_bar_uri',
-            httpMethod: 'get'
+              httpMethod: 'get'
             }
           }
 

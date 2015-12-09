@@ -44,7 +44,7 @@ describe 'Group Params as Array' do
         "/groups"=>{
           "post"=>{
             "produces"=>["application/json"],
-            "responses"=>{"201"=>{"description"=>"created Group", "schema"=>{"$ref"=>"#/definitions/Group"}}},
+            "responses"=>{"201"=>{"description"=>"created Group"}},
             "parameters"=>[
               {"in"=>"formData", "name"=>"required_group[][required_param_1]", "description"=>nil, "type"=>"string", "required"=>true, "allowMultiple"=>true},
               {"in"=>"formData", "name"=>"required_group[][required_param_2]", "description"=>nil, "type"=>"string", "required"=>true, "allowMultiple"=>true}
@@ -65,7 +65,7 @@ describe 'Group Params as Array' do
         "/type_given"=>{
           "post"=>{
             "produces"=>["application/json"],
-            "responses"=>{"201"=>{"description"=>"created TypeGiven", "schema"=>{"$ref"=>"#/definitions/TypeGiven"}}},
+            "responses"=>{"201"=>{"description"=>"created TypeGiven"}},
             "parameters"=>[
               {"in"=>"formData", "name"=>"typed_group[][id]", "description"=>"integer given", "type"=>"integer", "required"=>true, "allowMultiple"=>true, "format"=>"int32"},
               {"in"=>"formData", "name"=>"typed_group[][name]", "description"=>"string given", "type"=>"string", "required"=>true, "allowMultiple"=>true},

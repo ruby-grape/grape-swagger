@@ -76,21 +76,21 @@ describe 'a simple mounted api' do
         "host"=>"example.org",
         "schemes" => ["https", "http"],
         "paths"=>
-        {"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something.", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}},
-         "/simple-test"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something for URL using - separator.", "schema"=>{"$ref"=>"#/definitions/SimpleTest"}}}}},
+        {"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something."}}}},
+         "/simple-test"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something for URL using - separator."}}}},
          "/simple_with_headers"=>
           {"get"=>
             {"produces"=>["application/json"],
              "responses"=>
-              {"200"=>{"description"=>"this gets something else", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}},
-               "403"=>{"description"=>"invalid pony", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}},
-               "405"=>{"description"=>"no ponies left!", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}}},
+              {"200"=>{"description"=>"this gets something else"},
+               "403"=>{"description"=>"invalid pony"},
+               "405"=>{"description"=>"no ponies left!"}},
             "headers"=>{
               'XAuthToken' => {"description"=>'A required header.', "required"=>true },
               'XOtherHeader' => {"description"=>'An optional header.', "required"=>false }
             }}},
-         "/items"=>{"post"=>{"produces"=>["application/json"], "responses"=>{"201"=>{"description"=>"this takes an array of parameters", "schema"=>{"$ref"=>"#/definitions/Item"}}}}},
-         "/custom"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"this uses a custom parameter", "schema"=>{"$ref"=>"#/definitions/Custom"}}}}}}}
+         "/items"=>{"post"=>{"produces"=>["application/json"], "responses"=>{"201"=>{"description"=>"this takes an array of parameters"}}}},
+         "/custom"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"this uses a custom parameter"}}}}}}
     )
   end
 
@@ -102,7 +102,7 @@ describe 'a simple mounted api' do
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
       "schemes" => ["https", "http"],
-      "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something.", "schema"=>{"$ref"=>"#/definitions/Simple"}}}}}}})
+      "paths"=>{"/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something."}}}}}})
   end
 
   context 'retrieves the documentation for mounted-api that' do
@@ -118,8 +118,7 @@ describe 'a simple mounted api' do
           "/simple-test"=>{"get"=>{
             "produces"=>["application/json"],
             "responses"=>{
-              "200"=>{"description"=>"This gets something for URL using - separator.",
-                "schema"=>{"$ref"=>"#/definitions/SimpleTest"}}}}}}}
+              "200"=>{"description"=>"This gets something for URL using - separator."}}}}}}
         )
     end
 
@@ -133,9 +132,9 @@ describe 'a simple mounted api' do
             'XAuthToken' => {"description"=>'A required header.', "required"=>true },
             'XOtherHeader' => {"description"=>'An optional header.', "required"=>false }},
            "responses"=>
-            {"200"=>{"description"=>"this gets something else", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}},
-             "403"=>{"description"=>"invalid pony", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}},
-             "405"=>{"description"=>"no ponies left!", "schema"=>{"$ref"=>"#/definitions/SimpleWithHeader"}}}}}}
+            {"200"=>{"description"=>"this gets something else"},
+             "403"=>{"description"=>"invalid pony"},
+             "405"=>{"description"=>"no ponies left!"}}}}}
       )
     end
 
@@ -148,10 +147,7 @@ describe 'a simple mounted api' do
               "produces"=>["application/json"],
               "responses"=>{
                 "201"=>{
-                  "description"=>"this takes an array of parameters",
-                  "schema"=>{
-                    "$ref"=>"#/definitions/Item"}
-              }}}}}
+                  "description"=>"this takes an array of parameters"}}}}}
         )
     end
 
@@ -164,8 +160,7 @@ describe 'a simple mounted api' do
               "produces"=>["application/json"],
               "responses"=>{
                 "200"=>{
-                  "description"=>"this uses a custom parameter",
-                  "schema"=>{"$ref"=>"#/definitions/Custom"}}}}}}
+                  "description"=>"this uses a custom parameter"}}}}}
       )
     end
   end

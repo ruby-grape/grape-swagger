@@ -29,7 +29,6 @@ module GrapeSwagger
       [:format, :default_format, :default_error_formatter].each do |method|
         send(method, options[:format])
       end if options[:format]
-
       # getting of the whole swagger2.0 spec file
       desc api_doc.delete(:desc), api_doc
       get mount_path do

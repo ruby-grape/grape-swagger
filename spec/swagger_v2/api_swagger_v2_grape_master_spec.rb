@@ -80,56 +80,35 @@ describe 'support for grape master' do
       "swagger"=>"2.0",
       "produces"=>["application/json"],
       "host"=>"example.org",
-      "schemes" => ["https", "http"],
+      "schemes"=>["https", "http"],
       "paths"=>{
         "/some_entity"=>{
           "get"=>{
             "produces"=>["application/json"],
             "responses"=>{
-              "200"=>{
-                "description"=>"This returns something",
-                "schema"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/SomeEntity"}}},
-              "422"=>{
-                "description"=>"EntitiesOutError",
-                "schema"=>{"$ref"=>"#/definitions/ApiError"}}}}},
+              "200"=>{"description"=>"This returns something", "schema"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/SomeEntity"}}},
+              "422"=>{"description"=>"EntitiesOutError", "schema"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/ApiError"}}}}}},
         "/some_entity/{id}"=>{
           "get"=>{
             "produces"=>["application/json"],
             "responses"=>{
-              "200"=>{
-                "description"=>"This returns something",
-                "schema"=>{"$ref"=>"#/definitions/SomeEntity"}},
-              "422"=>{
-                "description"=>"EntitiesOutError",
-                "schema"=>{"$ref"=>"#/definitions/ApiError2"}}}}}},
+              "200"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/SomeEntity"}},
+              "422"=>{"description"=>"EntitiesOutError", "schema"=>{"$ref"=>"#/definitions/ApiError2"}}}}}},
       "definitions"=>{
+        "Kind"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer"}}},
+        "Tag"=>{"type"=>"object", "properties"=>{"name"=>{"type"=>"string"}}},
+        "Relation"=>{"type"=>"object", "properties"=>{"name"=>{"type"=>"string"}}},
         "SomeEntity"=>{
           "type"=>"object",
-          "properties"=>{"text"=>{"type"=>"string"},
-        "kind"=>{"$ref"=>"#/definitions/Kind"},
-        "kind2"=>{"$ref"=>"#/definitions/Kind"},
-        "kind3"=>{"$ref"=>"#/definitions/Kind"},
-        "tags"=>{"$ref"=>"#/definitions/Tag"},
-        "relation"=>{"$ref"=>"#/definitions/Relation"}}},
-        "Kind"=>{
-          "type"=>"object",
-          "properties"=>{"id"=>{"type"=>"integer"}}},
-        "Tag"=>{
-          "type"=>"object",
-          "properties"=>{"name"=>{"type"=>"string"}}},
-        "Relation"=>{
-          "type"=>"object",
-          "properties"=>{"name"=>{"type"=>"string"}}},
-        "ApiError"=>{
-          "type"=>"object",
           "properties"=>{
-            "status_code"=>{"type"=>"integer"},
-            "message"=>{"type"=>"string"}}},
-        "ApiError2"=>{"type"=>"object",
-          "properties"=>{
-            "status"=>{"type"=>"integer"},
-            "message"=>{"type"=>"string"}}}
-      }})
-
+            "text"=>{"type"=>"string"},
+            "kind"=>{"$ref"=>"#/definitions/Kind"},
+            "kind2"=>{"$ref"=>"#/definitions/Kind"},
+            "kind3"=>{"$ref"=>"#/definitions/Kind"},
+            "tags"=>{"$ref"=>"#/definitions/Tag"},
+            "relation"=>{"$ref"=>"#/definitions/Relation"}}},
+        "ApiError"=>{"type"=>"object", "properties"=>{"status_code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}},
+        "ApiError2"=>{"type"=>"object", "properties"=>{"status"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}}}}
+    )
   end
 end

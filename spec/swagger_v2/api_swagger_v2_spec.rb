@@ -114,7 +114,6 @@ describe 'swagger spec v2.0' do
 
       version 'v3', using: :path
       add_swagger_documentation api_version: 'v1',
-                                hide_format: true,
                                 base_path: '/api',
                                 info: {
                                   title: "The API title to be displayed on the API homepage.",
@@ -176,6 +175,10 @@ describe 'swagger spec v2.0' do
 
     describe 'path object' do
       let(:paths) { json['paths'] }
+
+      it "hides documentation paths per default" do
+        expect(paths.keys).not_to include '/swagger_doc', '/swagger_doc/{name}'
+      end
 
       specify do
         paths.each_pair do |path, value|

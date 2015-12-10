@@ -15,11 +15,7 @@ readded/reimplemented features could be found in the ToC**
 [Installation](#install)  
 [Usage](#usage)  
 [Configure](#configure)  
-[Swagger Header Parameters](#headers)  
-[Hiding an Endpoint](#hiding)  
-[Defining an endpoint as array](#array)  
-[Using an options hash](#options)  
-[Response documentation](#response)  
+[Routes Configuration](#routes)  
 
 
 For how to use at the moment see [v2 specs](https://github.com/LeFnord/grape-swagger/tree/master/spec/swagger_v2) and or [Hussars](https://github.com/LeFnord/hussars) sample app.
@@ -42,8 +38,6 @@ These screenshot is based on the [Hussars](https://github.com/LeFnord/hussars) s
 ## Related Projects
 
 * [Grape](https://github.com/ruby-grape/grape)
-* [Grape Swagger Rails](https://github.com/LeFnord/grape-swagger-rails)  
-  fork of: [Ruby Grape / Grape Swagger Rails](https://github.com/ruby-grape/grape-swagger-rails) for usage of this gem
 * [Swagger UI](https://github.com/wordnik/swagger-ui)
 
 <a name="swagger-spec" />
@@ -112,59 +106,67 @@ end
 <a name="configure" />
 ## Configure
 
+[api_version](#api_version)  
+[hide_documentation_path](#hide_documentation_path)  
+[info](#info)  
+
+
 You can pass a hash with optional configuration settings to ```add_swagger_documentation```.
 
 *not all configuration options supported yet*, but is WIP
-#### target_class
+#### target_class:
 
 The API class to document, default `self`.
 
-#### mount_path
+#### *mount_path*:
 
 The path where the API documentation is loaded, default is `/swagger_doc`.
 
-#### class_name
+#### *class_name*:
 
 API class name.
 
-#### markdown
+#### *markdown*:
 
 Allow markdown in `detail`/`notes`, default is `nil`. (disabled) See below for details.
 
-#### hide_format
+#### hide_format:
 
 ~~Don't add `.(format)` to the end of URLs, default is `false`.~~  
 `.(format)` would always be removed.
 
-#### api_version
+<a name="api_version" />
+#### api_version:
 
 Version of the API that's being exposed.
 
-#### base_path
+#### *base_path*:
 
 Base path of the API that's being exposed. This configuration parameter accepts a `proc` to evaluate `base_path`, useful when you need to use request attributes to determine its value.
 
-#### authorizations
+#### *authorizations*:
 
 This value is added to the `authorizations` key in the JSON documentation.
 
-#### root_base_path
+#### *root_base_path*:
 
 Add `basePath` key to the JSON documentation, default is `true`.
 
-#### models
+#### *models*:
 
 A list of entities to document. Combine with the [grape-entity](https://github.com/ruby-grape/grape-entity) gem. See below for details.
 
-#### hide_documentation_path
+<a name="hide_documentation_path" />
+#### hide_documentation_path:
 
 Don't show the `/swagger_doc` path in the generated swagger documentation.
 
-#### format
+#### *format*:
 
 Documentation response format, default is `:json`.
 
-#### info
+<a name="info" />
+#### info:
 
 A hash merged into the `info` key of the JSON documentation. This may contain:
 
@@ -175,7 +177,7 @@ A hash merged into the `info` key of the JSON documentation. This may contain:
 * `:license_url`: The URL of the license.
 * `:terms_of_service_url`: The URL of the API terms and conditions.
 
-#### api_documentation
+#### *api_documentation*:
 
 Customize the Swagger API documentation route, typically contains a `desc` field. The default description is "Swagger compatible API description".
 
@@ -184,7 +186,7 @@ add_swagger_documentation \
    api_documentation: { desc: 'Reticulated splines API swagger-compatible documentation.' }
 ```
 
-#### specific_api_documentation
+#### *specific_api_documentation*:
 
 Customize the Swagger API specific documentation route, typically contains a `desc` field. The default description is "Swagger compatible API description for specific API".
 
@@ -193,8 +195,18 @@ add_swagger_documentation \
    specific_api_documentation: { desc: 'Reticulated splines API swagger-compatible endpoint documentation.' }
 ```
 
+<a name="routes" />
+## Routes Configuration
+
+[Swagger Header Parameters](#headers)  
+[Hiding an Endpoint](#hiding)  
+[Defining an endpoint as array](#array)  
+[Using an options hash](#options)  
+[Response documentation](#response)  
+
+
 <a name="headers" />
-## Swagger Header Parameters
+#### Swagger Header Parameters
 
 Swagger also supports the documentation of parameters passed in the header. Since grape's ```params[]``` doesn't return header parameters we can specify header parameters seperately in a block after the description.
 
@@ -214,7 +226,7 @@ desc "Return super-secret information", {
 ```
 
 <a name="hiding" />
-## Hiding an Endpoint
+#### Hiding an Endpoint
 
 You can hide an endpoint by adding ```hidden: true``` in the description of the endpoint:
 
@@ -229,7 +241,7 @@ state:
 desc 'Conditionally hide this endpoint', hidden: lambda { ENV['EXPERIMENTAL'] != 'true' }
 ```
 
-## Overriding Auto-Generated Nicknames
+#### Overriding Auto-Generated Nicknames
 
 You can specify a swagger nickname to use instead of the auto generated name by adding `:nickname 'string'``` in the description of the endpoint.
 
@@ -238,7 +250,7 @@ desc 'Get a full list of pets', nickname: 'getAllPets'
 ```
 
 <a name="array" />
-## Defining an endpoint as array
+#### Defining an endpoint as array
 
 You can define an endpoint as array by adding `is_array` in the description:
 
@@ -247,7 +259,7 @@ desc 'Get a full list of pets', is_array: true
 ```
 
 <a name="options" />
-## Using an options hash
+#### Using an options hash
 
 The Grape DSL supports either an options hash or a restricted block to pass settings. Passing the `nickname`, `hidden` and `is_array` options together with response codes is only possible when passing an options hash.
 Since the syntax differs you'll need to adjust it accordingly:
@@ -258,12 +270,13 @@ desc 'Get all kittens!', {
   is_array: true,
   nickname: 'getKittens',
   entity: Entities::Kitten, # or success
-  http_codes: [[401, 'KittenBitesError', Entities::BadKitten]]  # or failure
+  http_codes: [[401, 'KittenBitesError', Entities::BadKitten]] # or failure
+  # also explicit as hash: [{ code: 401, mssage: 'KittenBitesError', model: Entities::BadKitten }]
   }
 get '/kittens' do
 ```
 
-## Specify endpoint details
+#### Specify endpoint details
 
 To specify further details for an endpoint, use the `detail` option within a block passed to `desc`:
 
@@ -274,7 +287,7 @@ end
 get '/kittens' do
 ```
 
-## Overriding param type
+#### Overriding param type
 
 You can override paramType in POST|PUT methods to query, using the documentation hash.
 
@@ -287,7 +300,7 @@ post :act do
 end
 ```
 
-## Expose nested namespace as standalone route
+#### Expose nested namespace as standalone route
 
 Use the `nested: false` property in the `swagger` option to make nested namespaces appear as standalone resources.
 This option can help to structure and keep the swagger schema simple.
@@ -318,7 +331,8 @@ end
 ```
 Here, the `GET /order_id` appears as operation of the `store_order` resource and the `GET /evaluate` as operation of the `store_orders_actions` route.
 
-### With a custom name
+##### With a custom name
+
 Auto generated names for the standalone version of complex nested resource do not have a nice look.
 You can set a custom name with the `name` property inside the `swagger` option, but only if the namespace gets exposed as standalone route.
 The name should not contain whitespaces or any other special characters due to further issues within swagger-ui.

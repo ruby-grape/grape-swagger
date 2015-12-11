@@ -53,21 +53,19 @@ module Grape
     # sub-objects of info object
     # license
     def license_object(infos)
-      license = {}
-      license[:name] = infos.delete(:license) if infos[:license]
-      license[:url] = infos.delete(:license_url) if infos[:license_url]
-
-      license
+      {
+        name: infos.delete(:license),
+        url:  infos.delete(:license_url)
+      }.delete_if { |_, value| value.blank? }
     end
 
     # contact
     def contact_object(infos)
-      contact = {}
-      contact[:contact_name] = infos.delete(:contact_name) if infos[:contact_name]
-      contact[:contact_email] = infos.delete(:contact_email) if infos[:contact_email]
-      contact[:contact_url] = infos.delete(:contact_url) if infos[:contact_url]
-
-      contact
+      {
+        contact_name: infos.delete(:contact_name),
+        contact_email: infos.delete(:contact_email),
+        contact_url: infos.delete(:contact_url)
+      }.delete_if { |_, value| value.blank? }
     end
 
     # building path and definitions objects
@@ -79,7 +77,15 @@ module Grape
         path_item(routes, options)
       end
 
+      add_definitions_from options[:models]
+
       return @paths, @definitions
+    end
+
+    def add_definitions_from models
+      return if models.nil?
+
+      models.each{|x| expose_params_from_model(x) }
     end
 
     # path object

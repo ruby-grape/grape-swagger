@@ -55,7 +55,6 @@ describe 'exposing' do
   end
 
 
-
   # describe "presented response from entity" do
   #   subject do
   #     get '/swagger_doc/present_response'

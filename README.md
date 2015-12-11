@@ -64,7 +64,7 @@ Please see [UPGRADING](UPGRADING.md) when upgrading from a previous version.
 Mount all your different APIs (with ```Grape::API``` superclass) on a root node. In the root class definition, include ```add_swagger_documentation```, this sets up the system and registers the documentation on '/swagger_doc'. See [example/api.rb](example/api.rb) for a simple demo.
 
 
-``` ruby
+```ruby
 require 'grape-swagger'
 
 module API
@@ -84,7 +84,7 @@ To explore your API, either download [Swagger UI](https://github.com/wordnik/swa
 
 If you use the online demo, make sure your API supports foreign requests by enabling CORS in Grape, otherwise you'll see the API description, but requests on the API won't return. Use [rack-cors](https://github.com/cyu/rack-cors) to enable CORS.
 
-```` ruby
+````ruby
 require 'rack/cors'
 use Rack::Cors do
   allow do
@@ -96,7 +96,7 @@ end
 
 Alternatively you can set CORS headers in a Grape `before` block.
 
-``` ruby
+```ruby
 before do
   header['Access-Control-Allow-Origin'] = '*'
   header['Access-Control-Request-Method'] = '*'
@@ -107,6 +107,7 @@ end
 ## Configure
 
 [api_version](#api_version)  
+[models](#models)  
 [hide_documentation_path](#hide_documentation_path)  
 [info](#info)  
 
@@ -137,6 +138,10 @@ Allow markdown in `detail`/`notes`, default is `nil`. (disabled) See below for d
 
 <a name="api_version" />
 #### api_version:
+```ruby
+add_swagger_documentation \
+   api_version: 'v1'
+```
 
 Version of the API that's being exposed.
 
@@ -152,12 +157,27 @@ This value is added to the `authorizations` key in the JSON documentation.
 
 Add `basePath` key to the JSON documentation, default is `true`.
 
-#### *models*:
+<a name="models" />
+#### models:
 
-A list of entities to document. Combine with the [grape-entity](https://github.com/ruby-grape/grape-entity) gem. See below for details.
+A list of entities to document. Combine with the [grape-entity](https://github.com/ruby-grape/grape-entity) gem.
+
+These would be added to the definitions section of the swagger file.
+
+```ruby
+add_swagger_documentation \
+   models: [
+     TheApi::Entities::UseResponse,
+     TheApi::Entities::ApiError
+   ]
+```
 
 <a name="hide_documentation_path" />
-#### hide_documentation_path:
+#### hide_documentation_path: (default: `true`)
+```ruby
+add_swagger_documentation \
+   hide_documentation_path: true
+```
 
 Don't show the `/swagger_doc` path in the generated swagger documentation.
 
@@ -167,21 +187,27 @@ Documentation response format, default is `:json`.
 
 <a name="info" />
 #### info:
+```ruby
+add_swagger_documentation \
+  info: {
+    title: "The API title to be displayed on the API homepage.",
+    description: "A description of the API.",
+    contact_name: "Contact name",
+    contact_email: "Contact@email.com",
+    contact_url: "Contact URL",
+    license: "The name of the license.",
+    license_url: "www.The-URL-of-the-license.org",
+    terms_of_service_url: "www.The-URL-of-the-terms-and-service.com",
+  }
+```
 
-A hash merged into the `info` key of the JSON documentation. This may contain:
-
-* `:title`: The API title to be displayed on the API homepage.
-* `:description`: A description of the API.
-* `:contact`: Contact email.
-* `:license`: The name of the license.
-* `:license_url`: The URL of the license.
-* `:terms_of_service_url`: The URL of the API terms and conditions.
+A hash merged into the `info` key of the JSON documentation.
 
 #### *api_documentation*:
 
 Customize the Swagger API documentation route, typically contains a `desc` field. The default description is "Swagger compatible API description".
 
-``` ruby
+```ruby
 add_swagger_documentation \
    api_documentation: { desc: 'Reticulated splines API swagger-compatible documentation.' }
 ```
@@ -190,7 +216,7 @@ add_swagger_documentation \
 
 Customize the Swagger API specific documentation route, typically contains a `desc` field. The default description is "Swagger compatible API description for specific API".
 
-``` ruby
+```ruby
 add_swagger_documentation \
    specific_api_documentation: { desc: 'Reticulated splines API swagger-compatible endpoint documentation.' }
 ```
@@ -210,7 +236,7 @@ add_swagger_documentation \
 
 Swagger also supports the documentation of parameters passed in the header. Since grape's ```params[]``` doesn't return header parameters we can specify header parameters seperately in a block after the description.
 
-``` ruby
+```ruby
 desc "Return super-secret information", {
   headers: {
     "XAuthToken" => {
@@ -230,14 +256,14 @@ desc "Return super-secret information", {
 
 You can hide an endpoint by adding ```hidden: true``` in the description of the endpoint:
 
-``` ruby
+```ruby
 desc 'Hide this endpoint', hidden: true
 ```
 
 Endpoints can be conditionally hidden by providing a callable object such as a lambda which evaluates to the desired
 state:
 
-``` ruby
+```ruby
 desc 'Conditionally hide this endpoint', hidden: lambda { ENV['EXPERIMENTAL'] != 'true' }
 ```
 
@@ -245,7 +271,7 @@ desc 'Conditionally hide this endpoint', hidden: lambda { ENV['EXPERIMENTAL'] !=
 
 You can specify a swagger nickname to use instead of the auto generated name by adding `:nickname 'string'``` in the description of the endpoint.
 
-``` ruby
+```ruby
 desc 'Get a full list of pets', nickname: 'getAllPets'
 ```
 
@@ -254,7 +280,7 @@ desc 'Get a full list of pets', nickname: 'getAllPets'
 
 You can define an endpoint as array by adding `is_array` in the description:
 
-``` ruby
+```ruby
 desc 'Get a full list of pets', is_array: true
 ```
 
@@ -264,7 +290,7 @@ desc 'Get a full list of pets', is_array: true
 The Grape DSL supports either an options hash or a restricted block to pass settings. Passing the `nickname`, `hidden` and `is_array` options together with response codes is only possible when passing an options hash.
 Since the syntax differs you'll need to adjust it accordingly:
 
-``` ruby
+```ruby
 desc 'Get all kittens!', {
   hidden: true,
   is_array: true,
@@ -280,7 +306,7 @@ get '/kittens' do
 
 To specify further details for an endpoint, use the `detail` option within a block passed to `desc`:
 
-``` ruby
+```ruby
 desc 'Get all kittens!' do
   detail 'this will expose all the kittens'
 end
@@ -291,7 +317,7 @@ get '/kittens' do
 
 You can override paramType in POST|PUT methods to query, using the documentation hash.
 
-``` ruby
+```ruby
 params do
   requires :action, type: Symbol, values: [:PAUSE, :RESUME, :STOP], documentation: { param_type: 'query' }
 end
@@ -596,7 +622,7 @@ end
 ```
 
 By adding a `model` key, e.g. this would be taken.
-``` ruby
+```ruby
 get '/thing', http_codes: [
   { code: 200, message: 'Ok' },
   { code: 422, message: "Invalid parameter entry", model: Entities::ApiError }

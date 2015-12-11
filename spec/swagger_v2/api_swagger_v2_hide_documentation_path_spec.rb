@@ -1,25 +1,10 @@
 require 'spec_helper'
 
 describe 'exposing' do
+  include_context "the api"
+
   before :all do
     module TheApi
-      module Entities
-        class ApiError < Grape::Entity
-          expose :code, documentation: { type: Integer }
-          expose :message, documentation: { type: String }
-        end
-
-        class ResponseItem < Grape::Entity
-          expose :id, documentation: { type: Integer }
-          expose :name, documentation: { type: String }
-        end
-
-        class UseResponse < Grape::Entity
-          expose :description, documentation: { type: String }
-          expose :items, as: '$responses', using: Entities::ResponseItem, documentation: { is_array: true }
-        end
-      end
-
       class ResponseApi < Grape::API
         format :json
 
@@ -53,8 +38,6 @@ describe 'exposing' do
   def app
     TheApi::ResponseApi
   end
-
-
 
   describe "shows documentation paths" do
     subject do

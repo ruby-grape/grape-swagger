@@ -52,7 +52,7 @@ describe 'Group Params as Hash' do
     )
   end
 
-  it 'retrieves the documentation for group parameters' do
+  it 'retrieves the documentation for typed group parameters' do
     get '/swagger_doc/type_given'
     body = JSON.parse last_response.body
     expect(body).to eql({

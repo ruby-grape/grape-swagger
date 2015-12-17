@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'exposing' do
-  include_context "the api"
+  include_context "the api entities"
 
   before :all do
     module TheApi

@@ -34,3 +34,4 @@ Gemfile.lock
 example.json
 swagger_spec1.2/
 ToDo.md
+.ruby-version

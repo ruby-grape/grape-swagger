@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe 'exposing' do
-  include_context "the api"
+describe 'exposing additional models' do
+  include_context "the api entities"
 
   before :all do
     module TheApi
@@ -31,5 +31,4 @@ describe 'exposing' do
       expect(subject['definitions']).to include 'ResponseItem', 'UseResponse', 'ApiError'
     end
   end
-
 end

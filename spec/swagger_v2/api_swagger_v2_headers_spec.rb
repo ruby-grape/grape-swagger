@@ -1,32 +1,22 @@
 require 'spec_helper'
 
 describe 'entities exposing an array' do
+  include_context "the api entities"
+
   before :all do
     module TheApi
-      module Entities
-        class ApiError < Grape::Entity
-          expose :code, documentation: { type: Integer }
-          expose :message, documentation: { type: String }
-        end
-
-        class UseHeader < Grape::Entity
-          present_collection true
-          expose :items, as: 'diagnoses', using: Entities::ApiError, documentation: { is_array: true }
-          expose :others, documentation: { type: String }
-        end
-      end
-
       class HeadersApi < Grape::API
         format :json
 
         desc 'This returns something',
+          failure: [{code: 400, model: Entities::ApiError}],
           headers:  {
             "X-Rate-Limit-Limit" => {
               "description" => "The number of allowed requests in the current period",
               "type" => "integer"
           }},
 
-          entity: Entities::UseHeader
+          entity: Entities::UseResponse
         get '/use_headers' do
           { "declared_params" => declared(params) }
         end
@@ -47,43 +37,34 @@ describe 'entities exposing an array' do
 
   describe "it exposes a nested entity as array" do
     specify do
-
       expect(subject).to eql({
-        "info"=>{
-          "title"=>"API title",
-          "version"=>"v1"
-        },
+        "info"=>{"title"=>"API title", "version"=>"v1"},
         "swagger"=>"2.0",
         "produces"=>["application/json"],
         "host"=>"example.org",
-        "schemes" => ["https", "http"],
+        "schemes"=>["https", "http"],
         "paths"=>{
           "/use_headers"=>{
             "get"=>{
+              "headers"=>{"X-Rate-Limit-Limit"=>{"description"=>"The number of allowed requests in the current period", "type"=>"integer"}},
               "produces"=>["application/json"],
               "responses"=>{
-                "200"=>{
-                  "description"=>"This returns something",
-                  "schema"=>{
-                    "$ref"=>"#/definitions/UseHeader"}}},
-              "headers"=>{
-                "X-Rate-Limit-Limit"=>{
-                  "description"=>"The number of allowed requests in the current period",
-                  "type"=>"integer"
-              }}}}},
+                "200"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/UseResponse"}},
+                "400"=>{"description"=>nil, "schema"=>{"$ref"=>"#/definitions/ApiError"}}
+        }}}},
         "definitions"=>{
-          "UseHeader"=>{
+          "ResponseItem"=>{
             "type"=>"object",
-            "properties"=>{
-              "diagnoses"=>{"$ref"=>"#/definitions/ApiError"},
-              "others"=>{"type"=>"string"}
-          }},
+            "properties"=>{"id"=>{"type"=>"integer"}, "name"=>{"type"=>"string"}}
+          },
+          "UseResponse"=>{
+            "type"=>"object",
+            "properties"=>{"description"=>{"type"=>"string"}, "$responses"=>{"$ref"=>"#/definitions/ResponseItem"}}
+          },
           "ApiError"=>{
             "type"=>"object",
-            "properties"=>{
-              "code"=>{"type"=>"integer"},
-              "message"=>{"type"=>"string"}
-      }}}})
+            "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}}
+      }})
     end
   end
 end

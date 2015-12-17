@@ -1,25 +1,10 @@
 require 'spec_helper'
 
 describe 'exposing' do
+  include_context "the api entities"
+
   before :all do
     module TheApi
-      module Entities
-        class ApiError < Grape::Entity
-          expose :code, documentation: { type: Integer }
-          expose :message, documentation: { type: String }
-        end
-
-        class ResponseItem < Grape::Entity
-          expose :id, documentation: { type: Integer }
-          expose :name, documentation: { type: String }
-        end
-
-        class UseResponse < Grape::Entity
-          expose :description, documentation: { type: String }
-          expose :items, as: '$responses', using: Entities::ResponseItem, documentation: { is_array: true }
-        end
-      end
-
       class ResponseApi < Grape::API
         format :json
 
@@ -37,14 +22,6 @@ describe 'exposing' do
           { "declared_params" => declared(params) }
         end
 
-        # desc 'This returns something',
-        #   failure: [{code: 400, message: 'NotFound', model: Entities::ApiError}]
-        # get '/present_response' do
-        #   foo = OpenStruct.new id: 1, name: 'bar'
-        #   something = OpenStruct.new description: 'something', item: foo
-        #   present :somethings, something, with: Entities::UseResponse
-        # end
-
         add_swagger_documentation
       end
     end
@@ -53,20 +30,6 @@ describe 'exposing' do
   def app
     TheApi::ResponseApi
   end
-
-
-  # describe "presented response from entity" do
-  #   subject do
-  #     get '/swagger_doc/present_response'
-  #     JSON.parse(last_response.body)
-  #   end
-  #
-  #   describe "uses entity as response object" do
-  #     specify do
-  #       ap subject
-  #     end
-  #   end
-  # end
 
   describe "response from entity" do
     subject do

@@ -208,7 +208,7 @@ module GrapeSwagger
       end
     end
 
-    def parse_path(path, version)
+    def parse_path(path, version, hide_module_from_path=false)
       # adapt format to swagger format
       parsed_path = path.sub(/\(\..*\)$/, @@hide_format ? '' : '.{format}')
 
@@ -220,7 +220,11 @@ module GrapeSwagger
       parsed_path = parsed_path.gsub(/:([a-zA-Z_]\w*)/, '{\1}')
 
       # add the version
-      version ? parsed_path.gsub('{version}', version) : parsed_path
+      if hide_module_from_path
+        parsed_path.gsub('/{version}', '')
+      else
+        version ? parsed_path.gsub('{version}', version) : parsed_path
+      end
     end
 
     def parse_entity_name(model)
@@ -380,6 +384,7 @@ module GrapeSwagger
         markdown: nil,
         i18n_scope: :api,
         hide_documentation_path: false,
+        hide_module_from_path: false,
         hide_format: false,
         format: nil,
         models: [],
@@ -392,19 +397,20 @@ module GrapeSwagger
 
       options = defaults.merge(options)
 
-      target_class     = options[:target_class]
-      @@mount_path     = options[:mount_path]
-      @@class_name     = options[:class_name] || options[:mount_path].delete('/')
-      @@markdown       = options[:markdown] ? GrapeSwagger::Markdown.new(options[:markdown]) : nil
-      @@hide_format    = options[:hide_format]
-      api_version      = options[:api_version]
-      authorizations   = options[:authorizations]
-      root_base_path   = options[:root_base_path]
-      extra_info       = options[:info]
-      api_doc          = options[:api_documentation].dup
-      specific_api_doc = options[:specific_api_documentation].dup
-      @@models         = options[:models] || []
-      i18n_scope       = options[:i18n_scope]
+      target_class             = options[:target_class]
+      @@mount_path             = options[:mount_path]
+      @@class_name             = options[:class_name] || options[:mount_path].delete('/')
+      @@markdown               = options[:markdown] ? GrapeSwagger::Markdown.new(options[:markdown]) : nil
+      @@hide_format            = options[:hide_format]
+      api_version              = options[:api_version]
+      authorizations           = options[:authorizations]
+      root_base_path           = options[:root_base_path]
+      extra_info               = options[:info]
+      api_doc                  = options[:api_documentation].dup
+      specific_api_doc         = options[:specific_api_documentation].dup
+      @@models                 = options[:models] || []
+      i18n_scope               = options[:i18n_scope]
+      hide_module_from_path    = options[:hide_module_from_path]
 
       @@hide_documentation_path = options[:hide_documentation_path]
 
@@ -476,6 +482,7 @@ module GrapeSwagger
         requires :name, type: String, desc: 'Resource name of mounted API'
       end
       get "#{@@mount_path}/:name" do
+
         I18n.locale = params[:locale] || I18n.default_locale
         header['Access-Control-Allow-Origin']   = '*'
         header['Access-Control-Request-Method'] = '*'
@@ -489,7 +496,7 @@ module GrapeSwagger
         end
 
         ops = visible_ops.group_by do |route|
-          @@documentation_class.parse_path(route.route_path, api_version)
+          @@documentation_class.parse_path(route.route_path, api_version, hide_module_from_path)
         end
 
         error!('Not Found', 404) unless ops.any?

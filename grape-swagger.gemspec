@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'kramdown', '~> 1.4.1'
   s.add_development_dependency 'redcarpet', '~> 3.1.2' unless RUBY_PLATFORM.eql? 'java'
   s.add_development_dependency 'rouge', '~> 1.6.1'
+  s.add_runtime_dependency 'byebug'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec}/*`.split("\n")

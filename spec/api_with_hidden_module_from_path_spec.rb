@@ -21,7 +21,6 @@ describe 'Api with "path" versioning and using modules' do
           mount Api::V1::TestResource
 
           add_swagger_documentation api_version: 'v1'
-
         end
         class ModularizedApiWithPathVersioningHidingModule < Grape::API
           format :json
@@ -30,10 +29,9 @@ describe 'Api with "path" versioning and using modules' do
           mount Api::V1::TestResource
 
           add_swagger_documentation api_version: 'v1', hide_module_from_path: true
-
         end
       end
-    end    
+    end
   end
 
   def app_without_hiding
@@ -56,12 +54,11 @@ describe 'Api with "path" versioning and using modules' do
 
   context 'when hiding module from path' do
     let(:app) { app_with_hiding }
-  
+
     it 'retrieves swagger-documentation on /swagger_doc/resources that contains :resources api path without version' do
       get '/v1/swagger_doc/resources'
 
       expect(json_body['apis'][0]['path']).to eq('/resources.{format}')
-    end  
+    end
   end
-
 end

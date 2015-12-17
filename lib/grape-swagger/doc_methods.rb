@@ -208,7 +208,7 @@ module GrapeSwagger
       end
     end
 
-    def parse_path(path, version, hide_module_from_path=false)
+    def parse_path(path, version, hide_module_from_path = false)
       # adapt format to swagger format
       parsed_path = path.sub(/\(\..*\)$/, @@hide_format ? '' : '.{format}')
 
@@ -482,7 +482,6 @@ module GrapeSwagger
         requires :name, type: String, desc: 'Resource name of mounted API'
       end
       get "#{@@mount_path}/:name" do
-
         I18n.locale = params[:locale] || I18n.default_locale
         header['Access-Control-Allow-Origin']   = '*'
         header['Access-Control-Request-Method'] = '*'

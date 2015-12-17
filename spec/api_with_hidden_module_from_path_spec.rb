@@ -48,7 +48,7 @@ describe 'Api with "path" versioning and using modules' do
     it 'retrieves swagger-documentation on /swagger_doc/resources that contains :resources api path with version' do
       get '/v1/swagger_doc/resources'
 
-      expect(json_body['apis'][0]['path']).to eq('/v1/resources.{format}')
+      expect(json_body['apis'][0]['path']).to match(/^\/v1\/resources/)
     end
   end
 
@@ -58,7 +58,7 @@ describe 'Api with "path" versioning and using modules' do
     it 'retrieves swagger-documentation on /swagger_doc/resources that contains :resources api path without version' do
       get '/v1/swagger_doc/resources'
 
-      expect(json_body['apis'][0]['path']).to eq('/resources.{format}')
+      expect(json_body['apis'][0]['path']).to match(/^\/resources/)
     end
   end
 end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'exposing additional models' do
+describe 'definitions/models' do
   include_context "the api entities"
 
   before :all do

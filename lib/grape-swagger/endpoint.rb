@@ -203,6 +203,7 @@ module Grape
         @definitions[@item] = { properties: properties }
       end
 
+      return route.route_params if route.route_params && !route.route_settings[:declared_params].present?
       required_params || {}
     end
 

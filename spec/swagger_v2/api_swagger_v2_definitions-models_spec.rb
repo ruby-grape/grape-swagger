@@ -20,15 +20,13 @@ describe 'definitions/models' do
     TheApi::ModelApi
   end
 
-  describe "adds model definitions" do
-    subject do
-      get '/swagger_doc'
-      JSON.parse(last_response.body)
-    end
+  subject do
+    get '/swagger_doc'
+    JSON.parse(last_response.body)
+  end
 
-    specify do
-      expect(subject).to include 'definitions'
-      expect(subject['definitions']).to include 'ResponseItem', 'UseResponse', 'ApiError'
-    end
+  specify do
+    expect(subject).to include 'definitions'
+    expect(subject['definitions']).to include 'ResponseItem', 'UseResponse', 'ApiError'
   end
 end

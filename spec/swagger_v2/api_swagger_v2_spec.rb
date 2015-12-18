@@ -9,12 +9,6 @@ describe 'swagger spec v2.0' do
 
       #  Thing stuff
       desc 'This gets Things.' do
-        detail <<-DETAILS
-          # This gets Things
-
-          with the details given, the endpoint can be more verbose described
-          *this* can be done in markdown
-        DETAILS
         params Entities::Something.documentation
         http_codes [ { code: 401, message: 'Unauthorized', model: Entities::ApiError } ]
       end

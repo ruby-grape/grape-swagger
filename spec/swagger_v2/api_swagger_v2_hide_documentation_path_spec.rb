@@ -5,7 +5,7 @@ describe 'hide documentation path' do
 
   before :all do
     module TheApi
-      class ResponseApi < Grape::API
+      class HideDocumentationApi < Grape::API
         format :json
 
         desc 'This returns something',
@@ -39,7 +39,7 @@ describe 'hide documentation path' do
   end
 
   def app
-    TheApi::ResponseApi
+    TheApi::HideDocumentationApi
   end
 
   describe "shows documentation paths" do

@@ -48,9 +48,7 @@ describe 'Default API' do
     def app
       Class.new(Grape::API) do
         format :json
-        desc 'This gets something.' do
-          detail 'more details about the endpoint'
-        end
+        desc 'This gets something.'
         get '/something' do
           { bla: 'something' }
         end

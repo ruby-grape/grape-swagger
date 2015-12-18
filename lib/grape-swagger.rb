@@ -3,7 +3,6 @@ require 'grape-swagger/version'
 require 'grape-swagger/endpoint'
 require 'grape-swagger/errors'
 require 'grape-swagger/doc_methods'
-require 'grape-swagger/markdown'
 require 'grape-swagger/markdown/kramdown_adapter'
 require 'grape-swagger/markdown/redcarpet_adapter'
 

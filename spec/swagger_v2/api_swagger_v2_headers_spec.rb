@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'entities exposing an array' do
+describe 'headers' do
   include_context "the api entities"
 
   before :all do

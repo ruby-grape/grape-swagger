@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'exposing' do
+describe 'hide documentation path' do
   include_context "the api entities"
 
   before :all do
@@ -11,6 +11,9 @@ describe 'exposing' do
         desc 'This returns something',
           params: Entities::UseResponse.documentation,
           failure: [{code: 400, message: 'NotFound', model: Entities::ApiError}]
+        params do
+          requires :foo, type: Integer
+        end
         get '/params_response' do
           { "declared_params" => declared(params) }
         end

@@ -31,70 +31,68 @@ describe 'exposing' do
     TheApi::ResponseApi
   end
 
-  describe "response from entity" do
+  describe "uses entity as response object" do
     subject do
       get '/swagger_doc/entity_response'
       JSON.parse(last_response.body)
     end
 
-    describe "uses entity as response object" do
-      specify do
-        expect(subject).to eql({
-          "info"=>{"title"=>"API title", "version"=>"v1"},
-          "swagger"=>"2.0",
-          "produces"=>["application/json"],
-          "host"=>"example.org",
-          "schemes"=>["https", "http"],
-          "paths"=>{
-            "/entity_response"=>{
-              "get"=>{
-                "produces"=>["application/json"],
-                "responses"=>{
-                  "200"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/UseResponse"}},
-                  "400"=>{"description"=>"NotFound", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}}}},
-          "definitions"=>{
-            "ResponseItem"=>{
-              "type"=>"object",
-              "properties"=>{"id"=>{"type"=>"integer"}, "name"=>{"type"=>"string"}}},
-            "UseResponse"=>{
-              "type"=>"object",
-              "properties"=>{"description"=>{"type"=>"string"}, "$responses"=>{"$ref"=>"#/definitions/ResponseItem"}}},
-            "ApiError"=>{
-              "type"=>"object",
-              "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}}
-        }})
-      end
+    specify do
+      expect(subject).to eql({
+        "info"=>{"title"=>"API title", "version"=>"v1"},
+        "swagger"=>"2.0",
+        "produces"=>["application/json"],
+        "host"=>"example.org",
+        "schemes"=>["https", "http"],
+        "paths"=>{
+          "/entity_response"=>{
+            "get"=>{
+              "produces"=>["application/json"],
+              "responses"=>{
+                "200"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/UseResponse"}},
+                "400"=>{"description"=>"NotFound", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}}}},
+        "definitions"=>{
+          "ResponseItem"=>{
+            "type"=>"object",
+            "properties"=>{"id"=>{"type"=>"integer"}, "name"=>{"type"=>"string"}}},
+          "UseResponse"=>{
+            "type"=>"object",
+            "properties"=>{"description"=>{"type"=>"string"}, "$responses"=>{"$ref"=>"#/definitions/ResponseItem"}}},
+          "ApiError"=>{
+            "type"=>"object",
+            "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}}
+      }})
     end
   end
 
-  describe "response params" do
+  describe "uses params as response object" do
     subject do
       get '/swagger_doc/params_response'
       JSON.parse(last_response.body)
     end
 
-    describe "uses params as response object" do
-      specify do
-        expect(subject).to eql({
-          "info"=>{"title"=>"API title", "version"=>"v1"},
-          "swagger"=>"2.0",
-          "produces"=>["application/json"],
-          "host"=>"example.org",
-          "schemes"=>["https", "http"],
-          "paths"=>{
-            "/params_response"=>{
-              "get"=>{
-                "produces"=>["application/json"],
-                "responses"=>{
-                  "200"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/ParamsResponse"}},
-                  "400"=>{"description"=>"NotFound", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}}}},
-          "definitions"=>{
-            "ParamsResponse"=>{"properties"=>{"description"=>{"type"=>"string"}}},
-            "ApiError"=>{
-              "type"=>"object",
-              "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}}}
-        })
-      end
+    specify do
+      expect(subject).to eql({
+        "info"=>{"title"=>"API title", "version"=>"v1"},
+        "swagger"=>"2.0",
+        "produces"=>["application/json"],
+        "host"=>"example.org",
+        "schemes"=>["https", "http"],
+        "paths"=>{
+          "/params_response"=>{
+            "get"=>{
+              "produces"=>["application/json"],
+              "parameters"=>[
+                {"in"=>"query", "name"=>"description", "description"=>nil, "type"=>"string", "required"=>false, "allowMultiple"=>false},
+                {"in"=>"query", "name"=>"$responses", "description"=>nil, "type"=>"string", "required"=>false, "allowMultiple"=>true}],
+              "responses"=>{
+                "200"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/ParamsResponse"}},
+                "400"=>{"description"=>"NotFound", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}
+        }}},
+        "definitions"=>{
+          "ParamsResponse"=>{"properties"=>{"description"=>{"type"=>"string"}}},
+          "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}}
+      }})
     end
   end
 

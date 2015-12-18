@@ -86,9 +86,8 @@ module GrapeSwagger
         mount_path: '/swagger_doc',
         host: nil,
         base_path: nil,
-        markdown: nil,
+        markdown: false,
         hide_documentation_path: true,
-        hide_format: true,
         format: nil,
         models: [],
         info: {},
@@ -103,9 +102,6 @@ module GrapeSwagger
     def class_variables_from(options)
       @@mount_path              = options[:mount_path]
       @@class_name              = options[:class_name] || options[:mount_path].delete('/')
-      @@markdown                = options[:markdown] ? GrapeSwagger::Markdown.new(options[:markdown]) : nil
-      @@hide_format             = true
-      @@models                  = options[:models] || []
       @@hide_documentation_path = options[:hide_documentation_path]
     end
 

@@ -125,8 +125,7 @@ module Grape
 
     def method_object(method, route, options)
       methods = {}
-
-      methods[:description] = route.route_desc if route.route_desc
+      methods[:description] = description_object(route, options[:markdown])
       methods[:headers] = route.route_headers if route.route_headers
 
       mime_types = options[:format] ? Grape::ContentTypes::CONTENT_TYPES[options[:format]] : Grape::ContentTypes::CONTENT_TYPES[:json]
@@ -142,6 +141,13 @@ module Grape
       end
 
       methods.delete_if { |_, value| value.blank? }
+    end
+
+    def description_object(route, markdown)
+      description = route.route_desc if route.route_desc.present?
+      description = route.route_detail if route.route_detail.present?
+      description = markdown.markdown(description).chomp if !!markdown
+      description
     end
 
     def response_object(route)
@@ -246,6 +252,7 @@ module Grape
     def expose_params_from_model(model)
       model_name = model.name.demodulize.camelize
 
+      #  has to be adept, to be ready for grape-entity >0.5.0
       parameters = model.exposures ? model.exposures : model.documentation
       properties = parse_response_params(parameters, model_name)
 

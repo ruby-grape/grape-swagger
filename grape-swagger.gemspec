@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
 
   s.add_runtime_dependency 'grape', '>= 0.8.0'
-  s.add_runtime_dependency 'grape-entity', '~> 0.5.0'
+  s.add_runtime_dependency 'grape-entity', '< 0.5.0'
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'shoulda'

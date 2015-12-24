@@ -99,6 +99,14 @@ describe 'API Models' do
       root 'things', 'thing'
       expose :text, documentation: { type: 'string', desc: 'Content of something.' }
     end
+
+    class ThingWithRootAndEntityName < Grape::Entity
+      root 'things', 'thing'
+
+      def self.entity_name
+        'TheThing'
+      end
+    end
   end
 
   def app
@@ -162,6 +170,12 @@ describe 'API Models' do
         present thing, with: Entities::ThingWithRoot
       end
 
+      desc 'This gets thing with root and entity name', entity: Entities::ThingWithRootAndEntityName
+      get '/thing_with_root_and_entity_name' do
+        thing = Object.new
+        present thing, with: Entities::ThingWithRootAndEntityName
+      end
+
       add_swagger_documentation
     end
   end
@@ -191,6 +205,7 @@ describe 'API Models' do
         { 'path' => '/nesting.{format}', 'description' => 'Operations about nestings' },
         { 'path' => '/multiple_entities.{format}', 'description' => 'Operations about multiple_entities' },
         { 'path' => '/thing_with_root.{format}', 'description' => 'Operations about thing_with_roots' },
+        { 'path' => '/thing_with_root_and_entity_name.{format}', 'description' => 'Operations about thing_with_root_and_entity_names' },
         { 'path' => '/swagger_doc.{format}', 'description' => 'Operations about swagger_docs' }
       ]
     end
@@ -305,9 +320,15 @@ describe 'API Models' do
     expect(result['models']).to include('QueryInput', 'QueryInputElement', 'QueryResult')
   end
 
-  it 'includes an id equal to the model name' do
+  it 'includes an id equal to the model name (defined with root)' do
     get '/swagger_doc/thing_with_root'
     result = JSON.parse(last_response.body)
     expect(result['models']['thing']['id']).to eq('thing')
+  end
+
+  it 'prefers entity_name for id over root' do
+    get 'swagger_doc/thing_with_root_and_entity_name'
+    result = JSON.parse(last_response.body)
+    expect(result['models']['TheThing']['id']).to eq('TheThing')
   end
 end

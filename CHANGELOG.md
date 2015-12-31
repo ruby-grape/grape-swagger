@@ -2,6 +2,11 @@
 
 * [#319](https://github.com/ruby-grape/grape-swagger/pull/319): Hide module version from path [@synth](https://github.com/synth)
 
+#### Fixes
+
+* [#321](https://github.com/ruby-grape/grape-swagger/pull/321): Fixed handling paths containing uppercase letters - [@gekola](https://github.com/gekola).
+* [#322](https://github.com/ruby-grape/grape-swagger/pull/322): Entity's `entity_name` takes predence over root  - [@gekola](https://github.com/gekola).
+
 ### 0.10.4 (December 7, 2015)
 
 * [#315](https://github.com/ruby-grape/grape-swagger/pull/315): Require `grape-entity` < 0.5.0 - [@dblock](https://github.com/dblock).

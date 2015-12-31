@@ -230,6 +230,8 @@ module GrapeSwagger
     def parse_entity_name(model)
       if model.respond_to?(:entity_name)
         model.entity_name
+      elsif (root = model.instance_variable_get(:@root))
+        root
       else
         name = model.to_s
         entity_parts = name.split('::')
@@ -242,7 +244,7 @@ module GrapeSwagger
       scope = options[:scope]
       result = {}
       models.each do |model|
-        name       = (model.instance_variable_get(:@root) || parse_entity_name(model))
+        name       = parse_entity_name(model)
         properties = {}
         required   = []
 

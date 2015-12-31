@@ -23,6 +23,12 @@ describe 'a simple mounted api' do
         { bla: 'something' }
       end
 
+      desc 'This gets something for URL in camelcase.',
+           notes: '_test_'
+      get '/SimpleTest' do
+        { bla: 'something else' }
+      end
+
       desc 'this gets something else',
            headers: {
              'XAuthToken' => { description: 'A required header.', required: true },
@@ -76,6 +82,7 @@ describe 'a simple mounted api' do
       'apis' => [
         { 'path' => '/simple.{format}', 'description' => 'Operations about simples' },
         { 'path' => '/simple-test.{format}', 'description' => 'Operations about simple-tests' },
+        { 'path' => '/SimpleTest.{format}', 'description' => 'Operations about SimpleTests' },
         { 'path' => '/simple_with_headers.{format}', 'description' => 'Operations about simple_with_headers' },
         { 'path' => '/items.{format}', 'description' => 'Operations about items' },
         { 'path' => '/custom.{format}', 'description' => 'Operations about customs' },
@@ -121,6 +128,28 @@ describe 'a simple mounted api' do
             'notes' => '_test_',
             'summary' => 'This gets something for URL using - separator.',
             'nickname' => 'GET-simple-test---format-',
+            'method' => 'GET',
+            'parameters' => [],
+            'type' => 'void'
+          }]
+        }]
+      )
+    end
+
+    it 'uses camelcase' do
+      get '/swagger_doc/SimpleTest.json'
+      expect(JSON.parse(last_response.body)).to eq(
+        'apiVersion' => '0.1',
+        'swaggerVersion' => '1.2',
+        'basePath' => 'http://example.org',
+        'resourcePath' => '/SimpleTest',
+        'produces' => Grape::ContentTypes::CONTENT_TYPES.values.uniq,
+        'apis' => [{
+          'path' => '/SimpleTest.{format}',
+          'operations' => [{
+            'notes' => '_test_',
+            'summary' => 'This gets something for URL in camelcase.',
+            'nickname' => 'GET-SimpleTest---format-',
             'method' => 'GET',
             'parameters' => [],
             'type' => 'void'

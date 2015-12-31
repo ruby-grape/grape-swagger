@@ -1,6 +1,7 @@
 ### 0.10.5 (Next)
 
-* Your contribution here.
+-* Your contribution here.
+* [#319](https://github.com/ruby-grape/grape-swagger/pull/319): Hide module version from path [@synth](https://github.com/synth).
 
 #### Fixes
 

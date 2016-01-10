@@ -194,7 +194,7 @@ desc 'Conditionally hide this endpoint', hidden: lambda { ENV['EXPERIMENTAL'] !=
 
 ## Overriding Auto-Generated Nicknames
 
-You can specify a swagger nickname to use instead of the auto generated name by adding `:nickname 'string'``` in the description of the endpoint.
+You can specify a swagger nickname to use instead of the auto generated name by adding `:nickname 'string'` in the description of the endpoint.
 
 ``` ruby
 desc 'Get a full list of pets', nickname: 'getAllPets'

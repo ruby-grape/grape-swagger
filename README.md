@@ -101,6 +101,10 @@ Translations scope (or array of scopes) default is `:api`. [See below for detail
 
 Don't add `.(format)` to the end of URLs, default is `false`.
 
+#### hide_module_from_path
+
+If you are versioning your api via modules such as Api::V2::, swagger will create paths that have the version module in the path. This setting allows you to turns that off. This is generally when the version is added to the base_path.
+
 #### api_version
 
 Version of the API that's being exposed.

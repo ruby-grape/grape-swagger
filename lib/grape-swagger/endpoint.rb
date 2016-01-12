@@ -1,6 +1,5 @@
 module Grape
   class Endpoint
-
     PRIMITIVE_MAPPINGS = {
       'integer' => %w(integer int32),
       'long' => %w(integer int64),
@@ -79,30 +78,29 @@ module Grape
 
       add_definitions_from options[:models]
 
-      return @paths, @definitions
+      [@paths, @definitions]
     end
 
-    def add_definitions_from models
+    def add_definitions_from(models)
       return if models.nil?
 
-      models.each{|x| expose_params_from_model(x) }
+      models.each { |x| expose_params_from_model(x) }
     end
 
     # path object
     def path_item(routes, options)
-      paths = {}
       routes.each do |route|
-        next if is_hidden?(route)
-        method_definition = {}
+        next if hidden?(route)
+
         path = route.route_path
         # always removing format
-        path.sub!(/\(\.\w+?\)$/,'')
-        path.sub!("(.:format)",'')
+        path.sub!(/\(\.\w+?\)$/, '')
+        path.sub!('(.:format)', '')
         # ... format params
-        path.gsub!(/:(\w+)/,'{\1}')
+        path.gsub!(/:(\w+)/, '{\1}')
         # set item from path, this is used for the definitions object
 
-        @item = path.gsub(/\/\{(.+?)\}/,"").split('/').last.singularize.underscore.camelize || 'Item'
+        @item = path.gsub(/\/\{(.+?)\}/, '').split('/').last.singularize.underscore.camelize || 'Item'
         @entity = route.route_entity || route.route_success
 
         # ... replacing version params through submitted version
@@ -113,17 +111,17 @@ module Grape
         end
 
         method = route.route_method.downcase.to_sym
-        request_params = method_object(method, route, options)
+        request_params = method_object(route, options)
 
         if @paths.key?(path.to_sym)
           @paths[path.to_sym][method] = request_params
         else
-          @paths[path.to_sym] = {method => request_params}
+          @paths[path.to_sym] = { method => request_params }
         end
       end
     end
 
-    def method_object(method, route, options)
+    def method_object(route, options)
       methods = {}
       methods[:description] = description_object(route, options[:markdown])
       methods[:headers] = route.route_headers if route.route_headers
@@ -131,7 +129,6 @@ module Grape
       mime_types = options[:format] ? Grape::ContentTypes::CONTENT_TYPES[options[:format]] : Grape::ContentTypes::CONTENT_TYPES[:json]
       methods[:produces] = [mime_types]
 
-      params = route.route_params
       methods[:parameters] = params_object(route)
       methods[:responses] = response_object(route)
 
@@ -146,45 +143,45 @@ module Grape
     def description_object(route, markdown)
       description = route.route_desc if route.route_desc.present?
       description = route.route_detail if route.route_detail.present?
-      description = markdown.markdown(description).chomp if !!markdown
+      description = markdown.markdown(description).chomp if markdown
       description
     end
 
     def response_object(route)
       default_code = default_staus_codes[route.route_method.downcase.to_sym]
       default_code[:model] = @entity if @entity
-      default_code[:message] = route.route_description || default_code[:message].sub('{item}',@item)
+      default_code[:message] = route.route_description || default_code[:message].sub('{item}', @item)
 
       codes = [default_code] + (route.route_http_codes || route.route_failure || [])
 
-      codes.map!{|x| x.is_a?(Array)? {code: x[0], message: x[1], model: x[2]} : x }
+      codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2] } : x }
 
-      codes.inject({}) do |h, v|
-        h[v[:code]] = { description: v[:message] }
+      codes.each_with_object({}) do |value, memo|
+        memo[value[:code]] = { description: value[:message] }
 
         response_model = @item
-        response_model = expose_params_from_model(v[:model]) if v[:model]
+        response_model = expose_params_from_model(value[:model]) if value[:model]
 
         # TODO: proof that the definition exist, if model isn't specified
         if !response_model.start_with?('Swagger_doc') &&
-          ((!!@definitions[response_model] && v[:code].to_s.start_with?('2')) || v[:model])
+           ((!!@definitions[response_model] && value[:code].to_s.start_with?('2')) ||
+           value[:model])
           if route.route_is_array
-            h[v[:code]][:schema] = { 'type' => 'array', 'items' => {'$ref' => "#/definitions/#{response_model}"} }
+            memo[value[:code]][:schema] = { 'type' => 'array', 'items' => { '$ref' => "#/definitions/#{response_model}" } }
           else
-            h[v[:code]][:schema] = { '$ref' => "#/definitions/#{response_model}" }
+            memo[value[:code]][:schema] = { '$ref' => "#/definitions/#{response_model}" }
           end
         end
-        h
       end
     end
 
     def default_staus_codes
       {
-        get: {code: 200, message: 'get {item}(s)'},
-        post: {code: 201, message: 'created {item}'},
-        put: {code: 200, message: 'updated {item}'},
-        patch: {code: 200, message: 'patched {item}'},
-        delete: {code: 200, message: 'deleted {item}'}
+        get: { code: 200, message: 'get {item}(s)' },
+        post: { code: 201, message: 'created {item}' },
+        put: { code: 200, message: 'updated {item}' },
+        patch: { code: 200, message: 'patched {item}' },
+        delete: { code: 200, message: 'deleted {item}' }
       }
     end
 
@@ -203,7 +200,7 @@ module Grape
       end
 
       if !exposed.empty? && !@entity
-        exposed_params = exposed.inject({}) {|h,x| h[x.first] = x.last; h }
+        exposed_params = exposed.each_with_object({}) { |x, memo| memo[x.first] = x.last }
         properties = parse_response_params(exposed_params)
 
         @definitions[@item] = { properties: properties }
@@ -214,39 +211,34 @@ module Grape
     end
 
     def parse_request_params(parameters, required, route_paramter)
-      parameters.inject({}) do |h,x|
+      parameters.each_with_object({}) do |x, memo|
         if x.is_a?(Hash)
           x.keys.each do |key|
             if route_paramter[key.to_s][:type] == 'Array'
-              x[key].each { |y| h["#{key}[][#{y}]"] = required.assoc("#{key}[#{y}]").last.merge(is_array: true) }
+              x[key].each { |y| memo["#{key}[][#{y}]"] = required.assoc("#{key}[#{y}]").last.merge(is_array: true) }
             else
-              x[key].each { |y| h["#{key}[#{y}]"] = required.assoc("#{key}[#{y}]").last }
+              x[key].each { |y| memo["#{key}[#{y}]"] = required.assoc("#{key}[#{y}]").last }
             end
           end
         else
-          h[x] = required.assoc(x.to_s).last
+          memo[x] = required.assoc(x.to_s).last
         end
-        h
       end
     end
 
-    def parse_response_params(params, model_name = nil)
+    def parse_response_params(params)
       return if params.empty?
 
-      properties = params.inject({}) do |h,x|
+      params.each_with_object({}) do |x, memo|
         x[0] = x.last[:as] if x.last[:as]
         if x.last[:using].present? || could_it_be_a_model?(x.last)
           name = expose_params_from_model(x.last[:using] || x.last[:type])
-          h[x.first] = { '$ref' => "#/definitions/#{name}" }
-          h
+          memo[x.first] = { '$ref' => "#/definitions/#{name}" }
         else
-          h[x.first] = {type: data_type(x.last[:documentation] || x.last)}
-          h[x.first][:enum] = x.last[:values] if x.last[:values] && x.last[:values].is_a?(Array)
-          h
+          memo[x.first] = { type: data_type(x.last[:documentation] || x.last) }
+          memo[x.first][:enum] = x.last[:values] if x.last[:values] && x.last[:values].is_a?(Array)
         end
       end
-
-      properties
     end
 
     def expose_params_from_model(model)
@@ -254,7 +246,7 @@ module Grape
 
       #  has to be adept, to be ready for grape-entity >0.5.0
       parameters = model.exposures ? model.exposures : model.documentation
-      properties = parse_response_params(parameters, model_name)
+      properties = parse_response_params(parameters)
 
       @definitions[model_name] = { type: 'object', properties: properties }
 
@@ -263,12 +255,12 @@ module Grape
 
     def could_it_be_a_model?(value)
       value[:type] &&
-      value[:type].is_a?(Class) &&
-      !is_primitive?(value[:type].name.downcase) &&
-      !value[:type] == Array
+        value[:type].is_a?(Class) &&
+        !primitive?(value[:type].name.downcase) &&
+        !value[:type] == Array
     end
 
-    def is_hidden?(route)
+    def hidden?(route)
       if route.route_hidden
         return route.route_hidden.is_a?(Proc) ? route.route_hidden.call : route.route_hidden
       end
@@ -295,8 +287,9 @@ module Grape
       name                 = (value.is_a?(Hash) && value[:full_name]) || param
       enum_or_range_values = parse_enum_or_range_values(values)
 
+      value_type = { value: value, data_type: data_type, path: path }
       parsed_params = {
-        in:            param_type(value, data_type, path, param, method, is_array),
+        in:            param_type(value_type, param, method, is_array),
         name:          name,
         description:   description,
         type:          data_type,
@@ -351,27 +344,25 @@ module Grape
       end
     end
 
-    def param_type(value, data_type, path, param, method, is_array)
-      if value.is_a?(Hash) && value.key?(:documentation) && value[:documentation].key?(:param_type)
-        param_type = value[:documentation][:param_type]
+    def param_type(value_type, param, method, is_array)
+      if value_type[:value].is_a?(Hash) &&
+         value_type[:value].key?(:documentation) &&
+         value_type[:value][:documentation].key?(:param_type)
+
         if is_array
-          items     = { '$ref' => data_type }
+          items     = { '$ref' => value_type[:data_type] }
           data_type = 'array'
         end
       else
-        param_type = case
-                     when path.include?("{#{param}}")
-                       'path'
-                     when %w(POST PUT PATCH).include?(method)
-                       if is_primitive?(data_type)
-                         'formData'
-                       else
-                         'body'
-                       end
-                     else
-                       'query'
-                      end
-                    end
+        case
+        when value_type[:path].include?("{#{param}}")
+          'path'
+        when %w(POST PUT PATCH).include?(method)
+          primitive?(value_type[:data_type]) ? 'formData' : 'body'
+        else
+          'query'
+        end
+      end
     end
 
     def parse_enum_or_range_values(values)
@@ -405,17 +396,8 @@ module Grape
       end
     end
 
-    def is_primitive?(type)
+    def primitive?(type)
       %w(object integer long float double string byte boolean date dateTime).include? type
-    end
-
-    def as_markdown(details)
-      # description && @@markdown ? @@markdown.as_markdown(strip_heredoc(description)) : description
-    end
-
-    def strip_heredoc(string)
-      indent = string.scan(/^[ \t]*(?=\S)/).min.try(:size) || 0
-      string.gsub(/^[ \t]{#{indent}}/, '')
     end
   end
 end

@@ -6,7 +6,7 @@ require 'grape-swagger/doc_methods'
 require 'grape-swagger/markdown/kramdown_adapter'
 require 'grape-swagger/markdown/redcarpet_adapter'
 
-require "awesome_print"
+require 'awesome_print'
 
 module Grape
   class API
@@ -16,7 +16,7 @@ module Grape
       def add_swagger_documentation(options = {})
         documentation_class = create_documentation_class
 
-        set_version(options)
+        version_for(options)
         options = { target_class: self }.merge(options)
         @target_class = options[:target_class]
 
@@ -40,8 +40,8 @@ module Grape
 
       private
 
-      def set_version(options)
-        options[:version] = self.version if self.version
+      def version_for(options)
+        options[:version] = version if version
       end
 
       def combine_routes(app, doc_klass)

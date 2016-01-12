@@ -1,6 +1,5 @@
 module GrapeSwagger
   module DocMethods
-
     def name
       @@class_name
     end
@@ -91,7 +90,7 @@ module GrapeSwagger
         format: nil,
         models: [],
         info: {},
-        scheme: ['https', 'http'],
+        scheme: %w( https http ),
         authorizations: nil,
         root_base_path: true,
         api_documentation: { desc: 'Swagger compatible API description' },
@@ -104,6 +103,5 @@ module GrapeSwagger
       @@class_name              = options[:class_name] || options[:mount_path].delete('/')
       @@hide_documentation_path = options[:hide_documentation_path]
     end
-
   end
 end

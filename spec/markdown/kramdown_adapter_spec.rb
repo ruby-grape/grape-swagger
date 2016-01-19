@@ -25,9 +25,9 @@ describe GrapeSwagger::Markdown::KramdownAdapter do
 
   context 'markdown' do
     it 'marks down with the configured options' do
-      text = '# hello world #'
+      text = '# hello world'
       options = { input: 'GFM', enable_coderay: true, auto_ids: false, hard_wrap: true }
-      expect(Kramdown::Document).to receive(:new).with(text, options).and_call_original
+      expect(GrapeSwagger::Markdown::KramdownAdapter).to receive(:new).with(options).and_call_original
 
       output = GrapeSwagger::Markdown::KramdownAdapter.new(options).markdown(text)
 

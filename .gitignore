@@ -35,3 +35,4 @@ example.json
 swagger_spec1.2/
 ToDo.md
 .ruby-version
+spec/params_entity_spec.rb

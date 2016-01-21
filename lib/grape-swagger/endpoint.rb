@@ -1,3 +1,6 @@
+require 'active_support'
+require 'active_support/core_ext/string/inflections.rb'
+
 module Grape
   class Endpoint
     PRIMITIVE_MAPPINGS = {
@@ -98,8 +101,8 @@ module Grape
         path.sub!('(.:format)', '')
         # ... format params
         path.gsub!(/:(\w+)/, '{\1}')
-        # set item from path, this is used for the definitions object
 
+        # set item from path, this could be used for the definitions object
         @item = path.gsub(/\/\{(.+?)\}/, '').split('/').last.singularize.underscore.camelize || 'Item'
         @entity = route.route_entity || route.route_success
 

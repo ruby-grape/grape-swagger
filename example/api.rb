@@ -110,10 +110,10 @@ module Api
   end
 
   class FileAccessor < Grape::API
-    # TEST api for testing uploading
-    # curl --form file=@splines.png http://localhost:9292/file/upload
     namespace :file do
-      desc 'Update image'
+      desc 'Update image',
+        details: "# TEST api for testing uploading\n
+                  # curl --form file=@splines.png http://localhost:9292/file/upload"
       post 'upload' do
         filename = params[:file][:filename]
         content_type 'application/octet-stream'

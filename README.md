@@ -1,3 +1,5 @@
+[ ![Codeship Status for LeFnord/grape-swagger](https://codeship.com/projects/3e240870-44df-0133-d90f-6a11ad0da27a/status?branch=master)](https://codeship.com/projects/104499)
+
 # grape-swagger
 
 **this is a work in progress version, to upgrade to swagger 2.0 spec,  

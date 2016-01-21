@@ -16,6 +16,7 @@ readded/reimplemented features could be found in the ToC**
 [Configure](#configure)  
 [Routes Configuration](#routes)  
 [Additional documentation](#additions)  
+[Example](#example)  
 
 
 For how to use at the moment see [v2 specs](https://github.com/LeFnord/grape-swagger/tree/master/spec/swagger_v2) and or [Hussars](https://github.com/LeFnord/hussars) sample app.
@@ -707,6 +708,14 @@ desc 'thing',
   …
 
 ```
+
+<a="example" />
+# Example
+
+Go into example directory and run it: `$ bundle exec rackup`
+go to: `http://localhost:9292/swagger_doc` to get it
+
+For request examples load the [postman file]()
 
 ## Contributing to grape-swagger
 

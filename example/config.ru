@@ -6,19 +6,19 @@ use Rack::Cors do
   end
 end
 
-# run Api.new
-
 require 'grape'
-require '../lib/grape-swagger'
 
-require './api'
+require './api/endpoints'
+require './api/entities'
 
 class Base < Grape::API
+  require 'grape-entity'
+  require '../lib/grape-swagger'
   format :json
 
-  mount Api::Root
-  mount Api::Splines
-  mount Api::FileAccessor
+  mount Api::Endpoints::Root
+  mount Api::Endpoints::Splines
+  mount Api::Endpoints::FileAccessor
 
   before do
     header['Access-Control-Allow-Origin'] = '*'
@@ -31,8 +31,7 @@ class Base < Grape::API
     error_response(message: "Internal server error: #{e}", status: 500)
   end
 
-  add_swagger_documentation :format => :json,
-                            :hide_documentation_path => true,
+  add_swagger_documentation :hide_documentation_path => true,
                             :api_version => 'v1',
                             :info => {
                               title: "Horses and Hussars",

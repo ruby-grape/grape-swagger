@@ -2,15 +2,15 @@ This branch is work in progress for bringing grape-swagger to Swagger 2.0 spec. 
 
 ##### Table of Contents
 
-[What is grape-swagger?](#what)
-[Related Projects](#related)
-[Swagger-Spec](#swagger-spec)
-[Installation](#install)
-[Usage](#usage)
-[Configure](#configure)
-[Routes Configuration](#routes)
-[Additional documentation](#additions)
-[Example](#example)
+[What is grape-swagger?](#what)  
+[Related Projects](#related)  
+[Swagger-Spec](#swagger-spec)  
+[Installation](#install)  
+[Usage](#usage)  
+[Configure](#configure)  
+[Routes Configuration](#routes)  
+[Additional documentation](#additions)  
+[Example](#example)  
 
 For how to use at the moment see [v2 specs](tree/master/spec/swagger_v2) and or [Hussars](https://github.com/LeFnord/hussars) sample app.
 
@@ -107,13 +107,13 @@ end
 <a name="configure" />
 ## Configure
 
-[target_class](#target_class)
-[markdown](#markdown)
-[hide_format](#hide_format)
-[api_version](#api_version)
-[models](#models)
-[hide_documentation_path](#hide_documentation_path)
-[info](#info)
+[target_class](#target_class)  
+[markdown](#markdown)  
+[hide_format](#hide_format)  
+[api_version](#api_version)  
+[models](#models)  
+[hide_documentation_path](#hide_documentation_path)  
+[info](#info)  
 
 
 You can pass a hash with optional configuration settings to ```add_swagger_documentation```.
@@ -245,12 +245,12 @@ add_swagger_documentation \
 <a name="routes" />
 ## Routes Configuration
 
-[Swagger Header Parameters](#headers)
-[Hiding an Endpoint](#hiding)
-[Defining an endpoint as array](#array)
-[Using an options hash](#options)
-[Specify endpoint details](#details)
-[Response documentation](#response)
+[Swagger Header Parameters](#headers)  
+[Hiding an Endpoint](#hiding)  
+[Defining an endpoint as array](#array)  
+[Using an options hash](#options)  
+[Specify endpoint details](#details)  
+[Response documentation](#response)  
 
 
 <a name="headers" />
@@ -407,8 +407,8 @@ end
 ## Additional documentation
 
 
-[Markdown in Detail](#md_usage)
-[Response documentation](#response)
+[Markdown in Detail](#md_usage)  
+[Response documentation](#response)  
 
 
 ### Setting a Swagger defaultValue

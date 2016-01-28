@@ -11,7 +11,7 @@ describe 'exposing' do
         desc 'This returns something',
           params: Entities::UseResponse.documentation,
           failure: [{code: 400, message: 'NotFound', model: Entities::ApiError}]
-        get '/params_response' do
+        post '/params_response' do
           { "declared_params" => declared(params) }
         end
 
@@ -71,6 +71,14 @@ describe 'exposing' do
       JSON.parse(last_response.body)
     end
 
+
+    # usage of grape-entity 0.4.8 preduces a wrong definition for ParamsResponse, this one:
+    # "definitions" => {
+    #   "ParamsResponse"=>{"properties"=>{"description"=>{"type"=>"string"}}},
+    #   "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}}
+    # }
+    # (`$response` property is missing)
+
     specify do
       expect(subject).to eql({
         "info"=>{"title"=>"API title", "version"=>"v1"},
@@ -80,17 +88,17 @@ describe 'exposing' do
         "schemes"=>["https", "http"],
         "paths"=>{
           "/params_response"=>{
-            "get"=>{
+            "post"=>{
               "produces"=>["application/json"],
               "parameters"=>[
-                {"in"=>"query", "name"=>"description", "description"=>nil, "type"=>"string", "required"=>false, "allowMultiple"=>false},
-                {"in"=>"query", "name"=>"$responses", "description"=>nil, "type"=>"string", "required"=>false, "allowMultiple"=>true}],
+                {"in"=>"formData", "name"=>"description", "description"=>nil, "type"=>"string", "required"=>false, "allowMultiple"=>false},
+                {"in"=>"formData", "name"=>"$responses", "description"=>nil, "type"=>"string", "required"=>false, "allowMultiple"=>true}],
               "responses"=>{
-                "200"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/ParamsResponse"}},
+                "201"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/ParamsResponse"}},
                 "400"=>{"description"=>"NotFound", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}
         }}},
         "definitions"=>{
-          "ParamsResponse"=>{"properties"=>{"description"=>{"type"=>"string"}}},
+          "ParamsResponse"=>{"properties"=>{"description"=>{"type"=>"string"}, "$responses"=>{"type"=>"string"}}},
           "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}}
       }})
     end

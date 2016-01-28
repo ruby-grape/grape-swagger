@@ -230,7 +230,7 @@ module Grape
     end
 
     def parse_response_params(params)
-      return if params.empty?
+      return if params.nil?
 
       params.each_with_object({}) do |x, memo|
         x[0] = x.last[:as] if x.last[:as]
@@ -247,8 +247,15 @@ module Grape
     def expose_params_from_model(model)
       model_name = model.name.demodulize.camelize
 
-      #  has to be adept, to be ready for grape-entity >0.5.0
-      parameters = model.exposures ? model.exposures : model.documentation
+      # DONE: has to be adept, to be ready for grape-entity >0.5.0
+      # TODO: this should only be a temporary hack ;)
+      if GrapeEntity::VERSION =~ /0\.4\.\d/
+        parameters = model.exposures ? model.exposures : model.documentation
+      elsif GrapeEntity::VERSION =~ /0\.5\.\d/
+        parameters = model.root_exposures.each_with_object({}) do |value,memo|
+          memo[value.attribute] = value.send(:options)
+        end
+      end
       properties = parse_response_params(parameters)
 
       @definitions[model_name] = { type: 'object', properties: properties }

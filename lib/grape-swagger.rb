@@ -150,23 +150,27 @@ module Grape
 
       def parse_array_params(params)
         modified_params = {}
-        array_param = nil
+        array_keys = []
         params.each_key do |k|
+          new_key, modified_params = parse_array_key(array_keys, k, modified_params)
           if params[k].is_a?(Hash) && params[k][:type] == 'Array'
-            array_param = k
-            modified_params[k] = params[k]
-          else
-            new_key = k
-            unless array_param.nil?
-              if k.to_s.start_with?(array_param.to_s + '[')
-                new_key = array_param.to_s + '[]' + k.to_s.split(array_param)[1]
-                modified_params.delete array_param
-              end
-            end
-            modified_params[new_key] = params[k]
+            array_keys.push(new_key)
           end
+          modified_params[new_key] = params[k]
         end
         modified_params
+      end
+
+      def parse_array_key(array_keys, key, modified_params)
+        unless array_keys.blank?
+          array_keys.each do |array_key|
+            if key.to_s.start_with?(array_key.to_s + '[')
+              key = array_key.to_s + '[]' + key.to_s.split(array_key)[1]
+              modified_params.delete array_key
+            end
+          end
+        end
+        return key, modified_params
       end
 
       def parse_enum_or_range_values(values)

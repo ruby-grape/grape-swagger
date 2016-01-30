@@ -53,10 +53,10 @@ module Grape
       def combine_namespaces(app)
         app.endpoints.each do |endpoint|
           ns = if endpoint.respond_to?(:namespace_stackable)
-                 endpoint.namespace_stackable(:namespace).last
-               else
-                 endpoint.settings.stack.last[:namespace]
-               end
+            endpoint.namespace_stackable(:namespace).last
+          else
+            endpoint.settings.stack.last[:namespace]
+          end
           # use the full namespace here (not the latest level only)
           # and strip leading slash
           @target_class.combined_namespaces[endpoint.namespace.sub(/^\//, '')] = ns if ns
@@ -78,7 +78,7 @@ module Grape
           # fetch all routes that are within the current namespace
           namespace_routes = parent_route.collect do |route|
             route if (route.route_path.start_with?(route.route_prefix ? "/#{route.route_prefix}/#{name}" : "/#{name}") || route.route_path.start_with?((route.route_prefix ? "/#{route.route_prefix}/:version/#{name}" : "/:version/#{name}"))) &&
-                     (route.instance_variable_get(:@options)[:namespace] == "/#{name}" || route.instance_variable_get(:@options)[:namespace] == "/:version/#{name}")
+              (route.instance_variable_get(:@options)[:namespace] == "/#{name}" || route.instance_variable_get(:@options)[:namespace] == "/:version/#{name}")
           end.compact
 
           if namespace.options.key?(:swagger) && namespace.options[:swagger][:nested] == false
@@ -150,38 +150,42 @@ module Grape
 
       def parse_array_params(params)
         modified_params = {}
-        array_param = nil
+        array_keys = []
         params.each_key do |k|
+          new_key, modified_params = parse_array_key(array_keys, k, modified_params)
           if params[k].is_a?(Hash) && params[k][:type] == 'Array'
-            array_param = k
-            modified_params[k] = params[k]
-          else
-            new_key = k
-            unless array_param.nil?
-              if k.to_s.start_with?(array_param.to_s + '[')
-                new_key = array_param.to_s + '[]' + k.to_s.split(array_param)[1]
-                modified_params.delete array_param
-              end
-            end
-            modified_params[new_key] = params[k]
+            array_keys.push(new_key)
           end
+          modified_params[new_key] = params[k]
         end
         modified_params
       end
 
+      def parse_array_key(array_keys, key, modified_params)
+        unless array_keys.blank?
+          array_keys.each do |array_key|
+            if key.to_s.start_with?(array_key.to_s + '[')
+              key = array_key.to_s + '[]' + key.to_s.split(array_key)[1]
+              modified_params.delete array_key
+            end
+          end
+        end
+        return key, modified_params
+      end
+
       def parse_enum_or_range_values(values)
         case values
-        when Range
-          parse_range_values(values) if values.first.is_a?(Integer)
-        when Proc
-          values_result = values.call
-          if values_result.is_a?(Range) && values_result.first.is_a?(Integer)
-            parse_range_values(values_result)
+          when Range
+            parse_range_values(values) if values.first.is_a?(Integer)
+          when Proc
+            values_result = values.call
+            if values_result.is_a?(Range) && values_result.first.is_a?(Integer)
+              parse_range_values(values_result)
+            else
+              { enum: values_result }
+            end
           else
-            { enum: values_result }
-          end
-        else
-          { enum: values } if values
+            { enum: values } if values
         end
       end
 

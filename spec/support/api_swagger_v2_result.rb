@@ -77,10 +77,11 @@ RSpec.shared_context "swagger example" do
         "/v3/other_thing/{elements}"=>{
           "get"=>{
             "produces"=>["application/json"],
-            "parameters"=>[{"in"=>"array", "name"=>"elements", "description"=>"Set of configuration", "type"=>"string", "required"=>true, "allowMultiple"=>true}],
-            "responses"=>{"200"=>{"description"=>"nested route inside namespace", "schema"=>{"$ref"=>"#/definitions/QueryInput"}}},
-            "x-amazon-apigateway-auth"=>{"type"=>"none"},
-            "x-amazon-apigateway-integration"=>{"type"=>"aws", "uri"=>"foo_bar_uri", "httpMethod"=>"get"}}},
+            "parameters"=>[
+              {"in"=>"array", "name"=>"elements", "description"=>"Set of configuration", "type"=>"string", "required"=>true, "allowMultiple"=>true, "items"=>{"type"=>"string"}}],
+              "responses"=>{"200"=>{"description"=>"nested route inside namespace", "schema"=>{"$ref"=>"#/definitions/QueryInput"}}},
+              "x-amazon-apigateway-auth"=>{"type"=>"none"},
+              "x-amazon-apigateway-integration"=>{"type"=>"aws", "uri"=>"foo_bar_uri", "httpMethod"=>"get"}}},
         "/thing"=>{
           "get"=>{
             "produces"=>["application/json"],

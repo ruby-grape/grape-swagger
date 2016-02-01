@@ -99,6 +99,6 @@ describe 'format, content_type' do
     specify do
       expect(subject['paths']['/use_produces']['get']).to include('produces')
       expect(subject['paths']['/use_produces']['get']['produces']).to eql(produced)
-      end
+    end
   end
 end

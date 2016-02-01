@@ -11,7 +11,7 @@ module Grape
       'byte' => %w(string byte),
       'date' => %w(string date),
       'dateTime' => %w(string date-time)
-    }
+    }.freeze
 
     def content_types_for(target_class)
       content_types = (target_class.content_types || {}).values
@@ -103,7 +103,7 @@ module Grape
         path.gsub!(/:(\w+)/, '{\1}')
 
         # set item from path, this could be used for the definitions object
-        @item = path.gsub(/\/\{(.+?)\}/, '').split('/').last.singularize.underscore.camelize || 'Item'
+        @item = path.gsub(%r{/{(.+?)}}, '').split('/').last.singularize.underscore.camelize || 'Item'
         @entity = route.route_entity || route.route_success
 
         # ... replacing version params through submitted version
@@ -175,14 +175,15 @@ module Grape
         response_model = @item
         response_model = expose_params_from_model(value[:model]) if value[:model]
 
-        next unless !response_model.start_with?('Swagger_doc') && ((@definitions[response_model] && value[:code].to_s.start_with?('2')) || value[:model])
+        next unless !response_model.start_with?('Swagger_doc') &&
+                    ((@definitions[response_model] && value[:code].to_s.start_with?('2')) || value[:model])
 
         # TODO: proof that the definition exist, if model isn't specified
-        if route.route_is_array
-          memo[value[:code]][:schema] = { 'type' => 'array', 'items' => { '$ref' => "#/definitions/#{response_model}" } }
-        else
-          memo[value[:code]][:schema] = { '$ref' => "#/definitions/#{response_model}" }
-        end
+        memo[value[:code]][:schema] = if route.route_is_array
+                                        { 'type' => 'array', 'items' => { '$ref' => "#/definitions/#{response_model}" } }
+                                      else
+                                        { '$ref' => "#/definitions/#{response_model}" }
+                                      end
       end
     end
 
@@ -287,7 +288,7 @@ module Grape
     end
 
     def parse_params(param, value, path, method)
-      items = {}
+      @array_items = {}
 
       additional_documentation = value.is_a?(Hash) ? value[:documentation] : nil
       data_type = data_type(value)
@@ -306,6 +307,7 @@ module Grape
       enum_or_range_values = parse_enum_or_range_values(values)
 
       value_type = { value: value, data_type: data_type, path: path }
+
       parsed_params = {
         in:            param_type(value_type, param, method, is_array),
         name:          name,
@@ -319,12 +321,10 @@ module Grape
         parsed_params[:type], parsed_params[:format] = PRIMITIVE_MAPPINGS[data_type]
       end
 
-      parsed_params[:items] = items if items.present?
+      parsed_params[:items] = @array_items if @array_items.present?
 
       parsed_params[:defaultValue] = example if example
-      if default_value && example.blank?
-        parsed_params[:defaultValue] = default_value
-      end
+      parsed_params[:defaultValue] = default_value if default_value && example.blank?
 
       parsed_params.merge!(enum_or_range_values) if enum_or_range_values
       parsed_params
@@ -368,8 +368,9 @@ module Grape
          value_type[:value][:documentation].key?(:param_type)
 
         if is_array
-          items     = { '$ref' => value_type[:data_type] }
-          data_type = 'array'
+          @array_items = { 'type' => value_type[:data_type] }
+
+          'array'
         end
       else
         case

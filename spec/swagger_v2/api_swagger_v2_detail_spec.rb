@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'spec_helper'
 
 def details
@@ -109,7 +111,7 @@ describe 'details' do
     end
   end
 
-  describe 'details, convert markdown with redcarpet' do
+  describe 'details, convert markdown with redcarpet', unless: RUBY_PLATFORM.eql?('java') do
     include_context "the api entities"
 
     before :all do
@@ -142,7 +144,7 @@ describe 'details' do
     specify do
       expect(subject['paths']['/use_gfm_rc_detail']['get']).to include('description')
       expect(subject['paths']['/use_gfm_rc_detail']['get']['description']).to eql(
-        "<h1>Burgers in Heaven</h1>\n\n<blockquote>\n<p>A burger doesn&#39;t come for free</p>\n</blockquote>\n\n<p>If you want to reserve a burger in heaven, you have to do\nsome crazy stuff on earth.</p>\n<pre><code class=\"highlight plaintext\">def do_good\nputs 'help people'\nend\n</code></pre>\n\n<ul>\n<li><em>Will go to Heaven:</em> Probably</li>\n<li><em>Will go to Hell:</em> Probably not</li>\n</ul>"
+        "<h1>Burgers in Heaven</h1>\n\n<blockquote>\n<p>A burger doesn&#39;t come for free</p>\n</blockquote>\n\n<p>If you want to reserve a burger in heaven, you have to do\nsome crazy stuff on earth.</p>\n<pre class=\"highlight plaintext\"><code>def do_good\nputs 'help people'\nend\n</code></pre>\n\n<ul>\n<li><em>Will go to Heaven:</em> Probably</li>\n<li><em>Will go to Hell:</em> Probably not</li>\n</ul>"
       )
     end
   end

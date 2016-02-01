@@ -129,8 +129,7 @@ module Grape
       methods[:description] = description_object(route, options[:markdown])
       methods[:headers] = route.route_headers if route.route_headers
 
-      mime_types = options[:format] ? Grape::ContentTypes::CONTENT_TYPES[options[:format]] : Grape::ContentTypes::CONTENT_TYPES[:json]
-      methods[:produces] = [mime_types]
+      methods[:produces] = produces_object(route, options)
 
       methods[:parameters] = params_object(route)
       methods[:responses] = response_object(route)
@@ -148,6 +147,17 @@ module Grape
       description = route.route_detail if route.route_detail.present?
       description = markdown.markdown(description).chomp if markdown
       description
+    end
+
+    def produces_object(route, options)
+      mime_types = GrapeSwagger::DocMethods::Produces.call(options[:format])
+
+      route_mime_types = [:route_formats, :route_content_types, :route_produces].map do |producer|
+        possible = route.send(producer)
+        GrapeSwagger::DocMethods::Produces.call(possible) if possible.present?
+      end.flatten.compact.uniq
+
+      route_mime_types.present? ? route_mime_types : mime_types
     end
 
     def response_object(route)

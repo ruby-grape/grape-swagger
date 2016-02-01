@@ -8,11 +8,18 @@ describe 'format, content_type' do
       class ProducesApi < Grape::API
         format :json
 
+        desc 'This uses json (default) for produces',
+          failure: [{code: 400, model: Entities::ApiError}],
+          entity: Entities::UseResponse
+        get '/use_default' do
+          { "declared_params" => declared(params) }
+        end
+
         desc 'This uses formats for produces',
           failure: [{code: 400, model: Entities::ApiError}],
           formats: [:xml, :binary, "application/vdns"],
           entity: Entities::UseResponse
-        get '/use_format' do
+        get '/use_formats' do
           { "declared_params" => declared(params) }
         end
 
@@ -20,7 +27,15 @@ describe 'format, content_type' do
           failure: [{code: 400, model: Entities::ApiError}],
           content_types: [:xml, :binary, "application/vdns"],
           entity: Entities::UseResponse
-        get '/use_format' do
+        get '/use_content_types' do
+          { "declared_params" => declared(params) }
+        end
+
+        desc 'This uses produces for produces',
+          failure: [{code: 400, model: Entities::ApiError}],
+          produces: [:xml, :binary, "application/vdns"],
+          entity: Entities::UseResponse
+        get '/use_produces' do
           { "declared_params" => declared(params) }
         end
 
@@ -33,14 +48,57 @@ describe 'format, content_type' do
     TheApi::ProducesApi
   end
 
-  subject do
-    get '/swagger_doc'
-    JSON.parse(last_response.body)
+  let(:produced) {[
+    'application/xml',
+    'application/octet-stream',
+    'application/vdns'
+  ]}
+
+  describe "formats" do
+    subject do
+      get '/swagger_doc/use_default'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['paths']['/use_default']['get']).to include('produces')
+      expect(subject['paths']['/use_default']['get']['produces']).to eql(['application/json'])
+    end
   end
 
-  specify do
-    require 'pry'; binding.pry
-    expect(subject['paths']['/use_produces']['get']).to include('produces')
-    # expect(subject['paths']['/use_produces']['get']['produces']).to eql(["application/json"])
+  describe "formats" do
+    subject do
+      get '/swagger_doc/use_formats'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['paths']['/use_formats']['get']).to include('produces')
+      expect(subject['paths']['/use_formats']['get']['produces']).to eql(produced)
+    end
+  end
+
+  describe "content types" do
+    subject do
+      get '/swagger_doc/use_content_types'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['paths']['/use_content_types']['get']).to include('produces')
+      expect(subject['paths']['/use_content_types']['get']['produces']).to eql(produced)
+      end
+  end
+
+  describe "produces" do
+    subject do
+      get '/swagger_doc/use_produces'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['paths']['/use_produces']['get']).to include('produces')
+      expect(subject['paths']['/use_produces']['get']['produces']).to eql(produced)
+      end
   end
 end

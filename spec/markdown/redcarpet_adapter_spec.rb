@@ -30,12 +30,6 @@ describe GrapeSwagger::Markdown::RedcarpetAdapter, unless: RUBY_PLATFORM.eql?('j
         expect(adapter.extension_options).to eq(extensions)
         expect(adapter.render_options).to eq(no_links: true)
       end
-
-      it 'raises an GrapeSwagger::Errors::MarkdownDependencyMissingError if module can not be required.' do
-        expect_any_instance_of(Kernel).to receive(:require).with('redcarpet').and_raise(LoadError)
-
-        expect { GrapeSwagger::Markdown::RedcarpetAdapter.new }.to raise_error(GrapeSwagger::Errors::MarkdownDependencyMissingError, 'Missing required dependency: redcarpet')
-      end
     end
 
     context 'markdown' do
@@ -58,14 +52,6 @@ describe GrapeSwagger::Markdown::RedcarpetAdapter, unless: RUBY_PLATFORM.eql?('j
 
         expect(renderer).to include(Rouge::Plugins::Redcarpet)
         expect(renderer.superclass).to be(Redcarpet::Render::HTML)
-      end
-
-      it 'throws an error when rouge syntax highlighter cant be included' do
-        adapter = GrapeSwagger::Markdown::RedcarpetAdapter.new
-
-        expect_any_instance_of(Kernel).to receive(:require).with('rouge').and_raise(LoadError)
-
-        expect { adapter.send(:new_redcarpet_renderer, :rouge) }.to raise_error(GrapeSwagger::Errors::MarkdownDependencyMissingError, 'Missing required dependency: rouge')
       end
 
       it 'returns a default syntax highlighter' do

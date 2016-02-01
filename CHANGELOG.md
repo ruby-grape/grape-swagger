@@ -1,6 +1,16 @@
+
+n.n.n / 2016-02-05
+==================
+
 ### 0.10.3 (Next)
 
-* Your contribution here.
+[#336](https://github.com/ruby-grape/grape-swagger/pull/336) changes of swagger-2.0 fork, to support it
+
+* updates gems, corrects parameter, which is in array, make rubocop happy
+* runs under 2.3
+* documents produces of an end-point
+* Update api_swagger_v2_format-content_type_spec.rb
+* upgrades to grape 0.14.x; grape-entity 0.5.x
 
 ### 0.10.2 (August 19, 2015)
 

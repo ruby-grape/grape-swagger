@@ -165,15 +165,13 @@ module Grape
         response_model = @item
         response_model = expose_params_from_model(value[:model]) if value[:model]
 
+        next unless !response_model.start_with?('Swagger_doc') && ((@definitions[response_model] && value[:code].to_s.start_with?('2')) || value[:model])
+
         # TODO: proof that the definition exist, if model isn't specified
-        if !response_model.start_with?('Swagger_doc') &&
-           ((!!@definitions[response_model] && value[:code].to_s.start_with?('2')) ||
-           value[:model])
-          if route.route_is_array
-            memo[value[:code]][:schema] = { 'type' => 'array', 'items' => { '$ref' => "#/definitions/#{response_model}" } }
-          else
-            memo[value[:code]][:schema] = { '$ref' => "#/definitions/#{response_model}" }
-          end
+        if route.route_is_array
+          memo[value[:code]][:schema] = { 'type' => 'array', 'items' => { '$ref' => "#/definitions/#{response_model}" } }
+        else
+          memo[value[:code]][:schema] = { '$ref' => "#/definitions/#{response_model}" }
         end
       end
     end
@@ -190,7 +188,7 @@ module Grape
 
     def params_object(route)
       partition_params(route).map do |param, value|
-        parse_params(param, value, route.route_path, route.route_method)
+        parse_params(param, { required: false }.merge(value), route.route_path, route.route_method)
       end
     end
 
@@ -252,7 +250,7 @@ module Grape
       if GrapeEntity::VERSION =~ /0\.4\.\d/
         parameters = model.exposures ? model.exposures : model.documentation
       elsif GrapeEntity::VERSION =~ /0\.5\.\d/
-        parameters = model.root_exposures.each_with_object({}) do |value,memo|
+        parameters = model.root_exposures.each_with_object({}) do |value, memo|
           memo[value.attribute] = value.send(:options)
         end
       end
@@ -289,7 +287,7 @@ module Grape
       end
 
       description          = value.is_a?(Hash) ? value[:desc] || value[:description] : nil
-      required             = value.is_a?(Hash) ? !!value[:required] : false
+      required             = value.is_a?(Hash) ? value[:required] : false
       default_value        = value.is_a?(Hash) ? value[:default] : nil
       example              = value.is_a?(Hash) ? value[:example] : nil
       is_array             = value.is_a?(Hash) ? (value[:is_array] || false) : false

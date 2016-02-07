@@ -26,6 +26,17 @@ describe 'Array Params' do
       get :raw_array_integers do
       end
 
+      params do
+        requires :a_array, type: Array do
+          requires :param_1, type: Integer
+          requires :b_array, type: Array do
+            requires :param_2, type: String
+          end
+        end
+      end
+      post :nested_array do
+      end
+
       add_swagger_documentation
     end
   end
@@ -58,6 +69,17 @@ describe 'Array Params' do
     parameters = body['apis'].first['operations'].first['parameters']
     expect(parameters).to eq [
       { 'paramType' => 'query', 'name' => 'raw_array', 'description' => '', 'type' => 'array', 'required' => false, 'allowMultiple' => false, 'items' => { 'type' => 'integer', 'format' => 'int32' } }
+    ]
+  end
+
+  it 'get nested array integer' do
+    get '/swagger_doc/nested_array'
+    expect(last_response.status).to eq 200
+    body = JSON.parse last_response.body
+    parameters = body['apis'].first['operations'].first['parameters']
+    expect(parameters).to eq [
+      { 'paramType' => 'form', 'name' => 'a_array[][param_1]', 'description' => '', 'type' => 'integer', 'required' => true, 'allowMultiple' => false, 'format' => 'int32' },
+      { 'paramType' => 'form', 'name' => 'a_array[][b_array][][param_2]', 'description' => '', 'type' => 'string', 'required' => true, 'allowMultiple' => false }
     ]
   end
 end

@@ -1,5 +1,6 @@
 ### 0.10.5 (Next)
 
+* [#338](https://github.com/ruby-grape/grape-swagger/pull/338): Support Nested Array - [@itoufo](https://github.com/itoufo).
 * Your contribution here.
 
 #### Fixes

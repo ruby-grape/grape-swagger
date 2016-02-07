@@ -52,11 +52,12 @@ module Grape
 
       def combine_namespaces(app)
         app.endpoints.each do |endpoint|
-          ns = if endpoint.respond_to?(:namespace_stackable)
-                 endpoint.namespace_stackable(:namespace).last
-               else
-                 endpoint.settings.stack.last[:namespace]
-               end
+          ns =
+            if endpoint.respond_to?(:namespace_stackable)
+              endpoint.namespace_stackable(:namespace).last
+            else
+              endpoint.settings.stack.last[:namespace]
+            end
           # use the full namespace here (not the latest level only)
           # and strip leading slash
           @target_class.combined_namespaces[endpoint.namespace.sub(/^\//, '')] = ns if ns
@@ -170,7 +171,7 @@ module Grape
             end
           end
         end
-        return key, modified_params
+        [key, modified_params]
       end
 
       def parse_enum_or_range_values(values)

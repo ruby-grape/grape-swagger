@@ -422,7 +422,7 @@ module GrapeSwagger
       params do
         optional :locale, type: Symbol, desc: 'Locale of API documentation'
       end
-      get @@mount_path do
+      get "#{@@mount_path}" do
         I18n.locale = params[:locale] || I18n.default_locale
         header['Access-Control-Allow-Origin']   = '*'
         header['Access-Control-Request-Method'] = '*'

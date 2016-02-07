@@ -53,9 +53,9 @@ module Grape
       def combine_namespaces(app)
         app.endpoints.each do |endpoint|
           ns = if endpoint.respond_to?(:namespace_stackable)
-            endpoint.namespace_stackable(:namespace).last
-          else
-            endpoint.settings.stack.last[:namespace]
+                 endpoint.namespace_stackable(:namespace).last
+               else
+                 endpoint.settings.stack.last[:namespace]
           end
           # use the full namespace here (not the latest level only)
           # and strip leading slash
@@ -78,7 +78,7 @@ module Grape
           # fetch all routes that are within the current namespace
           namespace_routes = parent_route.collect do |route|
             route if (route.route_path.start_with?(route.route_prefix ? "/#{route.route_prefix}/#{name}" : "/#{name}") || route.route_path.start_with?((route.route_prefix ? "/#{route.route_prefix}/:version/#{name}" : "/:version/#{name}"))) &&
-              (route.instance_variable_get(:@options)[:namespace] == "/#{name}" || route.instance_variable_get(:@options)[:namespace] == "/:version/#{name}")
+                     (route.instance_variable_get(:@options)[:namespace] == "/#{name}" || route.instance_variable_get(:@options)[:namespace] == "/:version/#{name}")
           end.compact
 
           if namespace.options.key?(:swagger) && namespace.options[:swagger][:nested] == false
@@ -170,22 +170,22 @@ module Grape
             end
           end
         end
-        return key, modified_params
+        [key, modified_params]
       end
 
       def parse_enum_or_range_values(values)
         case values
-          when Range
-            parse_range_values(values) if values.first.is_a?(Integer)
-          when Proc
-            values_result = values.call
-            if values_result.is_a?(Range) && values_result.first.is_a?(Integer)
-              parse_range_values(values_result)
-            else
-              { enum: values_result }
-            end
+        when Range
+          parse_range_values(values) if values.first.is_a?(Integer)
+        when Proc
+          values_result = values.call
+          if values_result.is_a?(Range) && values_result.first.is_a?(Integer)
+            parse_range_values(values_result)
           else
-            { enum: values } if values
+            { enum: values_result }
+          end
+        else
+          { enum: values } if values
         end
       end
 

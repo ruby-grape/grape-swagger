@@ -11,7 +11,7 @@ module Grape
       'byte' => %w(string byte),
       'date' => %w(string date),
       'dateTime' => %w(string date-time)
-    }
+    }.freeze
 
     def content_types_for(target_class)
       content_types = (target_class.content_types || {}).values
@@ -103,7 +103,7 @@ module Grape
         path.gsub!(/:(\w+)/, '{\1}')
 
         # set item from path, this could be used for the definitions object
-        @item = path.gsub(/\/\{(.+?)\}/, '').split('/').last.singularize.underscore.camelize || 'Item'
+        @item = path.gsub(%r{/{(.+?)}}, '').split('/').last.singularize.underscore.camelize || 'Item'
         @entity = route.route_entity || route.route_success
 
         # ... replacing version params through submitted version
@@ -129,8 +129,7 @@ module Grape
       methods[:description] = description_object(route, options[:markdown])
       methods[:headers] = route.route_headers if route.route_headers
 
-      mime_types = options[:format] ? Grape::ContentTypes::CONTENT_TYPES[options[:format]] : Grape::ContentTypes::CONTENT_TYPES[:json]
-      methods[:produces] = [mime_types]
+      methods[:produces] = produces_object(route, options)
 
       methods[:parameters] = params_object(route)
       methods[:responses] = response_object(route)
@@ -150,6 +149,17 @@ module Grape
       description
     end
 
+    def produces_object(route, options)
+      mime_types = GrapeSwagger::DocMethods::Produces.call(options[:format])
+
+      route_mime_types = [:route_formats, :route_content_types, :route_produces].map do |producer|
+        possible = route.send(producer)
+        GrapeSwagger::DocMethods::Produces.call(possible) if possible.present?
+      end.flatten.compact.uniq
+
+      route_mime_types.present? ? route_mime_types : mime_types
+    end
+
     def response_object(route)
       default_code = default_staus_codes[route.route_method.downcase.to_sym]
       default_code[:model] = @entity if @entity
@@ -165,16 +175,15 @@ module Grape
         response_model = @item
         response_model = expose_params_from_model(value[:model]) if value[:model]
 
+        next unless !response_model.start_with?('Swagger_doc') &&
+                    ((@definitions[response_model] && value[:code].to_s.start_with?('2')) || value[:model])
+
         # TODO: proof that the definition exist, if model isn't specified
-        if !response_model.start_with?('Swagger_doc') &&
-           ((!!@definitions[response_model] && value[:code].to_s.start_with?('2')) ||
-           value[:model])
-          if route.route_is_array
-            memo[value[:code]][:schema] = { 'type' => 'array', 'items' => { '$ref' => "#/definitions/#{response_model}" } }
-          else
-            memo[value[:code]][:schema] = { '$ref' => "#/definitions/#{response_model}" }
-          end
-        end
+        memo[value[:code]][:schema] = if route.route_is_array
+                                        { 'type' => 'array', 'items' => { '$ref' => "#/definitions/#{response_model}" } }
+                                      else
+                                        { '$ref' => "#/definitions/#{response_model}" }
+                                      end
       end
     end
 
@@ -190,7 +199,7 @@ module Grape
 
     def params_object(route)
       partition_params(route).map do |param, value|
-        parse_params(param, value, route.route_path, route.route_method)
+        parse_params(param, { required: false }.merge(value), route.route_path, route.route_method)
       end
     end
 
@@ -230,7 +239,7 @@ module Grape
     end
 
     def parse_response_params(params)
-      return if params.empty?
+      return if params.nil?
 
       params.each_with_object({}) do |x, memo|
         x[0] = x.last[:as] if x.last[:as]
@@ -247,8 +256,15 @@ module Grape
     def expose_params_from_model(model)
       model_name = model.name.demodulize.camelize
 
-      #  has to be adept, to be ready for grape-entity >0.5.0
-      parameters = model.exposures ? model.exposures : model.documentation
+      # DONE: has to be adept, to be ready for grape-entity >0.5.0
+      # TODO: this should only be a temporary hack ;)
+      if GrapeEntity::VERSION =~ /0\.4\.\d/
+        parameters = model.exposures ? model.exposures : model.documentation
+      elsif GrapeEntity::VERSION =~ /0\.5\.\d/
+        parameters = model.root_exposures.each_with_object({}) do |value, memo|
+          memo[value.attribute] = value.send(:options)
+        end
+      end
       properties = parse_response_params(parameters)
 
       @definitions[model_name] = { type: 'object', properties: properties }
@@ -272,7 +288,7 @@ module Grape
     end
 
     def parse_params(param, value, path, method)
-      items = {}
+      @array_items = {}
 
       additional_documentation = value.is_a?(Hash) ? value[:documentation] : nil
       data_type = data_type(value)
@@ -282,7 +298,7 @@ module Grape
       end
 
       description          = value.is_a?(Hash) ? value[:desc] || value[:description] : nil
-      required             = value.is_a?(Hash) ? !!value[:required] : false
+      required             = value.is_a?(Hash) ? value[:required] : false
       default_value        = value.is_a?(Hash) ? value[:default] : nil
       example              = value.is_a?(Hash) ? value[:example] : nil
       is_array             = value.is_a?(Hash) ? (value[:is_array] || false) : false
@@ -291,6 +307,7 @@ module Grape
       enum_or_range_values = parse_enum_or_range_values(values)
 
       value_type = { value: value, data_type: data_type, path: path }
+
       parsed_params = {
         in:            param_type(value_type, param, method, is_array),
         name:          name,
@@ -304,12 +321,10 @@ module Grape
         parsed_params[:type], parsed_params[:format] = PRIMITIVE_MAPPINGS[data_type]
       end
 
-      parsed_params[:items] = items if items.present?
+      parsed_params[:items] = @array_items if @array_items.present?
 
       parsed_params[:defaultValue] = example if example
-      if default_value && example.blank?
-        parsed_params[:defaultValue] = default_value
-      end
+      parsed_params[:defaultValue] = default_value if default_value && example.blank?
 
       parsed_params.merge!(enum_or_range_values) if enum_or_range_values
       parsed_params
@@ -353,8 +368,9 @@ module Grape
          value_type[:value][:documentation].key?(:param_type)
 
         if is_array
-          items     = { '$ref' => value_type[:data_type] }
-          data_type = 'array'
+          @array_items = { 'type' => value_type[:data_type] }
+
+          'array'
         end
       else
         case

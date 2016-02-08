@@ -87,7 +87,7 @@ module GrapeSwagger
         base_path: nil,
         markdown: false,
         hide_documentation_path: true,
-        format: nil,
+        format: :json,
         models: [],
         info: {},
         scheme: %w( https http ),

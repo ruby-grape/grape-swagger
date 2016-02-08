@@ -2,6 +2,7 @@ require 'grape'
 require 'grape-swagger/version'
 require 'grape-swagger/endpoint'
 require 'grape-swagger/errors'
+require 'grape-swagger/doc_methods/produces'
 require 'grape-swagger/doc_methods'
 require 'grape-swagger/markdown/kramdown_adapter'
 require 'grape-swagger/markdown/redcarpet_adapter'
@@ -88,11 +89,11 @@ module Grape
 
           if namespace.options.key?(:swagger) && namespace.options[:swagger][:nested] == false
             # Namespace shall appear as standalone resource, use specified name or use normalized path as name
-            if namespace.options[:swagger].key?(:name)
-              identifier = namespace.options[:swagger][:name].tr(' ', '-')
-            else
-              identifier = name.tr('_', '-').gsub(/\//, '_')
-            end
+            identifier =  if namespace.options[:swagger].key?(:name)
+                            name.tr(' ', '-')
+                          else
+                            name.tr('_', '-').gsub(/\//, '_')
+                          end
             @target_class.combined_namespace_identifiers[identifier] = name
             @target_class.combined_namespace_routes[identifier] = namespace_routes
 
@@ -104,8 +105,8 @@ module Grape
             # default case when not explicitly specified or nested == true
             standalone_namespaces = namespaces.reject do |_, ns|
               !ns.options.key?(:swagger) ||
-              !ns.options[:swagger].key?(:nested) ||
-              ns.options[:swagger][:nested] != false
+                !ns.options[:swagger].key?(:nested) ||
+                ns.options[:swagger][:nested] != false
             end
 
             parent_standalone_namespaces = standalone_namespaces.reject { |ns_name, _| !name.start_with?(ns_name) }
@@ -142,8 +143,7 @@ module Grape
         route_prefix = route.route_prefix ? "/#{route.route_prefix}/#{name}" : "/#{name}"
         route_versioned_prefix = route.route_prefix ? "/#{route.route_prefix}/:version/#{name}" : "/:version/#{name}"
 
-        route.route_path.start_with?(route_prefix) ||
-          route.route_path.start_with?(route_versioned_prefix)
+        route.route_path.start_with?(route_prefix, route_versioned_prefix)
       end
 
       def standalone_sub_namespaces(name, namespaces)

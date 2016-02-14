@@ -112,26 +112,22 @@ module Grape
         else
           @paths[path.to_sym] = { method => request_params }
         end
+
+        GrapeSwagger::DocMethods::Extensions.add(@paths[path.to_sym], @definitions, route)
       end
     end
 
     def method_object(route, options)
-      methods = {}
-      methods[:description] = description_object(route, options[:markdown])
-      methods[:headers] = route.route_headers if route.route_headers
+      method = {}
+      method[:description] = description_object(route, options[:markdown])
+      method[:headers] = route.route_headers if route.route_headers
 
-      methods[:produces] = produces_object(route, options)
+      method[:produces] = produces_object(route, options)
+      method[:tags] = tag_object(route, options[:version])
+      method[:parameters] = params_object(route)
+      method[:responses] = response_object(route)
 
-      methods[:parameters] = params_object(route)
-      methods[:tags] = tag_object(route, options[:version])
-      methods[:responses] = response_object(route)
-
-      if route.route_aws
-        methods['x-amazon-apigateway-auth'] = { type: route.route_aws[:auth] } if route.route_aws[:auth]
-        methods['x-amazon-apigateway-integration'] = route.route_aws[:integration] if route.route_aws[:integration]
-      end
-
-      methods.delete_if { |_, value| value.blank? }
+      method.delete_if { |_, value| value.blank? }
     end
 
     def description_object(route, markdown)
@@ -283,6 +279,8 @@ module Grape
       false
     end
 
+    # original methods
+    #
     def parse_params(param, value, path, method)
       @array_items = {}
 

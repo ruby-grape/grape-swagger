@@ -7,9 +7,20 @@ RSpec.shared_context "the api entities" do
           expose :message, documentation: { type: String }
         end
 
+        class SecondApiError < Grape::Entity
+          expose :code, documentation: { type: Integer }
+          expose :severity, documentation: { type: String }
+          expose :message, documentation: { type: String }
+        end
+
         class ResponseItem < Grape::Entity
           expose :id, documentation: { type: Integer }
           expose :name, documentation: { type: String }
+        end
+
+        class OtherItem < Grape::Entity
+          expose :key, documentation: { type: Integer }
+          expose :symbol, documentation: { type: String }
         end
 
         class UseResponse < Grape::Entity

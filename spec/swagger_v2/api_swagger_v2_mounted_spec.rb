@@ -84,13 +84,11 @@ describe 'swagger spec v2.0' do
         namespace :other_thing do
           desc 'nested route inside namespace',
             entity: Entities::QueryInput,
-            aws: {auth: 'none',
-                  integration: {
-              type: 'aws',
-              uri: 'foo_bar_uri',
-              httpMethod: 'get'
+            x: {
+              'amazon-apigateway-auth' => {type: 'none'},
+              'amazon-apigateway-integration' => {type: 'aws', uri: 'foo_bar_uri', httpMethod: 'get'}
             }
-          }
+
 
           params do
             requires :elements, documentation: {

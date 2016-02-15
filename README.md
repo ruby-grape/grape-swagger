@@ -722,7 +722,7 @@ this would generate:
 ```
 
 - `definition` extension, again by setting via route settings,
-here the status code must be provided, for which definition the extensions is:
+here the status code must be provided, for which definition the extensions should be:
 ```ruby
 route_setting :x_def, { for: 422, other: 'stuff' }
 ```

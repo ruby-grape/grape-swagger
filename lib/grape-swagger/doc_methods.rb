@@ -90,7 +90,7 @@ module GrapeSwagger
         format: :json,
         models: [],
         info: {},
-        scheme: %w( https http ),
+        scheme: %w( http https ),
         authorizations: nil,
         root_base_path: true,
         api_documentation: { desc: 'Swagger compatible API description' },

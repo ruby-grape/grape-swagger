@@ -73,17 +73,15 @@ module Grape
     # building path and definitions objects
     def path_and_definition_objects(namespace_routes, options)
       @paths = {}
-      @tags = []
       @definitions = {}
       namespace_routes.keys.each do |key|
         routes = namespace_routes[key]
         path_item(routes, options)
-        tag_object(routes, options)
       end
 
       add_definitions_from options[:models]
 
-      [@tags, @paths, @definitions]
+      [@paths, @definitions]
     end
 
     def add_definitions_from(models)

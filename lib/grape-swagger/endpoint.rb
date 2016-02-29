@@ -130,6 +130,7 @@ module Grape
       methods[:headers] = route.route_headers if route.route_headers
 
       methods[:produces] = produces_object(route, options)
+      methods[:tags] = path_tag_object(route, options)
 
       methods[:parameters] = params_object(route)
       methods[:responses] = response_object(route)
@@ -147,6 +148,40 @@ module Grape
       description = route.route_detail if route.route_detail.present?
       description = markdown.markdown(description).chomp if markdown
       description
+    end
+
+    def tag_object(routes, options)
+      routes.each do |route|
+        next if hidden?(route)
+        
+        path = route.route_path
+        path.sub!(/\(\.\w+?\)$/, '')
+        path.sub!('(.:format)', '')
+        path.gsub!(/:(\w+)/, '{\1}')
+        
+        item = path.gsub(%r{/{(.+?)}}, '').split('/').last.singularize.underscore.camelize || 'Item'
+          
+        tag = {}
+        tag[:name] = item
+        tag[:description] = description_object(route, options[:markdown])
+  
+        @tags << tag
+      end
+    end
+
+    def path_tag_object(route, options)
+      path = route.route_path
+      path.sub!(/\(\.\w+?\)$/, '')
+      path.sub!('(.:format)', '')
+      path.gsub!(/:(\w+)/, '{\1}')
+      
+      item = path.gsub(%r{/{(.+?)}}, '').split('/').last.singularize.underscore.camelize || 'Item'
+        
+      tag = {}
+      tag[:name] = item
+      tag[:description] = description_object(route, options[:markdown])
+      
+      tag
     end
 
     def produces_object(route, options)

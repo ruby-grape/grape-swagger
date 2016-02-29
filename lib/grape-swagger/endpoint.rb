@@ -73,15 +73,17 @@ module Grape
     # building path and definitions objects
     def path_and_definition_objects(namespace_routes, options)
       @paths = {}
+      @tags = []
       @definitions = {}
       namespace_routes.keys.each do |key|
         routes = namespace_routes[key]
         path_item(routes, options)
+        tag_object(routes, options)
       end
 
       add_definitions_from options[:models]
 
-      [@paths, @definitions]
+      [@tags, @paths, @definitions]
     end
 
     def add_definitions_from(models)
@@ -130,7 +132,7 @@ module Grape
       methods[:headers] = route.route_headers if route.route_headers
 
       methods[:produces] = produces_object(route, options)
-      methods[:tags] = tags_object(route, options)
+      methods[:tags] = path_tag_object(route, options)
 
       methods[:parameters] = params_object(route)
       methods[:responses] = response_object(route)
@@ -150,18 +152,38 @@ module Grape
       description
     end
 
-    def tags_object(route, options)
+    def tag_object(routes, options)
+      routes.each do |route|
+        next if hidden?(route)
+        
+        path = route.route_path
+        path.sub!(/\(\.\w+?\)$/, '')
+        path.sub!('(.:format)', '')
+        path.gsub!(/:(\w+)/, '{\1}')
+        
+        item = path.gsub(%r{/{(.+?)}}, '').split('/').last.singularize.underscore.camelize || 'Item'
+          
+        tag = {}
+        tag[:name] = item
+        tag[:description] = description_object(route, options[:markdown])
+  
+        @tags << tag
+      end
+    end
+
+    def path_tag_object(route, options)
       path = route.route_path
       path.sub!(/\(\.\w+?\)$/, '')
       path.sub!('(.:format)', '')
       path.gsub!(/:(\w+)/, '{\1}')
       
-      @item = path.gsub(%r{/{(.+?)}}, '').split('/').last.singularize.underscore.camelize || 'Item'
+      item = path.gsub(%r{/{(.+?)}}, '').split('/').last.singularize.underscore.camelize || 'Item'
         
-      tags = {}
-      tags[:name] = @item
-      tags[:description] = description_object(route, options[:markdown])
-      tags
+      tag = {}
+      tag[:name] = item
+      tag[:description] = description_object(route, options[:markdown])
+      
+      tag
     end
 
     def produces_object(route, options)

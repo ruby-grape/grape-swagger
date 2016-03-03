@@ -103,8 +103,7 @@ RSpec.shared_context "swagger example" do
             "produces"=>["application/json"],
             "parameters"=>[
               {"in"=>"formData", "name"=>"text", "description"=>"Content of something.", "type"=>"string", "required"=>true, "allowMultiple"=>false},
-              {"in"=>"body", "name"=>"links", "description"=>nil, "type"=>"Array", "required"=>true, "allowMultiple"=>true}],
-            "tags"=>["thing"],
+              {"in"=>"body", "name"=>"links[]", "description"=>nil, "type"=>"Array", "required"=>true, "allowMultiple"=>true}],
             "responses"=>{
               "201"=>{"description"=>"This creates Thing.", "schema"=>{"$ref"=>"#/definitions/Something"}},
               "422"=>{"description"=>"Unprocessible Entity"}}
@@ -123,8 +122,7 @@ RSpec.shared_context "swagger example" do
             "parameters"=>[
               {"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"},
               {"in"=>"formData", "name"=>"text", "description"=>"Content of something.", "type"=>"string", "required"=>false, "allowMultiple"=>false},
-              {"in"=>"body", "name"=>"links", "description"=>nil, "type"=>"Array", "required"=>false, "allowMultiple"=>true}],
-            "tags"=>["thing"],
+              {"in"=>"body", "name"=>"links[]", "description"=>nil, "type"=>"Array", "required"=>false, "allowMultiple"=>true}],
             "responses"=>{"200"=>{"description"=>"This updates Thing.", "schema"=>{"$ref"=>"#/definitions/Something"}}}},
           "delete"=>{
             "produces"=>["application/json"],

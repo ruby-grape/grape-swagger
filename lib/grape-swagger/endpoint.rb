@@ -28,7 +28,7 @@ module Grape
     # swagger spec2.0 related parts
     #
     # required keys for SwaggerObject
-    def swagger_object(info, target_class, request, options)
+    def swagger_object(info, target_class, request, options, namespace_routes_array)
       {
         info:           info,
         swagger:        '2.0',
@@ -36,6 +36,7 @@ module Grape
         authorizations: options[:authorizations],
         host:           request.env['HTTP_HOST'] || options[:host],
         basePath:       request.env['SCRIPT_NAME'] || options[:base_path],
+        tags:           namespace_routes_array,
         schemes:        options[:scheme]
       }.delete_if { |_, value| value.blank? }
     end
@@ -132,6 +133,7 @@ module Grape
       methods[:produces] = produces_object(route, options)
 
       methods[:parameters] = params_object(route)
+      methods[:tags]      = Array(route.route_path.split('{')[0].split('/').last)
       methods[:responses] = response_object(route)
 
       if route.route_aws

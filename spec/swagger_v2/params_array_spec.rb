@@ -43,11 +43,13 @@ describe 'Group Params as Array' do
         "swagger"=>"2.0",
         "produces"=>["application/json"],
         "host"=>"example.org",
+        "tags" => [{"name"=>"groups.{format}", "description"=>"Operations about groups"}, {"name"=>"type_given.{format}", "description"=>"Operations about type_givens"}],
         "schemes" => ["https", "http"],
         "paths"=>{
           "/groups"=>{
             "post"=>{
               "produces"=>["application/json"],
+              "tags"=>["groups"],
               "responses"=>{"201"=>{"description"=>"created Group"}},
               "parameters"=>[
                 {"in"=>"formData", "name"=>"required_group[][required_param_1]", "description"=>nil, "type"=>"string", "required"=>true, "allowMultiple"=>true},
@@ -68,11 +70,13 @@ describe 'Group Params as Array' do
         "swagger"=>"2.0",
         "produces"=>["application/json"],
         "host"=>"example.org",
+        "tags" => [{"name"=>"groups.{format}", "description"=>"Operations about groups"}, {"name"=>"type_given.{format}", "description"=>"Operations about type_givens"}],        
         "schemes" => ["https", "http"],
         "paths"=>{
           "/type_given"=>{
             "post"=>{
               "produces"=>["application/json"],
+              "tags"=>["type_given"],
               "responses"=>{"201"=>{"description"=>"created TypeGiven"}},
               "parameters"=>[
                 {"in"=>"formData", "name"=>"typed_group[][id]", "description"=>"integer given", "type"=>"integer", "required"=>true, "allowMultiple"=>true, "format"=>"int32"},

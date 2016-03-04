@@ -44,7 +44,7 @@ describe 'docs mounted separately from api' do
     expect(JSON.parse(last_response.body)).to eq({
       "info"=>{"title"=>"API title", "version"=>"v1"},
       "swagger"=>"2.0",
-      "tags" => [{"name"=>"simple.{format}", "description"=>"Operations about simples"}],      
+      "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}],      
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
       "schemes" => ["https", "http"],

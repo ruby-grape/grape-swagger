@@ -73,7 +73,7 @@ module GrapeSwagger
         requires :name, type: String, desc: 'Resource name of mounted API'
         optional :locale, type: Symbol, desc: 'Locale of API documentation'
       end
-      get "#{mount_path}/:name" do
+      get "#{@@mount_path}/:name" do
         I18n.locale = params[:locale] || I18n.default_locale
 
         namespaces = target_class.combined_namespaces
@@ -82,15 +82,12 @@ module GrapeSwagger
         namespace_routes_array = namespace_routes.keys.map do |local_route|
           next if namespace_routes[local_route].map(&:route_hidden).all? { |value| value.respond_to?(:call) ? value.call : value }
 
-          url_format = '.{format}'
-          url_locale = "?locale=#{params[:locale]}" unless params[:locale].blank?
-
           original_namespace_name = target_class.combined_namespace_identifiers.key?(local_route) ? target_class.combined_namespace_identifiers[local_route] : local_route
           description = namespaces[original_namespace_name] && namespaces[original_namespace_name].options[:desc]
           description ||= "Operations about #{original_namespace_name.pluralize}"
 
           {
-            name: "#{local_route}#{url_format}#{url_locale}",
+            name: "#{local_route}",
             description: description
           }
         end.compact

@@ -43,7 +43,7 @@ describe 'exposing' do
         "swagger"=>"2.0",
         "produces"=>["application/json"],
         "host"=>"example.org",
-        "tags" => [{"name"=>"params_response.{format}", "description"=>"Operations about params_responses"}, {"name"=>"entity_response.{format}", "description"=>"Operations about entity_responses"}],        
+        "tags" => [{"name"=>"params_response", "description"=>"Operations about params_responses"}, {"name"=>"entity_response", "description"=>"Operations about entity_responses"}],        
         "schemes"=>["https", "http"],
         "paths"=>{
           "/entity_response"=>{
@@ -87,7 +87,7 @@ describe 'exposing' do
         "swagger"=>"2.0",
         "produces"=>["application/json"],
         "host"=>"example.org",
-        "tags" => [{"name"=>"params_response.{format}", "description"=>"Operations about params_responses"}, {"name"=>"entity_response.{format}", "description"=>"Operations about entity_responses"}],
+        "tags" => [{"name"=>"params_response", "description"=>"Operations about params_responses"}, {"name"=>"entity_response", "description"=>"Operations about entity_responses"}],
         "schemes"=>["https", "http"],
         "paths"=>{
           "/params_response"=>{

@@ -88,7 +88,7 @@ describe 'a hide mounted api with same namespace' do
       "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}],
       "schemes" => ["https", "http"],
       "paths"=>{
-        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "tags"=>["show"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}}}
+        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "tags"=>["simple"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}}}
       })
   end
 
@@ -99,10 +99,10 @@ describe 'a hide mounted api with same namespace' do
       "swagger"=>"2.0",
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
-      "tags" => [{"name"=>"simple.{format}", "description"=>"Operations about simples"}],
+      "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}],
       "schemes" => ["https", "http"],
       "paths"=>{
-        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "tags"=>["show"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}}}
+        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "tags"=>["simple"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}}}
       })
   end
 end

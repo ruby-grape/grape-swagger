@@ -69,7 +69,7 @@ describe 'Default API' do
         "swagger"=>"2.0",
         "produces"=>["application/json"],
         "host"=>"example.org",
-        "tags" => [{"name"=>"something.{format}", "description"=>"Operations about somethings"}],
+        "tags" => [{"name"=>"something", "description"=>"Operations about somethings"}],
         "schemes" => ["https", "http"],
         "paths"=>{
           "/something"=>{

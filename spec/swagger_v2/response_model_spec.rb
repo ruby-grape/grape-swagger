@@ -117,7 +117,7 @@ describe 'responseModel' do
           "kind"=>{"$ref"=>"#/definitions/Kind"},
           "kind2"=>{"$ref"=>"#/definitions/Kind"},
           "kind3"=>{"$ref"=>"#/definitions/Kind"},
-          "tags"=>{"$ref"=>"#/definitions/Tag"},
+          "tags"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/Tag"}},
           "relation"=>{"$ref"=>"#/definitions/Relation"}}}
     )
 
@@ -201,7 +201,7 @@ describe 'should build definition from given entity' do
           "kind"=>{"$ref"=>"#/definitions/Kind"},
           "kind2"=>{"$ref"=>"#/definitions/Kind"},
           "kind3"=>{"$ref"=>"#/definitions/Kind"},
-          "tags"=>{"$ref"=>"#/definitions/Tag"},
+          "tags"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/Tag"}},
           "relation"=>{"$ref"=>"#/definitions/Relation"}}}
     })
 

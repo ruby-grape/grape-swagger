@@ -30,7 +30,7 @@ module GrapeSwagger
       end if options[:format]
       # getting of the whole swagger2.0 spec file
       desc api_doc.delete(:desc), api_doc
-      get "#{@@mount_path}" do
+      get mount_path do
         header['Access-Control-Allow-Origin']   = '*'
         header['Access-Control-Request-Method'] = '*'
 
@@ -45,11 +45,11 @@ module GrapeSwagger
           description ||= "Operations about #{original_namespace_name.pluralize}"
 
           {
-            name: "#{local_route}",
+            name: "#{local_route.to_s}",
             description: description
           }
         end.compact
-        #tag information included 
+        # tag information included
         output = swagger_object(
           info_object(extra_info.merge(version: api_version)),
           target_class,
@@ -73,7 +73,7 @@ module GrapeSwagger
         requires :name, type: String, desc: 'Resource name of mounted API'
         optional :locale, type: Symbol, desc: 'Locale of API documentation'
       end
-      get "#{@@mount_path}/:name" do
+      get "#{mount_path}/:name" do
         I18n.locale = params[:locale] || I18n.default_locale
 
         namespaces = target_class.combined_namespaces
@@ -87,7 +87,7 @@ module GrapeSwagger
           description ||= "Operations about #{original_namespace_name.pluralize}"
 
           {
-            name: "#{local_route}",
+            name: "#{local_route.to_s}",
             description: description
           }
         end.compact

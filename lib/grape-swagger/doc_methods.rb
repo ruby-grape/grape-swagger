@@ -45,7 +45,7 @@ module GrapeSwagger
           description ||= "Operations about #{original_namespace_name.pluralize}"
 
           {
-            name: "#{local_route.to_s}",
+            name: local_route,
             description: description
           }
         end.compact
@@ -87,7 +87,7 @@ module GrapeSwagger
           description ||= "Operations about #{original_namespace_name.pluralize}"
 
           {
-            name: "#{local_route.to_s}",
+            name: local_route,
             description: description
           }
         end.compact

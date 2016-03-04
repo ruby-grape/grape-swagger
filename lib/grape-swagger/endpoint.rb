@@ -133,7 +133,7 @@ module Grape
       methods[:produces] = produces_object(route, options)
 
       methods[:parameters] = params_object(route)
-      methods[:tags]      = Array(route.route_path.split('{')[0].split('/').delete_if { |i| i[/v[0-9]*/] }.reject(&:empty?).first)
+      methods[:tags]      = Array(route.route_path.split('{')[0].split('/').delete_if { |i| (i==route.route_prefix) || i[/v[0-9]*/] }.reject(&:empty?).first)
       methods[:responses] = response_object(route)
 
       if route.route_aws

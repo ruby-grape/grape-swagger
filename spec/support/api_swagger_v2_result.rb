@@ -137,7 +137,7 @@ RSpec.shared_context "swagger example" do
       }}},
       "definitions"=>{
         "QueryInputElement"=>{"type"=>"object", "properties"=>{"key"=>{"type"=>"string"}, "value"=>{"type"=>"string"}}},
-        "QueryInput"=>{"type"=>"object", "properties"=>{"elements"=>{"$ref"=>"#/definitions/QueryInputElement"}}},
+        "QueryInput"=>{"type"=>"object", "properties"=>{"elements"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/QueryInputElement"}}}},
         "Thing"=>{"properties"=>{"id"=>{"type"=>"integer"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}},
         "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}},
         "Something"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}}

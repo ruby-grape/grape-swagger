@@ -34,28 +34,11 @@ module GrapeSwagger
         header['Access-Control-Allow-Origin']   = '*'
         header['Access-Control-Request-Method'] = '*'
 
-        namespaces = target_class.combined_namespaces
-        namespace_routes = target_class.combined_namespace_routes
-
-        namespace_routes_array = namespace_routes.keys.map do |local_route|
-          next if namespace_routes[local_route].map(&:route_hidden).all? { |value| value.respond_to?(:call) ? value.call : value }
-
-          original_namespace_name = target_class.combined_namespace_identifiers.key?(local_route) ? target_class.combined_namespace_identifiers[local_route] : local_route
-          description = namespaces[original_namespace_name] && namespaces[original_namespace_name].options[:desc]
-          description ||= "Operations about #{original_namespace_name.pluralize}"
-
-          {
-            name: local_route,
-            description: description
-          }
-        end.compact
-        # tag information included
         output = swagger_object(
           info_object(extra_info.merge(version: api_version)),
           target_class,
           request,
-          options,
-          namespace_routes_array
+          options
         )
 
         target_routes        = target_class.combined_namespace_routes
@@ -76,22 +59,6 @@ module GrapeSwagger
       get "#{mount_path}/:name" do
         I18n.locale = params[:locale] || I18n.default_locale
 
-        namespaces = target_class.combined_namespaces
-        namespace_routes = target_class.combined_namespace_routes
-
-        namespace_routes_array = namespace_routes.keys.map do |local_route|
-          next if namespace_routes[local_route].map(&:route_hidden).all? { |value| value.respond_to?(:call) ? value.call : value }
-
-          original_namespace_name = target_class.combined_namespace_identifiers.key?(local_route) ? target_class.combined_namespace_identifiers[local_route] : local_route
-          description = namespaces[original_namespace_name] && namespaces[original_namespace_name].options[:desc]
-          description ||= "Operations about #{original_namespace_name.pluralize}"
-
-          {
-            name: local_route,
-            description: description
-          }
-        end.compact
-
         combined_routes = target_class.combined_namespace_routes[params[:name]]
         error!({ error: 'named resource not exist' }, 400) if combined_routes.nil?
 
@@ -99,8 +66,7 @@ module GrapeSwagger
           info_object(extra_info.merge(version: api_version)),
           target_class,
           request,
-          options,
-          namespace_routes_array
+          options
         )
 
         target_routes        = { params[:name] => combined_routes }

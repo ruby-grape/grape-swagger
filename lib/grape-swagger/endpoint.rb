@@ -247,7 +247,11 @@ module Grape
         x[0] = x.last[:as] if x.last[:as]
         if x.last[:using].present? || could_it_be_a_model?(x.last)
           name = expose_params_from_model(x.last[:using] || x.last[:type])
-          memo[x.first] = { '$ref' => "#/definitions/#{name}" }
+          memo[x.first] = if x.last[:documentation] && x.last[:documentation][:is_array]
+                            { 'type' => 'array', 'items' => { '$ref' => "#/definitions/#{name}" } }
+                          else
+                            { '$ref' => "#/definitions/#{name}" }
+                          end
         else
           memo[x.first] = { type: data_type(x.last[:documentation] || x.last) }
           memo[x.first][:enum] = x.last[:values] if x.last[:values] && x.last[:values].is_a?(Array)

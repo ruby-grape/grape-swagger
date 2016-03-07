@@ -59,7 +59,7 @@ describe 'exposing' do
             "properties"=>{"id"=>{"type"=>"integer"}, "name"=>{"type"=>"string"}}},
           "UseResponse"=>{
             "type"=>"object",
-            "properties"=>{"description"=>{"type"=>"string"}, "$responses"=>{"$ref"=>"#/definitions/ResponseItem"}}},
+            "properties"=>{"description"=>{"type"=>"string"}, "$responses"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/ResponseItem"}}}},
           "ApiError"=>{
             "type"=>"object",
             "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}}

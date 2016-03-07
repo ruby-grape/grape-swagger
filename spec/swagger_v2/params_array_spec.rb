@@ -66,23 +66,23 @@ describe 'Group Params as Array' do
 
     specify do
       expect(subject).to eql({
-        "info"=>{"title"=>"API title", "version"=>"v1"},
-        "swagger"=>"2.0",
-        "produces"=>["application/json"],
-        "host"=>"example.org",
-        "tags" => [{"name"=>"groups", "description"=>"Operations about groups"}, {"name"=>"type_given", "description"=>"Operations about type_givens"}],        
-        "schemes" => ["https", "http"],
+        "info"=>{"title"=>"API title", "version"=>"v1"}, 
+        "swagger"=>"2.0", 
+        "produces"=>["application/json"], 
+        "host"=>"example.org", 
+        "tags"=>[{"name"=>"groups", "description"=>"Operations about groups"}, {"name"=>"type_given", "description"=>"Operations about type_givens"}], 
+        "schemes"=>["https", "http"], 
         "paths"=>{
           "/type_given"=>{
             "post"=>{
-              "produces"=>["application/json"],
-              "responses"=>{"201"=>{"description"=>"created TypeGiven"}},
+              "produces"=>["application/json"], 
               "parameters"=>[
-                {"in"=>"formData", "name"=>"typed_group[][id]", "description"=>"integer given", "type"=>"integer", "required"=>true, "allowMultiple"=>true, "format"=>"int32"},
-                {"in"=>"formData", "name"=>"typed_group[][name]", "description"=>"string given", "type"=>"string", "required"=>true, "allowMultiple"=>true},
-                {"in"=>"formData", "name"=>"typed_group[][email]", "description"=>"email given", "type"=>"string", "required"=>false, "allowMultiple"=>true},
-                {"in"=>"formData", "name"=>"typed_group[][others]", "description"=>nil, "type"=>"integer", "required"=>false, "allowMultiple"=>true, "format"=>"int32", "enum"=>[1, 2, 3]}
-        ]}}}})
+                {"in"=>"formData", "name"=>"typed_group[][id]", "description"=>"integer given", "type"=>"integer", "required"=>true, "allowMultiple"=>true, "format"=>"int32"}, 
+                {"in"=>"formData", "name"=>"typed_group[][name]", "description"=>"string given", "type"=>"string", "required"=>true, "allowMultiple"=>true}, 
+                {"in"=>"formData", "name"=>"typed_group[][email]", "description"=>"email given", "type"=>"string", "required"=>false, "allowMultiple"=>true}, 
+                {"in"=>"formData", "name"=>"typed_group[][others]", "description"=>nil, "type"=>"integer", "required"=>false, "allowMultiple"=>true, "format"=>"int32", "enum"=>[1, 2, 3]}], 
+              "tags"=>["type_given"], 
+              "responses"=>{"201"=>{"description"=>"created TypeGiven"}}}}}})
     end
   end
 end

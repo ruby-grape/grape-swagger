@@ -443,7 +443,7 @@ module Grape
     def tag_object(route)
       base_array = route.route_path.split('{')[0].split('/').reject(&:empty?)
       tag_name = base_array.delete_if { |i| (i==route.route_prefix.to_s) || (i[/v[0-9]*/]) }        
-      Array(tag_name.first)
+      Array(tag_name)
     end
   end
 end

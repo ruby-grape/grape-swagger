@@ -4,6 +4,8 @@ n.n.n / 2016-02-05
 
 ### 0.10.3 (Next)
 
+* [#345](https://github.com/ruby-grape/grape-swagger/pull/345): Moving documented headers into the `parameters` object - [@daveWid](https://github.com/daveWid).
+
 [#336](https://github.com/ruby-grape/grape-swagger/pull/336) changes of swagger-2.0 fork, to support it
 
 * updates gems, corrects parameter, which is in array, make rubocop happy

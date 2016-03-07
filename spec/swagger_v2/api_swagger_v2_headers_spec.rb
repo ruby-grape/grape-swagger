@@ -36,9 +36,7 @@ describe 'headers' do
   end
 
   specify do
-    expect(subject['paths']['/use_headers']['get']).to include('headers')
-    expect(subject['paths']['/use_headers']['get']['headers']).to eql({
-      "X-Rate-Limit-Limit"=>{"description"=>"The number of allowed requests in the current period", "type"=>"integer"}
-    })
+    expect(subject['paths']['/use_headers']['get']['parameters'][0]['in']).to eq('header')
+    expect(subject['paths']['/use_headers']['get']['parameters'][0]).to eql({"description"=>"The number of allowed requests in the current period", "type"=>"integer", "in"=>"header", "name"=>"X-Rate-Limit-Limit"})
   end
 end

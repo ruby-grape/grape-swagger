@@ -127,11 +127,12 @@ module Grape
     def method_object(route, options)
       methods = {}
       methods[:description] = description_object(route, options[:markdown])
-      methods[:headers] = route.route_headers if route.route_headers
 
       methods[:produces] = produces_object(route, options)
 
       methods[:parameters] = params_object(route)
+      methods[:parameters].concat(parse_header_params(route)) if route.route_headers
+
       methods[:responses] = response_object(route)
 
       if route.route_aws
@@ -235,6 +236,12 @@ module Grape
         else
           memo[x] = required.assoc(x.to_s).last
         end
+      end
+    end
+
+    def parse_header_params(route)
+      route.route_headers.map do |param, value|
+        { in: 'header', name: param, type: 'string' }.merge(value)
       end
     end
 

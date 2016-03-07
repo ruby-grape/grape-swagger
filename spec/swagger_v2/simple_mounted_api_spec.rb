@@ -84,9 +84,9 @@ describe 'a simple mounted api' do
           "/simple-test"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something for URL using - separator."}}}},
           "/simple_with_headers"=>{
             "get"=>{
-              "headers"=>{
-                "XAuthToken"=>{"description"=>"A required header.", "required"=>true},
-                "XOtherHeader"=>{"description"=>"An optional header.", "required"=>false}},
+              "parameters"=>[{"in"=>"header", "name"=>"XAuthToken", "description"=>"A required header.", "required"=>true, "type"=>"string"},
+                {"in"=>"header", "name"=>"XOtherHeader", "description"=>"An optional header.", "required"=>false, "type"=>"string"}
+              ],
               "produces"=>["application/json"],
               "responses"=>{
                 "200"=>{"description"=>"this gets something else"},
@@ -161,9 +161,9 @@ describe 'a simple mounted api' do
         expect(subject['paths']).to eq({
           "/simple_with_headers"=>{
             "get"=>{
-              "headers"=>{
-                "XAuthToken"=>{"description"=>"A required header.", "required"=>true},
-                "XOtherHeader"=>{"description"=>"An optional header.", "required"=>false}},
+              "parameters"=>[{"in"=>"header", "name"=>"XAuthToken", "description"=>"A required header.", "required"=>true, "type"=>"string"},
+                {"in"=>"header", "name"=>"XOtherHeader", "description"=>"An optional header.", "required"=>false, "type"=>"string"}
+              ],
               "produces"=>["application/json"],
               "responses"=>{
                 "200"=>{"description"=>"this gets something else"},

@@ -120,12 +120,11 @@ module Grape
     def method_object(route, options)
       method = {}
       method[:description] = description_object(route, options[:markdown])
-      method[:headers] = route.route_headers if route.route_headers
-
-      method[:produces] = produces_object(route, options)
-      method[:tags] = tag_object(route, options[:version])
-      method[:parameters] = params_object(route)
-      method[:responses] = response_object(route)
+      method[:headers]     = route.route_headers if route.route_headers
+      method[:produces]    = produces_object(route, options)
+      method[:parameters]  = params_object(route)
+      method[:responses]   = response_object(route)
+      method[:tags]        = tag_object(route, options[:version])
 
       method.delete_if { |_, value| value.blank? }
     end

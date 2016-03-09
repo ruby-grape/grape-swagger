@@ -708,6 +708,43 @@ Go into example directory and run it: `$ bundle exec rackup`
 go to: `http://localhost:9292/swagger_doc` to get it
 
 For request examples load the [postman file]()
+## Grouping the API list using Namespace
+
+Use namespace for grouping APIs
+
+![grape-swagger-v2-new-corrected](https://cloud.githubusercontent.com/assets/1027590/13516020/979cfefa-e1f9-11e5-9624-f4a6b17a3c8a.png)
+
+# Example
+
+```ruby
+class NamespaceApi < Grape::API
+  namespace :hudson do
+    desc 'Document root'
+    get '/' do
+    end
+  end
+
+  namespace :hudson do
+    desc 'This gets something.',
+      notes: '_test_'
+
+    get '/simple' do
+      { bla: 'something' }
+    end
+  end
+
+  namespace :colorado do
+    desc 'This gets something for URL using - separator.',
+      notes: '_test_'
+
+    get '/simple-test' do
+      { bla: 'something' }
+    end
+  end
+end
+  …
+
+```
 
 ## Contributing to grape-swagger
 

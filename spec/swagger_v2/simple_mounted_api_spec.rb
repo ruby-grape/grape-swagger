@@ -78,16 +78,18 @@ describe 'a simple mounted api' do
         "swagger"=>"2.0",
         "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
         "host"=>"example.org",
+        "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}, {"name"=>"simple-test", "description"=>"Operations about simple-tests"}, {"name"=>"simple_with_headers", "description"=>"Operations about simple_with_headers"}, {"name"=>"items", "description"=>"Operations about items"}, {"name"=>"custom", "description"=>"Operations about customs"}],
         "schemes"=>["https", "http"],
         "paths"=>{
-          "/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something."}}}},
-          "/simple-test"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something for URL using - separator."}}}},
+          "/simple"=>{"get"=>{"produces"=>["application/json"], "tags"=>["simple"], "responses"=>{"200"=>{"description"=>"This gets something."}}}},
+          "/simple-test"=>{"get"=>{"produces"=>["application/json"], "tags"=>["simple-test"], "responses"=>{"200"=>{"description"=>"This gets something for URL using - separator."}}}},
           "/simple_with_headers"=>{
             "get"=>{
               "headers"=>{
                 "XAuthToken"=>{"description"=>"A required header.", "required"=>true},
                 "XOtherHeader"=>{"description"=>"An optional header.", "required"=>false}},
               "produces"=>["application/json"],
+              "tags"=>["simple_with_headers"],
               "responses"=>{
                 "200"=>{"description"=>"this gets something else"},
                 "403"=>{"description"=>"invalid pony"},
@@ -97,12 +99,14 @@ describe 'a simple mounted api' do
             "post"=>{
               "produces"=>["application/json"],
               "parameters"=>[{"in"=>"formData", "name"=>"items[]", "description"=>"array of items", "type"=>"string", "required"=>false, "allowMultiple"=>true}],
+              "tags"=>["items"],
               "responses"=>{"201"=>{"description"=>"this takes an array of parameters"}}
           }},
           "/custom"=>{
             "get"=>{
               "produces"=>["application/json"],
               "parameters"=>[{"in"=>"query", "name"=>"custom", "description"=>"array of items", "type"=>"CustomType", "required"=>false, "allowMultiple"=>true}],
+              "tags"=>["custom"],
               "responses"=>{"200"=>{"description"=>"this uses a custom parameter"}}}
       }}})
     end
@@ -120,10 +124,11 @@ describe 'a simple mounted api' do
         "swagger"=>"2.0",
         "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
         "host"=>"example.org",
+        "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}, {"name"=>"simple-test", "description"=>"Operations about simple-tests"}, {"name"=>"simple_with_headers", "description"=>"Operations about simple_with_headers"}, {"name"=>"items", "description"=>"Operations about items"}, {"name"=>"custom", "description"=>"Operations about customs"}],
         "schemes"=>["https", "http"],
         "paths"=>{
           "/simple"=>{
-            "get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"This gets something."}}}}
+            "get"=>{"produces"=>["application/json"], "tags"=>["simple"], "responses"=>{"200"=>{"description"=>"This gets something."}}}}
         }})
     end
   end
@@ -141,11 +146,13 @@ describe 'a simple mounted api' do
           "swagger"=>"2.0",
           "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
           "host"=>"example.org",
+          "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}, {"name"=>"simple-test", "description"=>"Operations about simple-tests"}, {"name"=>"simple_with_headers", "description"=>"Operations about simple_with_headers"}, {"name"=>"items", "description"=>"Operations about items"}, {"name"=>"custom", "description"=>"Operations about customs"}],
           "schemes"=>["https", "http"],
           "paths"=>{
             "/simple-test"=>{
               "get"=>{
                 "produces"=>["application/json"],
+                "tags"=>["simple-test"],
                 "responses"=>{"200"=>{"description"=>"This gets something for URL using - separator."}}}}
           }})
       end
@@ -165,6 +172,7 @@ describe 'a simple mounted api' do
                 "XAuthToken"=>{"description"=>"A required header.", "required"=>true},
                 "XOtherHeader"=>{"description"=>"An optional header.", "required"=>false}},
               "produces"=>["application/json"],
+              "tags"=>["simple_with_headers"],
               "responses"=>{
                 "200"=>{"description"=>"this gets something else"},
                 "403"=>{"description"=>"invalid pony"},
@@ -185,6 +193,7 @@ describe 'a simple mounted api' do
             "post"=>{
               "produces"=>["application/json"],
               "parameters"=>[{"in"=>"formData", "name"=>"items[]", "description"=>"array of items", "type"=>"string", "required"=>false, "allowMultiple"=>true}],
+              "tags"=>["items"],
               "responses"=>{"201"=>{"description"=>"this takes an array of parameters"}}}
           }})
       end
@@ -202,6 +211,7 @@ describe 'a simple mounted api' do
             "get"=>{
               "produces"=>["application/json"],
               "parameters"=>[{"in"=>"query", "name"=>"custom", "description"=>"array of items", "type"=>"CustomType", "required"=>false, "allowMultiple"=>true}],
+              "tags"=>["custom"],
               "responses"=>{"200"=>{"description"=>"this uses a custom parameter"}}}
           }})
       end

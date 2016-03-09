@@ -43,11 +43,13 @@ describe 'exposing' do
         "swagger"=>"2.0",
         "produces"=>["application/json"],
         "host"=>"example.org",
+        "tags" => [{"name"=>"params_response", "description"=>"Operations about params_responses"}, {"name"=>"entity_response", "description"=>"Operations about entity_responses"}],
         "schemes"=>["https", "http"],
         "paths"=>{
           "/entity_response"=>{
             "get"=>{
               "produces"=>["application/json"],
+              "tags"=>["entity_response"],
               "responses"=>{
                 "200"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/UseResponse"}},
                 "400"=>{"description"=>"NotFound", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}}}},
@@ -85,6 +87,7 @@ describe 'exposing' do
         "swagger"=>"2.0",
         "produces"=>["application/json"],
         "host"=>"example.org",
+        "tags" => [{"name"=>"params_response", "description"=>"Operations about params_responses"}, {"name"=>"entity_response", "description"=>"Operations about entity_responses"}],
         "schemes"=>["https", "http"],
         "paths"=>{
           "/params_response"=>{
@@ -93,6 +96,7 @@ describe 'exposing' do
               "parameters"=>[
                 {"in"=>"formData", "name"=>"description", "description"=>nil, "type"=>"string", "required"=>false, "allowMultiple"=>false},
                 {"in"=>"formData", "name"=>"$responses", "description"=>nil, "type"=>"string", "required"=>false, "allowMultiple"=>true}],
+              "tags"=>["params_response"],
               "responses"=>{
                 "201"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/ParamsResponse"}},
                 "400"=>{"description"=>"NotFound", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}

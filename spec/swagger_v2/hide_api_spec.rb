@@ -40,10 +40,11 @@ describe 'a hide mounted api' do
       "swagger"=>"2.0",
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
+      "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}, {"name"=>"lazy", "description"=>"Operations about lazies"}],
       "schemes" => ["https", "http"],
       "paths"=>{
-        "/simple"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}},
-        "/lazy"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Lazily show endpoint"}}}}}
+        "/simple"=>{"get"=>{"produces"=>["application/json"],  "tags"=>["simple"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}},
+        "/lazy"=>{"get"=>{"produces"=>["application/json"], "tags"=>["lazy"], "responses"=>{"200"=>{"description"=>"Lazily show endpoint"}}}}}
     })
   end
 end
@@ -84,9 +85,10 @@ describe 'a hide mounted api with same namespace' do
       "swagger"=>"2.0",
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
+      "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}],
       "schemes" => ["https", "http"],
       "paths"=>{
-        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}}}
+        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "tags"=>["simple"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}}}
       })
   end
 
@@ -97,9 +99,10 @@ describe 'a hide mounted api with same namespace' do
       "swagger"=>"2.0",
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
+      "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}],
       "schemes" => ["https", "http"],
       "paths"=>{
-        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}}}
+        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "tags"=>["simple"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}}}
       })
   end
 end

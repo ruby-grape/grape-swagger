@@ -72,6 +72,10 @@ RSpec.shared_context "swagger example" do
       "swagger"=>"2.0",
       "produces"=>["application/json"],
       "host"=>"example.org",
+      "tags"=>[{"name"=>"other_thing", "description"=>"Operations about other_things"},
+        {"name"=>"thing", "description"=>"Operations about things"},
+        {"name"=>"thing2", "description"=>"Operations about thing2s"},
+        {"name"=>"dummy", "description"=>"Operations about dummies"}],
       "schemes"=>["https", "http"],
       "paths"=>{
         "/v3/other_thing/{elements}"=>{
@@ -79,6 +83,7 @@ RSpec.shared_context "swagger example" do
             "produces"=>["application/json"],
             "parameters"=>[
               {"in"=>"array", "name"=>"elements", "description"=>"Set of configuration", "type"=>"string", "required"=>true, "allowMultiple"=>true, "items"=>{"type"=>"string"}}],
+              "tags"=>["other_thing"],
               "responses"=>{"200"=>{"description"=>"nested route inside namespace", "schema"=>{"$ref"=>"#/definitions/QueryInput"}}},
               "x-amazon-apigateway-auth"=>{"type"=>"none"},
               "x-amazon-apigateway-integration"=>{"type"=>"aws", "uri"=>"foo_bar_uri", "httpMethod"=>"get"}}},
@@ -90,6 +95,7 @@ RSpec.shared_context "swagger example" do
               {"in"=>"query", "name"=>"text", "description"=>"Content of something.", "type"=>"string", "required"=>false, "allowMultiple"=>false},
               {"in"=>"query", "name"=>"links", "description"=>nil, "type"=>"link", "required"=>false, "allowMultiple"=>true},
               {"in"=>"query", "name"=>"others", "description"=>nil, "type"=>"text", "required"=>false, "allowMultiple"=>false}],
+              "tags"=>["thing"],
             "responses"=>{
               "200"=>{"description"=>"This gets Things.", "schema"=>{"$ref"=>"#/definitions/Thing"}},
               "401"=>{"description"=>"Unauthorized", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}},
@@ -98,6 +104,7 @@ RSpec.shared_context "swagger example" do
             "parameters"=>[
               {"in"=>"formData", "name"=>"text", "description"=>"Content of something.", "type"=>"string", "required"=>true, "allowMultiple"=>false},
               {"in"=>"body", "name"=>"links", "description"=>nil, "type"=>"Array", "required"=>true, "allowMultiple"=>true}],
+            "tags"=>["thing"],
             "responses"=>{
               "201"=>{"description"=>"This creates Thing.", "schema"=>{"$ref"=>"#/definitions/Something"}},
               "422"=>{"description"=>"Unprocessible Entity"}}
@@ -107,6 +114,7 @@ RSpec.shared_context "swagger example" do
             "produces"=>["application/json"],
             "parameters"=>[
               {"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"}],
+            "tags"=>["thing"],
             "responses"=>{
               "200"=>{"description"=>"getting a single thing", "schema"=>{"$ref"=>"#/definitions/Thing"}},
               "401"=>{"description"=>"Unauthorized"}}},
@@ -116,15 +124,18 @@ RSpec.shared_context "swagger example" do
               {"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"},
               {"in"=>"formData", "name"=>"text", "description"=>"Content of something.", "type"=>"string", "required"=>false, "allowMultiple"=>false},
               {"in"=>"body", "name"=>"links", "description"=>nil, "type"=>"Array", "required"=>false, "allowMultiple"=>true}],
+            "tags"=>["thing"],
             "responses"=>{"200"=>{"description"=>"This updates Thing.", "schema"=>{"$ref"=>"#/definitions/Something"}}}},
           "delete"=>{
             "produces"=>["application/json"],
             "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"}],
+            "tags"=>["thing"],
             "responses"=>{"200"=>{"description"=>"This deletes Thing.", "schema"=>{"$ref"=>"#/definitions/Something"}}}
         }},
         "/thing2"=>{
           "get"=>{
             "produces"=>["application/json"],
+            "tags"=>["thing2"],
             "responses"=>{
               "200"=>{"description"=>"get Horses", "schema"=>{"$ref"=>"#/definitions/Something"}},
               "401"=>{"description"=>"HorsesOutError", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}
@@ -133,6 +144,7 @@ RSpec.shared_context "swagger example" do
           "delete"=>{
             "produces"=>["application/json"],
             "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"}],
+            "tags"=>["dummy"],
             "responses"=>{"200"=>{"description"=>"dummy route."}, "401"=>{"description"=>"Unauthorized"}}
       }}},
       "definitions"=>{

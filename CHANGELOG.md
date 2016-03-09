@@ -2,6 +2,12 @@
 n.n.n / 2016-02-05
 ==================
 
+### 0.10.4 (Next)
+
+[#344](https://github.com/ruby-grape/grape-swagger/pull/) Namespace based tag include in Swagger Json
+
+* Namespace based tagging help the swagger GUI to group the API list
+
 ### 0.10.3 (Next)
 
 [#336](https://github.com/ruby-grape/grape-swagger/pull/336) changes of swagger-2.0 fork, to support it

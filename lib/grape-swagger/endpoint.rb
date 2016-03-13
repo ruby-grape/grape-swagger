@@ -122,26 +122,21 @@ module Grape
         else
           @paths[path.to_sym] = { method => request_params }
         end
+
+        GrapeSwagger::DocMethods::Extensions.add(@paths[path.to_sym], @definitions, route)
       end
     end
 
     def method_object(route, options)
-      methods = {}
-      methods[:description] = description_object(route, options[:markdown])
-      methods[:headers] = route.route_headers if route.route_headers
+      method = {}
+      method[:description] = description_object(route, options[:markdown])
+      method[:headers]     = route.route_headers if route.route_headers
+      method[:produces]    = produces_object(route, options)
+      method[:parameters]  = params_object(route)
+      method[:responses]   = response_object(route)
+      method[:tags]        = tag_object(route, options[:version])
 
-      methods[:produces] = produces_object(route, options)
-
-      methods[:parameters] = params_object(route)
-      methods[:tags] = tag_object(route, options[:version])
-      methods[:responses] = response_object(route)
-
-      if route.route_aws
-        methods['x-amazon-apigateway-auth'] = { type: route.route_aws[:auth] } if route.route_aws[:auth]
-        methods['x-amazon-apigateway-integration'] = route.route_aws[:integration] if route.route_aws[:integration]
-      end
-
-      methods.delete_if { |_, value| value.blank? }
+      method.delete_if { |_, value| value.blank? }
     end
 
     def description_object(route, markdown)
@@ -210,7 +205,7 @@ module Grape
       required, exposed = route.route_params.partition { |x| x.first.is_a? String }
 
       unless declared_params.nil?
-        required_params = parse_request_params(declared_params, required, route.route_params)
+        required_params = parse_request_params(required)
       end
 
       if !exposed.empty? && !@entity
@@ -224,19 +219,17 @@ module Grape
       required_params || {}
     end
 
-    def parse_request_params(parameters, required, route_paramter)
-      parameters.each_with_object({}) do |x, memo|
-        if x.is_a?(Hash)
-          x.keys.each do |key|
-            if route_paramter[key.to_s][:type] == 'Array'
-              x[key].each { |y| memo["#{key}[][#{y}]"] = required.assoc("#{key}[#{y}]").last.merge(is_array: true) }
-            else
-              x[key].each { |y| memo["#{key}[#{y}]"] = required.assoc("#{key}[#{y}]").last }
-            end
-          end
+    def parse_request_params(required)
+      required.each_with_object({}) do |param, memo|
+        @array_key = param.first.to_s.gsub('[', '[][') if param.last[:type] == 'Array'
+        possible_key = param.first.to_s.gsub('[', '[][')
+        if @array_key && possible_key.start_with?(@array_key)
+          key = possible_key
+          param.last[:is_array] = true
         else
-          memo[x] = required.assoc(x.to_s).last
+          key = param.first
         end
+        memo[key] = param.last unless param.last[:type] == 'Hash' || param.last[:type] == 'Array' && !param.last.key?(:documentation)
       end
     end
 
@@ -253,7 +246,7 @@ module Grape
                             { '$ref' => "#/definitions/#{name}" }
                           end
         else
-          memo[x.first] = { type: data_type(x.last[:documentation] || x.last) }
+          memo[x.first] = { type: GrapeSwagger::DocMethods::DataType.call(x.last[:documentation] || x.last) }
           memo[x.first][:enum] = x.last[:values] if x.last[:values] && x.last[:values].is_a?(Array)
         end
       end
@@ -293,11 +286,13 @@ module Grape
       false
     end
 
+    # original methods
+    #
     def parse_params(param, value, path, method)
       @array_items = {}
 
       additional_documentation = value.is_a?(Hash) ? value[:documentation] : nil
-      data_type = data_type(value)
+      data_type = GrapeSwagger::DocMethods::DataType.call(value)
 
       if additional_documentation && value.is_a?(Hash)
         value = additional_documentation.merge(value)
@@ -323,8 +318,8 @@ module Grape
         allowMultiple: is_array
       }
 
-      if PRIMITIVE_MAPPINGS.key?(data_type)
-        parsed_params[:type], parsed_params[:format] = PRIMITIVE_MAPPINGS[data_type]
+      if GrapeSwagger::DocMethods::DataType::PRIMITIVE_MAPPINGS.key?(data_type)
+        parsed_params[:type], parsed_params[:format] = GrapeSwagger::DocMethods::DataType::PRIMITIVE_MAPPINGS[data_type]
       end
 
       parsed_params[:items] = @array_items if @array_items.present?
@@ -334,38 +329,6 @@ module Grape
 
       parsed_params.merge!(enum_or_range_values) if enum_or_range_values
       parsed_params
-    end
-
-    # helper methods
-    def data_type(value)
-      raw_data_type = value[:type] if value.is_a?(Hash)
-      raw_data_type ||= 'string'
-      case raw_data_type.to_s
-      when 'Hash'
-        'object'
-      when 'Rack::Multipart::UploadedFile'
-        'File'
-      when 'Virtus::Attribute::Boolean'
-        'boolean'
-      when 'Boolean', 'Date', 'Integer', 'String', 'Float'
-        raw_data_type.to_s.downcase
-      when 'BigDecimal'
-        'long'
-      when 'DateTime'
-        'dateTime'
-      when 'Numeric'
-        'double'
-      when 'Symbol'
-        'string'
-      when /^\[(?<type>.*)\]$/
-        items[:type] = Regexp.last_match[:type].downcase
-        if PRIMITIVE_MAPPINGS.key?(items[:type])
-          items[:type], items[:format] = PRIMITIVE_MAPPINGS[items[:type]]
-        end
-        'array'
-      else
-        parse_entity_name(raw_data_type)
-      end
     end
 
     def param_type(value_type, param, method, is_array)
@@ -408,17 +371,6 @@ module Grape
 
     def parse_range_values(values)
       { minimum: values.first, maximum: values.last }
-    end
-
-    def parse_entity_name(model)
-      if model.respond_to?(:entity_name)
-        model.entity_name
-      else
-        name = model.to_s
-        entity_parts = name.split('::')
-        entity_parts.reject! { |p| p == 'Entity' || p == 'Entities' }
-        entity_parts.join('::')
-      end
     end
 
     def primitive?(type)

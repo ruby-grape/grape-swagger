@@ -4,8 +4,8 @@ module Api
   module Entities
     class Splines < Grape::Entity
       expose :id, documentation: { type: Integer, desc: 'identity of a resource' }
-      expose :x, documentation: { type: Numeric, desc: 'x-value' }
-      expose :y, documentation: { type: Numeric, desc: 'y-value' }
+      expose :x, documentation: { type: Float, desc: 'x-value' }
+      expose :y, documentation: { type: Float, desc: 'y-value' }
       expose :path, documentation: { type: String, desc: 'the requested resource'}
 
       private

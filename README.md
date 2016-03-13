@@ -9,7 +9,9 @@ This branch is work in progress for bringing grape-swagger to Swagger 2.0 spec. 
 [Usage](#usage)  
 [Configure](#configure)  
 [Routes Configuration](#routes)  
-[Additional documentation](#additions)  
+[Markdown](#md_usage)  
+[Response documentation](#response)  
+[Extensions](#extensions)  
 [Example](#example)  
 
 For how to use at the moment see [v2 specs](tree/master/spec/swagger_v2) and or [Hussars](https://github.com/LeFnord/hussars) sample app.
@@ -681,24 +683,61 @@ The result is then something like following:
 },
 ```
 
+<a name="extensions" />
+## Extensions
 
-## direct adding of additional swagger information for the route
+Swagger spec2.0 supports extensions on different levels, for the moment,
+the documentation on `verb`, `path` and `definition` level would be supported.
+The documented key would be generated from the `x` + `-` + key of the submitted hash,
+for possibilities refer to the [extensions spec](spec/lib/extensions_spec.rb).
+To get an overview *how* the extensions would be defined on grape level, see the following examples:
 
-- The amazon api gateway parameters can be added by indicated a aws hash with auth and integration keys, example:
-
+- `verb` extension, add a `x` key to the `desc` hash:
 ```ruby
-desc 'thing',
-  aws: {
-    auth: 'aws_iam',
-    integration: {
-      type: 'aws',
-      uri: 'foo_bar_uri',
-      httpMethod: 'get'
-    }
+desc 'This returns something with extension on verb level',
+  x: { some: 'stuff' }
+```
+this would generate:
+```json
+"/path":{
+  "get":{
+    "…":"…",
+    "x-some":"stuff"
   }
+}
+```
 
-  …
+- `path` extension, by setting via route settings:
+```ruby
+route_setting :x_path, { some: 'stuff' }
+```
+this would generate:
+```json
+"/path":{
+  "x-some":"stuff",
+  "get":{
+    "…":"…",
+  }
+}
+```
 
+- `definition` extension, again by setting via route settings,
+here the status code must be provided, for which definition the extensions should be:
+```ruby
+route_setting :x_def, { for: 422, other: 'stuff' }
+```
+this would generate:
+```json
+"/definitions":{
+  "ApiError":{
+    "x-other":"stuff",
+    "…":"…",
+  }
+}
+```
+or, for more definitions:
+```ruby
+route_setting :x_def, [{ for: 422, other: 'stuff' }, { for: 200, some: 'stuff' }]
 ```
 
 <a="example" />

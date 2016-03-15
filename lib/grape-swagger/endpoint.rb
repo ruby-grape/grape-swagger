@@ -141,9 +141,9 @@ module Grape
         path.sub!('/{version}', '')
       end
 
-      path = "/#{optional_objects(:base_path, options)}#{path}" if options[:add_base_path]
+      path = "#{optional_objects(:base_path, options)}#{path}" if options[:add_base_path]
 
-      path
+      path.start_with?('/') ? path : "/#{path}"
     end
 
     def method_object(route, options, path)

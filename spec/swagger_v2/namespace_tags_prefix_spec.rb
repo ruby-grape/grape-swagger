@@ -28,32 +28,19 @@ describe 'namespace tags check while using prefix and version' do
     end
 
     specify do
-      expect(subject).to eq({
-        "info"=>{"title"=>"API title", "version"=>"v1"},
-        "swagger"=>"2.0",
-        "produces" => ["application/xml", "application/json", "application/octet-stream", "text/plain"],
-        "host"=>"example.org",
-        "tags"=>[{"name"=>"hudson", "description"=>"Operations about hudsons"},
-          {"name"=>"colorado", "description"=>"Operations about colorados"},
-          {"name"=>"thames", "description"=>"Operations about thames"},
-          {"name"=>"niles", "description"=>"Operations about niles"}],
-        "schemes"=>["https", "http"],
-        "paths"=>{
-          "/api/v1/hudson"=>{"get"=>{"produces"=>["application/json"],
-            "tags"=>["hudson"],
-            "responses"=>{"200"=>{"description"=>"Document root"}}}},
-          "/api/v1/colorado/simple"=>{"get"=>{"produces"=>["application/json"],
-            "tags"=>["colorado"],
-            "responses"=>{"200"=>{"description"=>"This gets something."}}}},
-          "/api/v1/colorado/simple-test"=>{"get"=>{"produces"=>["application/json"],
-            "tags"=>["colorado"],
-            "responses"=>{"200"=>{"description"=>"This gets something for URL using - separator."}}}},
-          "/api/v1/thames/simple_with_headers"=>{"get"=>{"headers"=>{"XAuthToken"=>{"description"=>"A required header.", "required"=>true}, "XOtherHeader"=>{"description"=>"An optional header.", "required"=>false}}, "produces"=>["application/json"],
-            "tags"=>["thames"], "responses"=>{"200"=>{"description"=>"this gets something else"}, "403"=>{"description"=>"invalid pony"}, "405"=>{"description"=>"no ponies left!"}}}},
-            "/api/v1/niles/items"=>{"post"=>{"produces"=>["application/json"], "parameters"=>[{"in"=>"formData", "name"=>"items[]", "description"=>"array of items", "type"=>"string", "required"=>false, "allowMultiple"=>true}],
-            "tags"=>["niles"], "responses"=>{"201"=>{"description"=>"this takes an array of parameters"}}}},
-          "/api/v1/niles/custom"=>{"get"=>{"produces"=>["application/json"], "parameters"=>[{"in"=>"query", "name"=>"custom", "description"=>"array of items", "type"=>"TheApi::CustomType", "required"=>false, "allowMultiple"=>true}],
-            "tags"=>["niles"], "responses"=>{"200"=>{"description"=>"this uses a custom parameter"}}}}}})
+      expect(subject['tags']).to eql([
+        {"name"=>"hudson", "description"=>"Operations about hudsons"},
+        {"name"=>"colorado", "description"=>"Operations about colorados"},
+        {"name"=>"thames", "description"=>"Operations about thames"},
+        {"name"=>"niles", "description"=>"Operations about niles"}
+      ])
+
+      expect(subject['paths']['/api/v1/hudson']['get']['tags']).to eql(['hudson'])
+      expect(subject['paths']['/api/v1/colorado/simple']['get']['tags']).to eql(['colorado'])
+      expect(subject['paths']['/api/v1/colorado/simple-test']['get']['tags']).to eql(['colorado'])
+      expect(subject['paths']['/api/v1/thames/simple_with_headers']['get']['tags']).to eql(['thames'])
+      expect(subject['paths']['/api/v1/niles/items']['post']['tags']).to eql(['niles'])
+      expect(subject['paths']['/api/v1/niles/custom']['get']['tags']).to eql(['niles'])
     end
   end
 
@@ -65,23 +52,15 @@ describe 'namespace tags check while using prefix and version' do
     end
 
     specify do
-      expect(subject).to eq({
-        "info"=>{"title"=>"API title", "version"=>"v1"},
-        "swagger"=>"2.0",
-        "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
-        "host"=>"example.org",
-        "tags"=>[{"name"=>"hudson", "description"=>"Operations about hudsons"}, {"name"=>"colorado", "description"=>"Operations about colorados"}, {"name"=>"thames", "description"=>"Operations about thames"}, {"name"=>"niles", "description"=>"Operations about niles"}],
-        "schemes"=>["https", "http"],
-        "paths"=>{
-          "/api/v1/colorado/simple"=>{
-              "get"=>{"produces"=>["application/json"],
-              "tags"=>["colorado"],
-              "responses"=>{"200"=>{"description"=>"This gets something."}}}},
-          "/api/v1/colorado/simple-test"=>{
-              "get"=>{"produces"=>["application/json"],
-              "tags"=>["colorado"],
-              "responses"=>{"200"=>{"description"=>"This gets something for URL using - separator."}}}}
-        }})
+      expect(subject['tags']).to eql([
+        {"name"=>"hudson", "description"=>"Operations about hudsons"},
+        {"name"=>"colorado", "description"=>"Operations about colorados"},
+        {"name"=>"thames", "description"=>"Operations about thames"},
+        {"name"=>"niles", "description"=>"Operations about niles"}
+      ])
+
+      expect(subject['paths']['/api/v1/colorado/simple']['get']['tags']).to eql(['colorado'])
+      expect(subject['paths']['/api/v1/colorado/simple-test']['get']['tags']).to eql(['colorado'])
     end
 
     describe 'includes headers' do
@@ -91,19 +70,14 @@ describe 'namespace tags check while using prefix and version' do
       end
 
       specify do
-        expect(subject['paths']).to eq({
-          "/api/v1/thames/simple_with_headers"=>{
-              "get"=>{
-                  "headers"=>{
-                    "XAuthToken"=>{"description"=>"A required header.", "required"=>true},
-                    "XOtherHeader"=>{"description"=>"An optional header.", "required"=>false}},
-                  "produces"=>["application/json"],
-                  "tags"=>["thames"],
-                  "responses"=>{
-                      "200"=>{"description"=>"this gets something else"},
-                      "403"=>{"description"=>"invalid pony"},
-                      "405"=>{"description"=>"no ponies left!"}}}
-          }})
+        expect(subject['tags']).to eql([
+          {"name"=>"hudson", "description"=>"Operations about hudsons"},
+          {"name"=>"colorado", "description"=>"Operations about colorados"},
+          {"name"=>"thames", "description"=>"Operations about thames"},
+          {"name"=>"niles", "description"=>"Operations about niles"}
+        ])
+
+        expect(subject['paths']['/api/v1/thames/simple_with_headers']['get']['tags']).to eql(['thames'])
       end
     end
   end

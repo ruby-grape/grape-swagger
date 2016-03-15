@@ -18,8 +18,6 @@ module GrapeSwagger
       # options could be set on #add_swagger_documentation call,
       # for available options see #defaults
       target_class     = options[:target_class]
-      api_version      = options[:api_version]
-      extra_info       = options[:info]
       api_doc          = options[:api_documentation].dup
       specific_api_doc = options[:specific_api_documentation].dup
 
@@ -35,7 +33,6 @@ module GrapeSwagger
         header['Access-Control-Request-Method'] = '*'
 
         output = swagger_object(
-          info_object(extra_info.merge(version: api_version)),
           target_class,
           request,
           options
@@ -63,7 +60,6 @@ module GrapeSwagger
         error!({ error: 'named resource not exist' }, 400) if combined_routes.nil?
 
         output = swagger_object(
-          info_object(extra_info.merge(version: api_version)),
           target_class,
           request,
           options
@@ -80,19 +76,20 @@ module GrapeSwagger
 
     def defaults
       {
+        info: {},
+        models: [],
+        scheme: %w( https http ),
         api_version: 'v1',
         target_class: nil,
         mount_path: '/swagger_doc',
         host: nil,
         base_path: nil,
+        add_base_path: false,
+        add_version: true,
         markdown: false,
         hide_documentation_path: true,
         format: :json,
-        models: [],
-        info: {},
-        scheme: %w( https http ),
         authorizations: nil,
-        root_base_path: true,
         api_documentation: { desc: 'Swagger compatible API description' },
         specific_api_documentation: { desc: 'Swagger compatible API description for specific API' }
       }

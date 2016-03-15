@@ -109,9 +109,11 @@ end
 <a name="configure" />
 ## Configure
 
-[target_class](#target_class)  
+[host](#host)  
+[mount_path](#mount_path)  
+[add_base_path](#add_base_path)  
+[add_version](#add_version)  
 [markdown](#markdown)  
-[hide_format](#hide_format)  
 [api_version](#api_version)  
 [models](#models)  
 [hide_documentation_path](#hide_documentation_path)  
@@ -123,16 +125,45 @@ You can pass a hash with optional configuration settings to ```add_swagger_docum
 *not all configuration options supported yet*, but is WIP
 
 
-#### target_class: <a name="target_class" />
-The API class to document, default `self`.
+`host` and `base_path` are also accepting a `proc` to evaluate.
 
+<a name="host" />
+#### host:
+Sets explicit the `host`
+```ruby
+add_swagger_documentation \
+   host: 'www.no-example.com'
+```
 
-#### *mount_path*:
+<a name="base_path" />
+#### base_path:
+Base path of the API that's being exposed.
+```ruby
+add_swagger_documentation \
+   base_path: '/super/api'
+```
+
+<a name="mount_path" />
+#### mount_path:
 The path where the API documentation is loaded, default is `/swagger_doc`.
+```ruby
+add_swagger_documentation \
+   mount_path: '/docu'
+```
 
+#### add_base_path:
+Add `basePath` key to the JSON documentation, default is `false`.
+```ruby
+add_swagger_documentation \
+   add_base_path: true
+```
 
-#### *class_name*:
-API class name.
+#### add_version:
+Add `version` key to the JSON documentation, default is `true`.
+```ruby
+add_swagger_documentation \
+   add_version: false
+```
 
 
 <a name="markdown" />
@@ -149,14 +180,6 @@ add_swagger_documentation \
   markdown: GrapeSwagger::Markdown::RedcarpetAdapter.new
 ```
 
-
-<a name="hide_format" />
-#### hide_format:
-
-~~Don't add `.(format)` to the end of URLs, default is `false`.~~
-`.(format)` would always be removed.
-
-
 <a name="api_version" />
 #### api_version:
 ```ruby
@@ -167,16 +190,9 @@ add_swagger_documentation \
 Version of the API that's being exposed.
 
 
-#### *base_path*:
-Base path of the API that's being exposed. This configuration parameter accepts a `proc` to evaluate `base_path`, useful when you need to use request attributes to determine its value.
-
-
 #### *authorizations*:
 This value is added to the `authorizations` key in the JSON documentation.
 
-
-#### *root_base_path*:
-Add `basePath` key to the JSON documentation, default is `true`.
 
 
 <a name="models" />
@@ -202,11 +218,6 @@ add_swagger_documentation \
 
 Don't show the `/swagger_doc` path in the generated swagger documentation.
 
-
-#### *format*:
-Documentation response format, default is `:json`.
-
-
 <a name="info" />
 #### info:
 ```ruby
@@ -226,7 +237,7 @@ add_swagger_documentation \
 A hash merged into the `info` key of the JSON documentation.
 
 
-#### *api_documentation*:
+<!-- #### *api_documentation*:
 Customize the Swagger API documentation route, typically contains a `desc` field. The default description is "Swagger compatible API description".
 
 ```ruby
@@ -241,7 +252,7 @@ Customize the Swagger API specific documentation route, typically contains a `de
 ```ruby
 add_swagger_documentation \
    specific_api_documentation: { desc: 'Reticulated splines API swagger-compatible endpoint documentation.' }
-```
+``` -->
 
 
 <a name="routes" />

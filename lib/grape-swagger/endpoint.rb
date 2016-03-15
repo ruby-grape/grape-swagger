@@ -28,17 +28,27 @@ module Grape
     # swagger spec2.0 related parts
     #
     # required keys for SwaggerObject
-    def swagger_object(info, target_class, request, options)
+    def swagger_object(target_class, request, options)
       {
-        info:           info,
+        info:           info_object(options[:info].merge(version: options[:api_version])),
         swagger:        '2.0',
         produces:       content_types_for(target_class),
         authorizations: options[:authorizations],
-        host:           request.env['HTTP_HOST'] || options[:host],
-        basePath:       request.env['SCRIPT_NAME'] || options[:base_path],
+        host:           optional_objects(:host, options, request.env['HTTP_HOST']),
+        basePath:       optional_objects(:base_path, options, request.env['SCRIPT_NAME']),
         tags:           tag_name_description(options),
         schemes:        options[:scheme]
       }.delete_if { |_, value| value.blank? }
+    end
+
+    # helper for swagger object
+    # gets host and base_path
+    def optional_objects(key, options, request = nil)
+      if options[key]
+        options[key].is_a?(Proc) ? options[key].call : options[key]
+      else
+        request
+      end
     end
 
     # building info object
@@ -96,26 +106,13 @@ module Grape
       routes.each do |route|
         next if hidden?(route)
 
-        path = route.route_path
-        # always removing format
-        path.sub!(/\(\.\w+?\)$/, '')
-        path.sub!('(.:format)', '')
-        # ... format params
-        path.gsub!(/:(\w+)/, '{\1}')
-
-        # set item from path, this could be used for the definitions object
-        @item = path.gsub(%r{/{(.+?)}}, '').split('/').last.singularize.underscore.camelize || 'Item'
+        path = path_string(route, options)
         @entity = route.route_entity || route.route_success
 
         # ... replacing version params through submitted version
-        if options[:version]
-          path.sub!('{version}', options[:version])
-        else
-          path.sub!('{version}', '')
-        end
 
         method = route.route_method.downcase.to_sym
-        request_params = method_object(route, options)
+        request_params = method_object(route, options, path)
 
         if @paths.key?(path.to_sym)
           @paths[path.to_sym][method] = request_params
@@ -127,7 +124,29 @@ module Grape
       end
     end
 
-    def method_object(route, options)
+    def path_string(route, options)
+      path = route.route_path
+      # always removing format
+      path.sub!(/\(\.\w+?\)$/, '')
+      path.sub!('(.:format)', '')
+      # ... format params
+      path.gsub!(/:(\w+)/, '{\1}')
+
+      # set item from path, this could be used for the definitions object
+      @item = path.gsub(%r{/{(.+?)}}, '').split('/').last.singularize.underscore.camelize || 'Item'
+
+      if options[:version] && options[:add_version]
+        path.sub!('{version}', options[:version])
+      else
+        path.sub!('/{version}', '')
+      end
+
+      path = "/#{optional_objects(:base_path, options)}#{path}" if options[:add_base_path]
+
+      path
+    end
+
+    def method_object(route, options, path)
       method = {}
       method[:description] = description_object(route, options[:markdown])
       method[:headers]     = route.route_headers if route.route_headers
@@ -135,8 +154,22 @@ module Grape
       method[:parameters]  = params_object(route)
       method[:responses]   = response_object(route)
       method[:tags]        = tag_object(route, options[:version])
-
+      method[:operationId] = operation_id_object(route.route_method, path)
       method.delete_if { |_, value| value.blank? }
+    end
+
+    def operation_id_object(method, path = nil)
+      verb = method.to_s.downcase
+      unless path.nil?
+        operation = path.split('/').map(&:capitalize).join
+        operation.gsub!(/\-(\w)/, &:upcase).delete!('-') if operation.include?('-')
+        operation.gsub!(/\_(\w)/, &:upcase).delete!('_') if operation.include?('_')
+        if path.include?('{')
+          operation.gsub!(/\{(\w)/, &:upcase)
+          operation.delete!('{').delete!('}')
+        end
+      end
+      "#{verb}#{operation}"
     end
 
     def description_object(route, markdown)

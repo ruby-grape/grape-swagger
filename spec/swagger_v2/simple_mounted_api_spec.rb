@@ -81,8 +81,18 @@ describe 'a simple mounted api' do
         "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}, {"name"=>"simple-test", "description"=>"Operations about simple-tests"}, {"name"=>"simple_with_headers", "description"=>"Operations about simple_with_headers"}, {"name"=>"items", "description"=>"Operations about items"}, {"name"=>"custom", "description"=>"Operations about customs"}],
         "schemes"=>["https", "http"],
         "paths"=>{
-          "/simple"=>{"get"=>{"produces"=>["application/json"], "tags"=>["simple"], "responses"=>{"200"=>{"description"=>"This gets something."}}}},
-          "/simple-test"=>{"get"=>{"produces"=>["application/json"], "tags"=>["simple-test"], "responses"=>{"200"=>{"description"=>"This gets something for URL using - separator."}}}},
+          "/simple"=>{
+            "get"=>{
+              "produces"=>["application/json"],
+              "tags"=>["simple"],
+              "operationId"=>"getSimple",
+              "responses"=>{"200"=>{"description"=>"This gets something."}}}},
+          "/simple-test"=>{
+            "get"=>{
+              "produces"=>["application/json"],
+              "tags"=>["simple-test"],
+              "operationId"=>"getSimpleTest",
+              "responses"=>{"200"=>{"description"=>"This gets something for URL using - separator."}}}},
           "/simple_with_headers"=>{
             "get"=>{
               "headers"=>{
@@ -90,6 +100,7 @@ describe 'a simple mounted api' do
                 "XOtherHeader"=>{"description"=>"An optional header.", "required"=>false}},
               "produces"=>["application/json"],
               "tags"=>["simple_with_headers"],
+              "operationId"=>"getSimpleWithHeaders",
               "responses"=>{
                 "200"=>{"description"=>"this gets something else"},
                 "403"=>{"description"=>"invalid pony"},
@@ -100,6 +111,7 @@ describe 'a simple mounted api' do
               "produces"=>["application/json"],
               "parameters"=>[{"in"=>"formData", "name"=>"items[]", "description"=>"array of items", "type"=>"string", "required"=>false, "allowMultiple"=>true}],
               "tags"=>["items"],
+              "operationId"=>"postItems",
               "responses"=>{"201"=>{"description"=>"this takes an array of parameters"}}
           }},
           "/custom"=>{
@@ -107,6 +119,7 @@ describe 'a simple mounted api' do
               "produces"=>["application/json"],
               "parameters"=>[{"in"=>"query", "name"=>"custom", "description"=>"array of items", "type"=>"CustomType", "required"=>false, "allowMultiple"=>true}],
               "tags"=>["custom"],
+              "operationId"=>"getCustom",
               "responses"=>{"200"=>{"description"=>"this uses a custom parameter"}}}
       }}})
     end
@@ -128,7 +141,11 @@ describe 'a simple mounted api' do
         "schemes"=>["https", "http"],
         "paths"=>{
           "/simple"=>{
-            "get"=>{"produces"=>["application/json"], "tags"=>["simple"], "responses"=>{"200"=>{"description"=>"This gets something."}}}}
+            "get"=>{
+              "produces"=>["application/json"],
+              "tags"=>["simple"],
+              "operationId"=>"getSimple",
+              "responses"=>{"200"=>{"description"=>"This gets something."}}}}
         }})
     end
   end
@@ -153,6 +170,7 @@ describe 'a simple mounted api' do
               "get"=>{
                 "produces"=>["application/json"],
                 "tags"=>["simple-test"],
+                "operationId"=>"getSimpleTest",
                 "responses"=>{"200"=>{"description"=>"This gets something for URL using - separator."}}}}
           }})
       end
@@ -173,6 +191,7 @@ describe 'a simple mounted api' do
                 "XOtherHeader"=>{"description"=>"An optional header.", "required"=>false}},
               "produces"=>["application/json"],
               "tags"=>["simple_with_headers"],
+              "operationId"=>"getSimpleWithHeaders",
               "responses"=>{
                 "200"=>{"description"=>"this gets something else"},
                 "403"=>{"description"=>"invalid pony"},
@@ -194,6 +213,7 @@ describe 'a simple mounted api' do
               "produces"=>["application/json"],
               "parameters"=>[{"in"=>"formData", "name"=>"items[]", "description"=>"array of items", "type"=>"string", "required"=>false, "allowMultiple"=>true}],
               "tags"=>["items"],
+              "operationId"=>"postItems",
               "responses"=>{"201"=>{"description"=>"this takes an array of parameters"}}}
           }})
       end
@@ -212,6 +232,7 @@ describe 'a simple mounted api' do
               "produces"=>["application/json"],
               "parameters"=>[{"in"=>"query", "name"=>"custom", "description"=>"array of items", "type"=>"CustomType", "required"=>false, "allowMultiple"=>true}],
               "tags"=>["custom"],
+              "operationId"=>"getCustom",
               "responses"=>{"200"=>{"description"=>"this uses a custom parameter"}}}
           }})
       end

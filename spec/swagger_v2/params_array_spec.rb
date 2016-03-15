@@ -50,6 +50,7 @@ describe 'Group Params as Array' do
             "post"=>{
               "produces"=>["application/json"],
               "tags"=>["groups"],
+              "operationId"=>"postGroups",
               "responses"=>{"201"=>{"description"=>"created Group"}},
               "parameters"=>[
                 {"in"=>"formData", "name"=>"required_group[][required_param_1]", "description"=>nil, "type"=>"string", "required"=>true, "allowMultiple"=>true},
@@ -82,6 +83,7 @@ describe 'Group Params as Array' do
                 {"in"=>"formData", "name"=>"typed_group[][email]", "description"=>"email given", "type"=>"string", "required"=>false, "allowMultiple"=>true},
                 {"in"=>"formData", "name"=>"typed_group[][others]", "description"=>nil, "type"=>"integer", "required"=>false, "allowMultiple"=>true, "format"=>"int32", "enum"=>[1, 2, 3]}],
                 "tags"=>["type_given"],
+                "operationId"=>"postTypeGiven",
               "responses"=>{"201"=>{"description"=>"created TypeGiven"}}}}}})
     end
   end

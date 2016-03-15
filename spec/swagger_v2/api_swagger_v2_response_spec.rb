@@ -50,6 +50,7 @@ describe 'exposing' do
             "get"=>{
               "produces"=>["application/json"],
               "tags"=>["entity_response"],
+              "operationId"=>"getEntityResponse",
               "responses"=>{
                 "200"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/UseResponse"}},
                 "400"=>{"description"=>"NotFound", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}}}},
@@ -97,6 +98,7 @@ describe 'exposing' do
                 {"in"=>"formData", "name"=>"description", "description"=>nil, "type"=>"string", "required"=>false, "allowMultiple"=>false},
                 {"in"=>"formData", "name"=>"$responses", "description"=>nil, "type"=>"string", "required"=>false, "allowMultiple"=>true}],
               "tags"=>["params_response"],
+              "operationId"=>"postParamsResponse",
               "responses"=>{
                 "201"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/ParamsResponse"}},
                 "400"=>{"description"=>"NotFound", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}

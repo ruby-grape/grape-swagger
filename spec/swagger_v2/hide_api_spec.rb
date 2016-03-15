@@ -43,8 +43,18 @@ describe 'a hide mounted api' do
       "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}, {"name"=>"lazy", "description"=>"Operations about lazies"}],
       "schemes" => ["https", "http"],
       "paths"=>{
-        "/simple"=>{"get"=>{"produces"=>["application/json"],  "tags"=>["simple"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}},
-        "/lazy"=>{"get"=>{"produces"=>["application/json"], "tags"=>["lazy"], "responses"=>{"200"=>{"description"=>"Lazily show endpoint"}}}}}
+        "/simple"=>{
+          "get"=>{
+            "produces"=>["application/json"],
+            "tags"=>["simple"],
+            "operationId"=>"getSimple",
+            "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}},
+        "/lazy"=>{
+          "get"=>{
+            "produces"=>["application/json"],
+            "tags"=>["lazy"],
+            "operationId"=>"getLazy",
+            "responses"=>{"200"=>{"description"=>"Lazily show endpoint"}}}}}
     })
   end
 end
@@ -88,7 +98,11 @@ describe 'a hide mounted api with same namespace' do
       "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}],
       "schemes" => ["https", "http"],
       "paths"=>{
-        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "tags"=>["simple"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}}}
+        "/simple/show"=>{
+          "get"=>{
+            "produces"=>["application/json"],
+            "operationId"=>"getSimpleShow",
+            "tags"=>["simple"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}}}
       })
   end
 
@@ -102,7 +116,12 @@ describe 'a hide mounted api with same namespace' do
       "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}],
       "schemes" => ["https", "http"],
       "paths"=>{
-        "/simple/show"=>{"get"=>{"produces"=>["application/json"], "tags"=>["simple"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}}}
+        "/simple/show"=>{
+          "get"=>{
+            "produces"=>["application/json"],
+            "tags"=>["simple"],
+            "operationId"=>"getSimpleShow",
+            "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}}}
       })
   end
 end

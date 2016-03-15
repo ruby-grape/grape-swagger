@@ -196,7 +196,8 @@ module Grape
 
     def params_object(route)
       partition_params(route).map do |param, value|
-        parse_params(param, { required: false }.merge(value), route.route_path, route.route_method)
+        value = { required: false }.merge(value) if value.is_a?(Hash)
+        parse_params(param, value, route.route_path, route.route_method)
       end
     end
 

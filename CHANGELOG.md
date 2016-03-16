@@ -1,5 +1,14 @@
-n.n.n / 2016-02-14
+
+n.n.n / 2016-03-16
 ==================
+
+[#354](https://github.com/ruby-grape/grape-swagger/pull/354) some improvements
+
+- fixes setting of `base_path` and `host`;
+- adds possibility to configure the setting of `version` and `base_path` in documented path;
+- adds `operationId`
+
+[#353](https://github.com/ruby-grape/grape-swagger/pull/353) resolves issue #352
 
 ### 0.10.4 (Next)
 

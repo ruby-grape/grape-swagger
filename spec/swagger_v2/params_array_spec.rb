@@ -38,24 +38,10 @@ describe 'Group Params as Array' do
     end
 
     specify do
-      expect(subject).to eql({
-        "info"=>{"title"=>"API title", "version"=>"v1"},
-        "swagger"=>"2.0",
-        "produces"=>["application/json"],
-        "host"=>"example.org",
-        "tags" => [{"name"=>"groups", "description"=>"Operations about groups"}, {"name"=>"type_given", "description"=>"Operations about type_givens"}],
-        "schemes" => ["https", "http"],
-        "paths"=>{
-          "/groups"=>{
-            "post"=>{
-              "produces"=>["application/json"],
-              "tags"=>["groups"],
-              "operationId"=>"postGroups",
-              "responses"=>{"201"=>{"description"=>"created Group"}},
-              "parameters"=>[
-                {"in"=>"formData", "name"=>"required_group[][required_param_1]", "description"=>nil, "type"=>"string", "required"=>true, "allowMultiple"=>true},
-                {"in"=>"formData", "name"=>"required_group[][required_param_2]", "description"=>nil, "type"=>"string", "required"=>true, "allowMultiple"=>true}
-        ]}}}})
+      expect(subject['paths']['/groups']['post']['parameters']).to eql([
+        {"in"=>"formData", "name"=>"required_group[][required_param_1]", "description"=>nil, "type"=>"string", "required"=>true, "allowMultiple"=>true},
+        {"in"=>"formData", "name"=>"required_group[][required_param_2]", "description"=>nil, "type"=>"string", "required"=>true, "allowMultiple"=>true}
+      ])
     end
   end
 
@@ -66,25 +52,12 @@ describe 'Group Params as Array' do
     end
 
     specify do
-      expect(subject).to eql({
-        "info"=>{"title"=>"API title", "version"=>"v1"},
-        "swagger"=>"2.0",
-        "produces"=>["application/json"],
-        "host"=>"example.org",
-        "tags"=>[{"name"=>"groups", "description"=>"Operations about groups"}, {"name"=>"type_given", "description"=>"Operations about type_givens"}],
-        "schemes"=>["https", "http"],
-        "paths"=>{
-          "/type_given"=>{
-            "post"=>{
-              "produces"=>["application/json"],
-              "parameters"=>[
-                {"in"=>"formData", "name"=>"typed_group[][id]", "description"=>"integer given", "type"=>"integer", "required"=>true, "allowMultiple"=>true, "format"=>"int32"},
-                {"in"=>"formData", "name"=>"typed_group[][name]", "description"=>"string given", "type"=>"string", "required"=>true, "allowMultiple"=>true},
-                {"in"=>"formData", "name"=>"typed_group[][email]", "description"=>"email given", "type"=>"string", "required"=>false, "allowMultiple"=>true},
-                {"in"=>"formData", "name"=>"typed_group[][others]", "description"=>nil, "type"=>"integer", "required"=>false, "allowMultiple"=>true, "format"=>"int32", "enum"=>[1, 2, 3]}],
-                "tags"=>["type_given"],
-                "operationId"=>"postTypeGiven",
-              "responses"=>{"201"=>{"description"=>"created TypeGiven"}}}}}})
+      expect(subject['paths']['/type_given']['post']['parameters']).to eql([
+        {"in"=>"formData", "name"=>"typed_group[][id]", "description"=>"integer given", "type"=>"integer", "required"=>true, "allowMultiple"=>true, "format"=>"int32"},
+        {"in"=>"formData", "name"=>"typed_group[][name]", "description"=>"string given", "type"=>"string", "required"=>true, "allowMultiple"=>true},
+        {"in"=>"formData", "name"=>"typed_group[][email]", "description"=>"email given", "type"=>"string", "required"=>false, "allowMultiple"=>true},
+        {"in"=>"formData", "name"=>"typed_group[][others]", "description"=>nil, "type"=>"integer", "required"=>false, "allowMultiple"=>true, "format"=>"int32", "enum"=>[1, 2, 3]}
+      ])
     end
   end
 end

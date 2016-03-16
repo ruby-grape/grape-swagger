@@ -34,21 +34,11 @@ module Grape
         swagger:        '2.0',
         produces:       content_types_for(target_class),
         authorizations: options[:authorizations],
-        host:           optional_objects(:host, options, request.env['HTTP_HOST']),
-        basePath:       optional_objects(:base_path, options, request.env['SCRIPT_NAME']),
-        tags:           tag_name_description(options),
+        host:           GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request.env['HTTP_HOST']),
+        basePath:       GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request.env['SCRIPT_NAME']),
+        tags:           GrapeSwagger::DocMethods::TagNameDescription.build(options),
         schemes:        options[:scheme]
       }.delete_if { |_, value| value.blank? }
-    end
-
-    # helper for swagger object
-    # gets host and base_path
-    def optional_objects(key, options, request = nil)
-      if options[key]
-        options[key].is_a?(Proc) ? options[key].call : options[key]
-      else
-        request
-      end
     end
 
     # building info object
@@ -106,7 +96,7 @@ module Grape
       routes.each do |route|
         next if hidden?(route)
 
-        path = path_string(route, options)
+        @item, path = GrapeSwagger::DocMethods::PathString.build(route.route_path, options)
         @entity = route.route_entity || route.route_success
 
         # ... replacing version params through submitted version
@@ -124,52 +114,17 @@ module Grape
       end
     end
 
-    def path_string(route, options)
-      path = route.route_path
-      # always removing format
-      path.sub!(/\(\.\w+?\)$/, '')
-      path.sub!('(.:format)', '')
-      # ... format params
-      path.gsub!(/:(\w+)/, '{\1}')
-
-      # set item from path, this could be used for the definitions object
-      @item = path.gsub(%r{/{(.+?)}}, '').split('/').last.singularize.underscore.camelize || 'Item'
-
-      if options[:version] && options[:add_version]
-        path.sub!('{version}', options[:version])
-      else
-        path.sub!('/{version}', '')
-      end
-
-      path = "#{optional_objects(:base_path, options)}#{path}" if options[:add_base_path]
-
-      path.start_with?('/') ? path : "/#{path}"
-    end
-
     def method_object(route, options, path)
       method = {}
       method[:description] = description_object(route, options[:markdown])
       method[:headers]     = route.route_headers if route.route_headers
-      method[:produces]    = produces_object(route, options)
+      method[:produces]    = produces_object(route, options[:produces] || options[:format])
+      method[:consumes]    = consumes_object(route, options[:format])
       method[:parameters]  = params_object(route)
       method[:responses]   = response_object(route)
       method[:tags]        = tag_object(route, options[:version])
-      method[:operationId] = operation_id_object(route.route_method, path)
+      method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route.route_method, path)
       method.delete_if { |_, value| value.blank? }
-    end
-
-    def operation_id_object(method, path = nil)
-      verb = method.to_s.downcase
-      unless path.nil?
-        operation = path.split('/').map(&:capitalize).join
-        operation.gsub!(/\-(\w)/, &:upcase).delete!('-') if operation.include?('-')
-        operation.gsub!(/\_(\w)/, &:upcase).delete!('_') if operation.include?('_')
-        if path.include?('{')
-          operation.gsub!(/\{(\w)/, &:upcase)
-          operation.delete!('{').delete!('}')
-        end
-      end
-      "#{verb}#{operation}"
     end
 
     def description_object(route, markdown)
@@ -179,12 +134,21 @@ module Grape
       description
     end
 
-    def produces_object(route, options)
-      mime_types = GrapeSwagger::DocMethods::Produces.call(options[:format])
+    def consumes_object(route, format)
+      method = route.route_method.downcase.to_sym
+      # require 'pry'; binding.pry if [:post, :put].include?(method)
+      format = route.route_settings[:description][:consumes] if route.route_settings[:description] && route.route_settings[:description][:consumes]
+      mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format) if [:post, :put].include?(method)
+
+      mime_types
+    end
+
+    def produces_object(route, format)
+      mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format)
 
       route_mime_types = [:route_formats, :route_content_types, :route_produces].map do |producer|
         possible = route.send(producer)
-        GrapeSwagger::DocMethods::Produces.call(possible) if possible.present?
+        GrapeSwagger::DocMethods::ProducesConsumes.call(possible) if possible.present?
       end.flatten.compact.uniq
 
       route_mime_types.present? ? route_mime_types : mime_types
@@ -409,25 +373,6 @@ module Grape
 
     def primitive?(type)
       %w(object integer long float double string byte boolean date dateTime).include? type
-    end
-
-    def tag_name_description(options)
-      target_class = options[:target_class]
-      namespaces = target_class.combined_namespaces
-      namespace_routes = target_class.combined_namespace_routes
-
-      namespace_routes.keys.map do |local_route|
-        next if namespace_routes[local_route].map(&:route_hidden).all? { |value| value.respond_to?(:call) ? value.call : value }
-
-        original_namespace_name = target_class.combined_namespace_identifiers.key?(local_route) ? target_class.combined_namespace_identifiers[local_route] : local_route
-        description = namespaces[original_namespace_name] && namespaces[original_namespace_name].options[:desc]
-        description ||= "Operations about #{original_namespace_name.pluralize}"
-
-        {
-          name: local_route,
-          description: description
-        }
-      end.compact
     end
 
     def tag_object(route, version)

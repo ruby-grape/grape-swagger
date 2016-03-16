@@ -27,6 +27,11 @@ RSpec.shared_context "the api entities" do
           expose :description, documentation: { type: String }
           expose :items, as: '$responses', using: Entities::ResponseItem, documentation: { is_array: true }
         end
+
+        class UseTemResponseAsType < Grape::Entity
+          expose :description, documentation: { type: String }
+          expose :responses, documentation: { type: Entities::ResponseItem, is_array: false }
+        end
       end
     end
   end

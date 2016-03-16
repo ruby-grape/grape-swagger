@@ -155,12 +155,12 @@ describe 'swagger spec v2.0' do
       describe 'contact object' do
         let(:contact) { json['info']['contact'] }
 
-        it { expect(contact.keys).to include 'contact_name' }
-        it { expect(contact['contact_name']).to be_a String  }
-        it { expect(contact.keys).to include 'contact_email' }
-        it { expect(contact['contact_email']).to be_a String  }
-        it { expect(contact.keys).to include 'contact_url' }
-        it { expect(contact['contact_url']).to be_a String  }
+        it { expect(contact.keys).to include 'name' }
+        it { expect(contact['name']).to be_a String  }
+        it { expect(contact.keys).to include 'email' }
+        it { expect(contact['email']).to be_a String  }
+        it { expect(contact.keys).to include 'url' }
+        it { expect(contact['url']).to be_a String  }
       end
     end
 

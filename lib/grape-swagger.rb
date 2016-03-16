@@ -11,6 +11,8 @@ require 'grape-swagger/doc_methods/operation_id'
 require 'grape-swagger/doc_methods/optional_object'
 require 'grape-swagger/doc_methods/path_string'
 require 'grape-swagger/doc_methods/tag_name_description'
+require 'grape-swagger/doc_methods/parse_params'
+
 require 'grape-swagger/doc_methods'
 
 require 'grape-swagger/markdown/kramdown_adapter'

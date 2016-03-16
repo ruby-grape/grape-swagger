@@ -1,6 +1,10 @@
 
 n.n.n / 2016-03-16
 ==================
+[#356](https://github.com/ruby-grape/grape-swagger/pull/356)
+
+- adds `consumes` setting
+- refactoring
 
 [#354](https://github.com/ruby-grape/grape-swagger/pull/354) some improvements
 

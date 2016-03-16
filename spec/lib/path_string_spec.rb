@@ -32,7 +32,6 @@ describe GrapeSwagger::DocMethods::PathString do
           expect(subject.build('/{version}/thing/:id', options)).to eql ['Thing', '/v1/thing/{id}']
           expect(subject.build('/{version}/thing/foo/:id', options)).to eql ['Foo', '/v1/thing/foo/{id}']
         end
-
       end
     end
   end

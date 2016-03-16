@@ -109,6 +109,7 @@ describe 'a simple mounted api' do
           "/items"=>{
             "post"=>{
               "produces"=>["application/json"],
+              "consumes"=>["application/json"],
               "parameters"=>[{"in"=>"formData", "name"=>"items[]", "description"=>"array of items", "type"=>"string", "required"=>false, "allowMultiple"=>true}],
               "tags"=>["items"],
               "operationId"=>"postItems",
@@ -211,6 +212,7 @@ describe 'a simple mounted api' do
           "/items"=>{
             "post"=>{
               "produces"=>["application/json"],
+              "consumes"=>["application/json"],
               "parameters"=>[{"in"=>"formData", "name"=>"items[]", "description"=>"array of items", "type"=>"string", "required"=>false, "allowMultiple"=>true}],
               "tags"=>["items"],
               "operationId"=>"postItems",

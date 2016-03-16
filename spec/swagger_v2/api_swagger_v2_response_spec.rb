@@ -94,6 +94,7 @@ describe 'exposing' do
           "/params_response"=>{
             "post"=>{
               "produces"=>["application/json"],
+              "consumes"=>["application/json"],
               "parameters"=>[
                 {"in"=>"formData", "name"=>"description", "description"=>nil, "type"=>"string", "required"=>false, "allowMultiple"=>false},
                 {"in"=>"formData", "name"=>"$responses", "description"=>nil, "type"=>"string", "required"=>false, "allowMultiple"=>true}],

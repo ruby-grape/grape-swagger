@@ -104,6 +104,7 @@ RSpec.shared_context "swagger example" do
               "401"=>{"description"=>"Unauthorized", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}},
           "post"=>{
             "produces"=>["application/json"],
+            "consumes"=>["application/json"],
             "parameters"=>[
               {"in"=>"formData", "name"=>"text", "description"=>"Content of something.", "type"=>"string", "required"=>true, "allowMultiple"=>false},
               {"in"=>"body", "name"=>"links", "description"=>nil, "type"=>"Array", "required"=>true, "allowMultiple"=>true}],
@@ -125,6 +126,7 @@ RSpec.shared_context "swagger example" do
               "401"=>{"description"=>"Unauthorized"}}},
           "put"=>{
             "produces"=>["application/json"],
+            "consumes"=>["application/json"],
             "parameters"=>[
               {"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"},
               {"in"=>"formData", "name"=>"text", "description"=>"Content of something.", "type"=>"string", "required"=>false, "allowMultiple"=>false},

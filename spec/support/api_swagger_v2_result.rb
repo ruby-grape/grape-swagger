@@ -65,7 +65,7 @@ RSpec.shared_context "swagger example" do
         "title"=>"The API title to be displayed on the API homepage.",
         "description"=>"A description of the API.",
         "termsOfServiceUrl"=>"www.The-URL-of-the-terms-and-service.com",
-        "contact"=>{"contact_name"=>"Contact name", "contact_email"=>"Contact@email.com", "contact_url"=>"Contact URL"},
+        "contact"=>{"name"=>"Contact name", "email"=>"Contact@email.com", "url"=>"Contact URL"},
         "license"=>{"name"=>"The name of the license.", "url"=>"www.The-URL-of-the-license.org"},
         "version"=>"v1"
       },

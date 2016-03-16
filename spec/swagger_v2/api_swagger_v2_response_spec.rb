@@ -22,6 +22,14 @@ describe 'exposing' do
           { "declared_params" => declared(params) }
         end
 
+        desc 'This returns something',
+          entity: Entities::UseTemResponseAsType,
+          failure: [{code: 400, message: 'NotFound', model: Entities::ApiError}]
+        get '/nested_type' do
+          { "declared_params" => declared(params) }
+        end
+
+
         add_swagger_documentation
       end
     end
@@ -29,6 +37,42 @@ describe 'exposing' do
 
   def app
     TheApi::ResponseApi
+  end
+
+  describe "uses nested type as response object" do
+    subject do
+      get '/swagger_doc/nested_type'
+      JSON.parse(last_response.body)
+    end
+    specify do
+      expect(subject).to eql({
+        "info"=>{"title"=>"API title", "version"=>"v1"},
+        "swagger"=>"2.0",
+        "produces"=>["application/json"],
+        "host"=>"example.org",
+        "tags"=>[
+          {"name"=>"params_response", "description"=>"Operations about params_responses"},
+          {"name"=>"entity_response", "description"=>"Operations about entity_responses"},
+          {"name"=>"nested_type", "description"=>"Operations about nested_types"}
+        ],
+        "schemes"=>["https", "http"],
+        "paths"=>{
+          "/nested_type"=>{
+            "get"=>{
+              "produces"=>["application/json"],
+              "responses"=>{
+                "200"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/UseTemResponseAsType"}},
+                "400"=>{"description"=>"NotFound", "schema"=>{"$ref"=>"#/definitions/ApiError"}}
+              },
+              "tags"=>["nested_type"],
+              "operationId"=>"getNestedType"
+        }}},
+        "definitions"=>{
+          "ResponseItem"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer"}, "name"=>{"type"=>"string"}}},
+          "UseTemResponseAsType"=>{"type"=>"object", "properties"=>{"description"=>{"type"=>"string"}, "responses"=>{"$ref"=>"#/definitions/ResponseItem"}}},
+          "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}}
+      }})
+    end
   end
 
   describe "uses entity as response object" do
@@ -43,7 +87,11 @@ describe 'exposing' do
         "swagger"=>"2.0",
         "produces"=>["application/json"],
         "host"=>"example.org",
-        "tags" => [{"name"=>"params_response", "description"=>"Operations about params_responses"}, {"name"=>"entity_response", "description"=>"Operations about entity_responses"}],
+        "tags" => [
+          {"name"=>"params_response", "description"=>"Operations about params_responses"},
+          {"name"=>"entity_response", "description"=>"Operations about entity_responses"},
+          {"name"=>"nested_type", "description"=>"Operations about nested_types"}
+        ],
         "schemes"=>["https", "http"],
         "paths"=>{
           "/entity_response"=>{
@@ -74,21 +122,17 @@ describe 'exposing' do
       JSON.parse(last_response.body)
     end
 
-
-    # usage of grape-entity 0.4.8 preduces a wrong definition for ParamsResponse, this one:
-    # "definitions" => {
-    #   "ParamsResponse"=>{"properties"=>{"description"=>{"type"=>"string"}}},
-    #   "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}}
-    # }
-    # (`$response` property is missing)
-
     specify do
       expect(subject).to eql({
         "info"=>{"title"=>"API title", "version"=>"v1"},
         "swagger"=>"2.0",
         "produces"=>["application/json"],
         "host"=>"example.org",
-        "tags" => [{"name"=>"params_response", "description"=>"Operations about params_responses"}, {"name"=>"entity_response", "description"=>"Operations about entity_responses"}],
+        "tags" => [
+          {"name"=>"params_response", "description"=>"Operations about params_responses"},
+          {"name"=>"entity_response", "description"=>"Operations about entity_responses"},
+          {"name"=>"nested_type", "description"=>"Operations about nested_types"}
+        ],
         "schemes"=>["https", "http"],
         "paths"=>{
           "/params_response"=>{

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GrapeSwagger::DocMethods::Produces do
+describe GrapeSwagger::DocMethods::ProducesConsumes do
   describe ":json (default)" do
     subject { described_class.call }
 

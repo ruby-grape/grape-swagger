@@ -110,6 +110,7 @@ end
 ## Configure
 
 [host](#host)  
+[base_path](#base_path)  
 [mount_path](#mount_path)  
 [add_base_path](#add_base_path)  
 [add_version](#add_version)  
@@ -337,6 +338,8 @@ desc 'Get all kittens!', {
   entity: Entities::Kitten, # or success
   http_codes: [[401, 'KittenBitesError', Entities::BadKitten]] # or failure
   # also explicit as hash: [{ code: 401, mssage: 'KittenBitesError', model: Entities::BadKitten }]
+  produces: [ "array", "of", "mime_types" ],
+  consumes: [ "array", "of", "mime_types" ]
   }
 get '/kittens' do
 ```

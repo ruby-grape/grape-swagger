@@ -1,6 +1,6 @@
 module GrapeSwagger
   module DocMethods
-    class Produces
+    class ProducesConsumes
       class << self
         def call(*args)
           return ['application/json'] unless args.flatten.present?

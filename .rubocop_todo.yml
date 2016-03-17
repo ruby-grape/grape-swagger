@@ -13,7 +13,7 @@ Metrics/AbcSize:
 # Offense count: 1
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 353
+  Max: 230
 
 # Offense count: 6
 Metrics/CyclomaticComplexity:
@@ -32,7 +32,7 @@ Metrics/MethodLength:
 # Offense count: 1
 # Configuration parameters: CountComments.
 Metrics/ModuleLength:
-  Max: 394
+  Max: 200
 
 # Offense count: 4
 Metrics/PerceivedComplexity:
@@ -51,7 +51,6 @@ Style/Documentation:
 # Offense count: 2
 Style/DoubleNegation:
   Exclude:
-    - 'lib/grape-swagger/doc_methods.rb'
 
 # Offense count: 3
 # Configuration parameters: Exclude.
@@ -65,7 +64,6 @@ Style/FileName:
 # Configuration parameters: NamePrefix, NamePrefixBlacklist.
 Style/PredicateName:
   Exclude:
-    - 'lib/grape-swagger/doc_methods.rb'
 
 # Offense count: 4
 # Cop supports --auto-correct.
@@ -73,4 +71,3 @@ Style/PredicateName:
 Style/RegexpLiteral:
   Exclude:
     - 'lib/grape-swagger.rb'
-    - 'lib/grape-swagger/doc_methods.rb'

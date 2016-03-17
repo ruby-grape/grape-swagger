@@ -39,6 +39,14 @@ describe 'format, content_type' do
           { "declared_params" => declared(params) }
         end
 
+        desc 'This uses produces for produces',
+          failure: [{code: 400, model: Entities::ApiError}],
+          consumes: ["application/www_url_encoded"],
+          entity: Entities::UseResponse
+        post '/use_consumes' do
+          { "declared_params" => declared(params) }
+        end
+
         add_swagger_documentation
       end
     end
@@ -99,6 +107,18 @@ describe 'format, content_type' do
     specify do
       expect(subject['paths']['/use_produces']['get']).to include('produces')
       expect(subject['paths']['/use_produces']['get']['produces']).to eql(produced)
+    end
+  end
+
+  describe "consumes" do
+    subject do
+      get '/swagger_doc/use_consumes'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['paths']['/use_consumes']['post']).to include('consumes')
+      expect(subject['paths']['/use_consumes']['post']['consumes']).to eql ["application/www_url_encoded"]
     end
   end
 end

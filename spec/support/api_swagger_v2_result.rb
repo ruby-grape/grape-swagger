@@ -65,7 +65,7 @@ RSpec.shared_context "swagger example" do
         "title"=>"The API title to be displayed on the API homepage.",
         "description"=>"A description of the API.",
         "termsOfServiceUrl"=>"www.The-URL-of-the-terms-and-service.com",
-        "contact"=>{"contact_name"=>"Contact name", "contact_email"=>"Contact@email.com", "contact_url"=>"Contact URL"},
+        "contact"=>{"name"=>"Contact name", "email"=>"Contact@email.com", "url"=>"Contact URL"},
         "license"=>{"name"=>"The name of the license.", "url"=>"www.The-URL-of-the-license.org"},
         "version"=>"v1"
       },
@@ -104,6 +104,7 @@ RSpec.shared_context "swagger example" do
               "401"=>{"description"=>"Unauthorized", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}},
           "post"=>{
             "produces"=>["application/json"],
+            "consumes"=>["application/json"],
             "parameters"=>[
               {"in"=>"formData", "name"=>"text", "description"=>"Content of something.", "type"=>"string", "required"=>true, "allowMultiple"=>false},
               {"in"=>"body", "name"=>"links", "description"=>nil, "type"=>"Array", "required"=>true, "allowMultiple"=>true}],
@@ -125,6 +126,7 @@ RSpec.shared_context "swagger example" do
               "401"=>{"description"=>"Unauthorized"}}},
           "put"=>{
             "produces"=>["application/json"],
+            "consumes"=>["application/json"],
             "parameters"=>[
               {"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"},
               {"in"=>"formData", "name"=>"text", "description"=>"Content of something.", "type"=>"string", "required"=>false, "allowMultiple"=>false},

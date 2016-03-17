@@ -124,7 +124,7 @@ describe 'Default API' do
     end
 
     it 'documents the contact email' do
-      expect(subject['contact']['contact_email']).to eql('support@test.com')
+      expect(subject['contact']['email']).to eql('support@test.com')
     end
   end
 end

@@ -50,6 +50,10 @@ describe 'API Models' do
       class AliasedThing < Grape::Entity
         expose :something, as: :post, using: Entities::Something, documentation: { type: 'Something', desc: 'Reference to something.' }
       end
+
+      class AliasedThingWithoutType < Grape::Entity
+        expose :something, as: :post, using: Entities::Something, documentation: { desc: 'Reference to something without type.' }
+      end
     end
 
     module Entities
@@ -146,6 +150,12 @@ describe 'API Models' do
         present something, with: Entities::AliasedThing
       end
 
+      desc 'This also gets an aliased thing', entity: Entities::AliasedThingWithoutType
+      get '/aliased_thing_without_type' do
+        something = OpenStruct.new(something: OpenStruct.new(text: 'something'))
+        present something, with: Entities::AliasedThingWithoutType
+      end
+
       desc 'This gets all nested entities.', entity: Entities::FirstLevel
       get '/nesting' do
         fourth_level = OpenStruct.new text: 'something'
@@ -202,6 +212,7 @@ describe 'API Models' do
         { 'path' => '/somethingelse.{format}', 'description' => 'Operations about somethingelses' },
         { 'path' => '/enum_description_in_entity.{format}', 'description' => 'Operations about enum_description_in_entities' },
         { 'path' => '/aliasedthing.{format}', 'description' => 'Operations about aliasedthings' },
+        { 'path' => '/aliased_thing_without_type.{format}', 'description' => 'Operations about aliased_thing_without_types' },
         { 'path' => '/nesting.{format}', 'description' => 'Operations about nestings' },
         { 'path' => '/multiple_entities.{format}', 'description' => 'Operations about multiple_entities' },
         { 'path' => '/thing_with_root.{format}', 'description' => 'Operations about thing_with_roots' },
@@ -294,6 +305,25 @@ describe 'API Models' do
       'id' => 'AliasedThing',
       'properties' => {
         'post' => { '$ref' => 'Something', 'description' => 'Reference to something.' }
+      }
+    )
+
+    expect(result['models']['Something']).to eq(
+      'id' => 'Something',
+      'properties' => {
+        'text' => { 'type' => 'string', 'description' => 'Content of something.' },
+        'links' => { 'type' => 'array', 'items' => { '$ref' => 'link' } }
+      }
+    )
+  end
+
+  it 'includes referenced models in those with aliased references and omitted types.' do
+    get '/swagger_doc/aliased_thing_without_type'
+    result = JSON.parse(last_response.body)
+    expect(result['models']['AliasedThingWithoutType']).to eq(
+      'id' => 'AliasedThingWithoutType',
+      'properties' => {
+        'post' => { '$ref' => 'Something', 'description' => 'Reference to something without type.' }
       }
     )
 

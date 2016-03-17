@@ -252,16 +252,17 @@ module GrapeSwagger
         end
         i18n_keys << :default
 
-        model.documentation.each do |property_name, property_info|
-          p = property_info.dup
+        model.exposures.each do |property_name, property_info|
+          next unless property_info.key? :documentation
+          property_name = property_info[:as] if property_info.key? :as
+          p = property_info[:documentation].dup
 
           required << property_name.to_s if p.delete(:required)
 
           type = if p[:type]
                    p.delete(:type)
                  else
-                   exposure = model.exposures[property_name]
-                   parse_entity_name(exposure[:using]) if exposure
+                   parse_entity_name(property_info[:using])
                  end
 
           if p.delete(:is_array)

@@ -1,6 +1,7 @@
 ### 0.10.5 (Next)
 
 * [#338](https://github.com/ruby-grape/grape-swagger/pull/338): Fixed handling of nested Array parameters - [@itoufo](https://github.com/itoufo).
+* [#347](https://github.com/ruby-grape/grape-swagger/pull/347): Fixed typeref when both :using and :as are provided in exposure but no :type in documentation - [@c910335](https://github.com/c910335).
 * Your contribution here.
 
 #### Fixes

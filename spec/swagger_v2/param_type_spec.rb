@@ -28,8 +28,7 @@ describe 'Params Types' do
       "name"=>"input",
       "description"=>nil,
       "type"=>"string",
-      "required"=>true,
-      "allowMultiple"=>false
+      "required"=>true
     }]
   end
 

@@ -3,16 +3,6 @@ require 'active_support/core_ext/string/inflections.rb'
 
 module Grape
   class Endpoint
-    PRIMITIVE_MAPPINGS = {
-      'integer' => %w(integer int32),
-      'long' => %w(integer int64),
-      'float' => %w(number float),
-      'double' => %w(number double),
-      'byte' => %w(string byte),
-      'date' => %w(string date),
-      'dateTime' => %w(string date-time)
-    }.freeze
-
     def content_types_for(target_class)
       content_types = (target_class.content_types || {}).values
 

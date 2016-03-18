@@ -30,8 +30,7 @@ module GrapeSwagger
             name:          name,
             description:   description,
             type:          data_type,
-            required:      required,
-            allowMultiple: is_array
+            required:      required
           }
 
           if GrapeSwagger::DocMethods::DataType::PRIMITIVE_MAPPINGS.key?(data_type)

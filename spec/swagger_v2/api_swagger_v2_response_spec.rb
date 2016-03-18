@@ -140,8 +140,8 @@ describe 'exposing' do
               "produces"=>["application/json"],
               "consumes"=>["application/json"],
               "parameters"=>[
-                {"in"=>"formData", "name"=>"description", "description"=>nil, "type"=>"string", "required"=>false, "allowMultiple"=>false},
-                {"in"=>"formData", "name"=>"$responses", "description"=>nil, "type"=>"string", "required"=>false, "allowMultiple"=>true}],
+                {"in"=>"formData", "name"=>"description", "description"=>nil, "type"=>"string", "required"=>false},
+                {"in"=>"formData", "name"=>"$responses", "description"=>nil, "type"=>"string", "required"=>false}],
               "tags"=>["params_response"],
               "operationId"=>"postParamsResponse",
               "responses"=>{

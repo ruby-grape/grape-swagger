@@ -50,7 +50,6 @@ describe 'Convert values to enum or Range' do
         "description"=>nil,
         "type"=>"string",
         "required"=>true,
-        "allowMultiple"=>false,
         "enum"=>["a", "b", "c"]
       }]
     end
@@ -66,7 +65,6 @@ describe 'Convert values to enum or Range' do
         "description"=>nil,
         "type"=>"string",
         "required"=>true,
-        "allowMultiple"=>false,
         "enum"=>["d", "e", "f"]
       }]
     end
@@ -81,8 +79,7 @@ describe 'Convert values to enum or Range' do
         "name"=>"letter",
         "description"=>nil,
         "type"=>"string",
-        "required"=>true,
-        "allowMultiple"=>false
+        "required"=>true
       }]
     end
 
@@ -95,7 +92,6 @@ describe 'Convert values to enum or Range' do
         "description"=>nil,
         "type"=>"integer",
         "required"=>true,
-        "allowMultiple"=>false,
         "format"=>"int32",
         "minimum"=>-5,
         "maximum"=>5
@@ -142,7 +138,6 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
         "description"=>nil,
         "type"=>"string",
         "required"=>true,
-        "allowMultiple"=>false,
         "enum"=>"string"
       }]
     end
@@ -158,7 +153,6 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
         "description"=>nil,
         "type"=>"number",
         "required"=>true,
-        "allowMultiple"=>false,
         "format"=>"float"
       }]
     end

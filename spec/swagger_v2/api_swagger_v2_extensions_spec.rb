@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'exposing' do
+describe 'extension' do
   include_context "the api entities"
 
   before :all do

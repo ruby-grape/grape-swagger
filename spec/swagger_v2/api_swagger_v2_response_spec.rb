@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'exposing' do
+describe 'response' do
   include_context "the api entities"
 
   before :all do
@@ -68,9 +68,9 @@ describe 'exposing' do
               "operationId"=>"getNestedType"
         }}},
         "definitions"=>{
-          "ResponseItem"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer"}, "name"=>{"type"=>"string"}}},
+          "ResponseItem"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}, "name"=>{"type"=>"string"}}},
           "UseTemResponseAsType"=>{"type"=>"object", "properties"=>{"description"=>{"type"=>"string"}, "responses"=>{"$ref"=>"#/definitions/ResponseItem"}}},
-          "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}}
+          "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}}}
       }})
     end
   end
@@ -105,13 +105,13 @@ describe 'exposing' do
         "definitions"=>{
           "ResponseItem"=>{
             "type"=>"object",
-            "properties"=>{"id"=>{"type"=>"integer"}, "name"=>{"type"=>"string"}}},
+            "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}, "name"=>{"type"=>"string"}}},
           "UseResponse"=>{
             "type"=>"object",
             "properties"=>{"description"=>{"type"=>"string"}, "$responses"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/ResponseItem"}}}},
           "ApiError"=>{
             "type"=>"object",
-            "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}}
+            "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}}}
       }})
     end
   end
@@ -150,7 +150,7 @@ describe 'exposing' do
         }}},
         "definitions"=>{
           "ParamsResponse"=>{"properties"=>{"description"=>{"type"=>"string"}, "$responses"=>{"type"=>"string"}}},
-          "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer"}, "message"=>{"type"=>"string"}}}
+          "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}}}
       }})
     end
   end

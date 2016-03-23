@@ -238,7 +238,16 @@ module Grape
                             { '$ref' => "#/definitions/#{name}" }
                           end
         else
-          memo[x.first] = { type: GrapeSwagger::DocMethods::DataType.call(x.last[:documentation] || x.last) }
+
+          data_type = GrapeSwagger::DocMethods::DataType.call(x.last[:documentation] || x.last)
+
+          if GrapeSwagger::DocMethods::DataType.primitive?(data_type)
+            data = GrapeSwagger::DocMethods::DataType::PRIMITIVE_MAPPINGS[data_type]
+            memo[x.first] = { type: data.first, format: data.last }
+          else
+            memo[x.first] = { type: data_type }
+          end
+
           memo[x.first][:enum] = x.last[:values] if x.last[:values] && x.last[:values].is_a?(Array)
         end
       end
@@ -269,7 +278,7 @@ module Grape
       ) || (
         value[:type] &&
         value[:type].is_a?(Class) &&
-        !GrapeSwagger::DocMethods::ParseParams.primitive?(value[:type].name.downcase) &&
+        !GrapeSwagger::DocMethods::DataType.primitive?(value[:type].name.downcase) &&
         !value[:type] == Array
       )
     end

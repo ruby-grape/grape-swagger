@@ -389,17 +389,18 @@ module GrapeSwagger
         info: {},
         authorizations: nil,
         root_base_path: true,
+        root_prefix: '',
         api_documentation: { desc: 'Swagger compatible API description' },
         specific_api_documentation: { desc: 'Swagger compatible API description for specific API' }
       }
 
       options = defaults.merge(options)
-
       target_class     = options[:target_class]
       @@mount_path     = options[:mount_path]
       @@class_name     = options[:class_name] || options[:mount_path].delete('/')
       @@markdown       = options[:markdown] ? GrapeSwagger::Markdown.new(options[:markdown]) : nil
       @@hide_format    = options[:hide_format]
+      @@root_prefix    = options[:root_prefix]
       api_version      = options[:api_version]
       authorizations   = options[:authorizations]
       root_base_path   = options[:root_base_path]
@@ -549,7 +550,7 @@ module GrapeSwagger
             operation
           end.compact
           apis << {
-            path: path,
+            path: "#{@@root_prefix}#{path}",
             operations: operations
           }
         end

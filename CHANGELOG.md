@@ -1,6 +1,13 @@
 
 n.n.n / 2016-03-16
 ==================
+[#358](https://github.com/ruby-grape/grape-swagger/pull/358)
+
+- removes `allowMultiple` property from params
+- adds `format` to definition property
+- renames `defaultValue` to `default`
+
+
 [#356](https://github.com/ruby-grape/grape-swagger/pull/356)
 
 - adds `consumes` setting

@@ -40,8 +40,8 @@ describe 'Group Params as Hash' do
     specify do
       expect(subject['paths']['/use_groups']['post']).to include('parameters')
       expect(subject['paths']['/use_groups']['post']['parameters']).to eql([
-        {"in"=>"formData", "name"=>"required_group[required_param_1]", "description"=>nil, "type"=>"string", "required"=>true, "allowMultiple"=>false},
-        {"in"=>"formData", "name"=>"required_group[required_param_2]", "description"=>nil, "type"=>"string", "required"=>true, "allowMultiple"=>false}
+        {"in"=>"formData", "name"=>"required_group[required_param_1]", "description"=>nil, "type"=>"string", "required"=>true},
+        {"in"=>"formData", "name"=>"required_group[required_param_2]", "description"=>nil, "type"=>"string", "required"=>true}
       ])
     end
   end
@@ -55,10 +55,10 @@ describe 'Group Params as Hash' do
     specify do
       expect(subject['paths']['/use_given_type']['post']).to include('parameters')
       expect(subject['paths']['/use_given_type']['post']['parameters']).to eql([
-        {"in"=>"formData", "name"=>"typed_group[id]", "description"=>"integer given", "type"=>"integer", "required"=>true, "allowMultiple"=>false, "format"=>"int32"},
-        {"in"=>"formData", "name"=>"typed_group[name]", "description"=>"string given", "type"=>"string", "required"=>true, "allowMultiple"=>false},
-        {"in"=>"formData", "name"=>"typed_group[email]", "description"=>"email given", "type"=>"string", "required"=>false, "allowMultiple"=>false},
-        {"in"=>"formData", "name"=>"typed_group[others]", "description"=>nil, "type"=>"integer", "required"=>false, "allowMultiple"=>false, "format"=>"int32", "enum"=>[1, 2, 3]}
+        {"in"=>"formData", "name"=>"typed_group[id]", "description"=>"integer given", "type"=>"integer", "required"=>true, "format"=>"int32"},
+        {"in"=>"formData", "name"=>"typed_group[name]", "description"=>"string given", "type"=>"string", "required"=>true},
+        {"in"=>"formData", "name"=>"typed_group[email]", "description"=>"email given", "type"=>"string", "required"=>false},
+        {"in"=>"formData", "name"=>"typed_group[others]", "description"=>nil, "type"=>"integer", "required"=>false, "format"=>"int32", "enum"=>[1, 2, 3]}
       ])
     end
   end

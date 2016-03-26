@@ -6,20 +6,20 @@ module GrapeSwagger
           raw_data_type = value[:type] if value.is_a?(Hash)
           raw_data_type ||= 'string'
           case raw_data_type.to_s
+          when 'Boolean', 'Date', 'Integer', 'String', 'Float', 'JSON', 'Array'
+            raw_data_type.to_s.downcase
           when 'Hash'
             'object'
-          when 'Rack::Multipart::UploadedFile'
-            'File'
+          when 'Rack::Multipart::UploadedFile', 'File'
+            'file'
           when 'Virtus::Attribute::Boolean'
             'boolean'
-          when 'Boolean', 'Date', 'Integer', 'String', 'Float'
-            raw_data_type.to_s.downcase
           when 'BigDecimal'
-            'long'
-          when 'DateTime'
+            'double'
+          when 'DateTime', 'Time'
             'dateTime'
           when 'Numeric'
-            'double'
+            'long'
           when 'Symbol'
             'string'
           else
@@ -37,6 +37,22 @@ module GrapeSwagger
             entity_parts.join('::')
           end
         end
+
+        def request_primitive?(type)
+          request_primitives.include?(type.to_s.downcase)
+        end
+
+        def primitive?(type)
+          primitives.include?(type.to_s.downcase)
+        end
+
+        def request_primitives
+          primitives + %w(object string boolean file json array)
+        end
+
+        def primitives
+          PRIMITIVE_MAPPINGS.keys.map(&:downcase)
+        end
       end
 
       PRIMITIVE_MAPPINGS = {
@@ -46,7 +62,10 @@ module GrapeSwagger
         'double' => %w(number double),
         'byte' => %w(string byte),
         'date' => %w(string date),
-        'dateTime' => %w(string date-time)
+        'dateTime' => %w(string date-time),
+        'binary' => %w(string binary),
+        'password' => %w(string password),
+        'email' => %w(string email)
       }.freeze
     end
   end

@@ -22,7 +22,7 @@ describe GrapeSwagger::DocMethods::DataType do
   describe "Rack::Multipart::UploadedFile" do
     let(:value) { { type: Rack::Multipart::UploadedFile } }
 
-    it { expect(subject).to eql 'File' }
+    it { expect(subject).to eql 'file' }
   end
 
   describe "Virtus::Attribute::Boolean" do
@@ -34,7 +34,7 @@ describe GrapeSwagger::DocMethods::DataType do
   describe "BigDecimal" do
     let(:value) { { type: BigDecimal } }
 
-    it { expect(subject).to eql 'long' }
+    it { expect(subject).to eql 'double' }
   end
 
   describe "DateTime" do
@@ -46,7 +46,7 @@ describe GrapeSwagger::DocMethods::DataType do
   describe "Numeric" do
     let(:value) { { type: Numeric } }
 
-    it { expect(subject).to eql 'double' }
+    it { expect(subject).to eql 'long' }
   end
 
   describe "Symbol" do

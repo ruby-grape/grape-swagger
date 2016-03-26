@@ -39,8 +39,8 @@ describe 'Group Params as Array' do
 
     specify do
       expect(subject['paths']['/groups']['post']['parameters']).to eql([
-        {"in"=>"formData", "name"=>"required_group[][required_param_1]", "description"=>nil, "type"=>"string", "required"=>true, "allowMultiple"=>true},
-        {"in"=>"formData", "name"=>"required_group[][required_param_2]", "description"=>nil, "type"=>"string", "required"=>true, "allowMultiple"=>true}
+        {"in"=>"formData", "name"=>"required_group[][required_param_1]", "description"=>nil, "type"=>"string", "required"=>true},
+        {"in"=>"formData", "name"=>"required_group[][required_param_2]", "description"=>nil, "type"=>"string", "required"=>true}
       ])
     end
   end
@@ -53,10 +53,10 @@ describe 'Group Params as Array' do
 
     specify do
       expect(subject['paths']['/type_given']['post']['parameters']).to eql([
-        {"in"=>"formData", "name"=>"typed_group[][id]", "description"=>"integer given", "type"=>"integer", "required"=>true, "allowMultiple"=>true, "format"=>"int32"},
-        {"in"=>"formData", "name"=>"typed_group[][name]", "description"=>"string given", "type"=>"string", "required"=>true, "allowMultiple"=>true},
-        {"in"=>"formData", "name"=>"typed_group[][email]", "description"=>"email given", "type"=>"string", "required"=>false, "allowMultiple"=>true},
-        {"in"=>"formData", "name"=>"typed_group[][others]", "description"=>nil, "type"=>"integer", "required"=>false, "allowMultiple"=>true, "format"=>"int32", "enum"=>[1, 2, 3]}
+        {"in"=>"formData", "name"=>"typed_group[][id]", "description"=>"integer given", "type"=>"integer", "required"=>true, "format"=>"int32"},
+        {"in"=>"formData", "name"=>"typed_group[][name]", "description"=>"string given", "type"=>"string", "required"=>true},
+        {"in"=>"formData", "name"=>"typed_group[][email]", "description"=>"email given", "type"=>"string", "required"=>false},
+        {"in"=>"formData", "name"=>"typed_group[][others]", "description"=>nil, "type"=>"integer", "required"=>false, "format"=>"int32", "enum"=>[1, 2, 3]}
       ])
     end
   end

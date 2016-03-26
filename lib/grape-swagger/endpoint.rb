@@ -3,16 +3,6 @@ require 'active_support/core_ext/string/inflections.rb'
 
 module Grape
   class Endpoint
-    PRIMITIVE_MAPPINGS = {
-      'integer' => %w(integer int32),
-      'long' => %w(integer int64),
-      'float' => %w(number float),
-      'double' => %w(number double),
-      'byte' => %w(string byte),
-      'date' => %w(string date),
-      'dateTime' => %w(string date-time)
-    }.freeze
-
     def content_types_for(target_class)
       content_types = (target_class.content_types || {}).values
 
@@ -248,7 +238,16 @@ module Grape
                             { '$ref' => "#/definitions/#{name}" }
                           end
         else
-          memo[x.first] = { type: GrapeSwagger::DocMethods::DataType.call(x.last[:documentation] || x.last) }
+
+          data_type = GrapeSwagger::DocMethods::DataType.call(x.last[:documentation] || x.last)
+
+          if GrapeSwagger::DocMethods::DataType.primitive?(data_type)
+            data = GrapeSwagger::DocMethods::DataType::PRIMITIVE_MAPPINGS[data_type]
+            memo[x.first] = { type: data.first, format: data.last }
+          else
+            memo[x.first] = { type: data_type }
+          end
+
           memo[x.first][:enum] = x.last[:values] if x.last[:values] && x.last[:values].is_a?(Array)
         end
       end
@@ -279,7 +278,7 @@ module Grape
       ) || (
         value[:type] &&
         value[:type].is_a?(Class) &&
-        !GrapeSwagger::DocMethods::ParseParams.primitive?(value[:type].name.downcase) &&
+        !GrapeSwagger::DocMethods::DataType.primitive?(value[:type].name.downcase) &&
         !value[:type] == Array
       )
     end

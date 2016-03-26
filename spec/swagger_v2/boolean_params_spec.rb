@@ -24,7 +24,7 @@ describe 'Boolean Params' do
 
   it 'converts boolean types' do
     expect(subject).to eq [
-      {"in"=>"formData", "name"=>"a_boolean", "description"=>nil, "type"=>"boolean", "required"=>true, "allowMultiple"=>false}
+      {"in"=>"formData", "name"=>"a_boolean", "description"=>nil, "type"=>"boolean", "required"=>true}
     ]
   end
 end

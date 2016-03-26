@@ -191,7 +191,7 @@ describe 'should build definition from given entity' do
 
   it "it prefer entity over others" do
     expect(subject['definitions']).to eql({
-      "Kind"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer"}}},
+      "Kind"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}}},
       "Tag"=>{"type"=>"object", "properties"=>{"name"=>{"type"=>"string"}}},
       "Relation"=>{"type"=>"object", "properties"=>{"name"=>{"type"=>"string"}}},
       "SomeEntity"=>{
@@ -202,8 +202,7 @@ describe 'should build definition from given entity' do
           "kind2"=>{"$ref"=>"#/definitions/Kind"},
           "kind3"=>{"$ref"=>"#/definitions/Kind"},
           "tags"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/Tag"}},
-          "relation"=>{"$ref"=>"#/definitions/Relation"}}}
-    })
-
+          "relation"=>{"$ref"=>"#/definitions/Relation"}
+    }}})
   end
 end

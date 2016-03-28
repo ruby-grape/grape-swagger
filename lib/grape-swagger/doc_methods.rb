@@ -443,7 +443,7 @@ module GrapeSwagger
 
           original_namespace_name = target_class.combined_namespace_identifiers.key?(local_route) ? target_class.combined_namespace_identifiers[local_route] : local_route
           description = namespaces[original_namespace_name] && namespaces[original_namespace_name].options[:desc]
-          description ||= "Operations about #{original_namespace_name.pluralize}"
+          description ||= "Operations about #{original_namespace_name.pluralize.gsub(/_/, " ")}"
           description = @@documentation_class.translate(
             description, i18n_scope,
             [

@@ -53,6 +53,10 @@ module GrapeSwagger
         def primitives
           PRIMITIVE_MAPPINGS.keys.map(&:downcase)
         end
+
+        def mapping(value)
+          PRIMITIVE_MAPPINGS[value] || 'string'
+        end
       end
 
       PRIMITIVE_MAPPINGS = {

@@ -27,7 +27,7 @@ module Grape
         host:           GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request.env['HTTP_HOST']),
         basePath:       GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request.env['SCRIPT_NAME']),
         tags:           GrapeSwagger::DocMethods::TagNameDescription.build(options),
-        schemes:        options[:scheme]
+        schemes:        options[:schemes].is_a?(String) ? [options[:schemes]] : options[:schemes]
       }.delete_if { |_, value| value.blank? }
     end
 
@@ -126,7 +126,6 @@ module Grape
 
     def consumes_object(route, format)
       method = route.route_method.downcase.to_sym
-      # require 'pry'; binding.pry if [:post, :put].include?(method)
       format = route.route_settings[:description][:consumes] if route.route_settings[:description] && route.route_settings[:description][:consumes]
       mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format) if [:post, :put].include?(method)
 

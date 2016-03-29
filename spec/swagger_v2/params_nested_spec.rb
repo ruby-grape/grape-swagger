@@ -41,8 +41,8 @@ describe 'nested group params' do
 
     specify do
       expect(subject['paths']['/nested_array']['post']['parameters']).to eql([
-        {"in"=>"formData", "name"=>"a_array[][param_1]", "description"=>nil, "type"=>"integer", "required"=>true, "format"=>"int32"},
-        {"in"=>"formData", "name"=>"a_array[][b_array][][param_2]", "description"=>nil, "type"=>"string", "required"=>true}
+        {"in"=>"formData", "name"=>"a_array[][param_1]", "description"=>nil, "required"=>true, "type"=>"array", "items"=>{"type"=>"integer"}},
+        {"in"=>"formData", "name"=>"a_array[][b_array][][param_2]", "description"=>nil, "required"=>true, "type"=>"array", "items"=>{"type"=>"string"}}
       ])
     end
   end
@@ -55,8 +55,8 @@ describe 'nested group params' do
 
     specify do
       expect(subject['paths']['/nested_hash']['post']['parameters']).to eql([
-        {"in"=>"formData", "name"=>"a_hash[param_1]", "description"=>nil, "type"=>"integer", "required"=>true, "format"=>"int32"},
-        {"in"=>"formData", "name"=>"a_hash[b_hash][param_2]", "description"=>nil, "type"=>"string", "required"=>true}
+        {"in"=>"formData", "name"=>"a_hash[param_1]", "description"=>nil, "required"=>true, "type"=>"integer", "format"=>"int32"},
+        {"in"=>"formData", "name"=>"a_hash[b_hash][param_2]", "description"=>nil, "required"=>true, "type"=>"string"}
       ])
     end
   end

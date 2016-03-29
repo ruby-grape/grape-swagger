@@ -141,7 +141,7 @@ describe 'response' do
               "consumes"=>["application/json"],
               "parameters"=>[
                 {"in"=>"formData", "name"=>"description", "description"=>nil, "type"=>"string", "required"=>false},
-                {"in"=>"formData", "name"=>"$responses", "description"=>nil, "type"=>"string", "required"=>false}],
+                {"in"=>"formData", "name"=>"$responses", "description"=>nil, "required"=>false, "type"=>"array", "items"=>{"type"=>"string"}}],
               "tags"=>["params_response"],
               "operationId"=>"postParamsResponse",
               "responses"=>{

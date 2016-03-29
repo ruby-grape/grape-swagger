@@ -110,7 +110,7 @@ describe 'a simple mounted api' do
             "post"=>{
               "produces"=>["application/json"],
               "consumes"=>["application/json"],
-              "parameters"=>[{"in"=>"formData", "name"=>"items[]", "description"=>"array of items", "type"=>"string", "required"=>false}],
+              "parameters"=>[{"in"=>"formData", "name"=>"items[]", "description"=>"array of items", "required"=>false, "type"=>"array", "items"=>{"type"=>"string"}}],
               "tags"=>["items"],
               "operationId"=>"postItems",
               "responses"=>{"201"=>{"description"=>"this takes an array of parameters"}}
@@ -118,7 +118,7 @@ describe 'a simple mounted api' do
           "/custom"=>{
             "get"=>{
               "produces"=>["application/json"],
-              "parameters"=>[{"in"=>"query", "name"=>"custom", "description"=>"array of items", "type"=>"CustomType", "required"=>false}],
+              "parameters"=>[{"in"=>"formData", "name"=>"custom", "description"=>"array of items", "required"=>false, "type"=>"array", "items"=>{"type"=>"CustomType"}}],
               "tags"=>["custom"],
               "operationId"=>"getCustom",
               "responses"=>{"200"=>{"description"=>"this uses a custom parameter"}}}
@@ -213,7 +213,7 @@ describe 'a simple mounted api' do
             "post"=>{
               "produces"=>["application/json"],
               "consumes"=>["application/json"],
-              "parameters"=>[{"in"=>"formData", "name"=>"items[]", "description"=>"array of items", "type"=>"string", "required"=>false}],
+              "parameters"=>[{"in"=>"formData", "name"=>"items[]", "description"=>"array of items", "required"=>false, "type"=>"array", "items"=>{"type"=>"string"}}],
               "tags"=>["items"],
               "operationId"=>"postItems",
               "responses"=>{"201"=>{"description"=>"this takes an array of parameters"}}}
@@ -232,7 +232,7 @@ describe 'a simple mounted api' do
           "/custom"=>{
             "get"=>{
               "produces"=>["application/json"],
-              "parameters"=>[{"in"=>"query", "name"=>"custom", "description"=>"array of items", "type"=>"CustomType", "required"=>false}],
+              "parameters"=>[{"in"=>"formData", "name"=>"custom", "description"=>"array of items", "required"=>false, "type"=>"array", "items"=>{"type"=>"CustomType"}}],
               "tags"=>["custom"],
               "operationId"=>"getCustom",
               "responses"=>{"200"=>{"description"=>"this uses a custom parameter"}}}

@@ -83,32 +83,31 @@ RSpec.shared_context "swagger example" do
           "/v3/other_thing/{elements}"=>{
             "get"=>{
               "produces"=>["application/json"],
-              "parameters"=>[{"in"=>"array", "name"=>"elements", "description"=>"Set of configuration", "required"=>true, "type"=>"string", "items"=>{"type"=>"string"}}],
+              "parameters"=>[{"in"=>"body", "name"=>"elements", "description"=>"Set of configuration", "required"=>true, "type"=>"array", "items"=>{"type"=>"string"}}],
               "responses"=>{"200"=>{"description"=>"nested route inside namespace", "schema"=>{"$ref"=>"#/definitions/QueryInput"}}},
               "tags"=>["other_thing"],
               "operationId"=>"getV3OtherThingElements",
               "x-amazon-apigateway-auth"=>{"type"=>"none"},
-              "x-amazon-apigateway-integration"=>{"type"=>"aws", "uri"=>"foo_bar_uri", "httpMethod"=>"get"}
-          }},
+              "x-amazon-apigateway-integration"=>{"type"=>"aws", "uri"=>"foo_bar_uri", "httpMethod"=>"get"}}
+          },
           "/thing"=>{
             "get"=>{
               "produces"=>["application/json"],
               "parameters"=>[
                 {"in"=>"query", "name"=>"id", "description"=>"Identity of Something", "required"=>false, "type"=>"integer", "format"=>"int32"},
                 {"in"=>"query", "name"=>"text", "description"=>"Content of something.", "required"=>false, "type"=>"string"},
-                {"in"=>"query", "name"=>"links", "description"=>nil, "required"=>false, "type"=>"link"},
+                {"in"=>"formData", "name"=>"links", "description"=>nil, "required"=>false, "type"=>"array", "items"=>{"type"=>"link"}},
                 {"in"=>"query", "name"=>"others", "description"=>nil, "required"=>false, "type"=>"text"}
               ],
               "responses"=>{"200"=>{"description"=>"This gets Things.", "schema"=>{"$ref"=>"#/definitions/Thing"}}, "401"=>{"description"=>"Unauthorized", "schema"=>{"$ref"=>"#/definitions/ApiError"}}},
               "tags"=>["thing"],
-              "operationId"=>"getThing"
-            },
+              "operationId"=>"getThing"},
             "post"=>{
               "produces"=>["application/json"],
               "consumes"=>["application/json"],
               "parameters"=>[
                 {"in"=>"formData", "name"=>"text", "description"=>"Content of something.", "required"=>true, "type"=>"string"},
-                {"in"=>"formData", "name"=>"links", "description"=>nil, "required"=>true, "type"=>"array"}
+                {"in"=>"formData", "name"=>"links", "description"=>nil, "required"=>true, "type"=>"array", "items"=>{"type"=>"string"}}
               ],
               "responses"=>{"201"=>{"description"=>"This creates Thing.", "schema"=>{"$ref"=>"#/definitions/Something"}}, "422"=>{"description"=>"Unprocessible Entity"}},
               "tags"=>["thing"],
@@ -128,7 +127,7 @@ RSpec.shared_context "swagger example" do
               "parameters"=>[
                 {"in"=>"path", "name"=>"id", "description"=>nil, "required"=>true, "type"=>"integer", "format"=>"int32"},
                 {"in"=>"formData", "name"=>"text", "description"=>"Content of something.", "required"=>false, "type"=>"string"},
-                {"in"=>"formData", "name"=>"links", "description"=>nil, "required"=>false, "type"=>"array"}
+                {"in"=>"formData", "name"=>"links", "description"=>nil, "required"=>false, "type"=>"array", "items"=>{"type"=>"string"}}
               ],
               "responses"=>{"200"=>{"description"=>"This updates Thing.", "schema"=>{"$ref"=>"#/definitions/Something"}}},
               "tags"=>["thing"],
@@ -162,7 +161,7 @@ RSpec.shared_context "swagger example" do
           "Thing"=>{"properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}},
           "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}}},
           "Something"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}}
-      }}
+    }}
   end
 
   let(:http_verbs) { %w[get post put delete]}

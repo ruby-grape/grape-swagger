@@ -3,7 +3,6 @@ module GrapeSwagger
     class ParseParams
       class << self
         def call(param, settings, route)
-          @array_items = {}
           path = route.route_path
           method = route.route_method
 
@@ -13,62 +12,79 @@ module GrapeSwagger
             settings = additional_documentation.merge(settings)
           end
 
-          default_value        = settings[:default] || nil
-          example              = settings[:example] || nil
-          values               = settings[:values] || nil
-          enum_or_range_values = parse_enum_or_range_values(values)
+          value_type = settings.merge(data_type: data_type, path: path, param_name: param, method: method)
 
-          value_type = { value: settings, data_type: data_type, path: path }
-
-          parsed_params = {
-            in:            param_type(value_type, param, method),
+          @parsed_param = {
+            in:            param_type(value_type),
             name:          settings[:full_name] || param,
-            description:   settings[:desc] || settings[:description] || nil,
-            required:      settings[:required] || false
+            description:   settings[:desc] || settings[:description] || nil
           }
 
-          if GrapeSwagger::DocMethods::DataType.primitive?(data_type)
-            data = GrapeSwagger::DocMethods::DataType.mapping(data_type)
-            parsed_params[:type], parsed_params[:format] = data
-          else
-            parsed_params[:type] = data_type
-          end
+          document_type_and_format(data_type)
+          document_array_param(value_type)
+          document_default_value(settings)
+          document_range_values(settings)
+          document_required(settings)
 
-          if @array_items.present?
-            parsed_params[:items] = @array_items
-            parsed_params[:type] = 'array'
-            parsed_params.delete(:format)
-          end
-
-          parsed_params[:default] = example if example
-          parsed_params[:default] = default_value if default_value && example.blank?
-
-          parsed_params.merge!(enum_or_range_values) if enum_or_range_values
-          parsed_params
+          @parsed_param
         end
 
         private
 
-        def param_type(value_type, param, method)
-          # TODO: use `value_type.dig():value, :documentation, :param_type)` instead, req ruby2.3
-          #
-          if value_type[:value][:is_array]
-            if value_type[:value][:documentation].present?
-              param_type = value_type[:value][:documentation][:param_type]
-              type = GrapeSwagger::DocMethods::DataType.mapping(value_type[:value][:documentation][:type])
-            end
-            @array_items = { 'type' => type || value_type[:data_type] }
+        def document_required(settings)
+          @parsed_param[:required] = settings[:required] || false
+          @parsed_param[:required] = true if @parsed_param[:in] == 'path'
+        end
 
-            param_type || 'formData'
+        def document_range_values(settings)
+          values               = settings[:values] || nil
+          enum_or_range_values = parse_enum_or_range_values(values)
+          @parsed_param.merge!(enum_or_range_values) if enum_or_range_values
+        end
+
+        def document_default_value(settings)
+          default_value = settings[:default] || nil
+          example       = settings[:example] || nil
+
+          @parsed_param[:default] = example if example
+          @parsed_param[:default] = default_value if default_value && example.blank?
+        end
+
+        def document_type_and_format(data_type)
+          if GrapeSwagger::DocMethods::DataType.primitive?(data_type)
+            data = GrapeSwagger::DocMethods::DataType.mapping(data_type)
+            @parsed_param[:type], @parsed_param[:format] = data
           else
-            case
-            when value_type[:path].include?("{#{param}}")
-              'path'
-            when %w(POST PUT PATCH).include?(method)
-              GrapeSwagger::DocMethods::DataType.request_primitive?(value_type[:data_type]) ? 'formData' : 'body'
-            else
-              'query'
+            @parsed_param[:type] = data_type
+          end
+        end
+
+        def document_array_param(value_type)
+          if value_type[:is_array]
+            if value_type[:documentation].present?
+              param_type = value_type[:documentation][:param_type]
+              type = GrapeSwagger::DocMethods::DataType.mapping(value_type[:documentation][:type])
             end
+            array_items = { 'type' => type || value_type[:data_type] }
+
+            @parsed_param[:in] = param_type || 'formData'
+            @parsed_param[:items] = array_items
+            @parsed_param[:type] = 'array'
+            @parsed_param.delete(:format)
+          end
+        end
+
+        def param_type(value_type)
+          param_type = value_type[:param_type] || value_type[:in]
+          case
+          when param_type
+            param_type
+          when value_type[:path].include?("{#{value_type[:param_name]}}")
+            'path'
+          when %w(POST PUT PATCH).include?(value_type[:method])
+            GrapeSwagger::DocMethods::DataType.request_primitive?(value_type[:data_type]) ? 'formData' : 'body'
+          else
+            'query'
           end
         end
 

@@ -151,14 +151,14 @@ RSpec.shared_context "swagger example" do
             "delete"=>{
               "produces"=>["application/json"],
               "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "required"=>true, "type"=>"integer", "format"=>"int32"}],
-              "responses"=>{"200"=>{"description"=>"dummy route."}, "401"=>{"description"=>"Unauthorized"}},
+              "responses"=>{"204"=>{"description"=>"dummy route."}, "401"=>{"description"=>"Unauthorized"}},
               "tags"=>["dummy"],
               "operationId"=>"deleteDummyId"
         }}},
         "definitions"=>{
-          "QueryInputElement"=>{"type"=>"object", "properties"=>{"key"=>{"type"=>"string"}, "value"=>{"type"=>"string"}}},
           "QueryInput"=>{"type"=>"object", "properties"=>{"elements"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/QueryInputElement"}}}},
-          "Thing"=>{"properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}},
+          "QueryInputElement"=>{"type"=>"object", "properties"=>{"key"=>{"type"=>"string"}, "value"=>{"type"=>"string"}}},
+          "Thing"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}},
           "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}}},
           "Something"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}}}
     }}

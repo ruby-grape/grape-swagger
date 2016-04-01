@@ -89,8 +89,6 @@ module Grape
         @item, path = GrapeSwagger::DocMethods::PathString.build(route.route_path, options)
         @entity = route.route_entity || route.route_success
 
-        # ... replacing version params through submitted version
-
         method = route.route_method.downcase.to_sym
         request_params = method_object(route, options, path)
 
@@ -124,14 +122,6 @@ module Grape
       description
     end
 
-    def consumes_object(route, format)
-      method = route.route_method.downcase.to_sym
-      format = route.route_settings[:description][:consumes] if route.route_settings[:description] && route.route_settings[:description][:consumes]
-      mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format) if [:post, :put].include?(method)
-
-      mime_types
-    end
-
     def produces_object(route, format)
       mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format)
 
@@ -143,13 +133,27 @@ module Grape
       route_mime_types.present? ? route_mime_types : mime_types
     end
 
+    def consumes_object(route, format)
+      method = route.route_method.downcase.to_sym
+      format = route.route_settings[:description][:consumes] if route.route_settings[:description] && route.route_settings[:description][:consumes]
+      mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format) if [:post, :put].include?(method)
+
+      mime_types
+    end
+
+    def params_object(route)
+      partition_params(route).map do |param, value|
+        value = { required: false }.merge(value) if value.is_a?(Hash)
+        GrapeSwagger::DocMethods::ParseParams.call(param, value, route)
+      end
+    end
+
     def response_object(route)
-      default_code = default_staus_codes[route.route_method.downcase.to_sym]
+      default_code = default_status_codes[route.route_method.downcase.to_sym]
       default_code[:model] = @entity if @entity
       default_code[:message] = route.route_description || default_code[:message].sub('{item}', @item)
 
       codes = [default_code] + (route.route_http_codes || route.route_failure || [])
-
       codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2] } : x }
 
       codes.each_with_object({}) do |value, memo|
@@ -157,6 +161,8 @@ module Grape
 
         response_model = @item
         response_model = expose_params_from_model(value[:model]) if value[:model]
+
+        memo[204] = memo.delete(200) if memo.key?(200) && route.route_method == 'DELETE' && value[:model].nil?
 
         next unless !response_model.start_with?('Swagger_doc') &&
                     ((@definitions[response_model] && value[:code].to_s.start_with?('2')) || value[:model])
@@ -170,40 +176,32 @@ module Grape
       end
     end
 
-    def default_staus_codes
-      {
-        get: { code: 200, message: 'get {item}(s)' },
-        post: { code: 201, message: 'created {item}' },
-        put: { code: 200, message: 'updated {item}' },
-        patch: { code: 200, message: 'patched {item}' },
-        delete: { code: 200, message: 'deleted {item}' }
-      }
+    def tag_object(route, version)
+      Array(route.route_path.split('{')[0].split('/').reject(&:empty?).delete_if { |i| ((i == route.route_prefix.to_s) || (i == version)) }.first)
     end
 
-    def params_object(route)
-      partition_params(route).map do |param, value|
-        value = { required: false }.merge(value) if value.is_a?(Hash)
-        GrapeSwagger::DocMethods::ParseParams.call(param, value, route)
-      end
-    end
+    private
 
     def partition_params(route)
       declared_params = route.route_settings[:declared_params] if route.route_settings[:declared_params].present?
       required, exposed = route.route_params.partition { |x| x.first.is_a? String }
 
       unless declared_params.nil?
-        required_params = parse_request_params(required)
+        request_params = parse_request_params(required)
       end
 
-      if !exposed.empty? && !@entity
+      if !exposed.empty?
         exposed_params = exposed.each_with_object({}) { |x, memo| memo[x.first] = x.last }
         properties = parse_response_params(exposed_params)
-
-        @definitions[@item] = { properties: properties }
+      else
+        properties = parse_response_params(required)
       end
 
+      key = model_name(@entity || @item)
+      @definitions[key] = { type: 'object', properties: properties } unless properties.empty? || @definitions.key?(key) || (route.route_method == 'DELETE' && !@entity)
+
       return route.route_params if route.route_params && !route.route_settings[:declared_params].present?
-      required_params || {}
+      request_params || {}
     end
 
     def parse_request_params(required)
@@ -237,11 +235,12 @@ module Grape
                             { '$ref' => "#/definitions/#{name}" }
                           end
         else
-
-          data_type = GrapeSwagger::DocMethods::DataType.call(x.last[:documentation] || x.last)
+          documented_type = x.last[:type]
+          documented_type ||= x.last[:documentation][:type] if x.last[:documentation]
+          data_type = GrapeSwagger::DocMethods::DataType.call(documented_type)
 
           if GrapeSwagger::DocMethods::DataType.primitive?(data_type)
-            data = GrapeSwagger::DocMethods::DataType::PRIMITIVE_MAPPINGS[data_type]
+            data = GrapeSwagger::DocMethods::DataType.mapping(data_type)
             memo[x.first] = { type: data.first, format: data.last }
           else
             memo[x.first] = { type: data_type }
@@ -253,9 +252,8 @@ module Grape
     end
 
     def expose_params_from_model(model)
-      model_name = model.respond_to?(:name) ? model.name.demodulize.camelize : model.split('::').last
+      model_name = model_name(model)
 
-      # DONE: has to be adept, to be ready for grape-entity >0.5.0
       # TODO: this should only be a temporary hack ;)
       if GrapeEntity::VERSION =~ /0\.4\.\d/
         parameters = model.exposures ? model.exposures : model.documentation
@@ -269,6 +267,20 @@ module Grape
       @definitions[model_name] = { type: 'object', properties: properties }
 
       model_name
+    end
+
+    def model_name(name)
+      name.respond_to?(:name) ? name.name.demodulize.camelize : name.split('::').last
+    end
+
+    def default_status_codes
+      {
+        get: { code: 200, message: 'get {item}(s)' },
+        post: { code: 201, message: 'created {item}' },
+        put: { code: 200, message: 'updated {item}' },
+        patch: { code: 200, message: 'patched {item}' },
+        delete: { code: 200, message: 'deleted {item}' }
+      }
     end
 
     def could_it_be_a_model?(value)
@@ -288,10 +300,6 @@ module Grape
       end
 
       false
-    end
-
-    def tag_object(route, version)
-      Array(route.route_path.split('{')[0].split('/').reject(&:empty?).delete_if { |i| ((i == route.route_prefix.to_s) || (i == version)) }.first)
     end
   end
 end

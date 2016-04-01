@@ -4,6 +4,7 @@ module GrapeSwagger
       class << self
         def call(value)
           raw_data_type = value[:type] if value.is_a?(Hash)
+          raw_data_type = value unless value.is_a?(Hash)
           raw_data_type ||= 'string'
           case raw_data_type.to_s
           when 'Boolean', 'Date', 'Integer', 'String', 'Float', 'JSON', 'Array'

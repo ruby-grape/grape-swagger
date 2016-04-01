@@ -149,7 +149,7 @@ describe 'response' do
                 "400"=>{"description"=>"NotFound", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}
         }}},
         "definitions"=>{
-          "ParamsResponse"=>{"properties"=>{"description"=>{"type"=>"string"}, "$responses"=>{"type"=>"string"}}},
+          "ParamsResponse"=>{"type"=>"object", "properties"=>{"description"=>{"type"=>"string"}, "$responses"=>{"type"=>"string"}}},
           "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}}}
       }})
     end

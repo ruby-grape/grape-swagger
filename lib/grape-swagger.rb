@@ -3,7 +3,6 @@ require 'grape-swagger/version'
 require 'grape-swagger/endpoint'
 require 'grape-swagger/errors'
 
-# TODO: loading should be simplified by using a better/more clever dependincy structure
 require 'grape-swagger/doc_methods/produces_consumes'
 require 'grape-swagger/doc_methods/data_type'
 require 'grape-swagger/doc_methods/extensions'
@@ -12,6 +11,7 @@ require 'grape-swagger/doc_methods/optional_object'
 require 'grape-swagger/doc_methods/path_string'
 require 'grape-swagger/doc_methods/tag_name_description'
 require 'grape-swagger/doc_methods/parse_params'
+# require 'grape-swagger/doc_methods/move_params'
 
 require 'grape-swagger/doc_methods'
 

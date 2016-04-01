@@ -113,7 +113,7 @@ describe 'a simple mounted api' do
               "parameters"=>[{"in"=>"formData", "name"=>"items[]", "description"=>"array of items", "required"=>false, "type"=>"array", "items"=>{"type"=>"string"}}],
               "tags"=>["items"],
               "operationId"=>"postItems",
-              "responses"=>{"201"=>{"description"=>"this takes an array of parameters"}}
+              "responses"=>{"201"=>{"description"=>"this takes an array of parameters", "schema"=>{"$ref"=>"#/definitions/Item"}}}
           }},
           "/custom"=>{
             "get"=>{
@@ -121,8 +121,9 @@ describe 'a simple mounted api' do
               "parameters"=>[{"in"=>"formData", "name"=>"custom", "description"=>"array of items", "required"=>false, "type"=>"array", "items"=>{"type"=>"CustomType"}}],
               "tags"=>["custom"],
               "operationId"=>"getCustom",
-              "responses"=>{"200"=>{"description"=>"this uses a custom parameter"}}}
-      }}})
+              "responses"=>{"200"=>{"description"=>"this uses a custom parameter", "schema"=>{"$ref"=>"#/definitions/Custom"}}}}
+      }},
+      "definitions"=>{"Item"=>{"type"=>"object", "properties"=>{"items[]"=>{"type"=>"string"}}}, "Custom"=>{"type"=>"object", "properties"=>{"custom"=>{"type"=>"CustomType"}}}}})
     end
   end
 
@@ -216,7 +217,7 @@ describe 'a simple mounted api' do
               "parameters"=>[{"in"=>"formData", "name"=>"items[]", "description"=>"array of items", "required"=>false, "type"=>"array", "items"=>{"type"=>"string"}}],
               "tags"=>["items"],
               "operationId"=>"postItems",
-              "responses"=>{"201"=>{"description"=>"this takes an array of parameters"}}}
+              "responses"=>{"201"=>{"description"=>"this takes an array of parameters", "schema"=>{"$ref"=>"#/definitions/Item"}}}}
           }})
       end
     end
@@ -235,7 +236,7 @@ describe 'a simple mounted api' do
               "parameters"=>[{"in"=>"formData", "name"=>"custom", "description"=>"array of items", "required"=>false, "type"=>"array", "items"=>{"type"=>"CustomType"}}],
               "tags"=>["custom"],
               "operationId"=>"getCustom",
-              "responses"=>{"200"=>{"description"=>"this uses a custom parameter"}}}
+              "responses"=>{"200"=>{"description"=>"this uses a custom parameter", "schema"=>{"$ref"=>"#/definitions/Custom"}}}}
           }})
       end
     end

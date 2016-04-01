@@ -50,7 +50,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           optional :in_header, type: String, documentation: { in: 'header' }
         end
 
-        get '/defined_param_type' do
+        get '/defined_in' do
           { "declared_params" => declared(params) }
         end
 
@@ -62,19 +62,18 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           optional :in_header, type: String, documentation: { in: 'header' }
         end
 
-        get '/defined_param_type/:in_path' do
+        get '/defined_in/:in_path' do
           { "declared_params" => declared(params) }
         end
 
-        desc 'full set of request param types using `:in`',
-          success: TheApi::Entities::UseResponse
+        desc 'full set of request param types using `:in`'
         params do
           optional :in_path, type: Integer
           optional :in_query, type: String, documentation: { in: 'query' }
           optional :in_header, type: String, documentation: { in: 'header' }
         end
 
-        delete '/defined_param_type/:in_path' do
+        delete '/defined_in/:in_path' do
           { "declared_params" => declared(params) }
         end
 
@@ -109,6 +108,25 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
     TheApi::ParamTypeApi
   end
 
+  describe 'foo' do
+    subject do
+      get '/swagger_doc'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['paths']['/defined_param_type/{in_path}']['delete']['responses']).to eql({
+        "200"=>{"description"=>"full set of request param types", "schema"=>{"$ref"=>"#/definitions/UseResponse"}}
+      })
+    end
+
+    specify do
+      expect(subject['paths']['/defined_in/{in_path}']['delete']['responses']).to eql({
+        "204"=>{"description"=>"full set of request param types using `:in`"}
+      })
+    end
+  end
+
   describe 'defined param types' do
     subject do
       get '/swagger_doc/defined_param_type'
@@ -139,7 +157,37 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
     end
   end
 
-  describe 'file up-, download' do
+  describe 'defined param types with `:in`' do
+    subject do
+      get '/swagger_doc/defined_in'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['paths']['/defined_in']['get']['parameters']).to eql([
+        {"in"=>"query", "name"=>"in_query", "description"=>nil, "required"=>false, "type"=>"string"},
+        {"in"=>"header", "name"=>"in_header", "description"=>nil, "required"=>false, "type"=>"string"},
+      ])
+    end
+
+    specify do
+      expect(subject['paths']['/defined_in/{in_path}']['get']['parameters']).to eql([
+        {"in"=>"path", "name"=>"in_path", "description"=>nil, "required"=>true, "type"=>"integer", "format"=>"int32"},
+        {"in"=>"query", "name"=>"in_query", "description"=>nil, "required"=>false, "type"=>"string"},
+        {"in"=>"header", "name"=>"in_header", "description"=>nil, "required"=>false, "type"=>"string"},
+      ])
+    end
+
+    specify do
+      expect(subject['paths']['/defined_in/{in_path}']['delete']['parameters']).to eql([
+        {"in"=>"path", "name"=>"in_path", "description"=>nil, "required"=>true, "type"=>"integer", "format"=>"int32"},
+        {"in"=>"query", "name"=>"in_query", "description"=>nil, "required"=>false, "type"=>"string"},
+        {"in"=>"header", "name"=>"in_header", "description"=>nil, "required"=>false, "type"=>"string"},
+      ])
+    end
+  end
+
+  describe 'file' do
     describe 'upload' do
       subject do
         get '/swagger_doc/upload'

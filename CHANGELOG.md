@@ -1,6 +1,10 @@
 
 n.n.n / 2016-03-16
 ==================
+[#365](https://github.com/ruby-grape/grape-swagger/pull/365)
+
+- fixes passing markdown with redcarpet even with nil description and detail
+
 [#358](https://github.com/ruby-grape/grape-swagger/pull/358)
 
 - removes `allowMultiple` property from params

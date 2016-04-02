@@ -119,7 +119,7 @@ module Grape
     def description_object(route, markdown)
       description = route.route_desc if route.route_desc.present?
       description = route.route_detail if route.route_detail.present?
-      description = markdown.markdown(description).chomp if markdown
+      description = markdown.markdown(description.to_s).chomp if markdown
       description
     end
 

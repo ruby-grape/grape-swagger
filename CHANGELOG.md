@@ -1,6 +1,11 @@
 
 n.n.n / 2016-03-16
 ==================
+[#367](https://github.com/ruby-grape/grape-swagger/pull/367)
+
+  - set default `type: Integer` and `required: true` for path params,
+    if they wasn't specified inside the `params` bloack as required
+
 [#365](https://github.com/ruby-grape/grape-swagger/pull/365)
 
 - fixes passing markdown with redcarpet even with nil description and detail

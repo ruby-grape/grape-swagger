@@ -72,6 +72,7 @@ module Grape
 
       add_definitions_from options[:models]
 
+      # GrapeSwagger::DocMethods::MoveParams.to_definition(@paths, @definitions)
       [@paths, @definitions]
     end
 
@@ -144,6 +145,7 @@ module Grape
     def params_object(route)
       partition_params(route).map do |param, value|
         value = { required: false }.merge(value) if value.is_a?(Hash)
+        _, value = default_type([[param, value]]).first if value == ''
         GrapeSwagger::DocMethods::ParseParams.call(param, value, route)
       end
     end
@@ -162,7 +164,10 @@ module Grape
         response_model = @item
         response_model = expose_params_from_model(value[:model]) if value[:model]
 
-        memo[204] = memo.delete(200) if memo.key?(200) && route.route_method == 'DELETE' && value[:model].nil?
+        if memo.key?(200) && route.route_method == 'DELETE' && value[:model].nil?
+          memo[204] = memo.delete(200)
+          value[:code] = 204
+        end
 
         next unless !response_model.start_with?('Swagger_doc') &&
                     ((@definitions[response_model] && value[:code].to_s.start_with?('2')) || value[:model])
@@ -186,6 +191,9 @@ module Grape
       declared_params = route.route_settings[:declared_params] if route.route_settings[:declared_params].present?
       required, exposed = route.route_params.partition { |x| x.first.is_a? String }
 
+      default_type(required)
+      default_type(exposed)
+
       unless declared_params.nil?
         request_params = parse_request_params(required)
       end
@@ -198,10 +206,20 @@ module Grape
       end
 
       key = model_name(@entity || @item)
-      @definitions[key] = { type: 'object', properties: properties } unless properties.empty? || @definitions.key?(key) || (route.route_method == 'DELETE' && !@entity)
+
+      unless properties.empty? || (route.route_method == 'DELETE' && !@entity)
+        @definitions[key] = { type: 'object', properties: properties } unless @definitions.key?(key)
+        @definitions[key][:properties].merge!(properties) if @definitions.key?(key)
+      end
 
       return route.route_params if route.route_params && !route.route_settings[:declared_params].present?
       request_params || {}
+    end
+
+    def default_type(params)
+      params.each do |param|
+        param[-1] = param.last == '' ? { required: true, type: 'Integer' } : param.last
+      end
     end
 
     def parse_request_params(required)

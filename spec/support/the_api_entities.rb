@@ -28,9 +28,21 @@ RSpec.shared_context "the api entities" do
           expose :items, as: '$responses', using: Entities::ResponseItem, documentation: { is_array: true }
         end
 
-        class UseTemResponseAsType < Grape::Entity
+        class UseItemResponseAsType < Grape::Entity
           expose :description, documentation: { type: String }
           expose :responses, documentation: { type: Entities::ResponseItem, is_array: false }
+        end
+
+        class UseAddress < Grape::Entity
+          expose :street, documentation: { type: String, desc: 'street' }
+          expose :postcode, documentation: { type: String, desc: 'postcode' }
+          expose :city, documentation: { type: String, desc: 'city' }
+          expose :country, documentation: { type: String, desc: 'country' }
+        end
+
+        class UseNestedWithAddress < Grape::Entity
+          expose :name, documentation: { type: String }
+          expose :address, using: Entities::UseAddress
         end
       end
     end

@@ -71,8 +71,7 @@ module Grape
       end
 
       add_definitions_from options[:models]
-
-      # GrapeSwagger::DocMethods::MoveParams.to_definition(@paths, @definitions)
+      GrapeSwagger::DocMethods::MoveParams.to_definition(@paths, @definitions)
       [@paths, @definitions]
     end
 
@@ -151,7 +150,7 @@ module Grape
     end
 
     def response_object(route)
-      default_code = default_status_codes[route.route_method.downcase.to_sym]
+      default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.route_method.downcase.to_sym]
       default_code[:model] = @entity if @entity
       default_code[:message] = route.route_description || default_code[:message].sub('{item}', @item)
 
@@ -289,16 +288,6 @@ module Grape
 
     def model_name(name)
       name.respond_to?(:name) ? name.name.demodulize.camelize : name.split('::').last
-    end
-
-    def default_status_codes
-      {
-        get: { code: 200, message: 'get {item}(s)' },
-        post: { code: 201, message: 'created {item}' },
-        put: { code: 200, message: 'updated {item}' },
-        patch: { code: 200, message: 'patched {item}' },
-        delete: { code: 200, message: 'deleted {item}' }
-      }
     end
 
     def could_it_be_a_model?(value)

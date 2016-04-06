@@ -23,7 +23,7 @@ describe 'response' do
         end
 
         desc 'This returns something',
-          entity: Entities::UseTemResponseAsType,
+          entity: Entities::UseItemResponseAsType,
           failure: [{code: 400, message: 'NotFound', model: Entities::ApiError}]
         get '/nested_type' do
           { "declared_params" => declared(params) }
@@ -61,7 +61,7 @@ describe 'response' do
             "get"=>{
               "produces"=>["application/json"],
               "responses"=>{
-                "200"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/UseTemResponseAsType"}},
+                "200"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/UseItemResponseAsType"}},
                 "400"=>{"description"=>"NotFound", "schema"=>{"$ref"=>"#/definitions/ApiError"}}
               },
               "tags"=>["nested_type"],
@@ -69,7 +69,7 @@ describe 'response' do
         }}},
         "definitions"=>{
           "ResponseItem"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}, "name"=>{"type"=>"string"}}},
-          "UseTemResponseAsType"=>{"type"=>"object", "properties"=>{"description"=>{"type"=>"string"}, "responses"=>{"$ref"=>"#/definitions/ResponseItem"}}},
+          "UseItemResponseAsType"=>{"type"=>"object", "properties"=>{"description"=>{"type"=>"string"}, "responses"=>{"$ref"=>"#/definitions/ResponseItem"}}},
           "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}}}
       }})
     end

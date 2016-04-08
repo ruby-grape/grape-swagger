@@ -5,7 +5,7 @@ module GrapeSwagger
         def to_definition(paths, definitions)
           @definitions = definitions
           find_post_put(paths) do |path|
-            find_definition_and_parameters(path)
+            find_definition_and_params(path)
           end
         end
 
@@ -16,41 +16,36 @@ module GrapeSwagger
           end
         end
 
-        def find_definition_and_parameters(path)
+        def find_definition_and_params(path)
           path.keys.each do |verb|
-            parameters = path[verb][:parameters]
+            params = path[verb][:parameters]
 
-            next if parameters.nil?
-            next unless should_move?(parameters)
+            next if params.nil?
+            next unless should_move?(params)
 
-            unify!(parameters)
+            unify!(params)
 
             status_code = GrapeSwagger::DocMethods::StatusCodes.get[verb.to_sym][:code]
             response = path[verb][:responses][status_code]
             referenced_definition = parse_model(response[:schema]['$ref'])
 
-            name = build_definition(verb, referenced_definition)
+            name = build_definition(referenced_definition, verb)
+            move_params_to_new(name, params)
 
-            move_params_to_new(verb, name, parameters)
-            @definitions[name].delete(:required) if @definitions[name][:required].empty?
+            @definitions[name][:description] = path[verb][:description]
             path[verb][:parameters] << build_body_parameter(response.dup, name)
           end
         end
 
-        def build_definition(verb, name)
-          name = "#{verb}Request#{name}".to_sym
-          @definitions[name] = { type: 'object', properties: {}, required: [] }
-
-          name
-        end
-
-        def move_params_to_new(_, name, parameters)
+        def move_params_to_new(name, params)
           properties = {}
           definition = @definitions[name]
-          request_parameters = parameters.dup
 
-          request_parameters.each do |param|
+          nested_definitions(name, params, properties)
+
+          params.dup.each do |param|
             next unless movable?(param)
+
             name = param[:name].to_sym
             properties[name] = {}
 
@@ -61,12 +56,36 @@ module GrapeSwagger
             end
 
             properties[name][:readOnly] = true unless deletable?(param)
-            parameters.delete(param) if deletable?(param)
+            params.delete(param) if deletable?(param)
+
             definition[:required] << name if deletable?(param) && param[:required]
           end
 
+          definition.delete(:required) if definition[:required].empty?
           definition[:properties] = properties
         end
+
+        def nested_definitions(name, params, properties)
+          loop do
+            nested_name = params.bsearch { |x| x[:name].include?('[') }
+            return if nested_name.nil?
+
+            nested_name = nested_name[:name].split('[').first
+
+            nested, = params.partition { |x| x[:name].start_with?("#{nested_name}[") }
+            nested.each { |x| params.delete(x) }
+            nested_def_name = GrapeSwagger::DocMethods::OperationId.manipulate(nested_name)
+            def_name = "#{name}#{nested_def_name}"
+            properties[nested_name] = { '$ref' => "#/definitions/#{def_name}" }
+
+            prepare_nested_names(nested)
+            build_definition(def_name)
+
+            move_params_to_new(def_name, nested)
+          end
+        end
+
+        private
 
         def build_body_parameter(response, name = false)
           body_param = {}
@@ -79,7 +98,22 @@ module GrapeSwagger
           end
         end
 
-        private
+        def build_definition(name, verb = nil)
+          name = "#{verb}Request#{name}" if verb
+          @definitions[name] = { type: 'object', properties: {}, required: [] }
+
+          name
+        end
+
+        def prepare_nested_names(params)
+          params.each do |param|
+            param.tap do |x|
+              name = x[:name].partition('[').last.sub(']', '')
+              name = name.partition('[').last.sub(']', '') if name.start_with?('[')
+              x[:name] = name
+            end
+          end
+        end
 
         def unify!(params)
           params.each do |param|
@@ -110,8 +144,8 @@ module GrapeSwagger
           false
         end
 
-        def should_move?(parameters)
-          !parameters.select { |x| x[:in] == 'body' || x[:param_type] == 'body' }.empty?
+        def should_move?(params)
+          !params.select { |x| x[:in] == 'body' || x[:param_type] == 'body' }.empty?
         end
       end
     end

@@ -31,17 +31,21 @@ describe 'docs mounted separately from api' do
     expect(JSON.parse(last_response.body)).to eq({
       "info"=>{"title"=>"API title", "version"=>"v1"},
       "swagger"=>"2.0",
-      "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}],
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
-      "schemes" => ["https", "http"],
-      "paths" => {
+      "tags"=>[{"name"=>"simple", "description"=>"Operations about simples"}],
+      "schemes"=>["https", "http"],
+      "paths"=>{
         "/simple"=>{
           "get"=>{
+            "description"=>"This gets something.",
             "produces"=>["application/json"],
+            "responses"=>{"200"=>{"description"=>"This gets something."}},
             "tags"=>["simple"],
-            "operationId"=>"getSimple",
-            "responses"=>{"200"=>{"description"=>"This gets something."}}}}}
+            "operationId"=>"getSimple"
+          }
+        }
+      }
     })
   end
 
@@ -57,10 +61,16 @@ describe 'docs mounted separately from api' do
       "paths" => {
         "/simple"=>{
           "get"=>{
+            "description"=>"This gets something.",
             "produces"=>["application/json"],
+            "responses"=>{
+              "200"=>{"description"=>"This gets something."}
+            },
             "tags"=>["simple"],
-            "operationId"=>"getSimple",
-            "responses"=>{"200"=>{"description"=>"This gets something."}}}}}
+            "operationId"=>"getSimple"
+          }
+        }
+      }
     })
   end
 end

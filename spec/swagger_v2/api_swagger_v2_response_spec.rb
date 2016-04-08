@@ -59,6 +59,7 @@ describe 'response' do
         "paths"=>{
           "/nested_type"=>{
             "get"=>{
+              "description"=>"This returns something",
               "produces"=>["application/json"],
               "responses"=>{
                 "200"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/UseItemResponseAsType"}},
@@ -68,10 +69,21 @@ describe 'response' do
               "operationId"=>"getNestedType"
         }}},
         "definitions"=>{
-          "ResponseItem"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}, "name"=>{"type"=>"string"}}},
-          "UseItemResponseAsType"=>{"type"=>"object", "properties"=>{"description"=>{"type"=>"string"}, "responses"=>{"$ref"=>"#/definitions/ResponseItem"}}},
-          "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}}}
-      }})
+          "ResponseItem"=>{
+            "type"=>"object",
+            "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}, "name"=>{"type"=>"string"}}
+          },
+          "UseItemResponseAsType"=>{
+            "type"=>"object",
+            "properties"=>{"description"=>{"type"=>"string"}, "responses"=>{"$ref"=>"#/definitions/ResponseItem"}},
+            "description"=>"This returns something"
+          },
+          "ApiError"=>{
+            "type"=>"object",
+            "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}},
+            "description"=>"This returns something"
+          }}
+        })
     end
   end
 
@@ -96,6 +108,7 @@ describe 'response' do
         "paths"=>{
           "/entity_response"=>{
             "get"=>{
+              "description"=>"This returns something",
               "produces"=>["application/json"],
               "tags"=>["entity_response"],
               "operationId"=>"getEntityResponse",
@@ -108,10 +121,14 @@ describe 'response' do
             "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}, "name"=>{"type"=>"string"}}},
           "UseResponse"=>{
             "type"=>"object",
-            "properties"=>{"description"=>{"type"=>"string"}, "$responses"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/ResponseItem"}}}},
+            "properties"=>{"description"=>{"type"=>"string"}, "$responses"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/ResponseItem"}}},
+            "description"=>"This returns something"
+          },
           "ApiError"=>{
             "type"=>"object",
-            "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}}}
+            "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}},
+            "description"=>"This returns something"
+          }
       }})
     end
   end
@@ -137,6 +154,7 @@ describe 'response' do
         "paths"=>{
           "/params_response"=>{
             "post"=>{
+              "description"=>"This returns something",
               "produces"=>["application/json"],
               "consumes"=>["application/json"],
               "parameters"=>[
@@ -149,8 +167,16 @@ describe 'response' do
                 "400"=>{"description"=>"NotFound", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}
         }}},
         "definitions"=>{
-          "ParamsResponse"=>{"type"=>"object", "properties"=>{"description"=>{"type"=>"string"}, "$responses"=>{"type"=>"string"}}},
-          "ApiError"=>{"type"=>"object", "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}}}
+          "ParamsResponse"=>{
+            "type"=>"object",
+            "properties"=>{"description"=>{"type"=>"string"}, "$responses"=>{"type"=>"string"}},
+            "description"=>"This returns something"
+          },
+          "ApiError"=>{
+            "type"=>"object",
+            "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}},
+            "description"=>"This returns something"
+          }
       }})
     end
   end

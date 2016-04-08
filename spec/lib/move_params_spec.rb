@@ -36,18 +36,12 @@ describe GrapeSwagger::DocMethods::MoveParams do
     end
   end
 
-  describe 'build_definition' do
-    let(:verb) { 'post' }
-    let(:name) { 'Foo' }
-    let(:definitions) {{}}
-
+  describe 'find_definition_and_params' do
     specify do
       subject.instance_variable_set(:@definitions, definitions)
-      subject.build_definition(verb, name)
+      subject.find_definition_and_params(found_path)
 
-      definition = definitions.to_a.first
-      expect(definition.first).to eql :postRequestFoo
-      expect(definition.last).to eql({ type: 'object', properties: {}, required: [] })
+      expect(definitions.keys).to include 'InBody', 'postRequestInBody'
     end
   end
 
@@ -61,8 +55,8 @@ describe GrapeSwagger::DocMethods::MoveParams do
 
       specify do
         subject.instance_variable_set(:@definitions, definitions)
-        name = subject.build_definition(verb, name)
-        subject.move_params_to_new(verb, name, params)
+        name = subject.send(:build_definition, name, verb)
+        subject.move_params_to_new(name, params)
 
         expect(definitions[name]).to eql expected_post_defs
         expect(params).to be_empty
@@ -75,8 +69,8 @@ describe GrapeSwagger::DocMethods::MoveParams do
 
       specify do
         subject.instance_variable_set(:@definitions, definitions)
-        name, definition = subject.build_definition(verb, name)
-        subject.move_params_to_new(verb, name, params)
+        name, definition = subject.send(:build_definition, name, verb)
+        subject.move_params_to_new(name, params)
 
         expect(definitions[name]).to eql expected_put_defs
         expect(params.length).to be 1
@@ -84,41 +78,96 @@ describe GrapeSwagger::DocMethods::MoveParams do
     end
   end
 
-  describe 'find_definition' do
-    specify do
-      subject.instance_variable_set(:@definitions, definitions)
-      subject.find_definition_and_parameters(found_path)
-
-      expect(definitions.keys).to include 'InBody', :postRequestInBody
-    end
-  end
-
-  describe 'build_body_parameter' do
-    let(:response) {{ schema: { '$ref' => '#/definitions/Somewhere'} }}
-
-    describe 'no name given' do
-      let(:expected_param) {
-        {:name=>"Somewhere", :in=>"body", :required=>true, :schema=>{'$ref' => "#/definitions/Somewhere"}}
-      }
-      specify do
-        parameter = subject.build_body_parameter(response)
-        expect(parameter).to eql expected_param
+  describe 'nested definitions related' do
+    describe 'prepare_nested_names' do
+      before do
+        subject.send(:prepare_nested_names, params)
       end
-    end
 
-    describe 'name given' do
-      let(:name) { 'Foo' }
-      let(:expected_param) {
-        {:name=>"Somewhere", :in=>"body", :required=>true, :schema=>{'$ref' => "#/definitions/#{name}"}}
-      }
-      specify do
-        parameter = subject.build_body_parameter(response, name)
-        expect(parameter).to eql expected_param
+      describe 'simple' do
+        let(:params) {[{:in=>"body", :name=>"address[street]", :description=>"street", :type=>"string", :required=>true}]}
+        let(:expected) {[{:in=>"body", :name=>"street", :description=>"street", :type=>"string", :required=>true}]}
+        specify do
+          expect(params).to eql expected
+        end
+      end
+
+      describe 'nested' do
+        let(:params) {[{:in=>"body", :name=>"address[street][name]", :description=>"street", :type=>"string", :required=>true}]}
+        let(:expected) {[{:in=>"body", :name=>"street[name]", :description=>"street", :type=>"string", :required=>true}]}
+        specify do
+          expect(params).to eql expected
+        end
+      end
+
+      describe 'array' do
+        let(:params) {[{:in=>"body", :name=>"address[][street_lines]", :description=>"street lines", :type=>"array", :required=>true}]}
+        let(:expected) {[{:in=>"body", :name=>"street_lines", :description=>"street lines", :type=>"array", :required=>true}]}
+        specify do
+          expect(params).to eql expected
+        end
       end
     end
   end
 
   describe 'private methods' do
+    describe 'build_definition' do
+      before do
+        subject.instance_variable_set(:@definitions, definitions)
+        subject.send(:build_definition, name, verb)
+      end
+
+      describe 'verb given' do
+        let(:verb) { 'post' }
+        let(:name) { 'Foo' }
+        let(:definitions) {{}}
+
+        specify do
+          definition = definitions.to_a.first
+          expect(definition.first).to eql 'postRequestFoo'
+          expect(definition.last).to eql({ type: 'object', properties: {}, required: [] })
+        end
+      end
+
+      describe 'no verb given' do
+        let(:name) { 'FooBar' }
+        let(:definitions) {{}}
+        let(:verb) { nil }
+
+        specify do
+          definition = definitions.to_a.first
+          expect(definition.first).to eql 'FooBar'
+          expect(definition.last).to eql({ type: 'object', properties: {}, required: [] })
+        end
+      end
+    end
+
+    describe 'build_body_parameter' do
+      let(:response) {{ schema: { '$ref' => '#/definitions/Somewhere'} }}
+
+      describe 'no name given' do
+        let(:name) { nil }
+        let(:expected_param) {
+          {:name=>"Somewhere", :in=>"body", :required=>true, :schema=>{'$ref' => "#/definitions/Somewhere"}}
+        }
+        specify do
+          parameter = subject.send(:build_body_parameter, response)
+          expect(parameter).to eql expected_param
+        end
+      end
+
+      describe 'name given' do
+        let(:name) { 'Foo' }
+        let(:expected_param) {
+          {:name=>"Somewhere", :in=>"body", :required=>true, :schema=>{'$ref' => "#/definitions/#{name}"}}
+        }
+        specify do
+          parameter = subject.send(:build_body_parameter, response, name)
+          expect(parameter).to eql expected_param
+        end
+      end
+    end
+
     describe 'parse_model' do
       let(:ref) { '#/definitions/InBody' }
       subject(:object) { described_class.send(:parse_model, ref) }
@@ -245,6 +294,5 @@ describe GrapeSwagger::DocMethods::MoveParams do
         it { expect(params).to eql expected_params }
       end
     end
-
   end
 end

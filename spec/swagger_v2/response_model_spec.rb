@@ -103,6 +103,7 @@ describe 'responseModel' do
     expect(subject['definitions']['Error']).to eq(
       {
         "type"=>"object",
+        "description" => "This returns something or an error",
         "properties"=>{
           "code"=>{"type"=>"string"},
           "message"=>{"type"=>"string"}
@@ -112,6 +113,7 @@ describe 'responseModel' do
     expect(subject['definitions'].keys).to include 'Something'
     expect(subject['definitions']['Something']).to eq(
     { "type"=>"object",
+      "description" => "This returns something or an error",
       "properties"=>
         { "text"=>{"type"=>"string"},
           "kind"=>{"$ref"=>"#/definitions/Kind"},
@@ -203,6 +205,8 @@ describe 'should build definition from given entity' do
           "kind3"=>{"$ref"=>"#/definitions/Kind"},
           "tags"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/Tag"}},
           "relation"=>{"$ref"=>"#/definitions/Relation"}
-    }}})
+        },
+        "description"=>"This returns something"
+      }})
   end
 end

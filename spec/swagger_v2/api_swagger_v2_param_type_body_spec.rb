@@ -54,41 +54,6 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           end
         end
 
-        # namespace :nested_params do
-        #   desc 'post in body with entity',
-        #     success: TheApi::Entities::UseNestedWithAddress
-        #   params do
-        #     requires :name, type: String, documentation: { desc: 'name', in: 'body' }
-        #     optional :address, type: Hash do
-        #       requires :street, type: String, documentation: { desc: 'street', in: 'body' }
-        #       requires :postcode, type: String, documentation: { desc: 'postcode', in: 'body' }
-        #       requires :city, type: String, documentation: { desc: 'city', in: 'body' }
-        #       optional :country, type: String, documentation: { desc: 'country', in: 'body' }
-        #     end
-        #   end
-        #
-        #   post '/in_body' do
-        #     { "declared_params" => declared(params) }
-        #   end
-        #
-        #   desc 'put in body with entity',
-        #     success: TheApi::Entities::UseNestedWithAddress
-        #   params do
-        #     requires :id, type: Integer
-        #     optional :name, type: String, documentation: { desc: 'name', in: 'body' }
-        #     optional :address, type: Hash do
-        #       optional :street, type: String, documentation: { desc: 'street', in: 'body' }
-        #       optional :postcode, type: String, documentation: { desc: 'postcode', in: 'formData' }
-        #       optional :city, type: String, documentation: { desc: 'city', in: 'body' }
-        #       optional :country, type: String, documentation: { desc: 'country', in: 'body' }
-        #     end
-        #   end
-        #
-        #   put '/in_body/:id' do
-        #     { "declared_params" => declared(params) }
-        #   end
-        # end
-
         add_swagger_documentation
       end
     end
@@ -112,6 +77,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
     specify do
       expect(subject['definitions']['postRequestInBody']).to eql({
+        "description" => "post in body /wo entity",
         "type"=>"object",
         "properties"=>{
           "in_body_1"=>{"type"=>"integer", "format"=>"int32", "description"=>"in_body_1"},
@@ -131,6 +97,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
     specify do
       expect(subject['definitions']['putRequestInBody']).to eql({
+        "description" => "put in body /wo entity",
         "type"=>"object",
         "properties"=>{
           "key"=>{"type"=>"integer", "format"=>"int32", "readOnly"=>true},
@@ -156,6 +123,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
     specify do
       expect(subject['definitions']['postRequestResponseItem']).to eql({
+        "description" => "post in body with entity",
         "type"=>"object",
         "properties"=>{
           "name"=>{"type"=>"string", "description"=>"name"}},
@@ -172,6 +140,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
     specify do
       expect(subject['definitions']['putRequestResponseItem']).to eql({
+        "description" => "put in body with entity",
         "type"=>"object",
         "properties"=>{
           "id"=>{"type"=>"integer", "format"=>"int32", "readOnly"=>true},
@@ -179,15 +148,4 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
       })
     end
   end
-
-  # describe 'nested body parameters given' do
-  #   subject do
-  #     get '/swagger_doc/nested_params'
-  #     JSON.parse(last_response.body)
-  #   end
-  #
-  #   specify do
-  #     # ap subject
-  #   end
-  # end
 end

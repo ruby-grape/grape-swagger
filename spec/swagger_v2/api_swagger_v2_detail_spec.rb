@@ -64,12 +64,12 @@ describe 'details' do
 
     specify do
       expect(subject['paths']['/use_detail']['get']).to include('description')
-      expect(subject['paths']['/use_detail']['get']['description']).to eql 'detailed description of the route'
+      expect(subject['paths']['/use_detail']['get']['description']).to eql "This returns something\n detailed description of the route"
     end
 
     specify do
       expect(subject['paths']['/use_detail_block']['get']).to include('description')
-      expect(subject['paths']['/use_detail_block']['get']['description']).to eql 'detailed description of the route inside the `desc` block'
+      expect(subject['paths']['/use_detail_block']['get']['description']).to eql "This returns something\n detailed description of the route inside the `desc` block"
     end
   end
 
@@ -106,7 +106,7 @@ describe 'details' do
     specify do
       expect(subject['paths']['/use_gfm_detail']['get']).to include('description')
       expect(subject['paths']['/use_gfm_detail']['get']['description']).to eql(
-        "<h1 id=\"burgers-in-heaven\">Burgers in Heaven</h1>\n\n<blockquote>\n  <p>A burger doesn’t come for free</p>\n</blockquote>\n\n<p>If you want to reserve a burger in heaven, you have to do<br />\nsome crazy stuff on earth.</p>\n\n<pre><code>def do_good\nputs 'help people'\nend\n</code></pre>\n\n<ul>\n  <li><em>Will go to Heaven:</em> Probably</li>\n  <li><em>Will go to Hell:</em> Probably not</li>\n</ul>"
+        "<h1 id=\"this-returns-something\">This returns something</h1>\n<p># Burgers in Heaven</p>\n\n<blockquote>\n  <p>A burger doesn’t come for free</p>\n</blockquote>\n\n<p>If you want to reserve a burger in heaven, you have to do<br />\nsome crazy stuff on earth.</p>\n\n<pre><code>def do_good\nputs 'help people'\nend\n</code></pre>\n\n<ul>\n  <li><em>Will go to Heaven:</em> Probably</li>\n  <li><em>Will go to Hell:</em> Probably not</li>\n</ul>"
       )
     end
   end
@@ -144,7 +144,7 @@ describe 'details' do
     specify do
       expect(subject['paths']['/use_gfm_rc_detail']['get']).to include('description')
       expect(subject['paths']['/use_gfm_rc_detail']['get']['description']).to eql(
-        "<h1>Burgers in Heaven</h1>\n\n<blockquote>\n<p>A burger doesn&#39;t come for free</p>\n</blockquote>\n\n<p>If you want to reserve a burger in heaven, you have to do\nsome crazy stuff on earth.</p>\n<pre class=\"highlight plaintext\"><code>def do_good\nputs 'help people'\nend\n</code></pre>\n\n<ul>\n<li><em>Will go to Heaven:</em> Probably</li>\n<li><em>Will go to Hell:</em> Probably not</li>\n</ul>"
+        "<h1>This returns something</h1>\n\n<p># Burgers in Heaven</p>\n\n<blockquote>\n<p>A burger doesn&#39;t come for free</p>\n</blockquote>\n\n<p>If you want to reserve a burger in heaven, you have to do\nsome crazy stuff on earth.</p>\n<pre class=\"highlight plaintext\"><code>def do_good\nputs 'help people'\nend\n</code></pre>\n\n<ul>\n<li><em>Will go to Heaven:</em> Probably</li>\n<li><em>Will go to Hell:</em> Probably not</li>\n</ul>"
       )
     end
   end

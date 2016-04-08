@@ -71,8 +71,7 @@ module Grape
       end
 
       add_definitions_from options[:models]
-
-      # GrapeSwagger::DocMethods::MoveParams.to_definition(@paths, @definitions)
+      GrapeSwagger::DocMethods::MoveParams.to_definition(@paths, @definitions)
       [@paths, @definitions]
     end
 
@@ -110,7 +109,7 @@ module Grape
       method[:produces]    = produces_object(route, options[:produces] || options[:format])
       method[:consumes]    = consumes_object(route, options[:format])
       method[:parameters]  = params_object(route)
-      method[:responses]   = response_object(route)
+      method[:responses]   = response_object(route, options[:markdown])
       method[:tags]        = tag_object(route, options[:version])
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route.route_method, path)
       method.delete_if { |_, value| value.blank? }
@@ -118,8 +117,11 @@ module Grape
 
     def description_object(route, markdown)
       description = route.route_desc if route.route_desc.present?
-      description = route.route_detail if route.route_detail.present?
+      description = route.route_description if route.route_description.present?
+      description = "# #{description} " if markdown
+      description += "\n #{route.route_detail}" if route.route_detail
       description = markdown.markdown(description.to_s).chomp if markdown
+
       description
     end
 
@@ -150,8 +152,8 @@ module Grape
       end
     end
 
-    def response_object(route)
-      default_code = default_status_codes[route.route_method.downcase.to_sym]
+    def response_object(route, markdown)
+      default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.route_method.downcase.to_sym]
       default_code[:model] = @entity if @entity
       default_code[:message] = route.route_description || default_code[:message].sub('{item}', @item)
 
@@ -169,9 +171,11 @@ module Grape
           value[:code] = 204
         end
 
+        next if memo.key?(204)
         next unless !response_model.start_with?('Swagger_doc') &&
                     ((@definitions[response_model] && value[:code].to_s.start_with?('2')) || value[:model])
 
+        @definitions[response_model][:description] = description_object(route, markdown)
         # TODO: proof that the definition exist, if model isn't specified
         memo[value[:code]][:schema] = if route.route_is_array
                                         { 'type' => 'array', 'items' => { '$ref' => "#/definitions/#{response_model}" } }
@@ -289,16 +293,6 @@ module Grape
 
     def model_name(name)
       name.respond_to?(:name) ? name.name.demodulize.camelize : name.split('::').last
-    end
-
-    def default_status_codes
-      {
-        get: { code: 200, message: 'get {item}(s)' },
-        post: { code: 201, message: 'created {item}' },
-        put: { code: 200, message: 'updated {item}' },
-        patch: { code: 200, message: 'patched {item}' },
-        delete: { code: 200, message: 'deleted {item}' }
-      }
     end
 
     def could_it_be_a_model?(value)

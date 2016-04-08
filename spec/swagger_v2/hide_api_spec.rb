@@ -45,12 +45,14 @@ describe 'a hide mounted api' do
       "paths"=>{
         "/simple"=>{
           "get"=>{
+            "description"=>"Show this endpoint",
             "produces"=>["application/json"],
             "tags"=>["simple"],
             "operationId"=>"getSimple",
             "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}},
         "/lazy"=>{
           "get"=>{
+            "description"=>"Lazily show endpoint",
             "produces"=>["application/json"],
             "tags"=>["lazy"],
             "operationId"=>"getLazy",
@@ -100,6 +102,7 @@ describe 'a hide mounted api with same namespace' do
       "paths"=>{
         "/simple/show"=>{
           "get"=>{
+            "description"=>"Show this endpoint",
             "produces"=>["application/json"],
             "operationId"=>"getSimpleShow",
             "tags"=>["simple"], "responses"=>{"200"=>{"description"=>"Show this endpoint"}}}}}
@@ -118,6 +121,7 @@ describe 'a hide mounted api with same namespace' do
       "paths"=>{
         "/simple/show"=>{
           "get"=>{
+            "description"=>"Show this endpoint",
             "produces"=>["application/json"],
             "tags"=>["simple"],
             "operationId"=>"getSimpleShow",

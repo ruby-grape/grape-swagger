@@ -83,18 +83,21 @@ describe 'a simple mounted api' do
         "paths"=>{
           "/simple"=>{
             "get"=>{
+              "description"=>"This gets something.",
               "produces"=>["application/json"],
               "tags"=>["simple"],
               "operationId"=>"getSimple",
               "responses"=>{"200"=>{"description"=>"This gets something."}}}},
           "/simple-test"=>{
             "get"=>{
+              "description"=>"This gets something for URL using - separator.",
               "produces"=>["application/json"],
               "tags"=>["simple-test"],
               "operationId"=>"getSimpleTest",
               "responses"=>{"200"=>{"description"=>"This gets something for URL using - separator."}}}},
           "/simple_with_headers"=>{
             "get"=>{
+              "description"=>"this gets something else",
               "headers"=>{
                 "XAuthToken"=>{"description"=>"A required header.", "required"=>true},
                 "XOtherHeader"=>{"description"=>"An optional header.", "required"=>false}},
@@ -108,6 +111,7 @@ describe 'a simple mounted api' do
           }},
           "/items"=>{
             "post"=>{
+              "description"=>"this takes an array of parameters",
               "produces"=>["application/json"],
               "consumes"=>["application/json"],
               "parameters"=>[{"in"=>"formData", "name"=>"items[]", "description"=>"array of items", "required"=>false, "type"=>"array", "items"=>{"type"=>"string"}}],
@@ -117,13 +121,24 @@ describe 'a simple mounted api' do
           }},
           "/custom"=>{
             "get"=>{
+              "description"=>"this uses a custom parameter",
               "produces"=>["application/json"],
               "parameters"=>[{"in"=>"formData", "name"=>"custom", "description"=>"array of items", "required"=>false, "type"=>"array", "items"=>{"type"=>"CustomType"}}],
               "tags"=>["custom"],
               "operationId"=>"getCustom",
               "responses"=>{"200"=>{"description"=>"this uses a custom parameter", "schema"=>{"$ref"=>"#/definitions/Custom"}}}}
       }},
-      "definitions"=>{"Item"=>{"type"=>"object", "properties"=>{"items[]"=>{"type"=>"string"}}}, "Custom"=>{"type"=>"object", "properties"=>{"custom"=>{"type"=>"CustomType"}}}}})
+      "definitions"=>{
+        "Item"=>{
+          "type"=>"object",
+          "properties"=>{"items[]"=>{"type"=>"string"}},
+          "description"=>"this takes an array of parameters"
+        },
+        "Custom"=>{
+          "type"=>"object",
+          "properties"=>{"custom"=>{"type"=>"CustomType"}},
+          "description"=>"this uses a custom parameter"
+        }}})
     end
   end
 
@@ -144,6 +159,7 @@ describe 'a simple mounted api' do
         "paths"=>{
           "/simple"=>{
             "get"=>{
+              "description"=>"This gets something.",
               "produces"=>["application/json"],
               "tags"=>["simple"],
               "operationId"=>"getSimple",
@@ -170,6 +186,7 @@ describe 'a simple mounted api' do
           "paths"=>{
             "/simple-test"=>{
               "get"=>{
+                "description"=>"This gets something for URL using - separator.",
                 "produces"=>["application/json"],
                 "tags"=>["simple-test"],
                 "operationId"=>"getSimpleTest",
@@ -188,6 +205,7 @@ describe 'a simple mounted api' do
         expect(subject['paths']).to eq({
           "/simple_with_headers"=>{
             "get"=>{
+              "description"=>"this gets something else",
               "headers"=>{
                 "XAuthToken"=>{"description"=>"A required header.", "required"=>true},
                 "XOtherHeader"=>{"description"=>"An optional header.", "required"=>false}},
@@ -212,6 +230,7 @@ describe 'a simple mounted api' do
         expect(subject['paths']).to eq({
           "/items"=>{
             "post"=>{
+              "description"=>"this takes an array of parameters",
               "produces"=>["application/json"],
               "consumes"=>["application/json"],
               "parameters"=>[{"in"=>"formData", "name"=>"items[]", "description"=>"array of items", "required"=>false, "type"=>"array", "items"=>{"type"=>"string"}}],
@@ -232,6 +251,7 @@ describe 'a simple mounted api' do
         expect(subject['paths']).to eq({
           "/custom"=>{
             "get"=>{
+              "description"=>"this uses a custom parameter",
               "produces"=>["application/json"],
               "parameters"=>[{"in"=>"formData", "name"=>"custom", "description"=>"array of items", "required"=>false, "type"=>"array", "items"=>{"type"=>"CustomType"}}],
               "tags"=>["custom"],

@@ -1,6 +1,11 @@
 
-n.n.n / 2016-03-16
+n.n.n / 2016-04-09
 ==================
+
+[#371](https://github.com/ruby-grape/grape-swagger/pull/371)
+
+  - adds param type `body` handling
+
 [#367](https://github.com/ruby-grape/grape-swagger/pull/367)
 
   - set default `type: Integer` and `required: true` for path params,

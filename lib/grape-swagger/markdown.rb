@@ -9,7 +9,7 @@ module GrapeSwagger
     ###
     def initialize(adapter)
       adapter = adapter.new if adapter.is_a?(Class)
-      fail(ArgumentError, "The configured markdown adapter should implement the method #{:markdown}") unless adapter.respond_to? :markdown
+      fail(ArgumentError, 'The configured markdown adapter should implement the method markdown') unless adapter.respond_to? :markdown
       @adapter = adapter
     end
 

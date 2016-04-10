@@ -23,15 +23,15 @@ module Grape
 
         @target_class.combined_routes = {}
         @target_class.routes.each do |route|
-          route_path = route.route_path
-          route_match = route_path.split(/^.*?#{route.route_prefix.to_s}/).last
+          route_path = route.path
+          route_match = route_path.split(/^.*?#{route.prefix.to_s}/).last
           next unless route_match
           route_match = route_match.match('\/([\w|-]*?)[\.\/\(]') || route_match.match('\/([\w|-]*)$')
           next unless route_match
           resource = route_match.captures.first
           next if resource.empty?
           @target_class.combined_routes[resource] ||= []
-          next if documentation_class.hide_documentation_path && route.route_path.match(/#{documentation_class.mount_path}($|\/|\(\.)/)
+          next if documentation_class.hide_documentation_path && route.path.match(/#{documentation_class.mount_path}($|\/|\(\.)/)
           @target_class.combined_routes[resource] << route
         end
 
@@ -77,17 +77,17 @@ module Grape
           parent_route = @target_class.combined_routes[parent_route_name]
           # fetch all routes that are within the current namespace
           namespace_routes = parent_route.collect do |route|
-            route if (route.route_path.start_with?(route.route_prefix ? "/#{route.route_prefix}/#{name}" : "/#{name}") || route.route_path.start_with?((route.route_prefix ? "/#{route.route_prefix}/:version/#{name}" : "/:version/#{name}"))) &&
+            route if (route.path.start_with?(route.prefix ? "/#{route.prefix}/#{name}" : "/#{name}") || route.path.start_with?((route.prefix ? "/#{route.prefix}/:version/#{name}" : "/:version/#{name}"))) &&
                      (route.instance_variable_get(:@options)[:namespace] == "/#{name}" || route.instance_variable_get(:@options)[:namespace] == "/:version/#{name}")
           end.compact
 
           if namespace.options.key?(:swagger) && namespace.options[:swagger][:nested] == false
             # Namespace shall appear as standalone resource, use specified name or use normalized path as name
-            if namespace.options[:swagger].key?(:name)
-              identifier = namespace.options[:swagger][:name].tr(' ', '-')
-            else
-              identifier = name.tr('_', '-').gsub(/\//, '_')
-            end
+            identifier = if namespace.options[:swagger].key?(:name)
+                           namespace.options[:swagger][:name].tr(' ', '-')
+                         else
+                           name.tr('_', '-').gsub(/\//, '_')
+                         end
             @target_class.combined_namespace_identifiers[identifier] = name
             @target_class.combined_namespace_routes[identifier] = namespace_routes
 

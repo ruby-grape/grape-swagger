@@ -1,3 +1,9 @@
+### 0.11.0 (Next)
+
+#### Features
+
+* [#368](https://github.com/ruby-grape/grape-swagger/pull/368): Requires Grape 0.16.2, fixes `route_xxx` deprecation messages - [@dblock](https://github.com/dblock).
+
 ### 0.10.5 (2016-04-12)
 
 * [#338](https://github.com/ruby-grape/grape-swagger/pull/338): Fixed handling of nested Array parameters - [@itoufo](https://github.com/itoufo).

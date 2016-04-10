@@ -10,7 +10,7 @@ module GrapeSwagger
       'byte' => %w(string byte),
       'date' => %w(string date),
       'dateTime' => %w(string date-time)
-    }
+    }.freeze
 
     def name
       @@class_name
@@ -64,31 +64,31 @@ module GrapeSwagger
 
         raw_data_type = value[:type] if value.is_a?(Hash)
         raw_data_type ||= 'string'
-        data_type     = case raw_data_type.to_s
-                        when 'Hash'
-                          'object'
-                        when 'Rack::Multipart::UploadedFile'
-                          'File'
-                        when 'Virtus::Attribute::Boolean'
-                          'boolean'
-                        when 'Boolean', 'Date', 'Integer', 'String', 'Float'
-                          raw_data_type.to_s.downcase
-                        when 'BigDecimal'
-                          'long'
-                        when 'DateTime'
-                          'dateTime'
-                        when 'Numeric'
-                          'double'
-                        when 'Symbol'
-                          'string'
-                        when /^\[(?<type>.*)\]$/
-                          items[:type] = Regexp.last_match[:type].downcase
-                          if PRIMITIVE_MAPPINGS.key?(items[:type])
-                            items[:type], items[:format] = PRIMITIVE_MAPPINGS[items[:type]]
-                          end
-                          'array'
-                        else
-                          @@documentation_class.parse_entity_name(raw_data_type)
+        data_type = case raw_data_type.to_s
+                    when 'Hash'
+                      'object'
+                    when 'Rack::Multipart::UploadedFile'
+                      'File'
+                    when 'Virtus::Attribute::Boolean'
+                      'boolean'
+                    when 'Boolean', 'Date', 'Integer', 'String', 'Float'
+                      raw_data_type.to_s.downcase
+                    when 'BigDecimal'
+                      'long'
+                    when 'DateTime'
+                      'dateTime'
+                    when 'Numeric'
+                      'double'
+                    when 'Symbol'
+                      'string'
+                    when /^\[(?<type>.*)\]$/
+                      items[:type] = Regexp.last_match[:type].downcase
+                      if PRIMITIVE_MAPPINGS.key?(items[:type])
+                        items[:type], items[:format] = PRIMITIVE_MAPPINGS[items[:type]]
+                      end
+                      'array'
+                    else
+                      @@documentation_class.parse_entity_name(raw_data_type)
                         end
 
         additional_documentation = value.is_a?(Hash) ? value[:documentation] : nil
@@ -125,7 +125,7 @@ module GrapeSwagger
                          'query'
                         end
         end
-        name          = (value.is_a?(Hash) && value[:full_name]) || param
+        name = (value.is_a?(Hash) && value[:full_name]) || param
         description = translate(description, scope,
                                 i18n_keys.map { |key| :"#{key}.params.#{name}" })
 
@@ -202,7 +202,7 @@ module GrapeSwagger
           required:     required
         }
 
-        parsed_params.merge!(defaultValue: default_value) if default_value
+        parsed_params[:defaultValue] = default_value if default_value
 
         parsed_params
       end
@@ -330,7 +330,7 @@ module GrapeSwagger
     end
 
     def generate_typeref(type)
-      type_s = type.to_s.sub(/^[A-Z]/) { |f| f.downcase }
+      type_s = type.to_s.sub(/^[A-Z]/, &:downcase)
       if is_primitive? type_s
         { 'type' => type_s }
       else
@@ -423,7 +423,7 @@ module GrapeSwagger
       params do
         optional :locale, type: Symbol, desc: 'Locale of API documentation'
       end
-      get "#{@@mount_path}" do
+      get @@mount_path.to_s do
         I18n.locale = params[:locale] || I18n.default_locale
         header['Access-Control-Allow-Origin']   = '*'
         header['Access-Control-Request-Method'] = '*'
@@ -436,7 +436,9 @@ module GrapeSwagger
         end
 
         namespace_routes_array = namespace_routes.keys.map do |local_route|
-          next if namespace_routes[local_route].map(&:route_hidden).all? { |value| value.respond_to?(:call) ? value.call : value }
+          next if namespace_routes[local_route].map do |route|
+            route.settings[:description] && route.settings[:description][:hidden]
+          end.all? { |value| value.respond_to?(:call) ? value.call : value }
 
           url_format = '.{format}' unless @@hide_format
           url_locale = "?locale=#{params[:locale]}" unless params[:locale].blank?
@@ -488,11 +490,12 @@ module GrapeSwagger
         error!('Not Found', 404) unless routes
 
         visible_ops = routes.reject do |route|
-          route.route_hidden.respond_to?(:call) ? route.route_hidden.call : route.route_hidden
+          hidden = route.options[:hidden]
+          hidden && hidden.respond_to?(:call) ? hidden.call : hidden
         end
 
         ops = visible_ops.group_by do |route|
-          @@documentation_class.parse_path(route.route_path, api_version)
+          @@documentation_class.parse_path(route.path, api_version)
         end
 
         error!('Not Found', 404) unless ops.any?
@@ -501,51 +504,57 @@ module GrapeSwagger
 
         ops.each do |path, op_routes|
           operations = op_routes.map do |route|
+            route_settings_description = route.settings[:description] || {}
             endpoint = target_class.endpoint_mapping[route.to_s.sub('(.:format)', '')]
             endpoint_path = endpoint.options[:path] unless endpoint.nil?
-            i18n_key = [route.route_namespace, endpoint_path, route.route_method.downcase].flatten.join('/')
+            i18n_key = [route.namespace, endpoint_path, route.request_method.downcase].flatten.join('/')
             i18n_key = i18n_key.split('/').reject(&:empty?).join('.')
 
             summary = @@documentation_class.translate(
-              route.route_description, i18n_scope,
+              route.description, i18n_scope,
               [:"#{i18n_key}.desc", :"#{i18n_key}.description"]
             )
             notes = @@documentation_class.translate(
-              route.route_detail || route.route_notes, i18n_scope,
+              route_settings_description[:detail] || route_settings_description[:notes], i18n_scope,
               [:"#{i18n_key}.detail", :"#{i18n_key}.notes"]
             )
             notes       = @@documentation_class.as_markdown(notes)
 
-            http_codes  = @@documentation_class.parse_http_codes(route.route_http_codes, models)
+            http_codes  = @@documentation_class.parse_http_codes(route.http_codes, models)
 
-            models.merge(Array(route.route_entity)) if route.route_entity.present?
+            models.merge(Array(route.entity)) if route.entity.present?
+
+            route_settings_description = route.settings[:description] || {}
 
             operation = {
               notes: notes.to_s,
               summary: summary,
-              nickname: route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/, '-')),
-              method: route.route_method,
-              parameters: @@documentation_class.parse_header_params(route.route_headers, scope: i18n_scope, key: i18n_key) +
-                          @@documentation_class.parse_params(route.route_params, route.route_path, route.route_method,
+              nickname: route_settings_description[:nickname] || (route.request_method + route.path.gsub(/[\/:\(\)\.]/, '-')),
+              method: route.request_method,
+              parameters: @@documentation_class.parse_header_params(route.headers, scope: i18n_scope, key: i18n_key) +
+                          @@documentation_class.parse_params(route.params, route.path, route.request_method,
                                                              scope: i18n_scope, key: i18n_key),
-              type: route.route_is_array ? 'array' : 'void'
+              type: route_settings_description[:is_array] ? 'array' : 'void'
             }
-            operation[:authorizations] = route.route_authorizations unless route.route_authorizations.nil? || route.route_authorizations.empty?
-            if operation[:parameters].any? { |param| param[:type] == 'File' }
-              operation.merge!(consumes: ['multipart/form-data'])
-            end
-            operation.merge!(responseMessages: http_codes) unless http_codes.empty?
 
-            if route.route_entity
-              type = @@documentation_class.parse_entity_name(Array(route.route_entity).first)
-              if route.route_is_array
-                operation.merge!(items: { '$ref' => type })
+            authorizations = route_settings_description[:authorizations]
+            operation[:authorizations] = authorizations if authorizations && authorizations.any?
+
+            if operation[:parameters].any? { |param| param[:type] == 'File' }
+              operation[:consumes] = ['multipart/form-data']
+            end
+            operation[:responseMessages] = http_codes unless http_codes.empty?
+
+            if route.entity
+              type = @@documentation_class.parse_entity_name(Array(route.entity).first)
+              if route_settings_description[:is_array]
+                operation[:items] = { '$ref' => type }
               else
-                operation.merge!(type: type)
+                operation[:type] = type
               end
             end
 
-            operation[:nickname] = route.route_nickname if route.route_nickname
+            operation[:nickname] = route_settings_description[:nickname] if route_settings_description.key?(:nickname)
             operation
           end.compact
           apis << {
@@ -557,11 +566,11 @@ module GrapeSwagger
         models = @@documentation_class.models_with_included_presenters(models.to_a.flatten.compact)
 
         # use custom resource naming if available
-        if target_class.combined_namespace_identifiers.key? params[:name]
-          resource_path = target_class.combined_namespace_identifiers[params[:name]]
-        else
-          resource_path = params[:name]
-        end
+        resource_path = if target_class.combined_namespace_identifiers.key? params[:name]
+                          target_class.combined_namespace_identifiers[params[:name]]
+                        else
+                          params[:name]
+                        end
         api_description = {
           apiVersion:     api_version,
           swaggerVersion: '1.2',
@@ -571,7 +580,7 @@ module GrapeSwagger
         }
 
         base_path                        = @@documentation_class.parse_base_path(options[:base_path], request)
-        api_description[:basePath]       = base_path if base_path && base_path.size > 0 && root_base_path != false
+        api_description[:basePath]       = base_path if base_path && !base_path.empty? && root_base_path != false
         api_description[:models]         = @@documentation_class.parse_entity_models(models, scope: i18n_scope) unless models.empty?
         api_description[:authorizations] = authorizations if authorizations
 

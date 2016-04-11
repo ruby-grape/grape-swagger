@@ -94,7 +94,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
     specify do
       expect(subject['definitions']['postRequestUseNestedWithAddress']).to eql({
-        "description" => "post in body with nested parameters\n more details description",
+        "description"=>"post in body with nested parameters\n more details description",
         "type"=>"object",
         "properties"=>{
           "address"=>{"$ref"=>"#/definitions/postRequestUseNestedWithAddressAddress"},
@@ -103,6 +103,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         "required"=>["name"]
       })
       expect(subject['definitions']['postRequestUseNestedWithAddressAddress']).to eql({
+        "description"=>"postRequestUseNestedWithAddress - address",
         "type"=>"object",
         "properties"=>{
           "street"=>{"type"=>"string", "description"=>"street"},
@@ -134,15 +135,17 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           "address"=>{"$ref"=>"#/definitions/putRequestUseNestedWithAddressAddress"},
           "id"=>{"type"=>"integer", "format"=>"int32", "readOnly"=>true},
           "name"=>{"type"=>"string", "description"=>"name"}
-      }})
+        }
+      })
       expect(subject['definitions']['putRequestUseNestedWithAddressAddress']).to eql({
+        "description"=>"putRequestUseNestedWithAddress - address",
         "type"=>"object",
         "properties"=>{
           "street"=>{"type"=>"string", "description"=>"street"},
           "postcode"=>{"type"=>"string", "description"=>"postcode"},
           "city"=>{"type"=>"string", "description"=>"city"},
-          "country"=>{"type"=>"string", "description"=>"country"}
-      }})
+          "country"=>{"type"=>"string", "description"=>"country"}}
+      })
     end
   end
 
@@ -170,6 +173,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           "name"=>{"type"=>"string", "description"=>"name"}
       }})
       expect(subject['definitions']['putRequestUseNestedWithAddressAddress']).to eql({
+        "description" => "putRequestUseNestedWithAddress - address",
         "type"=>"object",
         "properties"=>{
           "street"=>{"type"=>"string", "description"=>"street"},
@@ -180,6 +184,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         "required"=>["postcode"]
       })
       expect(subject['definitions']['putRequestUseNestedWithAddressDeliveryAddress']).to eql({
+        "description" => "putRequestUseNestedWithAddress - delivery_address",
         "type"=>"object",
         "properties"=>{
           "street"=>{"type"=>"string", "description"=>"street"},

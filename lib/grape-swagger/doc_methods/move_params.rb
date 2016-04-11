@@ -80,7 +80,7 @@ module GrapeSwagger
 
             prepare_nested_names(nested)
             build_definition(def_name)
-
+            @definitions[def_name][:description] = "#{name} - #{nested_name}"
             move_params_to_new(def_name, nested)
           end
         end

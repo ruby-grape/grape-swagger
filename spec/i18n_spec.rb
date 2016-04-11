@@ -164,8 +164,8 @@ describe 'I18n Default Translation' do
       summary: 'Finds user by id', notes: ''
     )
     expect(result[:apis][api_index][:operations][0][:parameters]).to eq [
-      { paramType: 'path', name: 'id', description: 'User id', type: 'string', required: true, allowMultiple: false },
-      { paramType: 'query', name: 'locale', description: "Used to change locale of endpoint's responding message", type: 'string', required: false, allowMultiple: false }
+      { paramType: 'query', name: 'locale', description: "Used to change locale of endpoint's responding message", type: 'string', required: false, allowMultiple: false },
+      { paramType: 'path', name: 'id', description: 'User id', type: 'string', required: true, allowMultiple: false }
     ]
 
     api_index += 1
@@ -173,8 +173,8 @@ describe 'I18n Default Translation' do
       summary: "Changes a user's email", notes: ''
     )
     expect(result[:apis][api_index][:operations][0][:parameters]).to eq [
-      { paramType: 'path', name: 'id', description: 'User id', type: 'string', required: true, allowMultiple: false },
       { paramType: 'form', name: 'locale', description: "Used to change locale of endpoint's responding message", type: 'string', required: false, allowMultiple: false },
+      { paramType: 'path', name: 'id', description: 'User id', type: 'string', required: true, allowMultiple: false },
       { paramType: 'form', name: 'email', description: 'A new email', type: 'string', required: true, allowMultiple: false }
     ]
 
@@ -183,8 +183,8 @@ describe 'I18n Default Translation' do
       summary: "Gets the strength estimation of a user's password", notes: 'The estimation is done by a well-known algorithm when he changed his password'
     )
     expect(result[:apis][api_index][:operations][0][:parameters]).to eq [
-      { paramType: 'path', name: 'id', description: 'User id', type: 'string', required: true, allowMultiple: false },
-      { paramType: 'query', name: 'locale', description: "Used to change locale of endpoint's responding message", type: 'string', required: false, allowMultiple: false }
+      { paramType: 'query', name: 'locale', description: "Used to change locale of endpoint's responding message", type: 'string', required: false, allowMultiple: false },
+      { paramType: 'path', name: 'id', description: 'User id', type: 'string', required: true, allowMultiple: false }
     ]
   end
 
@@ -207,8 +207,8 @@ describe 'I18n Default Translation' do
       summary: 'Gets specific resource API document'
     )
     expect(result[:apis][api_index][:operations][0][:parameters]).to eq [
-      { paramType: 'path', name: 'name', description: 'Resource name', type: 'string', required: true, allowMultiple: false },
-      { paramType: 'query', name: 'locale', description: "Used to change locale of endpoint's responding message", type: 'string', required: false, allowMultiple: false }
+      { paramType: 'query', name: 'locale', description: "Used to change locale of endpoint's responding message", type: 'string', required: false, allowMultiple: false },
+      { paramType: 'path', name: 'name', description: 'Resource name', type: 'string', required: true, allowMultiple: false }
     ]
   end
 end

@@ -3,21 +3,14 @@ language: ruby
 sudo: false
 
 rvm:
-  - 2.2
-  - 2.1
-  - 2.0
+  - 2.2.3
+  - 2.1.7
   - jruby-19mode
+  - jruby-9.0.5.0
   - rbx-2
 
 env:
-  - GRAPE_VERSION=0.8.0
-  - GRAPE_VERSION=0.9.0
-  - GRAPE_VERSION=0.10.0
-  - GRAPE_VERSION=0.10.1
-  - GRAPE_VERSION=0.11.0
-  - GRAPE_VERSION=0.12.0
-  - GRAPE_VERSION=0.13.0
-  - GRAPE_VERSION=0.14.0
+  - GRAPE_VERSION=0.16.2
   - GRAPE_VERSION=HEAD
 
 matrix:

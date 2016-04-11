@@ -11,7 +11,7 @@ describe 'options: ' do
       end
 
       class SimpleApiWithBasePath < Grape::API
-        NON_DEFAULT_BASE_PATH = 'http://www.breakcoregivesmewood.com'
+        NON_DEFAULT_BASE_PATH = 'http://www.breakcoregivesmewood.com'.freeze
 
         mount BasePathMountedApi
         add_swagger_documentation base_path: NON_DEFAULT_BASE_PATH
@@ -119,7 +119,7 @@ describe 'options: ' do
       end
 
       class SimpleApiWithApiVersion < Grape::API
-        API_VERSION = '101'
+        API_VERSION = '101'.freeze
 
         mount ApiVersionMountedApi
         add_swagger_documentation api_version: API_VERSION
@@ -345,7 +345,7 @@ describe 'options: ' do
       end
 
       class SimpleApiWithDifferentMount < Grape::API
-        MOUNT_PATH = '/api_doc'
+        MOUNT_PATH = '/api_doc'.freeze
 
         mount DifferentMountMountedApi
         add_swagger_documentation mount_path: MOUNT_PATH

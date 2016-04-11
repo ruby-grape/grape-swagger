@@ -42,7 +42,7 @@ describe GrapeSwagger::Markdown::RedcarpetAdapter, unless: RUBY_PLATFORM.eql?('j
       it 'marks down with the configured options' do
         text = '# hello world #'
         extensions = { fenced_code_blocks: true, autolink: true }
-        render_options = { highlighter: :none, no_links: true, highlighter: :none }
+        render_options = { highlighter: :none, no_links: true }
         expect_any_instance_of(Redcarpet::Markdown).to receive(:render).with(text).and_call_original
 
         output = GrapeSwagger::Markdown::RedcarpetAdapter.new(extensions: extensions, render_options: render_options).markdown(text)

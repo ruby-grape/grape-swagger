@@ -3,9 +3,9 @@ language: ruby
 sudo: false
 
 rvm:
+  - 2.3
   - 2.2
   - 2.1
-  - 2.0
   - jruby-19mode
   - rbx-2
 
@@ -18,7 +18,7 @@ env:
   - GRAPE_VERSION=0.12.0
   - GRAPE_VERSION=0.13.0
   - GRAPE_VERSION=0.14.0
-  - GRAPE_VERSION=HEAD
+  # - GRAPE_VERSION=HEAD
 
 matrix:
   allow_failures:

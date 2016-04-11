@@ -1,15 +1,16 @@
 # Releasing Grape-Swagger
 
-There're no particular rules about when to release grape-swagger. Release bug fixes frequenty, features not so frequently and breaking API changes rarely.
+There're no particular rules about when to release grape-swagger. Release bug fixes frequently, features not so frequently and breaking API changes rarely.
 
 ### Release
 
-Run tests, check that all tests succeed locally.
+Run tests and rubocop, check that all tests succeed locally.
 
 ```
 bundle install
-rake
+bundle exec rake
 ```
+
 
 Check that the last build succeeded in [Travis CI](https://travis-ci.org/ruby-grape/grape-swagger) for all supported platforms.
 

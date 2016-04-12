@@ -2,8 +2,8 @@
 
 compatible versions:
 
-- `grape <~ 0.14.0`
-- `grape-entity < 0.5.0`
+- `grape > 0.16.2`
+- `grape-entity > 0.5.0`
 
 # grape-swagger
 

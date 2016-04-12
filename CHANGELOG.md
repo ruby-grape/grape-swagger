@@ -1,13 +1,12 @@
-### 0.10.5 (Next)
+### 0.10.5 (2016-04-12)
 
 * [#338](https://github.com/ruby-grape/grape-swagger/pull/338): Fixed handling of nested Array parameters - [@itoufo](https://github.com/itoufo).
 * [#347](https://github.com/ruby-grape/grape-swagger/pull/347): Fixed typeref when both :using and :as are provided in exposure but no :type in documentation - [@c910335](https://github.com/c910335).
-* Your contribution here.
 
 #### Fixes
 
-* [#321](https://github.com/ruby-grape/grape-swagger/pull/321): Fixed handling paths containing uppercase letters - [@gekola](https://github.com/gekola).
 * [#322](https://github.com/ruby-grape/grape-swagger/pull/322): Entity's `entity_name` takes predence over root  - [@gekola](https://github.com/gekola).
+* [#321](https://github.com/ruby-grape/grape-swagger/pull/321): Fixed handling paths containing uppercase letters - [@gekola](https://github.com/gekola).
 
 ### 0.10.4 (December 7, 2015)
 

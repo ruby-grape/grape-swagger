@@ -1,5 +1,9 @@
-**these branch generates a swagger file,  
-which is conform to the 1.2 spec**
+**these branch generates a swagger file, which is conform to the 1.2 spec**
+
+compatible versions:
+
+- `grape <~ 0.14.0`
+- `grape-entity < 0.5.0`
 
 # grape-swagger
 

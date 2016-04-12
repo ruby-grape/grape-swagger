@@ -19,6 +19,8 @@ require 'i18n_helper'
 
 RSpec.configure do |config|
   require 'rspec/expectations'
+  require 'rspec/support'
+
   config.include RSpec::Matchers
   config.mock_with :rspec
   config.include Rack::Test::Methods

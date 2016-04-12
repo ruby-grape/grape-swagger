@@ -1,4 +1,4 @@
-This branch is work in progress for bringing grape-swagger to Swagger 2.0 spec. Re-added/reimplemented features could be found in the ToC.
+This is work in progress for bringing grape-swagger to [swagger-spec (OpenAPI) 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) spec. Re-added/reimplemented features from [grape-swagger 1.2](https://github.com/ruby-grape/grape-swagger/tree/swagger-1.2) could be found in the ToC.
 
 ##### Table of Contents
 

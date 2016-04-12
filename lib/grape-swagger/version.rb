@@ -1,3 +1,3 @@
 module GrapeSwagger
-  VERSION = '0.11.0'.freeze
+  VERSION = '0.20.0'.freeze
 end

@@ -1,25 +1,21 @@
-This is work in progress for bringing grape-swagger to [swagger-spec (OpenAPI) 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) spec. Re-added/reimplemented features from [grape-swagger 1.2](https://github.com/ruby-grape/grape-swagger/tree/swagger-1.2) could be found in the ToC.
-
-##### Table of Contents
-
-[What is grape-swagger?](#what)  
-[Related Projects](#related)  
-[Swagger-Spec](#swagger-spec)  
-[Installation](#install)  
-[Usage](#usage)  
-[Configure](#configure)  
-[Routes Configuration](#routes)  
-[Markdown](#md_usage)  
-[Response documentation](#response)  
-[Extensions](#extensions)  
-[Example](#example)  
-
-For how to use at the moment see [v2 specs](tree/master/spec/swagger_v2) and or [Hussars](https://github.com/LeFnord/hussars) sample app.
-
 [![Gem Version](https://badge.fury.io/rb/grape-swagger.svg)](http://badge.fury.io/rb/grape-swagger)
 [![Build Status](https://travis-ci.org/ruby-grape/grape-swagger.svg?branch=swagger-2.0)](https://travis-ci.org/ruby-grape/grape-swagger)
 [![Dependency Status](https://gemnasium.com/ruby-grape/grape-swagger.svg)](https://gemnasium.com/ruby-grape/grape-swagger)
 [![Code Climate](https://codeclimate.com/github/ruby-grape/grape-swagger.svg)](https://codeclimate.com/github/ruby-grape/grape-swagger)
+
+##### Table of Contents
+
+* [What is grape-swagger?](#what)
+* [Related Projects](#related)
+* [Swagger-Spec](#swagger-spec)
+* [Installation](#install)
+* [Usage](#usage)
+* [Configure](#configure)
+* [Routes Configuration](#routes)
+* [Markdown](#md_usage)
+* [Response documentation](#response)
+* [Extensions](#extensions)
+* [Example](#example)
 
 <a name="what" />
 ## What is grape-swagger?
@@ -50,9 +46,8 @@ Grape-swagger generates documentation per [Swagger Spec 2.0](https://github.com/
 Add to your Gemfile:
 
 ```ruby
-  gem 'grape-swagger', git: 'git@github.com:ruby-grape/grape-swagger.git'
+gem 'grape-swagger'
 ```
-
 
 ## Upgrade
 
@@ -109,16 +104,16 @@ end
 <a name="configure" />
 ## Configure
 
-[host](#host)  
-[base_path](#base_path)  
-[mount_path](#mount_path)  
-[add_base_path](#add_base_path)  
-[add_version](#add_version)  
-[markdown](#markdown)  
-[api_version](#api_version)  
-[models](#models)  
-[hide_documentation_path](#hide_documentation_path)  
-[info](#info)  
+* [host](#host)
+* [base_path](#base_path)
+* [mount_path](#mount_path)
+* [add_base_path](#add_base_path)
+* [add_version](#add_version)
+* [markdown](#markdown)
+* [api_version](#api_version)
+* [models](#models)
+* [hide_documentation_path](#hide_documentation_path)
+* [info](#info)
 
 
 You can pass a hash with optional configuration settings to ```add_swagger_documentation```.
@@ -259,12 +254,12 @@ add_swagger_documentation \
 <a name="routes" />
 ## Routes Configuration
 
-[Swagger Header Parameters](#headers)  
-[Hiding an Endpoint](#hiding)  
-[Defining an endpoint as array](#array)  
-[Using an options hash](#options)  
-[Specify endpoint details](#details)  
-[Response documentation](#response)  
+* [Swagger Header Parameters](#headers)
+* [Hiding an Endpoint](#hiding)
+* [Defining an endpoint as array](#array)
+* [Using an options hash](#options)
+* [Specify endpoint details](#details)
+* [Response documentation](#response)
 
 
 <a name="headers" />
@@ -422,10 +417,8 @@ end
 <a name="additions" />
 ## Additional documentation
 
-
-[Markdown in Detail](#md_usage)  
-[Response documentation](#response)  
-
+* [Markdown in Detail](#md_usage)
+* [Response documentation](#response)
 
 ### Setting a Swagger defaultValue
 

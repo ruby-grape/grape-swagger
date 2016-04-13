@@ -1,6 +1,6 @@
+### 0.20.0 / 2016-04-09
 
-n.n.n / 2016-04-09
-==================
+#### Features
 
 [#371](https://github.com/ruby-grape/grape-swagger/pull/371)
 

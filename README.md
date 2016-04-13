@@ -50,7 +50,7 @@ Grape-swagger generates documentation per [Swagger Spec 2.0](https://github.com/
 Add to your Gemfile:
 
 ```ruby
-  gem 'grape-swagger', git: 'git@github.com:LeFnord/grape-swagger.git'
+  gem 'grape-swagger', git: 'git@github.com:ruby-grape/grape-swagger.git'
 ```
 
 

@@ -24,20 +24,20 @@ describe 'type format settings' do
     module TheApi
       module Entities
         class TypedDefinition < Grape::Entity
-          expose :prop_integer,   documentation: { type: Integer, desc: 'prop_integer' }
-          expose :prop_long,      documentation: { type: Numeric, desc: 'prop_long' }
-          expose :prop_float,     documentation: { type: Float, desc: 'prop_float' }
-          expose :prop_double,    documentation: { type: BigDecimal, desc: 'prop_double' }
-          expose :prop_string,    documentation: { type: String, desc: 'prop_string' }
-          expose :prop_symbol,    documentation: { type: Symbol, desc: 'prop_symbol' }
-          expose :prop_date,      documentation: { type: Date, desc: 'prop_date' }
-          expose :prop_date_time, documentation: { type: DateTime, desc: 'prop_date_time' }
-          expose :prop_time,      documentation: { type: Time, desc: 'prop_time' }
-          expose :prop_password,  documentation: { type: 'password', desc: 'prop_password' }
-          expose :prop_email,     documentation: { type: 'email', desc: 'prop_email' }
-          expose :prop_boolean,   documentation: { type: Virtus::Attribute::Boolean, desc: 'prop_boolean' }
-          expose :prop_file,      documentation: { type: File, desc: 'prop_file' }
-          expose :prop_json,      documentation: { type: JSON, desc: 'prop_json' }
+          expose :prop_integer,   documentation: { type: Integer, desc: 'prop_integer description' }
+          expose :prop_long,      documentation: { type: Numeric, desc: 'prop_long description' }
+          expose :prop_float,     documentation: { type: Float, desc: 'prop_float description' }
+          expose :prop_double,    documentation: { type: BigDecimal, desc: 'prop_double description' }
+          expose :prop_string,    documentation: { type: String, desc: 'prop_string description' }
+          expose :prop_symbol,    documentation: { type: Symbol, desc: 'prop_symbol description' }
+          expose :prop_date,      documentation: { type: Date, desc: 'prop_date description' }
+          expose :prop_date_time, documentation: { type: DateTime, desc: 'prop_date_time description' }
+          expose :prop_time,      documentation: { type: Time, desc: 'prop_time description' }
+          expose :prop_password,  documentation: { type: 'password', desc: 'prop_password description' }
+          expose :prop_email,     documentation: { type: 'email', desc: 'prop_email description' }
+          expose :prop_boolean,   documentation: { type: Virtus::Attribute::Boolean, desc: 'prop_boolean description' }
+          expose :prop_file,      documentation: { type: File, desc: 'prop_file description' }
+          expose :prop_json,      documentation: { type: JSON, desc: 'prop_json description' }
         end
       end
 
@@ -102,20 +102,20 @@ describe 'type format settings' do
 
   specify do
     expect(subject['definitions']['TypedDefinition']['properties']).to eql({
-      "prop_integer"=>{"type"=>"integer", "format"=>"int32"},
-      "prop_long"=>{"type"=>"integer", "format"=>"int64"},
-      "prop_float"=>{"type"=>"number", "format"=>"float"},
-      "prop_double"=>{"type"=>"number", "format"=>"double"},
-      "prop_string"=>{"type"=>"string"},
-      "prop_symbol"=>{"type"=>"string"},
-      "prop_date"=>{"type"=>"string", "format"=>"date"},
-      "prop_date_time"=>{"type"=>"string", "format"=>"date-time"},
-      "prop_time"=>{"type"=>"string", "format"=>"date-time"},
-      "prop_password"=>{"type"=>"string", "format"=>"password"},
-      "prop_email"=>{"type"=>"string", "format"=>"email"},
-      "prop_boolean"=>{"type"=>"boolean"},
-      "prop_file"=>{"type"=>"file"},
-      "prop_json"=>{"type"=>"json"}
+      "prop_integer"=>{"type"=>"integer", "format"=>"int32", "description"=>"prop_integer description"},
+      "prop_long"=>{"type"=>"integer", "format"=>"int64", "description"=>"prop_long description"},
+      "prop_float"=>{"type"=>"number", "format"=>"float", "description"=>"prop_float description"},
+      "prop_double"=>{"type"=>"number", "format"=>"double", "description"=>"prop_double description"},
+      "prop_string"=>{"type"=>"string", "description"=>"prop_string description"},
+      "prop_symbol"=>{"type"=>"string", "description"=>"prop_symbol description"},
+      "prop_date"=>{"type"=>"string", "format"=>"date", "description"=>"prop_date description"},
+      "prop_date_time"=>{"type"=>"string", "format"=>"date-time", "description"=>"prop_date_time description"},
+      "prop_time"=>{"type"=>"string", "format"=>"date-time", "description"=>"prop_time description"},
+      "prop_password"=>{"type"=>"string", "format"=>"password", "description"=>"prop_password description"},
+      "prop_email"=>{"type"=>"string", "format"=>"email", "description"=>"prop_email description"},
+      "prop_boolean"=>{"type"=>"boolean", "description"=>"prop_boolean description"},
+      "prop_file"=>{"type"=>"file", "description"=>"prop_file description"},
+      "prop_json"=>{"type"=>"json", "description"=>"prop_json description"}
     })
   end
 end

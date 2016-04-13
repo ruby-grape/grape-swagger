@@ -105,8 +105,8 @@ describe 'responseModel' do
         "type"=>"object",
         "description" => "This returns something or an error",
         "properties"=>{
-          "code"=>{"type"=>"string"},
-          "message"=>{"type"=>"string"}
+          "code"=>{"type"=>"string","description"=>"Error code"},
+          "message"=>{"type"=>"string","description"=>"Error message"}
       }}
     )
 
@@ -115,27 +115,27 @@ describe 'responseModel' do
     { "type"=>"object",
       "description" => "This returns something or an error",
       "properties"=>
-        { "text"=>{"type"=>"string"},
-          "kind"=>{"$ref"=>"#/definitions/Kind"},
-          "kind2"=>{"$ref"=>"#/definitions/Kind"},
-          "kind3"=>{"$ref"=>"#/definitions/Kind"},
-          "tags"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/Tag"}},
-          "relation"=>{"$ref"=>"#/definitions/Relation"}}}
+        { "text"=>{"type"=>"string","description"=>"Content of something."},
+          "kind"=>{"$ref"=>"#/definitions/Kind","description"=>"The kind of this something."},
+          "kind2"=>{"$ref"=>"#/definitions/Kind","description"=>"Secondary kind."},
+          "kind3"=>{"$ref"=>"#/definitions/Kind","description"=>"Tertiary kind."},
+          "tags"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/Tag"},"description"=>"Tags."},
+          "relation"=>{"$ref"=>"#/definitions/Relation","description"=>"A related model."}}}
     )
 
     expect(subject['definitions'].keys).to include 'Kind'
     expect(subject['definitions']['Kind']).to eq(
-      "type"=>"object", "properties"=>{"title"=>{"type"=>"string"}}
+      "type"=>"object", "properties"=>{"title"=>{"type"=>"string","description"=>"Title of the kind."}}
     )
 
     expect(subject['definitions'].keys).to include 'Relation'
     expect(subject['definitions']['Relation']).to eq(
-      "type"=>"object", "properties"=>{"name"=>{"type"=>"string"}}
+      "type"=>"object", "properties"=>{"name"=>{"type"=>"string","description"=>"Name"}}
     )
 
     expect(subject['definitions'].keys).to include 'Tag'
     expect(subject['definitions']['Tag']).to eq(
-      "type"=>"object", "properties"=>{"name"=>{"type"=>"string"}}
+      "type"=>"object", "properties"=>{"name"=>{"type"=>"string","description"=>"Name"}}
     )
   end
 end
@@ -193,18 +193,18 @@ describe 'should build definition from given entity' do
 
   it "it prefer entity over others" do
     expect(subject['definitions']).to eql({
-      "Kind"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}}},
-      "Tag"=>{"type"=>"object", "properties"=>{"name"=>{"type"=>"string"}}},
-      "Relation"=>{"type"=>"object", "properties"=>{"name"=>{"type"=>"string"}}},
+      "Kind"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32", "description"=>"Title of the kind."}}},
+      "Tag"=>{"type"=>"object", "properties"=>{"name"=>{"type"=>"string", "description"=>"Name"}}},
+      "Relation"=>{"type"=>"object", "properties"=>{"name"=>{"type"=>"string", "description"=>"Name"}}},
       "SomeEntity"=>{
         "type"=>"object",
         "properties"=>{
-          "text"=>{"type"=>"string"},
-          "kind"=>{"$ref"=>"#/definitions/Kind"},
-          "kind2"=>{"$ref"=>"#/definitions/Kind"},
-          "kind3"=>{"$ref"=>"#/definitions/Kind"},
-          "tags"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/Tag"}},
-          "relation"=>{"$ref"=>"#/definitions/Relation"}
+          "text"=>{"type"=>"string", "description"=>"Content of something."},
+          "kind"=>{"$ref"=>"#/definitions/Kind", "description"=>"The kind of this something."},
+          "kind2"=>{"$ref"=>"#/definitions/Kind", "description"=>"Secondary kind."},
+          "kind3"=>{"$ref"=>"#/definitions/Kind", "description"=>"Tertiary kind."},
+          "tags"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/Tag"}, "description"=>"Tags."},
+          "relation"=>{"$ref"=>"#/definitions/Relation", "description"=>"A related model."}
         },
         "description"=>"This returns something"
       }})

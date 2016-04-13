@@ -17,7 +17,6 @@ describe GrapeSwagger::Markdown::KramdownAdapter do
     end
 
     it 'raises an GrapeSwagger::Errors::MarkdownDependencyMissingError if module can not be required' do
-      pending
       expect_any_instance_of(Kernel).to receive(:require).with('kramdown').and_raise(LoadError)
 
       expect { GrapeSwagger::Markdown::KramdownAdapter.new }.to raise_error(GrapeSwagger::Errors::MarkdownDependencyMissingError, 'Missing required dependency: kramdown')

@@ -27,7 +27,6 @@ describe 'Default API' do
           "produces"=>["application/json"],
           "host"=>"example.org",
           "tags" => [{"name"=>"something", "description"=>"Operations about somethings"}],
-          "schemes" => ["https", "http"],
           "paths"=>{
             "/something"=>{
               "get"=>{
@@ -72,7 +71,6 @@ describe 'Default API' do
         "produces"=>["application/json"],
         "host"=>"example.org",
         "tags" => [{"name"=>"something", "description"=>"Operations about somethings"}],
-        "schemes" => ["https", "http"],
         "paths"=>{
           "/something"=>{
             "get"=>{

@@ -79,7 +79,6 @@ RSpec.shared_context "swagger example" do
         {"name"=>"thing2", "description"=>"Operations about thing2s"},
         {"name"=>"dummy", "description"=>"Operations about dummies"}
       ],
-      "schemes"=>["https", "http"],
       "paths"=>{
         "/v3/other_thing/{elements}"=>{
           "get"=>{

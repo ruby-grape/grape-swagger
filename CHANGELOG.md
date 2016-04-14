@@ -2,6 +2,10 @@
 
 #### Features
 
+[#381](https://github.com/ruby-grape/grape-swagger/pull/381) 
+
+- adding entity property description when property documentation desc option is present [@elciok](https://github.com/elciok).
+
 [#371](https://github.com/ruby-grape/grape-swagger/pull/371)
 
   - adds param type `body` handling

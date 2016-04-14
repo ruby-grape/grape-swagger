@@ -174,22 +174,22 @@ RSpec.shared_context "swagger example" do
       "definitions"=>{
         "QueryInput"=>{
           "type"=>"object",
-          "properties"=>{"elements"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/QueryInputElement"}}},
+          "properties"=>{"elements"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/QueryInputElement"}, "description"=>"Set of configuration"}},
           "description"=>"nested route inside namespace"},
         "QueryInputElement"=>{
           "type"=>"object",
-          "properties"=>{"key"=>{"type"=>"string"}, "value"=>{"type"=>"string"}}},
+          "properties"=>{"key"=>{"type"=>"string", "description"=>"Name of parameter"}, "value"=>{"type"=>"string", "description"=>"Value of parameter"}}},
         "Thing"=>{
           "type"=>"object",
           "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}},
           "description"=>"This gets Thing."},
         "ApiError"=>{
           "type"=>"object",
-          "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}},
+          "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32", "description"=>"status code"}, "message"=>{"type"=>"string", "description"=>"error message"}},
           "description"=>"This gets Things."},
         "Something"=>{
           "type"=>"object",
-          "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}},
+          "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32", "description"=>"Identity of Something"}, "text"=>{"type"=>"string", "description"=>"Content of something."}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}},
           "description"=>"This gets Things."
         }
       }

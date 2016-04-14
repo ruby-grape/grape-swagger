@@ -270,6 +270,7 @@ module Grape
 
           memo[x.first][:enum] = x.last[:values] if x.last[:values] && x.last[:values].is_a?(Array)
         end
+        memo[x.first][:description] = x.last[:documentation][:desc] if x.last[:documentation] && x.last[:documentation][:desc]
       end
     end
 

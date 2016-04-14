@@ -41,7 +41,6 @@ describe 'a hide mounted api' do
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
       "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}, {"name"=>"lazy", "description"=>"Operations about lazies"}],
-      "schemes" => ["https", "http"],
       "paths"=>{
         "/simple"=>{
           "get"=>{
@@ -98,7 +97,6 @@ describe 'a hide mounted api with same namespace' do
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
       "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}],
-      "schemes" => ["https", "http"],
       "paths"=>{
         "/simple/show"=>{
           "get"=>{
@@ -117,7 +115,6 @@ describe 'a hide mounted api with same namespace' do
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
       "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}],
-      "schemes" => ["https", "http"],
       "paths"=>{
         "/simple/show"=>{
           "get"=>{

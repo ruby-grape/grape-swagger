@@ -90,7 +90,6 @@ module GrapeSwagger
       {
         info: {},
         models: [],
-        schemes: %w( https http ),
         api_version: 'v1',
         target_class: nil,
         mount_path: '/swagger_doc',

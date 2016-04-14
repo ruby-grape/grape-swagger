@@ -79,7 +79,6 @@ describe 'a simple mounted api' do
         "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
         "host"=>"example.org",
         "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}, {"name"=>"simple-test", "description"=>"Operations about simple-tests"}, {"name"=>"simple_with_headers", "description"=>"Operations about simple_with_headers"}, {"name"=>"items", "description"=>"Operations about items"}, {"name"=>"custom", "description"=>"Operations about customs"}],
-        "schemes"=>["https", "http"],
         "paths"=>{
           "/simple"=>{
             "get"=>{
@@ -155,7 +154,6 @@ describe 'a simple mounted api' do
         "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
         "host"=>"example.org",
         "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}, {"name"=>"simple-test", "description"=>"Operations about simple-tests"}, {"name"=>"simple_with_headers", "description"=>"Operations about simple_with_headers"}, {"name"=>"items", "description"=>"Operations about items"}, {"name"=>"custom", "description"=>"Operations about customs"}],
-        "schemes"=>["https", "http"],
         "paths"=>{
           "/simple"=>{
             "get"=>{
@@ -182,7 +180,6 @@ describe 'a simple mounted api' do
           "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
           "host"=>"example.org",
           "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}, {"name"=>"simple-test", "description"=>"Operations about simple-tests"}, {"name"=>"simple_with_headers", "description"=>"Operations about simple_with_headers"}, {"name"=>"items", "description"=>"Operations about items"}, {"name"=>"custom", "description"=>"Operations about customs"}],
-          "schemes"=>["https", "http"],
           "paths"=>{
             "/simple-test"=>{
               "get"=>{

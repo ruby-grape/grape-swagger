@@ -1,3 +1,8 @@
+### (next)
+
+#### Fixes
+* [#382](https://github.com/ruby-grape/grape-swagger/pull/382): Make the schemes undefined by default to match Swagger 2.0 spec indicating that a blank schemes will use the scheme from the document - [@wleeper](https://github.com/wleeper).
+
 ### 0.20.0 / 2016-04-09
 
 #### Features

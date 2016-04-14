@@ -55,7 +55,6 @@ describe 'response' do
           {"name"=>"entity_response", "description"=>"Operations about entity_responses"},
           {"name"=>"nested_type", "description"=>"Operations about nested_types"}
         ],
-        "schemes"=>["https", "http"],
         "paths"=>{
           "/nested_type"=>{
             "get"=>{
@@ -104,7 +103,6 @@ describe 'response' do
           {"name"=>"entity_response", "description"=>"Operations about entity_responses"},
           {"name"=>"nested_type", "description"=>"Operations about nested_types"}
         ],
-        "schemes"=>["https", "http"],
         "paths"=>{
           "/entity_response"=>{
             "get"=>{
@@ -150,7 +148,6 @@ describe 'response' do
           {"name"=>"entity_response", "description"=>"Operations about entity_responses"},
           {"name"=>"nested_type", "description"=>"Operations about nested_types"}
         ],
-        "schemes"=>["https", "http"],
         "paths"=>{
           "/params_response"=>{
             "post"=>{

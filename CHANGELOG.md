@@ -1,15 +1,17 @@
-### (next)
+### 0.20.1 (next)
+
+#### Features
+
+* [#382](https://github.com/ruby-grape/grape-swagger/pull/382): make schemes optional - [@wleeper](https://github.com/wleeper).
+* [#381](https://github.com/ruby-grape/grape-swagger/pull/381): adding entity property description when property documentation desc option is present - [@elciok](https://github.com/elciok).
 
 #### Fixes
-* [#382](https://github.com/ruby-grape/grape-swagger/pull/382): Make the schemes undefined by default to match Swagger 2.0 spec indicating that a blank schemes will use the scheme from the document - [@wleeper](https://github.com/wleeper).
+
+* [#383](https://github.com/ruby-grape/grape-swagger/pull/383): fixes grape to 0.14.0 - [@LeFnord](https://github.com/LeFnord).
 
 ### 0.20.0 / 2016-04-09
 
 #### Features
-
-[#381](https://github.com/ruby-grape/grape-swagger/pull/381) 
-
-- adding entity property description when property documentation desc option is present [@elciok](https://github.com/elciok).
 
 [#371](https://github.com/ruby-grape/grape-swagger/pull/371)
 

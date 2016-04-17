@@ -1,4 +1,10 @@
-### 0.20.1 (next)
+### x.xx.x (next)
+
+#### Features
+
+#### Fixes
+
+### 0.20.1 / 2016-04-17
 
 #### Features
 
@@ -7,7 +13,7 @@
 
 #### Fixes
 
-* [#383](https://github.com/ruby-grape/grape-swagger/pull/383): fixes grape to 0.14.0 - [@LeFnord](https://github.com/LeFnord).
+* [#383](https://github.com/ruby-grape/grape-swagger/pull/383): fixes grape to 0.12.0–0.14.0 - [@LeFnord](https://github.com/LeFnord).
 
 ### 0.20.0 / 2016-04-09
 

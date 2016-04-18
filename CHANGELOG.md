@@ -4,6 +4,8 @@
 
 #### Fixes
 
+* [#389](https://github.com/ruby-grape/grape-swagger/pull/389): respect X-Forwarded-Host - [@edvakf](https://github.com/edvakf).
+
 ### 0.20.1 / 2016-04-17
 
 #### Features

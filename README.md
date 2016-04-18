@@ -7,6 +7,7 @@
 
 * [What is grape-swagger?](#what)
 * [Related Projects](#related)
+* [Compatibility](#version)
 * [Swagger-Spec](#swagger-spec)
 * [Installation](#install)
 * [Usage](#usage)
@@ -31,7 +32,20 @@ These screenshot is based on the [Hussars](https://github.com/LeFnord/hussars) s
 ## Related Projects
 
 * [Grape](https://github.com/ruby-grape/grape)
+* [Grape Entity](https://github.com/ruby-grape/grape-entity)
 * [Swagger UI](https://github.com/wordnik/swagger-ui)
+
+
+<a name="version" />
+## Compatibility
+
+The following versions of grape, grape-entity and grape-swagger can currently be used together.
+
+grape-swagger | grape                   | grape-entity
+--------------|-------------------------|-------------
+0.10.5        | >= 0.10.0 ... <= 0.14.0 |  < 0.5.0
+0.11.0        |               >= 0.16.2 |  < 0.5.0
+0.20.1        | >= 0.12.0 ... <= 0.14.0 | <= 0.5.1
 
 
 <a name="swagger-spec" />

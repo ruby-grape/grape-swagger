@@ -97,10 +97,10 @@ describe 'a simple mounted api' do
           "/simple_with_headers"=>{
             "get"=>{
               "description"=>"this gets something else",
-              "headers"=>{
-                "XAuthToken"=>{"description"=>"A required header.", "required"=>true},
-                "XOtherHeader"=>{"description"=>"An optional header.", "required"=>false}},
               "produces"=>["application/json"],
+              "parameters"=>[
+                {"in"=>"header", "name"=>"XAuthToken", "description"=>"A required header.", "type"=>"string", "required"=>true},
+                {"in"=>"header", "name"=>"XOtherHeader", "description"=>"An optional header.", "type"=>"string", "required"=>false}],
               "tags"=>["simple_with_headers"],
               "operationId"=>"getSimpleWithHeaders",
               "responses"=>{
@@ -203,10 +203,10 @@ describe 'a simple mounted api' do
           "/simple_with_headers"=>{
             "get"=>{
               "description"=>"this gets something else",
-              "headers"=>{
-                "XAuthToken"=>{"description"=>"A required header.", "required"=>true},
-                "XOtherHeader"=>{"description"=>"An optional header.", "required"=>false}},
               "produces"=>["application/json"],
+              "parameters"=>[
+                {"in"=>"header", "name"=>"XAuthToken", "description"=>"A required header.", "type"=>"string", "required"=>true},
+                {"in"=>"header", "name"=>"XOtherHeader", "description"=>"An optional header.", "type"=>"string", "required"=>false}],
               "tags"=>["simple_with_headers"],
               "operationId"=>"getSimpleWithHeaders",
               "responses"=>{

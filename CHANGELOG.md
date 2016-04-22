@@ -5,6 +5,7 @@
 #### Fixes
 
 * [#389](https://github.com/ruby-grape/grape-swagger/pull/389): respect X-Forwarded-Host - [@edvakf](https://github.com/edvakf).
+* [#393](https://github.com/ruby-grape/grape-swagger/pull/393): properly handle header parameters- [@wleeper](https://github.com/wleeper).
 
 ### 0.20.1 / 2016-04-17
 

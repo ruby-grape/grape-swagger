@@ -43,11 +43,7 @@ module GrapeSwagger
         end
 
         def document_default_value(settings)
-          default_value = settings[:default] || nil
-          example       = settings[:example] || nil
-
-          @parsed_param[:default] = example if example
-          @parsed_param[:default] = default_value if default_value && example.blank?
+          @parsed_param[:default] = settings[:default] if settings[:default].present?
         end
 
         def document_type_and_format(data_type)

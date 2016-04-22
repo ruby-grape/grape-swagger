@@ -9,6 +9,7 @@ require 'grape-swagger/doc_methods/path_string'
 require 'grape-swagger/doc_methods/tag_name_description'
 require 'grape-swagger/doc_methods/parse_params'
 require 'grape-swagger/doc_methods/move_params'
+require 'grape-swagger/doc_methods/headers'
 
 module GrapeSwagger
   module DocMethods

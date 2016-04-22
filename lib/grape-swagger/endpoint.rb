@@ -105,7 +105,6 @@ module Grape
     def method_object(route, options, path)
       method = {}
       method[:description] = description_object(route, options[:markdown])
-      method[:headers]     = route.route_headers if route.route_headers
       method[:produces]    = produces_object(route, options[:produces] || options[:format])
       method[:consumes]    = consumes_object(route, options[:format])
       method[:parameters]  = params_object(route)
@@ -194,14 +193,13 @@ module Grape
     def partition_params(route)
       declared_params = route.route_settings[:declared_params] if route.route_settings[:declared_params].present?
       required, exposed = route.route_params.partition { |x| x.first.is_a? String }
-
+      required.concat GrapeSwagger::DocMethods::Headers.parse(route) unless route.route_headers.nil?
       default_type(required)
       default_type(exposed)
 
-      unless declared_params.nil?
+      unless declared_params.nil? && route.route_headers.nil?
         request_params = parse_request_params(required)
       end
-
       if !exposed.empty?
         exposed_params = exposed.each_with_object({}) { |x, memo| memo[x.first] = x.last }
         properties = parse_response_params(exposed_params)
@@ -215,8 +213,7 @@ module Grape
         @definitions[key] = { type: 'object', properties: properties } unless @definitions.key?(key)
         @definitions[key][:properties].merge!(properties) if @definitions.key?(key)
       end
-
-      return route.route_params if route.route_params && !route.route_settings[:declared_params].present?
+      return route.route_params if route.route_params.present? && !route.route_settings[:declared_params].present?
       request_params || {}
     end
 
@@ -244,6 +241,7 @@ module Grape
       return if params.nil?
 
       params.each_with_object({}) do |x, memo|
+        next if x[1].fetch(:documentation, {}).fetch(:in, nil).to_s == 'header'
         x[0] = x.last[:as] if x.last[:as]
 
         model = x.last[:using] if x.last[:using].present?

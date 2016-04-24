@@ -135,24 +135,24 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
     specify do
       expect(subject['paths']['/defined_param_type']['get']['parameters']).to eql([
-        {"in"=>"query", "name"=>"in_query", "description"=>nil, "required"=>false, "type"=>"string"},
-        {"in"=>"header", "name"=>"in_header", "description"=>nil, "required"=>false, "type"=>"string"},
+        {"in"=>"query", "name"=>"in_query", "required"=>false, "type"=>"string"},
+        {"in"=>"header", "name"=>"in_header", "required"=>false, "type"=>"string"},
       ])
     end
 
     specify do
       expect(subject['paths']['/defined_param_type/{in_path}']['get']['parameters']).to eql([
-        {"in"=>"path", "name"=>"in_path", "description"=>nil, "required"=>true, "type"=>"integer", "format"=>"int32"},
-        {"in"=>"query", "name"=>"in_query", "description"=>nil, "required"=>false, "type"=>"string"},
-        {"in"=>"header", "name"=>"in_header", "description"=>nil, "required"=>false, "type"=>"string"},
+        {"in"=>"path", "name"=>"in_path", "required"=>true, "type"=>"integer", "format"=>"int32"},
+        {"in"=>"query", "name"=>"in_query", "required"=>false, "type"=>"string"},
+        {"in"=>"header", "name"=>"in_header", "required"=>false, "type"=>"string"},
       ])
     end
 
     specify do
       expect(subject['paths']['/defined_param_type/{in_path}']['delete']['parameters']).to eql([
-        {"in"=>"path", "name"=>"in_path", "description"=>nil, "required"=>true, "type"=>"integer", "format"=>"int32"},
-        {"in"=>"query", "name"=>"in_query", "description"=>nil, "required"=>false, "type"=>"string"},
-        {"in"=>"header", "name"=>"in_header", "description"=>nil, "required"=>false, "type"=>"string"},
+        {"in"=>"path", "name"=>"in_path", "required"=>true, "type"=>"integer", "format"=>"int32"},
+        {"in"=>"query", "name"=>"in_query", "required"=>false, "type"=>"string"},
+        {"in"=>"header", "name"=>"in_header", "required"=>false, "type"=>"string"},
       ])
     end
   end
@@ -165,24 +165,24 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
     specify do
       expect(subject['paths']['/defined_in']['get']['parameters']).to eql([
-        {"in"=>"query", "name"=>"in_query", "description"=>nil, "required"=>false, "type"=>"string"},
-        {"in"=>"header", "name"=>"in_header", "description"=>nil, "required"=>false, "type"=>"string"},
+        {"in"=>"query", "name"=>"in_query", "required"=>false, "type"=>"string"},
+        {"in"=>"header", "name"=>"in_header", "required"=>false, "type"=>"string"},
       ])
     end
 
     specify do
       expect(subject['paths']['/defined_in/{in_path}']['get']['parameters']).to eql([
-        {"in"=>"path", "name"=>"in_path", "description"=>nil, "required"=>true, "type"=>"integer", "format"=>"int32"},
-        {"in"=>"query", "name"=>"in_query", "description"=>nil, "required"=>false, "type"=>"string"},
-        {"in"=>"header", "name"=>"in_header", "description"=>nil, "required"=>false, "type"=>"string"},
+        {"in"=>"path", "name"=>"in_path", "required"=>true, "type"=>"integer", "format"=>"int32"},
+        {"in"=>"query", "name"=>"in_query", "required"=>false, "type"=>"string"},
+        {"in"=>"header", "name"=>"in_header", "required"=>false, "type"=>"string"},
       ])
     end
 
     specify do
       expect(subject['paths']['/defined_in/{in_path}']['delete']['parameters']).to eql([
-        {"in"=>"path", "name"=>"in_path", "description"=>nil, "required"=>true, "type"=>"integer", "format"=>"int32"},
-        {"in"=>"query", "name"=>"in_query", "description"=>nil, "required"=>false, "type"=>"string"},
-        {"in"=>"header", "name"=>"in_header", "description"=>nil, "required"=>false, "type"=>"string"},
+        {"in"=>"path", "name"=>"in_path", "required"=>true, "type"=>"integer", "format"=>"int32"},
+        {"in"=>"query", "name"=>"in_query", "required"=>false, "type"=>"string"},
+        {"in"=>"header", "name"=>"in_header", "required"=>false, "type"=>"string"},
       ])
     end
   end
@@ -196,7 +196,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
       specify do
         expect(subject['paths']['/upload']['post']['parameters']).to eql([
-          {"in"=>"formData", "name"=>"name", "description"=>nil, "required"=>true, "type"=>"file"}
+          {"in"=>"formData", "name"=>"name", "required"=>true, "type"=>"file"}
         ])
       end
     end
@@ -209,7 +209,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
       specify do
         expect(subject['paths']['/download']['get']['parameters']).to eql([
-          {"in"=>"query", "name"=>"name", "description"=>nil, "required"=>true, "type"=>"string"}
+          {"in"=>"query", "name"=>"name", "required"=>true, "type"=>"string"}
         ])
       end
     end

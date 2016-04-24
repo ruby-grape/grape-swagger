@@ -99,8 +99,8 @@ RSpec.shared_context "swagger example" do
             "parameters"=>[
               {"in"=>"query", "name"=>"id", "description"=>"Identity of Something", "type"=>"integer", "format"=>"int32", "required"=>false},
               {"in"=>"query", "name"=>"text", "description"=>"Content of something.", "type"=>"string", "required"=>false},
-              {"in"=>"formData", "name"=>"links", "description"=>nil, "type"=>"array", "items"=>{"type"=>"link"}, "required"=>false},
-              {"in"=>"query", "name"=>"others", "description"=>nil, "type"=>"text", "required"=>false}
+              {"in"=>"formData", "name"=>"links", "type"=>"array", "items"=>{"type"=>"link"}, "required"=>false},
+              {"in"=>"query", "name"=>"others", "type"=>"text", "required"=>false}
             ],
             "responses"=>{"200"=>{"description"=>"This gets Things.", "schema"=>{"$ref"=>"#/definitions/Thing"}}, "401"=>{"description"=>"Unauthorized", "schema"=>{"$ref"=>"#/definitions/ApiError"}}},
             "tags"=>["thing"],
@@ -112,7 +112,7 @@ RSpec.shared_context "swagger example" do
             "consumes"=>["application/json"],
             "parameters"=>[
               {"in"=>"formData", "name"=>"text", "description"=>"Content of something.", "type"=>"string", "required"=>true},
-              {"in"=>"formData", "name"=>"links", "description"=>nil, "type"=>"array", "items"=>{"type"=>"string"}, "required"=>true}
+              {"in"=>"formData", "name"=>"links", "type"=>"array", "items"=>{"type"=>"string"}, "required"=>true}
             ],
             "responses"=>{"201"=>{"description"=>"This creates Thing.", "schema"=>{"$ref"=>"#/definitions/Something"}}, "422"=>{"description"=>"Unprocessible Entity"}},
             "tags"=>["thing"],
@@ -123,7 +123,7 @@ RSpec.shared_context "swagger example" do
           "get"=>{
             "description"=>"This gets Thing.",
             "produces"=>["application/json"],
-            "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "format"=>"int32", "required"=>true}],
+            "parameters"=>[{"in"=>"path", "name"=>"id", "type"=>"integer", "format"=>"int32", "required"=>true}],
             "responses"=>{"200"=>{"description"=>"getting a single thing", "schema"=>{"$ref"=>"#/definitions/Thing"}}, "401"=>{"description"=>"Unauthorized"}},
             "tags"=>["thing"],
             "operationId"=>"getThingId"
@@ -133,9 +133,9 @@ RSpec.shared_context "swagger example" do
             "produces"=>["application/json"],
             "consumes"=>["application/json"],
             "parameters"=>[
-              {"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "format"=>"int32", "required"=>true},
+              {"in"=>"path", "name"=>"id", "type"=>"integer", "format"=>"int32", "required"=>true},
               {"in"=>"formData", "name"=>"text", "description"=>"Content of something.", "type"=>"string", "required"=>false},
-              {"in"=>"formData", "name"=>"links", "description"=>nil, "type"=>"array", "items"=>{"type"=>"string"}, "required"=>false}
+              {"in"=>"formData", "name"=>"links", "type"=>"array", "items"=>{"type"=>"string"}, "required"=>false}
             ],
             "responses"=>{"200"=>{"description"=>"This updates Thing.", "schema"=>{"$ref"=>"#/definitions/Something"}}},
             "tags"=>["thing"],
@@ -144,7 +144,7 @@ RSpec.shared_context "swagger example" do
           "delete"=>{
             "description"=>"This deletes Thing.",
             "produces"=>["application/json"],
-            "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "format"=>"int32", "required"=>true}],
+            "parameters"=>[{"in"=>"path", "name"=>"id", "type"=>"integer", "format"=>"int32", "required"=>true}],
             "responses"=>{"200"=>{"description"=>"This deletes Thing.", "schema"=>{"$ref"=>"#/definitions/Something"}}},
             "tags"=>["thing"],
             "operationId"=>"deleteThingId"
@@ -163,7 +163,7 @@ RSpec.shared_context "swagger example" do
           "delete"=>{
             "description"=>"dummy route.",
             "produces"=>["application/json"],
-            "parameters"=>[{"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "format"=>"int32", "required"=>true}],
+            "parameters"=>[{"in"=>"path", "name"=>"id", "type"=>"integer", "format"=>"int32", "required"=>true}],
             "responses"=>{"204"=>{"description"=>"dummy route."}, "401"=>{"description"=>"Unauthorized"}},
             "tags"=>["dummy"],
             "operationId"=>"deleteDummyId"

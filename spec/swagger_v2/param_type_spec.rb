@@ -26,7 +26,6 @@ describe 'Params Types' do
     expect(subject).to eq [{
       "in"=>"formData",
       "name"=>"input",
-      "description"=>nil,
       "type"=>"string",
       "required"=>true
     }]

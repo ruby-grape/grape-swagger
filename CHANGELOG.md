@@ -1,3 +1,12 @@
+### next / 2016-xx-xx
+
+#### Features
+
+#### Fixes
+
+* [#399](https://github.com/ruby-grape/grape-swagger/pull/399): makes param description optional, solves [issue #395](https://github.com/ruby-grape/grape-swagger/issues/395) - [@LeFnord](https://github.com/LeFnord).
+
+
 ### 0.20.2 / 2016-04-22
 
 #### Features

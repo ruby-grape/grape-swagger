@@ -45,20 +45,20 @@ describe 'additional parameter settings' do
 
   specify do
     expect(subject['paths']['/bookings/{id}']['put']['parameters']).to eql([
-      {"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "format"=>"int32", "required"=>true},
-      {"in"=>"formData", "name"=>"name", "description"=>nil, "type"=>"string", "required"=>false}
+      {"in"=>"path", "name"=>"id", "type"=>"integer", "format"=>"int32", "required"=>true},
+      {"in"=>"formData", "name"=>"name", "type"=>"string", "required"=>false}
     ])
   end
 
   specify do
     expect(subject['paths']['/bookings/{id}']['get']['parameters']).to eql([
-      {"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "format"=>"int32", "required"=>true}
+      {"in"=>"path", "name"=>"id", "type"=>"integer", "format"=>"int32", "required"=>true}
     ])
   end
 
   specify do
     expect(subject['paths']['/bookings/{id}']['delete']['parameters']).to eql([
-      {"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "format"=>"int32", "required"=>true}
+      {"in"=>"path", "name"=>"id", "type"=>"integer", "format"=>"int32", "required"=>true}
     ])
   end
 end

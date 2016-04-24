@@ -2,8 +2,8 @@ module GrapeSwagger
   module DocMethods
     class OperationId
       class << self
-        def build(method = nil, path = nil)
-          verb = method.to_s.downcase
+        def build(route, path = nil)
+          verb = route.route_method.to_s.downcase
 
           operation = manipulate(path) unless path.nil?
 

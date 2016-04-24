@@ -39,8 +39,8 @@ describe 'Group Params as Array' do
 
     specify do
       expect(subject['paths']['/groups']['post']['parameters']).to eql([
-        {"in"=>"formData", "name"=>"required_group[][required_param_1]", "description"=>nil, "required"=>true, "type"=>"array", "items"=>{"type"=>"string"}},
-        {"in"=>"formData", "name"=>"required_group[][required_param_2]", "description"=>nil, "required"=>true, "type"=>"array", "items"=>{"type"=>"string"}}
+        {"in"=>"formData", "name"=>"required_group[][required_param_1]", "required"=>true, "type"=>"array", "items"=>{"type"=>"string"}},
+        {"in"=>"formData", "name"=>"required_group[][required_param_2]", "required"=>true, "type"=>"array", "items"=>{"type"=>"string"}}
       ])
     end
   end
@@ -56,7 +56,7 @@ describe 'Group Params as Array' do
         {"in"=>"formData", "name"=>"typed_group[][id]", "description"=>"integer given", "required"=>true, "type"=>"array", "items"=>{"type"=>"integer"}},
         {"in"=>"formData", "name"=>"typed_group[][name]", "description"=>"string given", "required"=>true, "type"=>"array", "items"=>{"type"=>"string"}},
         {"in"=>"formData", "name"=>"typed_group[][email]", "description"=>"email given", "required"=>false, "type"=>"array", "items"=>{"type"=>"string"}},
-        {"in"=>"formData", "name"=>"typed_group[][others]", "description"=>nil, "required"=>false, "type"=>"array", "items"=>{"type"=>"integer"}, "enum"=>[1, 2, 3]}
+        {"in"=>"formData", "name"=>"typed_group[][others]", "required"=>false, "type"=>"array", "items"=>{"type"=>"integer"}, "enum"=>[1, 2, 3]}
       ])
     end
   end

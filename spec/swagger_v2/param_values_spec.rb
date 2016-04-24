@@ -47,7 +47,6 @@ describe 'Convert values to enum or Range' do
       expect(plain_array).to eq [{
         "in"=>"formData",
         "name"=>"letter",
-        "description"=>nil,
         "type"=>"string",
         "required"=>true,
         "enum"=>["a", "b", "c"]
@@ -62,7 +61,6 @@ describe 'Convert values to enum or Range' do
       expect(array_in_proc).to eq [{
         "in"=>"formData",
         "name"=>"letter",
-        "description"=>nil,
         "type"=>"string",
         "required"=>true,
         "enum"=>["d", "e", "f"]
@@ -77,7 +75,6 @@ describe 'Convert values to enum or Range' do
       expect(range_letter).to eq [{
         "in"=>"formData",
         "name"=>"letter",
-        "description"=>nil,
         "type"=>"string",
         "required"=>true
       }]
@@ -89,7 +86,6 @@ describe 'Convert values to enum or Range' do
       expect(range_integer).to eq [{
         "in"=>"formData",
         "name"=>"integer",
-        "description"=>nil,
         "type"=>"integer",
         "required"=>true,
         "format"=>"int32",
@@ -135,7 +131,6 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
       expect(non_array_in_proc).to eq [{
         "in"=>"formData",
         "name"=>"letter",
-        "description"=>nil,
         "type"=>"string",
         "required"=>true,
         "enum"=>"string"
@@ -150,7 +145,6 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
       expect(range_float).to eq [{
         "in"=>"formData",
         "name"=>"float",
-        "description"=>nil,
         "type"=>"number",
         "required"=>true,
         "format"=>"float"

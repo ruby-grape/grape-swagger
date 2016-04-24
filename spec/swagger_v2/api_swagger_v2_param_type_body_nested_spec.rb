@@ -117,7 +117,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
     specify do
       expect(subject['paths']['/simple_nested_params/in_body/{id}']['put']['parameters']).to eql([
-        {"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "format"=>"int32", "required"=>true},
+        {"in"=>"path", "name"=>"id", "type"=>"integer", "format"=>"int32", "required"=>true},
         {
           "name"=>"UseNestedWithAddress",
           "in"=>"body",
@@ -157,7 +157,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
     specify do
       expect(subject['paths']['/multiple_nested_params/in_body/{id}']['put']['parameters']).to eql([
-        {"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "format"=>"int32", "required"=>true},
+        {"in"=>"path", "name"=>"id", "type"=>"integer", "format"=>"int32", "required"=>true},
         {"name"=>"UseNestedWithAddress", "in"=>"body", "required"=>true, "schema"=>{"$ref"=>"#/definitions/putRequestUseNestedWithAddress"}}
       ])
     end

@@ -90,7 +90,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
     specify do
       expect(subject['paths']['/wo_entities/in_body/{key}']['put']['parameters']).to eql([
-        {"in"=>"path", "name"=>"key", "description"=>nil, "type"=>"integer", "format"=>"int32", "required"=>true},
+        {"in"=>"path", "name"=>"key", "type"=>"integer", "format"=>"int32", "required"=>true},
         {"name"=>"InBody", "in"=>"body", "required"=>true, "schema"=>{"$ref"=>"#/definitions/putRequestInBody"}}
       ])
     end
@@ -133,7 +133,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
     specify do
       expect(subject['paths']['/with_entities/in_body/{id}']['put']['parameters']).to eql([
-        {"in"=>"path", "name"=>"id", "description"=>nil, "type"=>"integer", "format"=>"int32", "required"=>true},
+        {"in"=>"path", "name"=>"id", "type"=>"integer", "format"=>"int32", "required"=>true},
         {"name"=>"ResponseItem", "in"=>"body", "required"=>true, "schema"=>{"$ref"=>"#/definitions/putRequestResponseItem"}}
       ])
     end

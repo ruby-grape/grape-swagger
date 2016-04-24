@@ -108,7 +108,7 @@ describe GrapeSwagger::DocMethods::Extensions do
       end
     end
 
-    describe "reale example" do
+    describe "real example" do
       let(:extensions) { {x: {
         'amazon-apigateway-auth' => {type: 'none'},
         'amazon-apigateway-integration' => {type: 'aws', uri: 'foo_bar_uri', httpMethod: 'get'}

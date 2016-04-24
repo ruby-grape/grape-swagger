@@ -14,12 +14,14 @@ module GrapeSwagger
 
           value_type = settings.merge(data_type: data_type, path: path, param_name: param, method: method)
 
+          # required properties
           @parsed_param = {
-            in:            param_type(value_type),
-            name:          settings[:full_name] || param,
-            description:   settings[:desc] || settings[:description] || nil
+            in:   param_type(value_type),
+            name: settings[:full_name] || param
           }
 
+          # optional properties
+          document_description(settings)
           document_type_and_format(data_type)
           document_array_param(value_type)
           document_default_value(settings)
@@ -30,6 +32,11 @@ module GrapeSwagger
         end
 
         private
+
+        def document_description(settings)
+          description = settings[:desc] || settings[:description]
+          @parsed_param[:description] = description if description
+        end
 
         def document_required(settings)
           @parsed_param[:required] = settings[:required] || false

@@ -7,17 +7,47 @@ describe GrapeSwagger::DocMethods::OperationId do
   specify { expect(subject).to respond_to :build }
 
   describe 'build' do
-    specify do
-      expect(subject.build('GET')).to eql 'get'
-      expect(subject.build('get')).to eql 'get'
-      expect(subject.build(:get)).to eql 'get'
-      expect(subject.build('GET', 'foo')).to eql 'getFoo'
-      expect(subject.build('GET', '/foo')).to eql 'getFoo'
-      expect(subject.build('GET', 'bar/foo')).to eql 'getBarFoo'
-      expect(subject.build('GET', 'bar/foo{id}')).to eql 'getBarFooId'
-      expect(subject.build('GET', '/bar_foo{id}')).to eql 'getBarFooId'
-      expect(subject.build('GET', '/bar-foo{id}')).to eql 'getBarFooId'
-      expect(subject.build('GET', '/simple_test/bar-foo{id}')).to eql 'getSimpleTestBarFooId'
+    let(:route) { Grape::Route.new({ method: method })}
+
+    describe 'GET' do
+      let(:method) { 'GET' }
+      specify { expect(subject.build(route)).to eql 'get' }
+    end
+    describe 'get' do
+      let(:method) { 'get' }
+      specify { expect(subject.build(route)).to eql 'get' }
+    end
+    describe ':get' do
+      let(:method) { :get }
+      specify { expect(subject.build(route)).to eql 'get' }
+    end
+    describe 'GET with path foo' do
+      let(:method) { 'GET' }
+      specify { expect(subject.build(route, 'foo')).to eql 'getFoo' }
+    end
+    describe 'GET with path /foo' do
+      let(:method) { 'GET' }
+      specify { expect(subject.build(route, '/foo')).to eql 'getFoo' }
+    end
+    describe 'GET with path bar/foo' do
+      let(:method) { 'GET' }
+      specify { expect(subject.build(route, 'bar/foo')).to eql 'getBarFoo' }
+    end
+    describe 'GET with path bar/foo{id}' do
+      let(:method) { 'GET' }
+      specify { expect(subject.build(route, 'bar/foo{id}')).to eql 'getBarFooId' }
+    end
+    describe 'GET with path /bar_foo{id}' do
+      let(:method) { 'GET' }
+      specify { expect(subject.build(route, '/bar_foo{id}')).to eql 'getBarFooId' }
+    end
+    describe 'GET with path /bar-foo{id}' do
+      let(:method) { 'GET' }
+      specify { expect(subject.build(route, '/bar-foo{id}')).to eql 'getBarFooId' }
+    end
+    describe 'GET with path /simple_test/bar-foo{id}' do
+      let(:method) { 'GET' }
+      specify { expect(subject.build(route, '/simple_test/bar-foo{id}')).to eql 'getSimpleTestBarFooId' }
     end
   end
 

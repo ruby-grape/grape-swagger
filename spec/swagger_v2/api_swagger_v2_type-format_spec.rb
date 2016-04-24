@@ -83,20 +83,20 @@ describe 'type format settings' do
 
   specify do
     expect(subject['paths']['/request_types']['post']['parameters']).to eql([
-      {"in"=>"formData", "name"=>"param_integer", "description"=>nil, "required"=>true, "type"=>"integer", "format"=>"int32"},
-      {"in"=>"formData", "name"=>"param_long", "description"=>nil, "required"=>true, "type"=>"integer", "format"=>"int64"},
-      {"in"=>"formData", "name"=>"param_float", "description"=>nil, "required"=>true, "type"=>"number", "format"=>"float"},
-      {"in"=>"formData", "name"=>"param_double", "description"=>nil, "required"=>true, "type"=>"number", "format"=>"double"},
-      {"in"=>"formData", "name"=>"param_string", "description"=>nil, "required"=>false, "type"=>"string"},
-      {"in"=>"formData", "name"=>"param_symbol", "description"=>nil, "required"=>false, "type"=>"string"},
-      {"in"=>"formData", "name"=>"param_date", "description"=>nil, "required"=>true, "type"=>"string", "format"=>"date"},
-      {"in"=>"formData", "name"=>"param_date_time", "description"=>nil, "required"=>true, "type"=>"string", "format"=>"date-time"},
-      {"in"=>"formData", "name"=>"param_time", "description"=>nil, "required"=>true, "type"=>"string", "format"=>"date-time"},
-      {"in"=>"formData", "name"=>"param_password", "description"=>nil, "required"=>true, "type"=>"string", "format"=>"password"},
-      {"in"=>"formData", "name"=>"param_email", "description"=>nil, "required"=>true, "type"=>"string", "format"=>"email"},
-      {"in"=>"formData", "name"=>"param_boolean", "description"=>nil, "required"=>false, "type"=>"boolean"},
-      {"in"=>"formData", "name"=>"param_file", "description"=>nil, "required"=>false, "type"=>"file"},
-      {"in"=>"formData", "name"=>"param_json", "description"=>nil, "required"=>false, "type"=>"json"}
+      {"in"=>"formData", "name"=>"param_integer", "required"=>true, "type"=>"integer", "format"=>"int32"},
+      {"in"=>"formData", "name"=>"param_long", "required"=>true, "type"=>"integer", "format"=>"int64"},
+      {"in"=>"formData", "name"=>"param_float", "required"=>true, "type"=>"number", "format"=>"float"},
+      {"in"=>"formData", "name"=>"param_double", "required"=>true, "type"=>"number", "format"=>"double"},
+      {"in"=>"formData", "name"=>"param_string", "required"=>false, "type"=>"string"},
+      {"in"=>"formData", "name"=>"param_symbol", "required"=>false, "type"=>"string"},
+      {"in"=>"formData", "name"=>"param_date", "required"=>true, "type"=>"string", "format"=>"date"},
+      {"in"=>"formData", "name"=>"param_date_time", "required"=>true, "type"=>"string", "format"=>"date-time"},
+      {"in"=>"formData", "name"=>"param_time", "required"=>true, "type"=>"string", "format"=>"date-time"},
+      {"in"=>"formData", "name"=>"param_password", "required"=>true, "type"=>"string", "format"=>"password"},
+      {"in"=>"formData", "name"=>"param_email", "required"=>true, "type"=>"string", "format"=>"email"},
+      {"in"=>"formData", "name"=>"param_boolean", "required"=>false, "type"=>"boolean"},
+      {"in"=>"formData", "name"=>"param_file", "required"=>false, "type"=>"file"},
+      {"in"=>"formData", "name"=>"param_json", "required"=>false, "type"=>"json"}
     ])
   end
 

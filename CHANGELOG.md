@@ -2,6 +2,8 @@
 
 #### Features
 
+* [#406](https://github.com/ruby-grape/grape-swagger/pull/406): force usage of entities for response definition [issue #385](https://github.com/ruby-grape/grape-swagger/issues/385) - [@LeFnord](https://github.com/LeFnord).
+
 #### Fixes
 
 * [#405](https://github.com/ruby-grape/grape-swagger/pull/405): corrects documentation of versions [issue #403](https://github.com/ruby-grape/grape-swagger/issues/403) - [@LeFnord](https://github.com/LeFnord).

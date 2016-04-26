@@ -90,8 +90,7 @@ RSpec.shared_context "swagger example" do
             "operationId"=>"getV3OtherThingElements",
             "x-amazon-apigateway-auth"=>{"type"=>"none"},
             "x-amazon-apigateway-integration"=>{"type"=>"aws", "uri"=>"foo_bar_uri", "httpMethod"=>"get"}
-          }
-        },
+        }},
         "/thing"=>{
           "get"=>{
             "description"=>"This gets Things.",
@@ -102,7 +101,7 @@ RSpec.shared_context "swagger example" do
               {"in"=>"formData", "name"=>"links", "type"=>"array", "items"=>{"type"=>"link"}, "required"=>false},
               {"in"=>"query", "name"=>"others", "type"=>"text", "required"=>false}
             ],
-            "responses"=>{"200"=>{"description"=>"This gets Things.", "schema"=>{"$ref"=>"#/definitions/Thing"}}, "401"=>{"description"=>"Unauthorized", "schema"=>{"$ref"=>"#/definitions/ApiError"}}},
+            "responses"=>{"200"=>{"description"=>"This gets Things."}, "401"=>{"description"=>"Unauthorized", "schema"=>{"$ref"=>"#/definitions/ApiError"}}},
             "tags"=>["thing"],
             "operationId"=>"getThing"
           },
@@ -117,14 +116,13 @@ RSpec.shared_context "swagger example" do
             "responses"=>{"201"=>{"description"=>"This creates Thing.", "schema"=>{"$ref"=>"#/definitions/Something"}}, "422"=>{"description"=>"Unprocessible Entity"}},
             "tags"=>["thing"],
             "operationId"=>"postThing"
-          }
-        },
+        }},
         "/thing/{id}"=>{
           "get"=>{
             "description"=>"This gets Thing.",
             "produces"=>["application/json"],
             "parameters"=>[{"in"=>"path", "name"=>"id", "type"=>"integer", "format"=>"int32", "required"=>true}],
-            "responses"=>{"200"=>{"description"=>"getting a single thing", "schema"=>{"$ref"=>"#/definitions/Thing"}}, "401"=>{"description"=>"Unauthorized"}},
+            "responses"=>{"200"=>{"description"=>"getting a single thing"}, "401"=>{"description"=>"Unauthorized"}},
             "tags"=>["thing"],
             "operationId"=>"getThingId"
           },
@@ -148,8 +146,7 @@ RSpec.shared_context "swagger example" do
             "responses"=>{"200"=>{"description"=>"This deletes Thing.", "schema"=>{"$ref"=>"#/definitions/Something"}}},
             "tags"=>["thing"],
             "operationId"=>"deleteThingId"
-          }
-        },
+        }},
         "/thing2"=>{
           "get"=>{
             "description"=>"This gets Things.",
@@ -157,8 +154,7 @@ RSpec.shared_context "swagger example" do
             "responses"=>{"200"=>{"description"=>"get Horses", "schema"=>{"$ref"=>"#/definitions/Something"}}, "401"=>{"description"=>"HorsesOutError", "schema"=>{"$ref"=>"#/definitions/ApiError"}}},
             "tags"=>["thing2"],
             "operationId"=>"getThing2"
-          }
-        },
+        }},
         "/dummy/{id}"=>{
           "delete"=>{
             "description"=>"dummy route.",
@@ -167,32 +163,32 @@ RSpec.shared_context "swagger example" do
             "responses"=>{"204"=>{"description"=>"dummy route."}, "401"=>{"description"=>"Unauthorized"}},
             "tags"=>["dummy"],
             "operationId"=>"deleteDummyId"
-          }
-        }
-      },
+      }}},
       "definitions"=>{
         "QueryInput"=>{
           "type"=>"object",
           "properties"=>{"elements"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/QueryInputElement"}, "description"=>"Set of configuration"}},
-          "description"=>"nested route inside namespace"},
+          "description"=>"nested route inside namespace"
+        },
         "QueryInputElement"=>{
           "type"=>"object",
-          "properties"=>{"key"=>{"type"=>"string", "description"=>"Name of parameter"}, "value"=>{"type"=>"string", "description"=>"Value of parameter"}}},
-        "Thing"=>{
-          "type"=>"object",
-          "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}, "text"=>{"type"=>"string"}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}},
-          "description"=>"This gets Thing."},
+          "properties"=>{"key"=>{"type"=>"string", "description"=>"Name of parameter"}, "value"=>{"type"=>"string", "description"=>"Value of parameter"}}
+        },
         "ApiError"=>{
           "type"=>"object",
           "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32", "description"=>"status code"}, "message"=>{"type"=>"string", "description"=>"error message"}},
-          "description"=>"This gets Things."},
+          "description"=>"This gets Things."
+        },
         "Something"=>{
           "type"=>"object",
-          "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32", "description"=>"Identity of Something"}, "text"=>{"type"=>"string", "description"=>"Content of something."}, "links"=>{"type"=>"link"}, "others"=>{"type"=>"text"}},
+          "properties"=>{
+            "id"=>{"type"=>"integer", "format"=>"int32", "description"=>"Identity of Something"},
+            "text"=>{"type"=>"string", "description"=>"Content of something."},
+            "links"=>{"type"=>"link"},
+            "others"=>{"type"=>"text"}
+          },
           "description"=>"This gets Things."
-        }
-      }
-    }
+    }}}
   end
 
   let(:http_verbs) { %w[get post put delete]}

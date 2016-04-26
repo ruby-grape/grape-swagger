@@ -45,44 +45,39 @@ describe 'response' do
       JSON.parse(last_response.body)
     end
     specify do
-      expect(subject).to eql({
-        "info"=>{"title"=>"API title", "version"=>"v1"},
-        "swagger"=>"2.0",
-        "produces"=>["application/json"],
-        "host"=>"example.org",
-        "tags"=>[
-          {"name"=>"params_response", "description"=>"Operations about params_responses"},
-          {"name"=>"entity_response", "description"=>"Operations about entity_responses"},
-          {"name"=>"nested_type", "description"=>"Operations about nested_types"}
-        ],
-        "paths"=>{
-          "/nested_type"=>{
-            "get"=>{
-              "description"=>"This returns something",
-              "produces"=>["application/json"],
-              "responses"=>{
-                "200"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/UseItemResponseAsType"}},
-                "400"=>{"description"=>"NotFound", "schema"=>{"$ref"=>"#/definitions/ApiError"}}
-              },
-              "tags"=>["nested_type"],
-              "operationId"=>"getNestedType"
-        }}},
-        "definitions"=>{
-          "ResponseItem"=>{
-            "type"=>"object",
-            "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}, "name"=>{"type"=>"string"}}
+      expect(subject['paths']['/nested_type']['get']).to eql({
+        'description'=>'This returns something',
+        'produces'=>['application/json'],
+        'responses'=>{
+          '200'=>{'description'=>'This returns something', 'schema'=>{'$ref'=>'#/definitions/UseItemResponseAsType'}},
+          '400'=>{'description'=>'NotFound', 'schema'=>{'$ref'=>'#/definitions/ApiError'}}
+        },
+        'tags'=>['nested_type'],
+        'operationId'=>'getNestedType'
+      })
+      expect(subject['definitions']).to eql({
+        'ResponseItem'=>{
+          'type'=>'object',
+          'properties'=>{
+            'id'=>{'type'=>'integer', 'format'=>'int32'},
+            'name'=>{'type'=>'string'}
+          }
+        },
+        'UseItemResponseAsType'=>{
+          'type'=>'object',
+          'properties'=>{
+            'description'=>{'type'=>'string'},
+            'responses'=>{'$ref'=>'#/definitions/ResponseItem'}
           },
-          "UseItemResponseAsType"=>{
-            "type"=>"object",
-            "properties"=>{"description"=>{"type"=>"string"}, "responses"=>{"$ref"=>"#/definitions/ResponseItem"}},
-            "description"=>"This returns something"
-          },
-          "ApiError"=>{
-            "type"=>"object",
-            "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}},
-            "description"=>"This returns something"
-          }}
-        })
+          'description'=>'This returns something'
+        },
+        'ApiError'=>{
+          'type'=>'object',
+          'properties'=>{
+            'code'=>{'type'=>'integer', 'format'=>'int32'},
+            'message'=>{'type'=>'string'}},
+            'description'=>'This returns something'
+      }})
     end
   end
 
@@ -93,40 +88,36 @@ describe 'response' do
     end
 
     specify do
-      expect(subject).to eql({
-        "info"=>{"title"=>"API title", "version"=>"v1"},
-        "swagger"=>"2.0",
-        "produces"=>["application/json"],
-        "host"=>"example.org",
-        "tags" => [
-          {"name"=>"params_response", "description"=>"Operations about params_responses"},
-          {"name"=>"entity_response", "description"=>"Operations about entity_responses"},
-          {"name"=>"nested_type", "description"=>"Operations about nested_types"}
-        ],
-        "paths"=>{
-          "/entity_response"=>{
-            "get"=>{
-              "description"=>"This returns something",
-              "produces"=>["application/json"],
-              "tags"=>["entity_response"],
-              "operationId"=>"getEntityResponse",
-              "responses"=>{
-                "200"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/UseResponse"}},
-                "400"=>{"description"=>"NotFound", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}}}},
-        "definitions"=>{
-          "ResponseItem"=>{
-            "type"=>"object",
-            "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32"}, "name"=>{"type"=>"string"}}},
-          "UseResponse"=>{
-            "type"=>"object",
-            "properties"=>{"description"=>{"type"=>"string"}, "$responses"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/ResponseItem"}}},
-            "description"=>"This returns something"
-          },
-          "ApiError"=>{
-            "type"=>"object",
-            "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}},
-            "description"=>"This returns something"
+      expect(subject['paths']['/entity_response']['get']).to eql({
+        'description'=>'This returns something',
+        'produces'=>['application/json'],
+        'responses'=>{
+          '200'=>{'description'=>'This returns something', 'schema'=>{'$ref'=>'#/definitions/UseResponse'}},
+          '400'=>{'description'=>'NotFound', 'schema'=>{'$ref'=>'#/definitions/ApiError'}}
+        },
+        'tags'=>['entity_response'],
+        'operationId'=>'getEntityResponse'
+      })
+      expect(subject['definitions']).to eql({
+        'ResponseItem'=>{
+          'type'=>'object',
+          'properties'=>{
+            'id'=>{'type'=>'integer', 'format'=>'int32'},
+            'name'=>{'type'=>'string'}
           }
+        },
+        'UseResponse'=>{
+          'type'=>'object',
+          'properties'=>{
+            'description'=>{'type'=>'string'},
+            '$responses'=>{'type'=>'array', 'items'=>{'$ref'=>'#/definitions/ResponseItem'}}
+          },
+          'description'=>'This returns something'
+        },
+        'ApiError'=>{
+          'type'=>'object',
+          'properties'=>{'code'=>{'type'=>'integer', 'format'=>'int32'}, 'message'=>{'type'=>'string'}},
+          'description'=>'This returns something'
       }})
     end
   end
@@ -138,44 +129,27 @@ describe 'response' do
     end
 
     specify do
-      expect(subject).to eql({
-        "info"=>{"title"=>"API title", "version"=>"v1"},
-        "swagger"=>"2.0",
-        "produces"=>["application/json"],
-        "host"=>"example.org",
-        "tags" => [
-          {"name"=>"params_response", "description"=>"Operations about params_responses"},
-          {"name"=>"entity_response", "description"=>"Operations about entity_responses"},
-          {"name"=>"nested_type", "description"=>"Operations about nested_types"}
+      expect(subject['paths']['/params_response']['post']).to eql({
+        'description'=>'This returns something',
+        'produces'=>['application/json'],
+        'consumes'=>['application/json'],
+        'parameters'=>[
+          {'in'=>'formData', 'name'=>'description', 'type'=>'string', 'required'=>false},
+          {'in'=>'formData', 'name'=>'$responses', 'type'=>'array', 'items'=>{'type'=>'string'}, 'required'=>false}
         ],
-        "paths"=>{
-          "/params_response"=>{
-            "post"=>{
-              "description"=>"This returns something",
-              "produces"=>["application/json"],
-              "consumes"=>["application/json"],
-              "parameters"=>[
-                {"in"=>"formData", "name"=>"description", "type"=>"string", "required"=>false},
-                {"in"=>"formData", "name"=>"$responses", "required"=>false, "type"=>"array", "items"=>{"type"=>"string"}}],
-              "tags"=>["params_response"],
-              "operationId"=>"postParamsResponse",
-              "responses"=>{
-                "201"=>{"description"=>"This returns something", "schema"=>{"$ref"=>"#/definitions/ParamsResponse"}},
-                "400"=>{"description"=>"NotFound", "schema"=>{"$ref"=>"#/definitions/ApiError"}}}
-        }}},
-        "definitions"=>{
-          "ParamsResponse"=>{
-            "type"=>"object",
-            "properties"=>{"description"=>{"type"=>"string"}, "$responses"=>{"type"=>"string"}},
-            "description"=>"This returns something"
-          },
-          "ApiError"=>{
-            "type"=>"object",
-            "properties"=>{"code"=>{"type"=>"integer", "format"=>"int32"}, "message"=>{"type"=>"string"}},
-            "description"=>"This returns something"
-          }
+        'responses'=>{
+          '201'=>{'description'=>'This returns something'},
+          '400'=>{'description'=>'NotFound', 'schema'=>{'$ref'=>'#/definitions/ApiError'}}
+        },
+        'tags'=>['params_response'],
+        'operationId'=>'postParamsResponse'
+      })
+      expect(subject['definitions']).to eql({
+        'ApiError'=>{
+          'type'=>'object',
+          'properties'=>{'code'=>{'type'=>'integer', 'format'=>'int32'}, 'message'=>{'type'=>'string'}},
+          'description'=>'This returns something'
       }})
     end
   end
-
 end

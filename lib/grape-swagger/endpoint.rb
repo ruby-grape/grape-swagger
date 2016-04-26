@@ -89,13 +89,12 @@ module Grape
         @item, path = GrapeSwagger::DocMethods::PathString.build(route.route_path, options)
         @entity = route.route_entity || route.route_success
 
-        method = route.route_method.downcase.to_sym
-        request_params = method_object(route, options, path)
+        verb, method_object = method_object(route, options, path)
 
         if @paths.key?(path.to_sym)
-          @paths[path.to_sym][method] = request_params
+          @paths[path.to_sym][verb] = method_object
         else
-          @paths[path.to_sym] = { method => request_params }
+          @paths[path.to_sym] = { verb => method_object }
         end
 
         GrapeSwagger::DocMethods::Extensions.add(@paths[path.to_sym], @definitions, route)
@@ -112,6 +111,8 @@ module Grape
       method[:tags]        = tag_object(route, options[:version])
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method.delete_if { |_, value| value.blank? }
+
+      [route.route_method.downcase.to_sym, method]
     end
 
     def description_object(route, markdown)
@@ -200,19 +201,7 @@ module Grape
       unless declared_params.nil? && route.route_headers.nil?
         request_params = parse_request_params(required)
       end
-      if !exposed.empty?
-        exposed_params = exposed.each_with_object({}) { |x, memo| memo[x.first] = x.last }
-        properties = parse_response_params(exposed_params)
-      else
-        properties = parse_response_params(required)
-      end
 
-      key = model_name(@entity || @item)
-
-      unless properties.empty? || (route.route_method == 'DELETE' && !@entity)
-        @definitions[key] = { type: 'object', properties: properties } unless @definitions.key?(key)
-        @definitions[key][:properties].merge!(properties) if @definitions.key?(key)
-      end
       return route.route_params if route.route_params.present? && !route.route_settings[:declared_params].present?
       request_params || {}
     end

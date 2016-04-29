@@ -29,7 +29,7 @@ describe 'docs mounted separately from api' do
   it 'retrieves docs for actual api class' do
     get '/swagger_doc.json'
     expect(JSON.parse(last_response.body)).to eq({
-      "info"=>{"title"=>"API title", "version"=>"v1"},
+      "info"=>{"title"=>"API title", "version"=>"0.0.1"},
       "swagger"=>"2.0",
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
@@ -51,7 +51,7 @@ describe 'docs mounted separately from api' do
   it 'retrieves docs for endpoint in actual api class' do
     get '/swagger_doc/simple.json'
     expect(JSON.parse(last_response.body)).to eq({
-      "info"=>{"title"=>"API title", "version"=>"v1"},
+      "info"=>{"title"=>"API title", "version"=>"0.0.1"},
       "swagger"=>"2.0",
       "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}],
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],

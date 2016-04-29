@@ -67,7 +67,7 @@ RSpec.shared_context "swagger example" do
         "termsOfServiceUrl"=>"www.The-URL-of-the-terms-and-service.com",
         "contact"=>{"name"=>"Contact name", "email"=>"Contact@email.com", "url"=>"Contact URL"},
         "license"=>{"name"=>"The name of the license.", "url"=>"www.The-URL-of-the-license.org"},
-        "version"=>"v1"
+        "version"=>"0.0.1"
       },
       "swagger"=>"2.0",
       "produces"=>["application/json"],

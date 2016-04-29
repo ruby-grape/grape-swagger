@@ -91,7 +91,7 @@ module GrapeSwagger
       {
         info: {},
         models: [],
-        api_version: 'v1',
+        doc_version: '0.0.1',
         target_class: nil,
         mount_path: '/swagger_doc',
         host: nil,

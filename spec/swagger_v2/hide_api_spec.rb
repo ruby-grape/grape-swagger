@@ -36,7 +36,7 @@ describe 'a hide mounted api' do
 
   it "retrieves swagger-documentation that doesn't include hidden endpoints" do
     expect(subject).to eq({
-      "info"=>{"title"=>"API title", "version"=>"v1"},
+      "info"=>{"title"=>"API title", "version"=>"0.0.1"},
       "swagger"=>"2.0",
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
@@ -92,7 +92,7 @@ describe 'a hide mounted api with same namespace' do
   it 'retrieves swagger-documentation on /swagger_doc' do
     get '/swagger_doc.json'
     expect(JSON.parse(last_response.body)).to eq({
-      "info"=>{"title"=>"API title", "version"=>"v1"},
+      "info"=>{"title"=>"API title", "version"=>"0.0.1"},
       "swagger"=>"2.0",
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",
@@ -110,7 +110,7 @@ describe 'a hide mounted api with same namespace' do
   it "retrieves the documentation for mounted-api that doesn't include hidden endpoints" do
     get '/swagger_doc/simple.json'
     expect(JSON.parse(last_response.body)).to eq({
-      "info"=>{"title"=>"API title", "version"=>"v1"},
+      "info"=>{"title"=>"API title", "version"=>"0.0.1"},
       "swagger"=>"2.0",
       "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "host"=>"example.org",

@@ -46,7 +46,7 @@ describe 'response' do
     end
     specify do
       expect(subject).to eql({
-        "info"=>{"title"=>"API title", "version"=>"v1"},
+        "info"=>{"title"=>"API title", "version"=>"0.0.1"},
         "swagger"=>"2.0",
         "produces"=>["application/json"],
         "host"=>"example.org",
@@ -94,7 +94,7 @@ describe 'response' do
 
     specify do
       expect(subject).to eql({
-        "info"=>{"title"=>"API title", "version"=>"v1"},
+        "info"=>{"title"=>"API title", "version"=>"0.0.1"},
         "swagger"=>"2.0",
         "produces"=>["application/json"],
         "host"=>"example.org",
@@ -139,7 +139,7 @@ describe 'response' do
 
     specify do
       expect(subject).to eql({
-        "info"=>{"title"=>"API title", "version"=>"v1"},
+        "info"=>{"title"=>"API title", "version"=>"0.0.1"},
         "swagger"=>"2.0",
         "produces"=>["application/json"],
         "host"=>"example.org",

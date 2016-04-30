@@ -18,7 +18,7 @@ describe 'global configuration stuff' do
         end
 
         add_swagger_documentation format: :json,
-                                  api_version: '23',
+                                  doc_version: '23',
                                   schemes: 'https',
                                   host: -> { 'another.host.com' },
                                   base_path: -> { 'somewhere/over/the/rainbow' },
@@ -41,6 +41,7 @@ describe 'global configuration stuff' do
     end
 
     specify do
+      expect(subject['info']['version']).to eql '23'
       expect(subject['host']).to eql 'another.host.com'
       expect(subject['basePath']).to eql 'somewhere/over/the/rainbow'
       expect(subject['paths'].keys.first).to eql '/somewhere/over/the/rainbow/v3/configuration'

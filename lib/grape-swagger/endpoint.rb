@@ -20,7 +20,7 @@ module Grape
     # required keys for SwaggerObject
     def swagger_object(target_class, request, options)
       {
-        info:           info_object(options[:info].merge(version: options[:api_version])),
+        info:           info_object(options[:info].merge(version: options[:doc_version])),
         swagger:        '2.0',
         produces:       content_types_for(target_class),
         authorizations: options[:authorizations],
@@ -109,7 +109,7 @@ module Grape
       method[:consumes]    = consumes_object(route, options[:format])
       method[:parameters]  = params_object(route)
       method[:responses]   = response_object(route, options[:markdown])
-      method[:tags]        = tag_object(route, options[:version])
+      method[:tags]        = tag_object(route, options[:version].to_s)
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method.delete_if { |_, value| value.blank? }
     end

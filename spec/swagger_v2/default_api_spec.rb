@@ -22,7 +22,7 @@ describe 'Default API' do
     it 'documents api' do
       expect(subject).to eq(
         {
-          "info"=>{"title"=>"API title", "version"=>"v1"},
+          "info"=>{"title"=>"API title", "version"=>"0.0.1"},
           "swagger"=>"2.0",
           "produces"=>["application/json"],
           "host"=>"example.org",
@@ -66,7 +66,7 @@ describe 'Default API' do
 
     it 'documents endpoint' do
       expect(subject).to eq({
-        "info"=>{"title"=>"API title", "version"=>"v1"},
+        "info"=>{"title"=>"API title", "version"=>"0.0.1"},
         "swagger"=>"2.0",
         "produces"=>["application/json"],
         "host"=>"example.org",

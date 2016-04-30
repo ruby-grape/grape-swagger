@@ -123,8 +123,8 @@ end
 * [mount_path](#mount_path)
 * [add_base_path](#add_base_path)
 * [add_version](#add_version)
+* [doc_version](#doc_version)
 * [markdown](#markdown)
-* [api_version](#api_version)
 * [models](#models)
 * [hide_documentation_path](#hide_documentation_path)
 * [info](#info)
@@ -139,15 +139,15 @@ You can pass a hash with optional configuration settings to ```add_swagger_docum
 
 <a name="host" />
 #### host:
-Sets explicit the `host`
+Sets explicit the `host`, default would be taken from `request`.
 ```ruby
 add_swagger_documentation \
-   host: 'www.no-example.com'
+   host: 'www.example.com'
 ```
 
 <a name="base_path" />
 #### base_path:
-Base path of the API that's being exposed.
+Base path of the API that's being exposed, default would be taken from `request`.
 ```ruby
 add_swagger_documentation \
    base_path: '/super/api'
@@ -155,26 +155,35 @@ add_swagger_documentation \
 
 <a name="mount_path" />
 #### mount_path:
-The path where the API documentation is loaded, default is `/swagger_doc`.
+The path where the API documentation is loaded, default is: `/swagger_doc`.
 ```ruby
 add_swagger_documentation \
    mount_path: '/docu'
 ```
 
 #### add_base_path:
-Add `basePath` key to the JSON documentation, default is `false`.
+Add `basePath` key to the documented path keys, default is: `false`.
 ```ruby
 add_swagger_documentation \
    add_base_path: true
 ```
 
 #### add_version:
-Add `version` key to the JSON documentation, default is `true`.
+Add `version` key to the documented path keys, default is: `true`,  
+here the version is the API version, specified by `grape` in [`path`](https://github.com/ruby-grape/grape/#path)
+
 ```ruby
 add_swagger_documentation \
    add_version: false
 ```
 
+<a name="doc_version" />
+#### doc_version:
+Specify the version of the documentation at [info section](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#info-object), default is: `'0.0.1'`
+```ruby
+add_swagger_documentation \
+   doc_version: '0.0.1'
+```
 
 <a name="markdown" />
 #### markdown:
@@ -189,15 +198,6 @@ or alternative
 add_swagger_documentation \
   markdown: GrapeSwagger::Markdown::RedcarpetAdapter.new
 ```
-
-<a name="api_version" />
-#### api_version:
-```ruby
-add_swagger_documentation \
-   api_version: 'v1'
-```
-
-Version of the API that's being exposed.
 
 
 #### *authorizations*:

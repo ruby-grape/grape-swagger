@@ -14,7 +14,7 @@ module GrapeSwagger
           item = path.gsub(%r{/{(.+?)}}, '').split('/').last.singularize.underscore.camelize || 'Item'
 
           if options[:version] && options[:add_version]
-            path.sub!('{version}', options[:version])
+            path.sub!('{version}', options[:version].to_s)
           else
             path.sub!('/{version}', '')
           end

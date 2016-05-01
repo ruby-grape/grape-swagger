@@ -4,8 +4,12 @@ module GrapeSwagger
       class << self
         def to_definition(paths, definitions)
           @definitions = definitions
-          find_post_put(paths) do |path|
-            find_definition_and_params(path)
+
+          find_post_put(paths) do |method_definition|
+            verb = method_definition.keys.first
+            method_object = method_definition[verb]
+
+            find_definition_and_params(method_object, verb)
           end
         end
 
@@ -16,25 +20,29 @@ module GrapeSwagger
           end
         end
 
-        def find_definition_and_params(path)
-          path.keys.each do |verb|
-            params = path[verb][:parameters]
+        def find_definition_and_params(path, verb)
+          params = path[:parameters]
 
-            next if params.nil?
-            next unless should_move?(params)
+          return if params.nil?
+          return unless should_move?(params)
 
-            unify!(params)
+          unify!(params)
 
-            status_code = GrapeSwagger::DocMethods::StatusCodes.get[verb.to_sym][:code]
-            response = path[verb][:responses][status_code]
+          status_code = GrapeSwagger::DocMethods::StatusCodes.get[verb.to_sym][:code]
+          response = path[:responses][status_code]
+
+          if response[:schema] && response[:schema]['$ref']
             referenced_definition = parse_model(response[:schema]['$ref'])
-
             name = build_definition(referenced_definition, verb)
-            move_params_to_new(name, params)
-
-            @definitions[name][:description] = path[verb][:description]
-            path[verb][:parameters] << build_body_parameter(response.dup, name)
+          else
+            referenced_definition = path[:operationId]
+            name = build_definition(referenced_definition)
           end
+
+          move_params_to_new(name, params)
+
+          @definitions[name][:description] = path[:description]
+          path[:parameters] << build_body_parameter(response.dup, name)
         end
 
         def move_params_to_new(name, params)
@@ -88,9 +96,10 @@ module GrapeSwagger
         private
 
         def build_body_parameter(response, name = false)
+          entity = response[:schema] ? parse_model(response[:schema]['$ref']) : name
           body_param = {}
           body_param.tap do |x|
-            x[:name] = parse_model(response[:schema]['$ref'])
+            x[:name] = entity
             x[:in] = 'body'
             x[:required] = true
             x[:schema] = { '$ref' => response[:schema]['$ref'] } unless name

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'hide documentation path' do
-  include_context "the api entities"
+  include_context 'the api entities'
 
   before :all do
     module TheApi
@@ -9,24 +9,24 @@ describe 'hide documentation path' do
         format :json
 
         desc 'This returns something',
-          params: Entities::UseResponse.documentation,
-          failure: [{code: 400, message: 'NotFound', model: Entities::ApiError}]
+             params: Entities::UseResponse.documentation,
+             failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         params do
           requires :foo, type: Integer
         end
         get '/params_response' do
-          { "declared_params" => declared(params) }
+          { 'declared_params' => declared(params) }
         end
 
         desc 'This returns something',
-          entity: Entities::UseResponse,
-          failure: [{code: 400, message: 'NotFound', model: Entities::ApiError}]
+             entity: Entities::UseResponse,
+             failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         get '/entity_response' do
-          { "declared_params" => declared(params) }
+          { 'declared_params' => declared(params) }
         end
 
         desc 'This returns something',
-          failure: [{code: 400, message: 'NotFound', model: Entities::ApiError}]
+             failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         get '/present_response' do
           foo = OpenStruct.new id: 1, name: 'bar'
           something = OpenStruct.new description: 'something', item: foo
@@ -42,7 +42,7 @@ describe 'hide documentation path' do
     TheApi::HideDocumentationApi
   end
 
-  describe "shows documentation paths" do
+  describe 'shows documentation paths' do
     subject do
       get '/swagger_doc'
       JSON.parse(last_response.body)
@@ -52,5 +52,4 @@ describe 'hide documentation path' do
       expect(subject['paths'].keys).to include '/swagger_doc', '/swagger_doc/{name}'
     end
   end
-
 end

@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'global configuration stuff' do
-
   before :all do
     module TheApi
       class ConfigurationApi < Grape::API
@@ -9,12 +8,12 @@ describe 'global configuration stuff' do
         version 'v3', using: :path
 
         desc 'This returns something',
-          failure: [{code: 400, message: 'NotFound'}]
+             failure: [{ code: 400, message: 'NotFound' }]
         params do
           requires :foo, type: Integer
         end
         get :configuration do
-          { "declared_params" => declared(params) }
+          { 'declared_params' => declared(params) }
         end
 
         add_swagger_documentation format: :json,
@@ -25,7 +24,6 @@ describe 'global configuration stuff' do
                                   mount_path: 'documentation',
                                   add_base_path: true,
                                   add_version: true
-
       end
     end
   end
@@ -34,7 +32,7 @@ describe 'global configuration stuff' do
     TheApi::ConfigurationApi
   end
 
-  describe "shows documentation paths" do
+  describe 'shows documentation paths' do
     subject do
       get '/v3/documentation'
       JSON.parse(last_response.body)
@@ -48,5 +46,4 @@ describe 'global configuration stuff' do
       expect(subject['schemes']).to eql ['https']
     end
   end
-
 end

@@ -24,7 +24,7 @@ describe 'Float Params' do
 
   it 'converts float types' do
     expect(subject).to eq [
-      {"in"=>"formData", "name"=>"a_float", "type"=>"number", "required"=>true, "format"=>"float"}
+      { 'in' => 'formData', 'name' => 'a_float', 'type' => 'number', 'required' => true, 'format' => 'float' }
     ]
   end
 end

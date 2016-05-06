@@ -38,7 +38,7 @@ describe 'referenceEntity' do
           present kind, with: Entities::Kind
         end
 
-        add_swagger_documentation #models: [MyAPI::Entities::Something, MyAPI::Entities::Kind]
+        add_swagger_documentation # models: [MyAPI::Entities::Something, MyAPI::Entities::Kind]
       end
     end
   end
@@ -54,22 +54,22 @@ describe 'referenceEntity' do
 
   it 'should document specified models' do
     expect(subject['paths']['/kind']['get']['parameters']).to eq [{
-      "in"=>"query",
-      "name"=>"something",
-      "description"=>"something as parameter",
-      "type"=>"string",
-      "required"=>false,
-      "allowMultiple"=>false
+      'in' => 'query',
+      'name' => 'something',
+      'description' => 'something as parameter',
+      'type' => 'string',
+      'required' => false,
+      'allowMultiple' => false
     }]
 
     expect(subject['definitions'].keys).to include 'Something'
     expect(subject['definitions']['Something']).to eq(
-      "type"=>"object", "properties"=>{"text"=>{"type"=>"string"}}
+      'type' => 'object', 'properties' => { 'text' => { 'type' => 'string' } }
     )
 
     expect(subject['definitions'].keys).to include 'Kind'
     expect(subject['definitions']['Kind']).to eq(
-      "properties" => {"something"=>{"$ref"=>"#/definitions/Something"}}
+      'properties' => { 'something' => { '$ref' => '#/definitions/Something' } }
     )
   end
 end

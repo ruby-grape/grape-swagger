@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'host in the swagger_doc' do
-  include_context "the api entities"
+  include_context 'the api entities'
 
   before :all do
     module TheApi

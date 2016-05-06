@@ -1,15 +1,15 @@
 require 'spec_helper'
 
 describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `header`' do
-  include_context "the api entities"
+  include_context 'the api entities'
 
   before :all do
     module TheApi
       class NestedBodyParamTypeApi < Grape::API
         namespace :simple_nested_params do
           desc 'post in body with nested parameters',
-            detail: 'more details description',
-            success: TheApi::Entities::UseNestedWithAddress
+               detail: 'more details description',
+               success: TheApi::Entities::UseNestedWithAddress
           params do
             requires :name, type: String, documentation: { desc: 'name', in: 'body' }
             optional :address, type: Hash do
@@ -21,12 +21,12 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           end
 
           post '/in_body' do
-            { "declared_params" => declared(params) }
+            { 'declared_params' => declared(params) }
           end
 
           desc 'put in body with nested parameters',
-            detail: 'more details description',
-            success: TheApi::Entities::UseNestedWithAddress
+               detail: 'more details description',
+               success: TheApi::Entities::UseNestedWithAddress
           params do
             requires :id, type: Integer
             optional :name, type: String, documentation: { desc: 'name', in: 'body' }
@@ -39,13 +39,13 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           end
 
           put '/in_body/:id' do
-            { "declared_params" => declared(params) }
+            { 'declared_params' => declared(params) }
           end
         end
 
         namespace :multiple_nested_params do
           desc 'put in body with multiple nested parameters',
-            success: TheApi::Entities::UseNestedWithAddress
+               success: TheApi::Entities::UseNestedWithAddress
           params do
             requires :id, type: Integer
             optional :name, type: String, documentation: { desc: 'name', in: 'body' }
@@ -64,7 +64,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           end
 
           put '/in_body/:id' do
-            { "declared_params" => declared(params) }
+            { 'declared_params' => declared(params) }
           end
         end
 
@@ -84,68 +84,66 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
     end
 
     specify do
-      expect(subject['paths']['/simple_nested_params/in_body']['post']['parameters']).to eql([{
-        "name"=>"UseNestedWithAddress",
-        "in"=>"body",
-        "required"=>true,
-        "schema"=>{"$ref"=>"#/definitions/postRequestUseNestedWithAddress"}
-      }])
+      expect(subject['paths']['/simple_nested_params/in_body']['post']['parameters']).to eql(
+        [{
+          'name' => 'UseNestedWithAddress',
+          'in' => 'body',
+          'required' => true,
+          'schema' => { '$ref' => '#/definitions/postRequestUseNestedWithAddress' }
+        }])
     end
 
     specify do
-      expect(subject['definitions']['postRequestUseNestedWithAddress']).to eql({
-        "description"=>"post in body with nested parameters\n more details description",
-        "type"=>"object",
-        "properties"=>{
-          "address"=>{"$ref"=>"#/definitions/postRequestUseNestedWithAddressAddress"},
-          "name"=>{"type"=>"string", "description"=>"name"}
+      expect(subject['definitions']['postRequestUseNestedWithAddress']).to eql(
+        'description' => "post in body with nested parameters\n more details description",
+        'type' => 'object',
+        'properties' => {
+          'address' => { '$ref' => '#/definitions/postRequestUseNestedWithAddressAddress' },
+          'name' => { 'type' => 'string', 'description' => 'name' }
         },
-        "required"=>["name"]
-      })
-      expect(subject['definitions']['postRequestUseNestedWithAddressAddress']).to eql({
-        "description"=>"postRequestUseNestedWithAddress - address",
-        "type"=>"object",
-        "properties"=>{
-          "street"=>{"type"=>"string", "description"=>"street"},
-          "postcode"=>{"type"=>"string", "description"=>"postcode"},
-          "city"=>{"type"=>"string", "description"=>"city"},
-          "country"=>{"type"=>"string", "description"=>"country"}
+        'required' => ['name'])
+      expect(subject['definitions']['postRequestUseNestedWithAddressAddress']).to eql(
+        'description' => 'postRequestUseNestedWithAddress - address',
+        'type' => 'object',
+        'properties' => {
+          'street' => { 'type' => 'string', 'description' => 'street' },
+          'postcode' => { 'type' => 'string', 'description' => 'postcode' },
+          'city' => { 'type' => 'string', 'description' => 'city' },
+          'country' => { 'type' => 'string', 'description' => 'country' }
         },
-        "required"=>["street", "postcode", "city"]
-      })
+        'required' => %w(street postcode city))
     end
 
     specify do
-      expect(subject['paths']['/simple_nested_params/in_body/{id}']['put']['parameters']).to eql([
-        {"in"=>"path", "name"=>"id", "type"=>"integer", "format"=>"int32", "required"=>true},
-        {
-          "name"=>"UseNestedWithAddress",
-          "in"=>"body",
-          "required"=>true,
-          "schema"=>{"$ref"=>"#/definitions/putRequestUseNestedWithAddress"}
-        }
-      ])
+      expect(subject['paths']['/simple_nested_params/in_body/{id}']['put']['parameters']).to eql(
+        [
+          { 'in' => 'path', 'name' => 'id', 'type' => 'integer', 'format' => 'int32', 'required' => true },
+          {
+            'name' => 'UseNestedWithAddress',
+            'in' => 'body',
+            'required' => true,
+            'schema' => { '$ref' => '#/definitions/putRequestUseNestedWithAddress' }
+          }
+        ])
     end
 
     specify do
-      expect(subject['definitions']['putRequestUseNestedWithAddress']).to eql({
-        "description" => "put in body with nested parameters\n more details description",
-        "type"=>"object",
-        "properties"=>{
-          "address"=>{"$ref"=>"#/definitions/putRequestUseNestedWithAddressAddress"},
-          "id"=>{"type"=>"integer", "format"=>"int32", "readOnly"=>true},
-          "name"=>{"type"=>"string", "description"=>"name"}
-        }
-      })
-      expect(subject['definitions']['putRequestUseNestedWithAddressAddress']).to eql({
-        "description"=>"putRequestUseNestedWithAddress - address",
-        "type"=>"object",
-        "properties"=>{
-          "street"=>{"type"=>"string", "description"=>"street"},
-          "postcode"=>{"type"=>"string", "description"=>"postcode"},
-          "city"=>{"type"=>"string", "description"=>"city"},
-          "country"=>{"type"=>"string", "description"=>"country"}}
-      })
+      expect(subject['definitions']['putRequestUseNestedWithAddress']).to eql(
+        'description' => "put in body with nested parameters\n more details description",
+        'type' => 'object',
+        'properties' => {
+          'address' => { '$ref' => '#/definitions/putRequestUseNestedWithAddressAddress' },
+          'id' => { 'type' => 'integer', 'format' => 'int32', 'readOnly' => true },
+          'name' => { 'type' => 'string', 'description' => 'name' }
+        })
+      expect(subject['definitions']['putRequestUseNestedWithAddressAddress']).to eql(
+        'description' => 'putRequestUseNestedWithAddress - address',
+        'type' => 'object',
+        'properties' => {
+          'street' => { 'type' => 'string', 'description' => 'street' },
+          'postcode' => { 'type' => 'string', 'description' => 'postcode' },
+          'city' => { 'type' => 'string', 'description' => 'city' },
+          'country' => { 'type' => 'string', 'description' => 'country' } })
     end
   end
 
@@ -156,42 +154,42 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
     end
 
     specify do
-      expect(subject['paths']['/multiple_nested_params/in_body/{id}']['put']['parameters']).to eql([
-        {"in"=>"path", "name"=>"id", "type"=>"integer", "format"=>"int32", "required"=>true},
-        {"name"=>"UseNestedWithAddress", "in"=>"body", "required"=>true, "schema"=>{"$ref"=>"#/definitions/putRequestUseNestedWithAddress"}}
-      ])
+      expect(subject['paths']['/multiple_nested_params/in_body/{id}']['put']['parameters']).to eql(
+        [
+          { 'in' => 'path', 'name' => 'id', 'type' => 'integer', 'format' => 'int32', 'required' => true },
+          { 'name' => 'UseNestedWithAddress', 'in' => 'body', 'required' => true, 'schema' => { '$ref' => '#/definitions/putRequestUseNestedWithAddress' } }
+        ])
     end
 
     specify do
-      expect(subject['definitions']['putRequestUseNestedWithAddress']).to eql({
-        "description" => "put in body with multiple nested parameters",
-        "type"=>"object",
-        "properties"=>{
-          "address"=>{"$ref"=>"#/definitions/putRequestUseNestedWithAddressAddress"},
-          "delivery_address"=>{"$ref"=>"#/definitions/putRequestUseNestedWithAddressDeliveryAddress"},
-          "id"=>{"type"=>"integer", "format"=>"int32", "readOnly"=>true},
-          "name"=>{"type"=>"string", "description"=>"name"}
-      }})
-      expect(subject['definitions']['putRequestUseNestedWithAddressAddress']).to eql({
-        "description" => "putRequestUseNestedWithAddress - address",
-        "type"=>"object",
-        "properties"=>{
-          "street"=>{"type"=>"string", "description"=>"street"},
-          "postcode"=>{"type"=>"string", "description"=>"postcode"},
-          "city"=>{"type"=>"string", "description"=>"city"},
-          "country"=>{"type"=>"string", "description"=>"country"}
+      expect(subject['definitions']['putRequestUseNestedWithAddress']).to eql(
+        'description' => 'put in body with multiple nested parameters',
+        'type' => 'object',
+        'properties' => {
+          'address' => { '$ref' => '#/definitions/putRequestUseNestedWithAddressAddress' },
+          'delivery_address' => { '$ref' => '#/definitions/putRequestUseNestedWithAddressDeliveryAddress' },
+          'id' => { 'type' => 'integer', 'format' => 'int32', 'readOnly' => true },
+          'name' => { 'type' => 'string', 'description' => 'name' }
+        })
+      expect(subject['definitions']['putRequestUseNestedWithAddressAddress']).to eql(
+        'description' => 'putRequestUseNestedWithAddress - address',
+        'type' => 'object',
+        'properties' => {
+          'street' => { 'type' => 'string', 'description' => 'street' },
+          'postcode' => { 'type' => 'string', 'description' => 'postcode' },
+          'city' => { 'type' => 'string', 'description' => 'city' },
+          'country' => { 'type' => 'string', 'description' => 'country' }
         },
-        "required"=>["postcode"]
-      })
-      expect(subject['definitions']['putRequestUseNestedWithAddressDeliveryAddress']).to eql({
-        "description" => "putRequestUseNestedWithAddress - delivery_address",
-        "type"=>"object",
-        "properties"=>{
-          "street"=>{"type"=>"string", "description"=>"street"},
-          "postcode"=>{"type"=>"string", "description"=>"postcode"},
-          "city"=>{"type"=>"string", "description"=>"city"},
-          "country"=>{"type"=>"string", "description"=>"country"}
-      }})
+        'required' => ['postcode'])
+      expect(subject['definitions']['putRequestUseNestedWithAddressDeliveryAddress']).to eql(
+        'description' => 'putRequestUseNestedWithAddress - delivery_address',
+        'type' => 'object',
+        'properties' => {
+          'street' => { 'type' => 'string', 'description' => 'street' },
+          'postcode' => { 'type' => 'string', 'description' => 'postcode' },
+          'city' => { 'type' => 'string', 'description' => 'city' },
+          'country' => { 'type' => 'string', 'description' => 'country' }
+        })
     end
   end
 end

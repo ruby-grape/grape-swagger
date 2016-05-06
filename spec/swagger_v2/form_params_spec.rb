@@ -50,16 +50,16 @@ describe 'Form Params' do
 
   it 'retrieves the documentation form params' do
     expect(subject['paths'].length).to eq 2
-    expect(subject['paths'].keys).to include('/items','/items/{id}')
+    expect(subject['paths'].keys).to include('/items', '/items/{id}')
     expect(subject['paths']['/items'].keys).to include 'post'
     expect(subject['paths']['/items/{id}'].keys).to include('post', 'patch', 'put')
   end
 
   it 'treats Symbol parameter as form param' do
     expect(subject['paths']['/items/{id}']['post']['parameters']).to eq [
-      {"in"=>"path", "name"=>"id", "description"=>"id of item", "type"=>"integer", "required"=>true, "format"=>"int32"},
-      {"in"=>"formData", "name"=>"name", "description"=>"name of item", "type"=>"string", "required"=>true},
-      {"in"=>"formData", "name"=>"conditions", "description"=>"conditions of item", "type"=>"string", "required"=>false, "enum"=>["one", "two"]}
+      { 'in' => 'path', 'name' => 'id', 'description' => 'id of item', 'type' => 'integer', 'required' => true, 'format' => 'int32' },
+      { 'in' => 'formData', 'name' => 'name', 'description' => 'name of item', 'type' => 'string', 'required' => true },
+      { 'in' => 'formData', 'name' => 'conditions', 'description' => 'conditions of item', 'type' => 'string', 'required' => false, 'enum' => %w(one two) }
     ]
   end
 end

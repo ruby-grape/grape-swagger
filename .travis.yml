@@ -2,11 +2,6 @@ language: ruby
 
 sudo: false
 
-allow_failures:
-  - rvm: ruby-head
-  - rvm: jruby-head
-  - rvm: rbx-2
-
 matrix:
   include:
     - rvm: 2.3.1
@@ -28,4 +23,8 @@ matrix:
     - rvm: jruby-19mode
     - rvm: ruby-head
     - rvm: jruby-head
-
+  allow_failures:
+    - rvm: rbx-2
+    - rvm: jruby-19mode
+    - rvm: ruby-head
+    - rvm: jruby-head

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'details' do
   describe 'details, pass markdown with redcarpet even with nil description and detail', unless: RUBY_PLATFORM.eql?('java') do
-    include_context "the api entities"
+    include_context 'the api entities'
 
     before :all do
       module TheApi
@@ -12,9 +12,9 @@ describe 'details' do
           desc nil,
                detail: nil,
                entity: Entities::UseResponse,
-               failure: [{code: 400, model: Entities::ApiError}]
+               failure: [{ code: 400, model: Entities::ApiError }]
           get '/use_gfm_rc_detail' do
-            { "declared_params" => declared(params) }
+            { 'declared_params' => declared(params) }
           end
 
           add_swagger_documentation markdown: GrapeSwagger::Markdown::RedcarpetAdapter.new

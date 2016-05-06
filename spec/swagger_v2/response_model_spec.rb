@@ -10,11 +10,9 @@ describe 'responseModel' do
 
         class Relation < Grape::Entity
           expose :name, documentation: { type: 'string', desc: 'Name' }
-
         end
         class Tag < Grape::Entity
           expose :name, documentation: { type: 'string', desc: 'Name' }
-
         end
         class Error < Grape::Entity
           expose :code, documentation: { type: 'string', desc: 'Error code' }
@@ -34,8 +32,8 @@ describe 'responseModel' do
       class ResponseModelApi < Grape::API
         format :json
         desc 'This returns something',
-          is_array: true,
-          http_codes: [ { code: 200, message: 'OK', model: Entities::Something } ]
+             is_array: true,
+             http_codes: [{ code: 200, message: 'OK', model: Entities::Something }]
         get '/something' do
           something = OpenStruct.new text: 'something'
           present something, with: Entities::Something
@@ -75,67 +73,64 @@ describe 'responseModel' do
     JSON.parse(last_response.body)
   end
 
-  it "documents index action" do
-    expect(subject['paths']["/something"]["get"]["responses"]).to eq(
-      {
-        "200"=>{
-          "description"=>"OK",
-          "schema"=>{
-            "type"=>"array",
-            "items"=>{"$ref"=>"#/definitions/Something"}}
-        }}
+  it 'documents index action' do
+    expect(subject['paths']['/something']['get']['responses']).to eq(
+      '200' => {
+        'description' => 'OK',
+        'schema' => {
+          'type' => 'array',
+          'items' => { '$ref' => '#/definitions/Something' } }
+      }
     )
   end
 
   it 'should document specified models as show action' do
-    expect(subject['paths']["/something/{id}"]["get"]["responses"]).to eq(
-      {
-        "200"=>{
-          "description"=>"OK",
-          "schema"=>{"$ref"=>"#/definitions/Something"}
-        },
-        "403"=>{
-          "description"=>"Refused to return something",
-          "schema"=>{"$ref"=>"#/definitions/Error"}
-      }}
+    expect(subject['paths']['/something/{id}']['get']['responses']).to eq(
+      '200' => {
+        'description' => 'OK',
+        'schema' => { '$ref' => '#/definitions/Something' }
+      },
+      '403' => {
+        'description' => 'Refused to return something',
+        'schema' => { '$ref' => '#/definitions/Error' }
+      }
     )
     expect(subject['definitions'].keys).to include 'Error'
     expect(subject['definitions']['Error']).to eq(
-      {
-        "type"=>"object",
-        "description" => "This returns something or an error",
-        "properties"=>{
-          "code"=>{"type"=>"string","description"=>"Error code"},
-          "message"=>{"type"=>"string","description"=>"Error message"}
-      }}
+      'type' => 'object',
+      'description' => 'This returns something or an error',
+      'properties' => {
+        'code' => { 'type' => 'string', 'description' => 'Error code' },
+        'message' => { 'type' => 'string', 'description' => 'Error message' }
+      }
     )
 
     expect(subject['definitions'].keys).to include 'Something'
     expect(subject['definitions']['Something']).to eq(
-    { "type"=>"object",
-      "description" => "This returns something or an error",
-      "properties"=>
-        { "text"=>{"type"=>"string","description"=>"Content of something."},
-          "kind"=>{"$ref"=>"#/definitions/Kind","description"=>"The kind of this something."},
-          "kind2"=>{"$ref"=>"#/definitions/Kind","description"=>"Secondary kind."},
-          "kind3"=>{"$ref"=>"#/definitions/Kind","description"=>"Tertiary kind."},
-          "tags"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/Tag"},"description"=>"Tags."},
-          "relation"=>{"$ref"=>"#/definitions/Relation","description"=>"A related model."}}}
+      'type' => 'object',
+      'description' => 'This returns something or an error',
+      'properties' =>
+          { 'text' => { 'type' => 'string', 'description' => 'Content of something.' },
+            'kind' => { '$ref' => '#/definitions/Kind', 'description' => 'The kind of this something.' },
+            'kind2' => { '$ref' => '#/definitions/Kind', 'description' => 'Secondary kind.' },
+            'kind3' => { '$ref' => '#/definitions/Kind', 'description' => 'Tertiary kind.' },
+            'tags' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/Tag' }, 'description' => 'Tags.' },
+            'relation' => { '$ref' => '#/definitions/Relation', 'description' => 'A related model.' } }
     )
 
     expect(subject['definitions'].keys).to include 'Kind'
     expect(subject['definitions']['Kind']).to eq(
-      "type"=>"object", "properties"=>{"title"=>{"type"=>"string","description"=>"Title of the kind."}}
+      'type' => 'object', 'properties' => { 'title' => { 'type' => 'string', 'description' => 'Title of the kind.' } }
     )
 
     expect(subject['definitions'].keys).to include 'Relation'
     expect(subject['definitions']['Relation']).to eq(
-      "type"=>"object", "properties"=>{"name"=>{"type"=>"string","description"=>"Name"}}
+      'type' => 'object', 'properties' => { 'name' => { 'type' => 'string', 'description' => 'Name' } }
     )
 
     expect(subject['definitions'].keys).to include 'Tag'
     expect(subject['definitions']['Tag']).to eq(
-      "type"=>"object", "properties"=>{"name"=>{"type"=>"string","description"=>"Name"}}
+      'type' => 'object', 'properties' => { 'name' => { 'type' => 'string', 'description' => 'Name' } }
     )
   end
 end
@@ -150,11 +145,9 @@ describe 'should build definition from given entity' do
 
         class Relation < Grape::Entity
           expose :name, documentation: { type: String, desc: 'Name' }
-
         end
         class Tag < Grape::Entity
           expose :name, documentation: { type: 'string', desc: 'Name' }
-
         end
 
         class SomeEntity < Grape::Entity
@@ -170,8 +163,8 @@ describe 'should build definition from given entity' do
       class ResponseEntityApi < Grape::API
         format :json
         desc 'This returns something',
-          is_array: true,
-          entity: Entities::SomeEntity
+             is_array: true,
+             entity: Entities::SomeEntity
         get '/some_entity' do
           something = OpenStruct.new text: 'something'
           present something, with: Entities::SomeEntity
@@ -191,22 +184,25 @@ describe 'should build definition from given entity' do
     JSON.parse(last_response.body)
   end
 
-  it "it prefer entity over others" do
-    expect(subject['definitions']).to eql({
-      "Kind"=>{"type"=>"object", "properties"=>{"id"=>{"type"=>"integer", "format"=>"int32", "description"=>"Title of the kind."}}},
-      "Tag"=>{"type"=>"object", "properties"=>{"name"=>{"type"=>"string", "description"=>"Name"}}},
-      "Relation"=>{"type"=>"object", "properties"=>{"name"=>{"type"=>"string", "description"=>"Name"}}},
-      "SomeEntity"=>{
-        "type"=>"object",
-        "properties"=>{
-          "text"=>{"type"=>"string", "description"=>"Content of something."},
-          "kind"=>{"$ref"=>"#/definitions/Kind", "description"=>"The kind of this something."},
-          "kind2"=>{"$ref"=>"#/definitions/Kind", "description"=>"Secondary kind."},
-          "kind3"=>{"$ref"=>"#/definitions/Kind", "description"=>"Tertiary kind."},
-          "tags"=>{"type"=>"array", "items"=>{"$ref"=>"#/definitions/Tag"}, "description"=>"Tags."},
-          "relation"=>{"$ref"=>"#/definitions/Relation", "description"=>"A related model."}
+  it 'it prefer entity over others' do
+    expect(subject['definitions']).to eql(
+      'Kind' => {
+        'type' => 'object',
+        'properties' => {
+          'id' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'Title of the kind.' } } },
+      'Tag' => { 'type' => 'object', 'properties' => { 'name' => { 'type' => 'string', 'description' => 'Name' } } },
+      'Relation' => { 'type' => 'object', 'properties' => { 'name' => { 'type' => 'string', 'description' => 'Name' } } },
+      'SomeEntity' => {
+        'type' => 'object',
+        'properties' => {
+          'text' => { 'type' => 'string', 'description' => 'Content of something.' },
+          'kind' => { '$ref' => '#/definitions/Kind', 'description' => 'The kind of this something.' },
+          'kind2' => { '$ref' => '#/definitions/Kind', 'description' => 'Secondary kind.' },
+          'kind3' => { '$ref' => '#/definitions/Kind', 'description' => 'Tertiary kind.' },
+          'tags' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/Tag' }, 'description' => 'Tags.' },
+          'relation' => { '$ref' => '#/definitions/Relation', 'description' => 'A related model.' }
         },
-        "description"=>"This returns something"
-      }})
+        'description' => 'This returns something'
+      })
   end
 end

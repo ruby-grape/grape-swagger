@@ -1,50 +1,50 @@
 require 'spec_helper'
 
 describe 'extension' do
-  include_context "the api entities"
+  include_context 'the api entities'
 
   before :all do
     module TheApi
       class ExtensionsApi < Grape::API
         format :json
 
-        route_setting :x_path, { some: 'stuff' }
+        route_setting :x_path, some: 'stuff'
 
         desc 'This returns something with extension on path level',
-          params: Entities::UseResponse.documentation,
-          failure: [{code: 400, message: 'NotFound', model: Entities::ApiError}]
+             params: Entities::UseResponse.documentation,
+             failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         get '/path_extension' do
-          { "declared_params" => declared(params) }
+          { 'declared_params' => declared(params) }
         end
 
         desc 'This returns something with extension on verb level',
-          params: Entities::UseResponse.documentation,
-          failure: [{code: 400, message: 'NotFound', model: Entities::ApiError}],
-          x: { some: 'stuff' }
+             params: Entities::UseResponse.documentation,
+             failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }],
+             x: { some: 'stuff' }
         params do
           requires :id, type: Integer
         end
         get '/verb_extension' do
-          { "declared_params" => declared(params) }
+          { 'declared_params' => declared(params) }
         end
 
-        route_setting :x_def, { for: 200, some: 'stuff' }
+        route_setting :x_def, for: 200, some: 'stuff'
 
         desc 'This returns something with extension on definition level',
-          params: Entities::ResponseItem.documentation,
-          success: Entities::ResponseItem,
-          failure: [{code: 400, message: 'NotFound', model: Entities::ApiError}]
+             params: Entities::ResponseItem.documentation,
+             success: Entities::ResponseItem,
+             failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         get '/definitions_extension' do
-          { "declared_params" => declared(params) }
+          { 'declared_params' => declared(params) }
         end
 
         route_setting :x_def, [{ for: 422, other: 'stuff' }, { for: 200, some: 'stuff' }]
 
         desc 'This returns something with extension on definition level',
-          success: Entities::OtherItem,
-          failure: [{code: 422, message: 'NotFound', model: Entities::SecondApiError}]
+             success: Entities::OtherItem,
+             failure: [{ code: 422, message: 'NotFound', model: Entities::SecondApiError }]
         get '/multiple_definitions_extension' do
-          { "declared_params" => declared(params) }
+          { 'declared_params' => declared(params) }
         end
 
         add_swagger_documentation
@@ -56,7 +56,7 @@ describe 'extension' do
     TheApi::ExtensionsApi
   end
 
-  describe "extension on path level" do
+  describe 'extension on path level' do
     subject do
       get '/swagger_doc/path_extension'
       JSON.parse(last_response.body)
@@ -68,7 +68,7 @@ describe 'extension' do
     end
   end
 
-  describe "extension on verb level" do
+  describe 'extension on verb level' do
     subject do
       get '/swagger_doc/verb_extension'
       JSON.parse(last_response.body)
@@ -80,7 +80,7 @@ describe 'extension' do
     end
   end
 
-  describe "extension on definition level" do
+  describe 'extension on definition level' do
     subject do
       get '/swagger_doc/definitions_extension'
       JSON.parse(last_response.body)
@@ -93,7 +93,7 @@ describe 'extension' do
     end
   end
 
-  describe "extension on definition level" do
+  describe 'extension on definition level' do
     subject do
       get '/swagger_doc/multiple_definitions_extension'
       JSON.parse(last_response.body)

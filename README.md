@@ -46,6 +46,7 @@ grape-swagger | swagger spec | grape                   | grape-entity
 0.10.5        |     1.2      | >= 0.10.0 ... <= 0.14.0 |  < 0.5.0
 0.11.0        |     1.2      |               >= 0.16.2 |  < 0.5.0
 0.20.1        |     2.0      | >= 0.12.0 ... <= 0.14.0 | <= 0.5.1
+0.20.3 (next) |     2.0      | >= 0.12.0 ... <= 0.15.0 | <= 0.5.1
 
 Swagger 2.0 support is currently not available for Grape 0.16.x. Please contribute to [#407](https://github.com/ruby-grape/grape-swagger/issues/407).
 

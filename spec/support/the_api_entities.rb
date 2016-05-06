@@ -1,4 +1,4 @@
-RSpec.shared_context "the api entities" do
+RSpec.shared_context 'the api entities' do
   before :all do
     module TheApi
       module Entities
@@ -47,6 +47,4 @@ RSpec.shared_context "the api entities" do
       end
     end
   end
-
-
 end

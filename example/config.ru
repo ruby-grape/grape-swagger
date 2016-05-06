@@ -31,14 +31,12 @@ class Base < Grape::API
     error_response(message: "Internal server error: #{e}", status: 500)
   end
 
-  add_swagger_documentation :hide_documentation_path => true,
-                            :api_version => 'v1',
-                            :info => {
-                              title: "Horses and Hussars",
-                              description: "Demo app for dev of grape swagger 2.0"
+  add_swagger_documentation hide_documentation_path: true,
+                            api_version: 'v1',
+                            info: {
+                              title: 'Horses and Hussars',
+                              description: 'Demo app for dev of grape swagger 2.0'
                             }
-
 end
-
 
 run Base.new

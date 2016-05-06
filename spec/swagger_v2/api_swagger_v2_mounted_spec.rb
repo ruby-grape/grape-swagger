@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'swagger spec v2.0' do
   describe 'mounted APIs' do
-    include_context "swagger example"
+    include_context 'swagger example'
 
     def app
       Class.new(Grape::API) do
@@ -11,7 +11,7 @@ describe 'swagger spec v2.0' do
         #  Thing stuff
         desc 'This gets Things.' do
           params Entities::Something.documentation
-          http_codes [ { code: 401, message: 'Unauthorized', model: Entities::ApiError } ]
+          http_codes [{ code: 401, message: 'Unauthorized', model: Entities::ApiError }]
         end
         get '/thing' do
           something = OpenStruct.new text: 'something'
@@ -30,7 +30,7 @@ describe 'swagger spec v2.0' do
         end
 
         desc 'This gets Thing.' do
-          http_codes [ { code: 200, message: 'getting a single thing' }, { code: 401, message: 'Unauthorized' } ]
+          http_codes [{ code: 200, message: 'getting a single thing' }, { code: 401, message: 'Unauthorized' }]
         end
         params do
           requires :id, type: Integer
@@ -41,18 +41,18 @@ describe 'swagger spec v2.0' do
         end
 
         desc 'This creates Thing.',
-          success: Entities::Something
+             success: Entities::Something
         params do
           requires :text, type: String, documentation: { type: 'string', desc: 'Content of something.' }
           requires :links, type: Array, documentation: { type: 'link', is_array: true }
         end
-        post '/thing', http_codes: [ { code: 422, message: 'Unprocessible Entity' } ] do
+        post '/thing', http_codes: [{ code: 422, message: 'Unprocessible Entity' }] do
           something = OpenStruct.new text: 'something'
           present something, with: Entities::Something
         end
 
         desc 'This updates Thing.',
-          success: Entities::Something
+             success: Entities::Something
         params do
           requires :id, type: Integer
           optional :text, type: String, desc: 'Content of something.'
@@ -64,7 +64,7 @@ describe 'swagger spec v2.0' do
         end
 
         desc 'This deletes Thing.',
-          entity: Entities::Something
+             entity: Entities::Something
         params do
           requires :id, type: Integer
         end
@@ -74,7 +74,7 @@ describe 'swagger spec v2.0' do
         end
 
         desc 'dummy route.',
-          failure: [{ code: 401, message: 'Unauthorized' }]
+             failure: [{ code: 401, message: 'Unauthorized' }]
         params do
           requires :id, type: Integer
         end
@@ -83,12 +83,11 @@ describe 'swagger spec v2.0' do
 
         namespace :other_thing do
           desc 'nested route inside namespace',
-            entity: Entities::QueryInput,
-            x: {
-              'amazon-apigateway-auth' => {type: 'none'},
-              'amazon-apigateway-integration' => {type: 'aws', uri: 'foo_bar_uri', httpMethod: 'get'}
-            }
-
+               entity: Entities::QueryInput,
+               x: {
+                 'amazon-apigateway-auth' => { type: 'none' },
+                 'amazon-apigateway-integration' => { type: 'aws', uri: 'foo_bar_uri', httpMethod: 'get' }
+               }
 
           params do
             requires :elements, documentation: {
@@ -108,14 +107,14 @@ describe 'swagger spec v2.0' do
         add_swagger_documentation hide_format: true,
                                   base_path: '/api',
                                   info: {
-                                    title: "The API title to be displayed on the API homepage.",
-                                    description: "A description of the API.",
-                                    contact_name: "Contact name",
-                                    contact_email: "Contact@email.com",
-                                    contact_url: "Contact URL",
-                                    license: "The name of the license.",
-                                    license_url: "www.The-URL-of-the-license.org",
-                                    terms_of_service_url: "www.The-URL-of-the-terms-and-service.com",
+                                    title: 'The API title to be displayed on the API homepage.',
+                                    description: 'A description of the API.',
+                                    contact_name: 'Contact name',
+                                    contact_email: 'Contact@email.com',
+                                    contact_url: 'Contact URL',
+                                    license: 'The name of the license.',
+                                    license_url: 'www.The-URL-of-the-license.org',
+                                    terms_of_service_url: 'www.The-URL-of-the-terms-and-service.com'
                                   }
       end
     end
@@ -139,8 +138,6 @@ describe 'swagger spec v2.0' do
           end
         end
       end
-
     end
-
   end
 end

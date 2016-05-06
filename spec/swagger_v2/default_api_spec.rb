@@ -21,20 +21,19 @@ describe 'Default API' do
 
     it 'documents api' do
       expect(subject).to eq(
-        {
-          "info"=>{"title"=>"API title", "version"=>"0.0.1"},
-          "swagger"=>"2.0",
-          "produces"=>["application/json"],
-          "host"=>"example.org",
-          "tags" => [{"name"=>"something", "description"=>"Operations about somethings"}],
-          "paths"=>{
-            "/something"=>{
-              "get"=>{
-                "description"=>"This gets something.",
-                "produces"=>["application/json"],
-                "tags"=>["something"],
-                "operationId"=>"getSomething",
-                "responses"=>{"200"=>{"description"=>"This gets something."}}}}}}
+        'info' => { 'title' => 'API title', 'version' => '0.0.1' },
+        'swagger' => '2.0',
+        'produces' => ['application/json'],
+        'host' => 'example.org',
+        'tags' => [{ 'name' => 'something', 'description' => 'Operations about somethings' }],
+        'paths' => {
+          '/something' => {
+            'get' => {
+              'description' => 'This gets something.',
+              'produces' => ['application/json'],
+              'tags' => ['something'],
+              'operationId' => 'getSomething',
+              'responses' => { '200' => { 'description' => 'This gets something.' } } } } }
       )
     end
 
@@ -65,21 +64,19 @@ describe 'Default API' do
     end
 
     it 'documents endpoint' do
-      expect(subject).to eq({
-        "info"=>{"title"=>"API title", "version"=>"0.0.1"},
-        "swagger"=>"2.0",
-        "produces"=>["application/json"],
-        "host"=>"example.org",
-        "tags" => [{"name"=>"something", "description"=>"Operations about somethings"}],
-        "paths"=>{
-          "/something"=>{
-            "get"=>{
-              "description"=>"This gets something.",
-              "produces"=>["application/json"],
-              "tags"=>["something"],
-              "operationId"=>"getSomething",
-              "responses"=>{"200"=>{"description"=>"This gets something."}}}}}
-      })
+      expect(subject).to eq('info' => { 'title' => 'API title', 'version' => '0.0.1' },
+                            'swagger' => '2.0',
+                            'produces' => ['application/json'],
+                            'host' => 'example.org',
+                            'tags' => [{ 'name' => 'something', 'description' => 'Operations about somethings' }],
+                            'paths' => {
+                              '/something' => {
+                                'get' => {
+                                  'description' => 'This gets something.',
+                                  'produces' => ['application/json'],
+                                  'tags' => ['something'],
+                                  'operationId' => 'getSomething',
+                                  'responses' => { '200' => { 'description' => 'This gets something.' } } } } })
     end
   end
 

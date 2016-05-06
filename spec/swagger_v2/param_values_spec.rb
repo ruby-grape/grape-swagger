@@ -45,11 +45,11 @@ describe 'Convert values to enum or Range' do
     subject(:plain_array) { first_parameter_info('plain_array') }
     it 'has values as array in enum' do
       expect(plain_array).to eq [{
-        "in"=>"formData",
-        "name"=>"letter",
-        "type"=>"string",
-        "required"=>true,
-        "enum"=>["a", "b", "c"]
+        'in' => 'formData',
+        'name' => 'letter',
+        'type' => 'string',
+        'required' => true,
+        'enum' => %w(a b c)
       }]
     end
   end
@@ -59,11 +59,11 @@ describe 'Convert values to enum or Range' do
 
     it 'has proc returned values as array in enum' do
       expect(array_in_proc).to eq [{
-        "in"=>"formData",
-        "name"=>"letter",
-        "type"=>"string",
-        "required"=>true,
-        "enum"=>["d", "e", "f"]
+        'in' => 'formData',
+        'name' => 'letter',
+        'type' => 'string',
+        'required' => true,
+        'enum' => %w(d e f)
       }]
     end
   end
@@ -73,10 +73,10 @@ describe 'Convert values to enum or Range' do
 
     it 'has letter range values' do
       expect(range_letter).to eq [{
-        "in"=>"formData",
-        "name"=>"letter",
-        "type"=>"string",
-        "required"=>true
+        'in' => 'formData',
+        'name' => 'letter',
+        'type' => 'string',
+        'required' => true
       }]
     end
 
@@ -84,13 +84,13 @@ describe 'Convert values to enum or Range' do
 
     it 'has integer range values' do
       expect(range_integer).to eq [{
-        "in"=>"formData",
-        "name"=>"integer",
-        "type"=>"integer",
-        "required"=>true,
-        "format"=>"int32",
-        "minimum"=>-5,
-        "maximum"=>5
+        'in' => 'formData',
+        'name' => 'integer',
+        'type' => 'integer',
+        'required' => true,
+        'format' => 'int32',
+        'minimum' => -5,
+        'maximum' => 5
       }]
     end
   end
@@ -129,11 +129,11 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
 
     it 'has proc returned value as string in enum' do
       expect(non_array_in_proc).to eq [{
-        "in"=>"formData",
-        "name"=>"letter",
-        "type"=>"string",
-        "required"=>true,
-        "enum"=>"string"
+        'in' => 'formData',
+        'name' => 'letter',
+        'type' => 'string',
+        'required' => true,
+        'enum' => 'string'
       }]
     end
   end
@@ -143,11 +143,11 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
 
     it 'has float range values as string' do
       expect(range_float).to eq [{
-        "in"=>"formData",
-        "name"=>"float",
-        "type"=>"number",
-        "required"=>true,
-        "format"=>"float"
+        'in' => 'formData',
+        'name' => 'float',
+        'type' => 'number',
+        'required' => true,
+        'format' => 'float'
       }]
     end
   end

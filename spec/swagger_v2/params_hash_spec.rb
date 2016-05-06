@@ -17,9 +17,9 @@ describe 'Group Params as Hash' do
 
       params do
         requires :typed_group, type: Hash do
-          requires :id, type: Integer, desc: "integer given"
-          requires :name, type: String, desc: "string given"
-          optional :email, type: String, desc: "email given"
+          requires :id, type: Integer, desc: 'integer given'
+          requires :name, type: String, desc: 'string given'
+          optional :email, type: String, desc: 'email given'
           optional :others, type: Integer, values: [1, 2, 3]
         end
       end
@@ -31,7 +31,7 @@ describe 'Group Params as Hash' do
     end
   end
 
-  describe "grouped parameters" do
+  describe 'grouped parameters' do
     subject do
       get '/swagger_doc/use_groups'
       JSON.parse(last_response.body)
@@ -39,14 +39,15 @@ describe 'Group Params as Hash' do
 
     specify do
       expect(subject['paths']['/use_groups']['post']).to include('parameters')
-      expect(subject['paths']['/use_groups']['post']['parameters']).to eql([
-        {"in"=>"formData", "name"=>"required_group[required_param_1]", "type"=>"string", "required"=>true},
-        {"in"=>"formData", "name"=>"required_group[required_param_2]", "type"=>"string", "required"=>true}
-      ])
+      expect(subject['paths']['/use_groups']['post']['parameters']).to eql(
+        [
+          { 'in' => 'formData', 'name' => 'required_group[required_param_1]', 'type' => 'string', 'required' => true },
+          { 'in' => 'formData', 'name' => 'required_group[required_param_2]', 'type' => 'string', 'required' => true }
+        ])
     end
   end
 
-  describe "grouped parameters with given type" do
+  describe 'grouped parameters with given type' do
     subject do
       get '/swagger_doc/use_given_type'
       JSON.parse(last_response.body)
@@ -54,12 +55,13 @@ describe 'Group Params as Hash' do
 
     specify do
       expect(subject['paths']['/use_given_type']['post']).to include('parameters')
-      expect(subject['paths']['/use_given_type']['post']['parameters']).to eql([
-        {"in"=>"formData", "name"=>"typed_group[id]", "description"=>"integer given", "type"=>"integer", "required"=>true, "format"=>"int32"},
-        {"in"=>"formData", "name"=>"typed_group[name]", "description"=>"string given", "type"=>"string", "required"=>true},
-        {"in"=>"formData", "name"=>"typed_group[email]", "description"=>"email given", "type"=>"string", "required"=>false},
-        {"in"=>"formData", "name"=>"typed_group[others]", "type"=>"integer", "required"=>false, "format"=>"int32", "enum"=>[1, 2, 3]}
-      ])
+      expect(subject['paths']['/use_given_type']['post']['parameters']).to eql(
+        [
+          { 'in' => 'formData', 'name' => 'typed_group[id]', 'description' => 'integer given', 'type' => 'integer', 'required' => true, 'format' => 'int32' },
+          { 'in' => 'formData', 'name' => 'typed_group[name]', 'description' => 'string given', 'type' => 'string', 'required' => true },
+          { 'in' => 'formData', 'name' => 'typed_group[email]', 'description' => 'email given', 'type' => 'string', 'required' => false },
+          { 'in' => 'formData', 'name' => 'typed_group[others]', 'type' => 'integer', 'required' => false, 'format' => 'int32', 'enum' => [1, 2, 3] }
+        ])
     end
   end
 end

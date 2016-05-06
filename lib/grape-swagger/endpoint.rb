@@ -91,13 +91,13 @@ module Grape
 
         verb, method_object = method_object(route, options, path)
 
-        if @paths.key?(path.to_sym)
-          @paths[path.to_sym][verb] = method_object
+        if @paths.key?(path.to_s)
+          @paths[path.to_s][verb] = method_object
         else
-          @paths[path.to_sym] = { verb => method_object }
+          @paths[path.to_s] = { verb => method_object }
         end
 
-        GrapeSwagger::DocMethods::Extensions.add(@paths[path.to_sym], @definitions, route)
+        GrapeSwagger::DocMethods::Extensions.add(@paths[path.to_s], @definitions, route)
       end
     end
 

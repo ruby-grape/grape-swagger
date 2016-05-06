@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'namespace tags check while using prefix and version' do
-  include_context "namespace example"
+  include_context 'namespace example'
 
   before :all do
     module TheApi
@@ -21,19 +21,20 @@ describe 'namespace tags check while using prefix and version' do
     TagApi
   end
 
-  describe "retrieves swagger-documentation on /swagger_doc" do
+  describe 'retrieves swagger-documentation on /swagger_doc' do
     subject do
       get '/api/swagger_doc.json'
       JSON.parse(last_response.body)
     end
 
     specify do
-      expect(subject['tags']).to eql([
-        {"name"=>"hudson", "description"=>"Operations about hudsons"},
-        {"name"=>"colorado", "description"=>"Operations about colorados"},
-        {"name"=>"thames", "description"=>"Operations about thames"},
-        {"name"=>"niles", "description"=>"Operations about niles"}
-      ])
+      expect(subject['tags']).to eql(
+        [
+          { 'name' => 'hudson', 'description' => 'Operations about hudsons' },
+          { 'name' => 'colorado', 'description' => 'Operations about colorados' },
+          { 'name' => 'thames', 'description' => 'Operations about thames' },
+          { 'name' => 'niles', 'description' => 'Operations about niles' }
+        ])
 
       expect(subject['paths']['/api/v1/hudson']['get']['tags']).to eql(['hudson'])
       expect(subject['paths']['/api/v1/colorado/simple']['get']['tags']).to eql(['colorado'])
@@ -44,7 +45,6 @@ describe 'namespace tags check while using prefix and version' do
     end
   end
 
-
   describe 'retrieves the documentation for mounted-api' do
     subject do
       get '/api/swagger_doc/colorado.json'
@@ -52,12 +52,13 @@ describe 'namespace tags check while using prefix and version' do
     end
 
     specify do
-      expect(subject['tags']).to eql([
-        {"name"=>"hudson", "description"=>"Operations about hudsons"},
-        {"name"=>"colorado", "description"=>"Operations about colorados"},
-        {"name"=>"thames", "description"=>"Operations about thames"},
-        {"name"=>"niles", "description"=>"Operations about niles"}
-      ])
+      expect(subject['tags']).to eql(
+        [
+          { 'name' => 'hudson', 'description' => 'Operations about hudsons' },
+          { 'name' => 'colorado', 'description' => 'Operations about colorados' },
+          { 'name' => 'thames', 'description' => 'Operations about thames' },
+          { 'name' => 'niles', 'description' => 'Operations about niles' }
+        ])
 
       expect(subject['paths']['/api/v1/colorado/simple']['get']['tags']).to eql(['colorado'])
       expect(subject['paths']['/api/v1/colorado/simple-test']['get']['tags']).to eql(['colorado'])
@@ -70,12 +71,13 @@ describe 'namespace tags check while using prefix and version' do
       end
 
       specify do
-        expect(subject['tags']).to eql([
-          {"name"=>"hudson", "description"=>"Operations about hudsons"},
-          {"name"=>"colorado", "description"=>"Operations about colorados"},
-          {"name"=>"thames", "description"=>"Operations about thames"},
-          {"name"=>"niles", "description"=>"Operations about niles"}
-        ])
+        expect(subject['tags']).to eql(
+          [
+            { 'name' => 'hudson', 'description' => 'Operations about hudsons' },
+            { 'name' => 'colorado', 'description' => 'Operations about colorados' },
+            { 'name' => 'thames', 'description' => 'Operations about thames' },
+            { 'name' => 'niles', 'description' => 'Operations about niles' }
+          ])
 
         expect(subject['paths']['/api/v1/thames/simple_with_headers']['get']['tags']).to eql(['thames'])
       end

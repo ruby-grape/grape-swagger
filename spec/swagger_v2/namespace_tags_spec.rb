@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'namespace tags check' do
-  include_context "namespace example"
+  include_context 'namespace example'
 
   before :all do
     class TestApi < Grape::API
@@ -14,19 +14,20 @@ describe 'namespace tags check' do
     TestApi
   end
 
-  describe "retrieves swagger-documentation on /swagger_doc" do
+  describe 'retrieves swagger-documentation on /swagger_doc' do
     subject do
       get '/swagger_doc.json'
       JSON.parse(last_response.body)
     end
 
     specify do
-      expect(subject['tags']).to eql([
-        {"name"=>"hudson", "description"=>"Operations about hudsons"},
-        {"name"=>"colorado", "description"=>"Operations about colorados"},
-        {"name"=>"thames", "description"=>"Operations about thames"},
-        {"name"=>"niles", "description"=>"Operations about niles"}
-      ])
+      expect(subject['tags']).to eql(
+        [
+          { 'name' => 'hudson', 'description' => 'Operations about hudsons' },
+          { 'name' => 'colorado', 'description' => 'Operations about colorados' },
+          { 'name' => 'thames', 'description' => 'Operations about thames' },
+          { 'name' => 'niles', 'description' => 'Operations about niles' }
+        ])
 
       expect(subject['paths']['/hudson']['get']['tags']).to eql(['hudson'])
       expect(subject['paths']['/colorado/simple']['get']['tags']).to eql(['colorado'])
@@ -44,12 +45,13 @@ describe 'namespace tags check' do
     end
 
     specify do
-      expect(subject['tags']).to eql([
-        {"name"=>"hudson", "description"=>"Operations about hudsons"},
-        {"name"=>"colorado", "description"=>"Operations about colorados"},
-        {"name"=>"thames", "description"=>"Operations about thames"},
-        {"name"=>"niles", "description"=>"Operations about niles"}
-      ])
+      expect(subject['tags']).to eql(
+        [
+          { 'name' => 'hudson', 'description' => 'Operations about hudsons' },
+          { 'name' => 'colorado', 'description' => 'Operations about colorados' },
+          { 'name' => 'thames', 'description' => 'Operations about thames' },
+          { 'name' => 'niles', 'description' => 'Operations about niles' }
+        ])
 
       expect(subject['paths']['/colorado/simple']['get']['tags']).to eql(['colorado'])
       expect(subject['paths']['/colorado/simple-test']['get']['tags']).to eql(['colorado'])
@@ -62,12 +64,13 @@ describe 'namespace tags check' do
       end
 
       specify do
-        expect(subject['tags']).to eql([
-          {"name"=>"hudson", "description"=>"Operations about hudsons"},
-          {"name"=>"colorado", "description"=>"Operations about colorados"},
-          {"name"=>"thames", "description"=>"Operations about thames"},
-          {"name"=>"niles", "description"=>"Operations about niles"}
-        ])
+        expect(subject['tags']).to eql(
+          [
+            { 'name' => 'hudson', 'description' => 'Operations about hudsons' },
+            { 'name' => 'colorado', 'description' => 'Operations about colorados' },
+            { 'name' => 'thames', 'description' => 'Operations about thames' },
+            { 'name' => 'niles', 'description' => 'Operations about niles' }
+          ])
 
         expect(subject['paths']['/thames/simple_with_headers']['get']['tags']).to eql(['thames'])
       end

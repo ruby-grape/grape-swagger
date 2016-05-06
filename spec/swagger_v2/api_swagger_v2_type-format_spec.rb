@@ -56,8 +56,6 @@ describe 'type format settings' do
           requires :param_date,      type: Date
           requires :param_date_time, type: DateTime
           requires :param_time,      type: Time
-          requires :param_password,  type: 'password'
-          requires :param_email,     type: 'email'
           optional :param_boolean,   type: Boolean
           optional :param_file,      type: File
           optional :param_json,      type: JSON
@@ -92,8 +90,6 @@ describe 'type format settings' do
       {"in"=>"formData", "name"=>"param_date", "required"=>true, "type"=>"string", "format"=>"date"},
       {"in"=>"formData", "name"=>"param_date_time", "required"=>true, "type"=>"string", "format"=>"date-time"},
       {"in"=>"formData", "name"=>"param_time", "required"=>true, "type"=>"string", "format"=>"date-time"},
-      {"in"=>"formData", "name"=>"param_password", "required"=>true, "type"=>"string", "format"=>"password"},
-      {"in"=>"formData", "name"=>"param_email", "required"=>true, "type"=>"string", "format"=>"email"},
       {"in"=>"formData", "name"=>"param_boolean", "required"=>false, "type"=>"boolean"},
       {"in"=>"formData", "name"=>"param_file", "required"=>false, "type"=>"file"},
       {"in"=>"formData", "name"=>"param_json", "required"=>false, "type"=>"json"}

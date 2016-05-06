@@ -6,6 +6,7 @@
 
 #### Fixes
 
+* [#408](https://github.com/ruby-grape/grape-swagger/pull/408): fix fails when point with head method present - [@Bugagazavr](https://github.com/Bugagazavr)
 * [#405](https://github.com/ruby-grape/grape-swagger/pull/405): corrects documentation of versions [issue #403](https://github.com/ruby-grape/grape-swagger/issues/403) - [@LeFnord](https://github.com/LeFnord).
 * [#399](https://github.com/ruby-grape/grape-swagger/pull/399): makes param description optional, solves [issue #395](https://github.com/ruby-grape/grape-swagger/issues/395) - [@LeFnord](https://github.com/LeFnord).
 

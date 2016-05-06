@@ -9,7 +9,7 @@ describe GrapeSwagger::DocMethods::PathString do
   describe 'operation_id_object' do
     describe 'version' do
       describe 'defaults: not given, false' do
-        let(:options) {{ add_version: false }}
+        let(:options) { { add_version: false } }
 
         specify do
           expect(subject.build('/thing(.json)', options)).to eql ['Thing', '/thing']
@@ -22,7 +22,7 @@ describe GrapeSwagger::DocMethods::PathString do
       end
 
       describe 'defaults: given, true' do
-        let(:options) {{ version: 'v1', add_version: true }}
+        let(:options) { { version: 'v1', add_version: true } }
 
         specify do
           expect(subject.build('/{version}/thing(.json)', options)).to eql ['Thing', '/v1/thing']

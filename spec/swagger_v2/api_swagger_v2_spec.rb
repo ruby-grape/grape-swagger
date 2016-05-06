@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'swagger spec v2.0' do
-  include_context "swagger example"
+  include_context 'swagger example'
 
   def app
     Class.new(Grape::API) do
@@ -10,7 +10,7 @@ describe 'swagger spec v2.0' do
       #  Thing stuff
       desc 'This gets Things.' do
         params Entities::Something.documentation
-        http_codes [ { code: 401, message: 'Unauthorized', model: Entities::ApiError } ]
+        http_codes [{ code: 401, message: 'Unauthorized', model: Entities::ApiError }]
       end
       get '/thing' do
         something = OpenStruct.new text: 'something'
@@ -29,7 +29,7 @@ describe 'swagger spec v2.0' do
       end
 
       desc 'This gets Thing.' do
-        http_codes [ { code: 200, message: 'getting a single thing' }, { code: 401, message: 'Unauthorized' } ]
+        http_codes [{ code: 200, message: 'getting a single thing' }, { code: 401, message: 'Unauthorized' }]
       end
       params do
         requires :id, type: Integer
@@ -40,18 +40,18 @@ describe 'swagger spec v2.0' do
       end
 
       desc 'This creates Thing.',
-        success: Entities::Something
+           success: Entities::Something
       params do
         requires :text, type: String, documentation: { type: 'string', desc: 'Content of something.' }
         requires :links, type: Array, documentation: { type: 'link', is_array: true }
       end
-      post '/thing', http_codes: [ { code: 422, message: 'Unprocessible Entity' } ] do
+      post '/thing', http_codes: [{ code: 422, message: 'Unprocessible Entity' }] do
         something = OpenStruct.new text: 'something'
         present something, with: Entities::Something
       end
 
       desc 'This updates Thing.',
-        success: Entities::Something
+           success: Entities::Something
       params do
         requires :id, type: Integer
         optional :text, type: String, desc: 'Content of something.'
@@ -63,7 +63,7 @@ describe 'swagger spec v2.0' do
       end
 
       desc 'This deletes Thing.',
-        entity: Entities::Something
+           entity: Entities::Something
       params do
         requires :id, type: Integer
       end
@@ -73,7 +73,7 @@ describe 'swagger spec v2.0' do
       end
 
       desc 'dummy route.',
-        failure: [{ code: 401, message: 'Unauthorized' }]
+           failure: [{ code: 401, message: 'Unauthorized' }]
       params do
         requires :id, type: Integer
       end
@@ -82,11 +82,11 @@ describe 'swagger spec v2.0' do
 
       namespace :other_thing do
         desc 'nested route inside namespace',
-          entity: Entities::QueryInput,
-          x: {
-            'amazon-apigateway-auth' => {type: 'none'},
-            'amazon-apigateway-integration' => {type: 'aws', uri: 'foo_bar_uri', httpMethod: 'get'}
-          }
+             entity: Entities::QueryInput,
+             x: {
+               'amazon-apigateway-auth' => { type: 'none' },
+               'amazon-apigateway-integration' => { type: 'aws', uri: 'foo_bar_uri', httpMethod: 'get' }
+             }
 
         params do
           requires :elements, documentation: {
@@ -102,19 +102,18 @@ describe 'swagger spec v2.0' do
         end
       end
 
-
       version 'v3', using: :path
       add_swagger_documentation api_version: 'v1',
                                 base_path: '/api',
                                 info: {
-                                  title: "The API title to be displayed on the API homepage.",
-                                  description: "A description of the API.",
-                                  contact_name: "Contact name",
-                                  contact_email: "Contact@email.com",
-                                  contact_url: "Contact URL",
-                                  license: "The name of the license.",
-                                  license_url: "www.The-URL-of-the-license.org",
-                                  terms_of_service_url: "www.The-URL-of-the-terms-and-service.com",
+                                  title: 'The API title to be displayed on the API homepage.',
+                                  description: 'A description of the API.',
+                                  contact_name: 'Contact name',
+                                  contact_email: 'Contact@email.com',
+                                  contact_url: 'Contact URL',
+                                  license: 'The name of the license.',
+                                  license_url: 'www.The-URL-of-the-license.org',
+                                  terms_of_service_url: 'www.The-URL-of-the-terms-and-service.com'
                                 }
     end
   end
@@ -128,28 +127,28 @@ describe 'swagger spec v2.0' do
   describe 'swagger object' do
     describe 'required keys' do
       it { expect(json.keys).to include 'swagger' }
-      it { expect(json['swagger']).to eql '2.0'  }
+      it { expect(json['swagger']).to eql '2.0' }
       it { expect(json.keys).to include 'info' }
-      it { expect(json['info']).to be_a Hash  }
+      it { expect(json['info']).to be_a Hash }
       it { expect(json.keys).to include 'paths' }
-      it { expect(json['paths']).to be_a Hash  }
+      it { expect(json['paths']).to be_a Hash }
     end
 
     describe 'info object required keys' do
       let(:info) { json['info'] }
 
       it { expect(info.keys).to include 'title' }
-      it { expect(info['title']).to be_a String  }
+      it { expect(info['title']).to be_a String }
       it { expect(info.keys).to include 'version' }
-      it { expect(info['version']).to be_a String  }
+      it { expect(info['version']).to be_a String }
 
       describe 'license object' do
         let(:license) { json['info']['license'] }
 
         it { expect(license.keys).to include 'name' }
-        it { expect(license['name']).to be_a String  }
+        it { expect(license['name']).to be_a String }
         it { expect(license.keys).to include 'url' }
-        it { expect(license['url']).to be_a String  }
+        it { expect(license['url']).to be_a String }
       end
 
       describe 'contact object' do
@@ -158,16 +157,16 @@ describe 'swagger spec v2.0' do
         it { expect(contact.keys).to include 'name' }
         it { expect(contact['name']).to be_a String  }
         it { expect(contact.keys).to include 'email' }
-        it { expect(contact['email']).to be_a String  }
+        it { expect(contact['email']).to be_a String }
         it { expect(contact.keys).to include 'url' }
-        it { expect(contact['url']).to be_a String  }
+        it { expect(contact['url']).to be_a String }
       end
     end
 
     describe 'path object' do
       let(:paths) { json['paths'] }
 
-      it "hides documentation paths per default" do
+      it 'hides documentation paths per default' do
         expect(paths.keys).not_to include '/swagger_doc', '/swagger_doc/{name}'
       end
 
@@ -181,7 +180,7 @@ describe 'swagger spec v2.0' do
             expect(http_verbs).to include method
             expect(declaration).to have_key('responses')
 
-            declaration["responses"].each do |status_code, response|
+            declaration['responses'].each do |status_code, response|
               expect(status_code).to match(/\d{3}/)
               expect(response).to have_key('description')
             end
@@ -201,7 +200,7 @@ describe 'swagger spec v2.0' do
     end
   end
 
-  describe "swagger file" do
+  describe 'swagger file' do
     it { expect(json).to eql swagger_json }
   end
 end

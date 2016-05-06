@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'format, content_type' do
-  include_context "the api entities"
+  include_context 'the api entities'
 
   before :all do
     module TheApi
@@ -9,42 +9,42 @@ describe 'format, content_type' do
         format :json
 
         desc 'This uses json (default) for produces',
-          failure: [{code: 400, model: Entities::ApiError}],
-          entity: Entities::UseResponse
+             failure: [{ code: 400, model: Entities::ApiError }],
+             entity: Entities::UseResponse
         get '/use_default' do
-          { "declared_params" => declared(params) }
+          { 'declared_params' => declared(params) }
         end
 
         desc 'This uses formats for produces',
-          failure: [{code: 400, model: Entities::ApiError}],
-          formats: [:xml, :binary, "application/vdns"],
-          entity: Entities::UseResponse
+             failure: [{ code: 400, model: Entities::ApiError }],
+             formats: [:xml, :binary, 'application/vdns'],
+             entity: Entities::UseResponse
         get '/use_formats' do
-          { "declared_params" => declared(params) }
+          { 'declared_params' => declared(params) }
         end
 
         desc 'This uses content_types for produces',
-          failure: [{code: 400, model: Entities::ApiError}],
-          content_types: [:xml, :binary, "application/vdns"],
-          entity: Entities::UseResponse
+             failure: [{ code: 400, model: Entities::ApiError }],
+             content_types: [:xml, :binary, 'application/vdns'],
+             entity: Entities::UseResponse
         get '/use_content_types' do
-          { "declared_params" => declared(params) }
+          { 'declared_params' => declared(params) }
         end
 
         desc 'This uses produces for produces',
-          failure: [{code: 400, model: Entities::ApiError}],
-          produces: [:xml, :binary, "application/vdns"],
-          entity: Entities::UseResponse
+             failure: [{ code: 400, model: Entities::ApiError }],
+             produces: [:xml, :binary, 'application/vdns'],
+             entity: Entities::UseResponse
         get '/use_produces' do
-          { "declared_params" => declared(params) }
+          { 'declared_params' => declared(params) }
         end
 
         desc 'This uses produces for produces',
-          failure: [{code: 400, model: Entities::ApiError}],
-          consumes: ["application/www_url_encoded"],
-          entity: Entities::UseResponse
+             failure: [{ code: 400, model: Entities::ApiError }],
+             consumes: ['application/www_url_encoded'],
+             entity: Entities::UseResponse
         post '/use_consumes' do
-          { "declared_params" => declared(params) }
+          { 'declared_params' => declared(params) }
         end
 
         add_swagger_documentation
@@ -56,13 +56,15 @@ describe 'format, content_type' do
     TheApi::ProducesApi
   end
 
-  let(:produced) {[
-    'application/xml',
-    'application/octet-stream',
-    'application/vdns'
-  ]}
+  let(:produced) do
+    [
+      'application/xml',
+      'application/octet-stream',
+      'application/vdns'
+    ]
+  end
 
-  describe "formats" do
+  describe 'formats' do
     subject do
       get '/swagger_doc/use_default'
       JSON.parse(last_response.body)
@@ -74,7 +76,7 @@ describe 'format, content_type' do
     end
   end
 
-  describe "formats" do
+  describe 'formats' do
     subject do
       get '/swagger_doc/use_formats'
       JSON.parse(last_response.body)
@@ -86,7 +88,7 @@ describe 'format, content_type' do
     end
   end
 
-  describe "content types" do
+  describe 'content types' do
     subject do
       get '/swagger_doc/use_content_types'
       JSON.parse(last_response.body)
@@ -95,10 +97,10 @@ describe 'format, content_type' do
     specify do
       expect(subject['paths']['/use_content_types']['get']).to include('produces')
       expect(subject['paths']['/use_content_types']['get']['produces']).to eql(produced)
-      end
+    end
   end
 
-  describe "produces" do
+  describe 'produces' do
     subject do
       get '/swagger_doc/use_produces'
       JSON.parse(last_response.body)
@@ -110,7 +112,7 @@ describe 'format, content_type' do
     end
   end
 
-  describe "consumes" do
+  describe 'consumes' do
     subject do
       get '/swagger_doc/use_consumes'
       JSON.parse(last_response.body)
@@ -118,7 +120,7 @@ describe 'format, content_type' do
 
     specify do
       expect(subject['paths']['/use_consumes']['post']).to include('consumes')
-      expect(subject['paths']['/use_consumes']['post']['consumes']).to eql ["application/www_url_encoded"]
+      expect(subject['paths']['/use_consumes']['post']['consumes']).to eql ['application/www_url_encoded']
     end
   end
 end

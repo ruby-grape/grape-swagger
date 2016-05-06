@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'headers' do
-  include_context "the api entities"
+  include_context 'the api entities'
 
   before :all do
     module TheApi
@@ -9,16 +9,16 @@ describe 'headers' do
         format :json
 
         desc 'This returns something',
-          failure: [{code: 400, model: Entities::ApiError}],
-          headers:  {
-            "X-Rate-Limit-Limit" => {
-              "description" => "The number of allowed requests in the current period",
-              "type" => "integer"
-          }},
+             failure: [{ code: 400, model: Entities::ApiError }],
+             headers:  {
+               'X-Rate-Limit-Limit' => {
+                 'description' => 'The number of allowed requests in the current period',
+                 'type' => 'integer'
+               } },
 
-          entity: Entities::UseResponse
+             entity: Entities::UseResponse
         get '/use_headers' do
-          { "declared_params" => declared(params) }
+          { 'declared_params' => declared(params) }
         end
 
         add_swagger_documentation
@@ -36,13 +36,14 @@ describe 'headers' do
   end
 
   specify do
-    expect(subject['paths']['/use_headers']['get']['parameters']).to eql([
-      {"in"=>"header",
-       "name"=>"X-Rate-Limit-Limit",
-       "description"=>"The number of allowed requests in the current period",
-       "type"=>"integer",
-       "format" => "int32",
-       "required"=>false},
-    ])
+    expect(subject['paths']['/use_headers']['get']['parameters']).to eql(
+      [
+        { 'in' => 'header',
+          'name' => 'X-Rate-Limit-Limit',
+          'description' => 'The number of allowed requests in the current period',
+          'type' => 'integer',
+          'format' => 'int32',
+          'required' => false }
+      ])
   end
 end

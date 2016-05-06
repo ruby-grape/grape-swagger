@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 def details
-<<-DETAILS
+  <<-DETAILS
 # Burgers in Heaven
 
 > A burger doesn't come for free
@@ -23,8 +23,8 @@ DETAILS
 end
 
 describe 'details' do
-  describe "take deatils as it is" do
-    include_context "the api entities"
+  describe 'take deatils as it is' do
+    include_context 'the api entities'
 
     before :all do
       module TheApi
@@ -32,20 +32,20 @@ describe 'details' do
           format :json
 
           desc 'This returns something',
-            detail: 'detailed description of the route',
-            entity: Entities::UseResponse,
-            failure: [{code: 400, model: Entities::ApiError}]
+               detail: 'detailed description of the route',
+               entity: Entities::UseResponse,
+               failure: [{ code: 400, model: Entities::ApiError }]
           get '/use_detail' do
-            { "declared_params" => declared(params) }
+            { 'declared_params' => declared(params) }
           end
 
           desc 'This returns something' do
             detail 'detailed description of the route inside the `desc` block'
             entity Entities::UseResponse
-            failure [{code: 400, model: Entities::ApiError}]
+            failure [{ code: 400, model: Entities::ApiError }]
           end
           get '/use_detail_block' do
-            { "declared_params" => declared(params) }
+            { 'declared_params' => declared(params) }
           end
 
           add_swagger_documentation
@@ -74,7 +74,7 @@ describe 'details' do
   end
 
   describe 'details, convert markdown with kramdown' do
-    include_context "the api entities"
+    include_context 'the api entities'
 
     before :all do
       module TheApi
@@ -82,11 +82,11 @@ describe 'details' do
           format :json
 
           desc 'This returns something',
-            detail: details,
-            entity: Entities::UseResponse,
-            failure: [{code: 400, model: Entities::ApiError}]
+               detail: details,
+               entity: Entities::UseResponse,
+               failure: [{ code: 400, model: Entities::ApiError }]
           get '/use_gfm_detail' do
-            { "declared_params" => declared(params) }
+            { 'declared_params' => declared(params) }
           end
 
           add_swagger_documentation markdown: GrapeSwagger::Markdown::KramdownAdapter.new
@@ -112,7 +112,7 @@ describe 'details' do
   end
 
   describe 'details, convert markdown with redcarpet', unless: RUBY_PLATFORM.eql?('java') do
-    include_context "the api entities"
+    include_context 'the api entities'
 
     before :all do
       module TheApi
@@ -120,11 +120,11 @@ describe 'details' do
           format :json
 
           desc 'This returns something',
-            detail: details,
-            entity: Entities::UseResponse,
-            failure: [{code: 400, model: Entities::ApiError}]
+               detail: details,
+               entity: Entities::UseResponse,
+               failure: [{ code: 400, model: Entities::ApiError }]
           get '/use_gfm_rc_detail' do
-            { "declared_params" => declared(params) }
+            { 'declared_params' => declared(params) }
           end
 
           add_swagger_documentation markdown: GrapeSwagger::Markdown::RedcarpetAdapter.new

@@ -11,7 +11,7 @@ describe GrapeSwagger::DocMethods::OptionalObject do
     let(:request) { 'somes/request/string' }
 
     describe 'no option given for key' do
-      let(:options) { {foo: 'foo' }}
+      let(:options) { { foo: 'foo' } }
       specify do
         expect(subject.build(key, options)).to be_nil
         expect(subject.build(key, options, request)).to eql request
@@ -21,7 +21,7 @@ describe GrapeSwagger::DocMethods::OptionalObject do
     let(:value) { 'some optional value' }
 
     describe 'option is a string' do
-      let(:options) { {bar: value }}
+      let(:options) { { bar: value } }
       specify do
         expect(subject.build(key, options)).to eql value
         expect(subject.build(key, options, request)).to eql value
@@ -29,12 +29,11 @@ describe GrapeSwagger::DocMethods::OptionalObject do
     end
 
     describe 'option is a proc' do
-      let(:options) { {bar: -> { value } }}
+      let(:options) { { bar: -> { value } } }
       specify do
         expect(subject.build(key, options)).to eql value
         expect(subject.build(key, options, request)).to eql value
       end
     end
   end
-
 end

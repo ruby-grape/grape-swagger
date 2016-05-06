@@ -1,8 +1,5 @@
 AllCops:
   Exclude:
     - vendor/**/*
-    - spec/**/*
-    - swagger_spec1.2/**/*
-    - example/**/*
 
 inherit_from: .rubocop_todo.yml

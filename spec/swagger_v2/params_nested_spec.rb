@@ -33,31 +33,33 @@ describe 'nested group params' do
     end
   end
 
-  describe "retrieves the documentation for nested array parameters" do
+  describe 'retrieves the documentation for nested array parameters' do
     subject do
       get '/swagger_doc/nested_array'
       JSON.parse(last_response.body)
     end
 
     specify do
-      expect(subject['paths']['/nested_array']['post']['parameters']).to eql([
-        {"in"=>"formData", "name"=>"a_array[][param_1]", "required"=>true, "type"=>"array", "items"=>{"type"=>"integer"}},
-        {"in"=>"formData", "name"=>"a_array[][b_array][][param_2]", "required"=>true, "type"=>"array", "items"=>{"type"=>"string"}}
-      ])
+      expect(subject['paths']['/nested_array']['post']['parameters']).to eql(
+        [
+          { 'in' => 'formData', 'name' => 'a_array[][param_1]', 'required' => true, 'type' => 'array', 'items' => { 'type' => 'integer' } },
+          { 'in' => 'formData', 'name' => 'a_array[][b_array][][param_2]', 'required' => true, 'type' => 'array', 'items' => { 'type' => 'string' } }
+        ])
     end
   end
 
-  describe "retrieves the documentation for nested hash parameters" do
+  describe 'retrieves the documentation for nested hash parameters' do
     subject do
       get '/swagger_doc/nested_hash'
       JSON.parse(last_response.body)
     end
 
     specify do
-      expect(subject['paths']['/nested_hash']['post']['parameters']).to eql([
-        {"in"=>"formData", "name"=>"a_hash[param_1]", "required"=>true, "type"=>"integer", "format"=>"int32"},
-        {"in"=>"formData", "name"=>"a_hash[b_hash][param_2]", "required"=>true, "type"=>"string"}
-      ])
+      expect(subject['paths']['/nested_hash']['post']['parameters']).to eql(
+        [
+          { 'in' => 'formData', 'name' => 'a_hash[param_1]', 'required' => true, 'type' => 'integer', 'format' => 'int32' },
+          { 'in' => 'formData', 'name' => 'a_hash[b_hash][param_2]', 'required' => true, 'type' => 'string' }
+        ])
     end
   end
 end

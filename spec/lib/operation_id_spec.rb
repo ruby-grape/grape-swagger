@@ -7,7 +7,7 @@ describe GrapeSwagger::DocMethods::OperationId do
   specify { expect(subject).to respond_to :build }
 
   describe 'build' do
-    let(:route) { Grape::Route.new({ method: method })}
+    let(:route) { Grape::Route.new(method: method) }
 
     describe 'GET' do
       let(:method) { 'GET' }
@@ -47,5 +47,4 @@ describe GrapeSwagger::DocMethods::OperationId do
       end
     end
   end
-
 end

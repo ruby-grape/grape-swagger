@@ -1,89 +1,51 @@
-### next / 2016-xx-xx
+### Next
 
 #### Features
 
-* [#406](https://github.com/ruby-grape/grape-swagger/pull/406): force usage of entities for response definition [issue #385](https://github.com/ruby-grape/grape-swagger/issues/385) - [@LeFnord](https://github.com/LeFnord).
+* [#406](https://github.com/ruby-grape/grape-swagger/pull/406): Force usage of entities for response definition [issue #385](https://github.com/ruby-grape/grape-swagger/issues/385) - [@LeFnord](https://github.com/LeFnord).
+* [#405](https://github.com/ruby-grape/grape-swagger/pull/405), [#403](https://github.com/ruby-grape/grape-swagger/issues/403): Added version support matrix - [@LeFnord](https://github.com/LeFnord).
+* [#408](https://github.com/ruby-grape/grape-swagger/pull/408): Added support for `HEAD` endpoints - [@Bugagazavr](https://github.com/Bugagazavr).
+* Your contribution here.
 
 #### Fixes
 
-* [#408](https://github.com/ruby-grape/grape-swagger/pull/408): fix fails when point with head method present - [@Bugagazavr](https://github.com/Bugagazavr)
-* [#405](https://github.com/ruby-grape/grape-swagger/pull/405): corrects documentation of versions [issue #403](https://github.com/ruby-grape/grape-swagger/issues/403) - [@LeFnord](https://github.com/LeFnord).
-* [#399](https://github.com/ruby-grape/grape-swagger/pull/399): makes param description optional, solves [issue #395](https://github.com/ruby-grape/grape-swagger/issues/395) - [@LeFnord](https://github.com/LeFnord).
+* [#399](https://github.com/ruby-grape/grape-swagger/pull/399), [#395](https://github.com/ruby-grape/grape-swagger/issues/395): Make param description optional - [@LeFnord](https://github.com/LeFnord).
 
-
-### 0.20.2 / 2016-04-22
-
-#### Features
+### 0.20.2 (April 22, 2016)
 
 #### Fixes
 
-* [#394](https://github.com/ruby-grape/grape-swagger/pull/394): removes overiding default trough example - [@LeFnord](https://github.com/LeFnord).
-* [#393](https://github.com/ruby-grape/grape-swagger/pull/393): properly handle header parameters - [@wleeper](https://github.com/wleeper).
-* [#389](https://github.com/ruby-grape/grape-swagger/pull/389): respect X-Forwarded-Host - [@edvakf](https://github.com/edvakf).
+* [#394](https://github.com/ruby-grape/grape-swagger/pull/394): Removed overiding default through example - [@LeFnord](https://github.com/LeFnord).
+* [#393](https://github.com/ruby-grape/grape-swagger/pull/393): Properly handle header parameters - [@wleeper](https://github.com/wleeper).
+* [#389](https://github.com/ruby-grape/grape-swagger/pull/389): Respect X-Forwarded-Host - [@edvakf](https://github.com/edvakf).
 
-### 0.20.1 / 2016-04-17
+### 0.20.1 (April 17, 2016)
 
 #### Features
 
-* [#382](https://github.com/ruby-grape/grape-swagger/pull/382): make schemes optional - [@wleeper](https://github.com/wleeper).
-* [#381](https://github.com/ruby-grape/grape-swagger/pull/381): adding entity property description when property documentation desc option is present - [@elciok](https://github.com/elciok).
+* [#382](https://github.com/ruby-grape/grape-swagger/pull/382): Made schemes optional - [@wleeper](https://github.com/wleeper).
+* [#381](https://github.com/ruby-grape/grape-swagger/pull/381): Added entity property description when property documentation desc option is present - [@elciok](https://github.com/elciok).
 
 #### Fixes
 
-* [#383](https://github.com/ruby-grape/grape-swagger/pull/383): fixes grape to 0.12.0–0.14.0 - [@LeFnord](https://github.com/LeFnord).
+* [#383](https://github.com/ruby-grape/grape-swagger/pull/383): Fixed support for Grape 0.12.0 through 0.14.0 - [@LeFnord](https://github.com/LeFnord).
 
-### 0.20.0 / 2016-04-09
+### 0.20.0 (April 9, 2016)
 
 #### Features
 
-[#371](https://github.com/ruby-grape/grape-swagger/pull/371)
+* [#336](https://github.com/ruby-grape/grape-swagger/pull/336): Added Swagger 2.0 support - [@LeFnord](https://github.com/LeFnord).
+* [#371](https://github.com/ruby-grape/grape-swagger/pull/371): Added param type `body` handling - [@LeFnord](https://github.com/LeFnord).
+* [#367](https://github.com/ruby-grape/grape-swagger/pull/367): Set default `type: Integer` and `required: true` for path params, if they weren't specified inside the `params` block as required - [@LeFnord](https://github.com/LeFnord).
+* [#365](https://github.com/ruby-grape/grape-swagger/pull/365): Fixed passing markdown with redcarpet even with nil description and detail - [@LeFnord](https://github.com/LeFnord).
+* [#358](https://github.com/ruby-grape/grape-swagger/pull/358): Removed `allowMultiple` property from params, added `format` to definition property and renamed `defaultValue` to `default` - [@LeFnord](https://github.com/LeFnord).
+* [#356](https://github.com/ruby-grape/grape-swagger/pull/356): Added `consumes` - [@LeFnord](https://github.com/LeFnord).
+* [#354](https://github.com/ruby-grape/grape-swagger/pull/354): Fixed setting of `base_path` and `host`, added possibility to configure the setting of `version` and `base_path` in documented path and `operationId` - [@LeFnord](https://github.com/LeFnord).
+* [#353](https://github.com/ruby-grape/grape-swagger/pull/353), [#352](https://github.com/ruby-grape/grape-swagger/pull/353): Fixed exception with routes having a dynamic `:section` - [@LeFnord](https://github.com/LeFnord).
 
-  - adds param type `body` handling
+### 0.10.5 (April 12, 2016)
 
-[#367](https://github.com/ruby-grape/grape-swagger/pull/367)
-
-  - set default `type: Integer` and `required: true` for path params,
-    if they wasn't specified inside the `params` bloack as required
-
-[#365](https://github.com/ruby-grape/grape-swagger/pull/365)
-
-- fixes passing markdown with redcarpet even with nil description and detail
-
-[#358](https://github.com/ruby-grape/grape-swagger/pull/358)
-
-- removes `allowMultiple` property from params
-- adds `format` to definition property
-- renames `defaultValue` to `default`
-
-
-[#356](https://github.com/ruby-grape/grape-swagger/pull/356)
-
-- adds `consumes` setting
-- refactoring
-
-[#354](https://github.com/ruby-grape/grape-swagger/pull/354) some improvements
-
-- fixes setting of `base_path` and `host`;
-- adds possibility to configure the setting of `version` and `base_path` in documented path;
-- adds `operationId`
-
-[#353](https://github.com/ruby-grape/grape-swagger/pull/353) resolves issue #352
-
-### 0.10.4 (Next)
-
-[#344](https://github.com/ruby-grape/grape-swagger/pull/) Namespace based tag include in Swagger Json
-
-* Namespace based tagging help the swagger GUI to group the API list
-
-### 0.10.3 (Next)
-
-[#336](https://github.com/ruby-grape/grape-swagger/pull/336) changes of swagger-2.0 fork, to support it
-
-* updates gems, corrects parameter, which is in array, make rubocop happy
-* runs under 2.3
-* documents produces of an end-point
-* Update api_swagger_v2_format-content_type_spec.rb
-* upgrades to grape 0.14.x; grape-entity 0.5.x
+* [#344](https://github.com/ruby-grape/grape-swagger/pull/344): Namespace based tag included in Swagger JSON - [@LeFnord](https://github.com/LeFnord).
 
 ### 0.10.2 (August 19, 2015)
 

@@ -41,12 +41,13 @@ These screenshot is based on the [Hussars](https://github.com/LeFnord/hussars) s
 
 The following versions of grape, grape-entity and grape-swagger can currently be used together.
 
-grape-swagger | grape                   | grape-entity
---------------|-------------------------|-------------
-0.10.5        | >= 0.10.0 ... <= 0.14.0 |  < 0.5.0
-0.11.0        |               >= 0.16.2 |  < 0.5.0
-0.20.1        | >= 0.12.0 ... <= 0.14.0 | <= 0.5.1
+grape-swagger | swagger spec | grape                   | grape-entity
+--------------|--------------|-------------------------|-------------
+0.10.5        |     1.2      | >= 0.10.0 ... <= 0.14.0 |  < 0.5.0
+0.11.0        |     1.2      |               >= 0.16.2 |  < 0.5.0
+0.20.1        |     2.0      | >= 0.12.0 ... <= 0.14.0 | <= 0.5.1
 
+Swagger 2.0 support is currently not available for Grape 0.16.x. Please contribute to [#407](https://github.com/ruby-grape/grape-swagger/issues/407).
 
 <a name="swagger-spec" />
 ## Swagger-Spec
@@ -169,7 +170,7 @@ add_swagger_documentation \
 ```
 
 #### add_version:
-Add `version` key to the documented path keys, default is: `true`,  
+Add `version` key to the documented path keys, default is: `true`,
 here the version is the API version, specified by `grape` in [`path`](https://github.com/ruby-grape/grape/#path)
 
 ```ruby

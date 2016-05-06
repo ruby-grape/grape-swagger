@@ -27,6 +27,10 @@ describe 'a simple mounted api' do
         status 200
       end
 
+      options '/simple-options-test' do
+        status 200
+      end
+
       desc 'this gets something else',
            headers: {
              'XAuthToken' => { description: 'A required header.', required: true },
@@ -84,7 +88,14 @@ describe 'a simple mounted api' do
         'swagger' => '2.0',
         'produces' => ['application/xml', 'application/json', 'application/octet-stream', 'text/plain'],
         'host' => 'example.org',
-        'tags' => [{ 'name' => 'simple', 'description' => 'Operations about simples' }, { 'name' => 'simple-test', 'description' => 'Operations about simple-tests' }, { 'name' => 'simple-head-test', 'description' => 'Operations about simple-head-tests' }, { 'name' => 'simple_with_headers', 'description' => 'Operations about simple_with_headers' }, { 'name' => 'items', 'description' => 'Operations about items' }, { 'name' => 'custom', 'description' => 'Operations about customs' }],
+        'tags' => [
+          { 'name' => 'simple', 'description' => 'Operations about simples' },
+          { 'name' => 'simple-test', 'description' => 'Operations about simple-tests' },
+          { 'name' => 'simple-head-test', 'description' => 'Operations about simple-head-tests' },
+          { 'name' => 'simple-options-test', 'description' => 'Operations about simple-options-tests' },
+          { 'name' => 'simple_with_headers', 'description' => 'Operations about simple_with_headers' },
+          { 'name' => 'items', 'description' => 'Operations about items' },
+          { 'name' => 'custom', 'description' => 'Operations about customs' }],
         'paths' => {
           '/simple' => {
             'get' => {
@@ -106,6 +117,12 @@ describe 'a simple mounted api' do
               'responses' => { '200' => { 'description' => 'head SimpleHeadTest' } },
               'tags' => ['simple-head-test'],
               'operationId' => 'headSimpleHeadTest' } },
+          '/simple-options-test' => {
+            'options' => {
+              'produces' => ['application/json'],
+              'responses' => { '200' => { 'description' => 'option SimpleOptionsTest' } },
+              'tags' => ['simple-options-test'],
+              'operationId' => 'optionsSimpleOptionsTest' } },
           '/simple_with_headers' => {
             'get' => {
               'description' => 'this gets something else',
@@ -154,7 +171,14 @@ describe 'a simple mounted api' do
         'swagger' => '2.0',
         'produces' => ['application/xml', 'application/json', 'application/octet-stream', 'text/plain'],
         'host' => 'example.org',
-        'tags' => [{ 'name' => 'simple', 'description' => 'Operations about simples' }, { 'name' => 'simple-test', 'description' => 'Operations about simple-tests' }, { 'name' => 'simple-head-test', 'description' => 'Operations about simple-head-tests' }, { 'name' => 'simple_with_headers', 'description' => 'Operations about simple_with_headers' }, { 'name' => 'items', 'description' => 'Operations about items' }, { 'name' => 'custom', 'description' => 'Operations about customs' }],
+        'tags' => [
+          { 'name' => 'simple', 'description' => 'Operations about simples' },
+          { 'name' => 'simple-test', 'description' => 'Operations about simple-tests' },
+          { 'name' => 'simple-head-test', 'description' => 'Operations about simple-head-tests' },
+          { 'name' => 'simple-options-test', 'description' => 'Operations about simple-options-tests' },
+          { 'name' => 'simple_with_headers', 'description' => 'Operations about simple_with_headers' },
+          { 'name' => 'items', 'description' => 'Operations about items' },
+          { 'name' => 'custom', 'description' => 'Operations about customs' }],
         'paths' => {
           '/simple' => {
             'get' => {
@@ -180,7 +204,14 @@ describe 'a simple mounted api' do
           'swagger' => '2.0',
           'produces' => ['application/xml', 'application/json', 'application/octet-stream', 'text/plain'],
           'host' => 'example.org',
-          'tags' => [{ 'name' => 'simple', 'description' => 'Operations about simples' }, { 'name' => 'simple-test', 'description' => 'Operations about simple-tests' }, { 'name' => 'simple-head-test', 'description' => 'Operations about simple-head-tests' }, { 'name' => 'simple_with_headers', 'description' => 'Operations about simple_with_headers' }, { 'name' => 'items', 'description' => 'Operations about items' }, { 'name' => 'custom', 'description' => 'Operations about customs' }],
+          'tags' => [
+            { 'name' => 'simple', 'description' => 'Operations about simples' },
+            { 'name' => 'simple-test', 'description' => 'Operations about simple-tests' },
+            { 'name' => 'simple-head-test', 'description' => 'Operations about simple-head-tests' },
+            { 'name' => 'simple-options-test', 'description' => 'Operations about simple-options-tests' },
+            { 'name' => 'simple_with_headers', 'description' => 'Operations about simple_with_headers' },
+            { 'name' => 'items', 'description' => 'Operations about items' },
+            { 'name' => 'custom', 'description' => 'Operations about customs' }],
           'paths' => {
             '/simple-test' => {
               'get' => {

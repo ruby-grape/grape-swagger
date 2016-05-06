@@ -9,7 +9,8 @@ module GrapeSwagger
             put: { code: 200, message: 'updated {item}' },
             patch: { code: 200, message: 'patched {item}' },
             delete: { code: 200, message: 'deleted {item}' },
-            head: { code: 200, message: 'head {item}' }
+            head: { code: 200, message: 'head {item}' },
+            options: { code: 200, message: 'option {item}' }
           }
         end
       end

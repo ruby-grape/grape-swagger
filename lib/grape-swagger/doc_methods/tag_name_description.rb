@@ -8,7 +8,7 @@ module GrapeSwagger
           namespace_routes = target_class.combined_namespace_routes
 
           namespace_routes.keys.map do |local_route|
-            next if namespace_routes[local_route].map(&:route_hidden).all? { |value| value.respond_to?(:call) ? value.call : value }
+            next if namespace_routes[local_route].map { |route| route.options[:hidden] }.all? { |value| value.respond_to?(:call) ? value.call : value }
 
             original_namespace_name = target_class.combined_namespace_identifiers.key?(local_route) ? target_class.combined_namespace_identifiers[local_route] : local_route
             description = namespaces[original_namespace_name] && namespaces[original_namespace_name].options[:desc]

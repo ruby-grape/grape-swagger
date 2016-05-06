@@ -1,4 +1,7 @@
 require 'grape'
+
+require 'grape-swagger/grape/route'
+
 require 'grape-swagger/version'
 require 'grape-swagger/endpoint'
 require 'grape-swagger/errors'
@@ -48,8 +51,8 @@ module Grape
 
       def combine_routes(app, doc_klass)
         app.routes.each do |route|
-          route_path = route.route_path
-          route_match = route_path.split(/^.*?#{route.route_prefix.to_s}/).last
+          route_path = route.path
+          route_match = route_path.split(/^.*?#{route.prefix.to_s}/).last
           next unless route_match
           route_match = route_match.match('\/([\w|-]*?)[\.\/\(]') || route_match.match('\/([\w|-]*)$')
           next unless route_match
@@ -57,7 +60,7 @@ module Grape
           next if resource.empty?
           resource.downcase!
           @target_class.combined_routes[resource] ||= []
-          next if doc_klass.hide_documentation_path && route.route_path.match(/#{doc_klass.mount_path}($|\/|\(\.)/)
+          next if doc_klass.hide_documentation_path && route.path.match(/#{doc_klass.mount_path}($|\/|\(\.)/)
           @target_class.combined_routes[resource] << route
         end
       end
@@ -141,10 +144,10 @@ module Grape
       end
 
       def route_path_start_with?(route, name)
-        route_prefix = route.route_prefix ? "/#{route.route_prefix}/#{name}" : "/#{name}"
-        route_versioned_prefix = route.route_prefix ? "/#{route.route_prefix}/:version/#{name}" : "/:version/#{name}"
+        route_prefix = route.prefix ? "/#{route.prefix}/#{name}" : "/#{name}"
+        route_versioned_prefix = route.prefix ? "/#{route.prefix}/:version/#{name}" : "/:version/#{name}"
 
-        route.route_path.start_with?(route_prefix, route_versioned_prefix)
+        route.path.start_with?(route_prefix, route_versioned_prefix)
       end
 
       def standalone_sub_namespaces(name, namespaces)

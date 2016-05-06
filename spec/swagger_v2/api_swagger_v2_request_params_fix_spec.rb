@@ -44,7 +44,7 @@ describe 'additional parameter settings' do
   end
 
   specify do
-    expect(subject['paths']['/bookings/{id}']['put']['parameters']).to eql(
+    expect(subject['paths']['/bookings/{id}']['put']['parameters'].sort_by { |p| p['name'] }).to eql(
       [
         { 'in' => 'path', 'name' => 'id', 'type' => 'integer', 'format' => 'int32', 'required' => true },
         { 'in' => 'formData', 'name' => 'name', 'type' => 'string', 'required' => false }

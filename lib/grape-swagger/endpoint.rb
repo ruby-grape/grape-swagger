@@ -86,8 +86,8 @@ module Grape
       routes.each do |route|
         next if hidden?(route)
 
-        @item, path = GrapeSwagger::DocMethods::PathString.build(route.route_path, options)
-        @entity = route.route_entity || route.route_success
+        @item, path = GrapeSwagger::DocMethods::PathString.build(route.path, options)
+        @entity = route.entity || route.options[:success]
 
         verb, method_object = method_object(route, options, path)
 
@@ -112,14 +112,14 @@ module Grape
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method.delete_if { |_, value| value.blank? }
 
-      [route.route_method.downcase.to_sym, method]
+      [route.request_method.downcase.to_sym, method]
     end
 
     def description_object(route, markdown)
-      description = route.route_desc if route.route_desc.present?
-      description = route.route_description if route.route_description.present?
+      description = route.options[:desc] if route.options.key?(:desc)
+      description = route.description if route.description.present?
       description = "# #{description} " if markdown
-      description += "\n #{route.route_detail}" if route.route_detail
+      description += "\n #{route.options[:detail]}" if route.options.key?(:detail)
       description = markdown.markdown(description.to_s).chomp if markdown
 
       description
@@ -128,8 +128,8 @@ module Grape
     def produces_object(route, format)
       mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format)
 
-      route_mime_types = [:route_formats, :route_content_types, :route_produces].map do |producer|
-        possible = route.send(producer)
+      route_mime_types = [:formats, :content_types, :produces].map do |producer|
+        possible = route.options[producer]
         GrapeSwagger::DocMethods::ProducesConsumes.call(possible) if possible.present?
       end.flatten.compact.uniq
 
@@ -137,8 +137,8 @@ module Grape
     end
 
     def consumes_object(route, format)
-      method = route.route_method.downcase.to_sym
-      format = route.route_settings[:description][:consumes] if route.route_settings[:description] && route.route_settings[:description][:consumes]
+      method = route.request_method.downcase.to_sym
+      format = route.settings[:description][:consumes] if route.settings[:description] && route.settings[:description][:consumes]
       mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format) if [:post, :put].include?(method)
 
       mime_types
@@ -153,11 +153,11 @@ module Grape
     end
 
     def response_object(route, markdown)
-      default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.route_method.downcase.to_sym]
+      default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
       default_code[:model] = @entity if @entity
-      default_code[:message] = route.route_description || default_code[:message].sub('{item}', @item)
+      default_code[:message] = route.description || default_code[:message].sub('{item}', @item)
 
-      codes = [default_code] + (route.route_http_codes || route.route_failure || [])
+      codes = [default_code] + (route.http_codes || route.options[:failure] || [])
       codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2] } : x }
 
       codes.each_with_object({}) do |value, memo|
@@ -166,7 +166,7 @@ module Grape
         response_model = @item
         response_model = expose_params_from_model(value[:model]) if value[:model]
 
-        if memo.key?(200) && route.route_method == 'DELETE' && value[:model].nil?
+        if memo.key?(200) && route.request_method == 'DELETE' && value[:model].nil?
           memo[204] = memo.delete(200)
           value[:code] = 204
         end
@@ -177,7 +177,7 @@ module Grape
 
         @definitions[response_model][:description] = description_object(route, markdown)
         # TODO: proof that the definition exist, if model isn't specified
-        memo[value[:code]][:schema] = if route.route_is_array
+        memo[value[:code]][:schema] = if route.options[:is_array]
                                         { 'type' => 'array', 'items' => { '$ref' => "#/definitions/#{response_model}" } }
                                       else
                                         { '$ref' => "#/definitions/#{response_model}" }
@@ -186,23 +186,23 @@ module Grape
     end
 
     def tag_object(route, version)
-      Array(route.route_path.split('{')[0].split('/').reject(&:empty?).delete_if { |i| ((i == route.route_prefix.to_s) || (i == version)) }.first)
+      Array(route.path.split('{')[0].split('/').reject(&:empty?).delete_if { |i| ((i == route.prefix.to_s) || (i == version)) }.first)
     end
 
     private
 
     def partition_params(route)
-      declared_params = route.route_settings[:declared_params] if route.route_settings[:declared_params].present?
-      required, exposed = route.route_params.partition { |x| x.first.is_a? String }
-      required.concat GrapeSwagger::DocMethods::Headers.parse(route) unless route.route_headers.nil?
+      declared_params = route.settings[:declared_params] if route.settings[:declared_params].present?
+      required, exposed = route.params.partition { |x| x.first.is_a? String }
+      required.concat GrapeSwagger::DocMethods::Headers.parse(route) unless route.headers.nil?
       default_type(required)
       default_type(exposed)
 
-      unless declared_params.nil? && route.route_headers.nil?
+      unless declared_params.nil? && route.headers.nil?
         request_params = parse_request_params(required)
       end
 
-      return route.route_params if route.route_params.present? && !route.route_settings[:declared_params].present?
+      return route.params if route.params.present? && !route.settings[:declared_params].present?
       request_params || {}
     end
 
@@ -295,11 +295,9 @@ module Grape
     end
 
     def hidden?(route)
-      if route.route_hidden
-        return route.route_hidden.is_a?(Proc) ? route.route_hidden.call : route.route_hidden
-      end
-
-      false
+      route_hidden = route.options[:hidden]
+      route_hidden = route_hidden.call if route_hidden.is_a?(Proc)
+      route_hidden
     end
   end
 end

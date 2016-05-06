@@ -23,6 +23,10 @@ describe 'a simple mounted api' do
         { bla: 'something' }
       end
 
+      head '/simple-head-test' do
+        status 200
+      end
+
       desc 'this gets something else',
         headers: {
           'XAuthToken' => { description: 'A required header.', required: true },
@@ -78,7 +82,7 @@ describe 'a simple mounted api' do
         "swagger"=>"2.0",
         "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
         "host"=>"example.org",
-        "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}, {"name"=>"simple-test", "description"=>"Operations about simple-tests"}, {"name"=>"simple_with_headers", "description"=>"Operations about simple_with_headers"}, {"name"=>"items", "description"=>"Operations about items"}, {"name"=>"custom", "description"=>"Operations about customs"}],
+        "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}, {"name"=>"simple-test", "description"=>"Operations about simple-tests"}, {"name"=>"simple-head-test", "description"=>"Operations about simple-head-tests"}, {"name"=>"simple_with_headers", "description"=>"Operations about simple_with_headers"}, {"name"=>"items", "description"=>"Operations about items"}, {"name"=>"custom", "description"=>"Operations about customs"}],
         "paths"=>{
           "/simple"=>{
             "get"=>{
@@ -94,6 +98,12 @@ describe 'a simple mounted api' do
               "tags"=>["simple-test"],
               "operationId"=>"getSimpleTest",
               "responses"=>{"200"=>{"description"=>"This gets something for URL using - separator."}}}},
+          "/simple-head-test"=>{
+            "head"=>{
+              "produces"=>["application/json"],
+              "responses"=>{"200"=>{"description"=>"head SimpleHeadTest"}},
+              "tags"=>["simple-head-test"],
+              "operationId"=>"headSimpleHeadTest"}},
           "/simple_with_headers"=>{
             "get"=>{
               "description"=>"this gets something else",
@@ -142,7 +152,7 @@ describe 'a simple mounted api' do
         "swagger"=>"2.0",
         "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
         "host"=>"example.org",
-        "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}, {"name"=>"simple-test", "description"=>"Operations about simple-tests"}, {"name"=>"simple_with_headers", "description"=>"Operations about simple_with_headers"}, {"name"=>"items", "description"=>"Operations about items"}, {"name"=>"custom", "description"=>"Operations about customs"}],
+        "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}, {"name"=>"simple-test", "description"=>"Operations about simple-tests"}, {"name"=>"simple-head-test", "description"=>"Operations about simple-head-tests"}, {"name"=>"simple_with_headers", "description"=>"Operations about simple_with_headers"}, {"name"=>"items", "description"=>"Operations about items"}, {"name"=>"custom", "description"=>"Operations about customs"}],
         "paths"=>{
           "/simple"=>{
             "get"=>{
@@ -168,7 +178,7 @@ describe 'a simple mounted api' do
           "swagger"=>"2.0",
           "produces"=>["application/xml", "application/json", "application/octet-stream", "text/plain"],
           "host"=>"example.org",
-          "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}, {"name"=>"simple-test", "description"=>"Operations about simple-tests"}, {"name"=>"simple_with_headers", "description"=>"Operations about simple_with_headers"}, {"name"=>"items", "description"=>"Operations about items"}, {"name"=>"custom", "description"=>"Operations about customs"}],
+          "tags" => [{"name"=>"simple", "description"=>"Operations about simples"}, {"name"=>"simple-test", "description"=>"Operations about simple-tests"}, {"name"=>"simple-head-test", "description"=>"Operations about simple-head-tests"}, {"name"=>"simple_with_headers", "description"=>"Operations about simple_with_headers"}, {"name"=>"items", "description"=>"Operations about items"}, {"name"=>"custom", "description"=>"Operations about customs"}],
           "paths"=>{
             "/simple-test"=>{
               "get"=>{

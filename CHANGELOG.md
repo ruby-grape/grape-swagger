@@ -5,6 +5,7 @@
 * [#406](https://github.com/ruby-grape/grape-swagger/pull/406): Force usage of entities for response definition [issue #385](https://github.com/ruby-grape/grape-swagger/issues/385) - [@LeFnord](https://github.com/LeFnord).
 * [#405](https://github.com/ruby-grape/grape-swagger/pull/405), [#403](https://github.com/ruby-grape/grape-swagger/issues/403): Added version support matrix - [@LeFnord](https://github.com/LeFnord).
 * [#408](https://github.com/ruby-grape/grape-swagger/pull/408): Added support for `HEAD` endpoints - [@Bugagazavr](https://github.com/Bugagazavr).
+* [#408](https://github.com/ruby-grape/grape-swagger/pull/411): Added support for `OPTIONS` endpoints - [@Bugagazavr](https://github.com/Bugagazavr).
 * [#407](https://github.com/ruby-grape/grape-swagger/issues/407): Added support for Grape 0.15.x - [@dblock](https://github.com/dblock).
 * Your contribution here.
 

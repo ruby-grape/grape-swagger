@@ -4,10 +4,10 @@ module GrapeSwagger
       class << self
         def add(path, definitions, route)
           @route = route
-          description = route.route_settings[:description]
+          description = route.settings[:description]
           add_extension_to(path[method], extension(description)) if description && extended?(description, :x)
 
-          settings = route.route_settings
+          settings = route.settings
           add_extensions_to_path(settings, path) if settings && extended?(settings, :x_path)
           add_extensions_to_definition(settings, path, definitions) if settings && extended?(settings, :x_def)
         end
@@ -67,7 +67,7 @@ module GrapeSwagger
         end
 
         def method
-          @route.route_method.downcase.to_sym
+          @route.request_method.downcase.to_sym
         end
       end
     end

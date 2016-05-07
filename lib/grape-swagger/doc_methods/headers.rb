@@ -3,7 +3,7 @@ module GrapeSwagger
     class Headers
       class << self
         def parse(route)
-          route.route_headers.to_a.map do |route_header|
+          route.headers.to_a.map do |route_header|
             route_header.tap do |header|
               hash = header[1]
               description = hash.delete('description')

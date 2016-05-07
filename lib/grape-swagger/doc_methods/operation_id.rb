@@ -3,7 +3,7 @@ module GrapeSwagger
     class OperationId
       class << self
         def build(route, path = nil)
-          verb = route.route_method.to_s.downcase
+          verb = route.request_method.to_s.downcase
 
           operation = manipulate(path) unless path.nil?
 

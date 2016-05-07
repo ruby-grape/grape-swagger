@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.summary     = 'A simple way to add auto generated documentation to your Grape API that can be displayed with Swagger.'
   s.license     = 'MIT'
 
-  s.add_runtime_dependency 'grape', ['>= 0.12.0', '< 0.16.0']
+  s.add_runtime_dependency 'grape', '>= 0.12.0'
   s.add_runtime_dependency 'grape-entity'
   s.add_runtime_dependency 'awesome_print'
 

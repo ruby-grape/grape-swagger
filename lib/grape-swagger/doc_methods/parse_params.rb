@@ -3,8 +3,8 @@ module GrapeSwagger
     class ParseParams
       class << self
         def call(param, settings, route)
-          path = route.route_path
-          method = route.route_method
+          path = route.path
+          method = route.request_method
 
           data_type = GrapeSwagger::DocMethods::DataType.call(settings)
           additional_documentation = settings[:documentation]

@@ -12,10 +12,10 @@ matrix:
       env: GRAPE_VERSION=0.14.0
     - rvm: 2.3.1
       env: GRAPE_VERSION=0.15.0
-#    - rvm: 2.3.1
-#      env: GRAPE_VERSION=0.16.0
-#    - rvm: 2.3.1
-#      env: GRAPE_VERSION=HEAD
+    - rvm: 2.3.1
+      env: GRAPE_VERSION=0.16.2
+    - rvm: 2.3.1
+      env: GRAPE_VERSION=HEAD
     - rvm: 2.3.0
     - rvm: 2.2.5
     - rvm: 2.1

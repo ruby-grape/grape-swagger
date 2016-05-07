@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'swagger spec v2.0' do
-  include_context 'swagger example'
+  include_context "#{MODEL_PARSER} swagger example"
 
   def app
     Class.new(Grape::API) do
@@ -201,6 +201,8 @@ describe 'swagger spec v2.0' do
   end
 
   describe 'swagger file' do
-    it { expect(json).to eql swagger_json }
+    it do
+      expect(json).to eql swagger_json
+    end
   end
 end

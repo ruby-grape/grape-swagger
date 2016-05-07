@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'swagger spec v2.0' do
   describe 'mounted APIs' do
-    include_context 'swagger example'
+    include_context "#{MODEL_PARSER} swagger example"
 
     def app
       Class.new(Grape::API) do

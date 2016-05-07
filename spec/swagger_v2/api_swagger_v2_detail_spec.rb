@@ -24,7 +24,7 @@ end
 
 describe 'details' do
   describe 'take deatils as it is' do
-    include_context 'the api entities'
+    include_context "#{MODEL_PARSER} swagger example"
 
     before :all do
       module TheApi
@@ -74,7 +74,7 @@ describe 'details' do
   end
 
   describe 'details, convert markdown with kramdown' do
-    include_context 'the api entities'
+    include_context "#{MODEL_PARSER} swagger example"
 
     before :all do
       module TheApi
@@ -112,7 +112,7 @@ describe 'details' do
   end
 
   describe 'details, convert markdown with redcarpet', unless: RUBY_PLATFORM.eql?('java') do
-    include_context 'the api entities'
+    include_context "#{MODEL_PARSER} swagger example"
 
     before :all do
       module TheApi

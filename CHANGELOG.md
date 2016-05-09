@@ -1,4 +1,4 @@
-### Next
+### 0.20.3 (May 9, 2016)
 
 #### Features
 
@@ -7,7 +7,6 @@
 * [#405](https://github.com/ruby-grape/grape-swagger/pull/405), [#403](https://github.com/ruby-grape/grape-swagger/issues/403): Added version support matrix - [@LeFnord](https://github.com/LeFnord).
 * [#408](https://github.com/ruby-grape/grape-swagger/pull/408): Added support for `HEAD` endpoints - [@Bugagazavr](https://github.com/Bugagazavr).
 * [#408](https://github.com/ruby-grape/grape-swagger/pull/411): Added support for `OPTIONS` endpoints - [@Bugagazavr](https://github.com/Bugagazavr).
-* Your contribution here.
 
 #### Fixes
 

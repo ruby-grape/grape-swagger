@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'hide documentation path' do
-  include_context 'the api entities'
+  include_context "#{MODEL_PARSER} swagger example"
 
   before :all do
     module TheApi

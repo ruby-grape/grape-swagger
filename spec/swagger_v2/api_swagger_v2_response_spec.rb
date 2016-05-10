@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'response' do
-  include_context 'the api entities'
+  include_context "#{MODEL_PARSER} swagger example"
 
   before :all do
     module TheApi
@@ -53,21 +53,7 @@ describe 'response' do
         },
         'tags' => ['nested_type'],
         'operationId' => 'getNestedType')
-      expect(subject['definitions']).to eql(
-        'ResponseItem' => {
-          'type' => 'object',
-          'properties' => { 'id' => { 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'type' => 'string' } }
-        },
-        'UseItemResponseAsType' => {
-          'type' => 'object',
-          'properties' => { 'description' => { 'type' => 'string' }, 'responses' => { '$ref' => '#/definitions/ResponseItem' } },
-          'description' => 'This returns something'
-        },
-        'ApiError' => {
-          'type' => 'object',
-          'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'type' => 'string' } },
-          'description' => 'This returns something'
-        })
+      expect(subject['definitions']).to eql(swagger_nested_type)
     end
   end
 
@@ -87,21 +73,7 @@ describe 'response' do
         },
         'tags' => ['entity_response'],
         'operationId' => 'getEntityResponse')
-      expect(subject['definitions']).to eql(
-        'ResponseItem' => {
-          'type' => 'object',
-          'properties' => { 'id' => { 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'type' => 'string' } }
-        },
-        'UseResponse' => {
-          'type' => 'object',
-          'properties' => { 'description' => { 'type' => 'string' }, '$responses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' } } },
-          'description' => 'This returns something'
-        },
-        'ApiError' => {
-          'type' => 'object',
-          'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'type' => 'string' } },
-          'description' => 'This returns something'
-        })
+      expect(subject['definitions']).to eql(swagger_entity_as_response_object)
     end
   end
 
@@ -126,12 +98,7 @@ describe 'response' do
         },
         'tags' => ['params_response'],
         'operationId' => 'postParamsResponse')
-      expect(subject['definitions']).to eql(
-        'ApiError' => {
-          'type' => 'object',
-          'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'type' => 'string' } },
-          'description' => 'This returns something'
-        })
+      expect(subject['definitions']).to eql(swagger_params_as_response_object)
     end
   end
 end

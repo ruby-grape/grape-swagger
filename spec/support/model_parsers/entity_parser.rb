@@ -1,4 +1,4 @@
-RSpec.shared_context 'swagger example' do
+RSpec.shared_context 'entity swagger example' do
   before :all do
     module Entities
       class Something < Grape::Entity
@@ -54,7 +54,111 @@ RSpec.shared_context 'swagger example' do
         expose :code, documentation: { type: Integer, desc: 'status code' }
         expose :message, documentation: { type: String, desc: 'error message' }
       end
+
+      class SecondApiError < Grape::Entity
+        expose :code, documentation: { type: Integer }
+        expose :severity, documentation: { type: String }
+        expose :message, documentation: { type: String }
+      end
+
+      class ResponseItem < Grape::Entity
+        expose :id, documentation: { type: Integer }
+        expose :name, documentation: { type: String }
+      end
+
+      class OtherItem < Grape::Entity
+        expose :key, documentation: { type: Integer }
+        expose :symbol, documentation: { type: String }
+      end
+
+      class UseResponse < Grape::Entity
+        expose :description, documentation: { type: String }
+        expose :items, as: '$responses', using: Entities::ResponseItem, documentation: { is_array: true }
+      end
+
+      class UseItemResponseAsType < Grape::Entity
+        expose :description, documentation: { type: String }
+        expose :responses, documentation: { type: Entities::ResponseItem, is_array: false }
+      end
+
+      class UseAddress < Grape::Entity
+        expose :street, documentation: { type: String, desc: 'street' }
+        expose :postcode, documentation: { type: String, desc: 'postcode' }
+        expose :city, documentation: { type: String, desc: 'city' }
+        expose :country, documentation: { type: String, desc: 'country' }
+      end
+
+      class UseNestedWithAddress < Grape::Entity
+        expose :name, documentation: { type: String }
+        expose :address, using: Entities::UseAddress
+      end
+
+      class TypedDefinition < Grape::Entity
+        expose :prop_integer,   documentation: { type: Integer, desc: 'prop_integer description' }
+        expose :prop_long,      documentation: { type: Numeric, desc: 'prop_long description' }
+        expose :prop_float,     documentation: { type: Float, desc: 'prop_float description' }
+        expose :prop_double,    documentation: { type: BigDecimal, desc: 'prop_double description' }
+        expose :prop_string,    documentation: { type: String, desc: 'prop_string description' }
+        expose :prop_symbol,    documentation: { type: Symbol, desc: 'prop_symbol description' }
+        expose :prop_date,      documentation: { type: Date, desc: 'prop_date description' }
+        expose :prop_date_time, documentation: { type: DateTime, desc: 'prop_date_time description' }
+        expose :prop_time,      documentation: { type: Time, desc: 'prop_time description' }
+        expose :prop_password,  documentation: { type: 'password', desc: 'prop_password description' }
+        expose :prop_email,     documentation: { type: 'email', desc: 'prop_email description' }
+        expose :prop_boolean,   documentation: { type: Virtus::Attribute::Boolean, desc: 'prop_boolean description' }
+        expose :prop_file,      documentation: { type: File, desc: 'prop_file description' }
+        expose :prop_json,      documentation: { type: JSON, desc: 'prop_json description' }
+      end
     end
+  end
+
+  let(:swagger_definitions_models) do
+    {
+      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } } },
+      'ResponseItem' => { 'type' => 'object', 'properties' => { 'id' => { 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'type' => 'string' } } },
+      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, '$responses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' } } } }
+    }
+  end
+
+  let(:swagger_nested_type) do
+    {
+      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } }, 'description' => 'This returns something' },
+      'ResponseItem' => { 'type' => 'object', 'properties' => { 'id' => { 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'type' => 'string' } } },
+      'UseItemResponseAsType' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, 'responses' => { '$ref' => '#/definitions/ResponseItem' } }, 'description' => 'This returns something' }
+    }
+  end
+
+  let(:swagger_entity_as_response_object) do
+    {
+      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } }, 'description' => 'This returns something' },
+      'ResponseItem' => { 'type' => 'object', 'properties' => { 'id' => { 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'type' => 'string' } } },
+      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, '$responses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' } } }, 'description' => 'This returns something' }
+    }
+  end
+
+  let(:swagger_params_as_response_object) do
+    {
+      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'description' => 'status code', 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'description' => 'error message', 'type' => 'string' } }, 'description' => 'This returns something' }
+    }
+  end
+
+  let(:swagger_typed_defintion) do
+    {
+      'prop_boolean' => { 'description' => 'prop_boolean description', 'type' => 'boolean' },
+      'prop_date' => { 'description' => 'prop_date description', 'type' => 'string', 'format' => 'date' },
+      'prop_date_time' => { 'description' => 'prop_date_time description', 'type' => 'string', 'format' => 'date-time' },
+      'prop_double' => { 'description' => 'prop_double description', 'type' => 'number', 'format' => 'double' },
+      'prop_email' => { 'description' => 'prop_email description', 'type' => 'string', 'format' => 'email' },
+      'prop_file' => { 'description' => 'prop_file description', 'type' => 'file' },
+      'prop_float' => { 'description' => 'prop_float description', 'type' => 'number', 'format' => 'float' },
+      'prop_integer' => { 'description' => 'prop_integer description', 'type' => 'integer', 'format' => 'int32' },
+      'prop_json' => { 'description' => 'prop_json description', 'type' => 'json' },
+      'prop_long' => { 'description' => 'prop_long description', 'type' => 'integer', 'format' => 'int64' },
+      'prop_password' => { 'description' => 'prop_password description', 'type' => 'string', 'format' => 'password' },
+      'prop_string' => { 'description' => 'prop_string description', 'type' => 'string' },
+      'prop_symbol' => { 'description' => 'prop_symbol description', 'type' => 'string' },
+      'prop_time' => { 'description' => 'prop_time description', 'type' => 'string', 'format' => 'date-time' }
+    }
   end
 
   let(:swagger_json) do

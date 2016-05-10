@@ -1,6 +1,15 @@
 Upgrading Grape-swagger
 =======================
 
+### Upgrading to >= 0.21.0
+
+With grape >= 0.21.0, `grape-entity` support moved to separate gem `grape-swagger-entity`, if you use grape entity, update your Gemfile:
+
+```ruby
+gem 'grape-swagger'
+gem 'grape-swagger-entity'
+```
+
 ### Upgrading to >= 0.10.2
 
 With grape >= 0.12.0, support for `notes` is replaced by passing a block `detail` option specified. For future compatibility, update your code:

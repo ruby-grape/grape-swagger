@@ -1,5 +1,8 @@
 ### Next
 
+#### Features
+
+* [#413](https://github.com/ruby-grape/grape-swagger/pull/413): Move all model parsing logic to separate gems `grape-swagger-entity` and added representable parser `grape-swagger` - [@Bugagazavr](https://github.com/Bugagazavr).
 * Your contribution here.
 
 ### 0.20.3 (May 9, 2016)

@@ -7,11 +7,20 @@ require 'grape-swagger/endpoint'
 require 'grape-swagger/errors'
 
 require 'grape-swagger/doc_methods'
+require 'grape-swagger/model_parsers'
 
 require 'grape-swagger/markdown/kramdown_adapter'
 require 'grape-swagger/markdown/redcarpet_adapter'
 
 require 'awesome_print'
+
+module GrapeSwagger
+  class << self
+    def model_parsers
+      @model_parsers ||= GrapeSwagger::ModelParsers.new
+    end
+  end
+end
 
 module Grape
   class API

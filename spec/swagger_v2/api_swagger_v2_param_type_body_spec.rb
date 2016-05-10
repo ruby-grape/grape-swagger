@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `header`' do
-  include_context 'the api entities'
+  include_context "#{MODEL_PARSER} swagger example"
 
   before :all do
     module TheApi
@@ -33,7 +33,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
         namespace :with_entities do
           desc 'post in body with entity',
-               success: TheApi::Entities::ResponseItem
+               success: ::Entities::ResponseItem
           params do
             requires :name, type: String, documentation: { desc: 'name', param_type: 'body' }
           end
@@ -43,7 +43,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           end
 
           desc 'put in body with entity',
-               success: TheApi::Entities::ResponseItem
+               success: ::Entities::ResponseItem
           params do
             requires :id, type: Integer
             optional :name, type: String, documentation: { desc: 'name', param_type: 'body' }

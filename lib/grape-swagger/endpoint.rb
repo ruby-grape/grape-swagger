@@ -226,72 +226,26 @@ module Grape
       end
     end
 
-    def parse_response_params(params)
-      return if params.nil?
-
-      params.each_with_object({}) do |x, memo|
-        next if x[1].fetch(:documentation, {}).fetch(:in, nil).to_s == 'header'
-        x[0] = x.last[:as] if x.last[:as]
-
-        model = x.last[:using] if x.last[:using].present?
-        model ||= x.last[:documentation][:type] if x.last[:documentation] && could_it_be_a_model?(x.last[:documentation])
-
-        if model
-          name = expose_params_from_model(model)
-          memo[x.first] = if x.last[:documentation] && x.last[:documentation][:is_array]
-                            { 'type' => 'array', 'items' => { '$ref' => "#/definitions/#{name}" } }
-                          else
-                            { '$ref' => "#/definitions/#{name}" }
-                          end
-        else
-          documented_type = x.last[:type]
-          documented_type ||= x.last[:documentation][:type] if x.last[:documentation]
-          data_type = GrapeSwagger::DocMethods::DataType.call(documented_type)
-
-          if GrapeSwagger::DocMethods::DataType.primitive?(data_type)
-            data = GrapeSwagger::DocMethods::DataType.mapping(data_type)
-            memo[x.first] = { type: data.first, format: data.last }
-          else
-            memo[x.first] = { type: data_type }
-          end
-
-          memo[x.first][:enum] = x.last[:values] if x.last[:values] && x.last[:values].is_a?(Array)
-        end
-        memo[x.first][:description] = x.last[:documentation][:desc] if x.last[:documentation] && x.last[:documentation][:desc]
-      end
-    end
-
     def expose_params_from_model(model)
       model_name = model_name(model)
 
-      # TODO: this should only be a temporary hack ;)
-      if GrapeEntity::VERSION =~ /0\.4\.\d/
-        parameters = model.exposures ? model.exposures : model.documentation
-      elsif GrapeEntity::VERSION =~ /0\.5\.\d/
-        parameters = model.root_exposures.each_with_object({}) do |value, memo|
-          memo[value.attribute] = value.send(:options)
-        end
-      end
-      properties = parse_response_params(parameters)
+      properties = {}
+      GrapeSwagger.model_parsers.each do |klass, ancestor|
+        next unless model.ancestors.map(&:to_s).include?(ancestor)
 
-      @definitions[model_name] = { type: 'object', properties: properties }
+        model_class = klass.new(model, self)
+        properties = model_class.call
+
+        break
+      end
+
+      @definitions[model_name] = { type: 'object', properties: properties || {} }
 
       model_name
     end
 
     def model_name(name)
       name.respond_to?(:name) ? name.name.demodulize.camelize : name.split('::').last
-    end
-
-    def could_it_be_a_model?(value)
-      (
-        value[:type].to_s.include?('Entity') || value[:type].to_s.include?('Entities')
-      ) || (
-        value[:type] &&
-        value[:type].is_a?(Class) &&
-        !GrapeSwagger::DocMethods::DataType.primitive?(value[:type].name.downcase) &&
-        !value[:type] == Array
-      )
     end
 
     def hidden?(route)

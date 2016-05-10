@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `header`' do
-  include_context 'the api entities'
+  include_context "#{MODEL_PARSER} swagger example"
 
   before :all do
     module TheApi
@@ -9,7 +9,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         namespace :simple_nested_params do
           desc 'post in body with nested parameters',
                detail: 'more details description',
-               success: TheApi::Entities::UseNestedWithAddress
+               success: Entities::UseNestedWithAddress
           params do
             requires :name, type: String, documentation: { desc: 'name', in: 'body' }
             optional :address, type: Hash do
@@ -26,7 +26,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
           desc 'put in body with nested parameters',
                detail: 'more details description',
-               success: TheApi::Entities::UseNestedWithAddress
+               success: Entities::UseNestedWithAddress
           params do
             requires :id, type: Integer
             optional :name, type: String, documentation: { desc: 'name', in: 'body' }
@@ -45,7 +45,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
         namespace :multiple_nested_params do
           desc 'put in body with multiple nested parameters',
-               success: TheApi::Entities::UseNestedWithAddress
+               success: Entities::UseNestedWithAddress
           params do
             requires :id, type: Integer
             optional :name, type: String, documentation: { desc: 'name', in: 'body' }

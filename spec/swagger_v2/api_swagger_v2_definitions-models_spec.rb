@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'definitions/models' do
-  include_context 'the api entities'
+  include_context "#{MODEL_PARSER} swagger example"
 
   before :all do
     module TheApi
@@ -9,8 +9,8 @@ describe 'definitions/models' do
         format :json
 
         add_swagger_documentation models: [
-          TheApi::Entities::UseResponse,
-          TheApi::Entities::ApiError
+          ::Entities::UseResponse,
+          ::Entities::ApiError
         ]
       end
     end
@@ -27,6 +27,6 @@ describe 'definitions/models' do
 
   specify do
     expect(subject).to include 'definitions'
-    expect(subject['definitions']).to include 'ResponseItem', 'UseResponse', 'ApiError'
+    expect(subject['definitions']).to include(swagger_definitions_models)
   end
 end

@@ -5,6 +5,10 @@ sudo: false
 matrix:
   include:
     - rvm: 2.3.1
+      env: MODEL_PARSER=grape-swagger-entity
+    - rvm: 2.3.1
+      env: MODEL_PARSER=grape-swagger-representable
+    - rvm: 2.3.1
       env: GRAPE_VERSION=0.12.0
     - rvm: 2.3.1
       env: GRAPE_VERSION=0.13.0

@@ -14,7 +14,8 @@ describe 'headers' do
                'X-Rate-Limit-Limit' => {
                  'description' => 'The number of allowed requests in the current period',
                  'type' => 'integer'
-               } },
+               }
+             },
 
              entity: Entities::UseResponse
         get '/use_headers' do
@@ -44,6 +45,7 @@ describe 'headers' do
           'type' => 'integer',
           'format' => 'int32',
           'required' => false }
-      ])
+      ]
+    )
   end
 end

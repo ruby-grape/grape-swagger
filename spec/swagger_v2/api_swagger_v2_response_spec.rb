@@ -52,7 +52,8 @@ describe 'response' do
           '400' => { 'description' => 'NotFound', 'schema' => { '$ref' => '#/definitions/ApiError' } }
         },
         'tags' => ['nested_type'],
-        'operationId' => 'getNestedType')
+        'operationId' => 'getNestedType'
+      )
       expect(subject['definitions']).to eql(swagger_nested_type)
     end
   end
@@ -72,7 +73,8 @@ describe 'response' do
           '400' => { 'description' => 'NotFound', 'schema' => { '$ref' => '#/definitions/ApiError' } }
         },
         'tags' => ['entity_response'],
-        'operationId' => 'getEntityResponse')
+        'operationId' => 'getEntityResponse'
+      )
       expect(subject['definitions']).to eql(swagger_entity_as_response_object)
     end
   end
@@ -97,7 +99,8 @@ describe 'response' do
           '400' => { 'description' => 'NotFound', 'schema' => { '$ref' => '#/definitions/ApiError' } }
         },
         'tags' => ['params_response'],
-        'operationId' => 'postParamsResponse')
+        'operationId' => 'postParamsResponse'
+      )
       expect(subject['definitions']).to eql(swagger_params_as_response_object)
     end
   end

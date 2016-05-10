@@ -27,7 +27,8 @@ describe 'namespace tags check' do
           { 'name' => 'colorado', 'description' => 'Operations about colorados' },
           { 'name' => 'thames', 'description' => 'Operations about thames' },
           { 'name' => 'niles', 'description' => 'Operations about niles' }
-        ])
+        ]
+      )
 
       expect(subject['paths']['/hudson']['get']['tags']).to eql(['hudson'])
       expect(subject['paths']['/colorado/simple']['get']['tags']).to eql(['colorado'])
@@ -51,7 +52,8 @@ describe 'namespace tags check' do
           { 'name' => 'colorado', 'description' => 'Operations about colorados' },
           { 'name' => 'thames', 'description' => 'Operations about thames' },
           { 'name' => 'niles', 'description' => 'Operations about niles' }
-        ])
+        ]
+      )
 
       expect(subject['paths']['/colorado/simple']['get']['tags']).to eql(['colorado'])
       expect(subject['paths']['/colorado/simple-test']['get']['tags']).to eql(['colorado'])
@@ -70,7 +72,8 @@ describe 'namespace tags check' do
             { 'name' => 'colorado', 'description' => 'Operations about colorados' },
             { 'name' => 'thames', 'description' => 'Operations about thames' },
             { 'name' => 'niles', 'description' => 'Operations about niles' }
-          ])
+          ]
+        )
 
         expect(subject['paths']['/thames/simple_with_headers']['get']['tags']).to eql(['thames'])
       end

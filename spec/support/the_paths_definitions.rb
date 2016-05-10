@@ -43,7 +43,8 @@ RSpec.shared_context 'the api paths/defs' do
           responses: { 200 => { description: 'get in path /wo entity', schema: { '$ref' => '#/definitions/InBody' } } },
           tags: ['in_body'],
           operationId: 'getInBodyKey'
-        } }
+        }
+      }
     }
   end
 
@@ -60,7 +61,8 @@ RSpec.shared_context 'the api paths/defs' do
         responses: { 201 => { description: 'post in body /wo entity', schema: { '$ref' => '#/definitions/InBody' } } },
         tags: ['in_body'],
         operationId: 'postInBody'
-      } }
+      }
+    }
   end
 
   let(:definitions) do
@@ -72,7 +74,9 @@ RSpec.shared_context 'the api paths/defs' do
           in_body_2: { type: 'string' },
           in_body_3: { type: 'string' },
           key: { type: 'integer', format: 'int32' }
-        } } }
+        }
+      }
+    }
   end
 
   let(:expected_post_defs) do

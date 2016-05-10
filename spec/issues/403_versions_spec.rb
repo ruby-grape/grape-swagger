@@ -36,7 +36,10 @@ describe 'describing versions' do
               },
               tags: ['nothings'],
               operationId: 'getNothings'
-            } } })
+            }
+          }
+        }
+      )
     end
   end
 
@@ -75,7 +78,10 @@ describe 'describing versions' do
               },
               tags: ['api_version'],
               operationId: 'getV2ApiVersion'
-            } } })
+            }
+          }
+        }
+      )
     end
   end
 
@@ -113,7 +119,10 @@ describe 'describing versions' do
               },
               tags: ['doc_version'],
               operationId: 'getDocVersion'
-            } } })
+            }
+          }
+        }
+      )
     end
   end
 
@@ -152,7 +161,10 @@ describe 'describing versions' do
               },
               tags: ['both_versions'],
               operationId: 'getV2BothVersions'
-            } } })
+            }
+          }
+        }
+      )
     end
   end
 end

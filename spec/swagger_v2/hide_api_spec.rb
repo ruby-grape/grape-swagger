@@ -48,14 +48,20 @@ describe 'a hide mounted api' do
             'produces' => ['application/json'],
             'tags' => ['simple'],
             'operationId' => 'getSimple',
-            'responses' => { '200' => { 'description' => 'Show this endpoint' } } } },
+            'responses' => { '200' => { 'description' => 'Show this endpoint' } }
+          }
+        },
         '/lazy' => {
           'get' => {
             'description' => 'Lazily show endpoint',
             'produces' => ['application/json'],
             'tags' => ['lazy'],
             'operationId' => 'getLazy',
-            'responses' => { '200' => { 'description' => 'Lazily show endpoint' } } } } })
+            'responses' => { '200' => { 'description' => 'Lazily show endpoint' } }
+          }
+        }
+      }
+    )
   end
 end
 
@@ -102,7 +108,11 @@ describe 'a hide mounted api with same namespace' do
             'description' => 'Show this endpoint',
             'produces' => ['application/json'],
             'operationId' => 'getSimpleShow',
-            'tags' => ['simple'], 'responses' => { '200' => { 'description' => 'Show this endpoint' } } } } })
+            'tags' => ['simple'], 'responses' => { '200' => { 'description' => 'Show this endpoint' } }
+          }
+        }
+      }
+    )
   end
 
   it "retrieves the documentation for mounted-api that doesn't include hidden endpoints" do
@@ -120,6 +130,10 @@ describe 'a hide mounted api with same namespace' do
             'produces' => ['application/json'],
             'tags' => ['simple'],
             'operationId' => 'getSimpleShow',
-            'responses' => { '200' => { 'description' => 'Show this endpoint' } } } } })
+            'responses' => { '200' => { 'description' => 'Show this endpoint' } }
+          }
+        }
+      }
+    )
   end
 end

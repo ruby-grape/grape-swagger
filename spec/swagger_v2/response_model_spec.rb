@@ -79,7 +79,8 @@ describe 'responseModel' do
         'description' => 'OK',
         'schema' => {
           'type' => 'array',
-          'items' => { '$ref' => '#/definitions/Something' } }
+          'items' => { '$ref' => '#/definitions/Something' }
+        }
       }
     )
   end
@@ -189,7 +190,9 @@ describe 'should build definition from given entity' do
       'Kind' => {
         'type' => 'object',
         'properties' => {
-          'id' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'Title of the kind.' } } },
+          'id' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'Title of the kind.' }
+        }
+      },
       'Tag' => { 'type' => 'object', 'properties' => { 'name' => { 'type' => 'string', 'description' => 'Name' } } },
       'Relation' => { 'type' => 'object', 'properties' => { 'name' => { 'type' => 'string', 'description' => 'Name' } } },
       'SomeEntity' => {
@@ -203,6 +206,7 @@ describe 'should build definition from given entity' do
           'relation' => { '$ref' => '#/definitions/Relation', 'description' => 'A related model.' }
         },
         'description' => 'This returns something'
-      })
+      }
+    )
   end
 end

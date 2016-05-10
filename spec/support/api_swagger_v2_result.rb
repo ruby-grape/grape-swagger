@@ -35,9 +35,11 @@ RSpec.shared_context 'swagger example' do
 
       class QueryInputElement < Grape::Entity
         expose :key, documentation: {
-          type: String, desc: 'Name of parameter', required: true }
+          type: String, desc: 'Name of parameter', required: true
+        }
         expose :value, documentation: {
-          type: String, desc: 'Value of parameter', required: true }
+          type: String, desc: 'Value of parameter', required: true
+        }
       end
 
       class QueryInput < Grape::Entity
@@ -88,7 +90,8 @@ RSpec.shared_context 'swagger example' do
             'operationId' => 'getV3OtherThingElements',
             'x-amazon-apigateway-auth' => { 'type' => 'none' },
             'x-amazon-apigateway-integration' => { 'type' => 'aws', 'uri' => 'foo_bar_uri', 'httpMethod' => 'get' }
-          } },
+          }
+        },
         '/thing' => {
           'get' => {
             'description' => 'This gets Things.',
@@ -114,7 +117,8 @@ RSpec.shared_context 'swagger example' do
             'responses' => { '201' => { 'description' => 'This creates Thing.', 'schema' => { '$ref' => '#/definitions/Something' } }, '422' => { 'description' => 'Unprocessible Entity' } },
             'tags' => ['thing'],
             'operationId' => 'postThing'
-          } },
+          }
+        },
         '/thing/{id}' => {
           'get' => {
             'description' => 'This gets Thing.',
@@ -144,7 +148,8 @@ RSpec.shared_context 'swagger example' do
             'responses' => { '200' => { 'description' => 'This deletes Thing.', 'schema' => { '$ref' => '#/definitions/Something' } } },
             'tags' => ['thing'],
             'operationId' => 'deleteThingId'
-          } },
+          }
+        },
         '/thing2' => {
           'get' => {
             'description' => 'This gets Things.',
@@ -152,7 +157,8 @@ RSpec.shared_context 'swagger example' do
             'responses' => { '200' => { 'description' => 'get Horses', 'schema' => { '$ref' => '#/definitions/Something' } }, '401' => { 'description' => 'HorsesOutError', 'schema' => { '$ref' => '#/definitions/ApiError' } } },
             'tags' => ['thing2'],
             'operationId' => 'getThing2'
-          } },
+          }
+        },
         '/dummy/{id}' => {
           'delete' => {
             'description' => 'dummy route.',
@@ -161,7 +167,9 @@ RSpec.shared_context 'swagger example' do
             'responses' => { '204' => { 'description' => 'dummy route.' }, '401' => { 'description' => 'Unauthorized' } },
             'tags' => ['dummy'],
             'operationId' => 'deleteDummyId'
-          } } },
+          }
+        }
+      },
       'definitions' => {
         'QueryInput' => {
           'type' => 'object',
@@ -186,7 +194,9 @@ RSpec.shared_context 'swagger example' do
             'others' => { 'type' => 'text' }
           },
           'description' => 'This gets Things.'
-        } } }
+        }
+      }
+    }
   end
 
   let(:http_verbs) { %w(get post put delete) }

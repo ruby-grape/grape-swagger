@@ -94,7 +94,8 @@ describe 'type format settings' do
         { 'in' => 'formData', 'name' => 'param_boolean', 'required' => false, 'type' => 'boolean' },
         { 'in' => 'formData', 'name' => 'param_file', 'required' => false, 'type' => 'file' },
         { 'in' => 'formData', 'name' => 'param_json', 'required' => false, 'type' => 'json' }
-      ])
+      ]
+    )
   end
 
   specify do
@@ -112,6 +113,7 @@ describe 'type format settings' do
       'prop_email' => { 'type' => 'string', 'format' => 'email', 'description' => 'prop_email description' },
       'prop_boolean' => { 'type' => 'boolean', 'description' => 'prop_boolean description' },
       'prop_file' => { 'type' => 'file', 'description' => 'prop_file description' },
-      'prop_json' => { 'type' => 'json', 'description' => 'prop_json description' })
+      'prop_json' => { 'type' => 'json', 'description' => 'prop_json description' }
+    )
   end
 end

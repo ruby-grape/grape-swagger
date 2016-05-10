@@ -34,7 +34,8 @@ describe 'namespace tags check while using prefix and version' do
           { 'name' => 'colorado', 'description' => 'Operations about colorados' },
           { 'name' => 'thames', 'description' => 'Operations about thames' },
           { 'name' => 'niles', 'description' => 'Operations about niles' }
-        ])
+        ]
+      )
 
       expect(subject['paths']['/api/v1/hudson']['get']['tags']).to eql(['hudson'])
       expect(subject['paths']['/api/v1/colorado/simple']['get']['tags']).to eql(['colorado'])
@@ -58,7 +59,8 @@ describe 'namespace tags check while using prefix and version' do
           { 'name' => 'colorado', 'description' => 'Operations about colorados' },
           { 'name' => 'thames', 'description' => 'Operations about thames' },
           { 'name' => 'niles', 'description' => 'Operations about niles' }
-        ])
+        ]
+      )
 
       expect(subject['paths']['/api/v1/colorado/simple']['get']['tags']).to eql(['colorado'])
       expect(subject['paths']['/api/v1/colorado/simple-test']['get']['tags']).to eql(['colorado'])
@@ -77,7 +79,8 @@ describe 'namespace tags check while using prefix and version' do
             { 'name' => 'colorado', 'description' => 'Operations about colorados' },
             { 'name' => 'thames', 'description' => 'Operations about thames' },
             { 'name' => 'niles', 'description' => 'Operations about niles' }
-          ])
+          ]
+        )
 
         expect(subject['paths']['/api/v1/thames/simple_with_headers']['get']['tags']).to eql(['thames'])
       end

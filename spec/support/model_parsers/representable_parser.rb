@@ -179,6 +179,13 @@ RSpec.shared_context 'representable swagger example' do
         property :prop_file,      documentation: { type: File, desc: 'prop_file description' }
         property :prop_json,      documentation: { type: JSON, desc: 'prop_json description' }
       end
+
+      class RecursiveModel < Representable::Decorator
+        include Representable::JSON
+
+        property :name, documentation: { type: String, desc: 'The name.' }
+        property :children, decorator: self, documentation: { type: 'RecursiveModel', is_array: true, desc: 'The child nodes.' }
+      end
     end
   end
 
@@ -186,7 +193,8 @@ RSpec.shared_context 'representable swagger example' do
     {
       'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'description' => 'status code', 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'description' => 'error message', 'type' => 'string' } } },
       'ResponseItem' => { 'type' => 'object', 'properties' => { 'id' => { 'description' => '', 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'description' => '', 'type' => 'string' } } },
-      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'description' => '', 'type' => 'string' }, 'items' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' }, 'description' => '' } } }
+      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'description' => '', 'type' => 'string' }, 'items' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' }, 'description' => '' } } },
+      'RecursiveModel' => { 'type' => 'object', 'properties' => { 'name' => { 'type' => 'string', 'description' => 'The name.' }, 'children' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/RecursiveModel' }, 'description' => 'The child nodes.' } } }
     }
   end
 

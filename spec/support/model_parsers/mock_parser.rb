@@ -51,13 +51,15 @@ RSpec.shared_context 'mock swagger example' do
       class QueryInput < OpenStruct; end
       class ApiError < OpenStruct; end
       class SecondApiError < OpenStruct; end
+      class RecursiveModel < OpenStruct; end
     end
   end
 
   let(:swagger_definitions_models) do
     {
       'ApiError' => { 'type' => 'object', 'properties' => {} },
-      'UseResponse' => { 'type' => 'object', 'properties' => {} }
+      'UseResponse' => { 'type' => 'object', 'properties' => {} },
+      'RecursiveModel' => { 'type' => 'object', 'properties' => {} }
     }
   end
 

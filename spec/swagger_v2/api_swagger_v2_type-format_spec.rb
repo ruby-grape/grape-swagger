@@ -77,7 +77,8 @@ describe 'type format settings' do
         { 'in' => 'formData', 'name' => 'param_boolean', 'required' => false, 'type' => 'boolean' },
         { 'in' => 'formData', 'name' => 'param_file', 'required' => false, 'type' => 'file' },
         { 'in' => 'formData', 'name' => 'param_json', 'required' => false, 'type' => 'json' }
-      ])
+      ]
+    )
   end
 
   specify do

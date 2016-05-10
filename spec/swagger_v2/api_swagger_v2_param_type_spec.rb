@@ -117,13 +117,17 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
       expect(subject['paths']['/defined_param_type/{in_path}']['delete']['responses']).to eql(
         '200' => {
           'description' => 'full set of request param types',
-          'schema' => { '$ref' => '#/definitions/UseResponse' } })
+          'schema' => { '$ref' => '#/definitions/UseResponse' }
+        }
+      )
     end
 
     specify do
       expect(subject['paths']['/defined_in/{in_path}']['delete']['responses']).to eql(
         '204' => {
-          'description' => 'full set of request param types using `:in`' })
+          'description' => 'full set of request param types using `:in`'
+        }
+      )
     end
   end
 
@@ -138,7 +142,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         [
           { 'in' => 'query', 'name' => 'in_query', 'required' => false, 'type' => 'string' },
           { 'in' => 'header', 'name' => 'in_header', 'required' => false, 'type' => 'string' }
-        ])
+        ]
+      )
     end
 
     specify do
@@ -147,7 +152,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           { 'in' => 'path', 'name' => 'in_path', 'required' => true, 'type' => 'integer', 'format' => 'int32' },
           { 'in' => 'query', 'name' => 'in_query', 'required' => false, 'type' => 'string' },
           { 'in' => 'header', 'name' => 'in_header', 'required' => false, 'type' => 'string' }
-        ])
+        ]
+      )
     end
 
     specify do
@@ -156,7 +162,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           { 'in' => 'path', 'name' => 'in_path', 'required' => true, 'type' => 'integer', 'format' => 'int32' },
           { 'in' => 'query', 'name' => 'in_query', 'required' => false, 'type' => 'string' },
           { 'in' => 'header', 'name' => 'in_header', 'required' => false, 'type' => 'string' }
-        ])
+        ]
+      )
     end
   end
 
@@ -171,7 +178,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         [
           { 'in' => 'query', 'name' => 'in_query', 'required' => false, 'type' => 'string' },
           { 'in' => 'header', 'name' => 'in_header', 'required' => false, 'type' => 'string' }
-        ])
+        ]
+      )
     end
 
     specify do
@@ -180,7 +188,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           { 'in' => 'path', 'name' => 'in_path', 'required' => true, 'type' => 'integer', 'format' => 'int32' },
           { 'in' => 'query', 'name' => 'in_query', 'required' => false, 'type' => 'string' },
           { 'in' => 'header', 'name' => 'in_header', 'required' => false, 'type' => 'string' }
-        ])
+        ]
+      )
     end
 
     specify do
@@ -189,7 +198,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           { 'in' => 'path', 'name' => 'in_path', 'required' => true, 'type' => 'integer', 'format' => 'int32' },
           { 'in' => 'query', 'name' => 'in_query', 'required' => false, 'type' => 'string' },
           { 'in' => 'header', 'name' => 'in_header', 'required' => false, 'type' => 'string' }
-        ])
+        ]
+      )
     end
   end
 
@@ -204,7 +214,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         expect(subject['paths']['/upload']['post']['parameters']).to eql(
           [
             { 'in' => 'formData', 'name' => 'name', 'required' => true, 'type' => 'file' }
-          ])
+          ]
+        )
       end
     end
 
@@ -218,7 +229,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         expect(subject['paths']['/download']['get']['parameters']).to eql(
           [
             { 'in' => 'query', 'name' => 'name', 'required' => true, 'type' => 'string' }
-          ])
+          ]
+        )
       end
     end
   end

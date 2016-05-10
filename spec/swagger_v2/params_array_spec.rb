@@ -42,7 +42,8 @@ describe 'Group Params as Array' do
         [
           { 'in' => 'formData', 'name' => 'required_group[][required_param_1]', 'required' => true, 'type' => 'array', 'items' => { 'type' => 'string' } },
           { 'in' => 'formData', 'name' => 'required_group[][required_param_2]', 'required' => true, 'type' => 'array', 'items' => { 'type' => 'string' } }
-        ])
+        ]
+      )
     end
   end
 
@@ -59,7 +60,8 @@ describe 'Group Params as Array' do
           { 'in' => 'formData', 'name' => 'typed_group[][name]', 'description' => 'string given', 'required' => true, 'type' => 'array', 'items' => { 'type' => 'string' } },
           { 'in' => 'formData', 'name' => 'typed_group[][email]', 'description' => 'email given', 'required' => false, 'type' => 'array', 'items' => { 'type' => 'string' } },
           { 'in' => 'formData', 'name' => 'typed_group[][others]', 'required' => false, 'type' => 'array', 'items' => { 'type' => 'integer' }, 'enum' => [1, 2, 3] }
-        ])
+        ]
+      )
     end
   end
 end

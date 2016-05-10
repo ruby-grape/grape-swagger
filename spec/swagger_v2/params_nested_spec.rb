@@ -44,7 +44,8 @@ describe 'nested group params' do
         [
           { 'in' => 'formData', 'name' => 'a_array[][param_1]', 'required' => true, 'type' => 'array', 'items' => { 'type' => 'integer' } },
           { 'in' => 'formData', 'name' => 'a_array[][b_array][][param_2]', 'required' => true, 'type' => 'array', 'items' => { 'type' => 'string' } }
-        ])
+        ]
+      )
     end
   end
 
@@ -59,7 +60,8 @@ describe 'nested group params' do
         [
           { 'in' => 'formData', 'name' => 'a_hash[param_1]', 'required' => true, 'type' => 'integer', 'format' => 'int32' },
           { 'in' => 'formData', 'name' => 'a_hash[b_hash][param_2]', 'required' => true, 'type' => 'string' }
-        ])
+        ]
+      )
     end
   end
 end

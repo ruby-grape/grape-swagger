@@ -44,7 +44,8 @@ describe 'docs mounted separately from api' do
             'operationId' => 'getSimple'
           }
         }
-      })
+      }
+    )
   end
 
   it 'retrieves docs for endpoint in actual api class' do
@@ -67,6 +68,7 @@ describe 'docs mounted separately from api' do
             'operationId' => 'getSimple'
           }
         }
-      })
+      }
+    )
   end
 end

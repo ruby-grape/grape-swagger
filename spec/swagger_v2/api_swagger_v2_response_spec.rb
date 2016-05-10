@@ -52,7 +52,8 @@ describe 'response' do
           '400' => { 'description' => 'NotFound', 'schema' => { '$ref' => '#/definitions/ApiError' } }
         },
         'tags' => ['nested_type'],
-        'operationId' => 'getNestedType')
+        'operationId' => 'getNestedType'
+      )
       expect(subject['definitions']).to eql(
         'ResponseItem' => {
           'type' => 'object',
@@ -67,7 +68,8 @@ describe 'response' do
           'type' => 'object',
           'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'type' => 'string' } },
           'description' => 'This returns something'
-        })
+        }
+      )
     end
   end
 
@@ -86,7 +88,8 @@ describe 'response' do
           '400' => { 'description' => 'NotFound', 'schema' => { '$ref' => '#/definitions/ApiError' } }
         },
         'tags' => ['entity_response'],
-        'operationId' => 'getEntityResponse')
+        'operationId' => 'getEntityResponse'
+      )
       expect(subject['definitions']).to eql(
         'ResponseItem' => {
           'type' => 'object',
@@ -101,7 +104,8 @@ describe 'response' do
           'type' => 'object',
           'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'type' => 'string' } },
           'description' => 'This returns something'
-        })
+        }
+      )
     end
   end
 
@@ -125,13 +129,15 @@ describe 'response' do
           '400' => { 'description' => 'NotFound', 'schema' => { '$ref' => '#/definitions/ApiError' } }
         },
         'tags' => ['params_response'],
-        'operationId' => 'postParamsResponse')
+        'operationId' => 'postParamsResponse'
+      )
       expect(subject['definitions']).to eql(
         'ApiError' => {
           'type' => 'object',
           'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'type' => 'string' } },
           'description' => 'This returns something'
-        })
+        }
+      )
     end
   end
 end

@@ -73,7 +73,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
       expect(subject['paths']['/wo_entities/in_body']['post']['parameters']).to eql(
         [
           { 'name' => 'postWoEntitiesInBody', 'in' => 'body', 'required' => true, 'schema' => { '$ref' => '#/definitions/postWoEntitiesInBody' } }
-        ])
+        ]
+      )
     end
 
     specify do
@@ -85,7 +86,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           'in_body_2' => { 'type' => 'string', 'description' => 'in_body_2' },
           'in_body_3' => { 'type' => 'string', 'description' => 'in_body_3' }
         },
-        'required' => ['in_body_1'])
+        'required' => ['in_body_1']
+      )
     end
 
     specify do
@@ -93,7 +95,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         [
           { 'in' => 'path', 'name' => 'key', 'type' => 'integer', 'format' => 'int32', 'required' => true },
           { 'name' => 'putWoEntitiesInBodyKey', 'in' => 'body', 'required' => true, 'schema' => { '$ref' => '#/definitions/putWoEntitiesInBodyKey' } }
-        ])
+        ]
+      )
     end
 
     specify do
@@ -105,7 +108,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           'in_body_1' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'in_body_1' },
           'in_body_2' => { 'type' => 'string', 'description' => 'in_body_2' },
           'in_body_3' => { 'type' => 'string', 'description' => 'in_body_3' }
-        })
+        }
+      )
     end
   end
 
@@ -119,7 +123,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
       expect(subject['paths']['/with_entities/in_body']['post']['parameters']).to eql(
         [
           { 'name' => 'ResponseItem', 'in' => 'body', 'required' => true, 'schema' => { '$ref' => '#/definitions/postRequestResponseItem' } }
-        ])
+        ]
+      )
     end
 
     specify do
@@ -127,8 +132,10 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         'description' => 'post in body with entity',
         'type' => 'object',
         'properties' => {
-          'name' => { 'type' => 'string', 'description' => 'name' } },
-        'required' => ['name'])
+          'name' => { 'type' => 'string', 'description' => 'name' }
+        },
+        'required' => ['name']
+      )
     end
 
     specify do
@@ -136,7 +143,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         [
           { 'in' => 'path', 'name' => 'id', 'type' => 'integer', 'format' => 'int32', 'required' => true },
           { 'name' => 'ResponseItem', 'in' => 'body', 'required' => true, 'schema' => { '$ref' => '#/definitions/putRequestResponseItem' } }
-        ])
+        ]
+      )
     end
 
     specify do
@@ -145,7 +153,9 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         'type' => 'object',
         'properties' => {
           'id' => { 'type' => 'integer', 'format' => 'int32', 'readOnly' => true },
-          'name' => { 'type' => 'string', 'description' => 'name' } })
+          'name' => { 'type' => 'string', 'description' => 'name' }
+        }
+      )
     end
   end
 end

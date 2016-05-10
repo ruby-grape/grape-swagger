@@ -43,7 +43,8 @@ describe 'Group Params as Hash' do
         [
           { 'in' => 'formData', 'name' => 'required_group[required_param_1]', 'type' => 'string', 'required' => true },
           { 'in' => 'formData', 'name' => 'required_group[required_param_2]', 'type' => 'string', 'required' => true }
-        ])
+        ]
+      )
     end
   end
 
@@ -61,7 +62,8 @@ describe 'Group Params as Hash' do
           { 'in' => 'formData', 'name' => 'typed_group[name]', 'description' => 'string given', 'type' => 'string', 'required' => true },
           { 'in' => 'formData', 'name' => 'typed_group[email]', 'description' => 'email given', 'type' => 'string', 'required' => false },
           { 'in' => 'formData', 'name' => 'typed_group[others]', 'type' => 'integer', 'required' => false, 'format' => 'int32', 'enum' => [1, 2, 3] }
-        ])
+        ]
+      )
     end
   end
 end

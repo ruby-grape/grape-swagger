@@ -90,7 +90,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           'in' => 'body',
           'required' => true,
           'schema' => { '$ref' => '#/definitions/postRequestUseNestedWithAddress' }
-        }])
+        }]
+      )
     end
 
     specify do
@@ -101,7 +102,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           'address' => { '$ref' => '#/definitions/postRequestUseNestedWithAddressAddress' },
           'name' => { 'type' => 'string', 'description' => 'name' }
         },
-        'required' => ['name'])
+        'required' => ['name']
+      )
       expect(subject['definitions']['postRequestUseNestedWithAddressAddress']).to eql(
         'description' => 'postRequestUseNestedWithAddress - address',
         'type' => 'object',
@@ -111,7 +113,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           'city' => { 'type' => 'string', 'description' => 'city' },
           'country' => { 'type' => 'string', 'description' => 'country' }
         },
-        'required' => %w(street postcode city))
+        'required' => %w(street postcode city)
+      )
     end
 
     specify do
@@ -124,7 +127,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
             'required' => true,
             'schema' => { '$ref' => '#/definitions/putRequestUseNestedWithAddress' }
           }
-        ])
+        ]
+      )
     end
 
     specify do
@@ -135,7 +139,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           'address' => { '$ref' => '#/definitions/putRequestUseNestedWithAddressAddress' },
           'id' => { 'type' => 'integer', 'format' => 'int32', 'readOnly' => true },
           'name' => { 'type' => 'string', 'description' => 'name' }
-        })
+        }
+      )
       expect(subject['definitions']['putRequestUseNestedWithAddressAddress']).to eql(
         'description' => 'putRequestUseNestedWithAddress - address',
         'type' => 'object',
@@ -143,7 +148,9 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           'street' => { 'type' => 'string', 'description' => 'street' },
           'postcode' => { 'type' => 'string', 'description' => 'postcode' },
           'city' => { 'type' => 'string', 'description' => 'city' },
-          'country' => { 'type' => 'string', 'description' => 'country' } })
+          'country' => { 'type' => 'string', 'description' => 'country' }
+        }
+      )
     end
   end
 
@@ -158,7 +165,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         [
           { 'in' => 'path', 'name' => 'id', 'type' => 'integer', 'format' => 'int32', 'required' => true },
           { 'name' => 'UseNestedWithAddress', 'in' => 'body', 'required' => true, 'schema' => { '$ref' => '#/definitions/putRequestUseNestedWithAddress' } }
-        ])
+        ]
+      )
     end
 
     specify do
@@ -170,7 +178,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           'delivery_address' => { '$ref' => '#/definitions/putRequestUseNestedWithAddressDeliveryAddress' },
           'id' => { 'type' => 'integer', 'format' => 'int32', 'readOnly' => true },
           'name' => { 'type' => 'string', 'description' => 'name' }
-        })
+        }
+      )
       expect(subject['definitions']['putRequestUseNestedWithAddressAddress']).to eql(
         'description' => 'putRequestUseNestedWithAddress - address',
         'type' => 'object',
@@ -180,7 +189,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           'city' => { 'type' => 'string', 'description' => 'city' },
           'country' => { 'type' => 'string', 'description' => 'country' }
         },
-        'required' => ['postcode'])
+        'required' => ['postcode']
+      )
       expect(subject['definitions']['putRequestUseNestedWithAddressDeliveryAddress']).to eql(
         'description' => 'putRequestUseNestedWithAddress - delivery_address',
         'type' => 'object',
@@ -189,7 +199,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           'postcode' => { 'type' => 'string', 'description' => 'postcode' },
           'city' => { 'type' => 'string', 'description' => 'city' },
           'country' => { 'type' => 'string', 'description' => 'country' }
-        })
+        }
+      )
     end
   end
 end

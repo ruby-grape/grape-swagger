@@ -28,7 +28,8 @@ describe GrapeSwagger::DocMethods::ProducesConsumes do
             'application/json',
             'application/octet-stream',
             'text/plain'
-          ])
+          ]
+        )
       end
     end
   end
@@ -59,7 +60,8 @@ describe GrapeSwagger::DocMethods::ProducesConsumes do
             'application/json',
             'application/octet-stream',
             'text/plain'
-          ])
+          ]
+        )
       end
     end
   end
@@ -82,7 +84,8 @@ describe GrapeSwagger::DocMethods::ProducesConsumes do
           'application/json',
           'application/octet-stream',
           'text/plain'
-        ])
+        ]
+      )
     end
 
     subject do
@@ -93,7 +96,8 @@ describe GrapeSwagger::DocMethods::ProducesConsumes do
           'application/json',
           'application/octet-stream',
           :txt
-        ])
+        ]
+      )
     end
 
     specify do
@@ -103,7 +107,8 @@ describe GrapeSwagger::DocMethods::ProducesConsumes do
           'application/json',
           'application/octet-stream',
           'text/plain'
-        ])
+        ]
+      )
     end
   end
 end

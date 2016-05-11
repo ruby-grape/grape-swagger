@@ -111,6 +111,11 @@ RSpec.shared_context 'entity swagger example' do
         expose :prop_file,      documentation: { type: File, desc: 'prop_file description' }
         expose :prop_json,      documentation: { type: JSON, desc: 'prop_json description' }
       end
+
+      class RecursiveModel < Grape::Entity
+        expose :name, documentation: { type: String, desc: 'The name.' }
+        expose :children, using: self, documentation: { type: 'RecursiveModel', is_array: true, desc: 'The child nodes.' }
+      end
     end
   end
 
@@ -118,7 +123,8 @@ RSpec.shared_context 'entity swagger example' do
     {
       'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } } },
       'ResponseItem' => { 'type' => 'object', 'properties' => { 'id' => { 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'type' => 'string' } } },
-      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, '$responses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' } } } }
+      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, '$responses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' } } } },
+      'RecursiveModel' => { 'type' => 'object', 'properties' => { 'name' => { 'type' => 'string', 'description' => 'The name.' }, 'children' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/RecursiveModel' }, 'description' => 'The child nodes.' } } }
     }
   end
 

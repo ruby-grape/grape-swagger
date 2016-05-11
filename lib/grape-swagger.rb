@@ -12,8 +12,6 @@ require 'grape-swagger/model_parsers'
 require 'grape-swagger/markdown/kramdown_adapter'
 require 'grape-swagger/markdown/redcarpet_adapter'
 
-require 'awesome_print'
-
 module GrapeSwagger
   class << self
     def model_parsers

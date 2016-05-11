@@ -8,7 +8,8 @@
 #### Fixes
 
 * [#416](https://github.com/ruby-grape/grape-swagger/pull/416): Support recursive models - [@lest](https://github.com/lest).
-* [#418](https://github.com/ruby-grape/grape-swagger/pull/418): Replaced github ref to rubygems for external gems - [@Bugagazavr](https://github.com/Bugagazavr).
+* [#419](https://github.com/ruby-grape/grape-swagger/pull/419): Replaced github ref to rubygems for external gems - [@Bugagazavr](https://github.com/Bugagazavr).
+* [#420](https://github.com/ruby-grape/grape-swagger/pull/420): Raise SwaggerSpec exception if swagger spec isn't satisfied, when no parser for model registred or response model is empty - [@Bugagazavr](https://github.com/Bugagazavr).
 
 ### 0.20.3 (May 9, 2016)
 

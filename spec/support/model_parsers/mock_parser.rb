@@ -57,22 +57,56 @@ RSpec.shared_context 'mock swagger example' do
 
   let(:swagger_definitions_models) do
     {
-      'ApiError' => { 'type' => 'object', 'properties' => {} },
-      'UseResponse' => { 'type' => 'object', 'properties' => {} },
-      'RecursiveModel' => { 'type' => 'object', 'properties' => {} }
+      'ApiError' => {
+        'type' => 'object',
+        'properties' => {
+          'mock_data' => {
+            'type' => 'string',
+            'description' => "it's a mock"
+          }
+        }
+      },
+      'RecursiveModel' => {
+        'type' => 'object',
+        'properties' => {
+          'mock_data' => {
+            'type' => 'string',
+            'description' => "it's a mock"
+          }
+        }
+      },
+      'UseResponse' => {
+        'type' => 'object',
+        'properties' => {
+          'mock_data' => {
+            'type' => 'string',
+            'description' => "it's a mock"
+          }
+        }
+      }
     }
   end
 
   let(:swagger_nested_type) do
     {
-      'UseItemResponseAsType' => {
-        'type' => 'object',
-        'properties' => {},
-        'description' => 'This returns something'
-      },
       'ApiError' => {
         'type' => 'object',
-        'properties' => {},
+        'properties' => {
+          'mock_data' => {
+            'type' => 'string',
+            'description' => "it's a mock"
+          }
+        },
+        'description' => 'This returns something'
+      },
+      'UseItemResponseAsType' => {
+        'type' => 'object',
+        'properties' => {
+          'mock_data' => {
+            'type' => 'string',
+            'description' => "it's a mock"
+          }
+        },
         'description' => 'This returns something'
       }
     }
@@ -82,12 +116,22 @@ RSpec.shared_context 'mock swagger example' do
     {
       'UseResponse' => {
         'type' => 'object',
-        'properties' => {},
+        'properties' => {
+          'mock_data' => {
+            'type' => 'string',
+            'description' => "it's a mock"
+          }
+        },
         'description' => 'This returns something'
       },
       'ApiError' => {
         'type' => 'object',
-        'properties' => {},
+        'properties' => {
+          'mock_data' => {
+            'type' => 'string',
+            'description' => "it's a mock"
+          }
+        },
         'description' => 'This returns something'
       }
     }
@@ -97,14 +141,24 @@ RSpec.shared_context 'mock swagger example' do
     {
       'ApiError' => {
         'type' => 'object',
-        'properties' => {},
+        'properties' => {
+          'mock_data' => {
+            'type' => 'string',
+            'description' => "it's a mock"
+          }
+        },
         'description' => 'This returns something'
       }
     }
   end
 
   let(:swagger_typed_defintion) do
-    {}
+    {
+      'mock_data' => {
+        'type' => 'string',
+        'description' => "it's a mock"
+      }
+    }
   end
 
   let(:swagger_json) do
@@ -221,17 +275,32 @@ RSpec.shared_context 'mock swagger example' do
       'definitions' => {
         'QueryInput' => {
           'type' => 'object',
-          'properties' => {},
+          'properties' => {
+            'mock_data' => {
+              'type' => 'string',
+              'description' => "it's a mock"
+            }
+          },
           'description' => 'nested route inside namespace'
         },
         'ApiError' => {
           'type' => 'object',
-          'properties' => {},
+          'properties' => {
+            'mock_data' => {
+              'type' => 'string',
+              'description' => "it's a mock"
+            }
+          },
           'description' => 'This gets Things.'
         },
         'Something' => {
           'type' => 'object',
-          'properties' => {},
+          'properties' => {
+            'mock_data' => {
+              'type' => 'string',
+              'description' => "it's a mock"
+            }
+          },
           'description' => 'This gets Things.'
         }
       }

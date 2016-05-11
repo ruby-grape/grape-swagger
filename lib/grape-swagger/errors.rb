@@ -5,5 +5,8 @@ module GrapeSwagger
         super("Missing required dependency: #{missing_gem}")
       end
     end
+
+    class UnregisteredParser < StandardError; end
+    class SwaggerSpec < StandardError; end
   end
 end

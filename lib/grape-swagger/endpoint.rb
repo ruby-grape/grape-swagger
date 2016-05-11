@@ -229,6 +229,9 @@ module Grape
     def expose_params_from_model(model)
       model_name = model_name(model)
 
+      return model_name if @definitions.key?(model_name)
+      @definitions[model_name] = nil
+
       properties = {}
       GrapeSwagger.model_parsers.each do |klass, ancestor|
         next unless model.ancestors.map(&:to_s).include?(ancestor)

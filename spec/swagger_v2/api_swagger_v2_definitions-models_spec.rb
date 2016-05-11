@@ -10,7 +10,8 @@ describe 'definitions/models' do
 
         add_swagger_documentation models: [
           ::Entities::UseResponse,
-          ::Entities::ApiError
+          ::Entities::ApiError,
+          ::Entities::RecursiveModel
         ]
       end
     end

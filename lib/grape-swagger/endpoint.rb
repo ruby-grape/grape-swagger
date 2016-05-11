@@ -232,17 +232,23 @@ module Grape
       return model_name if @definitions.key?(model_name)
       @definitions[model_name] = nil
 
-      properties = {}
+      properties = nil
+      parser = nil
+
       GrapeSwagger.model_parsers.each do |klass, ancestor|
         next unless model.ancestors.map(&:to_s).include?(ancestor)
 
-        model_class = klass.new(model, self)
-        properties = model_class.call
+        parser = klass.new(model, self)
 
         break
       end
 
-      @definitions[model_name] = { type: 'object', properties: properties || {} }
+      properties = parser.call unless parser.nil?
+
+      raise GrapeSwagger::Errors::UnregisteredParser, "No parser registred for #{model_name}." unless parser
+      raise GrapeSwagger::Errors::SwaggerSpec, "Empty model #{model_name}, swagger 2.0 doesn't support empty definitions." unless properties && properties.any?
+
+      @definitions[model_name] = { type: 'object', properties: properties }
 
       model_name
     end

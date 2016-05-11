@@ -9,4 +9,4 @@ else
   gem 'grape', version
 end
 
-gem ENV['MODEL_PARSER'], github: "bugagazavr/#{ENV['MODEL_PARSER']}" if ENV.key?('MODEL_PARSER')
+gem ENV['MODEL_PARSER'] if ENV.key?('MODEL_PARSER')

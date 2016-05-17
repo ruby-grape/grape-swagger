@@ -1,7 +1,7 @@
 Upgrading Grape-swagger
 =======================
 
-### Upgrading to >= 0.21.0
+### Upgrading to >= 0.20.4
 
 With grape >= 0.21.0, `grape-entity` support moved to separate gem `grape-swagger-entity`, if you use grape entity, update your Gemfile:
 

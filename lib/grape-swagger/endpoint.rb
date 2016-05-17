@@ -245,7 +245,7 @@ module Grape
 
       properties = parser.call unless parser.nil?
 
-      raise GrapeSwagger::Errors::UnregisteredParser, "No parser registred for #{model_name}." unless parser
+      raise GrapeSwagger::Errors::UnregisteredParser, "No parser registered for #{model_name}." unless parser
       raise GrapeSwagger::Errors::SwaggerSpec, "Empty model #{model_name}, swagger 2.0 doesn't support empty definitions." unless properties && properties.any?
 
       @definitions[model_name] = { type: 'object', properties: properties }

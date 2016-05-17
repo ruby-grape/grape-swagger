@@ -69,7 +69,7 @@ describe 'Errors' do
     end
 
     it 'should raise UnregisteredParser exception' do
-      expect { get '/v3/swagger_doc' }.to raise_error(GrapeSwagger::Errors::UnregisteredParser, 'No parser registred for Hash.')
+      expect { get '/v3/swagger_doc' }.to raise_error(GrapeSwagger::Errors::UnregisteredParser, 'No parser registered for Hash.')
     end
   end
 end

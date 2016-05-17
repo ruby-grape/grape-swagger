@@ -17,7 +17,7 @@ describe GrapeSwagger::ModelParsers do
       end
     end
 
-    describe 'should be empty if no registred parsers' do
+    describe 'should be empty if no registered parsers' do
       specify do
         expect(model_parsers.to_a).to be_empty
       end
@@ -38,7 +38,7 @@ describe GrapeSwagger::ModelParsers do
       end
     end
 
-    describe 'SomeModelParser2 should be inserted anyway if SomeModelParser not registred' do
+    describe 'SomeModelParser2 should be inserted anyway if SomeModelParser not registered' do
       before do
         model_parsers.register(parser3, Class)
         model_parsers.insert_before(parser, parser2, Class)
@@ -76,7 +76,7 @@ describe GrapeSwagger::ModelParsers do
       end
     end
 
-    describe 'SomeModelParser2 should be inserted anyway if SomeModelParser not registred' do
+    describe 'SomeModelParser2 should be inserted anyway if SomeModelParser not registered' do
       before do
         model_parsers.register(parser3, Class)
         model_parsers.insert_after(parser, parser2, Class)

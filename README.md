@@ -132,7 +132,7 @@ Please see [UPGRADING](UPGRADING.md) when upgrading from a previous version.
 <a name="usage" />
 ## Usage
 
-Mount all your different APIs (with ```Grape::API``` superclass) on a root node. In the root class definition, include ```add_swagger_documentation```, this sets up the system and registers the documentation on '/swagger_doc'. See [example/api.rb](example/api.rb) for a simple demo.
+Mount all your different APIs (with ```Grape::API``` superclass) on a root node. In the root class definition, include ```add_swagger_documentation```, this sets up the system and registers the documentation on '/swagger_doc'. See [example/config.ru](example/config.ru) for a simple demo.
 
 
 ```ruby

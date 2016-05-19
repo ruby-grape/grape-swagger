@@ -29,6 +29,7 @@ describe 'describing versions' do
         paths: {
           :'/nothings' => {
             get: {
+              summary: 'no versions given',
               description: 'no versions given',
               produces: ['application/json'],
               responses: {
@@ -71,6 +72,7 @@ describe 'describing versions' do
         paths: {
           :'/v2/api_version' => {
             get: {
+              summary: 'api versions given',
               description: 'api versions given',
               produces: ['application/json'],
               responses: {
@@ -112,6 +114,7 @@ describe 'describing versions' do
         paths: {
           :'/doc_version' => {
             get: {
+              summary: 'doc versions given',
               description: 'doc versions given',
               produces: ['application/json'],
               responses: {
@@ -154,6 +157,7 @@ describe 'describing versions' do
         paths: {
           :'/v2/both_versions' => {
             get: {
+              summary: 'both versions given',
               description: 'both versions given',
               produces: ['application/json'],
               responses: {

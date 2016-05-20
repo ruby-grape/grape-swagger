@@ -502,7 +502,7 @@ Grape allows for an additional documentation hash to be passed to a parameter.
 ```ruby
 params do
   requires :id, type: Integer, desc: 'Coffee ID'
-  requires :temperature, type: Integer, desc: 'Temperature of the coffee in celcius', documentation: { example: 72 }
+  requires :temperature, type: Integer, desc: 'Temperature of the coffee in celcius', documentation: { default: 72 }
 end
 ```
 

@@ -2,11 +2,9 @@
 
 #### Features
 
-* Your contribution here.
+* [#431](https://github.com/ruby-grape/grape-swagger/pull/431): Add summary and deprecated to the operation object generator to be more compliant with [OpenAPI v2](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#operation-object) - [@aschuster3](https://github.com/aschuster3).
 
 #### Fixes
-
-* Your contribution here.
 
 ### 0.20.4 (May 16, 2016)
 

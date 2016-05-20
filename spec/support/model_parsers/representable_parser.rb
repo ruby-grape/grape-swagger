@@ -361,7 +361,6 @@ RSpec.shared_context 'representable swagger example' do
         'QueryInput' => {
           'type' => 'object',
           'properties' => { 'elements' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/QueryInputElement' }, 'description' => 'Set of configuration' } },
-          'summary' => 'nested route inside namespace',
           'description' => 'nested route inside namespace'
         },
         'QueryInputElement' => {
@@ -371,7 +370,6 @@ RSpec.shared_context 'representable swagger example' do
         'ApiError' => {
           'type' => 'object',
           'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } },
-          'summary' => 'This gets Things.',
           'description' => 'This gets Things.'
         },
         'Something' => {
@@ -382,7 +380,6 @@ RSpec.shared_context 'representable swagger example' do
             'links' => { 'type' => 'array', 'items' => { 'description' => '', 'type' => 'link' } },
             'others' => { 'description' => '', 'type' => 'text' }
           },
-          'summary' => 'This gets Things.',
           'description' => 'This gets Things.'
         }
       }

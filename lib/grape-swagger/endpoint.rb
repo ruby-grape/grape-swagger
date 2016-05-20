@@ -102,7 +102,6 @@ module Grape
     end
 
     def method_object(route, options, path)
-      puts "lib/grape-swagger/endpoint.rb:105 DEBUG OUTPUT FOR GRAPE-SWAGGER: #{route.options}"
       method = {}
       method[:summary]     = summary_object(route)
       method[:description] = description_object(route, options[:markdown])
@@ -111,6 +110,7 @@ module Grape
       method[:parameters]  = params_object(route)
       method[:responses]   = response_object(route, options[:markdown])
       method[:tags]        = tag_object(route, options[:version].to_s)
+      method[:deprecated]  = deprecated_object(route)
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method.delete_if { |_, value| value.blank? }
 
@@ -197,6 +197,10 @@ module Grape
 
     def tag_object(route, version)
       Array(route.path.split('{')[0].split('/').reject(&:empty?).delete_if { |i| ((i == route.prefix.to_s) || (i == version)) }.first)
+    end
+
+    def deprecated_object(route)
+      route.options.key?(:deprecated) && route.options[:deprecated]
     end
 
     private

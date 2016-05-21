@@ -39,6 +39,8 @@ gem 'grape-swagger-entity'
 gem 'grape-swagger-representable'
 ```
 
+If you are not using Rails, make sure to load the parser inside your application initialization logic via `require 'grape-swagger/entity'`.
+
 ##### Custom Model Parsers
 
 You can create your own model parser, for example for [roar](https://github.com/apotonick/roar).

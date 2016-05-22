@@ -45,6 +45,7 @@ describe 'response' do
     end
     specify do
       expect(subject['paths']['/nested_type']['get']).to eql(
+        'summary' => 'This returns something',
         'description' => 'This returns something',
         'produces' => ['application/json'],
         'responses' => {
@@ -66,6 +67,7 @@ describe 'response' do
 
     specify do
       expect(subject['paths']['/entity_response']['get']).to eql(
+        'summary' => 'This returns something',
         'description' => 'This returns something',
         'produces' => ['application/json'],
         'responses' => {
@@ -87,6 +89,7 @@ describe 'response' do
 
     specify do
       expect(subject['paths']['/params_response']['post']).to eql(
+        'summary' => 'This returns something',
         'description' => 'This returns something',
         'produces' => ['application/json'],
         'consumes' => ['application/json'],

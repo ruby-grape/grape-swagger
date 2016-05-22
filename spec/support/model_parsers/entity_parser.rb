@@ -192,6 +192,7 @@ RSpec.shared_context 'entity swagger example' do
       'paths' => {
         '/v3/other_thing/{elements}' => {
           'get' => {
+            'summary' => 'nested route inside namespace',
             'description' => 'nested route inside namespace',
             'produces' => ['application/json'],
             'parameters' => [{ 'in' => 'body', 'name' => 'elements', 'description' => 'Set of configuration', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => true }],
@@ -204,6 +205,7 @@ RSpec.shared_context 'entity swagger example' do
         },
         '/thing' => {
           'get' => {
+            'summary' => 'This gets Things.',
             'description' => 'This gets Things.',
             'produces' => ['application/json'],
             'parameters' => [
@@ -217,6 +219,7 @@ RSpec.shared_context 'entity swagger example' do
             'operationId' => 'getThing'
           },
           'post' => {
+            'summary' => 'This creates Thing.',
             'description' => 'This creates Thing.',
             'produces' => ['application/json'],
             'consumes' => ['application/json'],
@@ -231,6 +234,7 @@ RSpec.shared_context 'entity swagger example' do
         },
         '/thing/{id}' => {
           'get' => {
+            'summary' => 'This gets Thing.',
             'description' => 'This gets Thing.',
             'produces' => ['application/json'],
             'parameters' => [{ 'in' => 'path', 'name' => 'id', 'type' => 'integer', 'format' => 'int32', 'required' => true }],
@@ -239,6 +243,7 @@ RSpec.shared_context 'entity swagger example' do
             'operationId' => 'getThingId'
           },
           'put' => {
+            'summary' => 'This updates Thing.',
             'description' => 'This updates Thing.',
             'produces' => ['application/json'],
             'consumes' => ['application/json'],
@@ -252,6 +257,7 @@ RSpec.shared_context 'entity swagger example' do
             'operationId' => 'putThingId'
           },
           'delete' => {
+            'summary' => 'This deletes Thing.',
             'description' => 'This deletes Thing.',
             'produces' => ['application/json'],
             'parameters' => [{ 'in' => 'path', 'name' => 'id', 'type' => 'integer', 'format' => 'int32', 'required' => true }],
@@ -262,6 +268,7 @@ RSpec.shared_context 'entity swagger example' do
         },
         '/thing2' => {
           'get' => {
+            'summary' => 'This gets Things.',
             'description' => 'This gets Things.',
             'produces' => ['application/json'],
             'responses' => { '200' => { 'description' => 'get Horses', 'schema' => { '$ref' => '#/definitions/Something' } }, '401' => { 'description' => 'HorsesOutError', 'schema' => { '$ref' => '#/definitions/ApiError' } } },
@@ -271,6 +278,7 @@ RSpec.shared_context 'entity swagger example' do
         },
         '/dummy/{id}' => {
           'delete' => {
+            'summary' => 'dummy route.',
             'description' => 'dummy route.',
             'produces' => ['application/json'],
             'parameters' => [{ 'in' => 'path', 'name' => 'id', 'type' => 'integer', 'format' => 'int32', 'required' => true }],

@@ -103,6 +103,7 @@ module Grape
 
     def method_object(route, options, path)
       method = {}
+      method[:summary]     = summary_object(route)
       method[:description] = description_object(route, options[:markdown])
       method[:produces]    = produces_object(route, options[:produces] || options[:format])
       method[:consumes]    = consumes_object(route, options[:format])
@@ -113,6 +114,14 @@ module Grape
       method.delete_if { |_, value| value.blank? }
 
       [route.request_method.downcase.to_sym, method]
+    end
+
+    def summary_object(route)
+      summary = route.options[:desc] if route.options.key?(:desc)
+      summary = route.description if route.description.present?
+      summary = route.options[:summary] if route.options.key?(:summary)
+
+      summary
     end
 
     def description_object(route, markdown)
@@ -237,9 +246,7 @@ module Grape
 
       GrapeSwagger.model_parsers.each do |klass, ancestor|
         next unless model.ancestors.map(&:to_s).include?(ancestor)
-
         parser = klass.new(model, self)
-
         break
       end
 

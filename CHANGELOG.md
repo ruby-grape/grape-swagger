@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#434](https://github.com/ruby-grape/grape-swagger/pull/434): Add summary to the operation object generator to be more compliant with [OpenAPI v2](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#operation-object) - [@aschuster3](https://github.com/aschuster3).
 * Your contribution here.
 
 #### Fixes

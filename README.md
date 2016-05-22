@@ -49,8 +49,7 @@ grape-swagger | swagger spec | grape                   | grape-entity | represen
 0.11.0        |     1.2      |               >= 0.16.2 |  < 0.5.0     | n/a           |
 0.20.1        |     2.0      | >= 0.12.0 ... <= 0.14.0 | <= 0.5.1     | n/a           |
 0.20.3        |     2.0      | >= 0.12.0 ... ~> 0.16.2 | ~> 0.5.1     | n/a           |
-0.20.4        |     2.0      | >= 0.12.0 ... <= 0.16.2 | <= 0.5.1     | >= 2.4.1      |
-0.20.5 (next) |     2.0      | >= 0.12.0 ... <= 0.16.2 | <= 0.5.1     | >= 2.4.1      |
+0.21.0 (next) |     2.0      | >= 0.12.0 ... <= 0.16.2 | <= 0.5.1     | >= 2.4.1      |
 
 <a name="swagger-spec" />
 ## Swagger-Spec
@@ -99,7 +98,7 @@ To explore your API, either download [Swagger UI](https://github.com/wordnik/swa
 <a name="model_parsers" />
 ## Model Parsers
 
-Since 0.20.4, `Grape::Entity` is not a part of grape-swagger, you need to add `grape-swagger-entity` manually to your Gemfile.
+Since 0.21.0, `Grape::Entity` is not a part of grape-swagger, you need to add `grape-swagger-entity` manually to your Gemfile.
 Also added support for [representable](https://github.com/apotonick/representable) via `grape-swagger-representable`.
 
 ```ruby

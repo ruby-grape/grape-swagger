@@ -2,26 +2,26 @@ module GrapeSwagger
   module DocMethods
     class PathString
       class << self
-        def build(path, options = {})
+        def build(route, options = {})
           # always removing format
-          path.sub!(/\(\.\w+?\)$/, '')
-          path.sub!('(.:format)', '')
+          route.path.sub!(/\(\.\w+?\)$/, '')
+          route.path.sub!('(.:format)', '')
 
           # ... format path params
-          path.gsub!(/:(\w+)/, '{\1}')
+          route.path.gsub!(/:(\w+)/, '{\1}')
 
           # set item from path, this could be used for the definitions object
-          item = path.gsub(%r{/{(.+?)}}, '').split('/').last.singularize.underscore.camelize || 'Item'
+          item = route.path.gsub(%r{/{(.+?)}}, '').split('/').last.singularize.underscore.camelize || 'Item'
 
-          if options[:version] && options[:add_version]
-            path.sub!('{version}', options[:version].to_s)
+          if route.options[:version] && options[:add_version]
+            route.path.sub!('{version}', route.options[:version].to_s)
           else
-            path.sub!('/{version}', '')
+            route.path.sub!('/{version}', '')
           end
 
-          path = "#{GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options)}#{path}" if options[:add_base_path]
+          route.path = "#{GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options)}#{route.path}" if options[:add_base_path]
 
-          [item, path.start_with?('/') ? path : "/#{path}"]
+          [item, route.path.start_with?('/') ? route.path : "/#{route.path}"]
         end
       end
     end

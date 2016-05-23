@@ -1,7 +1,8 @@
 # backwards compatibility for Grape < 0.16.0
 module Grape
   class Route
-    [:path, :prefix, :entity, :description, :settings, :params, :headers, :http_codes].each do |m|
+    [:path, :prefix, :entity, :description, :settings, :params, :headers, :http_codes, :version]
+      .each do |m|
       define_method m do
         send "route_#{m}"
       end

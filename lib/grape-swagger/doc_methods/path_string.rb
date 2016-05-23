@@ -13,8 +13,8 @@ module GrapeSwagger
           # set item from path, this could be used for the definitions object
           item = route.path.gsub(%r{/{(.+?)}}, '').split('/').last.singularize.underscore.camelize || 'Item'
 
-          if route.options[:version] && options[:add_version]
-            route.path.sub!('{version}', route.options[:version].to_s)
+          if route.version && options[:add_version]
+            route.path.sub!('{version}', route.version.to_s)
           else
             route.path.sub!('/{version}', '')
           end

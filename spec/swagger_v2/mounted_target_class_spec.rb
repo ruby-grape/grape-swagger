@@ -37,6 +37,7 @@ describe 'docs mounted separately from api' do
       'paths' => {
         '/simple' => {
           'get' => {
+            'summary' => 'This gets something.',
             'description' => 'This gets something.',
             'produces' => ['application/json'],
             'responses' => { '200' => { 'description' => 'This gets something.' } },
@@ -59,6 +60,7 @@ describe 'docs mounted separately from api' do
       'paths' => {
         '/simple' => {
           'get' => {
+            'summary' => 'This gets something.',
             'description' => 'This gets something.',
             'produces' => ['application/json'],
             'responses' => {

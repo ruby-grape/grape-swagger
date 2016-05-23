@@ -444,6 +444,32 @@ end
 ```
 
 
+#### Overriding the route summary
+
+By default, the route summary is filled with the value supplied to `desc`.
+
+```ruby
+namespace 'order' do
+  desc 'This will be your summary'
+  get :order_id do
+    ...
+  end
+end
+```
+
+To override the summary, add `summary: '[string]'` after the description.
+
+```ruby
+namespace 'order' do
+  desc 'This will be your summary',
+    summary: 'Now this is your summary!'
+  get :order_id do
+    ...
+  end
+end
+```
+
+
 #### Expose nested namespace as standalone route
 
 Use the `nested: false` property in the `swagger` option to make nested namespaces appear as standalone resources.

@@ -19,7 +19,7 @@ module GrapeSwagger
             route.path.sub!('/{version}', '')
           end
 
-          route.path = "#{GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options)}#{route.path}" if options[:add_base_path]
+          route.path.prepend(GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options)) if options[:add_base_path]
 
           [item, route.path.start_with?('/') ? route.path : "/#{route.path}"]
         end

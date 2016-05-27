@@ -180,7 +180,7 @@ module Grape
           value[:code] = 204
         end
 
-        next if memo.key?(204)
+        next if value[:code] == 204
         next unless !response_model.start_with?('Swagger_doc') &&
                     ((@definitions[response_model] && value[:code].to_s.start_with?('2')) || value[:model])
 

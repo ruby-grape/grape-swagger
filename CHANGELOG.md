@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#441](https://github.com/ruby-grape/grape-swagger/pull/441): Accepting `String`, `lambda` and `proc` for `host` and `base_path` - [@LeFnord](https://github.com/LeFnord).
 * [#434](https://github.com/ruby-grape/grape-swagger/pull/434): Add summary to the operation object generator to be more compliant with [OpenAPI v2](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#operation-object) - [@aschuster3](https://github.com/aschuster3).
 * Your contribution here.
 
@@ -14,7 +15,6 @@
 #### Features
 
 * [#413](https://github.com/ruby-grape/grape-swagger/pull/413): Move all model parsing logic to separate gems `grape-swagger-entity` and added representable parser `grape-swagger` - [@Bugagazavr](https://github.com/Bugagazavr).
-* Your contribution here.
 
 #### Fixes
 

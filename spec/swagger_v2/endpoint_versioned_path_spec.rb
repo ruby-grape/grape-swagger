@@ -19,7 +19,7 @@ describe 'Grape::Endpoint#path_and_definitions' do
       end
     end
 
-    @options = { add_version: true}
+    @options = { add_version: true }
     @target_routes = API::Root.combined_namespace_routes
   end
 

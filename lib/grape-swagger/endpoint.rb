@@ -24,8 +24,8 @@ module Grape
         swagger:        '2.0',
         produces:       content_types_for(target_class),
         authorizations: options[:authorizations],
-        host:           GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request.host_with_port),
-        basePath:       GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request.env['SCRIPT_NAME']),
+        host:           GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request),
+        basePath:       GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request),
         tags:           GrapeSwagger::DocMethods::TagNameDescription.build(options),
         schemes:        options[:schemes].is_a?(String) ? [options[:schemes]] : options[:schemes]
       }.delete_if { |_, value| value.blank? }

@@ -7,32 +7,36 @@ describe GrapeSwagger::DocMethods::OptionalObject do
   specify { expect(subject).to respond_to :build }
 
   describe 'build' do
-    let(:key) { :bar }
-    let(:request) { 'somes/request/string' }
+    let(:key) { :host }
+    let!(:request) { Rack::Request.new(Rack::MockRequest.env_for('http://example.com:8080/')) }
 
-    describe 'no option given for key' do
+    describe 'no option given for host, take from request' do
       let(:options) { { foo: 'foo' } }
       specify do
-        expect(subject.build(key, options)).to be_nil
-        expect(subject.build(key, options, request)).to eql request
+        expect(subject.build(key, options, request)).to eql request.host_with_port
       end
     end
 
-    let(:value) { 'some optional value' }
+    let(:value) { 'grape-swagger.example.com' }
 
     describe 'option is a string' do
-      let(:options) { { bar: value } }
+      let(:options) { { host: value } }
       specify do
-        expect(subject.build(key, options)).to eql value
+        expect(subject.build(key, options, request)).to eql value
+      end
+    end
+
+    describe 'option is a lambda' do
+      let(:options) { { host: -> { value } } }
+      specify do
         expect(subject.build(key, options, request)).to eql value
       end
     end
 
     describe 'option is a proc' do
-      let(:options) { { bar: -> { value } } }
+      let(:options) { { host: proc { |foo| foo.host =~ /^example/ ? '/api-example' : '/api' } } }
       specify do
-        expect(subject.build(key, options)).to eql value
-        expect(subject.build(key, options, request)).to eql value
+        expect(subject.build(key, options, request)).to eql '/api-example'
       end
     end
   end

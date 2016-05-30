@@ -8,6 +8,8 @@
 
 #### Fixes
 
+* [#438](https://github.com/ruby-grape/grape-swagger/pull/438): Route version was missing in :options passed to PathString, so Endpoint.path_and_definitions_objects wasn't returning a versioned path when required - [@texpert](https://github.com/texpert).
+
 * Your contribution here.
 
 ### 0.20.4 (May 16, 2016)

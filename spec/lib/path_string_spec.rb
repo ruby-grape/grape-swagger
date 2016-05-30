@@ -10,57 +10,81 @@ describe GrapeSwagger::DocMethods::PathString do
     describe 'version' do
       describe 'defaults: given, true' do
         let(:options) { { add_version: true } }
-        let(:version) { 'v1' }
+        let(:route) { Struct.new(:version, :path).new('v1') }
 
         specify 'The returned path includes version' do
-          expect(subject.build('/{version}/thing(.json)', version, options)).to eql ['Thing', '/v1/thing']
-          expect(subject.build('/{version}/thing/foo(.json)', version, options)).to eql ['Foo', '/v1/thing/foo']
-          expect(subject.build('/{version}/thing(.:format)', version, options)).to eql ['Thing', '/v1/thing']
-          expect(subject.build('/{version}/thing/foo(.:format)', version, options)).to eql ['Foo', '/v1/thing/foo']
-          expect(subject.build('/{version}/thing/:id', version, options)).to eql ['Thing', '/v1/thing/{id}']
-          expect(subject.build('/{version}/thing/foo/:id', version, options)).to eql ['Foo', '/v1/thing/foo/{id}']
+          route.path = '/{version}/thing(.json)'
+          expect(subject.build(route, options)).to eql ['Thing', '/v1/thing']
+          route.path = '/{version}/thing/foo(.json)'
+          expect(subject.build(route, options)).to eql ['Foo', '/v1/thing/foo']
+          route.path = '/{version}/thing(.:format)'
+          expect(subject.build(route, options)).to eql ['Thing', '/v1/thing']
+          route.path = '/{version}/thing/foo(.:format)'
+          expect(subject.build(route, options)).to eql ['Foo', '/v1/thing/foo']
+          route.path = '/{version}/thing/:id'
+          expect(subject.build(route, options)).to eql ['Thing', '/v1/thing/{id}']
+          route.path = '/{version}/thing/foo/:id'
+          expect(subject.build(route, options)).to eql ['Foo', '/v1/thing/foo/{id}']
         end
       end
 
       describe 'defaults: not given, both false' do
         let(:options) { { add_version: false } }
-        let(:version) { nil }
+        let(:route) { Struct.new(:version, :path).new }
 
         specify 'The returned path does not include version' do
-          expect(subject.build('/thing(.json)', version, options)).to eql ['Thing', '/thing']
-          expect(subject.build('/thing/foo(.json)', version, options)).to eql ['Foo', '/thing/foo']
-          expect(subject.build('/thing(.:format)', version, options)).to eql ['Thing', '/thing']
-          expect(subject.build('/thing/foo(.:format)', version, options)).to eql ['Foo', '/thing/foo']
-          expect(subject.build('/thing/:id', version, options)).to eql ['Thing', '/thing/{id}']
-          expect(subject.build('/thing/foo/:id', version, options)).to eql ['Foo', '/thing/foo/{id}']
+          route.path = '/{version}/thing(.json)'
+          expect(subject.build(route, options)).to eql ['Thing', '/thing']
+          route.path = '/{version}/thing/foo(.json)'
+          expect(subject.build(route, options)).to eql ['Foo', '/thing/foo']
+          route.path = '/{version}/thing(.:format)'
+          expect(subject.build(route, options)).to eql ['Thing', '/thing']
+          route.path = '/{version}/thing/foo(.:format)'
+          expect(subject.build(route, options)).to eql ['Foo', '/thing/foo']
+          route.path = '/{version}/thing/:id'
+          expect(subject.build(route, options)).to eql ['Thing', '/thing/{id}']
+          route.path = '/{version}/thing/foo/:id'
+          expect(subject.build(route, options)).to eql ['Foo', '/thing/foo/{id}']
         end
       end
 
       describe 'defaults: add_version false' do
         let(:options) { { add_version: false } }
-        let(:version) { 'v1' }
+        let(:route) { Struct.new(:version, :path).new('v1') }
 
         specify 'The returned path does not include version' do
-          expect(subject.build('/thing(.json)', version, options)).to eql ['Thing', '/thing']
-          expect(subject.build('/thing/foo(.json)', version, options)).to eql ['Foo', '/thing/foo']
-          expect(subject.build('/thing(.:format)', version, options)).to eql ['Thing', '/thing']
-          expect(subject.build('/thing/foo(.:format)', version, options)).to eql ['Foo', '/thing/foo']
-          expect(subject.build('/thing/:id', version, options)).to eql ['Thing', '/thing/{id}']
-          expect(subject.build('/thing/foo/:id', version, options)).to eql ['Foo', '/thing/foo/{id}']
+          route.path = '/{version}/thing(.json)'
+          expect(subject.build(route, options)).to eql ['Thing', '/thing']
+          route.path = '/{version}/thing/foo(.json)'
+          expect(subject.build(route, options)).to eql ['Foo', '/thing/foo']
+          route.path = '/{version}/thing(.:format)'
+          expect(subject.build(route, options)).to eql ['Thing', '/thing']
+          route.path = '/{version}/thing/foo(.:format)'
+          expect(subject.build(route, options)).to eql ['Foo', '/thing/foo']
+          route.path = '/{version}/thing/:id'
+          expect(subject.build(route, options)).to eql ['Thing', '/thing/{id}']
+          route.path = '/{version}/thing/foo/:id'
+          expect(subject.build(route, options)).to eql ['Foo', '/thing/foo/{id}']
         end
       end
 
       describe 'defaults: root_version nil' do
         let(:options) { { add_version: true } }
-        let(:version) { nil }
+        let(:route) { Struct.new(:version, :path).new }
 
         specify 'The returned path does not include version' do
-          expect(subject.build('/thing(.json)', version, options)).to eql ['Thing', '/thing']
-          expect(subject.build('/thing/foo(.json)', version, options)).to eql ['Foo', '/thing/foo']
-          expect(subject.build('/thing(.:format)', version, options)).to eql ['Thing', '/thing']
-          expect(subject.build('/thing/foo(.:format)', version, options)).to eql ['Foo', '/thing/foo']
-          expect(subject.build('/thing/:id', version, options)).to eql ['Thing', '/thing/{id}']
-          expect(subject.build('/thing/foo/:id', version, options)).to eql ['Foo', '/thing/foo/{id}']
+          route.path = '/{version}/thing(.json)'
+          expect(subject.build(route, options)).to eql ['Thing', '/thing']
+          route.path = '/{version}/thing/foo(.json)'
+          expect(subject.build(route, options)).to eql ['Foo', '/thing/foo']
+          route.path = '/{version}/thing(.:format)'
+          expect(subject.build(route, options)).to eql ['Thing', '/thing']
+          route.path = '/{version}/thing/foo(.:format)'
+          expect(subject.build(route, options)).to eql ['Foo', '/thing/foo']
+          route.path = '/{version}/thing/:id'
+          expect(subject.build(route, options)).to eql ['Thing', '/thing/{id}']
+          route.path = '/{version}/thing/foo/:id'
+          expect(subject.build(route, options)).to eql ['Foo', '/thing/foo/{id}']
         end
       end
     end

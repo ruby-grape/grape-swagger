@@ -2,7 +2,8 @@ module GrapeSwagger
   module DocMethods
     class PathString
       class << self
-        def build(path, route_version, options = {})
+        def build(route, options = {})
+          path = route.path
           # always removing format
           path.sub!(/\(\.\w+?\)$/, '')
           path.sub!('(.:format)', '')
@@ -13,8 +14,8 @@ module GrapeSwagger
           # set item from path, this could be used for the definitions object
           item = path.gsub(%r{/{(.+?)}}, '').split('/').last.singularize.underscore.camelize || 'Item'
 
-          if route_version && options[:add_version]
-            path.sub!('{version}', route_version.to_s)
+          if route.version && options[:add_version]
+            path.sub!('{version}', route.version.to_s)
           else
             path.sub!('/{version}', '')
           end

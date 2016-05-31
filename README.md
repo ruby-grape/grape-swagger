@@ -206,7 +206,7 @@ The `host` and `base_path` options also accept a `proc` or `lambda` to evaluate,
 
 ```ruby
 add_swagger_documentation \
-  base_path: proc { |foo| foo.host =~ /^example/ ? '/api-example' : '/api' }
+  base_path: proc { |request| request.host =~ /^example/ ? '/api-example' : '/api' }
 ```
 
 <a name="host" />

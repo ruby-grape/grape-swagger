@@ -34,7 +34,7 @@ describe GrapeSwagger::DocMethods::OptionalObject do
     end
 
     describe 'option is a proc' do
-      let(:options) { { host: proc { |foo| foo.host =~ /^example/ ? '/api-example' : '/api' } } }
+      let(:options) { { host: proc { |request| request.host =~ /^example/ ? '/api-example' : '/api' } } }
       specify do
         expect(subject.build(key, options, request)).to eql '/api-example'
       end

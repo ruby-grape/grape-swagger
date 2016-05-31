@@ -202,7 +202,7 @@ You can pass a hash with optional configuration settings to ```add_swagger_docum
 *not all configuration options supported yet*, but is WIP
 
 
-The `host` and `base_path` options also accept a `proc` or `lambda` to evaluate, which is passed a request object:
+The `host` and `base_path` options also accept a `proc` or `lambda` to evaluate, which is passed a [request](http://www.rubydoc.info/github/rack/rack/Rack/Request) object:
 
 ```ruby
 add_swagger_documentation \

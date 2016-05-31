@@ -202,7 +202,12 @@ You can pass a hash with optional configuration settings to ```add_swagger_docum
 *not all configuration options supported yet*, but is WIP
 
 
-`host` and `base_path` are also accepting a `proc` to evaluate.
+The `host` and `base_path` options also accept a `proc` or `lambda` to evaluate, which is passed a [request](http://www.rubydoc.info/github/rack/rack/Rack/Request) object:
+
+```ruby
+add_swagger_documentation \
+  base_path: proc { |request| request.host =~ /^example/ ? '/api-example' : '/api' }
+```
 
 <a name="host" />
 #### host:

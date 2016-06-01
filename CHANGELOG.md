@@ -15,7 +15,6 @@
 * [#413](https://github.com/ruby-grape/grape-swagger/pull/413): Move all model parsing logic to separate gems `grape-swagger-entity` and added representable parser `grape-swagger` - [@Bugagazavr](https://github.com/Bugagazavr).
 * [#434](https://github.com/ruby-grape/grape-swagger/pull/434): Add summary to the operation object generator to be more compliant with [OpenAPI v2](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#operation-object) - [@aschuster3](https://github.com/aschuster3).
 * [#441](https://github.com/ruby-grape/grape-swagger/pull/441): Accepting `String`, `lambda` and `proc` for `host` and `base_path` - [@LeFnord](https://github.com/LeFnord).
-* Your contribution here.
 
 #### Fixes
 
@@ -23,7 +22,6 @@
 * [#419](https://github.com/ruby-grape/grape-swagger/pull/419): Replaced github ref to rubygems for external gems - [@Bugagazavr](https://github.com/Bugagazavr).
 * [#420](https://github.com/ruby-grape/grape-swagger/pull/420): Raise SwaggerSpec exception if swagger spec isn't satisfied, when no parser for model is registered or response model is empty - [@Bugagazavr](https://github.com/Bugagazavr).
 * [#438](https://github.com/ruby-grape/grape-swagger/pull/438): Route version was missing in :options passed to PathString, so Endpoint.path_and_definitions_objects wasn't returning a versioned path when required - [@texpert](https://github.com/texpert).
-* Your contribution here.
 
 ### 0.20.3 (May 9, 2016)
 

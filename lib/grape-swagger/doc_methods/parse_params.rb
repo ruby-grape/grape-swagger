@@ -6,11 +6,9 @@ module GrapeSwagger
           path = route.path
           method = route.request_method
 
+          additional_documentation = settings.fetch(:documentation, {})
+          settings.merge!(additional_documentation)
           data_type = GrapeSwagger::DocMethods::DataType.call(settings)
-          additional_documentation = settings[:documentation]
-          if additional_documentation
-            settings = additional_documentation.merge(settings)
-          end
 
           value_type = settings.merge(data_type: data_type, path: path, param_name: param, method: method)
 

@@ -344,9 +344,13 @@ add_swagger_documentation \
 
 * [Swagger Header Parameters](#headers)
 * [Hiding an Endpoint](#hiding)
+* [Overriding Auto-Generated Nicknames](#overriding-auto-generated-nicknames)
 * [Defining an endpoint as array](#array)
 * [Using an options hash](#options)
 * [Specify endpoint details](#details)
+* [Overriding param type](#overriding-param-type)
+* [Overriding type](#overriding-type)
+* [Multi types](#multi-types)
 * [Response documentation](#response)
 
 
@@ -454,6 +458,51 @@ post :act do
 end
 ```
 
+#### Overriding type
+
+You can override type, using the documentation hash.
+
+```ruby
+params do
+  requires :input, type: String, documentation: { type: 'integer' }
+end
+post :act do
+  ...
+end
+```
+
+```json
+{
+  "in": "formData",
+  "name": "input",
+  "type": "integer",
+  "format": "int32",
+  "required": true
+}
+```
+
+
+#### Multi types
+
+By default when you set multi types, the first type is selected as swagger type
+
+```ruby
+params do
+  requires :action, types: [String, Integer]
+end
+post :act do
+  ...
+end
+```
+
+```json
+{
+  "in": "formData",
+  "name": "action",
+  "type": "string",
+  "required": true
+}
+```
 
 #### Overriding the route summary
 

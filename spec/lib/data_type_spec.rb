@@ -18,6 +18,18 @@ describe GrapeSwagger::DocMethods::DataType do
     it { expect(subject).to eql 'object' }
   end
 
+  describe 'Multi types in a string' do
+    let(:value) { { type: "[String, Integer]" } }
+
+    it { expect(subject).to eql 'string' }
+  end
+
+  describe 'Multi types in array' do
+    let(:value) { { type: [String, Integer] } }
+
+    it { expect(subject).to eql 'string' }
+  end
+
   describe 'Rack::Multipart::UploadedFile' do
     let(:value) { { type: Rack::Multipart::UploadedFile } }
 

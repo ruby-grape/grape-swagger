@@ -19,7 +19,7 @@ describe GrapeSwagger::DocMethods::DataType do
   end
 
   describe 'Multi types in a string' do
-    let(:value) { { type: "[String, Integer]" } }
+    let(:value) { { type: '[String, Integer]' } }
 
     it { expect(subject).to eql 'string' }
   end

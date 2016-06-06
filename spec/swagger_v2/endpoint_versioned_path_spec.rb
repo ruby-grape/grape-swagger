@@ -26,7 +26,6 @@ describe 'Grape::Endpoint#path_and_definitions' do
   end
 
   it 'tags the endpoint with the resource name' do
-    pending 'BUG: This is set to the first part of the path'
-    expect(subject.first['/v1/item'][:get][:tags]).to eq ['items']
+    expect(subject.first['/v1/item'][:get][:tags]).to eq ['item']
   end
 end

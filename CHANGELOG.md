@@ -6,7 +6,7 @@
 
 #### Fixes
 
-* Your contribution here.
+* [#448](https://github.com/ruby-grape/grape-swagger/pull/448): Header parameters are now prepended to the parameter list - [@anakinj](https://github.com/anakinj).
 
 ### 0.21.0 (June 1, 2016)
 

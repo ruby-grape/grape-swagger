@@ -308,7 +308,7 @@ RSpec.shared_context 'entity swagger example' do
           'properties' => {
             'id' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'Identity of Something' },
             'text' => { 'type' => 'string', 'description' => 'Content of something.' },
-            'links' => { 'type' => 'link' },
+            'links' => { 'type' => 'array', 'items' => { 'type' => 'link' } },
             'others' => { 'type' => 'text' }
           },
           'description' => 'This gets Things.'

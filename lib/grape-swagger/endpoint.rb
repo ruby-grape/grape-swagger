@@ -203,7 +203,7 @@ module Grape
     def partition_params(route)
       declared_params = route.settings[:declared_params] if route.settings[:declared_params].present?
       required, exposed = route.params.partition { |x| x.first.is_a? String }
-      required.concat GrapeSwagger::DocMethods::Headers.parse(route) unless route.headers.nil?
+      required = GrapeSwagger::DocMethods::Headers.parse(route) + required unless route.headers.nil?
       default_type(required)
       default_type(exposed)
 

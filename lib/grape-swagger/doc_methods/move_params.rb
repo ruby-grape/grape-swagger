@@ -41,7 +41,7 @@ module GrapeSwagger
 
           move_params_to_new(name, params)
 
-          @definitions[name][:description] = path[:description]
+          @definitions[name][:description] = path[:description] if path[:description]
           path[:parameters] << build_body_parameter(response.dup, name)
         end
 

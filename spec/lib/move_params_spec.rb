@@ -45,8 +45,9 @@ describe GrapeSwagger::DocMethods::MoveParams do
   describe 'find_definition_and_params' do
     specify do
       subject.instance_variable_set(:@definitions, definitions)
-      subject.find_definition_and_params(found_path, :post)
+      subject.find_definition_and_params(found_path[:post], :post)
       expect(definitions.keys).to include 'InBody'
+      expect(definitions['postRequestInBody'].keys).to_not include :description
     end
   end
 

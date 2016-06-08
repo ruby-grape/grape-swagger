@@ -109,7 +109,7 @@ module Grape
       method[:consumes]    = consumes_object(route, options[:format])
       method[:parameters]  = params_object(route)
       method[:responses]   = response_object(route, options[:markdown])
-      method[:tags]        = tag_object(route, options[:version].to_s)
+      method[:tags]        = tag_object(route)
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method.delete_if { |_, value| value.blank? }
 
@@ -194,8 +194,8 @@ module Grape
       end
     end
 
-    def tag_object(route, version)
-      Array(route.path.split('{')[0].split('/').reject(&:empty?).delete_if { |i| ((i == route.prefix.to_s) || (i == version)) }.first)
+    def tag_object(route)
+      Array(route.path.split('{')[0].split('/').reject(&:empty?).delete_if { |i| ((i == route.prefix.to_s) || (i == route.version)) }.first)
     end
 
     private

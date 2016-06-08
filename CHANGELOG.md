@@ -7,7 +7,7 @@
 #### Fixes
 
 * [#450](https://github.com/ruby-grape/grape-swagger/pull/438): Do not add :description to definitions if :description is missing on path - [@texpert](https://github.com/texpert).
-* Your contribution here.
+* [#447](https://github.com/ruby-grape/grape-swagger/pull/447): Version part of the url is now ignored when generating tags for endpoint - [@anakinj](https://github.com/anakinj).
 
 ### 0.21.0 (June 1, 2016)
 

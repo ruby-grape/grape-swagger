@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+if Grape::VERSION >= '0.14'
 describe 'Params Multi Types' do
   def app
     Class.new(Grape::API) do
@@ -52,4 +53,5 @@ describe 'Params Multi Types' do
       expect(types).to eq(%w(string string))
     end
   end
+end
 end

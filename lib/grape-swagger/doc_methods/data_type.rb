@@ -3,9 +3,10 @@ module GrapeSwagger
     class DataType
       class << self
         def call(value)
-          raw_data_type = value[:type] if value.is_a?(Hash)
-          raw_data_type = value unless value.is_a?(Hash)
-          raw_data_type ||= 'string'
+          raw_data_type = value.is_a?(Hash) ? value[:type] : value
+          raw_data_type ||= 'String'
+          raw_data_type = parse_multi_type(raw_data_type)
+
           case raw_data_type.to_s
           when 'Boolean', 'Date', 'Integer', 'String', 'Float', 'JSON', 'Array'
             raw_data_type.to_s.downcase
@@ -25,6 +26,17 @@ module GrapeSwagger
             'string'
           else
             parse_entity_name(raw_data_type)
+          end
+        end
+
+        def parse_multi_type(raw_data_type)
+          case raw_data_type
+          when /\A\[.*\]\z/
+            raw_data_type.gsub(/[(\A\[)(\s+)(\]\z)]/, '').split(',').first
+          when Array
+            raw_data_type.first
+          else
+            raw_data_type
           end
         end
 

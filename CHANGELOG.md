@@ -3,11 +3,14 @@
 #### Features
 
 * [#448](https://github.com/ruby-grape/grape-swagger/pull/448): Header parameters are now prepended to the parameter list - [@anakinj](https://github.com/anakinj).
+* [#444](https://github.com/ruby-grape/grape-swagger/pull/444): With multi types parameter the first type is use as the documentation type [@scauglog](https://github.com/scauglog)
 
 #### Fixes
 
 * [#450](https://github.com/ruby-grape/grape-swagger/pull/438): Do not add :description to definitions if :description is missing on path - [@texpert](https://github.com/texpert).
 * [#447](https://github.com/ruby-grape/grape-swagger/pull/447): Version part of the url is now ignored when generating tags for endpoint - [@anakinj](https://github.com/anakinj).
+* [#444](https://github.com/ruby-grape/grape-swagger//pull/444): Default value provided in the documentation hash, override the grape default [@scauglog](https://github.com/scauglog)
+* [#443](https://github.com/ruby-grape/grape-swagger/issues/443): Type provided in the documentation hash, override the grape type [@scauglog](https://github.com/scauglog)
 
 ### 0.21.0 (June 1, 2016)
 

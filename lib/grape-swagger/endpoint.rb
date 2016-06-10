@@ -231,7 +231,7 @@ module Grape
         else
           key = param.first
         end
-        memo[key] = param.last unless param.last[:type] == 'Hash' || param.last[:type] == 'Array' && !param.last.key?(:documentation)
+        memo[key] = param.last unless (param.last[:type] == 'Hash' || param.last[:type] == 'Array') && !param.last.key?(:documentation)
       end
     end
 

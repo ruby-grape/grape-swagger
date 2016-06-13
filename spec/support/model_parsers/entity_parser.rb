@@ -118,8 +118,8 @@ RSpec.shared_context 'entity swagger example' do
       end
 
       class DocumentedHashAndArrayModel < Grape::Entity
-        expose :raw_hash, documentation: { type: Hash, desc: 'Example Hash.' }
-        expose :raw_array, documentation: { type: Array, desc: 'Example Array' }
+        expose :raw_hash, documentation: { type: Hash, desc: 'Example Hash.', documentation: { in: 'body' } }
+        expose :raw_array, documentation: { type: Array, desc: 'Example Array', documentation: { in: 'body' } }
       end
     end
   end

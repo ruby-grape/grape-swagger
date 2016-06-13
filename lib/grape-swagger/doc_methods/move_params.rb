@@ -144,13 +144,11 @@ module GrapeSwagger
         end
 
         def movable?(param)
-          return true if param[:in] == 'body' || param[:in] == 'path'
-          false
+          param[:in] == 'body'
         end
 
         def deletable?(param)
-          return true if movable?(param) && param[:in] == 'body'
-          false
+          param[:in] == 'body'
         end
 
         def should_move?(params)

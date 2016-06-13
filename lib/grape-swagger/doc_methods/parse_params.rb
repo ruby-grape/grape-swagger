@@ -64,7 +64,9 @@ module GrapeSwagger
           if value_type[:is_array]
             if value_type[:documentation].present?
               param_type = value_type[:documentation][:param_type]
-              type = GrapeSwagger::DocMethods::DataType.mapping(value_type[:documentation][:type])
+              if (doc_type = value_type[:documentation][:type])
+                type = GrapeSwagger::DocMethods::DataType.mapping(doc_type)
+              end
             end
             array_items = { 'type' => type || value_type[:data_type] }
 

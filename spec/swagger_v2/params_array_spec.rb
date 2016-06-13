@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'pry'
 
 describe 'Group Params as Array' do
   def app
@@ -33,6 +34,15 @@ describe 'Group Params as Array' do
       end
 
       post '/array_of_type' do
+        { 'declared_params' => declared(params) }
+      end
+
+      params do
+        requires :array_of_string, type: Array[String]
+        requires :array_of_integer, type: Array[Integer]
+      end
+
+      post '/array_of_type_in_form' do
         { 'declared_params' => declared(params) }
       end
 
@@ -88,6 +98,22 @@ describe 'Group Params as Array' do
         'array_of_integer' => {
           'type' => 'array', 'items' => { 'type' => 'integer' }, 'description' => 'nested array of integers'
         }
+      )
+    end
+  end
+
+  describe 'retrieves the documentation for typed group parameters' do
+    subject do
+      get '/swagger_doc/array_of_type_in_form'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['paths']['/array_of_type_in_form']['post']['parameters']).to eql(
+        [
+          { 'in' => 'formData', 'name' => 'array_of_string', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => true },
+          { 'in' => 'formData', 'name' => 'array_of_integer', 'type' => 'array', 'items' => { 'type' => 'integer' }, 'required' => true }
+        ]
       )
     end
   end

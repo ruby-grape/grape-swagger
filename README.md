@@ -481,6 +481,30 @@ end
 }
 ```
 
+#### Array type
+
+If you want to pass an array of primitive types, you can do this with the following:
+
+```ruby
+params do
+  requires :action_ids, type: Array[Integer]
+end
+post :act do
+  ...
+end
+```
+
+```json
+{
+  "in": "formData",
+  "name": "action_ids",
+  "type": "array",
+  "items": {
+      "type": "integer"
+  },
+  "required": true
+}
+```
 
 #### Multi types
 

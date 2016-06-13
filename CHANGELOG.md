@@ -12,7 +12,7 @@
 * [#447](https://github.com/ruby-grape/grape-swagger/pull/447): Version part of the url is now ignored when generating tags for endpoint - [@anakinj](https://github.com/anakinj).
 * [#444](https://github.com/ruby-grape/grape-swagger//pull/444): Default value provided in the documentation hash, override the grape default [@scauglog](https://github.com/scauglog).
 * [#443](https://github.com/ruby-grape/grape-swagger/issues/443): Type provided in the documentation hash, override the grape type [@scauglog](https://github.com/scauglog).
-* [#453](https://github.com/ruby-grape/grape-swagger/pull/453): Include documented Hashes in documentation output - [@aschuster3](https://github.com/aschuster3).
+* [#454](https://github.com/ruby-grape/grape-swagger/pull/453): Include documented Hashes in documentation output - [@aschuster3](https://github.com/aschuster3).
 * Your contribution here.
 
 ### 0.21.0 (June 1, 2016)

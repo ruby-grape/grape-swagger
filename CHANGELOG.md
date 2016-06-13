@@ -8,6 +8,7 @@
 
 #### Fixes
 
+* [#455](https://github.com/ruby-grape/grape-swagger/pull/455): Passing `Array[<primitive>]` should create json indicating `array` type - [@tyspring](https://github.com/tyspring).
 * [#450](https://github.com/ruby-grape/grape-swagger/pull/438): Do not add :description to definitions if :description is missing on path - [@texpert](https://github.com/texpert).
 * [#447](https://github.com/ruby-grape/grape-swagger/pull/447): Version part of the url is now ignored when generating tags for endpoint - [@anakinj](https://github.com/anakinj).
 * [#444](https://github.com/ruby-grape/grape-swagger//pull/444): Default value provided in the documentation hash, override the grape default [@scauglog](https://github.com/scauglog).

@@ -63,7 +63,6 @@ module GrapeSwagger
               end
             end
 
-            properties[name][:readOnly] = true unless deletable?(param)
             params.delete(param) if deletable?(param)
 
             definition[:required] << name if deletable?(param) && param[:required]

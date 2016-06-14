@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'pry'
 
 describe 'Group Params as Array' do
   def app

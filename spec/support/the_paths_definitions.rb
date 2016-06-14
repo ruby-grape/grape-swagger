@@ -97,8 +97,7 @@ RSpec.shared_context 'the api paths/defs' do
       properties: {
         in_body_1: { type: 'integer', format: 'int32', description: 'in_body_1' },
         in_body_2: { type: 'string', description: 'in_body_2' },
-        in_body_3: { type: 'string', description: 'in_body_3' },
-        key: { type: 'integer', format: 'int32', readOnly: true }
+        in_body_3: { type: 'string', description: 'in_body_3' }
       },
       required: [:in_body_1]
     }

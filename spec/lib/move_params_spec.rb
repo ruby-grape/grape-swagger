@@ -184,7 +184,7 @@ describe GrapeSwagger::DocMethods::MoveParams do
     describe 'movable' do
       describe 'path' do
         let(:param) { { in: 'path', name: 'key', description: nil, type: 'integer', format: 'int32', required: true } }
-        it { expect(subject.send(:movable?, param)).to be true }
+        it { expect(subject.send(:movable?, param)).to be false }
       end
 
       describe 'body' do

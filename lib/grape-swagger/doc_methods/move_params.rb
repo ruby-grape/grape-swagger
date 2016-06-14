@@ -63,7 +63,6 @@ module GrapeSwagger
               end
             end
 
-            properties[name][:readOnly] = true unless deletable?(param)
             params.delete(param) if deletable?(param)
 
             definition[:required] << name if deletable?(param) && param[:required]
@@ -144,13 +143,11 @@ module GrapeSwagger
         end
 
         def movable?(param)
-          return true if param[:in] == 'body' || param[:in] == 'path'
-          false
+          param[:in] == 'body'
         end
 
         def deletable?(param)
-          return true if movable?(param) && param[:in] == 'body'
-          false
+          param[:in] == 'body'
         end
 
         def should_move?(params)

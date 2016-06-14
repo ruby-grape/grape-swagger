@@ -104,7 +104,6 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         'description' => 'put in body /wo entity',
         'type' => 'object',
         'properties' => {
-          'key' => { 'type' => 'integer', 'format' => 'int32', 'readOnly' => true },
           'in_body_1' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'in_body_1' },
           'in_body_2' => { 'type' => 'string', 'description' => 'in_body_2' },
           'in_body_3' => { 'type' => 'string', 'description' => 'in_body_3' }
@@ -152,7 +151,6 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         'description' => 'put in body with entity',
         'type' => 'object',
         'properties' => {
-          'id' => { 'type' => 'integer', 'format' => 'int32', 'readOnly' => true },
           'name' => { 'type' => 'string', 'description' => 'name' }
         }
       )

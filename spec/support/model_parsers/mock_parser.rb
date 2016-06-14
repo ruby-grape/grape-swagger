@@ -52,6 +52,7 @@ RSpec.shared_context 'mock swagger example' do
       class ApiError < OpenStruct; end
       class SecondApiError < OpenStruct; end
       class RecursiveModel < OpenStruct; end
+      class DocumentedHashAndArrayModel < OpenStruct; end
     end
   end
 
@@ -76,6 +77,15 @@ RSpec.shared_context 'mock swagger example' do
         }
       },
       'UseResponse' => {
+        'type' => 'object',
+        'properties' => {
+          'mock_data' => {
+            'type' => 'string',
+            'description' => "it's a mock"
+          }
+        }
+      },
+      'DocumentedHashAndArrayModel' => {
         'type' => 'object',
         'properties' => {
           'mock_data' => {

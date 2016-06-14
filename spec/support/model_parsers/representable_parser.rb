@@ -186,6 +186,13 @@ RSpec.shared_context 'representable swagger example' do
         property :name, documentation: { type: String, desc: 'The name.' }
         property :children, decorator: self, documentation: { type: 'RecursiveModel', is_array: true, desc: 'The child nodes.' }
       end
+
+      class DocumentedHashAndArrayModel < Representable::Decorator
+        include Representable::JSON
+
+        property :raw_hash, documentation: { type: Hash, desc: 'Example Hash.' }
+        property :raw_array, documentation: { type: Array, desc: 'Example Array' }
+      end
     end
   end
 

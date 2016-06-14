@@ -137,7 +137,6 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         'type' => 'object',
         'properties' => {
           'address' => { '$ref' => '#/definitions/putRequestUseNestedWithAddressAddress' },
-          'id' => { 'type' => 'integer', 'format' => 'int32', 'readOnly' => true },
           'name' => { 'type' => 'string', 'description' => 'name' }
         }
       )
@@ -176,7 +175,6 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         'properties' => {
           'address' => { '$ref' => '#/definitions/putRequestUseNestedWithAddressAddress' },
           'delivery_address' => { '$ref' => '#/definitions/putRequestUseNestedWithAddressDeliveryAddress' },
-          'id' => { 'type' => 'integer', 'format' => 'int32', 'readOnly' => true },
           'name' => { 'type' => 'string', 'description' => 'name' }
         }
       )

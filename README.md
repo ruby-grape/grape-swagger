@@ -483,7 +483,7 @@ end
 
 #### Array type
 
-If you want to pass an array of primitive types, you can do this with the following:
+Array types are also supported.
 
 ```ruby
 params do

@@ -237,7 +237,7 @@ module Grape
 
     def param_type_is_array?(param_type)
       return false unless param_type
-      param_type == 'Array' || (param_type[0] == '[' && param_type[-1] == ']' && !param_type.include?(','))
+      param_type == 'Array' || param_type =~ /\[\w+\]\z/
     end
 
     def expose_params_from_model(model)

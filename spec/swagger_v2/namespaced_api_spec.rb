@@ -21,6 +21,26 @@ describe 'namespace' do
     end
   end
 
+  context 'with camel case namespace' do
+    def app
+      Class.new(Grape::API) do
+        namespace :camelCases do
+          get '/', desc: 'Look! An endpoint.'
+        end
+        add_swagger_documentation format: :json
+      end
+    end
+
+    subject do
+      get '/swagger_doc'
+      JSON.parse(last_response.body)['paths']['/camelCases']['get']
+    end
+
+    it 'shows the namespace description in the json spec' do
+      expect(subject['description']).to eql('Look! An endpoint.')
+    end
+  end
+
   context 'mounted' do
     def app
       namespaced_api = Class.new(Grape::API) do

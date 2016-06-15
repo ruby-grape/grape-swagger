@@ -65,7 +65,6 @@ module Grape
           next unless route_match
           resource = route_match.captures.first
           next if resource.empty?
-          resource.downcase!
           @target_class.combined_routes[resource] ||= []
           next if doc_klass.hide_documentation_path && route.path.match(/#{doc_klass.mount_path}($|\/|\(\.)/)
           @target_class.combined_routes[resource] << route

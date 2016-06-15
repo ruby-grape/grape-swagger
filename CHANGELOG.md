@@ -13,6 +13,7 @@
 * [#444](https://github.com/ruby-grape/grape-swagger//pull/444): Default value provided in the documentation hash, override the grape default [@scauglog](https://github.com/scauglog).
 * [#443](https://github.com/ruby-grape/grape-swagger/issues/443): Type provided in the documentation hash, override the grape type [@scauglog](https://github.com/scauglog).
 * [#454](https://github.com/ruby-grape/grape-swagger/pull/454): Include documented Hashes in documentation output - [@aschuster3](https://github.com/aschuster3).
+* [#457](https://github.com/ruby-grape/grape-swagger/issues/457): Using camel case on namespace throws exception on add_swagger_documentation method - [@rayko](https://github.com/rayko/).
 * Your contribution here.
 
 ### 0.21.0 (June 1, 2016)

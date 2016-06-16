@@ -65,4 +65,16 @@ describe GrapeSwagger::DocMethods::DataType do
 
     it { expect(subject).to eql 'string' }
   end
+
+  describe '[String]' do
+    let(:value) { { type: '[String]' } }
+
+    it { expect(subject).to eq('string') }
+  end
+
+  describe '[Integer]' do
+    let(:value) { { type: '[Integer]' } }
+
+    it { expect(subject).to eq('integer') }
+  end
 end

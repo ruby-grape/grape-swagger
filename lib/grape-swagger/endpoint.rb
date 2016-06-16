@@ -222,17 +222,22 @@ module Grape
     end
 
     def parse_request_params(required)
+      array_key = nil
       required.each_with_object({}) do |param, memo|
-        @array_key = param.first.to_s.gsub('[', '[][') if param.last[:type] == 'Array'
-        possible_key = param.first.to_s.gsub('[', '[][')
-        if @array_key && possible_key.start_with?(@array_key)
-          key = possible_key
-          param.last[:is_array] = true
-        else
-          key = param.first
-        end
-        memo[key] = param.last unless (param.last[:type] == 'Hash' || param.last[:type] == 'Array') && !param.last.key?(:documentation)
+        array_key = param.first.to_s if param_type_is_array?(param.last[:type])
+
+        param.last[:is_array] = true if array_key && param.first.start_with?(array_key)
+        memo[param.first] = param.last unless (param.last[:type] == 'Hash' || param.last[:type] == 'Array') && !param.last.key?(:documentation)
       end
+    end
+
+    def param_type_is_array?(param_type)
+      return false unless param_type
+      return true if param_type == 'Array'
+      param_types = param_type.match(/\[(.*)\]$/)
+      return false unless param_types
+      param_types = param_types[0].split(',') if param_types
+      param_types.size == 1
     end
 
     def expose_params_from_model(model)

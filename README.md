@@ -481,6 +481,30 @@ end
 }
 ```
 
+#### Array type
+
+Array types are also supported.
+
+```ruby
+params do
+  requires :action_ids, type: Array[Integer]
+end
+post :act do
+  ...
+end
+```
+
+```json
+{
+  "in": "formData",
+  "name": "action_ids",
+  "type": "array",
+  "items": {
+      "type": "integer"
+  },
+  "required": true
+}
+```
 
 #### Multi types
 

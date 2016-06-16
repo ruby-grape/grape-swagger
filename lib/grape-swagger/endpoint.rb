@@ -237,7 +237,11 @@ module Grape
 
     def param_type_is_array?(param_type)
       return false unless param_type
-      param_type == 'Array' || param_type =~ /\[\w+\]\z/
+      return true if param_type == 'Array'
+      param_types = param_type.match(/\[(.*)\]$/)
+      return false unless param_types
+      param_types = param_types[0].split(',') if param_types
+      param_types.size == 1
     end
 
     def expose_params_from_model(model)

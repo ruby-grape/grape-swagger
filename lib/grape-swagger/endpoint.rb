@@ -222,16 +222,12 @@ module Grape
     end
 
     def parse_request_params(required)
+      array_key = nil
       required.each_with_object({}) do |param, memo|
-        @array_key = param.first.to_s.gsub('[', '[][') if param_type_is_array?(param.last[:type])
-        possible_key = param.first.to_s.gsub('[', '[][')
-        if @array_key && possible_key.start_with?(@array_key)
-          key = possible_key
-          param.last[:is_array] = true
-        else
-          key = param.first
-        end
-        memo[key] = param.last unless (param.last[:type] == 'Hash' || param.last[:type] == 'Array') && !param.last.key?(:documentation)
+        array_key = param.first.to_s if param_type_is_array?(param.last[:type])
+
+        param.last[:is_array] = true if array_key && param.first.start_with?(array_key)
+        memo[param.first] = param.last unless (param.last[:type] == 'Hash' || param.last[:type] == 'Array') && !param.last.key?(:documentation)
       end
     end
 

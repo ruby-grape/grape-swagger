@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'extension' do
+describe 'extensions' do
   include_context "#{MODEL_PARSER} swagger example"
 
   before :all do
@@ -35,6 +35,14 @@ describe 'extension' do
              success: Entities::ResponseItem,
              failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         get '/definitions_extension' do
+          { 'declared_params' => declared(params) }
+        end
+
+        route_setting :x_def, [{ for: 422, other: 'stuff' }, { for: 200, some: 'stuff' }]
+
+        desc 'This returns something with extension on definition level',
+             success: Entities::OtherItem
+        get '/non_existend_status_definitions_extension' do
           { 'declared_params' => declared(params) }
         end
 
@@ -104,6 +112,19 @@ describe 'extension' do
       expect(subject['definitions']['OtherItem']['x-some']).to eql 'stuff'
       expect(subject['definitions']['SecondApiError']).to include 'x-other'
       expect(subject['definitions']['SecondApiError']['x-other']).to eql 'stuff'
+    end
+  end
+
+  describe 'extension on definition level' do
+    subject do
+      get '/swagger_doc/non_existend_status_definitions_extension'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['definitions'].length).to eql 1
+      expect(subject['definitions']['OtherItem']).to include 'x-some'
+      expect(subject['definitions']['OtherItem']['x-some']).to eql 'stuff'
     end
   end
 end

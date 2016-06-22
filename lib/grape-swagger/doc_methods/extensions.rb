@@ -4,6 +4,7 @@ module GrapeSwagger
       class << self
         def add(path, definitions, route)
           @route = route
+
           description = route.settings[:description]
           add_extension_to(path[method], extension(description)) if description && extended?(description, :x)
 
@@ -20,29 +21,32 @@ module GrapeSwagger
           def_extension = extension(settings, :x_def)
 
           if def_extension[:x_def].is_a?(Array)
-            def_extension[:x_def].each do |extension|
-              next unless extension.key?(:for)
-              status = extension.delete(:for)
-              definition = find_definition(status, path)
-              add_extension_to(definitions[definition], x_def: extension)
-            end
+            def_extension[:x_def].each { |extension| setup_definition(extension, path, definitions) }
           else
-            return unless def_extension[:x_def].key?(:for)
-            status = def_extension[:x_def].delete(:for)
-            definition = find_definition(status, path)
-            add_extension_to(definitions[definition], def_extension)
+            setup_definition(def_extension[:x_def], path, definitions)
           end
+        end
+
+        def setup_definition(def_extension, path, definitions)
+          return unless def_extension.key?(:for)
+          status = def_extension[:for]
+
+          definition = find_definition(status, path)
+          add_extension_to(definitions[definition], x_def: def_extension)
         end
 
         def find_definition(status, path)
           response = path[method][:responses][status]
+          return if response.nil?
 
-          response[:schema]['$ref'].split('/').last
+          return response[:schema]['$ref'].split('/').last if response[:schema].key?('$ref')
+          return response[:schema]['items']['$ref'].split('/').last if response[:schema].key?('items')
         end
 
         def add_extension_to(part, extensions)
+          return if part.nil?
           concatenate(extensions).each do |key, value|
-            part[key] = value
+            part[key] = value unless key.start_with?('x-for')
           end
         end
 

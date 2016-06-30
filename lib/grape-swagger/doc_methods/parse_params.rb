@@ -65,14 +65,17 @@ module GrapeSwagger
             if value_type[:documentation].present?
               param_type = value_type[:documentation][:param_type]
               doc_type = value_type[:documentation][:type]
-              type = GrapeSwagger::DocMethods::DataType.mapping(doc_type) if doc_type
+              type = GrapeSwagger::DocMethods::DataType.mapping(doc_type) if doc_type && !DataType.request_primitive?(doc_type)
             end
-            array_items = { 'type' => type || value_type[:data_type] }
+
+            array_items = {
+              type: type || @parsed_param[:type],
+              format: @parsed_param.delete(:format)
+            }.delete_if { |_, value| value.blank? }
 
             @parsed_param[:in] = param_type || 'formData'
             @parsed_param[:items] = array_items
             @parsed_param[:type] = 'array'
-            @parsed_param.delete(:format)
           end
         end
 

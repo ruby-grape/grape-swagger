@@ -351,6 +351,7 @@ add_swagger_documentation \
 * [Overriding param type](#overriding-param-type)
 * [Overriding type](#overriding-type)
 * [Multi types](#multi-types)
+* [Hiding parameters](#hiding-parameters)
 * [Response documentation](#response)
 
 
@@ -526,6 +527,20 @@ end
   "type": "string",
   "required": true
 }
+```
+
+#### Hiding parameters
+
+Exclude single optional parameter from the documentation
+
+```ruby
+params do
+  optional :one, documentation: { hidden: true }
+  optional :two, documentation: { hidden: -> { true } }
+end
+post :act do
+  ...
+end
 ```
 
 #### Overriding the route summary

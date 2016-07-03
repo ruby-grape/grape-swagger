@@ -221,13 +221,13 @@ module Grape
       end
     end
 
-    def parse_request_params(required)
+    def parse_request_params(params)
       array_key = nil
-      required.each_with_object({}) do |param, memo|
-        array_key = param.first.to_s if param_type_is_array?(param.last[:type])
-
-        param.last[:is_array] = true if array_key && param.first.start_with?(array_key)
-        memo[param.first] = param.last unless (param.last[:type] == 'Hash' || param.last[:type] == 'Array') && !param.last.key?(:documentation)
+      params.select { |param| public_parameter?(param) }.each_with_object({}) do |param, memo|
+        name, options = *param
+        array_key = name.to_s if param_type_is_array?(options[:type])
+        options[:is_array] = true if array_key && name.start_with?(array_key)
+        memo[param.first] = options unless (options[:type] == 'Hash' || options[:type] == 'Array') && !options.key?(:documentation)
       end
     end
 
@@ -273,6 +273,14 @@ module Grape
       route_hidden = route.options[:hidden]
       route_hidden = route_hidden.call if route_hidden.is_a?(Proc)
       route_hidden
+    end
+
+    def public_parameter?(param)
+      param_options = param.last
+      return true unless param_options.key?(:documentation) && !param_options[:required]
+      param_hidden = param_options[:documentation].fetch(:hidden, false)
+      param_hidden = param_hidden.call if param_hidden.is_a?(Proc)
+      !param_hidden
     end
   end
 end

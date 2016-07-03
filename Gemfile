@@ -10,3 +10,8 @@ else
 end
 
 gem ENV['MODEL_PARSER'] if ENV.key?('MODEL_PARSER')
+
+if RUBY_VERSION < '2.2.2'
+  gem 'rack', '<2.0.0'
+  gem 'activesupport', '<5.0.0'
+end

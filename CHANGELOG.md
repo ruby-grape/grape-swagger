@@ -3,7 +3,8 @@
 #### Features
 
 * [#448](https://github.com/ruby-grape/grape-swagger/pull/448): Header parameters are now prepended to the parameter list - [@anakinj](https://github.com/anakinj).
-* [#444](https://github.com/ruby-grape/grape-swagger/pull/444): With multi types parameter the first type is use as the documentation type [@scauglog](https://github.com/scauglog).
+* [#444](https://github.com/ruby-grape/grape-swagger/pull/444): With multi types parameter the first type is use as the documentation type - [@scauglog](https://github.com/scauglog).
+* [#463](https://github.com/ruby-grape/grape-swagger/pull/463): Added 'hidden' option for parameter to be exclude from generated documentation - [@anakinj](https://github.com/anakinj).
 * Your contribution here.
 
 #### Fixes

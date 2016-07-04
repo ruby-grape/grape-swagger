@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `header`' do
+describe 'moving body/formData Params to definitions' do
   include_context "#{MODEL_PARSER} swagger example"
 
   before :all do
@@ -12,7 +12,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
                success: Entities::UseNestedWithAddress
           params do
             requires :name, type: String, documentation: { desc: 'name', in: 'body' }
-            optional :address, type: Hash do
+            optional :addresses, type: Array do
               requires :street, type: String, documentation: { desc: 'street', in: 'body' }
               requires :postcode, type: String, documentation: { desc: 'postcode', in: 'body' }
               requires :city, type: String, documentation: { desc: 'city', in: 'body' }
@@ -44,6 +44,28 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         end
 
         namespace :multiple_nested_params do
+          desc 'put in body with multiple nested parameters',
+               success: Entities::UseNestedWithAddress
+          params do
+            optional :name, type: String, documentation: { desc: 'name', in: 'body' }
+            optional :addresses, type: Array do
+              optional :street, type: String, documentation: { desc: 'street', in: 'body' }
+              requires :postcode, type: String, documentation: { desc: 'postcode', in: 'formData' }
+              optional :city, type: String, documentation: { desc: 'city', in: 'body' }
+              optional :country, type: String, documentation: { desc: 'country', in: 'body' }
+            end
+            optional :delivery_address, type: Hash do
+              optional :street, type: String, documentation: { desc: 'street', in: 'body' }
+              optional :postcode, type: String, documentation: { desc: 'postcode', in: 'formData' }
+              optional :city, type: String, documentation: { desc: 'city', in: 'body' }
+              optional :country, type: String, documentation: { desc: 'country', in: 'body' }
+            end
+          end
+
+          post '/in_body' do
+            { 'declared_params' => declared(params) }
+          end
+
           desc 'put in body with multiple nested parameters',
                success: Entities::UseNestedWithAddress
           params do
@@ -96,16 +118,15 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
     specify do
       expect(subject['definitions']['postRequestUseNestedWithAddress']).to eql(
-        'description' => "post in body with nested parameters\n more details description",
         'type' => 'object',
         'properties' => {
-          'address' => { '$ref' => '#/definitions/postRequestUseNestedWithAddressAddress' },
+          'addresses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/postRequestUseNestedWithAddressAddresses' } },
           'name' => { 'type' => 'string', 'description' => 'name' }
         },
-        'required' => ['name']
+        'required' => ['name'],
+        'description' => "post in body with nested parameters\n more details description"
       )
-      expect(subject['definitions']['postRequestUseNestedWithAddressAddress']).to eql(
-        'description' => 'postRequestUseNestedWithAddress - address',
+      expect(subject['definitions']['postRequestUseNestedWithAddressAddresses']).to eql(
         'type' => 'object',
         'properties' => {
           'street' => { 'type' => 'string', 'description' => 'street' },
@@ -113,7 +134,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           'city' => { 'type' => 'string', 'description' => 'city' },
           'country' => { 'type' => 'string', 'description' => 'country' }
         },
-        'required' => %w(street postcode city)
+        'required' => %w(street postcode city),
+        'description' => 'postRequestUseNestedWithAddress - addresses'
       )
     end
 

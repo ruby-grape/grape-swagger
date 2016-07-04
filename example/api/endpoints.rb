@@ -23,21 +23,21 @@ module Api
       namespace :splines do
         #
         desc 'Get all splines',
-             is_array: true,
-             http_codes: [
-               { code: 200, message: 'get Splines', model: Api::Entities::Splines },
-               { code: 422, message: 'SplinesOutError' }
-             ]
+          is_array: true,
+          http_codes: [
+            { code: 200, message: 'get Splines', model: Api::Entities::Splines },
+            { code: 422, message: 'SplinesOutError' }
+          ]
         get do
           present :items, @@splines, with: Entities::Splines
         end
 
         #
         desc 'Return a spline.',
-             http_codes: [
-               { code: 200, message: 'get Splines' },
-               { code: 422, message: 'SplinesOutError' }
-             ]
+          http_codes: [
+            { code: 200, message: 'get Splines' },
+            { code: 422, message: 'SplinesOutError' }
+          ]
         params do
           requires :id, type: Integer, desc: 'Spline id.'
         end
@@ -49,9 +49,9 @@ module Api
 
         #
         desc 'Create a spline.',
-             http_codes: [
-               { code: 201, message: 'Spline created', model: Api::Entities::Splines }
-             ]
+          http_codes: [
+            { code: 201, message: 'Spline created', model: Api::Entities::Splines }
+          ]
         params do
           requires :spline, type: Hash do
             requires :x, type: Numeric
@@ -73,10 +73,10 @@ module Api
 
         #
         desc 'Update a spline.',
-             http_codes: [
-               { code: 200, message: 'update Splines', model: Api::Entities::Splines },
-               { code: 422, message: 'SplinesOutError' }
-             ]
+          http_codes: [
+            { code: 200, message: 'update Splines', model: Api::Entities::Splines },
+            { code: 422, message: 'SplinesOutError' }
+          ]
         params do
           requires :id, type: Integer, desc: 'Spline id.'
           optional :spline, type: Hash do

@@ -83,8 +83,13 @@ module GrapeSwagger
             nested.each { |x| params.delete(x) }
             nested_def_name = GrapeSwagger::DocMethods::OperationId.manipulate(nested_name)
             def_name = "#{name}#{nested_def_name}"
-            properties[nested_name] = { '$ref' => "#/definitions/#{def_name}" }
 
+            if nested.first[:type] && nested.first[:type] == 'array'
+              prepare_nested_types(nested)
+              properties[nested_name] = { type: 'array', items: { '$ref' => "#/definitions/#{def_name}" } }
+            else
+              properties[nested_name] = { '$ref' => "#/definitions/#{def_name}" }
+            end
             prepare_nested_names(nested)
             build_definition(def_name)
             @definitions[def_name][:description] = "#{name} - #{nested_name}"
@@ -113,13 +118,20 @@ module GrapeSwagger
           name
         end
 
+        def prepare_nested_types(params)
+          params.each do |param|
+            next unless param[:items]
+            param[:type] = param[:items][:type]
+            param[:format] = param[:items][:format] if param[:items][:format]
+            param.delete(:items)
+          end
+        end
+
         def prepare_nested_names(params)
           params.each do |param|
-            param.tap do |x|
-              name = x[:name].partition('[').last.sub(']', '')
-              name = name.partition('[').last.sub(']', '') if name.start_with?('[')
-              x[:name] = name
-            end
+            name = param[:name].partition('[').last.sub(']', '')
+            name = name.partition('[').last.sub(']', '') if name.start_with?('[')
+            param[:name] = name
           end
         end
 
@@ -145,10 +157,7 @@ module GrapeSwagger
         def movable?(param)
           param[:in] == 'body'
         end
-
-        def deletable?(param)
-          param[:in] == 'body'
-        end
+        alias deletable? movable?
 
         def should_move?(params)
           !params.select { |x| x[:in] == 'body' || x[:param_type] == 'body' }.empty?

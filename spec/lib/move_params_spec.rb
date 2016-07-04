@@ -107,8 +107,8 @@ describe GrapeSwagger::DocMethods::MoveParams do
       end
 
       describe 'array' do
-        let(:params) { [{ in: 'body', name: 'address[][street_lines]', description: 'street lines', type: 'array', required: true }] }
-        let(:expected) { [{ in: 'body', name: 'street_lines', description: 'street lines', type: 'array', required: true }] }
+        let(:params) { [{ in: 'body', name: 'address[street_lines]', description: 'street lines', type: 'array', items: { type: 'string' }, required: true }] }
+        let(:expected) { [{ in: 'body', name: 'street_lines', description: 'street lines', type: 'array', items: { type: 'string' }, required: true }] }
         specify do
           expect(params).to eql expected
         end

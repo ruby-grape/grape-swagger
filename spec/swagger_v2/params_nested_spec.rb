@@ -42,7 +42,7 @@ describe 'nested group params' do
     specify do
       expect(subject['paths']['/nested_array']['post']['parameters']).to eql(
         [
-          { 'in' => 'formData', 'name' => 'a_array[param_1]', 'required' => true, 'type' => 'array', 'items' => { 'type' => 'integer' } },
+          { 'in' => 'formData', 'name' => 'a_array[param_1]', 'required' => true, 'type' => 'array', 'items' => { 'type' => 'integer', 'format' => 'int32' } },
           { 'in' => 'formData', 'name' => 'a_array[b_array][param_2]', 'required' => true, 'type' => 'array', 'items' => { 'type' => 'string' } }
         ]
       )

@@ -11,7 +11,7 @@ describe 'response' do
         desc 'This returns something',
              params: Entities::UseResponse.documentation,
              failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
-        post '/params_response' do
+        post '/params_given' do
           { 'declared_params' => declared(params) }
         end
 
@@ -83,12 +83,12 @@ describe 'response' do
 
   describe 'uses params as response object' do
     subject do
-      get '/swagger_doc/params_response'
+      get '/swagger_doc/params_given'
       JSON.parse(last_response.body)
     end
 
     specify do
-      expect(subject['paths']['/params_response']['post']).to eql(
+      expect(subject['paths']['/params_given']['post']).to eql(
         'summary' => 'This returns something',
         'description' => 'This returns something',
         'produces' => ['application/json'],
@@ -101,8 +101,8 @@ describe 'response' do
           '201' => { 'description' => 'This returns something' },
           '400' => { 'description' => 'NotFound', 'schema' => { '$ref' => '#/definitions/ApiError' } }
         },
-        'tags' => ['params_response'],
-        'operationId' => 'postParamsResponse'
+        'tags' => ['params_given'],
+        'operationId' => 'postParamsGiven'
       )
       expect(subject['definitions']).to eql(swagger_params_as_response_object)
     end

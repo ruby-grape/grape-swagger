@@ -2,54 +2,38 @@ module GrapeSwagger
   module DocMethods
     class MoveParams
       class << self
-        def to_definition(paths, definitions)
+        attr_accessor :definitions
+
+        def to_definition(params, route, definitions)
           @definitions = definitions
 
-          find_post_put(paths) do |method_definition|
-            verb = method_definition.keys.first
-            method_object = method_definition[verb]
-
-            find_definition_and_params(method_object, verb)
-          end
+          parent_definition_of_params(params, route)
         end
 
-        def find_post_put(paths)
-          paths.each do |x|
-            found = x.last.select { |y| move_methods.include?(y) }
-            yield found unless found.empty?
-          end
+        def can_be_moved?(params, http_verb)
+          move_methods.include?(http_verb) && includes_body_param?(params)
         end
 
-        def find_definition_and_params(path, verb)
-          params = path[:parameters]
-
-          return if params.nil?
-          return unless should_move?(params)
-
+        def parent_definition_of_params(params, route)
           unify!(params)
 
-          status_code = GrapeSwagger::DocMethods::StatusCodes.get[verb.to_sym][:code]
-          response = path[:responses][status_code]
+          definition_name = GrapeSwagger::DocMethods::OperationId.manipulate(parse_model(route.path))
+          referenced_definition = build_definition(definition_name, route.request_method.downcase)
+          definition = @definitions[referenced_definition]
 
-          if response[:schema] && response[:schema]['$ref']
-            referenced_definition = parse_model(response[:schema]['$ref'])
-            name = build_definition(referenced_definition, verb)
-          else
-            referenced_definition = path[:operationId]
-            name = build_definition(referenced_definition)
-          end
+          move_params_to_new(referenced_definition, definition, params)
 
-          move_params_to_new(name, params)
+          definition[:description] = route.description if route.respond_to?(:description)
 
-          @definitions[name][:description] = path[:description] if path[:description]
-          path[:parameters] << build_body_parameter(response.dup, name)
+          params << build_body_parameter(referenced_definition, definition_name)
+
+          params
         end
 
-        def move_params_to_new(name, params)
+        def move_params_to_new(definition_name, definition, params)
           properties = {}
-          definition = @definitions[name]
 
-          nested_definitions(name, params, properties)
+          nested_definitions(definition_name, params, properties)
 
           params.dup.each do |param|
             next unless movable?(param)
@@ -64,7 +48,6 @@ module GrapeSwagger
             end
 
             params.delete(param) if deletable?(param)
-
             definition[:required] << name if deletable?(param) && param[:required]
           end
 
@@ -90,29 +73,28 @@ module GrapeSwagger
             else
               properties[nested_name] = { '$ref' => "#/definitions/#{def_name}" }
             end
+
             prepare_nested_names(nested)
-            build_definition(def_name)
-            @definitions[def_name][:description] = "#{name} - #{nested_name}"
-            move_params_to_new(def_name, nested)
+            definition = build_definition(def_name)
+            @definitions[definition][:description] = "#{name} - #{nested_name}"
+            move_params_to_new(definition, @definitions[definition], nested)
           end
         end
 
         private
 
-        def build_body_parameter(response, name = false)
-          entity = response[:schema] ? parse_model(response[:schema]['$ref']) : name
+        def build_body_parameter(reference, name)
           body_param = {}
           body_param.tap do |x|
-            x[:name] = entity
+            x[:name] = name
             x[:in] = 'body'
             x[:required] = true
-            x[:schema] = { '$ref' => response[:schema]['$ref'] } unless name
-            x[:schema] = { '$ref' => "#/definitions/#{name}" } if name
+            x[:schema] = { '$ref' => "#/definitions/#{reference}" }
           end
         end
 
         def build_definition(name, verb = nil)
-          name = "#{verb}Request#{name}" if verb
+          name = "#{verb}#{name}" if verb
           @definitions[name] = { type: 'object', properties: {}, required: [] }
 
           name
@@ -136,18 +118,13 @@ module GrapeSwagger
         end
 
         def unify!(params)
-          params.each do |param|
-            param[:in] = param.delete(:param_type) if param.key?(:param_type)
-            param[:in] = 'body' if param[:in] == 'formData'
-          end
+          params.each { |x| x[:in] = x.delete(:param_type) if x[:param_type] }
+          params.each { |x| x[:in] = 'body' if x[:in] == 'formData' } if includes_body_param?(params)
         end
 
         def parse_model(ref)
-          ref.split('/').last
-        end
-
-        def move_methods
-          [:post, :put, :patch]
+          parts = ref.split('/')
+          parts.last.include?('{') ? parts[0..-2].join('/') : parts[0..-1].join('/')
         end
 
         def property_keys
@@ -157,10 +134,16 @@ module GrapeSwagger
         def movable?(param)
           param[:in] == 'body'
         end
+
         alias deletable? movable?
 
-        def should_move?(params)
-          !params.select { |x| x[:in] == 'body' || x[:param_type] == 'body' }.empty?
+        def move_methods
+          [:post, :put, :patch, 'POST', 'PUT', 'PATCH']
+        end
+
+        def includes_body_param?(params)
+          params.map { |x| return true if x[:in] == 'body' || x[:param_type] == 'body' }
+          false
         end
       end
     end

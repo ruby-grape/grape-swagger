@@ -7,47 +7,79 @@ describe GrapeSwagger::DocMethods::MoveParams do
 
   it { expect(subject.to_s).to eql 'GrapeSwagger::DocMethods::MoveParams' }
 
-  describe 'find_post_put' do
-    let(:paths) { {} }
-
-    describe 'paths empty' do
-      specify { expect { |b| subject.find_post_put(paths, &b) }.not_to yield_control }
+  describe 'parameters can_be_moved' do
+    let(:movable_params) do
+      [
+        { param_type: 'path', name: 'key', description: nil, type: 'integer', format: 'int32', required: true },
+        { param_type: 'body', name: 'in_body', description: 'in_body', type: 'integer', format: 'int32', required: true },
+        { param_type: 'query', name: 'in_query', description: 'in_query', type: 'integer', format: 'int32', required: true },
+        { param_type: 'header', name: 'in_header', description: 'in_header', type: 'integer', format: 'int32', required: true },
+        { param_type: 'formData', name: 'in_form_data', description: 'in_form_data', type: 'integer', format: 'int32', required: true }
+      ]
     end
 
-    describe 'no post/put given' do
-      let(:paths) do
-        {
-          :'/foo' => { get: {}, delete: {} },
-          :'/bar/{key}' => { get: {}, delete: {} }
-        }
-      end
-      specify { expect { |b| subject.find_post_put(paths, &b) }.not_to yield_control }
+    let(:not_movable_params) do
+      [
+        { in: 'path', name: 'key', description: nil, type: 'integer', format: 'int32', required: true },
+        { in: 'query', name: 'in_query', description: 'in_query', type: 'integer', format: 'int32', required: true },
+        { in: 'header', name: 'in_header', description: 'in_header', type: 'integer', format: 'int32', required: true },
+        { in: 'formData', name: 'in_form_data', description: 'in_form_data', type: 'integer', format: 'int32', required: true }
+      ]
     end
 
-    describe 'no post/put given' do
-      let(:paths) do
-        {
-          :'/foo' => { get: {}, delete: {}, post: {}, put: {}, patch: {} },
-          :'/bar/{key}' => { get: {}, delete: {}, post: {}, put: {}, patch: {} }
-        }
+    let(:allowed_verbs) do
+      [:post, :put, :patch, 'POST', 'PUT', 'PATCH']
+    end
+
+    let(:not_allowed_verbs) do
+      [:get, :delete, 'GET', 'DELETE']
+    end
+
+    describe 'movable params' do
+      specify 'allowed verbs' do
+        allowed_verbs.each do |verb|
+          expect(subject.can_be_moved?(movable_params, verb)).to be true
+        end
       end
-      let(:expected) do
-        [
-          { post: {}, put: {}, patch: {} },
-          { post: {}, put: {}, patch: {} }
-        ]
+
+      specify 'not allowed verbs' do
+        not_allowed_verbs.each do |verb|
+          expect(subject.can_be_moved?(movable_params, verb)).to be false
+        end
       end
-      specify { expect { |b| subject.find_post_put(paths, &b) }.to yield_control.twice }
-      specify { expect { |b| subject.find_post_put(paths, &b) }.to yield_successive_args *expected }
+    end
+
+    describe 'not movable params' do
+      specify 'allowed verbs' do
+        allowed_verbs.each do |verb|
+          expect(subject.can_be_moved?(not_movable_params, verb)).to be false
+        end
+      end
+
+      specify 'not allowed verbs' do
+        not_allowed_verbs.each do |verb|
+          expect(subject.can_be_moved?(not_movable_params, verb)).to be false
+        end
+      end
     end
   end
 
-  describe 'find_definition_and_params' do
+  describe 'parent_definition_of_params' do
+    let(:params) { paths['/in_body'][:post][:parameters] }
+    let(:options)  do
+      {
+        method: 'POST'
+      }
+    end
+    let(:env) { Rack::MockRequest.env_for('/in_body', options) }
+    let(:request) { Grape::Request.new(env) }
+
     specify do
       subject.instance_variable_set(:@definitions, definitions)
-      subject.find_definition_and_params(found_path[:post], :post)
-      expect(definitions.keys).to include 'InBody'
-      expect(definitions['postRequestInBody'].keys).to_not include :description
+      body_definition = subject.parent_definition_of_params(params, request).first
+
+      expect(body_definition[:schema]['$ref']).to eql '#/definitions/postInBody'
+      expect(subject.definitions['postInBody']).not_to include :description
     end
   end
 
@@ -61,10 +93,9 @@ describe GrapeSwagger::DocMethods::MoveParams do
 
       specify do
         subject.instance_variable_set(:@definitions, definitions)
-        name = subject.send(:build_definition, name, verb)
-        subject.move_params_to_new(name, params)
-
-        expect(definitions[name]).to eql expected_post_defs
+        def_name = subject.send(:build_definition, name, verb)
+        subject.move_params_to_new(def_name, definitions[def_name], params)
+        expect(definitions[def_name]).to eql expected_post_defs
         expect(params).to be_empty
       end
     end
@@ -75,10 +106,11 @@ describe GrapeSwagger::DocMethods::MoveParams do
 
       specify do
         subject.instance_variable_set(:@definitions, definitions)
-        name, definition = subject.send(:build_definition, name, verb)
-        subject.move_params_to_new(name, params)
 
-        expect(definitions[name]).to eql expected_put_defs
+        def_name = subject.send(:build_definition, name, verb)
+        subject.move_params_to_new(def_name, definitions[def_name], params)
+
+        expect(definitions[def_name]).to eql expected_put_defs
         expect(params.length).to be 1
       end
     end
@@ -130,7 +162,7 @@ describe GrapeSwagger::DocMethods::MoveParams do
 
         specify do
           definition = definitions.to_a.first
-          expect(definition.first).to eql 'postRequestFoo'
+          expect(definition.first).to eql 'postFoo'
           expect(definition.last).to eql(type: 'object', properties: {}, required: [])
         end
       end
@@ -149,26 +181,14 @@ describe GrapeSwagger::DocMethods::MoveParams do
     end
 
     describe 'build_body_parameter' do
-      let(:response) { { schema: { '$ref' => '#/definitions/Somewhere' } } }
-
-      describe 'no name given' do
-        let(:name) { nil }
-        let(:expected_param) do
-          { name: 'Somewhere', in: 'body', required: true, schema: { '$ref' => '#/definitions/Somewhere' } }
-        end
-        specify do
-          parameter = subject.send(:build_body_parameter, response)
-          expect(parameter).to eql expected_param
-        end
-      end
-
       describe 'name given' do
         let(:name) { 'Foo' }
+        let(:reference) { 'Bar' }
         let(:expected_param) do
-          { name: 'Somewhere', in: 'body', required: true, schema: { '$ref' => "#/definitions/#{name}" } }
+          { name: name, in: 'body', required: true, schema: { '$ref' => "#/definitions/#{reference}" } }
         end
         specify do
-          parameter = subject.send(:build_body_parameter, response, name)
+          parameter = subject.send(:build_body_parameter, reference, name)
           expect(parameter).to eql expected_param
         end
       end
@@ -176,9 +196,18 @@ describe GrapeSwagger::DocMethods::MoveParams do
 
     describe 'parse_model' do
       let(:ref) { '#/definitions/InBody' }
-      subject(:object) { described_class.send(:parse_model, ref) }
+      describe 'post request' do
+        subject(:object) { described_class.send(:parse_model, ref) }
 
-      specify { expect(object).to eql 'InBody' }
+        specify { expect(object).to eql ref }
+      end
+
+      describe 'post request' do
+        let(:put_ref) { '#/definitions/InBody/{id}' }
+        subject(:object) { described_class.send(:parse_model, put_ref) }
+
+        specify { expect(object).to eql ref }
+      end
     end
 
     describe 'movable' do
@@ -225,32 +254,9 @@ describe GrapeSwagger::DocMethods::MoveParams do
       end
     end
 
-    describe 'should move' do
-      describe 'no move' do
-        let(:params) do
-          [
-            { in: 'path', name: 'key', description: nil, type: 'integer', format: 'int32', required: true },
-            { in: 'formData', name: 'in_form_data', description: 'in_form_data', type: 'integer', format: 'int32', required: true }
-          ]
-        end
-        it { expect(subject.send(:should_move?, params)).to be false }
-      end
-
-      describe 'move' do
-        let(:params) do
-          [
-            { in: 'path', name: 'key', description: nil, type: 'integer', format: 'int32', required: true },
-            { in: 'body', name: 'in_bosy', description: 'in_bosy', type: 'integer', format: 'int32', required: true },
-            { in: 'formData', name: 'in_form_data', description: 'in_form_data', type: 'integer', format: 'int32', required: true }
-          ]
-        end
-        it { expect(subject.send(:should_move?, params)).to be true }
-      end
-    end
-
     describe 'unify' do
-      before do
-        subject.send(:unify!, params) if subject.send(:should_move?, params)
+      before :each do
+        subject.send(:unify!, params)
       end
       describe 'param type with `:in` given' do
         let(:params) do

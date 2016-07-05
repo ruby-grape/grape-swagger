@@ -36,7 +36,7 @@ describe 'details' do
                entity: Entities::UseResponse,
                failure: [{ code: 400, model: Entities::ApiError }]
           get '/use_detail' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
 
           desc 'This returns something' do
@@ -45,7 +45,7 @@ describe 'details' do
             failure [{ code: 400, model: Entities::ApiError }]
           end
           get '/use_detail_block' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
 
           add_swagger_documentation
@@ -86,7 +86,7 @@ describe 'details' do
                entity: Entities::UseResponse,
                failure: [{ code: 400, model: Entities::ApiError }]
           get '/use_gfm_detail' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
 
           add_swagger_documentation markdown: GrapeSwagger::Markdown::KramdownAdapter.new
@@ -124,7 +124,7 @@ describe 'details' do
                entity: Entities::UseResponse,
                failure: [{ code: 400, model: Entities::ApiError }]
           get '/use_gfm_rc_detail' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
 
           add_swagger_documentation markdown: GrapeSwagger::Markdown::RedcarpetAdapter.new

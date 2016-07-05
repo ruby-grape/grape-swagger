@@ -22,7 +22,7 @@ describe 'headers' do
           optional :param_x, type: String, desc: 'This is a parameter', documentation: { param_type: 'query' }
         end
         get '/use_headers' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         add_swagger_documentation

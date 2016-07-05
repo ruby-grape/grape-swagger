@@ -15,7 +15,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         end
 
         get '/defined_param_type' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         desc 'full set of request param types',
@@ -27,7 +27,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         end
 
         get '/defined_param_type/:in_path' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         desc 'full set of request param types',
@@ -39,7 +39,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         end
 
         delete '/defined_param_type/:in_path' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         # using `:in`
@@ -51,7 +51,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         end
 
         get '/defined_in' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         desc 'full set of request param types using `:in`',
@@ -63,7 +63,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         end
 
         get '/defined_in/:in_path' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         desc 'full set of request param types using `:in`'
@@ -74,7 +74,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         end
 
         delete '/defined_in/:in_path' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         # file
@@ -85,7 +85,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         end
 
         get '/download' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         desc 'file upload',
@@ -95,7 +95,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         end
 
         post '/upload' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         add_swagger_documentation

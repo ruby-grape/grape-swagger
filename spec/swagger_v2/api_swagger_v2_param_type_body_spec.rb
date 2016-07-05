@@ -15,7 +15,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           end
 
           post '/in_body' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
 
           desc 'put in body /wo entity'
@@ -27,7 +27,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           end
 
           put '/in_body/:key' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
         end
 
@@ -39,7 +39,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           end
 
           post '/in_body' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
 
           desc 'put in body with entity',
@@ -50,7 +50,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           end
 
           put '/in_body/:id' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
         end
 

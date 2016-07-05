@@ -10,22 +10,22 @@ describe 'additional parameter settings' do
             optional :name, type: String
           end
           put ':id' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
 
           desc 'Get booking details'
           get ':id' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
 
           desc 'Get booking details by access_number'
           get '/conf/:access_number' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
 
           desc 'Remove booking'
           delete ':id' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
         end
 

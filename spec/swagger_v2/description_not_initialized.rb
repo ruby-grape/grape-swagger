@@ -14,7 +14,7 @@ describe 'details' do
                entity: Entities::UseResponse,
                failure: [{ code: 400, model: Entities::ApiError }]
           get '/use_gfm_rc_detail' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
 
           add_swagger_documentation markdown: GrapeSwagger::Markdown::RedcarpetAdapter.new

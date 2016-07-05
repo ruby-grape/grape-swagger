@@ -21,7 +21,7 @@ describe 'moving body/formData Params to definitions' do
           end
 
           post '/in_body' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
 
           desc 'put in body with nested parameters',
@@ -39,7 +39,7 @@ describe 'moving body/formData Params to definitions' do
           end
 
           put '/in_body/:id' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
         end
 
@@ -63,7 +63,7 @@ describe 'moving body/formData Params to definitions' do
           end
 
           post '/in_body' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
 
           desc 'put in body with multiple nested parameters',
@@ -86,7 +86,7 @@ describe 'moving body/formData Params to definitions' do
           end
 
           put '/in_body/:id' do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
         end
 

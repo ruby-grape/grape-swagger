@@ -14,7 +14,7 @@ describe 'nested group params' do
         end
       end
       post '/nested_array' do
-        { 'declared_params' => declared(params) }
+        { declared_params: declared(params) }
       end
 
       params do
@@ -26,7 +26,7 @@ describe 'nested group params' do
         end
       end
       post '/nested_hash' do
-        { 'declared_params' => declared(params) }
+        { declared_params: declared(params) }
       end
 
       add_swagger_documentation

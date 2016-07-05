@@ -12,7 +12,7 @@ describe 'format, content_type' do
              failure: [{ code: 400, model: Entities::ApiError }],
              entity: Entities::UseResponse
         get '/use_default' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         desc 'This uses formats for produces',
@@ -20,7 +20,7 @@ describe 'format, content_type' do
              formats: [:xml, :binary, 'application/vdns'],
              entity: Entities::UseResponse
         get '/use_formats' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         desc 'This uses content_types for produces',
@@ -28,7 +28,7 @@ describe 'format, content_type' do
              content_types: [:xml, :binary, 'application/vdns'],
              entity: Entities::UseResponse
         get '/use_content_types' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         desc 'This uses produces for produces',
@@ -36,7 +36,7 @@ describe 'format, content_type' do
              produces: [:xml, :binary, 'application/vdns'],
              entity: Entities::UseResponse
         get '/use_produces' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         desc 'This uses produces for produces',
@@ -44,7 +44,7 @@ describe 'format, content_type' do
              consumes: ['application/www_url_encoded'],
              entity: Entities::UseResponse
         post '/use_consumes' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         add_swagger_documentation

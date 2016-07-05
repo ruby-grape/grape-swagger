@@ -14,7 +14,7 @@ describe 'extensions' do
              params: Entities::UseResponse.documentation,
              failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         get '/path_extension' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         desc 'This returns something with extension on verb level',
@@ -25,7 +25,7 @@ describe 'extensions' do
           requires :id, type: Integer
         end
         get '/verb_extension' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         route_setting :x_def, for: 200, some: 'stuff'
@@ -35,7 +35,7 @@ describe 'extensions' do
              success: Entities::ResponseItem,
              failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         get '/definitions_extension' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         route_setting :x_def, [{ for: 422, other: 'stuff' }, { for: 200, some: 'stuff' }]
@@ -43,7 +43,7 @@ describe 'extensions' do
         desc 'This returns something with extension on definition level',
              success: Entities::OtherItem
         get '/non_existend_status_definitions_extension' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         route_setting :x_def, [{ for: 422, other: 'stuff' }, { for: 200, some: 'stuff' }]
@@ -52,7 +52,7 @@ describe 'extensions' do
              success: Entities::OtherItem,
              failure: [{ code: 422, message: 'NotFound', model: Entities::SecondApiError }]
         get '/multiple_definitions_extension' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         add_swagger_documentation

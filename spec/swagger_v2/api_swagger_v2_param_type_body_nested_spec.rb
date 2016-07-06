@@ -107,26 +107,23 @@ describe 'moving body/formData Params to definitions' do
 
     specify do
       expect(subject['paths']['/simple_nested_params/in_body']['post']['parameters']).to eql(
-        [{
-          'name' => 'UseNestedWithAddress',
-          'in' => 'body',
-          'required' => true,
-          'schema' => { '$ref' => '#/definitions/postRequestUseNestedWithAddress' }
-        }]
+        [
+          { 'name' => 'SimpleNestedParamsInBody', 'in' => 'body', 'required' => true, 'schema' => { '$ref' => '#/definitions/postSimpleNestedParamsInBody' } }
+        ]
       )
     end
 
     specify do
-      expect(subject['definitions']['postRequestUseNestedWithAddress']).to eql(
+      expect(subject['definitions']['postSimpleNestedParamsInBody']).to eql(
         'type' => 'object',
         'properties' => {
-          'addresses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/postRequestUseNestedWithAddressAddresses' } },
+          'addresses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/postSimpleNestedParamsInBodyAddresses' } },
           'name' => { 'type' => 'string', 'description' => 'name' }
         },
         'required' => ['name'],
-        'description' => "post in body with nested parameters\n more details description"
+        'description' => 'post in body with nested parameters'
       )
-      expect(subject['definitions']['postRequestUseNestedWithAddressAddresses']).to eql(
+      expect(subject['definitions']['postSimpleNestedParamsInBodyAddresses']).to eql(
         'type' => 'object',
         'properties' => {
           'street' => { 'type' => 'string', 'description' => 'street' },
@@ -135,7 +132,7 @@ describe 'moving body/formData Params to definitions' do
           'country' => { 'type' => 'string', 'description' => 'country' }
         },
         'required' => %w(street postcode city),
-        'description' => 'postRequestUseNestedWithAddress - addresses'
+        'description' => 'postSimpleNestedParamsInBody - addresses'
       )
     end
 
@@ -143,34 +140,29 @@ describe 'moving body/formData Params to definitions' do
       expect(subject['paths']['/simple_nested_params/in_body/{id}']['put']['parameters']).to eql(
         [
           { 'in' => 'path', 'name' => 'id', 'type' => 'integer', 'format' => 'int32', 'required' => true },
-          {
-            'name' => 'UseNestedWithAddress',
-            'in' => 'body',
-            'required' => true,
-            'schema' => { '$ref' => '#/definitions/putRequestUseNestedWithAddress' }
-          }
+          { 'name' => 'SimpleNestedParamsInBody', 'in' => 'body', 'required' => true, 'schema' => { '$ref' => '#/definitions/putSimpleNestedParamsInBody' } }
         ]
       )
     end
 
     specify do
-      expect(subject['definitions']['putRequestUseNestedWithAddress']).to eql(
-        'description' => "put in body with nested parameters\n more details description",
+      expect(subject['definitions']['putSimpleNestedParamsInBody']).to eql(
         'type' => 'object',
-        'properties' => {
-          'address' => { '$ref' => '#/definitions/putRequestUseNestedWithAddressAddress' },
+        'properties' =>  {
+          'address' => { '$ref' => '#/definitions/putSimpleNestedParamsInBodyAddress' },
           'name' => { 'type' => 'string', 'description' => 'name' }
-        }
+        },
+        'description' => 'put in body with nested parameters'
       )
-      expect(subject['definitions']['putRequestUseNestedWithAddressAddress']).to eql(
-        'description' => 'putRequestUseNestedWithAddress - address',
+      expect(subject['definitions']['putSimpleNestedParamsInBodyAddress']).to eql(
         'type' => 'object',
         'properties' => {
           'street' => { 'type' => 'string', 'description' => 'street' },
           'postcode' => { 'type' => 'string', 'description' => 'postcode' },
           'city' => { 'type' => 'string', 'description' => 'city' },
           'country' => { 'type' => 'string', 'description' => 'country' }
-        }
+        },
+        'description' => 'putSimpleNestedParamsInBody - address'
       )
     end
   end
@@ -185,23 +177,22 @@ describe 'moving body/formData Params to definitions' do
       expect(subject['paths']['/multiple_nested_params/in_body/{id}']['put']['parameters']).to eql(
         [
           { 'in' => 'path', 'name' => 'id', 'type' => 'integer', 'format' => 'int32', 'required' => true },
-          { 'name' => 'UseNestedWithAddress', 'in' => 'body', 'required' => true, 'schema' => { '$ref' => '#/definitions/putRequestUseNestedWithAddress' } }
+          { 'name' => 'MultipleNestedParamsInBody', 'in' => 'body', 'required' => true, 'schema' => { '$ref' => '#/definitions/putMultipleNestedParamsInBody' } }
         ]
       )
     end
 
     specify do
-      expect(subject['definitions']['putRequestUseNestedWithAddress']).to eql(
-        'description' => 'put in body with multiple nested parameters',
+      expect(subject['definitions']['putMultipleNestedParamsInBody']).to eql(
         'type' => 'object',
-        'properties' => {
-          'address' => { '$ref' => '#/definitions/putRequestUseNestedWithAddressAddress' },
-          'delivery_address' => { '$ref' => '#/definitions/putRequestUseNestedWithAddressDeliveryAddress' },
+        'properties' =>  {
+          'address' => { '$ref' => '#/definitions/putMultipleNestedParamsInBodyAddress' },
+          'delivery_address' => { '$ref' => '#/definitions/putMultipleNestedParamsInBodyDeliveryAddress' },
           'name' => { 'type' => 'string', 'description' => 'name' }
-        }
+        },
+        'description' => 'put in body with multiple nested parameters'
       )
-      expect(subject['definitions']['putRequestUseNestedWithAddressAddress']).to eql(
-        'description' => 'putRequestUseNestedWithAddress - address',
+      expect(subject['definitions']['putMultipleNestedParamsInBodyAddress']).to eql(
         'type' => 'object',
         'properties' => {
           'street' => { 'type' => 'string', 'description' => 'street' },
@@ -209,17 +200,18 @@ describe 'moving body/formData Params to definitions' do
           'city' => { 'type' => 'string', 'description' => 'city' },
           'country' => { 'type' => 'string', 'description' => 'country' }
         },
-        'required' => ['postcode']
+        'required' => ['postcode'],
+        'description' => 'putMultipleNestedParamsInBody - address'
       )
-      expect(subject['definitions']['putRequestUseNestedWithAddressDeliveryAddress']).to eql(
-        'description' => 'putRequestUseNestedWithAddress - delivery_address',
+      expect(subject['definitions']['putMultipleNestedParamsInBodyDeliveryAddress']).to eql(
         'type' => 'object',
         'properties' => {
           'street' => { 'type' => 'string', 'description' => 'street' },
           'postcode' => { 'type' => 'string', 'description' => 'postcode' },
           'city' => { 'type' => 'string', 'description' => 'city' },
           'country' => { 'type' => 'string', 'description' => 'country' }
-        }
+        },
+        'description' => 'putMultipleNestedParamsInBody - delivery_address'
       )
     end
   end

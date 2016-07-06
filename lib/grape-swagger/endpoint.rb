@@ -71,7 +71,6 @@ module Grape
       end
 
       add_definitions_from options[:models]
-      GrapeSwagger::DocMethods::MoveParams.to_definition(@paths, @definitions)
       [@paths, @definitions]
     end
 
@@ -154,11 +153,17 @@ module Grape
     end
 
     def params_object(route)
-      partition_params(route).map do |param, value|
+      parameters = partition_params(route).map do |param, value|
         value = { required: false }.merge(value) if value.is_a?(Hash)
         _, value = default_type([[param, value]]).first if value == ''
         GrapeSwagger::DocMethods::ParseParams.call(param, value, route)
       end
+
+      if GrapeSwagger::DocMethods::MoveParams.can_be_moved?(parameters, route.request_method)
+        parameters = GrapeSwagger::DocMethods::MoveParams.to_definition(parameters, route, @definitions)
+      end
+
+      parameters
     end
 
     def response_object(route, markdown)

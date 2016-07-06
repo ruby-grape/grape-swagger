@@ -9,6 +9,7 @@
 
 #### Fixes
 
+* [#467](https://github.com/ruby-grape/grape-swagger/pull/467): Refactors moving of body params - [@LeFnord](https://github.com/LeFnord).
 * [#464](https://github.com/ruby-grape/grape-swagger/pull/464): Fixes array params, sets correct type and format for items - [@LeFnord](https://github.com/LeFnord).
 * [#461](https://github.com/ruby-grape/grape-swagger/pull/461): Fixes issue by adding extensions to definitions. It appeared, if for the given status code, no definition could be found - [@LeFnord](https://github.com/LeFnord).
 * [#455](https://github.com/ruby-grape/grape-swagger/pull/455): Setting `type:` option as `Array[Class]` creates `array` type in JSON - [@tyspring](https://github.com/tyspring).

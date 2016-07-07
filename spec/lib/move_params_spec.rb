@@ -62,64 +62,86 @@ describe GrapeSwagger::DocMethods::MoveParams do
         end
       end
     end
+
+    describe 'movable_params' do
+      before do
+        subject.send(:unify!, movable_params)
+      end
+      let(:expected_params) do
+        [
+          { in: 'path', name: 'key', description: nil, type: 'integer', format: 'int32', required: true },
+          { in: 'query', name: 'in_query', description: 'in_query', type: 'integer', format: 'int32', required: true },
+          { in: 'header', name: 'in_header', description: 'in_header', type: 'integer', format: 'int32', required: true }
+        ]
+      end
+
+      let(:expected_movable_params) do
+        [
+          { in: 'body', name: 'in_body', description: 'in_body', type: 'integer', format: 'int32', required: true },
+          { in: 'body', name: 'in_form_data', description: 'in_form_data', type: 'integer', format: 'int32', required: true }
+        ]
+      end
+
+      specify do
+        params_to_move = subject.send(:movable_params, movable_params)
+        expect(movable_params).to eql expected_params
+        expect(params_to_move).to eql expected_movable_params
+      end
+    end
   end
 
   describe 'parent_definition_of_params' do
-    let(:params) { paths['/in_body'][:post][:parameters] }
-    let(:options)  do
-      {
-        method: 'POST'
-      }
-    end
-    let(:env) { Rack::MockRequest.env_for('/in_body', options) }
-    let(:request) { Grape::Request.new(env) }
-
-    specify do
-      subject.instance_variable_set(:@definitions, definitions)
-      body_definition = subject.parent_definition_of_params(params, request).first
-
-      expect(body_definition[:schema]['$ref']).to eql '#/definitions/postInBody'
-      expect(subject.definitions['postInBody']).not_to include :description
-    end
-  end
-
-  describe 'move_params_to_new definition' do
-    let(:name) { 'Foo' }
-    let(:definitions) { {} }
-
-    describe 'post request' do
-      let(:verb) { 'post' }
+    describe 'POST' do
       let(:params) { paths['/in_body'][:post][:parameters] }
+      let(:options)  do
+        {
+          method: 'POST'
+        }
+      end
+      let(:env) { Rack::MockRequest.env_for('/in_body', options) }
+      let(:request) { Grape::Request.new(env) }
 
       specify do
-        subject.instance_variable_set(:@definitions, definitions)
-        def_name = subject.send(:build_definition, name, verb)
-        subject.move_params_to_new(def_name, definitions[def_name], params)
-        expect(definitions[def_name]).to eql expected_post_defs
-        expect(params).to be_empty
+        subject.to_definition(params, request, definitions)
+        expect(params).to eql(
+          [
+            { name: 'InBody', in: 'body', required: true, schema: { '$ref' => '#/definitions/postInBody' } }
+          ]
+        )
+        expect(subject.definitions['postInBody']).not_to include :description
+        expect(subject.definitions['postInBody']).to eql expected_post_defs
       end
     end
 
-    describe 'put request' do
-      let(:verb) { 'put' }
+    describe 'POST' do
       let(:params) { paths['/in_body/{key}'][:put][:parameters] }
+      let(:options)  do
+        {
+          method: 'PUT'
+        }
+      end
+      let(:env) { Rack::MockRequest.env_for('/in_body', options) }
+      let(:request) { Grape::Request.new(env) }
 
       specify do
-        subject.instance_variable_set(:@definitions, definitions)
-
-        def_name = subject.send(:build_definition, name, verb)
-        subject.move_params_to_new(def_name, definitions[def_name], params)
-
-        expect(definitions[def_name]).to eql expected_put_defs
-        expect(params.length).to be 1
+        subject.to_definition(params, request, definitions)
+        expect(params).to eql(
+          [
+            { in: 'path', name: 'key', description: nil, type: 'integer', format: 'int32', required: true },
+            { name: 'InBody', in: 'body', required: true, schema: { '$ref' => '#/definitions/putInBody' } }
+          ]
+        )
+        expect(subject.definitions['putInBody']).not_to include :description
+        expect(subject.definitions['putInBody']).to eql expected_put_defs
       end
     end
   end
 
   describe 'nested definitions related' do
     describe 'prepare_nested_names' do
+      let(:property) { 'address' }
       before do
-        subject.send(:prepare_nested_names, params)
+        subject.send(:prepare_nested_names, property, params)
       end
 
       describe 'simple' do
@@ -150,9 +172,10 @@ describe GrapeSwagger::DocMethods::MoveParams do
 
   describe 'private methods' do
     describe 'build_definition' do
+      let(:params) { [{ in: 'body', name: 'address[street][name]', description: 'street', type: 'string', required: true }] }
       before do
         subject.instance_variable_set(:@definitions, definitions)
-        subject.send(:build_definition, name, verb)
+        subject.send(:build_definition, name, params, verb)
       end
 
       describe 'verb given' do
@@ -207,28 +230,6 @@ describe GrapeSwagger::DocMethods::MoveParams do
         subject(:object) { described_class.send(:parse_model, put_ref) }
 
         specify { expect(object).to eql ref }
-      end
-    end
-
-    describe 'movable' do
-      describe 'path' do
-        let(:param) { { in: 'path', name: 'key', description: nil, type: 'integer', format: 'int32', required: true } }
-        it { expect(subject.send(:movable?, param)).to be false }
-      end
-
-      describe 'body' do
-        let(:param) { { in: 'body', name: 'in_body', description: 'in_body', type: 'integer', format: 'int32', required: true } }
-        it { expect(subject.send(:movable?, param)).to be true }
-      end
-
-      describe 'query' do
-        let(:param) { { in: 'query', name: 'in_query', description: 'in_query', type: 'integer', format: 'int32', required: true } }
-        it { expect(subject.send(:movable?, param)).to be false }
-      end
-
-      describe 'header' do
-        let(:param) { { in: 'header', name: 'in_header', description: 'in_header', type: 'integer', format: 'int32', required: true } }
-        it { expect(subject.send(:movable?, param)).to be false }
       end
     end
 

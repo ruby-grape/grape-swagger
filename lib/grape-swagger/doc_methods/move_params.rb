@@ -4,88 +4,122 @@ module GrapeSwagger
       class << self
         attr_accessor :definitions
 
-        def to_definition(params, route, definitions)
-          @definitions = definitions
-
-          parent_definition_of_params(params, route)
-        end
-
         def can_be_moved?(params, http_verb)
           move_methods.include?(http_verb) && includes_body_param?(params)
         end
 
-        def parent_definition_of_params(params, route)
+        def to_definition(params, route, definitions)
+          @definitions = definitions
           unify!(params)
 
-          definition_name = GrapeSwagger::DocMethods::OperationId.manipulate(parse_model(route.path))
-          referenced_definition = build_definition(definition_name, route.request_method.downcase)
-          definition = @definitions[referenced_definition]
-
-          move_params_to_new(referenced_definition, definition, params)
-
-          definition[:description] = route.description if route.respond_to?(:description)
-
-          params << build_body_parameter(referenced_definition, definition_name)
+          params_to_move = movable_params(params)
+          params << parent_definition_of_params(params_to_move, route)
 
           params
         end
 
-        def move_params_to_new(definition_name, definition, params)
-          properties = {}
+        def parent_definition_of_params(params, route)
+          definition_name = GrapeSwagger::DocMethods::OperationId.manipulate(parse_model(route.path))
+          referenced_definition = build_definition(definition_name, params, route.request_method.downcase)
+          definition = @definitions[referenced_definition]
 
-          nested_definitions(definition_name, params, properties)
+          move_params_to_new(definition, params)
 
-          params.dup.each do |param|
-            next unless movable?(param)
+          definition[:description] = route.description if route.respond_to?(:description)
 
-            name = param[:name].to_sym
-            properties[name] = {}
-
-            properties[name].tap do |x|
-              property_keys.each do |attribute|
-                x[attribute] = param[attribute] unless param[attribute].nil?
-              end
-            end
-
-            params.delete(param) if deletable?(param)
-            definition[:required] << name if deletable?(param) && param[:required]
-          end
-
-          definition.delete(:required) if definition[:required].empty?
-          definition[:properties] = properties
+          build_body_parameter(referenced_definition, definition_name)
         end
 
-        def nested_definitions(name, params, properties)
-          loop do
-            nested_name = params.bsearch { |x| x[:name].include?('[') }
-            return if nested_name.nil?
+        def move_params_to_new(definition, params)
+          params, nested_params = params.partition { |x| !x[:name].include?('[') }
 
-            nested_name = nested_name[:name].split('[').first
+          unless params.blank?
+            properties, required = build_properties(params)
+            add_properties_to_definition(definition, properties, required)
+          end
 
-            nested, = params.partition { |x| x[:name].start_with?("#{nested_name}[") }
-            nested.each { |x| params.delete(x) }
-            nested_def_name = GrapeSwagger::DocMethods::OperationId.manipulate(nested_name)
-            def_name = "#{name}#{nested_def_name}"
+          nested_properties = build_nested_properties(nested_params) unless nested_params.blank?
+          add_properties_to_definition(definition, nested_properties, []) unless nested_params.blank?
+        end
 
-            if nested.first[:type] && nested.first[:type] == 'array'
-              prepare_nested_types(nested)
-              properties[nested_name] = { type: 'array', items: { '$ref' => "#/definitions/#{def_name}" } }
-            else
-              properties[nested_name] = { '$ref' => "#/definitions/#{def_name}" }
-            end
+        def build_nested_properties(params, properties = {})
+          property = params.bsearch { |x| x[:name].include?('[') }[:name].split('[').first
 
-            prepare_nested_names(nested)
-            definition = build_definition(def_name)
-            @definitions[definition][:description] = "#{name} - #{nested_name}"
-            move_params_to_new(definition, @definitions[definition], nested)
+          nested_params, params = params.partition { |x| x[:name].start_with?(property) }
+          prepare_nested_names(property, nested_params)
+
+          recursive_call(properties, property, nested_params) unless nested_params.empty?
+          build_nested_properties(params, properties) unless params.empty?
+
+          properties
+        end
+
+        def recursive_call(properties, property, nested_params)
+          if should_expose_as_array?(nested_params)
+            properties[property] = { type: 'array', items: { type: 'object', properties: {}, required: [] } }
+            move_params_to_new(properties[property][:items], nested_params)
+          else
+            properties[property] = { type: 'object', properties: {}, required: [] }
+            move_params_to_new(properties[property], nested_params)
           end
         end
 
         private
 
+        def movable_params(params)
+          to_delete = params.each_with_object([]) { |x, memo| memo << x if deletable?(x) }
+          delete_from(params, to_delete)
+
+          to_delete
+        end
+
+        def delete_from(params, to_delete)
+          to_delete.each { |x| params.delete(x) }
+        end
+
+        def add_properties_to_definition(definition, properties, required)
+          definition[:properties].merge!(properties)
+          definition[:required] = required
+          definition.delete(:required) if definition[:required].blank?
+        end
+
+        def build_properties(params)
+          properties = {}
+          required = []
+
+          prepare_nested_types(params) if should_expose_as_array?(params)
+
+          params.each do |param|
+            name = param[:name].to_sym
+            properties[name] = {}
+
+            if should_expose_as_array?([param])
+              prepare_nested_types([param])
+
+              properties[name][:type] = 'array'
+              properties[name][:items] = {}
+              properties[name][:items].tap do |x|
+                property_keys.each do |attribute|
+                  x[attribute] = param[attribute] unless param[attribute].nil?
+                end
+              end
+            else
+
+              properties[name].tap do |x|
+                property_keys.each do |attribute|
+                  x[attribute] = param[attribute] unless param[attribute].nil?
+                end
+              end
+            end
+
+            required << name if deletable?(param) && param[:required]
+          end
+
+          [properties, required]
+        end
+
         def build_body_parameter(reference, name)
-          body_param = {}
-          body_param.tap do |x|
+          {}.tap do |x|
             x[:name] = name
             x[:in] = 'body'
             x[:required] = true
@@ -93,9 +127,9 @@ module GrapeSwagger
           end
         end
 
-        def build_definition(name, verb = nil)
+        def build_definition(name, params, verb = nil)
           name = "#{verb}#{name}" if verb
-          @definitions[name] = { type: 'object', properties: {}, required: [] }
+          @definitions[name] = { type: should_exposed_as(params), properties: {}, required: [] }
 
           name
         end
@@ -103,18 +137,14 @@ module GrapeSwagger
         def prepare_nested_types(params)
           params.each do |param|
             next unless param[:items]
-            param[:type] = param[:items][:type]
+            param[:type] = param[:items][:type] == 'array' ? 'string' : param[:items][:type]
             param[:format] = param[:items][:format] if param[:items][:format]
             param.delete(:items)
           end
         end
 
-        def prepare_nested_names(params)
-          params.each do |param|
-            name = param[:name].partition('[').last.sub(']', '')
-            name = name.partition('[').last.sub(']', '') if name.start_with?('[')
-            param[:name] = name
-          end
+        def prepare_nested_names(property, params)
+          params.each { |x| x[:name] = x[:name].sub(property, '').sub('[', '').sub(']', '') }
         end
 
         def unify!(params)
@@ -131,11 +161,9 @@ module GrapeSwagger
           [:type, :format, :description, :minimum, :maximum, :items]
         end
 
-        def movable?(param)
+        def deletable?(param)
           param[:in] == 'body'
         end
-
-        alias deletable? movable?
 
         def move_methods
           [:post, :put, :patch, 'POST', 'PUT', 'PATCH']
@@ -144,6 +172,15 @@ module GrapeSwagger
         def includes_body_param?(params)
           params.map { |x| return true if x[:in] == 'body' || x[:param_type] == 'body' }
           false
+        end
+
+        def should_expose_as_array?(params)
+          should_exposed_as(params) == 'array'
+        end
+
+        def should_exposed_as(params)
+          params.map { |x| return 'object' if x[:type] && x[:type] != 'array' }
+          'array'
         end
       end
     end

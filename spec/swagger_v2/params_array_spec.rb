@@ -27,12 +27,24 @@ describe 'Group Params as Array' do
         { 'declared_params' => declared(params) }
       end
 
+      # as body parameters it would be interpreted a bit different,
+      # cause it could not be distinguished anymore, so this would be translated to one array,
+      # see also next example for the difference
       params do
         requires :array_of_string, type: Array[String], documentation: { param_type: 'body', desc: 'nested array of strings' }
         requires :array_of_integer, type: Array[Integer], documentation: { param_type: 'body', desc: 'nested array of integers' }
       end
 
       post '/array_of_type' do
+        { 'declared_params' => declared(params) }
+      end
+
+      params do
+        requires :array_of_string, type: Array[String], documentation: { param_type: 'body', desc: 'nested array of strings' }
+        requires :array_of_integer, type: Integer, documentation: { param_type: 'body', desc: 'nested array of integers' }
+      end
+
+      post '/object_of_array_and_type' do
         { 'declared_params' => declared(params) }
       end
 
@@ -90,12 +102,13 @@ describe 'Group Params as Array' do
     end
 
     specify do
+      expect(subject['definitions']['postArrayOfType']['type']).to eql 'array'
       expect(subject['definitions']['postArrayOfType']['properties']).to eql(
         'array_of_string' => {
-          'type' => 'array', 'items' => { 'type' => 'string' }, 'description' => 'nested array of strings'
+          'type' => 'string', 'description' => 'nested array of strings'
         },
         'array_of_integer' => {
-          'type' => 'array', 'items' => { 'type' => 'integer', 'format' => 'int32' }, 'description' => 'nested array of integers'
+          'type' => 'integer', 'format' => 'int32', 'description' => 'nested array of integers'
         }
       )
     end

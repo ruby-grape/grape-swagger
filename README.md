@@ -278,6 +278,8 @@ add_swagger_documentation \
 This value is added to the `authorizations` key in the JSON documentation.
 
 
+#### *security_definitions*:
+This value is added to the `securityDefinitions` key in the JSON documentation.
 
 <a name="models" />
 #### models:

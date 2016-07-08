@@ -102,6 +102,7 @@ module GrapeSwagger
         hide_documentation_path: true,
         format: :json,
         authorizations: nil,
+        security_definitions: nil,
         api_documentation: { desc: 'Swagger compatible API description' },
         specific_api_documentation: { desc: 'Swagger compatible API description for specific API' }
       }

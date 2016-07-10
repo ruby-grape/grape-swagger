@@ -186,7 +186,7 @@ describe GrapeSwagger::DocMethods::MoveParams do
         specify do
           definition = definitions.to_a.first
           expect(definition.first).to eql 'postFoo'
-          expect(definition.last).to eql(type: 'object', properties: {}, required: [])
+          expect(definition.last).to eql(type: 'object', properties: {})
         end
       end
 
@@ -198,7 +198,7 @@ describe GrapeSwagger::DocMethods::MoveParams do
         specify do
           definition = definitions.to_a.first
           expect(definition.first).to eql 'FooBar'
-          expect(definition.last).to eql(type: 'object', properties: {}, required: [])
+          expect(definition.last).to eql(type: 'object', properties: {})
         end
       end
     end

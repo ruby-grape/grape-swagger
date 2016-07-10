@@ -18,6 +18,8 @@ module GrapeSwagger
           params
         end
 
+        private
+
         def parent_definition_of_params(params, route)
           definition_name = GrapeSwagger::DocMethods::OperationId.manipulate(parse_model(route.path))
           referenced_definition = build_definition(definition_name, params, route.request_method.downcase)
@@ -45,7 +47,7 @@ module GrapeSwagger
         def build_nested_properties(params, properties = {})
           property = params.bsearch { |x| x[:name].include?('[') }[:name].split('[').first
 
-          nested_params, params = params.partition { |x| x[:name].start_with?(property) }
+          nested_params, params = params.partition { |x| x[:name].start_with?("#{property}[") }
           prepare_nested_names(property, nested_params)
 
           recursive_call(properties, property, nested_params) unless nested_params.empty?
@@ -56,15 +58,13 @@ module GrapeSwagger
 
         def recursive_call(properties, property, nested_params)
           if should_expose_as_array?(nested_params)
-            properties[property] = { type: 'array', items: { type: 'object', properties: {}, required: [] } }
+            properties[property] = array_type
             move_params_to_new(properties[property][:items], nested_params)
           else
-            properties[property] = { type: 'object', properties: {}, required: [] }
+            properties[property] = object_type
             move_params_to_new(properties[property], nested_params)
           end
         end
-
-        private
 
         def movable_params(params)
           to_delete = params.each_with_object([]) { |x, memo| memo << x if deletable?(x) }
@@ -78,9 +78,20 @@ module GrapeSwagger
         end
 
         def add_properties_to_definition(definition, properties, required)
-          definition[:properties].merge!(properties)
-          definition[:required] = required
-          definition.delete(:required) if definition[:required].blank?
+          if definition.key?(:items)
+            definition[:items][:properties].merge!(properties)
+            add_to_required(definition[:items], required)
+          else
+            definition[:properties].merge!(properties)
+            add_to_required(definition, required)
+          end
+        end
+
+        def add_to_required(definition, value)
+          return if value.blank?
+
+          definition[:required] ||= []
+          definition[:required].push(*value)
         end
 
         def build_properties(params)
@@ -129,9 +140,17 @@ module GrapeSwagger
 
         def build_definition(name, params, verb = nil)
           name = "#{verb}#{name}" if verb
-          @definitions[name] = { type: should_exposed_as(params), properties: {}, required: [] }
+          @definitions[name] = should_expose_as_array?(params) ? array_type : object_type
 
           name
+        end
+
+        def array_type
+          { type: 'array', items: { type: 'object', properties: {} } }
+        end
+
+        def object_type
+          { type: 'object', properties: {} }
         end
 
         def prepare_nested_types(params)

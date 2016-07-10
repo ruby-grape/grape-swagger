@@ -139,7 +139,8 @@ describe 'moving body/formData Params to definitions' do
                     'required' => %w(street postcode city)
                   }
                 }
-              }
+              },
+              'required' => %w(name)
             }
           },
           'description' => 'post in body with nested parameters'
@@ -228,7 +229,8 @@ describe 'moving body/formData Params to definitions' do
                     'country' => { 'type' => 'string', 'description' => 'country' }
                   }
                 }
-              }
+              },
+              'required' => %w(name)
             }
           },
           'description' => 'put in body with multiple nested parameters'

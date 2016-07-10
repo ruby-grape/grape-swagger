@@ -40,11 +40,11 @@ describe 'Group Params as Array' do
       end
 
       params do
-        requires :array_of_string, type: Array[String], documentation: { param_type: 'body', desc: 'nested array of strings' }
-        requires :array_of_integer, type: Integer, documentation: { param_type: 'body', desc: 'nested array of integers' }
+        requires :array_of_string, type: Array[String], documentation: { param_type: 'body', desc: 'array of strings' }
+        requires :integer_value, type: Integer, documentation: { param_type: 'body', desc: 'integer value' }
       end
 
-      post '/object_of_array_and_type' do
+      post '/object_and_array' do
         { 'declared_params' => declared(params) }
       end
 
@@ -103,12 +103,37 @@ describe 'Group Params as Array' do
 
     specify do
       expect(subject['definitions']['postArrayOfType']['type']).to eql 'array'
-      expect(subject['definitions']['postArrayOfType']['properties']).to eql(
-        'array_of_string' => {
-          'type' => 'string', 'description' => 'nested array of strings'
+      expect(subject['definitions']['postArrayOfType']['items']).to eql(
+        'type' => 'object',
+        'properties' => {
+          'array_of_string' => {
+            'type' => 'string', 'description' => 'nested array of strings'
+          },
+          'array_of_integer' => {
+            'type' => 'integer', 'format' => 'int32', 'description' => 'nested array of integers'
+          }
         },
-        'array_of_integer' => {
-          'type' => 'integer', 'format' => 'int32', 'description' => 'nested array of integers'
+        'required' => %w(array_of_string array_of_integer)
+      )
+    end
+  end
+
+  describe 'documentation for simple and array parameters' do
+    subject do
+      get '/swagger_doc/object_and_array'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['definitions']['postObjectAndArray']['type']).to eql 'object'
+      expect(subject['definitions']['postObjectAndArray']['properties']).to eql(
+        'array_of_string' => {
+          'type' => 'array', 'items' => {
+            'type' => 'string', 'description' => 'array of strings'
+          }
+        },
+        'integer_value' => {
+          'type' => 'integer', 'format' => 'int32', 'description' => 'integer value'
         }
       )
     end

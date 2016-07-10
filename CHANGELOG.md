@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#470](https://github.com/ruby-grape/grape-swagger/pull/470): Document request definitions inline - [@LeFnord](https://github.com/LeFnord).
 * [#448](https://github.com/ruby-grape/grape-swagger/pull/448): Header parameters are now prepended to the parameter list - [@anakinj](https://github.com/anakinj).
 * [#444](https://github.com/ruby-grape/grape-swagger/pull/444): With multi types parameter the first type is use as the documentation type - [@scauglog](https://github.com/scauglog).
 * [#463](https://github.com/ruby-grape/grape-swagger/pull/463): Added 'hidden' option for parameter to be exclude from generated documentation - [@anakinj](https://github.com/anakinj).
@@ -9,6 +10,7 @@
 
 #### Fixes
 
+* [#472](https://github.com/ruby-grape/grape-swagger/pull/472): Fixes required property for request definitions - [@LeFnord](https://github.com/LeFnord).
 * [#467](https://github.com/ruby-grape/grape-swagger/pull/467): Refactors moving of body params - [@LeFnord](https://github.com/LeFnord).
 * [#464](https://github.com/ruby-grape/grape-swagger/pull/464): Fixes array params, sets correct type and format for items - [@LeFnord](https://github.com/LeFnord).
 * [#461](https://github.com/ruby-grape/grape-swagger/pull/461): Fixes issue by adding extensions to definitions. It appeared, if for the given status code, no definition could be found - [@LeFnord](https://github.com/LeFnord).

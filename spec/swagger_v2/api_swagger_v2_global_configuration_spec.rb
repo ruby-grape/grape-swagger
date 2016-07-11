@@ -46,7 +46,7 @@ describe 'global configuration stuff' do
       expect(subject['paths'].keys.first).to eql '/somewhere/over/the/rainbow/v3/configuration'
       expect(subject['schemes']).to eql ['https']
       expect(subject['securityDefinitions'].keys).to include('api_key')
-      expect(subject['securityDefinitions']['api_key']).to include("foo" => "bar")
+      expect(subject['securityDefinitions']['api_key']).to include('foo' => 'bar')
     end
   end
 end

@@ -192,6 +192,7 @@ end
 * [add_version](#add_version)
 * [doc_version](#doc_version)
 * [markdown](#markdown)
+* [security_definitions](#security_definitions)
 * [models](#models)
 * [hide_documentation_path](#hide_documentation_path)
 * [info](#info)
@@ -273,11 +274,23 @@ add_swagger_documentation \
   markdown: GrapeSwagger::Markdown::RedcarpetAdapter.new
 ```
 
+<a name="security_definitions" />
+#### security_definitions:
+Specify the [Security Definitions Object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#security-definitions-object)
+
+```ruby
+add_swagger_documentation \
+  security_definitions: {
+    api_key: {
+      type: "apiKey",
+      name: "api_key",
+      in: "header"
+    }
+  }
+```
 
 #### *authorizations*:
 This value is added to the `authorizations` key in the JSON documentation.
-
-
 
 <a name="models" />
 #### models:

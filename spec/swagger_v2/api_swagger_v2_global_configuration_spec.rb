@@ -23,7 +23,8 @@ describe 'global configuration stuff' do
                                   base_path: -> { 'somewhere/over/the/rainbow' },
                                   mount_path: 'documentation',
                                   add_base_path: true,
-                                  add_version: true
+                                  add_version: true,
+                                  security_definitions: { api_key: { foo: 'bar' } }
       end
     end
   end
@@ -44,6 +45,8 @@ describe 'global configuration stuff' do
       expect(subject['basePath']).to eql 'somewhere/over/the/rainbow'
       expect(subject['paths'].keys.first).to eql '/somewhere/over/the/rainbow/v3/configuration'
       expect(subject['schemes']).to eql ['https']
+      expect(subject['securityDefinitions'].keys).to include('api_key')
+      expect(subject['securityDefinitions']['api_key']).to include('foo' => 'bar')
     end
   end
 end

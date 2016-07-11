@@ -24,6 +24,7 @@ module Grape
         swagger:        '2.0',
         produces:       content_types_for(target_class),
         authorizations: options[:authorizations],
+        securityDefinitions: options[:security_definitions],
         host:           GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request),
         basePath:       GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request),
         tags:           GrapeSwagger::DocMethods::TagNameDescription.build(options),

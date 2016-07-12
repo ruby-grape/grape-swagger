@@ -2,12 +2,21 @@
 
 #### Features
 
+* Your contribution here.
+
+#### Fixes
+
+* Your contribution here.
+
+### 0.22.0 (July 12, 2016)
+
+#### Features
+
 * [#470](https://github.com/ruby-grape/grape-swagger/pull/470): Document request definitions inline - [@LeFnord](https://github.com/LeFnord).
 * [#448](https://github.com/ruby-grape/grape-swagger/pull/448): Header parameters are now prepended to the parameter list - [@anakinj](https://github.com/anakinj).
 * [#444](https://github.com/ruby-grape/grape-swagger/pull/444): With multi types parameter the first type is use as the documentation type - [@scauglog](https://github.com/scauglog).
 * [#463](https://github.com/ruby-grape/grape-swagger/pull/463): Added 'hidden' option for parameter to be exclude from generated documentation - [@anakinj](https://github.com/anakinj).
 * [#471](https://github.com/ruby-grape/grape-swagger/pull/471): Allow Security Definitions Objects to be defined - [@bendodd](https://github.com/bendodd).
-* Your contribution here.
 
 #### Fixes
 
@@ -22,7 +31,6 @@
 * [#443](https://github.com/ruby-grape/grape-swagger/issues/443): Type provided in the documentation hash, override the grape type [@scauglog](https://github.com/scauglog).
 * [#454](https://github.com/ruby-grape/grape-swagger/pull/454): Include documented Hashes in documentation output - [@aschuster3](https://github.com/aschuster3).
 * [#457](https://github.com/ruby-grape/grape-swagger/issues/457): Using camel case on namespace throws exception on add_swagger_documentation method - [@rayko](https://github.com/rayko/).
-* Your contribution here.
 
 ### 0.21.0 (June 1, 2016)
 

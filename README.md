@@ -520,6 +520,34 @@ end
 }
 ```
 
+
+#### Array parameter collectionFormat
+
+Customize the collectionFormat of your array parameter to one of the following: 
+`csv`, `ssv`, `tsv`, `pipes`, `multi`
+
+```ruby
+params do
+  requires :input, type: Array[String], documentation: { collection_format: 'csv' }
+end
+post :act do
+  ...
+end
+```
+
+```json
+{
+  "in": "formData",
+  "name": "action_ids",
+  "type": "array",
+  "items": {
+      "type": "integer"
+  },
+  "collectionFormat": "csv",
+  "required": true
+}
+```
+
 #### Multi types
 
 By default when you set multi types, the first type is selected as swagger type

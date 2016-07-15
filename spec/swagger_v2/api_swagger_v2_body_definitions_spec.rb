@@ -6,8 +6,14 @@ describe 'body parameter definitions' do
       class Endpoint < Grape::API
         resource :endpoint do
           desc 'The endpoint' do
-            params body_param: { type: String, desc: 'param', required: false, documentation: { in: 'body' } }
+            headers XAuthToken: {
+              description: 'Valdates your identity',
+              required: true
+            }
+            params body_param: { type: 'String', desc: 'param', documentation: { in: 'body' } },
+                   'body_string_param' => { type: String, desc: 'string_param', documentation: { in: 'body' } }
           end
+
           post do
             { 'declared_params' => declared(params) }
           end
@@ -27,10 +33,11 @@ describe 'body parameter definitions' do
     JSON.parse(last_response.body)
   end
 
-  context 'a definition is generated for the endpoints parameters' do
+  context 'a definition is generated for the endpoints parameters defined within the desc block' do
     specify do
       expect(subject['definitions']['postEndpoint']['properties']).to eql(
-        'body_param' => { 'type' => 'string', 'description' => 'param' }
+        'body_param' => { 'type' => 'string', 'description' => 'param' },
+        'body_string_param' => { 'type' => 'string', 'description' => 'string_param' }
       )
     end
   end

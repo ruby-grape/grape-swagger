@@ -33,7 +33,7 @@ module GrapeSwagger
         end
 
         def move_params_to_new(definition, params)
-          params, nested_params = params.partition { |x| !x[:name].include?('[') }
+          params, nested_params = params.partition { |x| !x[:name].to_s.include?('[') }
 
           unless params.blank?
             properties, required = build_properties(params)

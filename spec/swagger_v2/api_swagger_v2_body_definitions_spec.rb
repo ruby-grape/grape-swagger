@@ -11,7 +11,7 @@ describe 'body parameter definitions' do
               required: true
             }
             params body_param: { type: 'String', desc: 'param', documentation: { in: 'body' } },
-                   'body_string_param' => { type: String, desc: 'string_param', documentation: { in: 'body' } }
+                   body_type_as_const_param: { type: String, desc: 'string_param', documentation: { in: 'body' } }
           end
 
           post do
@@ -37,7 +37,7 @@ describe 'body parameter definitions' do
     specify do
       expect(subject['definitions']['postEndpoint']['properties']).to eql(
         'body_param' => { 'type' => 'string', 'description' => 'param' },
-        'body_string_param' => { 'type' => 'string', 'description' => 'string_param' }
+        'body_type_as_const_param' => { 'type' => 'string', 'description' => 'string_param' }
       )
     end
   end

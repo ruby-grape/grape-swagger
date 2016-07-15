@@ -6,6 +6,7 @@
 
 #### Fixes
 
+* [#476](https://github.com/ruby-grape/grape-swagger/pull/476): Fixes for handling the parameter type when body parameters are defined inside desc block - [@anakinj](https://github.com/anakinj).
 * Your contribution here.
 
 ### 0.22.0 (July 12, 2016)

@@ -231,9 +231,11 @@ module Grape
       array_key = nil
       params.select { |param| public_parameter?(param) }.each_with_object({}) do |param, memo|
         name, options = *param
-        array_key = name.to_s if param_type_is_array?(options[:type])
+        param_type = options[:type]
+        param_type = param_type.to_s unless param_type.nil?
+        array_key = name.to_s if param_type_is_array?(param_type)
         options[:is_array] = true if array_key && name.start_with?(array_key)
-        memo[param.first] = options unless (options[:type] == 'Hash' || options[:type] == 'Array') && !options.key?(:documentation)
+        memo[name] = options unless %w(Hash Array).include?(param_type) && !options.key?(:documentation)
       end
     end
 

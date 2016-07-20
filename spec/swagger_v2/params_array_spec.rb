@@ -128,8 +128,10 @@ describe 'Group Params as Array' do
       expect(subject['definitions']['postObjectAndArray']['type']).to eql 'object'
       expect(subject['definitions']['postObjectAndArray']['properties']).to eql(
         'array_of_string' => {
-          'type' => 'array', 'items' => {
-            'type' => 'string', 'description' => 'array of strings'
+          'type' => 'array',
+          'description' => 'array of strings',
+          'items' => {
+            'type' => 'string'
           }
         },
         'integer_value' => {

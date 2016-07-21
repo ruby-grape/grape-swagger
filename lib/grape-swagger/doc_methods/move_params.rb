@@ -44,6 +44,39 @@ module GrapeSwagger
           add_properties_to_definition(definition, nested_properties, []) unless nested_params.blank?
         end
 
+        def build_properties(params)
+          properties = {}
+          required = []
+
+          prepare_nested_types(params) if should_expose_as_array?(params)
+
+          params.each do |param|
+            name = param[:name].to_sym
+
+            properties[name] = if should_expose_as_array?([param])
+                                 document_as_array(param)
+                               else
+                                 document_as_property(param)
+                               end
+
+            required << name if deletable?(param) && param[:required]
+          end
+
+          [properties, required]
+        end
+
+        def document_as_array(param)
+          {}.tap do |property|
+            property[:type] = 'array'
+            property[:description] = param.delete(:description) unless param[:description].nil?
+            property[:items] = document_as_property(param)[:items]
+          end
+        end
+
+        def document_as_property(param)
+          property_keys.each_with_object({}) { |x, memo| memo[x] = param[x] if param[x].present? }
+        end
+
         def build_nested_properties(params, properties = {})
           property = params.bsearch { |x| x[:name].include?('[') }[:name].split('[').first
 
@@ -92,41 +125,6 @@ module GrapeSwagger
 
           definition[:required] ||= []
           definition[:required].push(*value)
-        end
-
-        def build_properties(params)
-          properties = {}
-          required = []
-
-          prepare_nested_types(params) if should_expose_as_array?(params)
-
-          params.each do |param|
-            name = param[:name].to_sym
-            properties[name] = {}
-
-            if should_expose_as_array?([param])
-              prepare_nested_types([param])
-
-              properties[name][:type] = 'array'
-              properties[name][:items] = {}
-              properties[name][:items].tap do |x|
-                property_keys.each do |attribute|
-                  x[attribute] = param[attribute] unless param[attribute].nil?
-                end
-              end
-            else
-
-              properties[name].tap do |x|
-                property_keys.each do |attribute|
-                  x[attribute] = param[attribute] unless param[attribute].nil?
-                end
-              end
-            end
-
-            required << name if deletable?(param) && param[:required]
-          end
-
-          [properties, required]
         end
 
         def build_body_parameter(reference, name)

@@ -17,7 +17,7 @@ describe 'moving body/formData Params to definitions' do
                 requires :street, type: String, documentation: { desc: 'street', in: 'body' }
                 requires :postcode, type: String, documentation: { desc: 'postcode', in: 'body' }
                 requires :city, type: String, documentation: { desc: 'city', in: 'body' }
-                optional :country, type: String, documentation: { desc: 'country', in: 'body' }
+                optional :country, type: Array[String], documentation: { desc: 'country', in: 'body' }
               end
             end
           end
@@ -36,7 +36,7 @@ describe 'moving body/formData Params to definitions' do
               optional :street, type: String, documentation: { desc: 'street', in: 'body' }
               optional :postcode, type: String, documentation: { desc: 'postcode', in: 'formData' }
               optional :city, type: String, documentation: { desc: 'city', in: 'body' }
-              optional :country, type: String, documentation: { desc: 'country', in: 'body' }
+              optional :country, type: Array[String], documentation: { desc: 'country', in: 'body' }
             end
           end
 
@@ -55,13 +55,13 @@ describe 'moving body/formData Params to definitions' do
                 optional :street, type: String, documentation: { desc: 'street', in: 'body' }
                 requires :postcode, type: Integer, documentation: { desc: 'postcode', in: 'formData' }
                 optional :city, type: String, documentation: { desc: 'city', in: 'body' }
-                optional :country, type: String, documentation: { desc: 'country', in: 'body' }
+                optional :country, type: Array[String], documentation: { desc: 'country', in: 'body' }
               end
               optional :delivery_address, type: Hash do
                 optional :street, type: String, documentation: { desc: 'street', in: 'body' }
                 optional :postcode, type: String, documentation: { desc: 'postcode', in: 'formData' }
                 optional :city, type: String, documentation: { desc: 'city', in: 'body' }
-                optional :country, type: String, documentation: { desc: 'country', in: 'body' }
+                optional :country, type: Array[String], documentation: { desc: 'country', in: 'body' }
               end
             end
           end
@@ -79,13 +79,13 @@ describe 'moving body/formData Params to definitions' do
               optional :street, type: String, documentation: { desc: 'street', in: 'body' }
               requires :postcode, type: String, documentation: { desc: 'postcode', in: 'formData' }
               optional :city, type: String, documentation: { desc: 'city', in: 'body' }
-              optional :country, type: String, documentation: { desc: 'country', in: 'body' }
+              optional :country, type: Array[String], documentation: { desc: 'country', in: 'body' }
             end
             optional :delivery_address, type: Hash do
               optional :street, type: String, documentation: { desc: 'street', in: 'body' }
               optional :postcode, type: String, documentation: { desc: 'postcode', in: 'formData' }
               optional :city, type: String, documentation: { desc: 'city', in: 'body' }
-              optional :country, type: String, documentation: { desc: 'country', in: 'body' }
+              optional :country, type: Array[String], documentation: { desc: 'country', in: 'body' }
             end
           end
 
@@ -134,7 +134,7 @@ describe 'moving body/formData Params to definitions' do
                       'street' => { 'type' => 'string', 'description' => 'street' },
                       'postcode' => { 'type' => 'string', 'description' => 'postcode' },
                       'city' => { 'type' => 'string', 'description' => 'city' },
-                      'country' => { 'type' => 'string', 'description' => 'country' }
+                      'country' => { 'type' => 'array', 'items' => { 'type' => 'string' }, 'description' => 'country' }
                     },
                     'required' => %w(street postcode city)
                   }
@@ -169,7 +169,7 @@ describe 'moving body/formData Params to definitions' do
                 'street' => { 'type' => 'string', 'description' => 'street' },
                 'postcode' => { 'type' => 'string', 'description' => 'postcode' },
                 'city' => { 'type' => 'string', 'description' => 'city' },
-                'country' => { 'type' => 'string', 'description' => 'country' }
+                'country' => { 'type' => 'array', 'items' => { 'type' => 'string' }, 'description' => 'country' }
               }
             }
           },
@@ -215,7 +215,7 @@ describe 'moving body/formData Params to definitions' do
                       'street' => { 'type' => 'string', 'description' => 'street' },
                       'postcode' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'postcode' },
                       'city' => { 'type' => 'string', 'description' => 'city' },
-                      'country' => { 'type' => 'string', 'description' => 'country' }
+                      'country' => { 'type' => 'array', 'items' => { 'type' => 'string' }, 'description' => 'country' }
                     },
                     'required' => ['postcode']
                   }
@@ -226,7 +226,7 @@ describe 'moving body/formData Params to definitions' do
                     'street' => { 'type' => 'string', 'description' => 'street' },
                     'postcode' => { 'type' => 'string', 'description' => 'postcode' },
                     'city' => { 'type' => 'string', 'description' => 'city' },
-                    'country' => { 'type' => 'string', 'description' => 'country' }
+                    'country' => { 'type' => 'array', 'items' => { 'type' => 'string' }, 'description' => 'country' }
                   }
                 }
               },
@@ -259,7 +259,7 @@ describe 'moving body/formData Params to definitions' do
                 'street' => { 'type' => 'string', 'description' => 'street' },
                 'postcode' => { 'type' => 'string', 'description' => 'postcode' },
                 'city' => { 'type' => 'string', 'description' => 'city' },
-                'country' => { 'type' => 'string', 'description' => 'country' }
+                'country' => { 'type' => 'array', 'items' => { 'type' => 'string' }, 'description' => 'country' }
               },
               'required' => ['postcode']
             },
@@ -269,7 +269,7 @@ describe 'moving body/formData Params to definitions' do
                 'street' => { 'type' => 'string', 'description' => 'street' },
                 'postcode' => { 'type' => 'string', 'description' => 'postcode' },
                 'city' => { 'type' => 'string', 'description' => 'city' },
-                'country' => { 'type' => 'string', 'description' => 'country' }
+                'country' => { 'type' => 'array', 'items' => { 'type' => 'string' }, 'description' => 'country' }
               }
             }
           },

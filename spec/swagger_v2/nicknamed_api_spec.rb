@@ -1,21 +1,16 @@
 require 'spec_helper'
 
 describe 'a nicknamed mounted api' do
-  before :all do
-    class NicknamedMountedApi < Grape::API
+  def app
+    Class.new(Grape::API) do
       desc 'Show this endpoint', nickname: 'simple'
       get '/simple' do
         { foo: 'bar' }
       end
-    end
-
-    class NicknamedApi < Grape::API
-      mount NicknamedMountedApi
-      add_swagger_documentation
+      
+      add_swagger_documentation format: :json
     end
   end
-
-  let(:app) { NicknamedApi }
 
   subject do
     get '/swagger_doc.json'

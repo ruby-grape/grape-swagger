@@ -15,9 +15,7 @@ describe 'a nicknamed mounted api' do
     end
   end
 
-  def app
-    NicknamedApi
-  end
+  let(:app) { NicknamedApi }
 
   subject do
     get '/swagger_doc.json'

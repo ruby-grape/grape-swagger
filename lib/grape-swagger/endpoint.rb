@@ -110,7 +110,7 @@ module Grape
       method[:parameters]  = params_object(route)
       method[:responses]   = response_object(route, options[:markdown])
       method[:tags]        = tag_object(route)
-      method[:operationId] = operation_id(route, path)
+      method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method.delete_if { |_, value| value.blank? }
 
       [route.request_method.downcase.to_sym, method]
@@ -132,12 +132,6 @@ module Grape
       description = markdown.markdown(description.to_s).chomp if markdown
 
       description
-    end
-    
-    def operation_id(route, path)
-      operation_id = route.options[:nickname] || GrapeSwagger::DocMethods::OperationId.build(route, path)
-      
-      operation_id
     end
 
     def produces_object(route, format)

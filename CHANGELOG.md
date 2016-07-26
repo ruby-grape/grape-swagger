@@ -8,6 +8,7 @@
 
 * [#476](https://github.com/ruby-grape/grape-swagger/pull/476): Fixes for handling the parameter type when body parameters are defined inside desc block - [@anakinj](https://github.com/anakinj).
 * [#478](https://github.com/ruby-grape/grape-swagger/pull/478): Refactors building of properties, corrects documentation of array items - [@LeFnord](https://github.com/LeFnord).
+* [#479](https://github.com/ruby-grape/grape-swagger/pull/479): Fix regex for Array and Multi Type in doc_methods. Parsing of "[APoint]" should return "APoint" - [@frodrigo](https://github.com/frodrigo).
 * Your contribution here.
 
 ### 0.22.0 (July 12, 2016)

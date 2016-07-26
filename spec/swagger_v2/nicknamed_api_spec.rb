@@ -7,7 +7,7 @@ describe 'a nicknamed mounted api' do
       get '/simple' do
         { foo: 'bar' }
       end
-      
+
       add_swagger_documentation format: :json
     end
   end
@@ -17,7 +17,7 @@ describe 'a nicknamed mounted api' do
     JSON.parse(last_response.body)
   end
 
-  it "uses the nickname as the operationId" do
+  it 'uses the nickname as the operationId' do
     expect(subject['paths']['/simple']['get']['operationId']).to eql('simple')
   end
 end

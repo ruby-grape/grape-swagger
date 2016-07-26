@@ -24,6 +24,12 @@ describe GrapeSwagger::DocMethods::DataType do
     it { expect(subject).to eql 'string' }
   end
 
+  describe 'Multi types in a string stating with A' do
+    let(:value) { { type: '[Apple, Orange]' } }
+
+    it { expect(subject).to eql 'Apple' }
+  end
+
   describe 'Multi types in array' do
     let(:value) { { type: [String, Integer] } }
 

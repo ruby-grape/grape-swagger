@@ -22,6 +22,7 @@ module GrapeSwagger
           document_description(settings)
           document_type_and_format(data_type)
           document_array_param(value_type)
+          document_collection_format(value_type)
           document_default_value(settings)
           document_range_values(settings)
           document_required(settings)
@@ -76,6 +77,27 @@ module GrapeSwagger
             @parsed_param[:in] = param_type || 'formData'
             @parsed_param[:items] = array_items
             @parsed_param[:type] = 'array'
+          end
+        end
+
+        def document_collection_format(value_type)
+          if value_type[:is_array] && value_type[:documentation].present?
+            param_type = @parsed_param[:in]
+            collection_format = value_type[:documentation][:collection_format]
+            parsed_collection_format = case collection_format.to_s
+                                       when 'multi'
+                                         'multi' if %w(query formData).include? param_type
+                                       when 'csv'
+                                         'csv'
+                                       when 'tsv'
+                                         'tsv'
+                                       when 'ssv'
+                                         'ssv'
+                                       when 'pipes'
+                                         'pipes'
+                                       end
+
+            @parsed_param[:collectionFormat] = parsed_collection_format if parsed_collection_format
           end
         end
 

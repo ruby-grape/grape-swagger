@@ -5,6 +5,9 @@ sudo: false
 matrix:
   include:
     - rvm: 2.3.1
+      script:
+        - bundle exec danger
+    - rvm: 2.3.1
       env: MODEL_PARSER=grape-swagger-entity
     - rvm: 2.3.1
       env: MODEL_PARSER=grape-swagger-representable

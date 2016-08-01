@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gemspec
 
-case version = ENV['GRAPE_VERSION'] || '~> 0.16.2'
+case version = ENV['GRAPE_VERSION'] || '~> 0.17.0'
 when 'HEAD'
   gem 'grape', github: 'ruby-grape/grape'
 else
@@ -16,4 +16,4 @@ if RUBY_VERSION < '2.2.2'
   gem 'activesupport', '<5.0.0'
 end
 
-gem 'danger', '~> 2.0', require: false unless RUBY_PLATFORM == 'java'
+gem 'danger', '~> 2.1', require: false

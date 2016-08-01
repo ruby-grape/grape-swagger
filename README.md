@@ -199,8 +199,7 @@ end
 
 
 You can pass a hash with optional configuration settings to ```add_swagger_documentation```.
-
-*not all configuration options supported yet*, but is WIP
+The examples shows the default value.
 
 
 The `host` and `base_path` options also accept a `proc` or `lambda` to evaluate, which is passed a [request](http://www.rubydoc.info/github/rack/rack/Rack/Request) object:
@@ -223,7 +222,7 @@ add_swagger_documentation \
 Base path of the API that's being exposed, default would be taken from `request`.
 ```ruby
 add_swagger_documentation \
-   base_path: '/super/api'
+   base_path: nil
 ```
 
 `host` and `base_path` are also accepting a `proc` or `lambda`
@@ -233,14 +232,14 @@ add_swagger_documentation \
 The path where the API documentation is loaded, default is: `/swagger_doc`.
 ```ruby
 add_swagger_documentation \
-   mount_path: '/docu'
+   mount_path: '/swagger_doc'
 ```
 
 #### add_base_path:
 Add `basePath` key to the documented path keys, default is: `false`.
 ```ruby
 add_swagger_documentation \
-   add_base_path: true
+   add_base_path: true # only if base_path given
 ```
 
 #### add_version:
@@ -249,7 +248,7 @@ here the version is the API version, specified by `grape` in [`path`](https://gi
 
 ```ruby
 add_swagger_documentation \
-   add_version: false
+   add_version: true
 ```
 
 <a name="doc_version" />
@@ -288,9 +287,6 @@ add_swagger_documentation \
     }
   }
 ```
-
-#### *authorizations*:
-This value is added to the `authorizations` key in the JSON documentation.
 
 <a name="models" />
 #### models:
@@ -333,6 +329,8 @@ add_swagger_documentation \
 
 A hash merged into the `info` key of the JSON documentation.
 
+<!-- #### *authorizations*:
+This value is added to the `authorizations` key in the JSON documentation. -->
 
 <!-- #### *api_documentation*:
 Customize the Swagger API documentation route, typically contains a `desc` field. The default description is "Swagger compatible API description".

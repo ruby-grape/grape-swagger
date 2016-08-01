@@ -16,31 +16,12 @@ describe 'describing versions' do
 
     subject do
       get '/swagger_doc'
-      JSON.parse(last_response.body, symbolize_names: true)
+      JSON.parse(last_response.body)
     end
 
     specify do
-      expect(subject).to eql(
-        info: { title: 'API title', version: '0.0.1' },
-        swagger: '2.0',
-        produces: ['application/xml', 'application/json', 'application/octet-stream', 'text/plain'],
-        host: 'example.org',
-        tags: [{ name: 'nothings', description: 'Operations about nothings' }],
-        paths: {
-          :'/nothings' => {
-            get: {
-              summary: 'no versions given',
-              description: 'no versions given',
-              produces: ['application/json'],
-              responses: {
-                :'200' => { description: 'no versions given' }
-              },
-              tags: ['nothings'],
-              operationId: 'getNothings'
-            }
-          }
-        }
-      )
+      expect(subject['info']['version']).to eql '0.0.1'
+      expect(subject['paths'].keys.first).to eql '/nothings'
     end
   end
 
@@ -59,31 +40,12 @@ describe 'describing versions' do
 
     subject do
       get '/v2/swagger_doc'
-      JSON.parse(last_response.body, symbolize_names: true)
+      JSON.parse(last_response.body)
     end
 
     specify do
-      expect(subject).to eql(
-        info: { title: 'API title', version: '0.0.1' },
-        swagger: '2.0',
-        produces: ['application/xml', 'application/json', 'application/octet-stream', 'text/plain'],
-        host: 'example.org',
-        tags: [{ name: 'api_version', description: 'Operations about api_versions' }],
-        paths: {
-          :'/v2/api_version' => {
-            get: {
-              summary: 'api versions given',
-              description: 'api versions given',
-              produces: ['application/json'],
-              responses: {
-                :'200' => { description: 'api versions given' }
-              },
-              tags: ['api_version'],
-              operationId: 'getV2ApiVersion'
-            }
-          }
-        }
-      )
+      expect(subject['info']['version']).to eql '0.0.1'
+      expect(subject['paths'].keys.first).to eql '/v2/api_version'
     end
   end
 
@@ -95,80 +57,67 @@ describe 'describing versions' do
           { message: 'hello world …' }
         end
 
-        add_swagger_documentation doc_version: '0.0.2'
+        add_swagger_documentation doc_version: '0.1'
       end
     end
 
     subject do
       get '/swagger_doc'
-      JSON.parse(last_response.body, symbolize_names: true)
+      JSON.parse(last_response.body)
     end
 
     specify do
-      expect(subject).to eql(
-        info: { title: 'API title', version: '0.0.2' },
-        swagger: '2.0',
-        produces: ['application/xml', 'application/json', 'application/octet-stream', 'text/plain'],
-        host: 'example.org',
-        tags: [{ name: 'doc_version', description: 'Operations about doc_versions' }],
-        paths: {
-          :'/doc_version' => {
-            get: {
-              summary: 'doc versions given',
-              description: 'doc versions given',
-              produces: ['application/json'],
-              responses: {
-                :'200' => { description: 'doc versions given' }
-              },
-              tags: ['doc_version'],
-              operationId: 'getDocVersion'
-            }
-          }
-        }
-      )
+      expect(subject['info']['version']).to eql '0.1'
+      expect(subject['paths'].keys.first).to eql '/doc_version'
     end
   end
 
   describe 'both versions given' do
     def app
       Class.new(Grape::API) do
-        version :v2, using: :path
+        version :v3, using: :path
         desc 'both versions given'
         get '/both_versions' do
           { message: 'hello world …' }
         end
 
-        add_swagger_documentation doc_version: '0.0.2'
+        add_swagger_documentation doc_version: '0.2'
       end
     end
 
     subject do
-      get '/v2/swagger_doc'
-      JSON.parse(last_response.body, symbolize_names: true)
+      get '/v3/swagger_doc'
+      JSON.parse(last_response.body)
     end
 
     specify do
-      expect(subject).to eql(
-        info: { title: 'API title', version: '0.0.2' },
-        swagger: '2.0',
-        produces: ['application/xml', 'application/json', 'application/octet-stream', 'text/plain'],
-        host: 'example.org',
-        tags: [{ name: 'both_versions', description: 'Operations about both_versions' }],
-        paths: {
-          :'/v2/both_versions' => {
-            get: {
-              summary: 'both versions given',
-              description: 'both versions given',
-              produces: ['application/json'],
-              responses: {
-                :'200' => { description: 'both versions given' }
-              },
-              tags: ['both_versions'],
-              operationId: 'getV2BothVersions'
-            }
-          }
-        }
-      )
+      expect(subject['info']['version']).to eql '0.2'
+      expect(subject['paths'].keys.first).to eql '/v3/both_versions'
+    end
+  end
+
+  describe 'try to override grape given version' do
+    def app
+      Class.new(Grape::API) do
+        version :v4, using: :path
+        desc 'overriding grape given version?'
+        get '/grape_version' do
+          { message: 'hello world …' }
+        end
+
+        add_swagger_documentation doc_version: '0.0.3',
+                                  version: 'v5'
+      end
+    end
+
+    subject do
+      get '/v4/swagger_doc'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['info']['version']).to eql '0.0.3'
+      expect(subject['paths'].keys.first).to eql '/v4/grape_version'
     end
   end
 end

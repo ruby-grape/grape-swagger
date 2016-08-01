@@ -10,6 +10,18 @@ gem 'grape-swagger'
 gem 'grape-swagger-entity'
 ```
 
+`add_swagger_documentation` has changed from
+``` ruby
+  add_swagger_documentation \
+    api_version: 'v1'
+```
+to
+
+``` ruby
+  add_swagger_documentation \
+    version: 'v1'
+```
+
 ### Upgrading to >= 0.10.2
 
 With grape >= 0.12.0, support for `notes` is replaced by passing a block `detail` option specified. For future compatibility, update your code:

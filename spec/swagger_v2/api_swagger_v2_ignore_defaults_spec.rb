@@ -41,5 +41,6 @@ describe 'swagger spec v2.0' do
 
   it 'only returns one response if ignore_defaults is specified' do
     expect(json['paths']['/delay_thing']['post']['responses']).to eq('202' => { 'description' => 'OK' })
+    expect(json['paths']['/delay_thing']['post']['responses'].keys).not_to include '201'
   end
 end

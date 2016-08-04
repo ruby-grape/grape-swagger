@@ -190,7 +190,11 @@ module Grape
 
         @definitions[response_model][:description] = description_object(route, markdown)
         # TODO: proof that the definition exist, if model isn't specified
-        memo[value[:code]][:schema] = route.options[:is_array] ? { 'type' => 'array', 'items' => { '$ref' => "#/definitions/#{response_model}" } } : { '$ref' => "#/definitions/#{response_model}" }
+        memo[value[:code]][:schema] = if route.options[:is_array]
+                                        { 'type' => 'array', 'items' => { '$ref' => "#/definitions/#{response_model}" } }
+                                      else
+                                        { '$ref' => "#/definitions/#{response_model}" }
+                                      end
       end
     end
 

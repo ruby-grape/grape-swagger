@@ -168,11 +168,9 @@ module Grape
     end
 
     def response_object(route, markdown)
-      default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
-      default_code[:model] = @entity if @entity
-      default_code[:message] = route.description || default_code[:message].sub('{item}', @item)
+      codes = (route.http_codes || route.options[:failure] || [])
+      codes = apply_defaults(route, codes) if route.options[:ignore_defaults].nil?
 
-      codes = [default_code] + (route.http_codes || route.options[:failure] || [])
       codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2] } : x }
 
       codes.each_with_object({}) do |value, memo|
@@ -198,6 +196,13 @@ module Grape
                                         { '$ref' => "#/definitions/#{response_model}" }
                                       end
       end
+    end
+
+    def apply_defaults(route, codes)
+      default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
+      default_code[:model] = @entity if @entity
+      default_code[:message] = route.description || default_code[:message].sub('{item}', @item)
+      [default_code] + codes
     end
 
     def tag_object(route)

@@ -193,7 +193,6 @@ RSpec.shared_context 'entity swagger example' do
         { 'name' => 'other_thing', 'description' => 'Operations about other_things' },
         { 'name' => 'thing', 'description' => 'Operations about things' },
         { 'name' => 'thing2', 'description' => 'Operations about thing2s' },
-        { 'name' => 'delay_thing', 'description' => 'Operations about delay_things' },
         { 'name' => 'dummy', 'description' => 'Operations about dummies' }
       ],
       'paths' => {
@@ -283,22 +282,7 @@ RSpec.shared_context 'entity swagger example' do
             'operationId' => 'getThing2'
           }
         },
-        '/delay_thing' => {
-          'post' => {
-            'summary' => 'This creates Thing after a delay',
-            'description' => 'This creates Thing after a delay',
-            'produces' => ['application/json'],
-            'consumes' => ['application/json'],
-            'parameters' => [
-              { 'in' => 'formData', 'name' => 'text', 'description' => 'Content of something.', 'type' => 'string', 'required' => true },
-              { 'in' => 'formData', 'name' => 'links', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => true }
-            ],
-            'responses' => { '202' => { 'description' => 'OK' } },
-            'tags' => ['delay_thing'],
-            'operationId' => 'postDelayThing'
-          }
-        },
-      '/dummy/{id}' => {
+        '/dummy/{id}' => {
           'delete' => {
             'summary' => 'dummy route.',
             'description' => 'dummy route.',

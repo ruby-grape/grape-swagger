@@ -50,17 +50,6 @@ describe 'swagger spec v2.0' do
         present something, with: Entities::Something
       end
 
-      desc 'This creates Thing after a delay',
-      success: Entities::Something
-       params do
-         requires :text, type: String, documentation: { type: 'string', desc: 'Content of something.' }
-         requires :links, type: Array, documentation: { type: 'link', is_array: true }
-       end
-       post '/delay_thing', http_codes: [{ code: 202, message: 'OK' }], ignore_defaults: true do
-         something = OpenStruct.new text: 'something'
-         status 202
-       end
-
       desc 'This updates Thing.',
            success: Entities::Something
       params do
@@ -209,12 +198,6 @@ describe 'swagger spec v2.0' do
         end
       end
     end
-  end
-
-  it 'only returns one response if only one is given' do
-    expect(json['paths']['/delay_thing']['post']['responses']).to eq({
-       '202' => { 'description' => 'OK' }
-    })
   end
 
   describe 'swagger file' do

@@ -2,10 +2,18 @@
 
 #### Features
 
-* [#486](https://github.com/ruby-grape/grape/pull/486): Use an automated PR linter, [danger.systems](http://danger.systems) - [@dblock](https://github.com/dblock).
-* [#491](https://github.com/ruby-grape/grape/pull/491): Add `ignore_defaults` option - [@pezholio](https://github.com/pezholio).
+* Your contribution here.
+
+#### Fixes
 
 * Your contribution here.
+
+### 0.23.0 (August 5, 2016)
+
+#### Features
+
+* [#491](https://github.com/ruby-grape/grape/pull/491): Add `ignore_defaults` option - [@pezholio](https://github.com/pezholio).
+* [#486](https://github.com/ruby-grape/grape/pull/486): Use an automated PR linter, [danger.systems](http://danger.systems) - [@dblock](https://github.com/dblock).
 
 #### Fixes
 
@@ -14,7 +22,6 @@
 * [#478](https://github.com/ruby-grape/grape-swagger/pull/478): Refactors building of properties, corrects documentation of array items - [@LeFnord](https://github.com/LeFnord).
 * [#479](https://github.com/ruby-grape/grape-swagger/pull/479): Fix regex for Array and Multi Type in doc_methods. Parsing of "[APoint]" should return "APoint" - [@frodrigo](https://github.com/frodrigo).
 * [#483](https://github.com/ruby-grape/grape-swagger/pull/483): Added support for nicknamed routes - [@pbendersky](https://github.com/pbendersky).
-* Your contribution here.
 
 ### 0.22.0 (July 12, 2016)
 

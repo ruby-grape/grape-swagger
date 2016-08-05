@@ -12,8 +12,8 @@
 
 #### Features
 
-* [#491](https://github.com/ruby-grape/grape/pull/491): Add `ignore_defaults` option - [@pezholio](https://github.com/pezholio).
-* [#486](https://github.com/ruby-grape/grape/pull/486): Use an automated PR linter, [danger.systems](http://danger.systems) - [@dblock](https://github.com/dblock).
+* [#491](https://github.com/ruby-grape/grape-swagger/pull/491): Add `ignore_defaults` option - [@pezholio](https://github.com/pezholio).
+* [#486](https://github.com/ruby-grape/grape-swagger/pull/486): Use an automated PR linter, [danger.systems](http://danger.systems) - [@dblock](https://github.com/dblock).
 
 #### Fixes
 

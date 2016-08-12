@@ -108,12 +108,17 @@ module Grape
       method[:produces]    = produces_object(route, options[:produces] || options[:format])
       method[:consumes]    = consumes_object(route, options[:format])
       method[:parameters]  = params_object(route)
+      method[:security]    = security_object(route)
       method[:responses]   = response_object(route, options[:markdown])
       method[:tags]        = tag_object(route)
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method.delete_if { |_, value| value.blank? }
 
       [route.request_method.downcase.to_sym, method]
+    end
+
+    def security_object(route)
+      route.options[:security] if route.options.key?(:security)
     end
 
     def summary_object(route)

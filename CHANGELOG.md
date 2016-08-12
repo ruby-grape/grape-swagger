@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#492](https://github.com/ruby-grape/grape/pull/492): Define security requirements on endpoint methods - [@tomregelink](https://github.com/tomregelink).
 * Your contribution here.
 
 #### Fixes

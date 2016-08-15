@@ -31,6 +31,11 @@ module Grape
         version_for(options)
         options = { target_class: self }.merge(options)
         @target_class = options[:target_class]
+        auth_wrapper = options[:endpoint_auth_wrapper]
+
+        if auth_wrapper && auth_wrapper.method_defined?(:before) && !middleware.flatten.include?(auth_wrapper)
+          use auth_wrapper
+        end
 
         documentation_class.setup(options)
         mount(documentation_class)

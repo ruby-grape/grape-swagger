@@ -222,15 +222,17 @@ module Grape
       declared_params = route.settings[:declared_params] if route.settings[:declared_params].present?
       required, exposed = route.params.partition { |x| x.first.is_a? String }
       required = GrapeSwagger::DocMethods::Headers.parse(route) + required unless route.headers.nil?
+
       default_type(required)
       default_type(exposed)
 
-      unless declared_params.nil? && route.headers.nil?
-        request_params = parse_request_params(required)
-      end
+      request_params = unless declared_params.nil? && route.headers.nil?
+                         parse_request_params(required)
+                       end || {}
 
-      return route.params if route.params.present? && !route.settings[:declared_params].present?
-      request_params || {}
+      request_params = route.params.merge(request_params) if route.params.present? && !route.settings[:declared_params].present?
+
+      request_params
     end
 
     def default_type(params)

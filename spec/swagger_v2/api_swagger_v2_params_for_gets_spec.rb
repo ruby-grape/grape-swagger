@@ -7,7 +7,7 @@ describe 'parameters should never be of type body or formData for GET methods' d
         resource :resource do
           desc 'Simple listing of resources'
           params do
-            optional :string_filter, type: Array(String)
+            optional :string_filter, type: Array[String]
           end
           get '/' do
             []

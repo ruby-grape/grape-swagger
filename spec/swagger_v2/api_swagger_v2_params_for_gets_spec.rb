@@ -27,7 +27,6 @@ describe 'parameters should never be of type body or formData for GET methods' d
   end
 
   specify 'no parameter is defined as body or formData' do
-    pending 'This is failing with the current implementation, what could be done?'
     subject['paths'].each do |_path, methods|
       next unless methods.key?('get')
       methods['get']['parameters'].each do |parameter|

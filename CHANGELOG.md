@@ -3,6 +3,7 @@
 #### Features
 
 * [#492](https://github.com/ruby-grape/grape/pull/492): Define security requirements on endpoint methods - [@tomregelink](https://github.com/tomregelink).
+* [#497](https://github.com/ruby-grape/grape-swagger/pull/497): Use ruby-grape-danger in Dangerfile - [@dblock](https://github.com/dblock).
 * Your contribution here.
 
 #### Fixes

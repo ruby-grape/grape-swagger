@@ -39,6 +39,8 @@ describe 'body parameter definitions' do
         'body_param' => { 'type' => 'string', 'description' => 'param' },
         'body_type_as_const_param' => { 'type' => 'string', 'description' => 'string_param' }
       )
+
+      expect(subject['paths']['/endpoint']['post']['parameters'].any? { |p| p['name'] == 'XAuthToken' && p['in'] == 'header' }).to eql(true)
     end
   end
 end

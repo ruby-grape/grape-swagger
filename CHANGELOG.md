@@ -10,6 +10,7 @@
 
 #### Fixes
 
+* [#494](https://github.com/ruby-grape/grape-swagger/pull/494): Header parametes are now included in documentation when body parameters have been defined - [@anakinj](https://github.com/anakinj).
 * Your contribution here.
 
 ### 0.23.0 (August 5, 2016)

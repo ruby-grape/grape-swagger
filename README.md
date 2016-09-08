@@ -803,10 +803,10 @@ end
 
 The Swagger UI on Grape could be secured from unauthorized access using any middleware, which provides certain methods:
 
-- a *before* method to be run in the Grape controller for authorization purpose; 
+- a *before* method to be run in the Grape controller for authorization purpose;
 - some guard method, which could receive as argument a string or an array of authorization scopes;
 - a method which processes and returns the access token received in the HTTP request headers (usually in the 'HTTP_AUTHORIZATION' header).
-  
+
 Below are some examples of securing the Swagger UI on Grape installed along with Ruby on Rails:
 
 - The WineBouncer and Doorkeeper gems are used in the examples;
@@ -828,9 +828,9 @@ This is how to configure the grape_swagger documentation:
 
 The guard method should inject the Security Requirement Object into the endpoint's route settings (see Grape::DSL::Settings.route_setting method).
 
-The 'oauth2 false' added to swagger_documentation is making the main Swagger endpoint protected with OAuth, i.e. it 
+The 'oauth2 false' added to swagger_documentation is making the main Swagger endpoint protected with OAuth, i.e. it
 is retreiving the access_token from the HTTP request, but the 'false' scope is for skipping authorization and showing
- the UI for everyone. If the scope would be set to something else, like 'oauth2 admin', for example, than the UI 
+ the UI for everyone. If the scope would be set to something else, like 'oauth2 admin', for example, than the UI
  wouldn't be displayed at all to unauthorized users.  
 
 Further on, the guard could be used, where necessary, for endpoint access protection. Put it prior to the endpoint's method:
@@ -841,7 +841,7 @@ Further on, the guard could be used, where necessary, for endpoint access protec
     get do
       render_users
     end
-    
+
     oauth2 'admin'
     post do
       User.create!...
@@ -849,12 +849,12 @@ Further on, the guard could be used, where necessary, for endpoint access protec
   end
 ```
 
-And, finally, if you want to not only restrict the access, but to completely hide the endpoint from unauthorized 
+And, finally, if you want to not only restrict the access, but to completely hide the endpoint from unauthorized
 users, you could pass a lambda to the :hidden key of a endpoint's description:
-   
+
 ```ruby
   not_admins = lambda { |token=nil| token.nil? || !User.find(token.resource_owner_id).admin? }
-  
+
   resource :users do
     desc 'Create user', hidden: not_admins
     oauth2 'admin'
@@ -864,8 +864,8 @@ users, you could pass a lambda to the :hidden key of a endpoint's description:
   end
 ```
 
-The lambda is checking whether the user is authenticated (if not, the token is nil by default), and has the admin 
-role - only admins can see this endpoint. 
+The lambda is checking whether the user is authenticated (if not, the token is nil by default), and has the admin
+role - only admins can see this endpoint.
 
 <a name="md_usage" />
 ## Markdown in Detail
@@ -1122,15 +1122,20 @@ GrapeSwagger::Rake::OapiTasks.new(::Api::Base)
 
 ```
 rake oapi:fetch
-rake oapi:fetch store=true # writes to swagger_doc.json
+params:
+- store={ true | file_name } – save as JSON (optional)
+- resource=resource_name     – get only for this one (optional)
 ```
 
 #### OpenApi/Swagger Validation
 
 **requires**: `npm` and `swagger-cli` to be installed
 
+
 ```
 rake oapi:validate
+params:
+- resource=resource_name – get only for this one (optional)
 ```
 
 

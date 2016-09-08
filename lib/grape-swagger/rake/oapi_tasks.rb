@@ -29,19 +29,26 @@ module GrapeSwagger
       #
       # get swagger/OpenAPI documentation
       def fetch
-        desc 'generates OpenApi documentation (`store=true`, stores to FS)'
+        desc 'generates OpenApi documentation …
+          params (usage: key=value):
+          store    – save as JSON file, default: false            (optional)
+          resource - if given only for that it would be generated (optional)'
         task fetch: :environment do
           make_request
-          ENV['store'] ? File.write(file, @oapi) : print(@oapi)
+
+          save_to_file? ? File.write(file, @oapi) : $stdout.print(@oapi)
         end
       end
 
       # validates swagger/OpenAPI documentation
       def validate
-        desc 'validates the generated OpenApi file'
+        desc 'validates the generated OpenApi file …
+          params (usage: key=value):
+          resource - if given only for that it would be generated (optional)'
         task validate: :environment do
           ENV['store'] = 'true'
           ::Rake::Task['oapi:fetch'].invoke
+          exit if error?
 
           output = system "swagger validate #{file}"
 
@@ -59,19 +66,28 @@ module GrapeSwagger
           JSON.parse(
             last_response.body, symolize_names: true
           )
-        )
+        ) + "\n"
       end
 
       def url_for
         oapi_route = api_class.routes[-2]
-        url = '/swagger_doc'
-        url = "/#{oapi_route.version}#{url}" if oapi_route.version
-        url = "/#{oapi_route.prefix}#{url}" if oapi_route.prefix
-        url
+        path = oapi_route.pattern.origin
+        path.sub!(':version', oapi_route.version.to_s)
+
+        [path, ENV['resource']].join('/').chomp('/')
+      end
+
+      def save_to_file?
+        ENV['store'] && !error?
+      end
+
+      def error?
+        JSON.parse(@oapi).keys.first == 'error'
       end
 
       def file
-        File.join(Dir.getwd, 'swagger_doc.json')
+        name = ENV['store'] == 'true' || ENV['store'].blank? ? 'swagger_doc.json' : ENV['store']
+        File.join(Dir.getwd, name)
       end
 
       def app

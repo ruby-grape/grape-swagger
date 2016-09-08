@@ -19,6 +19,7 @@
 * [Response documentation](#response)
 * [Extensions](#extensions)
 * [Example](#example)
+* [Rake Tasks](#rake)
 
 <a name="what" />
 ## What is grape-swagger?
@@ -51,7 +52,7 @@ grape-swagger | swagger spec | grape                   | grape-entity | represen
 0.20.1        |     2.0      | >= 0.12.0 ... <= 0.14.0 | <= 0.5.1     | n/a           |
 0.20.3        |     2.0      | >= 0.12.0 ... ~> 0.16.2 | ~> 0.5.1     | n/a           |
 0.21.0        |     2.0      | >= 0.12.0 ... <= 0.16.2 | <= 0.5.1     | >= 2.4.1      |
-0.21.1 (next) |     2.0      | >= 0.12.0 ... <= 0.16.2 | <= 0.5.1     | >= 2.4.1      |
+0.23.0        |     2.0      | >= 0.12.0 ... <= 0.17.0 | <= 0.5.1     | >= 2.4.1      |
 
 <a name="swagger-spec" />
 ## Swagger-Spec
@@ -867,7 +868,7 @@ The lambda is checking whether the user is authenticated (if not, the token is n
 role - only admins can see this endpoint. 
 
 <a name="md_usage" />
-### Markdown in Detail
+## Markdown in Detail
 
 The grape-swagger gem allows you to add an explanation in markdown in the detail field. Which would result in proper formatted markdown in Swagger UI.
 Grape-swagger uses adapters for several markdown formatters. It includes adapters for [kramdown](http://kramdown.rubyforge.org) (kramdown [syntax](http://kramdown.rubyforge.org/syntax.html)) and [redcarpet](https://github.com/vmg/redcarpet).
@@ -1061,19 +1062,20 @@ route_setting :x_def, [{ for: 422, other: 'stuff' }, { for: 200, some: 'stuff' }
 ```
 
 <a="example" />
-# Example
+## Example
 
 Go into example directory and run it: `$ bundle exec rackup`
 go to: `http://localhost:9292/swagger_doc` to get it
 
 For request examples load the [postman file]()
-## Grouping the API list using Namespace
+
+#### Grouping the API list using Namespace
 
 Use namespace for grouping APIs
 
 ![grape-swagger-v2-new-corrected](https://cloud.githubusercontent.com/assets/1027590/13516020/979cfefa-e1f9-11e5-9624-f4a6b17a3c8a.png)
 
-# Example
+#### Example Code
 
 ```ruby
 class NamespaceApi < Grape::API
@@ -1104,6 +1106,33 @@ end
   …
 
 ```
+
+
+<a name="rake" />
+## Rake Tasks
+
+Add these lines to your Rakefile, and initialize the Task class with your Api class – be sure your Api class is available.
+
+```ruby
+require 'grape-swagger/rake/oapi_tasks'
+GrapeSwagger::Rake::OapiTasks.new(::Api::Base)
+```
+
+#### OpenApi/Swagger Documentation
+
+```
+rake oapi:fetch
+rake oapi:fetch store=true # writes to swagger_doc.json
+```
+
+#### OpenApi/Swagger Validation
+
+**requires**: `npm` and `swagger-cli` to be installed
+
+```
+rake oapi:validate
+```
+
 
 ## Contributing to grape-swagger
 

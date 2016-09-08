@@ -18,6 +18,7 @@ module GrapeSwagger
       @model_parsers ||= GrapeSwagger::ModelParsers.new
     end
   end
+  autoload :Rake, 'grape-swagger/rake/oapi_tasks'
 end
 
 module Grape

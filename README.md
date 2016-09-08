@@ -14,6 +14,7 @@
 * [Model Parsers](#model_parsers)
 * [Configure](#configure)
 * [Routes Configuration](#routes)
+* [Securing the Swagger UI](#oauth)
 * [Markdown](#md_usage)
 * [Response documentation](#response)
 * [Extensions](#extensions)
@@ -192,6 +193,9 @@ end
 * [add_version](#add_version)
 * [doc_version](#doc_version)
 * [markdown](#markdown)
+* [endpoint_auth_wrapper](#endpoint_auth_wrapper)
+* [swagger_endpoint_guard](#swagger_endpoint_guard)
+* [oauth_token](#oauth_token)
 * [security_definitions](#security_definitions)
 * [models](#models)
 * [hide_documentation_path](#hide_documentation_path)
@@ -271,6 +275,33 @@ or alternative
 ```ruby
 add_swagger_documentation \
   markdown: GrapeSwagger::Markdown::RedcarpetAdapter.new
+```
+
+<a name="endpoint_auth_wrapper" />
+#### endpoint_auth_wrapper:
+Specify the middleware to use for securing endpoints.
+
+```ruby
+add_swagger_documentation \
+   endpoint_auth_wrapper: WineBouncer::OAuth2
+```
+
+<a name="swagger_endpoint_guard" />
+#### swagger_endpoint_guard:
+Specify the method and auth scopes, used by the middleware for securing endpoints.
+
+```ruby
+add_swagger_documentation \
+   swagger_endpoint_guard: 'oauth2 false'
+```
+
+<a name="oauth_token" />
+#### oauth_token:
+Specify the method to get the oauth_token, provided by the middleware.
+
+```ruby
+add_swagger_documentation \
+   oauth_token: 'doorkeeper_access_token'
 ```
 
 <a name="security_definitions" />
@@ -765,6 +796,75 @@ module API
 end
 ```
 
+<a name="oauth" />
+## Securing the Swagger UI
+
+
+The Swagger UI on Grape could be secured from unauthorized access using any middleware, which provides certain methods:
+
+- a *before* method to be run in the Grape controller for authorization purpose; 
+- some guard method, which could receive as argument a string or an array of authorization scopes;
+- a method which processes and returns the access token received in the HTTP request headers (usually in the 'HTTP_AUTHORIZATION' header).
+  
+Below are some examples of securing the Swagger UI on Grape installed along with Ruby on Rails:
+
+- The WineBouncer and Doorkeeper gems are used in the examples;
+- 'rails' and 'wine_bouncer' gems should be required prior to 'grape-swagger' in boot.rb;
+- This works with a fresh PR to WineBouncer which is yet unmerged - [WineBouncer PR](https://github.com/antek-drzewiecki/wine_bouncer/pull/64).
+
+This is how to configure the grape_swagger documentation:
+
+```ruby
+  add_swagger_documentation base_path: '/',
+                            title: 'My API',
+                            doc_version: '0.0.1',
+                            hide_documentation_path: true,
+                            hide_format: true,
+                            endpoint_auth_wrapper: WineBouncer::OAuth2, # This is the middleware for securing the Swagger UI
+                            swagger_endpoint_guard: 'oauth2 false',     # this is the guard method and scope
+                            oauth_token: 'doorkeeper_access_token'      # This is the method returning the access_token
+```
+
+The guard method should inject the Security Requirement Object into the endpoint's route settings (see Grape::DSL::Settings.route_setting method).
+
+The 'oauth2 false' added to swagger_documentation is making the main Swagger endpoint protected with OAuth, i.e. it 
+is retreiving the access_token from the HTTP request, but the 'false' scope is for skipping authorization and showing
+ the UI for everyone. If the scope would be set to something else, like 'oauth2 admin', for example, than the UI 
+ wouldn't be displayed at all to unauthorized users.  
+
+Further on, the guard could be used, where necessary, for endpoint access protection. Put it prior to the endpoint's method:
+
+```ruby
+  resource :users do
+    oauth2 'read, write'
+    get do
+      render_users
+    end
+    
+    oauth2 'admin'
+    post do
+      User.create!...
+    end
+  end
+```
+
+And, finally, if you want to not only restrict the access, but to completely hide the endpoint from unauthorized 
+users, you could pass a lambda to the :hidden key of a endpoint's description:
+   
+```ruby
+  not_admins = lambda { |token=nil| token.nil? || !User.find(token.resource_owner_id).admin? }
+  
+  resource :users do
+    desc 'Create user', hidden: not_admins
+    oauth2 'admin'
+    post do
+      User.create!...
+    end
+  end
+```
+
+The lambda is checking whether the user is authenticated (if not, the token is nil by default), and has the admin 
+role - only admins can see this endpoint. 
 
 <a name="md_usage" />
 ### Markdown in Detail

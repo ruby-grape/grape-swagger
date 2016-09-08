@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support'
 require 'active_support/core_ext/string/inflections.rb'
 
@@ -84,7 +86,7 @@ module Grape
     # path object
     def path_item(routes, options)
       routes.each do |route|
-        next if hidden?(route)
+        next if hidden?(route, options)
 
         @item, path = GrapeSwagger::DocMethods::PathString.build(route, options)
         @entity = route.entity || route.options[:success]
@@ -287,10 +289,10 @@ module Grape
       name.respond_to?(:name) ? name.name.demodulize.camelize : name.split('::').last
     end
 
-    def hidden?(route)
+    def hidden?(route, options)
       route_hidden = route.options[:hidden]
-      route_hidden = route_hidden.call if route_hidden.is_a?(Proc)
-      route_hidden
+      return route_hidden unless route_hidden.is_a?(Proc)
+      options[:oauth_token] ? route_hidden.call(send(options[:oauth_token].to_sym)) : route_hidden.call
     end
 
     def public_parameter?(param)

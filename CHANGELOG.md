@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#502](https://github.com/ruby-grape/grape-swagger/pull/502): Adds specs for rake tasks - [@LeFnord](https://github.com/LeFnord).
 * [#501](https://github.com/ruby-grape/grape-swagger/pull/501): Adds getting of a specified resource for Rake Tasks - [@LeFnord](https://github.com/LeFnord).
 * [#500](https://github.com/ruby-grape/grape-swagger/pull/500): Adds Rake tasks to get and validate OAPI/Swagger documentation - [@LeFnord](https://github.com/LeFnord).
 * [#493](https://github.com/ruby-grape/grape-swagger/pull/493): Swagger UI endpoint authorization. - [@texpert](https://github.com/texpert).

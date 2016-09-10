@@ -2,8 +2,6 @@ require 'spec_helper'
 
 describe 'details' do
   describe 'details, pass markdown with redcarpet even with nil description and detail', unless: RUBY_PLATFORM.eql?('java') do
-    include_context 'the api entities'
-
     before :all do
       module TheApi
         class GfmRcDetailApi < Grape::API

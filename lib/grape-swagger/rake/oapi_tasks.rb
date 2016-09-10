@@ -12,6 +12,7 @@ module GrapeSwagger
 
       def initialize(api_class)
         super()
+
         @api_class = api_class
         define_tasks
       end
@@ -71,14 +72,14 @@ module GrapeSwagger
 
       def url_for
         oapi_route = api_class.routes[-2]
-        path = oapi_route.pattern.origin
+        path = oapi_route.path.sub(/\(\.\w+\)$/, '').sub(/\(\.:\w+\)$/, '')
         path.sub!(':version', oapi_route.version.to_s)
 
         [path, ENV['resource']].join('/').chomp('/')
       end
 
       def save_to_file?
-        ENV['store'] && !error?
+        ENV['store'].present? && !error?
       end
 
       def error?

@@ -12,6 +12,7 @@
 
 #### Fixes
 
+* [#503](https://github.com/ruby-grape/grape-swagger/pull/503): Corrects exposing of inline definitions - [@LeFnord](https://github.com/LeFnord).
 * [#494](https://github.com/ruby-grape/grape-swagger/pull/494): Header parametes are now included in documentation when body parameters have been defined - [@anakinj](https://github.com/anakinj).
 * Your contribution here.
 

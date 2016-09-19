@@ -288,7 +288,17 @@ module Grape
     end
 
     def model_name(name)
-      name.respond_to?(:name) ? name.name.demodulize.camelize : name.split('::').last
+      if name.respond_to?(:entity_name)
+        name.entity_name
+      elsif name.to_s.end_with?('Entity', 'Entities')
+        length = 0
+        name.to_s.split('::')[0..-2].reverse.take_while do |x|
+          length += x.length
+          length < 42
+        end.reverse.join
+      else
+        name.name.demodulize.camelize
+      end
     end
 
     def hidden?(route, options)

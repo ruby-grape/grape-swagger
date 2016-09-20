@@ -550,6 +550,39 @@ end
 }
 ```
 
+#### Collection format of arrays
+
+You can set the collection format of an array, using the documentation hash.
+
+Collection format determines the format of the array if type array is used. Possible values are:
+*  csv - comma separated values foo,bar.
+*  ssv - space separated values foo bar.
+*  tsv - tab separated values foo\tbar.
+*  pipes - pipe separated values foo|bar.
+*  multi - corresponds to multiple parameter instances instead of multiple values for a single instance foo=bar&foo=baz. This is valid only for parameters in "query" or "formData".
+
+```ruby
+params do
+  requires :statuses, type: Array[String], documentation: { collectionFormat: 'multi' }
+end
+post :act do
+  ...
+end
+```
+
+```json
+{
+  "in": "formData",
+  "name": "statuses",
+  "type": "array",
+  "items": {
+      "type": "string"
+  },
+  "collectionFormat": "multi",
+  "required": true
+}
+```
+
 #### Multi types
 
 By default when you set multi types, the first type is selected as swagger type

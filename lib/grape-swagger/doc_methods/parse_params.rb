@@ -66,6 +66,7 @@ module GrapeSwagger
               param_type = value_type[:documentation][:param_type]
               doc_type = value_type[:documentation][:type]
               type = GrapeSwagger::DocMethods::DataType.mapping(doc_type) if doc_type && !DataType.request_primitive?(doc_type)
+              collection_format = value_type[:documentation][:collectionFormat]
             end
 
             array_items = {
@@ -76,6 +77,7 @@ module GrapeSwagger
             @parsed_param[:in] = param_type || 'formData'
             @parsed_param[:items] = array_items
             @parsed_param[:type] = 'array'
+            @parsed_param[:collectionFormat] = collection_format if %w(csv ssv tsv pipes multi).include?(collection_format)
           end
         end
 

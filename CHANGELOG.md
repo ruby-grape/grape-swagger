@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#504](https://github.com/ruby-grape/grape-swagger/pull/504): Added support for set the 'collectionFormat' of arrays - [@rczjns](https://github.com/rczjns).
 * [#502](https://github.com/ruby-grape/grape-swagger/pull/502): Adds specs for rake tasks - [@LeFnord](https://github.com/LeFnord).
 * [#501](https://github.com/ruby-grape/grape-swagger/pull/501): Adds getting of a specified resource for Rake Tasks - [@LeFnord](https://github.com/LeFnord).
 * [#500](https://github.com/ruby-grape/grape-swagger/pull/500): Adds Rake tasks to get and validate OAPI/Swagger documentation - [@LeFnord](https://github.com/LeFnord).

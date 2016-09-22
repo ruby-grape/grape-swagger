@@ -86,7 +86,9 @@ module Grape
                end
           # use the full namespace here (not the latest level only)
           # and strip leading slash
-          @target_class.combined_namespaces[endpoint.namespace.sub(/^\//, '')] = ns if ns
+          mount_path = (endpoint.namespace_stackable(:mount_path) || []).join('/')
+          full_namespace = (mount_path + endpoint.namespace).sub(/\/{2,}/, '/').sub(/^\//, '')
+          @target_class.combined_namespaces[full_namespace] = ns if ns
 
           combine_namespaces(endpoint.options[:app]) if endpoint.options[:app]
         end

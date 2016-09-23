@@ -2,6 +2,16 @@
 
 #### Features
 
+* Your contribution here.
+
+#### Fixes
+
+* Your contribution here.
+
+### 0.24.0 (September 23, 2016)
+
+#### Features
+
 * [#504](https://github.com/ruby-grape/grape-swagger/pull/504): Added support for set the 'collectionFormat' of arrays - [@rczjns](https://github.com/rczjns).
 * [#502](https://github.com/ruby-grape/grape-swagger/pull/502): Adds specs for rake tasks - [@LeFnord](https://github.com/LeFnord).
 * [#501](https://github.com/ruby-grape/grape-swagger/pull/501): Adds getting of a specified resource for Rake Tasks - [@LeFnord](https://github.com/LeFnord).
@@ -9,14 +19,12 @@
 * [#493](https://github.com/ruby-grape/grape-swagger/pull/493): Swagger UI endpoint authorization. - [@texpert](https://github.com/texpert).
 * [#492](https://github.com/ruby-grape/grape/pull/492): Define security requirements on endpoint methods - [@tomregelink](https://github.com/tomregelink).
 * [#497](https://github.com/ruby-grape/grape-swagger/pull/497): Use ruby-grape-danger in Dangerfile - [@dblock](https://github.com/dblock).
-* Your contribution here.
 
 #### Fixes
 
 * [#503](https://github.com/ruby-grape/grape-swagger/pull/503): Corrects exposing of inline definitions - [@LeFnord](https://github.com/LeFnord).
 * [#494](https://github.com/ruby-grape/grape-swagger/pull/494): Header parametes are now included in documentation when body parameters have been defined - [@anakinj](https://github.com/anakinj).
 * [#505](https://github.com/ruby-grape/grape-swagger/pull/505): Combines namespaces with their mounted paths to allow APIs with specified mount_paths - [@KevinLiddle](https://github.com/KevinLiddle).
-* Your contribution here.
 
 ### 0.23.0 (August 5, 2016)
 

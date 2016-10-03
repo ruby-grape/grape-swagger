@@ -21,6 +21,10 @@ class SampleAuth < Grape::Middleware::Base
     def access_token=(token)
       @_access_token = token
     end
+
+    def resource_owner
+      @resource_owner = true if access_token == '12345'
+    end
   end
 
   def context
@@ -50,9 +54,9 @@ end
 describe 'a guarded api endpoint' do
   before :all do
     class GuardedMountedApi < Grape::API
-      access_token_valid = proc { |token = nil| token.nil? || token != '12345' }
+      resource_owner_valid = proc { |token_owner = nil| token_owner.nil? }
 
-      desc 'Show endpoint if authenticated', hidden: access_token_valid
+      desc 'Show endpoint if authenticated', hidden: resource_owner_valid
       get '/auth' do
         { foo: 'bar' }
       end
@@ -62,7 +66,7 @@ describe 'a guarded api endpoint' do
       mount GuardedMountedApi
       add_swagger_documentation endpoint_auth_wrapper: SampleAuth,
                                 swagger_endpoint_guard: 'sample_auth false',
-                                oauth_token: 'access_token'
+                                token_owner: 'resource_owner'
     end
   end
 

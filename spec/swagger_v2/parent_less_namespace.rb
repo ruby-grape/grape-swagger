@@ -23,14 +23,9 @@ describe 'a parent less namespace' do
 
     context 'not raises error' do
       specify do
-        expect(subject['tags']).to eql(
-                                     [
-                                       { 'name' => 'queues', 'description' => 'Operations about queues' }
-                                     ]
-                                   )
-
-        expect(subject['paths']['/api/{animal}/{breed}/queues/{queue_id}/reservations']['get']['operationId']).
-          to eql('getApiAnimalBreedQueuesQueueIdReservations')
+        expect(subject['tags']).to eql([{ 'name' => 'queues', 'description' => 'Operations about queues' }])
+        expect(subject['paths']['/api/{animal}/{breed}/queues/{queue_id}/reservations']['get']['operationId'])
+          .to eql('getApiAnimalBreedQueuesQueueIdReservations')
       end
     end
 
@@ -41,4 +36,3 @@ describe 'a parent less namespace' do
     end
   end
 end
-

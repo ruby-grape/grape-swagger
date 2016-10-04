@@ -196,7 +196,7 @@ end
 * [markdown](#markdown)
 * [endpoint_auth_wrapper](#endpoint_auth_wrapper)
 * [swagger_endpoint_guard](#swagger_endpoint_guard)
-* [oauth_token](#oauth_token)
+* [token_owner](#token_owner)
 * [security_definitions](#security_definitions)
 * [models](#models)
 * [hide_documentation_path](#hide_documentation_path)
@@ -296,13 +296,13 @@ add_swagger_documentation \
    swagger_endpoint_guard: 'oauth2 false'
 ```
 
-<a name="oauth_token" />
-#### oauth_token:
-Specify the method to get the oauth_token, provided by the middleware.
+<a name="token_owner" />
+#### token_owner:
+Specify the token_owner method, provided by the middleware, which is typically named 'resource_owner'.
 
 ```ruby
 add_swagger_documentation \
-   oauth_token: 'doorkeeper_access_token'
+   token_owner: 'resource_owner'
 ```
 
 <a name="security_definitions" />
@@ -836,9 +836,10 @@ end
 
 The Swagger UI on Grape could be secured from unauthorized access using any middleware, which provides certain methods:
 
-- a *before* method to be run in the Grape controller for authorization purpose;
 - some guard method, which could receive as argument a string or an array of authorization scopes;
-- a method which processes and returns the access token received in the HTTP request headers (usually in the 'HTTP_AUTHORIZATION' header).
+- a *before* method to be run in the Grape controller for authorization purpose;
+- a set of methods which will process the access token received in the HTTP request headers (usually in the 
+'HTTP_AUTHORIZATION' header) and try to return the owner of the token.
 
 Below are some examples of securing the Swagger UI on Grape installed along with Ruby on Rails:
 
@@ -856,14 +857,14 @@ This is how to configure the grape_swagger documentation:
                             hide_format: true,
                             endpoint_auth_wrapper: WineBouncer::OAuth2, # This is the middleware for securing the Swagger UI
                             swagger_endpoint_guard: 'oauth2 false',     # this is the guard method and scope
-                            oauth_token: 'doorkeeper_access_token'      # This is the method returning the access_token
+                            token_owner: 'resource_owner'               # This is the method returning the owner of the token
 ```
 
 The guard method should inject the Security Requirement Object into the endpoint's route settings (see Grape::DSL::Settings.route_setting method).
 
-The 'oauth2 false' added to swagger_documentation is making the main Swagger endpoint protected with OAuth, i.e. it
-is retreiving the access_token from the HTTP request, but the 'false' scope is for skipping authorization and showing
- the UI for everyone. If the scope would be set to something else, like 'oauth2 admin', for example, than the UI
+The 'oauth2 false' added to swagger_documentation is making the main Swagger endpoint protected with OAuth, i.e. the 
+access_token is being retreiving from the HTTP request, but the 'false' scope is for skipping authorization and 
+showing the UI for everyone. If the scope would be set to something else, like 'oauth2 admin', for example, than the UI
  wouldn't be displayed at all to unauthorized users.  
 
 Further on, the guard could be used, where necessary, for endpoint access protection. Put it prior to the endpoint's method:
@@ -886,7 +887,7 @@ And, finally, if you want to not only restrict the access, but to completely hid
 users, you could pass a lambda to the :hidden key of a endpoint's description:
 
 ```ruby
-  not_admins = lambda { |token=nil| token.nil? || !User.find(token.resource_owner_id).admin? }
+  not_admins = lambda { |token_owner = nil| token_owner.nil? || !token_owner.admin? }
 
   resource :users do
     desc 'Create user', hidden: not_admins
@@ -897,7 +898,7 @@ users, you could pass a lambda to the :hidden key of a endpoint's description:
   end
 ```
 
-The lambda is checking whether the user is authenticated (if not, the token is nil by default), and has the admin
+The lambda is checking whether the user is authenticated (if not, the token_owner is nil by default), and has the admin
 role - only admins can see this endpoint.
 
 <a name="md_usage" />

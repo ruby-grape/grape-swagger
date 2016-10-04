@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#510](https://github.com/ruby-grape/grape-swagger/pull/510): Use 'token_owner' instead of 'oauth_token' on Swagger UI endpoint authorization. - [@texpert](https://github.com/texpert).
 * Your contribution here.
 
 #### Fixes

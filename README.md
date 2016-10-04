@@ -309,6 +309,8 @@ add_swagger_documentation \
 #### security_definitions:
 Specify the [Security Definitions Object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#security-definitions-object)
 
+_NOTE: [Swagger-UI is supporting only implicit flow yet](https://github.com/swagger-api/swagger-ui/issues/2406#issuecomment-248651879)_ 
+
 ```ruby
 add_swagger_documentation \
   security_definitions: {

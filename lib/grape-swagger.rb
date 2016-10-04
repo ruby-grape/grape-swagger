@@ -98,9 +98,7 @@ module Grape
         # iterate over each single namespace
         namespaces.each do |name, namespace|
           # get the parent route for the namespace
-          parent_route_name = name.match(%r{^/?([^/]*).*$})[1]
-          # If parent is a parameter
-          parent_route_name = extract_parent_route(name) if parent_route_name.include?(':')
+          parent_route_name = extract_parent_route(name)
           parent_route = @target_class.combined_routes[parent_route_name]
           # fetch all routes that are within the current namespace
           namespace_routes = parent_route.reject do |route|
@@ -141,6 +139,8 @@ module Grape
       end
 
       def extract_parent_route(name)
+        route_name = name.match(%r{^/?([^/]*).*$})[1]
+        return route_name unless route_name.include? ':'
         name.match(/\/[a-z]+/)[0].delete('/')
       end
 

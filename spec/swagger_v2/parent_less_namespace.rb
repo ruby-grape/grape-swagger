@@ -16,6 +16,7 @@ describe 'a parent less namespace' do
   end
 
   describe 'retrieves swagger-documentation on /swagger_doc' do
+    let(:route_name) { ':animal/:breed/queues/:queue_id/reservations' }
     subject do
       get '/api/swagger_doc.json'
       JSON.parse(last_response.body)
@@ -30,9 +31,17 @@ describe 'a parent less namespace' do
     end
 
     context 'raises error' do
-      # If /lib/grape-swagger.rb:103 doesn't exist, it's raises
-      # NoMethodError:
-      #  undefined method `reject' for nil:NilClass
+      specify do
+        allow_any_instance_of(ParentLessApi).
+          to receive(:extract_parent_route).with(route_name).and_return(':animal') # BUT IT'S NOT STUBBING, CAUSE IT'S A PRIVATE METHODS
+        expect { subject }.to raise_error NoMethodError
+      end
+    end
+
+    context 'ParentLessApi.extract_parent_route' do
+      specify do
+        expect(ParentLessApi.send(:extract_parent_route, route_name)).to eq('queues')
+      end
     end
   end
 end

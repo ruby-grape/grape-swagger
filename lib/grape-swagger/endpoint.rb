@@ -304,7 +304,7 @@ module Grape
     def hidden?(route, options)
       route_hidden = route.options[:hidden]
       return route_hidden unless route_hidden.is_a?(Proc)
-      options[:oauth_token] ? route_hidden.call(send(options[:oauth_token].to_sym)) : route_hidden.call
+      options[:token_owner] ? route_hidden.call(send(options[:token_owner].to_sym)) : route_hidden.call
     end
 
     def public_parameter?(param)

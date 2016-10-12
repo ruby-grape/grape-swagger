@@ -287,17 +287,14 @@ module Grape
       model_name
     end
 
-    def model_name(name)
-      if name.respond_to?(:entity_name)
-        name.entity_name
-      elsif name.to_s.end_with?('Entity', 'Entities')
-        length = 0
-        name.to_s.split('::')[0..-2].reverse.take_while do |x|
-          length += x.length
-          length < 42
-        end.reverse.join
+    def model_name(entity)
+      if entity.respond_to?(:entity_name)
+        entity.entity_name
+      elsif entity.to_s.end_with?('::Entity', '::Entities')
+        entity.to_s.split('::')[-2]
       else
-        name.name.demodulize.camelize
+        entity.name.demodulize.camelize
+        # entity.respond_to?(:name) ? entity.name.demodulize.camelize : entity.split('::').last
       end
     end
 

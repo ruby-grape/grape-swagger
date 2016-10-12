@@ -15,12 +15,30 @@ describe 'definition names' do
             end
 
             class Class2
+              class Entities < Grape::Entity
+                expose :one_thing
+              end
+            end
+
+            class Class3
               class Entity < Grape::Entity
                 expose :another_thing
 
                 def self.entity_name
                   'FooKlass'
                 end
+              end
+            end
+
+            class Class4
+              class FourthEntity < Grape::Entity
+                expose :another_thing
+              end
+            end
+
+            class Class5
+              class FithEntity < Class4::FourthEntity
+                expose :another_thing
               end
             end
           end
@@ -30,7 +48,10 @@ describe 'definition names' do
       class NameApi < Grape::API
         add_swagger_documentation models: [
           DummyEntities::WithVeryLongName::AnotherGroupingModule::Class1::Entity,
-          DummyEntities::WithVeryLongName::AnotherGroupingModule::Class2::Entity
+          DummyEntities::WithVeryLongName::AnotherGroupingModule::Class2::Entities,
+          DummyEntities::WithVeryLongName::AnotherGroupingModule::Class3::Entity,
+          DummyEntities::WithVeryLongName::AnotherGroupingModule::Class4::FourthEntity,
+          DummyEntities::WithVeryLongName::AnotherGroupingModule::Class5::FithEntity
         ]
       end
     end
@@ -43,6 +64,9 @@ describe 'definition names' do
     JSON.parse(last_response.body)['definitions']
   end
 
-  specify { expect(subject).to include 'AnotherGroupingModuleClass1' }
+  specify { expect(subject).to include 'Class1' }
+  specify { expect(subject).to include 'Class2' }
   specify { expect(subject).to include 'FooKlass' }
+  specify { expect(subject).to include 'FourthEntity' }
+  specify { expect(subject).to include 'FithEntity' }
 end

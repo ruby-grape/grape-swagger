@@ -14,10 +14,9 @@
 * [Model Parsers](#model_parsers)
 * [Configure](#configure)
 * [Routes Configuration](#routes)
+* [Using Grape Entities](#grape-entity)
 * [Securing the Swagger UI](#oauth)
 * [Markdown](#md_usage)
-* [Response documentation](#response)
-* [Extensions](#extensions)
 * [Example](#example)
 * [Rake Tasks](#rake)
 
@@ -309,7 +308,7 @@ add_swagger_documentation \
 #### security_definitions:
 Specify the [Security Definitions Object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#security-definitions-object)
 
-_NOTE: [Swagger-UI is supporting only implicit flow yet](https://github.com/swagger-api/swagger-ui/issues/2406#issuecomment-248651879)_ 
+_NOTE: [Swagger-UI is supporting only implicit flow yet](https://github.com/swagger-api/swagger-ui/issues/2406#issuecomment-248651879)_
 
 ```ruby
 add_swagger_documentation \
@@ -390,14 +389,19 @@ add_swagger_documentation \
 * [Swagger Header Parameters](#headers)
 * [Hiding an Endpoint](#hiding)
 * [Overriding Auto-Generated Nicknames](#overriding-auto-generated-nicknames)
+* [Specify endpoint details](#details)
+* [Overriding the route summary](#summary)
 * [Defining an endpoint as an array](#array)
 * [Using an options hash](#options)
-* [Specify endpoint details](#details)
 * [Overriding param type](#overriding-param-type)
-* [Overriding type](#overriding-type)
-* [Multi types](#multi-types)
+* [Overriding param types](#overriding-param-types)
+* [Multiple param types](#multiple-types)
+* [Array type](#array-type)
+* [Collection Format](#collection-format)
 * [Hiding parameters](#hiding-parameters)
+* [Setting a Swagger default value](#default-value)
 * [Response documentation](#response)
+* [Extensions](#extensions)
 
 
 <a name="headers" />
@@ -438,12 +442,42 @@ desc 'Conditionally hide this endpoint', hidden: lambda { ENV['EXPERIMENTAL'] !=
 ```
 
 
+<a name="overriding-auto-generated-nicknames" />
 #### Overriding Auto-Generated Nicknames
 
 You can specify a swagger nickname to use instead of the auto generated name by adding `:nickname 'string'``` in the description of the endpoint.
 
 ```ruby
 desc 'Get a full list of pets', nickname: 'getAllPets'
+```
+
+
+<a name="details" />
+#### Specify endpoint details
+
+To specify further details for an endpoint, use the `detail` option within a block passed to `desc`:
+
+```ruby
+desc 'Get all kittens!' do
+  detail 'this will expose all the kittens'
+end
+get '/kittens' do
+```
+
+
+<a name="summary" />
+#### Overriding the route summary
+
+To override the summary, add `summary: '[string]'` after the description.
+
+```ruby
+namespace 'order' do
+  desc 'This will be your summary',
+    summary: 'Now this is your summary!'
+  get :order_id do
+    ...
+  end
+end
 ```
 
 
@@ -468,8 +502,8 @@ desc 'Get all kittens!', {
   hidden: true,
   is_array: true,
   nickname: 'getKittens',
-  entity: Entities::Kitten, # or success
-  http_codes: [[401, 'KittenBitesError', Entities::BadKitten]] # or failure
+  success: Entities::Kitten, # or success
+  failures: [[401, 'KittenBitesError', Entities::BadKitten]] # or failure
   # also explicit as hash: [{ code: 401, mssage: 'KittenBitesError', model: Entities::BadKitten }]
   produces: [ "array", "of", "mime_types" ],
   consumes: [ "array", "of", "mime_types" ]
@@ -478,19 +512,7 @@ get '/kittens' do
 ```
 
 
-<a name="details" />
-#### Specify endpoint details
-
-To specify further details for an endpoint, use the `detail` option within a block passed to `desc`:
-
-```ruby
-desc 'Get all kittens!' do
-  detail 'this will expose all the kittens'
-end
-get '/kittens' do
-```
-
-
+<a name="overriding-param-type" />
 #### Overriding param type
 
 You can override paramType in POST|PUT methods to query, using the documentation hash.
@@ -504,7 +526,8 @@ post :act do
 end
 ```
 
-#### Overriding type
+<a name="overriding-param-types" />
+#### Overriding param types
 
 You can override type, using the documentation hash.
 
@@ -527,6 +550,31 @@ end
 }
 ```
 
+
+<a name="multiple-types" />
+#### Multi types
+
+By default when you set multi types, the first type is selected as swagger type
+
+```ruby
+params do
+  requires :action, types: [String, Integer]
+end
+post :act do
+  ...
+end
+```
+
+```json
+{
+  "in": "formData",
+  "name": "action",
+  "type": "string",
+  "required": true
+}
+```
+
+<a name="array-type" />
 #### Array type
 
 Array types are also supported.
@@ -552,6 +600,8 @@ end
 }
 ```
 
+
+<a name="collection-format" />
 #### Collection format of arrays
 
 You can set the collection format of an array, using the documentation hash.
@@ -585,28 +635,8 @@ end
 }
 ```
 
-#### Multi types
 
-By default when you set multi types, the first type is selected as swagger type
-
-```ruby
-params do
-  requires :action, types: [String, Integer]
-end
-post :act do
-  ...
-end
-```
-
-```json
-{
-  "in": "formData",
-  "name": "action",
-  "type": "string",
-  "required": true
-}
-```
-
+<a name="hiding-parameters" />
 #### Hiding parameters
 
 Exclude single optional parameter from the documentation
@@ -621,28 +651,27 @@ post :act do
 end
 ```
 
-#### Overriding the route summary
 
-By default, the route summary is filled with the value supplied to `desc`.
+<a name="default-value" />
+#### Setting a Swagger default value
+
+Grape allows for an additional documentation hash to be passed to a parameter.
 
 ```ruby
-namespace 'order' do
-  desc 'This will be your summary'
-  get :order_id do
-    ...
-  end
+params do
+  requires :id, type: Integer, desc: 'Coffee ID'
+  requires :temperature, type: Integer, desc: 'Temperature of the coffee in celcius', documentation: { default: 72 }
 end
 ```
 
-To override the summary, add `summary: '[string]'` after the description.
+The example parameter will populate the Swagger UI with the example value, and can be used for optional or required parameters.
+
+Grape uses the option `default` to set a default value for optional parameters. This is different in that Grape will set your parameter to the provided default if the parameter is omitted, whereas the example value above will only set the value in the UI itself. This will set the Swagger `defaultValue` to the provided value. Note that the example value will override the Grape default value.
 
 ```ruby
-namespace 'order' do
-  desc 'This will be your summary',
-    summary: 'Now this is your summary!'
-  get :order_id do
-    ...
-  end
+params do
+  requires :id, type: Integer, desc: 'Coffee ID'
+  optional :temperature, type: Integer, desc: 'Temperature of the coffee in celcius', default: 72
 end
 ```
 
@@ -694,40 +723,134 @@ end
 ```
 
 
-<a name="additions" />
-## Additional documentation
+<a name="response" />
+#### Response documentation
 
-* [Markdown in Detail](#md_usage)
-* [Response documentation](#response)
+You can also document the HTTP status codes with a description and a specified model, as ref in the schema to the definitions, that your API returns with one of the following syntax.
 
-### Setting a Swagger defaultValue
-
-Grape allows for an additional documentation hash to be passed to a parameter.
+In the following cases, the schema ref would be taken from route.
 
 ```ruby
-params do
-  requires :id, type: Integer, desc: 'Coffee ID'
-  requires :temperature, type: Integer, desc: 'Temperature of the coffee in celcius', documentation: { default: 72 }
+desc 'thing', failures: [ { code: 400, message: "Invalid parameter entry" } ]
+get '/thing' do
+  ...
 end
 ```
 
-The example parameter will populate the Swagger UI with the example value, and can be used for optional or required parameters.
-
-Grape uses the option `default` to set a default value for optional parameters. This is different in that Grape will set your parameter to the provided default if the parameter is omitted, whereas the example value above will only set the value in the UI itself. This will set the Swagger `defaultValue` to the provided value. Note that the example value will override the Grape default value.
-
 ```ruby
-params do
-  requires :id, type: Integer, desc: 'Coffee ID'
-  optional :temperature, type: Integer, desc: 'Temperature of the coffee in celcius', default: 72
+desc 'thing' do
+  params Entities::Something.documentation
+  failures [ { code: 400, message: "Invalid parameter entry" } ]
+end
+get '/thing' do
+  ...
 end
 ```
 
+```ruby
+get '/thing', failures: [
+  { code: 200, message: 'Ok' },
+  { code: 400, message: "Invalid parameter entry" }
+] do
+  ...
+end
+```
 
-### Grape Entities
+By adding a `model` key, e.g. this would be taken.
+```ruby
+get '/thing', failures: [
+  { code: 200, message: 'Ok' },
+  { code: 422, message: "Invalid parameter entry", model: Entities::ApiError }
+] do
+  ...
+end
+```
+If no status code is defined [defaults](/lib/grape-swagger/endpoint.rb#L121) would be taken.
 
-Add the [grape-entity](https://github.com/ruby-grape/grape-entity) gem to your Gemfile.
+The result is then something like following:
+
+```json
+"responses": {
+  "200": {
+    "description": "get Horses",
+    "schema": {
+      "$ref": "#/definitions/Thing"
+    }
+  },
+  "401": {
+    "description": "HorsesOutError",
+    "schema": {
+      "$ref": "#/definitions/ApiError"
+    }
+  }
+},
+```
+
+<a name="extensions" />
+#### Extensions
+
+Swagger spec2.0 supports extensions on different levels, for the moment,
+the documentation on `verb`, `path` and `definition` level would be supported.
+The documented key would be generated from the `x` + `-` + key of the submitted hash,
+for possibilities refer to the [extensions spec](spec/lib/extensions_spec.rb).
+To get an overview *how* the extensions would be defined on grape level, see the following examples:
+
+- `verb` extension, add a `x` key to the `desc` hash:
+```ruby
+desc 'This returns something with extension on verb level',
+  x: { some: 'stuff' }
+```
+this would generate:
+```json
+"/path":{
+  "get":{
+    "…":"…",
+    "x-some":"stuff"
+  }
+}
+```
+
+- `path` extension, by setting via route settings:
+```ruby
+route_setting :x_path, { some: 'stuff' }
+```
+this would generate:
+```json
+"/path":{
+  "x-some":"stuff",
+  "get":{
+    "…":"…",
+  }
+}
+```
+
+- `definition` extension, again by setting via route settings,
+here the status code must be provided, for which definition the extensions should be:
+```ruby
+route_setting :x_def, { for: 422, other: 'stuff' }
+```
+this would generate:
+```json
+"/definitions":{
+  "ApiError":{
+    "x-other":"stuff",
+    "…":"…",
+  }
+}
+```
+or, for more definitions:
+```ruby
+route_setting :x_def, [{ for: 422, other: 'stuff' }, { for: 200, some: 'stuff' }]
+```
+
+
+<a name="grape-entity" />
+## Using Grape Entities
+
+Add the [grape-entity](https://github.com/ruby-grape/grape-entity) and [grape-swagger-entity](https://github.com/ruby-grape/grape-swagger-entity) gem to your Gemfile.
 
 The following example exposes statuses. And exposes statuses documentation adding :type and :desc.
+The documented class/definition name could be set via `#entity_name`.
 
 ```ruby
 module API
@@ -741,6 +864,11 @@ module API
     class Link < Grape::Entity
       expose :href, documentation: { type: 'url' }
       expose :rel, documentation: { type: 'string'}
+
+      def self.entity_name
+        'LinkedStatus'
+      end
+
     end
   end
 
@@ -766,12 +894,12 @@ end
 ```
 
 
-#### Relationships
+### Relationships
 
 You may safely omit `type` from relationships, as it can be inferred. However, if you need to specify or override it, use the full name of the class leaving out any modules named `Entities` or `Entity`.
 
 
-##### 1xN
+#### 1xN
 
 ```ruby
 module API
@@ -801,7 +929,7 @@ end
 ```
 
 
-##### 1x1
+#### 1x1
 
 Note: `is_array` is `false` by default.
 
@@ -840,7 +968,7 @@ The Swagger UI on Grape could be secured from unauthorized access using any midd
 
 - some guard method, which could receive as argument a string or an array of authorization scopes;
 - a *before* method to be run in the Grape controller for authorization purpose;
-- a set of methods which will process the access token received in the HTTP request headers (usually in the 
+- a set of methods which will process the access token received in the HTTP request headers (usually in the
 'HTTP_AUTHORIZATION' header) and try to return the owner of the token.
 
 Below are some examples of securing the Swagger UI on Grape installed along with Ruby on Rails:
@@ -864,8 +992,8 @@ This is how to configure the grape_swagger documentation:
 
 The guard method should inject the Security Requirement Object into the endpoint's route settings (see Grape::DSL::Settings.route_setting method).
 
-The 'oauth2 false' added to swagger_documentation is making the main Swagger endpoint protected with OAuth, i.e. the 
-access_token is being retreiving from the HTTP request, but the 'false' scope is for skipping authorization and 
+The 'oauth2 false' added to swagger_documentation is making the main Swagger endpoint protected with OAuth, i.e. the
+access_token is being retreiving from the HTTP request, but the 'false' scope is for skipping authorization and
 showing the UI for everyone. If the scope would be set to something else, like 'oauth2 admin', for example, than the UI
  wouldn't be displayed at all to unauthorized users.  
 
@@ -976,126 +1104,6 @@ module API
 end
 ```
 
-
-<a name="response" />
-## Response documentation
-
-You can also document the HTTP status codes with a description and a specified model, as ref in the schema to the definitions, that your API returns with one of the following syntax.
-
-In the following cases, the schema ref would be taken from route.
-
-```ruby
-desc 'thing', http_codes: [ { code: 400, message: "Invalid parameter entry" } ]
-get '/thing' do
-  ...
-end
-```
-
-```ruby
-desc 'thing' do
-  params Entities::Something.documentation
-  http_codes [ { code: 400, message: "Invalid parameter entry" } ]
-end
-get '/thing' do
-  ...
-end
-```
-
-```ruby
-get '/thing', http_codes: [
-  { code: 200, message: 'Ok' },
-  { code: 400, message: "Invalid parameter entry" }
-] do
-  ...
-end
-```
-
-By adding a `model` key, e.g. this would be taken.
-```ruby
-get '/thing', http_codes: [
-  { code: 200, message: 'Ok' },
-  { code: 422, message: "Invalid parameter entry", model: Entities::ApiError }
-] do
-  ...
-end
-```
-If no status code is defined [defaults](/lib/grape-swagger/endpoint.rb#L121) would be taken.
-
-The result is then something like following:
-
-```json
-"responses": {
-  "200": {
-    "description": "get Horses",
-    "schema": {
-      "$ref": "#/definitions/Thing"
-    }
-  },
-  "401": {
-    "description": "HorsesOutError",
-    "schema": {
-      "$ref": "#/definitions/ApiError"
-    }
-  }
-},
-```
-
-<a name="extensions" />
-## Extensions
-
-Swagger spec2.0 supports extensions on different levels, for the moment,
-the documentation on `verb`, `path` and `definition` level would be supported.
-The documented key would be generated from the `x` + `-` + key of the submitted hash,
-for possibilities refer to the [extensions spec](spec/lib/extensions_spec.rb).
-To get an overview *how* the extensions would be defined on grape level, see the following examples:
-
-- `verb` extension, add a `x` key to the `desc` hash:
-```ruby
-desc 'This returns something with extension on verb level',
-  x: { some: 'stuff' }
-```
-this would generate:
-```json
-"/path":{
-  "get":{
-    "…":"…",
-    "x-some":"stuff"
-  }
-}
-```
-
-- `path` extension, by setting via route settings:
-```ruby
-route_setting :x_path, { some: 'stuff' }
-```
-this would generate:
-```json
-"/path":{
-  "x-some":"stuff",
-  "get":{
-    "…":"…",
-  }
-}
-```
-
-- `definition` extension, again by setting via route settings,
-here the status code must be provided, for which definition the extensions should be:
-```ruby
-route_setting :x_def, { for: 422, other: 'stuff' }
-```
-this would generate:
-```json
-"/definitions":{
-  "ApiError":{
-    "x-other":"stuff",
-    "…":"…",
-  }
-}
-```
-or, for more definitions:
-```ruby
-route_setting :x_def, [{ for: 422, other: 'stuff' }, { for: 200, some: 'stuff' }]
-```
 
 <a="example" />
 ## Example

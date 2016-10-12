@@ -7,6 +7,7 @@
 
 #### Fixes
 
+* [#515](https://github.com/ruby-grape/grape-swagger/pull/515): Removes limit on model names, updates README - [@LeFnord](https://github.com/LeFnord).
 * Your contribution here.
 
 ### 0.24.0 (September 23, 2016)

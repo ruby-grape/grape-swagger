@@ -288,13 +288,12 @@ module Grape
     end
 
     def model_name(entity)
-      if entity.respond_to?(:entity_name)
+      if entity.methods(false).include?(:entity_name)
         entity.entity_name
       elsif entity.to_s.end_with?('::Entity', '::Entities')
         entity.to_s.split('::')[-2]
       else
         entity.name.demodulize.camelize
-        # entity.respond_to?(:name) ? entity.name.demodulize.camelize : entity.split('::').last
       end
     end
 

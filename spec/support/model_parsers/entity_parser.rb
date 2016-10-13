@@ -57,6 +57,13 @@ RSpec.shared_context 'entity swagger example' do
         expose :message, documentation: { type: String, desc: 'error message' }
       end
 
+      module NestedModule
+        class ApiResponse < Grape::Entity
+          expose :status, documentation: { type: String }
+          expose :error, documentation: { type: ::Entities::ApiError }
+        end
+      end
+
       class SecondApiError < Grape::Entity
         expose :code, documentation: { type: Integer }
         expose :severity, documentation: { type: String }

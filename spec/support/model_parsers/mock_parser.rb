@@ -53,6 +53,9 @@ RSpec.shared_context 'mock swagger example' do
       class SecondApiError < OpenStruct; end
       class RecursiveModel < OpenStruct; end
       class DocumentedHashAndArrayModel < OpenStruct; end
+      module NestedModule
+        class ApiResponse < OpenStruct; end
+      end
     end
   end
 

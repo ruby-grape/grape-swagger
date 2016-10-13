@@ -164,7 +164,12 @@ module Grape
       parameters = partition_params(route).map do |param, value|
         value = { required: false }.merge(value) if value.is_a?(Hash)
         _, value = default_type([[param, value]]).first if value == ''
-        GrapeSwagger::DocMethods::ParseParams.call(param, value, route)
+        if value[:type]
+          expose_params(value[:type])
+        elsif value[:documentation]
+          expose_params(value[:documentation][:type])
+        end
+        GrapeSwagger::DocMethods::ParseParams.call(param, value, route, @definitions)
       end
 
       if GrapeSwagger::DocMethods::MoveParams.can_be_moved?(parameters, route.request_method)
@@ -262,24 +267,28 @@ module Grape
       param_types.size == 1
     end
 
+    def expose_params(value)
+      if value.is_a?(Class) && GrapeSwagger.model_parsers.find(value)
+        expose_params_from_model(value)
+      elsif value.is_a?(String)
+        begin
+          expose_params(Object.const_get(value.gsub(/\[|\]/, ''))) # try to load class from its name
+        rescue NameError
+          nil
+        end
+      end
+    end
+
     def expose_params_from_model(model)
       model_name = model_name(model)
 
       return model_name if @definitions.key?(model_name)
       @definitions[model_name] = nil
 
-      properties = nil
-      parser = nil
-
-      GrapeSwagger.model_parsers.each do |klass, ancestor|
-        next unless model.ancestors.map(&:to_s).include?(ancestor)
-        parser = klass.new(model, self)
-        break
-      end
-
-      properties = parser.call unless parser.nil?
-
+      parser = GrapeSwagger.model_parsers.find(model)
       raise GrapeSwagger::Errors::UnregisteredParser, "No parser registered for #{model_name}." unless parser
+
+      properties = parser.new(model, self).call
       raise GrapeSwagger::Errors::SwaggerSpec, "Empty model #{model_name}, swagger 2.0 doesn't support empty definitions." unless properties && properties.any?
 
       @definitions[model_name] = { type: 'object', properties: properties }
@@ -287,14 +296,8 @@ module Grape
       model_name
     end
 
-    def model_name(entity)
-      if entity.methods(false).include?(:entity_name)
-        entity.entity_name
-      elsif entity.to_s.end_with?('::Entity', '::Entities')
-        entity.to_s.split('::')[-2]
-      else
-        entity.name.demodulize.camelize
-      end
+    def model_name(name)
+      GrapeSwagger::DocMethods::DataType.parse_entity_name(name)
     end
 
     def hidden?(route, options)

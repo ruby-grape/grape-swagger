@@ -395,9 +395,9 @@ add_swagger_documentation \
 * [Defining an endpoint as an array](#array)
 * [Using an options hash](#options)
 * [Overriding param type](#overriding-param-type)
-* [Overriding param types](#overriding-param-types)
-* [Multiple param types](#multiple-types)
-* [Array type](#array-type)
+* [Overriding data type of the parameter](#overriding-type-of-param)
+* [Multiple types](#multiple-types)
+* [Array of data type](#array-type)
 * [Collection Format](#collection-format)
 * [Hiding parameters](#hiding-parameters)
 * [Setting a Swagger default value](#default-value)
@@ -530,9 +530,9 @@ get '/kittens' do
 
 
 <a name="overriding-param-type" />
-#### Overriding param type
+#### Overriding parameter type
 
-You can override paramType in POST|PUT methods to query, using the documentation hash.
+You can override paramType, using the documentation hash. See [parameter object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#parameter-object) for available types.
 
 ```ruby
 params do
@@ -543,8 +543,9 @@ post :act do
 end
 ```
 
-<a name="overriding-param-types" />
-#### Overriding param types
+
+<a name="overriding-type-of-param" />
+#### Overriding data type of the parameter
 
 You can override type, using the documentation hash.
 
@@ -569,9 +570,9 @@ end
 
 
 <a name="multiple-types" />
-#### Multi types
+#### Multiple types
 
-By default when you set multi types, the first type is selected as swagger type
+By default when you set multiple types, the first type is selected as swagger type
 
 ```ruby
 params do
@@ -591,8 +592,9 @@ end
 }
 ```
 
+
 <a name="array-type" />
-#### Array type
+#### Array of data type
 
 Array types are also supported.
 

@@ -37,9 +37,11 @@ module GrapeSwagger
 
       class_variables_from(options)
 
-      [:format, :default_format, :default_error_formatter].each do |method|
-        send(method, formatter)
-      end if formatter
+      if formatter
+        [:format, :default_format, :default_error_formatter].each do |method|
+          send(method, formatter)
+        end
+      end
 
       send(guard.split.first.to_sym, *guard.split(/[\s,]+/).drop(1)) unless guard.nil?
 

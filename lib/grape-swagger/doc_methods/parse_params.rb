@@ -21,7 +21,7 @@ module GrapeSwagger
           # optional properties
           document_description(settings)
           document_type_and_format(data_type)
-          document_array_param(value_type, definitions)
+          document_array_param(value_type, definitions) if value_type[:is_array]
           document_default_value(settings)
           document_range_values(settings)
           document_required(settings)
@@ -61,27 +61,25 @@ module GrapeSwagger
         end
 
         def document_array_param(value_type, definitions)
-          if value_type[:is_array]
-            if value_type[:documentation].present?
-              param_type = value_type[:documentation][:param_type]
-              doc_type = value_type[:documentation][:type]
-              type = GrapeSwagger::DocMethods::DataType.mapping(doc_type) if doc_type && !DataType.request_primitive?(doc_type)
-              collection_format = value_type[:documentation][:collectionFormat]
-            end
-
-            array_items = {}
-            if definitions[value_type[:data_type]]
-              array_items['$ref'] = "#/definitions/#{@parsed_param[:type]}"
-            else
-              array_items[:type] = type || @parsed_param[:type]
-            end
-            array_items[:format] = @parsed_param.delete(:format) if @parsed_param[:format]
-
-            @parsed_param[:in] = param_type || 'formData'
-            @parsed_param[:items] = array_items
-            @parsed_param[:type] = 'array'
-            @parsed_param[:collectionFormat] = collection_format if %w(csv ssv tsv pipes multi).include?(collection_format)
+          if value_type[:documentation].present?
+            param_type = value_type[:documentation][:param_type]
+            doc_type = value_type[:documentation][:type]
+            type = GrapeSwagger::DocMethods::DataType.mapping(doc_type) if doc_type && !DataType.request_primitive?(doc_type)
+            collection_format = value_type[:documentation][:collectionFormat]
           end
+
+          array_items = {}
+          if definitions[value_type[:data_type]]
+            array_items['$ref'] = "#/definitions/#{@parsed_param[:type]}"
+          else
+            array_items[:type] = type || @parsed_param[:type]
+          end
+          array_items[:format] = @parsed_param.delete(:format) if @parsed_param[:format]
+
+          @parsed_param[:in] = param_type || 'formData'
+          @parsed_param[:items] = array_items
+          @parsed_param[:type] = 'array'
+          @parsed_param[:collectionFormat] = collection_format if %w(csv ssv tsv pipes multi).include?(collection_format)
         end
 
         def param_type(value_type)

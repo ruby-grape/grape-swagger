@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gemspec
 
-case version = ENV['GRAPE_VERSION'] || '~> 0.17.0'
+case version = ENV['GRAPE_VERSION'] || '~> 0.18'
 when 'HEAD'
   gem 'grape', github: 'ruby-grape/grape'
 else

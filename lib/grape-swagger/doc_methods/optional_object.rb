@@ -12,7 +12,7 @@ module GrapeSwagger
         end
 
         def evaluate(key, options, request)
-          options[key].arity == 0 ? options[key].call : options[key].call(request)
+          options[key].arity.zero? ? options[key].call : options[key].call(request)
         end
 
         def default_values

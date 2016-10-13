@@ -332,5 +332,5 @@ RSpec.shared_context 'mock swagger example' do
 end
 
 def mounted_paths
-  %w( /thing /other_thing /dummy )
+  %w(/thing /other_thing /dummy)
 end

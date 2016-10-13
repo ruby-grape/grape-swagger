@@ -8,6 +8,7 @@
 #### Fixes
 
 * [#515](https://github.com/ruby-grape/grape-swagger/pull/515): Removes limit on model names - [@LeFnord](https://github.com/LeFnord).
+* [#511](https://github.com/ruby-grape/grape-swagger/pull/511): Fix incorrect data type linking for request params of entity types - [@serggl](https://github.com/serggl).
 * Your contribution here.
 
 ### 0.24.0 (September 23, 2016)

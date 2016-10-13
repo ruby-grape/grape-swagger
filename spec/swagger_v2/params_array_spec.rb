@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe 'Group Params as Array' do
+  include_context "#{MODEL_PARSER} swagger example"
+
   def app
     Class.new(Grape::API) do
       format :json
@@ -54,6 +56,14 @@ describe 'Group Params as Array' do
       end
 
       post '/array_of_type_in_form' do
+        { 'declared_params' => declared(params) }
+      end
+
+      params do
+        requires :array_of_entities, type: Array[Entities::ApiError]
+      end
+
+      post '/array_of_entities' do
         { 'declared_params' => declared(params) }
       end
 
@@ -154,6 +164,32 @@ describe 'Group Params as Array' do
           { 'in' => 'formData', 'name' => 'array_of_integer', 'type' => 'array', 'items' => { 'type' => 'integer', 'format' => 'int32' }, 'required' => true }
         ]
       )
+    end
+  end
+
+  describe 'documentation for entity array parameters' do
+    let(:parameters) do
+      [
+        {
+          'in' => 'formData',
+          'name' => 'array_of_entities',
+          'type' => 'array',
+          'items' => {
+            '$ref' => '#/definitions/ApiError'
+          },
+          'required' => true
+        }
+      ]
+    end
+
+    subject do
+      get '/swagger_doc/array_of_entities'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['definitions']['ApiError']).not_to be_blank
+      expect(subject['paths']['/array_of_entities']['post']['parameters']).to eql(parameters)
     end
   end
 end

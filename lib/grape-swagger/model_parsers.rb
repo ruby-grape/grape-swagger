@@ -29,5 +29,12 @@ module GrapeSwagger
         yield klass, ancestor
       end
     end
+
+    def find(model)
+      GrapeSwagger.model_parsers.each do |klass, ancestor|
+        return klass if model.ancestors.map(&:to_s).include?(ancestor)
+      end
+      nil
+    end
   end
 end

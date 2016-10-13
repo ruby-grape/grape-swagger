@@ -293,6 +293,9 @@ module Grape
 
       @definitions[model_name] = { type: 'object', properties: properties }
 
+      required = GrapeSwagger::DocMethods::RequiredAttributes.build(model)
+      @definitions[model_name][:required] = required unless required.blank?
+
       model_name
     end
 

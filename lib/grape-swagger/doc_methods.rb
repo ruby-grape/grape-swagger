@@ -10,6 +10,7 @@ require 'grape-swagger/doc_methods/tag_name_description'
 require 'grape-swagger/doc_methods/parse_params'
 require 'grape-swagger/doc_methods/move_params'
 require 'grape-swagger/doc_methods/headers'
+require 'grape-swagger/doc_methods/required_attributes'
 
 module GrapeSwagger
   module DocMethods

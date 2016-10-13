@@ -54,6 +54,17 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           end
         end
 
+        namespace :with_entity_param do
+          desc 'put in body with entity parameter'
+          params do
+            optional :data, type: ::Entities::NestedModule::ApiResponse, documentation: { desc: 'request data' }
+          end
+
+          post do
+            { 'declared_params' => declared(params) }
+          end
+        end
+
         add_swagger_documentation
       end
     end
@@ -154,6 +165,51 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         },
         'description' => 'put in body with entity'
       )
+    end
+  end
+
+  describe 'complex entity given' do
+    let(:request_parameters_definition) do
+      [
+        {
+          'name' => 'WithEntityParam',
+          'in' => 'body',
+          'required' => true,
+          'schema' => {
+            '$ref' => '#/definitions/postWithEntityParam'
+          }
+        }
+      ]
+    end
+
+    let(:request_body_parameters_definition) do
+      {
+        'type' => 'object',
+        'properties' => {
+          'data' => {
+            '$ref' => '#/definitions/ApiResponse',
+            'description' => 'request data'
+          }
+        },
+        'description' => 'put in body with entity parameter'
+      }
+    end
+
+    subject do
+      get '/swagger_doc/with_entity_param'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['paths']['/with_entity_param']['post']['parameters']).to eql(request_parameters_definition)
+    end
+
+    specify do
+      expect(subject['definitions']['ApiResponse']).not_to be_nil
+    end
+
+    specify do
+      expect(subject['definitions']['postWithEntityParam']).to eql(request_body_parameters_definition)
     end
   end
 end

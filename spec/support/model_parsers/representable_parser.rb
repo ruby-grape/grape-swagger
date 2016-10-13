@@ -91,6 +91,15 @@ RSpec.shared_context 'representable swagger example' do
         property :message, documentation: { type: String, desc: 'error message' }
       end
 
+      module NestedModule
+        class ApiResponse < Representable::Decorator
+          include Representable::JSON
+
+          property :status, documentation: { type: String }
+          property :error, documentation: { type: ::Entities::ApiError }
+        end
+      end
+
       class SecondApiError < Representable::Decorator
         include Representable::JSON
 
@@ -236,7 +245,7 @@ RSpec.shared_context 'representable swagger example' do
       'prop_file' => { 'description' => 'prop_file description', 'type' => 'file' },
       'prop_float' => { 'description' => 'prop_float description', 'type' => 'number', 'format' => 'float' },
       'prop_integer' => { 'description' => 'prop_integer description', 'type' => 'integer', 'format' => 'int32' },
-      'prop_json' => { 'description' => 'prop_json description', 'type' => 'Representable::JSON' },
+      'prop_json' => { 'description' => 'prop_json description', 'type' => 'JSON' },
       'prop_long' => { 'description' => 'prop_long description', 'type' => 'integer', 'format' => 'int64' },
       'prop_password' => { 'description' => 'prop_password description', 'type' => 'string', 'format' => 'password' },
       'prop_string' => { 'description' => 'prop_string description', 'type' => 'string' },

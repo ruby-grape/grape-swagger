@@ -2,7 +2,7 @@ module GrapeSwagger
   module DocMethods
     class ParseParams
       class << self
-        def call(param, settings, route)
+        def call(param, settings, route, definitions)
           path = route.path
           method = route.request_method
 
@@ -21,7 +21,7 @@ module GrapeSwagger
           # optional properties
           document_description(settings)
           document_type_and_format(data_type)
-          document_array_param(value_type)
+          document_array_param(value_type, definitions)
           document_default_value(settings)
           document_range_values(settings)
           document_required(settings)
@@ -60,7 +60,7 @@ module GrapeSwagger
           end
         end
 
-        def document_array_param(value_type)
+        def document_array_param(value_type, definitions)
           if value_type[:is_array]
             if value_type[:documentation].present?
               param_type = value_type[:documentation][:param_type]
@@ -69,10 +69,13 @@ module GrapeSwagger
               collection_format = value_type[:documentation][:collectionFormat]
             end
 
-            array_items = {
-              type: type || @parsed_param[:type],
-              format: @parsed_param.delete(:format)
-            }.delete_if { |_, value| value.blank? }
+            array_items = {}
+            if definitions[value_type[:data_type]]
+              array_items['$ref'] = "#/definitions/#{@parsed_param[:type]}"
+            else
+              array_items[:type] = type || @parsed_param[:type]
+            end
+            array_items[:format] = @parsed_param.delete(:format) if @parsed_param[:format]
 
             @parsed_param[:in] = param_type || 'formData'
             @parsed_param[:items] = array_items

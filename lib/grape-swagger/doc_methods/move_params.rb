@@ -74,7 +74,15 @@ module GrapeSwagger
         end
 
         def document_as_property(param)
-          property_keys.each_with_object({}) { |x, memo| memo[x] = param[x] if param[x].present? }
+          property_keys.each_with_object({}) do |x, memo|
+            value = param[x]
+            next if value.blank?
+            if x == :type && @definitions[value].present?
+              memo['$ref'] = "#/definitions/#{value}"
+            else
+              memo[x] = value
+            end
+          end
         end
 
         def build_nested_properties(params, properties = {})

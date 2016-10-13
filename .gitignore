@@ -5,6 +5,9 @@ doc
 # bundler
 .bundle
 
+#IDEA temp files
+.idea
+
 # jeweler generated
 pkg
 

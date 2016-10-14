@@ -3,17 +3,17 @@ module GrapeSwagger
     class BuildModelDefinition
       class << self
         def build(model, properties)
-          response = { type: 'object', properties: properties }
+          definition = { type: 'object', properties: properties }
 
-          required = required(model)
-          response[:required] = required unless required.blank?
+          required = required_attributes(model)
+          definition[:required] = required unless required.blank?
 
-          response
+          definition
         end
 
         private
 
-        def required(model)
+        def required_attributes(model)
           parse_entity(model) || parse_representable(model)
         end
 

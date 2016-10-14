@@ -849,14 +849,14 @@ route_setting :x_def, [{ for: 422, other: 'stuff' }, { for: 200, some: 'stuff' }
 
 Add the [grape-entity](https://github.com/ruby-grape/grape-entity) and [grape-swagger-entity](https://github.com/ruby-grape/grape-swagger-entity) gem to your Gemfile.
 
-The following example exposes statuses. And exposes statuses documentation adding :type and :desc.
+The following example exposes statuses. And exposes statuses documentation adding :type, :desc and :required.
 The documented class/definition name could be set via `#entity_name`.
 
 ```ruby
 module API
   module Entities
     class Status < Grape::Entity
-      expose :text, documentation: { type: 'string', desc: 'Status update text.' }
+      expose :text, documentation: { type: 'string', desc: 'Status update text.', required: true }
       expose :links, using: Link, documentation: { type: 'link', is_array: true }
       expose :numbers, documentation: { type: 'integer', desc: 'favourite number', values: [1,2,3,4] }
     end

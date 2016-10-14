@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#520](https://github.com/ruby-grape/grape-swagger/pull/520): Response model can have required attributes - [@WojciechKo](https://github.com/WojciechKo).
 * [#510](https://github.com/ruby-grape/grape-swagger/pull/510): Use 'token_owner' instead of 'oauth_token' on Swagger UI endpoint authorization. - [@texpert](https://github.com/texpert).
 * Your contribution here.
 

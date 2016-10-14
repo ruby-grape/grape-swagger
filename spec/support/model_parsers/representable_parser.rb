@@ -376,11 +376,13 @@ RSpec.shared_context 'representable swagger example' do
       'definitions' => {
         'QueryInput' => {
           'type' => 'object',
+          'required' => ['elements'],
           'properties' => { 'elements' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/QueryInputElement' }, 'description' => 'Set of configuration' } },
           'description' => 'nested route inside namespace'
         },
         'QueryInputElement' => {
           'type' => 'object',
+          'required' => %w(key value),
           'properties' => { 'key' => { 'type' => 'string', 'description' => 'Name of parameter' }, 'value' => { 'type' => 'string', 'description' => 'Value of parameter' } }
         },
         'ApiError' => {

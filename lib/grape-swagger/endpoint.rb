@@ -112,7 +112,7 @@ module Grape
       method[:parameters]  = params_object(route)
       method[:security]    = security_object(route)
       method[:responses]   = response_object(route, options[:markdown])
-      method[:tags]        = tag_object(route)
+      method[:tags]        = route.options.fetch(:tags, tag_object(route))
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method.delete_if { |_, value| value.blank? }
 

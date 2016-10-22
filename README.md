@@ -391,6 +391,7 @@ add_swagger_documentation \
 * [Overriding Auto-Generated Nicknames](#overriding-auto-generated-nicknames)
 * [Specify endpoint details](#details)
 * [Overriding the route summary](#summary)
+* [Overriding the tags](#tags)
 * [Defining an endpoint as an array](#array)
 * [Using an options hash](#options)
 * [Overriding param type](#overriding-param-type)
@@ -474,6 +475,22 @@ To override the summary, add `summary: '[string]'` after the description.
 namespace 'order' do
   desc 'This will be your summary',
     summary: 'Now this is your summary!'
+  get :order_id do
+    ...
+  end
+end
+```
+
+
+<a name="tags" />
+#### Overriding the tags
+
+Tags are used for logical grouping of operations by resources or any other qualifier. To override the
+tags array, add `tags: ['tag1', 'tag2']` after the description.
+
+```ruby
+namespace 'order' do
+  desc 'This will be your summary', tags: ['orders']
   get :order_id do
     ...
   end

@@ -50,7 +50,9 @@ module GrapeSwagger
           options
         )
 
-        paths, definitions = endpoint.path_and_definition_objects(combi_routes, options)
+        paths, definitions   = endpoint.path_and_definition_objects(combi_routes, options)
+        tags                 = GrapeSwagger::DocMethods::TagNameDescription.build(paths)
+        output[:tags]        = tags unless tags.empty? || paths.blank?
         output[:paths]       = paths unless paths.blank?
         output[:definitions] = definitions unless definitions.blank?
 

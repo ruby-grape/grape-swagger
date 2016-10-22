@@ -394,7 +394,7 @@ add_swagger_documentation \
 * [Overriding the tags](#tags)
 * [Defining an endpoint as an array](#array)
 * [Using an options hash](#options)
-* [Overriding param type](#overriding-param-type)
+* [Overriding parameter type](#overriding-param-type)
 * [Overriding data type of the parameter](#overriding-type-of-param)
 * [Multiple types](#multiple-types)
 * [Array of data type](#array-type)

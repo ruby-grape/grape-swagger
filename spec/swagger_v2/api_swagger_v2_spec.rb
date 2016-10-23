@@ -118,91 +118,117 @@ describe 'swagger spec v2.0' do
     end
   end
 
-  before do
-    get '/v3/swagger_doc'
-  end
-
-  let(:json) { JSON.parse(last_response.body) }
-
-  describe 'swagger object' do
-    describe 'required keys' do
-      it { expect(json.keys).to include 'swagger' }
-      it { expect(json['swagger']).to eql '2.0' }
-      it { expect(json.keys).to include 'info' }
-      it { expect(json['info']).to be_a Hash }
-      it { expect(json.keys).to include 'paths' }
-      it { expect(json['paths']).to be_a Hash }
+  describe 'whole documentation' do
+    subject do
+      get '/v3/swagger_doc'
+      JSON.parse(last_response.body)
     end
 
-    describe 'info object required keys' do
-      let(:info) { json['info'] }
-
-      it { expect(info.keys).to include 'title' }
-      it { expect(info['title']).to be_a String }
-      it { expect(info.keys).to include 'version' }
-      it { expect(info['version']).to be_a String }
-
-      describe 'license object' do
-        let(:license) { json['info']['license'] }
-
-        it { expect(license.keys).to include 'name' }
-        it { expect(license['name']).to be_a String }
-        it { expect(license.keys).to include 'url' }
-        it { expect(license['url']).to be_a String }
+    describe 'swagger object' do
+      describe 'required keys' do
+        it { expect(subject.keys).to include 'swagger' }
+        it { expect(subject['swagger']).to eql '2.0' }
+        it { expect(subject.keys).to include 'info' }
+        it { expect(subject['info']).to be_a Hash }
+        it { expect(subject.keys).to include 'paths' }
+        it { expect(subject['paths']).to be_a Hash }
       end
 
-      describe 'contact object' do
-        let(:contact) { json['info']['contact'] }
+      describe 'info object required keys' do
+        let(:info) { subject['info'] }
 
-        it { expect(contact.keys).to include 'name' }
-        it { expect(contact['name']).to be_a String  }
-        it { expect(contact.keys).to include 'email' }
-        it { expect(contact['email']).to be_a String }
-        it { expect(contact.keys).to include 'url' }
-        it { expect(contact['url']).to be_a String }
+        it { expect(info.keys).to include 'title' }
+        it { expect(info['title']).to be_a String }
+        it { expect(info.keys).to include 'version' }
+        it { expect(info['version']).to be_a String }
+
+        describe 'license object' do
+          let(:license) { subject['info']['license'] }
+
+          it { expect(license.keys).to include 'name' }
+          it { expect(license['name']).to be_a String }
+          it { expect(license.keys).to include 'url' }
+          it { expect(license['url']).to be_a String }
+        end
+
+        describe 'contact object' do
+          let(:contact) { subject['info']['contact'] }
+
+          it { expect(contact.keys).to include 'name' }
+          it { expect(contact['name']).to be_a String  }
+          it { expect(contact.keys).to include 'email' }
+          it { expect(contact['email']).to be_a String }
+          it { expect(contact.keys).to include 'url' }
+          it { expect(contact['url']).to be_a String }
+        end
+
+        describe 'global tags' do
+          let(:tags) { subject['tags'] }
+
+          it { expect(tags).to be_a Array }
+          it { expect(tags).not_to be_empty }
+        end
       end
-    end
 
-    describe 'path object' do
-      let(:paths) { json['paths'] }
+      describe 'path object' do
+        let(:paths) { subject['paths'] }
 
-      it 'hides documentation paths per default' do
-        expect(paths.keys).not_to include '/swagger_doc', '/swagger_doc/{name}'
-      end
+        it 'hides documentation paths per default' do
+          expect(paths.keys).not_to include '/swagger_doc', '/swagger_doc/{name}'
+        end
 
-      specify do
-        paths.each_pair do |path, value|
-          expect(path).to start_with('/')
-          expect(value).to be_a Hash
-          expect(value).not_to be_empty
+        specify do
+          paths.each_pair do |path, value|
+            expect(path).to start_with('/')
+            expect(value).to be_a Hash
+            expect(value).not_to be_empty
 
-          value.each do |method, declaration|
-            expect(http_verbs).to include method
-            expect(declaration).to have_key('responses')
+            value.each do |method, declaration|
+              expect(http_verbs).to include method
+              expect(declaration).to have_key('responses')
 
-            declaration['responses'].each do |status_code, response|
-              expect(status_code).to match(/\d{3}/)
-              expect(response).to have_key('description')
+              declaration['responses'].each do |status_code, response|
+                expect(status_code).to match(/\d{3}/)
+                expect(response).to have_key('description')
+              end
             end
+          end
+        end
+      end
+
+      describe 'definitions object' do
+        let(:definitions) { subject['definitions'] }
+
+        specify do
+          definitions.each do |model, properties|
+            expect(model).to match(/\w+/)
+            expect(properties).to have_key('properties')
           end
         end
       end
     end
 
-    describe 'definitions object' do
-      let(:definitions) { json['definitions'] }
-      specify do
-        definitions.each do |model, properties|
-          expect(model).to match(/\w+/)
-          expect(properties).to have_key('properties')
-        end
+    describe 'swagger file' do
+      it do
+        expect(subject).to eql swagger_json
       end
     end
   end
 
-  describe 'swagger file' do
-    it do
-      expect(json).to eql swagger_json
+  describe 'specific resource documentation' do
+    subject do
+      get '/v3/swagger_doc/other_thing'
+      JSON.parse(last_response.body)
+    end
+
+    let(:tags) { subject['tags'] }
+    specify do
+      expect(tags).to eql [
+        {
+          'name' => 'other_thing',
+          'description' => 'Operations about other_things'
+        }
+      ]
     end
   end
 end

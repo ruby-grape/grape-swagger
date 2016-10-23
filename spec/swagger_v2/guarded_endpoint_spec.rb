@@ -86,6 +86,7 @@ describe 'a guarded api endpoint' do
         'swagger' => '2.0',
         'produces' => ['application/xml', 'application/json', 'application/octet-stream', 'text/plain'],
         'host' => 'example.org',
+        'tags' => [{ 'name' => 'auth', 'description' => 'Operations about auths' }],
         'paths' => {
           '/auth' => {
             'get' => {

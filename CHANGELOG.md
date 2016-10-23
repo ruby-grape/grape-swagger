@@ -2,9 +2,10 @@
 
 #### Features
 
+* [#524](https://github.com/ruby-grape/grape-swagger/pull/524): Use route tags for global tag set - [@LeFnord](https://github.com/LeFnord).
+* [#523](https://github.com/ruby-grape/grape-swagger/pull/523): Allow specifying custom tags at the route level - [@jordanfbrown](https://github.com/jordanfbrown).
 * [#520](https://github.com/ruby-grape/grape-swagger/pull/520): Response model can have required attributes - [@WojciechKo](https://github.com/WojciechKo).
 * [#510](https://github.com/ruby-grape/grape-swagger/pull/510): Use 'token_owner' instead of 'oauth_token' on Swagger UI endpoint authorization. - [@texpert](https://github.com/texpert).
-* [#523](https://github.com/ruby-grape/grape-swagger/pull/523): Allow specifying custom tags at the route level. - [@jordanfbrown](https://github.com/jordanfbrown).
 * Your contribution here.
 
 #### Fixes

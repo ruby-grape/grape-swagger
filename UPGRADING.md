@@ -1,6 +1,10 @@
 Upgrading Grape-swagger
 =======================
 
+### Upgrading to >= 0.25.0
+
+The global tag set now only includes tags for documented routes. This behaviour has impact in particular for calling the documtation of a specific route.
+
 ### Upgrading to >= 0.21.0
 
 With grape >= 0.21.0, `grape-entity` support moved to separate gem `grape-swagger-entity`, if you use grape entity, update your Gemfile:

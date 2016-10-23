@@ -48,10 +48,7 @@ describe 'namespace tags check' do
     specify do
       expect(subject['tags']).to eql(
         [
-          { 'name' => 'hudson', 'description' => 'Operations about hudsons' },
-          { 'name' => 'colorado', 'description' => 'Operations about colorados' },
-          { 'name' => 'thames', 'description' => 'Operations about thames' },
-          { 'name' => 'niles', 'description' => 'Operations about niles' }
+          { 'name' => 'colorado', 'description' => 'Operations about colorados' }
         ]
       )
 
@@ -68,10 +65,7 @@ describe 'namespace tags check' do
       specify do
         expect(subject['tags']).to eql(
           [
-            { 'name' => 'hudson', 'description' => 'Operations about hudsons' },
-            { 'name' => 'colorado', 'description' => 'Operations about colorados' },
-            { 'name' => 'thames', 'description' => 'Operations about thames' },
-            { 'name' => 'niles', 'description' => 'Operations about niles' }
+            { 'name' => 'thames', 'description' => 'Operations about thames' }
           ]
         )
 

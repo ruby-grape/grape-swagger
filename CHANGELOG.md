@@ -2,18 +2,26 @@
 
 #### Features
 
+* Your contribution here.
+
+#### Fixes
+
+* Your contribution here.
+
+### 0.25.0 (October 31, 2016)
+
+#### Features
+
 * [#524](https://github.com/ruby-grape/grape-swagger/pull/524): Use route tags for global tag set - [@LeFnord](https://github.com/LeFnord).
 * [#523](https://github.com/ruby-grape/grape-swagger/pull/523): Allow specifying custom tags at the route level - [@jordanfbrown](https://github.com/jordanfbrown).
 * [#520](https://github.com/ruby-grape/grape-swagger/pull/520): Response model can have required attributes - [@WojciechKo](https://github.com/WojciechKo).
 * [#510](https://github.com/ruby-grape/grape-swagger/pull/510): Use 'token_owner' instead of 'oauth_token' on Swagger UI endpoint authorization. - [@texpert](https://github.com/texpert).
-* Your contribution here.
 
 #### Fixes
 
 * [#527](https://github.com/ruby-grape/grape-swagger/pull/527): Accepts string as entity - [@LeFnord](https://github.com/LeFnord).
 * [#515](https://github.com/ruby-grape/grape-swagger/pull/515): Removes limit on model names - [@LeFnord](https://github.com/LeFnord).
 * [#511](https://github.com/ruby-grape/grape-swagger/pull/511): Fix incorrect data type linking for request params of entity types - [@serggl](https://github.com/serggl).
-* Your contribution here.
 
 ### 0.24.0 (September 23, 2016)
 

@@ -52,7 +52,9 @@ module Grape
         combine_namespace_routes(@target_class.combined_namespaces)
 
         exclusive_route_keys = @target_class.combined_routes.keys - @target_class.combined_namespaces.keys
-        exclusive_route_keys.each { |key| @target_class.combined_namespace_routes[key] = @target_class.combined_routes[key] }
+        exclusive_route_keys.each do |key|
+          @target_class.combined_namespace_routes[key] = @target_class.combined_routes[key]
+        end
         documentation_class
       end
 
@@ -128,10 +130,12 @@ module Grape
             end
 
             parent_standalone_namespaces = standalone_namespaces.reject { |ns_name, _| !name.start_with?(ns_name) }
-            # add only to the main route if the namespace is not within any other namespace appearing as standalone resource
+            # add only to the main route
+            # if the namespace is not within any other namespace appearing as standalone resource
             if parent_standalone_namespaces.empty?
               # default option, append namespace methods to parent route
-              @target_class.combined_namespace_routes[parent_route_name] = [] unless @target_class.combined_namespace_routes.key?(parent_route_name)
+              parent_route = @target_class.combined_namespace_routes.key?(parent_route_name)
+              @target_class.combined_namespace_routes[parent_route_name] = [] unless parent_route
               @target_class.combined_namespace_routes[parent_route_name].push(*namespace_routes)
             end
           end
@@ -175,7 +179,9 @@ module Grape
           # skip if sub_ns is standalone, too
           next unless sub_ns.options.key?(:swagger) && sub_ns.options[:swagger][:nested] == false
           # remove all namespaces that are nested below this standalone sub_ns
-          sub_namespaces.each { |sub_sub_name, _| sub_namespaces.delete(sub_sub_name) if sub_sub_name.start_with?(sub_name) }
+          sub_namespaces.each do |sub_sub_name, _|
+            sub_namespaces.delete(sub_sub_name) if sub_sub_name.start_with?(sub_name)
+          end
         end
         sub_namespaces
       end

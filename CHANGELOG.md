@@ -10,6 +10,7 @@
 
 #### Fixes
 
+* [#527](https://github.com/ruby-grape/grape-swagger/pull/527): Accepts string as entity - [@LeFnord](https://github.com/LeFnord).
 * [#515](https://github.com/ruby-grape/grape-swagger/pull/515): Removes limit on model names - [@LeFnord](https://github.com/LeFnord).
 * [#511](https://github.com/ruby-grape/grape-swagger/pull/511): Fix incorrect data type linking for request params of entity types - [@serggl](https://github.com/serggl).
 * Your contribution here.

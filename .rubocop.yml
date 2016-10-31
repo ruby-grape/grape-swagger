@@ -4,3 +4,7 @@ AllCops:
     - example/**/*
 
 inherit_from: .rubocop_todo.yml
+
+Metrics/LineLength:
+  Exclude:
+    - spec/**/*

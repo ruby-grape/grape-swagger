@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'active_support'
 require 'active_support/core_ext/string/inflections.rb'
 
@@ -279,6 +277,7 @@ module Grape
     end
 
     def expose_params_from_model(model)
+      model = model.is_a?(String) ? model.constantize : model
       model_name = model_name(model)
 
       return model_name if @definitions.key?(model_name)

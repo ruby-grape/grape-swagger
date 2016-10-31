@@ -20,6 +20,8 @@ matrix:
     - rvm: 2.3.1
       env: GRAPE_VERSION=0.17.0
     - rvm: 2.3.1
+      env: GRAPE_VERSION=0.18.0
+    - rvm: 2.3.1
       env: GRAPE_VERSION=HEAD
     - rvm: 2.3.0
     - rvm: 2.2

@@ -1208,4 +1208,4 @@ See [CONTRIBUTING](CONTRIBUTING.md).
 
 ## Copyright and License
 
-Copyright (c) 2012-2014 Tim Vandecasteele and contributors. See [LICENSE.txt](LICENSE.txt) for details.
+Copyright (c) 2012-2016 Tim Vandecasteele and contributors. See [LICENSE.txt](LICENSE.txt) for details.

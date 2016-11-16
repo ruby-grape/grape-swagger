@@ -6,6 +6,7 @@
 
 #### Fixes
 
+* [#509](https://github.com/ruby-grape/grape-swagger/pull/509), [#529](https://github.com/ruby-grape/grape-swagger/pull/529): Making parent-less routes working - [@contributor](https://github.com/mur-wtag).
 * Your contribution here.
 
 ### 0.25.0 (October 31, 2016)

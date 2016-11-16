@@ -66,6 +66,23 @@ RSpec.shared_context 'namespace example' do
           end
         end
       end
+
+      class ParentLessNamespaceApi < Grape::API
+        route_param :animal do
+          route_param :breed do
+            resource :queues do
+              route_param :queue_id do
+                resource :reservations do
+                  desc 'Lists all reservations specific type of animal of specific breed in specific queue'
+                  get do
+                    { bla: 'Bla Black' }
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
     end
   end
 end

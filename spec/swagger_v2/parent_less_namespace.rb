@@ -32,8 +32,8 @@ describe 'a parent less namespace' do
 
     context 'raises error' do
       specify do
-        allow_any_instance_of(ParentLessApi).
-          to receive(:extract_parent_route).with(route_name).and_return(':animal') # BUT IT'S NOT STUBBING, CAUSE IT'S A PRIVATE METHODS
+        allow_any_instance_of(ParentLessApi)
+          .to receive(:extract_parent_route).with(route_name).and_return(':animal') # BUT IT'S NOT STUBBING, CAUSE IT'S A PRIVATE METHODS
         expect { subject }.to raise_error NoMethodError
       end
     end

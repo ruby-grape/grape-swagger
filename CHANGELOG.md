@@ -6,6 +6,7 @@
 
 #### Fixes
 
+* [#509](https://github.com/ruby-grape/grape-swagger/pull/509), [#529](https://github.com/ruby-grape/grape-swagger/pull/529): Making parent-less routes working - [@contributor](https://github.com/mur-wtag).
 * Your contribution here.
 
 ### 0.25.0 (October 31, 2016)
@@ -36,7 +37,7 @@
 * [#497](https://github.com/ruby-grape/grape-swagger/pull/497): Use ruby-grape-danger in Dangerfile - [@dblock](https://github.com/dblock).
 
 #### Fixes
-* [#509](https://github.com/ruby-grape/grape-swagger/pull/509): Making parent-less routes working - [@contributor](https://github.com/mur-wtag).
+
 * [#503](https://github.com/ruby-grape/grape-swagger/pull/503): Corrects exposing of inline definitions - [@LeFnord](https://github.com/LeFnord).
 * [#494](https://github.com/ruby-grape/grape-swagger/pull/494): Header parametes are now included in documentation when body parameters have been defined - [@anakinj](https://github.com/anakinj).
 * [#505](https://github.com/ruby-grape/grape-swagger/pull/505): Combines namespaces with their mounted paths to allow APIs with specified mount_paths - [@KevinLiddle](https://github.com/KevinLiddle).

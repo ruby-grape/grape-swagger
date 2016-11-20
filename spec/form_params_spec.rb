@@ -77,7 +77,13 @@ describe "Form Params" do
               "summary" => "",
               "nickname" => "PATCH-items--id---format-",
               "httpMethod" => "PATCH",
-              "parameters" => [ { "paramType" => "path", "name" => "id", "description" => "id of item", "type" => "Integer", "dataType" => "Integer", "required" => true }, { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "String", "dataType" => "String", "required" => true }, { "paramType" => "form", "name" => "media[url]", "description" => "url of item", "type" => "String", "dataType" => "String", "required" => false }, { "paramType" => "form", "name" => "media[image_url]", "description" => "image url of item", "type" => "String", "dataType" => "String", "required" => false } ]
+              "parameters" => [
+                { "paramType" => "path", "name" => "id", "description" => "id of item", "type" => "Integer", "dataType" => "Integer", "required" => true },
+                { "paramType" => "form", "name" => "name", "description" => "name of item", "type" => "String", "dataType" => "String", "required" => true },
+                { "paramType" => "form", "name" => "media", "description" => nil, "type" => "Array", "dataType" => "Array", "required" => true },
+                { "paramType" => "form", "name" => "media[url]", "description" => "url of item", "type" => "String", "dataType" => "String", "required" => false },
+                { "paramType" => "form", "name" => "media[image_url]", "description" => "image url of item", "type" => "String", "dataType" => "String", "required" => false }
+              ]
             }
           ]
         }

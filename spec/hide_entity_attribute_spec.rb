@@ -33,7 +33,7 @@ describe "an API with hidden entity attributes" do
       "apis" => [{
         "path" => "/items.{format}",
         "operations" => [{
-          "produces" => ["application/xml","application/json","text/plain"],
+          "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
           "notes" => "",
           "summary" => "Add an item",
           "nickname" => "POST-items---format-",

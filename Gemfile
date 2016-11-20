@@ -20,5 +20,4 @@ group :development do
   gem "rack-test"
 
   gem "rspec"
-  gem "hashdiff"
 end

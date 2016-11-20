@@ -150,7 +150,7 @@ describe "options: " do
         "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
         "info" => {},
-        "produces" => ["application/xml", "application/json", "text/plain"],
+        "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
         "operations" => [],
         "apis" => [
           { "path" => "/v1/swagger_doc/something.{format}" },
@@ -170,7 +170,7 @@ describe "options: " do
         "apis" => [{
           "path" => "/0.1/something.{format}",
           "operations" => [{
-            "produces" => ["application/xml", "application/json", "text/plain"],
+            "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
             "notes" => nil,
             "notes" => "",
             "summary" => "This gets something.",
@@ -208,7 +208,7 @@ describe "options: " do
         "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
         "info" => {},
-        "produces" => ["application/xml", "application/json", "text/plain"],
+        "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
         "operations" => [],
         "apis" => [
           { "path" => "/swagger_doc/something.{format}" }
@@ -246,7 +246,7 @@ describe "options: " do
         "apis"=> [{
           "path"=>"/abc/something.{format}",
           "operations"=> [{
-            "produces" => ["application/xml", "application/json", "text/plain"],
+            "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
             "notes"=>nil,
             "notes"=>"",
             "summary"=>"This gets something.",
@@ -292,7 +292,7 @@ describe "options: " do
         "apis"=>[{
           "path"=>"/abc/v20/something.{format}",
           "operations"=>[{
-            "produces" => ["application/xml", "application/json", "text/plain"],
+            "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
             "notes"=>nil,
             "notes"=>"",
             "summary"=>"This gets something.",
@@ -375,7 +375,7 @@ describe "options: " do
         "apis" => [{
           "path" => "/something.{format}",
           "operations" => [{
-            "produces" => ["application/xml", "application/json", "text/plain"],
+            "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
             "notes" => "<p><em>test</em></p>\n",
             "summary" => "This gets something.",
             "nickname" => "GET-something---format-",
@@ -504,7 +504,7 @@ describe "options: " do
         "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
         "info" => {},
-        "produces" => ["application/xml", "application/json", "text/plain"],
+        "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
         "operations" => [],
         "apis" => [
           { "path" => "/first/swagger_doc/first.{format}" }
@@ -519,7 +519,7 @@ describe "options: " do
         "swaggerVersion" => "1.2",
         "basePath" => "http://example.org",
         "info" => {},
-        "produces" => ["application/xml", "application/json", "text/plain"],
+        "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
         "operations" => [],
         "apis" => [
           { "path" => "/second/swagger_doc/second.{format}" }

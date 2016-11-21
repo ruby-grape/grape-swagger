@@ -3,7 +3,7 @@ source "http://rubygems.org"
 # Example:
 #   gem "activesupport", ">= 2.3.5"
 
-gem 'grape', '~> 0.9.0'
+gem 'grape', '~> 0.11.0'
 gem 'grape-entity', '>= 0.3.0'
 gem 'kramdown', '>= 1.3.1'
 
@@ -16,6 +16,7 @@ group :development do
   gem "jeweler", "~> 1.8.4"
 
   gem "pry"
+  gem "pry-byebug"
 
   gem "rack-test"
 

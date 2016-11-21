@@ -19,6 +19,7 @@ describe "API Models" do
 
     class ModelsApi < Grape::API
       format :json
+      content_type :json, 'application/json'
       desc 'This gets something.', {
         entity: Entities::Something
       }

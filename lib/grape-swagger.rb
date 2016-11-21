@@ -1,4 +1,7 @@
+require 'active_support'
+require 'active_support/core_ext'
 require 'kramdown'
+
 
 module Grape
   class API
@@ -227,10 +230,10 @@ module Grape
             end
 
             def content_types_for(target_class)
-              content_types = (target_class.settings[:content_types] || {}).values
+              content_types = (target_class.content_types || {}).values
 
               if content_types.empty?
-                formats       = [target_class.settings[:format], target_class.settings[:default_format]].compact.uniq
+                formats       = [target_class.format, target_class.default_format].compact.uniq
                 formats       = Grape::Formatter::Base.formatters({}).keys if formats.empty?
                 content_types = Grape::ContentTypes::CONTENT_TYPES.select{|content_type, mime_type| formats.include? content_type}.values
               end

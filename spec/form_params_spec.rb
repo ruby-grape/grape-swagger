@@ -5,6 +5,7 @@ describe "Form Params" do
   before :all do
     class FormParamApi < Grape::API
       format :json
+      content_type :json, 'application/json'
 
       params do
         requires :name, type: String, desc: "name of item"
@@ -24,7 +25,7 @@ describe "Form Params" do
       params do
         requires :id, type: Integer, desc: "id of item"
         requires :name, type: String, desc: "name of item"
-        group :media do
+        group :media, type: Array do
           requires :url, type: String, desc: "url of item"
           optional :image_url, type: String, desc: "image url of item"
         end

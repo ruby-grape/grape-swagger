@@ -6,6 +6,7 @@ describe "Default API" do
     before :all do
       class NotAMountedApi < Grape::API
         format :json
+        content_type :json, 'application/json'
         desc 'This gets something.'
         get '/something' do
           { bla: 'something' }
@@ -31,7 +32,7 @@ describe "Default API" do
         ]
       }
     end
-    
+
     context "path inside the apis array" do
       it "should start with a forward slash" do
         get '/swagger_doc'

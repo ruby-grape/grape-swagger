@@ -32,7 +32,7 @@ describe "a hide mounted api with hide override set" do
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
       "info" => {},
-      "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
+      "produces" => ["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "operations" => [],
       "apis" => [
         { "path" => "/swagger_doc/simple.{format}" },
@@ -76,7 +76,7 @@ describe "a hide mounted api with same namespace with hide override set" do
       "swaggerVersion" => "1.2",
       "basePath" => "http://example.org",
       "info" => {},
-      "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
+      "produces" => ["application/xml", "application/json", "application/octet-stream", "text/plain"],
       "operations" => [],
       "apis" => [
         { "path" => "/swagger_doc/simple.{format}" },
@@ -95,7 +95,7 @@ describe "a hide mounted api with same namespace with hide override set" do
       "apis" => [{
         "path" => "/simple/show.{format}",
         "operations" => [{
-          "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
+          "produces" => ["application/xml", "application/json", "application/octet-stream", "text/plain"],
           "notes" => nil,
           "notes" => "",
           "summary" => "Show this endpoint",
@@ -107,7 +107,7 @@ describe "a hide mounted api with same namespace with hide override set" do
       {
         "path" => "/simple/hide.{format}",
         "operations" => [{
-          "produces" => ["application/xml", "application/json", "application/vnd.api+json", "text/plain"],
+          "produces" => ["application/xml", "application/json", "application/octet-stream", "text/plain"],
           "notes" => nil,
           "notes" => "",
           "summary" => "Hide this endpoint",

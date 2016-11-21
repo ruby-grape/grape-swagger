@@ -84,6 +84,11 @@ module Grape
               end
             end
 
+            helpers do
+              define_method(:hide_format) { options[:hide_format] }
+              define_method(:markdown) { options[:markdown] }
+            end
+
             desc 'Swagger compatible API description'
             get @@mount_path do
               header['Access-Control-Allow-Origin']   = '*'
@@ -99,7 +104,7 @@ module Grape
                 next if routes[local_route].all?(&:route_hidden) && !@@override_hidden.call(request)
 
                 url_base    = parse_path(route.route_path.gsub('(.:format)', ''), route.route_version) if include_base_url
-                url_format  = '.{format}' unless @@hide_format
+                url_format  = '.{format}' unless hide_format
                 {
                   :path => "#{url_base}/#{local_route}#{url_format}",
                   #:description => "..."
@@ -186,7 +191,7 @@ module Grape
           helpers do
 
             def as_markdown(description)
-              description && @@markdown ? Kramdown::Document.new(strip_heredoc(description), :input => 'GFM', :enable_coderay => false).to_html : description
+              description && markdown ? Kramdown::Document.new(strip_heredoc(description), :input => 'GFM', :enable_coderay => false).to_html : description
             end
 
             def parse_params(params, path, method)
@@ -283,7 +288,7 @@ module Grape
 
             def parse_path(path, version)
               # adapt format to swagger format
-              parsed_path = path.gsub('(.:format)', @@hide_format ? '' : '.{format}')
+              parsed_path = path.gsub('(.:format)', hide_format ? '' : '.{format}')
               # This is attempting to emulate the behavior of
               # Rack::Mount::Strexp. We cannot use Strexp directly because
               # all it does is generate regular expressions for parsing URLs.

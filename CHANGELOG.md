@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#531](https://github.com/ruby-grape/grape-swagger/pull/531): UUID data_type format support - [@migmartri](https://github.com/migmartri).
 * [#534](https://github.com/ruby-grape/grape-swagger/pull/534): Allows to overwrite defaults status codes - [@LeFnord](https://github.com/LeFnord).
 * Your contribution here.
 

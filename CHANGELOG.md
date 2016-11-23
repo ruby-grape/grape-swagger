@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#534](https://github.com/ruby-grape/grape-swagger/pull/534): Allows to overwrite defaults status codes - [@LeFnord](https://github.com/LeFnord).
 * Your contribution here.
 
 #### Fixes

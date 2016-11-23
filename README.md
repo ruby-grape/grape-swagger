@@ -404,6 +404,7 @@ add_swagger_documentation \
 * [Hiding parameters](#hiding-parameters)
 * [Setting a Swagger default value](#default-value)
 * [Response documentation](#response)
+* [Changing default status codes](#change-status)
 * [Extensions](#extensions)
 
 
@@ -752,7 +753,7 @@ You can also document the HTTP status codes with a description and a specified m
 In the following cases, the schema ref would be taken from route.
 
 ```ruby
-desc 'thing', failures: [ { code: 400, message: "Invalid parameter entry" } ]
+desc 'thing', failures: [ { code: 400, message: 'Invalid parameter entry' } ]
 get '/thing' do
   ...
 end
@@ -761,7 +762,7 @@ end
 ```ruby
 desc 'thing' do
   params Entities::Something.documentation
-  failures [ { code: 400, message: "Invalid parameter entry" } ]
+  failures [ { code: 400, message: 'Invalid parameter entry' } ]
 end
 get '/thing' do
   ...
@@ -770,8 +771,8 @@ end
 
 ```ruby
 get '/thing', failures: [
-  { code: 200, message: 'Ok' },
-  { code: 400, message: "Invalid parameter entry" }
+  { code: 400, message: 'Invalid parameter entry' },
+  { code: 404, message: 'Not authorized' },
 ] do
   ...
 end
@@ -780,13 +781,13 @@ end
 By adding a `model` key, e.g. this would be taken.
 ```ruby
 get '/thing', failures: [
-  { code: 200, message: 'Ok' },
-  { code: 422, message: "Invalid parameter entry", model: Entities::ApiError }
+  { code: 400, message: 'General error' },
+  { code: 422, message: 'Invalid parameter entry', model: Entities::ApiError }
 ] do
   ...
 end
 ```
-If no status code is defined [defaults](/lib/grape-swagger/endpoint.rb#L121) would be taken.
+If no status code is defined [defaults](/lib/grape-swagger/endpoint.rb#L210) would be taken.
 
 The result is then something like following:
 
@@ -806,6 +807,33 @@ The result is then something like following:
   }
 },
 ```
+
+<a name="change-status" />
+#### Changing default status codes
+
+The default status codes, one could be found (-> [status codes](lib/grape-swagger/doc_methods/status_codes.rb)) can be changed to your specific needs, to achive it, you have to change it for grape itself and for the documentation.
+
+```ruby
+desc 'Get a list of stuff',
+    success: { code: 202, model: Entities::UseResponse, message: 'a changed status code' }
+get do
+  status 202
+  # your code comes here
+end
+…
+```
+
+```json
+"responses": {
+  "202": {
+    "description": "ok",
+    "schema": {
+      "$ref": "#/definitions/UseResponse"
+    }
+  }
+},
+```
+
 
 <a name="extensions" />
 #### Extensions

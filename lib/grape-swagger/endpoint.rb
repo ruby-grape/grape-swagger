@@ -178,8 +178,8 @@ module Grape
 
     def response_object(route, markdown)
       codes = (route.http_codes || route.options[:failure] || [])
-      codes = apply_defaults(route, codes) if route.options[:ignore_defaults].nil?
 
+      codes = apply_success_codes(route) + codes
       codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2] } : x }
 
       codes.each_with_object({}) do |value, memo|
@@ -207,11 +207,19 @@ module Grape
       end
     end
 
-    def apply_defaults(route, codes)
+    def apply_success_codes(route)
       default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
-      default_code[:model] = @entity if @entity
-      default_code[:message] = route.description || default_code[:message].sub('{item}', @item)
-      [default_code] + codes
+      if @entity.is_a?(Hash)
+        default_code[:code] = @entity[:code] if @entity[:code].present?
+        default_code[:model] = @entity[:model] if @entity[:model].present?
+        default_code[:message] = @entity[:message] || route.description || default_code[:message].sub('{item}', @item)
+      else
+        default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
+        default_code[:model] = @entity if @entity
+        default_code[:message] = route.description || default_code[:message].sub('{item}', @item)
+      end
+
+      [default_code]
     end
 
     def tag_object(route)

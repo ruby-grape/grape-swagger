@@ -8,12 +8,12 @@ describe 'swagger spec v2.0' do
       format :json
 
       desc 'This creates Thing after a delay',
-           success: Entities::Something
+           success: { code: 202, message: 'OK', model: Entities::Something }
       params do
         requires :text, type: String, documentation: { type: 'string', desc: 'Content of something.' }
         requires :links, type: Array, documentation: { type: 'link', is_array: true }
       end
-      post '/delay_thing', http_codes: [{ code: 202, message: 'OK' }], ignore_defaults: true do
+      post '/delay_thing' do
         status 202
       end
 
@@ -40,7 +40,7 @@ describe 'swagger spec v2.0' do
   let(:json) { JSON.parse(last_response.body) }
 
   it 'only returns one response if ignore_defaults is specified' do
-    expect(json['paths']['/delay_thing']['post']['responses']).to eq('202' => { 'description' => 'OK' })
+    expect(json['paths']['/delay_thing']['post']['responses']).to eq('202' => { 'description' => 'OK', 'schema' => { '$ref' => '#/definitions/Something' } })
     expect(json['paths']['/delay_thing']['post']['responses'].keys).not_to include '201'
   end
 end

@@ -83,7 +83,8 @@ module GrapeSwagger
         'dateTime' => %w(string date-time),
         'binary' => %w(string binary),
         'password' => %w(string password),
-        'email' => %w(string email)
+        'email' => %w(string email),
+        'uuid' => %w(string uuid)
       }.freeze
     end
   end

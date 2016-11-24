@@ -3,6 +3,7 @@
 #### Features
 
 * [#534](https://github.com/ruby-grape/grape-swagger/pull/534): Allows to overwrite defaults status codes - [@LeFnord](https://github.com/LeFnord).
+* [#535](https://github.com/ruby-grape/grape-swagger/pull/535): Add support for grape version cascading - [@qinix](https://github.com/qinix).
 * Your contribution here.
 
 #### Fixes

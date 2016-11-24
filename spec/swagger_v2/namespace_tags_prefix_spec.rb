@@ -26,7 +26,6 @@ describe 'namespace tags check while using prefix and version' do
             { bla: 'something' }
           end
         end
-
       end
     end
 
@@ -34,7 +33,7 @@ describe 'namespace tags check while using prefix and version' do
       prefix :api
       mount TheApi::CascadingVersionApi
       mount TheApi::NamespaceApi
-      add_swagger_documentation version: 'v1'
+      add_swagger_documentation
     end
   end
 

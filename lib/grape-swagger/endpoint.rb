@@ -223,7 +223,7 @@ module Grape
     end
 
     def tag_object(route)
-      Array(route.path.split('{')[0].split('/').reject(&:empty?).delete_if { |i| ((i == route.prefix.to_s) || (i == route.version)) }.first)
+      Array(route.path.split('{')[0].split('/').reject(&:empty?).delete_if { |i| ((i == route.prefix.to_s) || (i == route.version.to_s) || (route.version.is_a?(Array) && route.version.map(&:to_s).include?(i))) }.first)
     end
 
     private

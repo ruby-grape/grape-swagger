@@ -3,7 +3,7 @@ source "http://rubygems.org"
 # Example:
 #   gem "activesupport", ">= 2.3.5"
 
-gem 'grape', '~> 0.11.0'
+gem 'grape', '~> 0.16.0'
 gem 'grape-entity', '>= 0.3.0'
 gem 'kramdown', '>= 1.3.1'
 

@@ -17,7 +17,7 @@ module Grape
         @combined_routes = {}
 
         routes.each do |route|
-          route_match = route.route_path.split(route.route_prefix).last.match('\/([\w|-]*?)[\.\/\(]')
+          route_match = route.path.split(route.prefix).last.match('\/([\w|-]*?)[\.\/\(]')
           next if route_match.nil?
           resource = route_match.captures.first
           next if resource.empty?
@@ -25,7 +25,7 @@ module Grape
 
           @combined_routes[resource] ||= []
 
-          unless @@hide_documentation_path and route.route_path.include?(@@mount_path)
+          unless @@hide_documentation_path and route.path.include?(@@mount_path)
             @combined_routes[resource] << route
           end
         end
@@ -87,6 +87,7 @@ module Grape
             helpers do
               define_method(:hide_format) { options[:hide_format] }
               define_method(:markdown) { options[:markdown] }
+              define_method(:hidden?) { |route| route.options[:hidden] }
             end
 
             desc 'Swagger compatible API description'
@@ -101,9 +102,9 @@ module Grape
               end
 
               routes_array = routes.keys.map do |local_route|
-                next if routes[local_route].all?(&:route_hidden) && !@@override_hidden.call(request)
+                next if routes[local_route].all?(&method(:hidden?)) && !@@override_hidden.call(request)
 
-                url_base    = parse_path(route.route_path.gsub('(.:format)', ''), route.route_version) if include_base_url
+                url_base    = parse_path(route.path.gsub('(.:format)', ''), route.version) if include_base_url
                 url_format  = '.{format}' unless hide_format
                 {
                   :path => "#{url_base}/#{local_route}#{url_format}",
@@ -141,29 +142,35 @@ module Grape
               models = []
               routes = target_class::combined_routes[params[:name]]
 
-              ops = (@@override_hidden.call(request) ? routes : routes.reject(&:route_hidden)).group_by do |route|
-                parse_path(route.route_path, api_version)
+              if @@override_hidden.call(request)
+                routes_to_show = routes
+              else
+                routes_to_show = routes.reject(&method(:hidden?))
+              end
+
+              ops = routes_to_show.group_by do |route|
+                parse_path(route.path, api_version)
               end
 
               apis = []
 
               ops.each do |path, routes|
                 operations = routes.map do |route|
-                  notes       = as_markdown(route.route_notes)
-                  http_codes  = parse_http_codes(route.route_http_codes)
+                  notes       = as_markdown(route.options[:notes])
+                  http_codes  = parse_http_codes(route.http_codes)
 
-                  models << route.route_entity if route.route_entity
+                  models << route.entity if route.entity
 
                   operation = {
                     :produces   => content_types_for(target_class),
                     :notes      => notes.to_s,
-                    :summary    => route.route_description || '',
-                    :nickname   => route.route_nickname || (route.route_method + route.route_path.gsub(/[\/:\(\)\.]/,'-')),
-                    :httpMethod => route.route_method,
-                    :parameters => parse_header_params(route.route_headers) +
-                      parse_params(route.route_params, route.route_path, route.route_method)
+                    :summary    => route.description || '',
+                    :nickname   => route.options[:nickname] || (route.request_method + route.path.gsub(/[\/:\(\)\.]/,'-')),
+                    :httpMethod => route.request_method,
+                    :parameters => parse_header_params(route.headers) +
+                      parse_params(route.params, route.path, route.request_method)
                   }
-                  operation.merge!(:type => parse_entity_name(route.route_entity)) if route.route_entity
+                  operation.merge!(:type => parse_entity_name(route.entity)) if route.entity
                   operation.merge!(:responseMessages => http_codes) unless http_codes.empty?
                   operation
                 end.compact

@@ -12,6 +12,8 @@ module GrapeSwagger
           @definitions = definitions
           unify!(params)
 
+          return correct_array_param(params) if should_correct_array?(params)
+
           params_to_move = movable_params(params)
           params << parent_definition_of_params(params_to_move, route)
 
@@ -19,6 +21,14 @@ module GrapeSwagger
         end
 
         private
+
+        def should_correct_array?(param)
+          param.length == 1 && param.first[:in] == 'body' && param.first[:type] == 'array'
+        end
+
+        def correct_array_param(param)
+          param.first[:schema] = { type: param.first.delete(:type), items: param.first.delete(:items) }
+        end
 
         def parent_definition_of_params(params, route)
           definition_name = GrapeSwagger::DocMethods::OperationId.manipulate(parse_model(route.path))

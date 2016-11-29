@@ -2,10 +2,10 @@ require 'spec_helper'
 require 'grape-entity'
 require 'grape-swagger-entity'
 
-describe '#427 nested entity given as string' do
+describe '#539 post params given as array' do
   let(:app) do
     Class.new(Grape::API) do
-      namespace :issue_427 do
+      namespace :issue_539 do
         class Element < Grape::Entity
           expose :id
           expose :description
@@ -35,7 +35,7 @@ describe '#427 nested entity given as string' do
     JSON.parse(last_response.body)
   end
 
-  let(:parameters) { subject['paths']['/issue_427']['post']['parameters'] }
+  let(:parameters) { subject['paths']['/issue_539']['post']['parameters'] }
   let(:definitions) { subject['definitions'] }
 
   specify do
@@ -48,7 +48,9 @@ describe '#427 nested entity given as string' do
         }
       ]
     )
+  end
 
+  specify do
     expect(definitions).to eql(
       'Element' => {
         'type' => 'object',

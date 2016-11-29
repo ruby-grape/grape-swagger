@@ -28,6 +28,8 @@ module GrapeSwagger
 
         def correct_array_param(param)
           param.first[:schema] = { type: param.first.delete(:type), items: param.first.delete(:items) }
+
+          param
         end
 
         def parent_definition_of_params(params, route)

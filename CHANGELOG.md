@@ -8,6 +8,7 @@
 
 #### Fixes
 
+* [#540](https://github.com/ruby-grape/grape-swagger/pull/540): Corrects exposing of array in post body - [@LeFnord](https://github.com/LeFnord).
 * [#509](https://github.com/ruby-grape/grape-swagger/pull/509), [#529](https://github.com/ruby-grape/grape-swagger/pull/529): Making parent-less routes working - [@mur-wtag](https://github.com/mur-wtag).
 * Your contribution here.
 

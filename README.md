@@ -956,7 +956,7 @@ module API
     class Client < Grape::Entity
       expose :name, documentation: { type: 'string', desc: 'Name' }
       expose :addresses, using: Entities::Address,
-        documentation: { type: 'API::Address', desc: 'Addresses.', param_type: 'body', is_array: true }
+        documentation: { type: 'Entities::Address', desc: 'Addresses.', param_type: 'body', is_array: true }
     end
 
     class Address < Grape::Entity
@@ -967,13 +967,15 @@ module API
   class Clients < Grape::API
     version 'v1'
 
-    desc 'Clients index', params: Entities::Client.documentation
+    desc 'Clients index',
+      params: Entities::Client.documentation,
+      success: Entities::Client
     get '/clients' do
       ...
     end
   end
 
-  add_swagger_documentation models: [Entities::Client, Entities::Address]
+  add_swagger_documentation
 end
 ```
 
@@ -988,7 +990,7 @@ module API
     class Client < Grape::Entity
       expose :name, documentation: { type: 'string', desc: 'Name' }
       expose :address, using: Entities::Address,
-        documentation: { type: 'API::Address', desc: 'Addresses.', param_type: 'body', is_array: false }
+        documentation: { type: 'Entities::Address', desc: 'Addresses.', param_type: 'body', is_array: false }
     end
 
     class Address < Grape::Entity
@@ -999,13 +1001,15 @@ module API
   class Clients < Grape::API
     version 'v1'
 
-    desc 'Clients index', params: Entities::Client.documentation
+    desc 'Clients index',
+      params: Entities::Client.documentation,
+      success: Entities::Client
     get '/clients' do
       ...
     end
   end
 
-  add_swagger_documentation models: [Entities::Client, Entities::Address]
+  add_swagger_documentation
 end
 ```
 

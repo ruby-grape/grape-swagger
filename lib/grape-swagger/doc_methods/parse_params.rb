@@ -68,6 +68,8 @@ module GrapeSwagger
             collection_format = value_type[:documentation][:collectionFormat]
           end
 
+          param_type ||= value_type[:param_type]
+
           array_items = {}
           if definitions[value_type[:data_type]]
             array_items['$ref'] = "#/definitions/#{@parsed_param[:type]}"

@@ -7,6 +7,7 @@ module GrapeSwagger
         def build(paths)
           paths.values.each_with_object([]) do |path, memo|
             tags = path.values.first[:tags]
+            next if tags.nil?
 
             case tags
             when String

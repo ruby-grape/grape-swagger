@@ -4,7 +4,9 @@ module GrapeSwagger
       class << self
         def build(paths)
           paths.values.each_with_object([]) do |path, memo|
-            path.values.first[:tags].each do |tag|
+            tags = path.values.first[:tags]
+            next if tags.nil?
+            tags.each do |tag|
               memo << {
                 name: tag,
                 description: "Operations about #{tag.pluralize}"

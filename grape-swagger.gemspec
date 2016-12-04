@@ -13,20 +13,6 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'grape', '>= 0.12.0'
 
-  s.add_development_dependency 'rake'
-  s.add_development_dependency 'shoulda'
-  s.add_development_dependency 'rdoc'
-  s.add_development_dependency 'rspec', '~> 3.0'
-  s.add_development_dependency 'bundler'
-  s.add_development_dependency 'rack-test'
-  s.add_development_dependency 'rack-cors'
-  s.add_development_dependency 'rubocop', '~> 0.40'
-  s.add_development_dependency 'kramdown'
-  s.add_development_dependency 'redcarpet' unless RUBY_PLATFORM.eql?('java') || RUBY_ENGINE.eql?('rbx')
-  s.add_development_dependency 'rouge' unless RUBY_PLATFORM.eql?('java') || RUBY_ENGINE.eql?('rbx')
-  s.add_development_dependency 'pry' unless RUBY_PLATFORM.eql?('java') || RUBY_ENGINE.eql?('rbx')
-  s.add_development_dependency 'pry-byebug' unless RUBY_PLATFORM.eql?('java') || RUBY_ENGINE.eql?('rbx')
-
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec}/*`.split("\n")
   s.require_paths = ['lib']

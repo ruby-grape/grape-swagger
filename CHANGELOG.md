@@ -6,8 +6,7 @@
 
 #### Fixes
 
-* Your contribution here.
-
+* [#546](https://github.com/ruby-grape/grape-swagger/pull/546): Move development dependencies to Gemfile - [@olleolleolle](https://github.com/olleolleolle).
 
 ### 0.25.2 (November 30, 2016)
 

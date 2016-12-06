@@ -1,6 +1,15 @@
 require 'spec_helper'
 
 describe GrapeSwagger::DocMethods::DataType do
+  before do
+    stub_const 'MyEntity', Class.new
+    MyEntity.class_eval{
+      def self.entity_name
+        'MyInteger'
+      end
+    }
+  end
+
   subject { described_class.call(value) }
 
   describe 'standards' do
@@ -34,6 +43,12 @@ describe GrapeSwagger::DocMethods::DataType do
     let(:value) { { type: [String, Integer] } }
 
     it { expect(subject).to eql 'string' }
+  end
+
+  describe 'Types in array with entity_name' do
+    let(:value) { { type: '[MyEntity]' } }
+
+    it { expect(subject).to eql 'MyInteger' }
   end
 
   describe 'Rack::Multipart::UploadedFile' do

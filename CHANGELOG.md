@@ -35,7 +35,7 @@
 * [#524](https://github.com/ruby-grape/grape-swagger/pull/524): Use route tags for global tag set - [@LeFnord](https://github.com/LeFnord).
 * [#523](https://github.com/ruby-grape/grape-swagger/pull/523): Allow specifying custom tags at the route level - [@jordanfbrown](https://github.com/jordanfbrown).
 * [#520](https://github.com/ruby-grape/grape-swagger/pull/520): Response model can have required attributes - [@WojciechKo](https://github.com/WojciechKo).
-* [#510](https://github.com/ruby-grape/grape-swagger/pull/510): Use 'token_owner' instead of 'oauth_token' on Swagger UI endpoint authorization. - [@texpert](https://github.com/texpert).
+* [#510](https://github.com/ruby-grape/grape-swagger/pull/510): Use 'token_owner' instead of 'oauth_token' on Swagger UI endpoint authorization - [@texpert](https://github.com/texpert).
 
 #### Fixes
 
@@ -51,7 +51,7 @@
 * [#502](https://github.com/ruby-grape/grape-swagger/pull/502): Adds specs for rake tasks - [@LeFnord](https://github.com/LeFnord).
 * [#501](https://github.com/ruby-grape/grape-swagger/pull/501): Adds getting of a specified resource for Rake Tasks - [@LeFnord](https://github.com/LeFnord).
 * [#500](https://github.com/ruby-grape/grape-swagger/pull/500): Adds Rake tasks to get and validate OAPI/Swagger documentation - [@LeFnord](https://github.com/LeFnord).
-* [#493](https://github.com/ruby-grape/grape-swagger/pull/493): Swagger UI endpoint authorization. - [@texpert](https://github.com/texpert).
+* [#493](https://github.com/ruby-grape/grape-swagger/pull/493): Swagger UI endpoint authorization - [@texpert](https://github.com/texpert).
 * [#492](https://github.com/ruby-grape/grape/pull/492): Define security requirements on endpoint methods - [@tomregelink](https://github.com/tomregelink).
 * [#497](https://github.com/ruby-grape/grape-swagger/pull/497): Use ruby-grape-danger in Dangerfile - [@dblock](https://github.com/dblock).
 

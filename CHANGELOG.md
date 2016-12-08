@@ -8,6 +8,7 @@
 
 * [#546](https://github.com/ruby-grape/grape-swagger/pull/546): Move development dependencies to Gemfile - [@olleolleolle](https://github.com/olleolleolle).
 * [#547](https://github.com/ruby-grape/grape-swagger/pull/547): Use entity_name event if type come from a string - [@frodrigo](https://github.com/frodrigo).
+* Your contribution here.
 
 ### 0.25.2 (November 30, 2016)
 

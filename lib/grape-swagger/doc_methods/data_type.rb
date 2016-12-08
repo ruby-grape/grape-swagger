@@ -32,7 +32,12 @@ module GrapeSwagger
         def parse_multi_type(raw_data_type)
           case raw_data_type
           when /\A\[.*\]\z/
-            raw_data_type.gsub(/[\[\s+\]]/, '').split(',').first
+            type_as_string = raw_data_type.gsub(/[\[\s+\]]/, '').split(',').first
+            begin
+              Object.const_get(type_as_string)
+            rescue NameError
+              type_as_string
+            end
           when Array
             raw_data_type.first
           else

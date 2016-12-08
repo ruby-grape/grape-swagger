@@ -3,11 +3,11 @@ require 'spec_helper'
 describe GrapeSwagger::DocMethods::DataType do
   before do
     stub_const 'MyEntity', Class.new
-    MyEntity.class_eval{
+    MyEntity.class_eval do
       def self.entity_name
         'MyInteger'
       end
-    }
+    end
   end
 
   subject { described_class.call(value) }

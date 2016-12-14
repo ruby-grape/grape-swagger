@@ -20,6 +20,7 @@ module GrapeSwagger
           operation = path.split('/').map(&:capitalize).join
           operation.gsub!(/\-(\w)/, &:upcase).delete!('-') if operation.include?('-')
           operation.gsub!(/\_(\w)/, &:upcase).delete!('_') if operation.include?('_')
+          operation.gsub!(/\.(\w)/, &:upcase).delete!('.') if operation.include?('.')
           if path.include?('{')
             operation.gsub!(/\{(\w)/, &:upcase)
             operation.delete!('{').delete!('}')

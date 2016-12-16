@@ -34,7 +34,7 @@ module GrapeSwagger
         end
 
         def parent_definition_of_params(params, route)
-          definition_name = GrapeSwagger::DocMethods::OperationId.manipulate(parse_model(route.path))
+          definition_name = OperationId.manipulate(parse_model(route.path))
           referenced_definition = build_definition(definition_name, params, route.request_method.downcase)
           definition = @definitions[referenced_definition]
 

@@ -9,7 +9,9 @@ module Grape
       if content_types.empty?
         formats       = [target_class.format, target_class.default_format].compact.uniq
         formats       = Grape::Formatter::Base.formatters({}).keys if formats.empty?
-        content_types = Grape::ContentTypes::CONTENT_TYPES.select { |content_type, _mime_type| formats.include? content_type }.values
+        content_types = Grape::ContentTypes::CONTENT_TYPES.select do |content_type, _mime_type|
+          formats.include? content_type
+        end.values
       end
 
       content_types.uniq
@@ -151,7 +153,9 @@ module Grape
 
     def consumes_object(route, format)
       method = route.request_method.downcase.to_sym
-      format = route.settings[:description][:consumes] if route.settings[:description] && route.settings[:description][:consumes]
+      if route.settings[:description] && route.settings[:description][:consumes]
+        format = route.settings[:description][:consumes]
+      end
       mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format) if [:post, :put].include?(method)
 
       mime_types
@@ -199,10 +203,11 @@ module Grape
 
         @definitions[response_model][:description] = description_object(route, markdown)
         # TODO: proof that the definition exist, if model isn't specified
+        reference = { '$ref' => "#/definitions/#{response_model}" }
         memo[value[:code]][:schema] = if route.options[:is_array]
-                                        { 'type' => 'array', 'items' => { '$ref' => "#/definitions/#{response_model}" } }
+                                        { 'type' => 'array', 'items' => reference }
                                       else
-                                        { '$ref' => "#/definitions/#{response_model}" }
+                                        reference
                                       end
       end
     end
@@ -223,7 +228,11 @@ module Grape
     end
 
     def tag_object(route)
-      Array(route.path.split('{')[0].split('/').reject(&:empty?).delete_if { |i| ((i == route.prefix.to_s) || (i == route.version)) }.first)
+      Array(
+        route.path.split('{')[0].split('/').reject(&:empty?).delete_if do |i|
+          i == route.prefix.to_s || i == route.version
+        end.first
+      )
     end
 
     private
@@ -240,7 +249,9 @@ module Grape
                          parse_request_params(required)
                        end || {}
 
-      request_params = route.params.merge(request_params) if route.params.present? && !route.settings[:declared_params].present?
+      if route.params.present? && !route.settings[:declared_params].present?
+        request_params = route.params.merge(request_params)
+      end
 
       request_params
     end
@@ -295,7 +306,10 @@ module Grape
       raise GrapeSwagger::Errors::UnregisteredParser, "No parser registered for #{model_name}." unless parser
 
       properties = parser.new(model, self).call
-      raise GrapeSwagger::Errors::SwaggerSpec, "Empty model #{model_name}, swagger 2.0 doesn't support empty definitions." unless properties && properties.any?
+      unless properties && properties.any?
+        raise GrapeSwagger::Errors::SwaggerSpec,
+              "Empty model #{model_name}, swagger 2.0 doesn't support empty definitions."
+      end
 
       @definitions[model_name] = GrapeSwagger::DocMethods::BuildModelDefinition.build(model, properties)
 

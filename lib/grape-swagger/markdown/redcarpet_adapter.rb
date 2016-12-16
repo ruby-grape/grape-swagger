@@ -6,7 +6,9 @@ module GrapeSwagger
 
         def block_code(code, language)
           language ||= 'text'
-          "<div class=\"code_highlight\"><pre><code class=\"highlight #{language}\">#{CGI.escapeHTML(code)}</code></pre></div>"
+          "<div class=\"code_highlight\">
+            <pre><code class=\"highlight #{language}\">#{CGI.escapeHTML(code)}</code></pre>
+          </div>"
         end
       end
 
@@ -31,7 +33,8 @@ module GrapeSwagger
       # when you want to have rouge as syntax highlighter add rouge to the gemfile or run:
       # $ (sudo) gem install rouge
       #
-      # GrapeSwagger::Markdown::RedcarpetAdapter.new({highlighter: :none},{no_links: true}) # will use no syntax highlighter and won't render links.
+      # GrapeSwagger::Markdown::RedcarpetAdapter.new({highlighter: :none},{no_links: true})
+      # will use no syntax highlighter and won't render links.
       ###
       def initialize(options = {})
         require 'redcarpet'

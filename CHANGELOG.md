@@ -2,6 +2,8 @@
 
 #### Features
 
+* [#554](https://github.com/ruby-grape/grape-swagger/pull/554): Updates travis.yml to align with grape  - [@LeFnord](https://github.com/LeFnord).
+
 * Your contribution here.
 
 #### Fixes

@@ -8,6 +8,9 @@ Dir[File.join(Dir.getwd, 'spec/support/*.rb')].each { |f| require f }
 require "grape-swagger/#{MODEL_PARSER}" if MODEL_PARSER != 'mock'
 require File.join(Dir.getwd, "spec/support/model_parsers/#{MODEL_PARSER}_parser.rb")
 
+require 'grape-entity'
+require 'grape-swagger-entity'
+
 Bundler.setup :default, :test
 
 require 'rack'

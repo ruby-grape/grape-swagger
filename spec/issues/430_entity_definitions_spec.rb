@@ -1,6 +1,4 @@
 require 'spec_helper'
-require 'grape-entity'
-require 'grape-swagger-entity'
 
 describe 'definition names' do
   before :all do

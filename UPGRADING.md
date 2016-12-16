@@ -1,5 +1,27 @@
-Upgrading Grape-swagger
-=======================
+## Upgrading Grape-swagger
+
+### Upgrading to >= 0.25.2
+
+Avoids ambiguous documentation of array parameters,
+by enforcing correct usage of both possibilities:
+
+1. Array of primitive types
+  ```ruby
+  params do
+    requires :foo, type: Array[String]
+  end
+  ```
+
+2. Array of objects
+  ```ruby
+  params do
+    requires :put_params, type: Array do
+      requires :op, type: String
+      requires :path, type: String
+      requires :value, type: String
+    end
+  end
+```
 
 ### Upgrading to >= 0.25.0
 

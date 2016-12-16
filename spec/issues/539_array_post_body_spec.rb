@@ -1,6 +1,4 @@
 require 'spec_helper'
-require 'grape-entity'
-require 'grape-swagger-entity'
 
 describe '#539 post params given as array' do
   let(:app) do

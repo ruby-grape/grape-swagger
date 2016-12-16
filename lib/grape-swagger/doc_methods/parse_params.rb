@@ -74,7 +74,7 @@ module GrapeSwagger
           if definitions[value_type[:data_type]]
             array_items['$ref'] = "#/definitions/#{@parsed_param[:type]}"
           else
-            array_items[:type] = type || @parsed_param[:type]
+            array_items[:type] = type || @parsed_param[:type] == 'array' ? 'string' : @parsed_param[:type]
           end
           array_items[:format] = @parsed_param.delete(:format) if @parsed_param[:format]
 

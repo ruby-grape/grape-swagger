@@ -1,6 +1,4 @@
 require 'spec_helper'
-require 'grape-entity'
-require 'grape-swagger-entity'
 
 describe '#427 nested entity given as string' do
   let(:app) do

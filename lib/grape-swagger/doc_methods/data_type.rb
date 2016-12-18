@@ -76,6 +76,10 @@ module GrapeSwagger
         def mapping(value)
           PRIMITIVE_MAPPINGS[value] || 'string'
         end
+
+        def collections
+          %w(csv ssv tsv pipes multi)
+        end
       end
 
       PRIMITIVE_MAPPINGS = {

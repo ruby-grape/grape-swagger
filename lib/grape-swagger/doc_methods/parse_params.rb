@@ -8,7 +8,7 @@ module GrapeSwagger
 
           additional_documentation = settings.fetch(:documentation, {})
           settings.merge!(additional_documentation)
-          data_type = GrapeSwagger::DocMethods::DataType.call(settings)
+          data_type = DataType.call(settings)
 
           value_type = settings.merge(data_type: data_type, path: path, param_name: param, method: method)
 
@@ -52,8 +52,8 @@ module GrapeSwagger
         end
 
         def document_type_and_format(data_type)
-          if GrapeSwagger::DocMethods::DataType.primitive?(data_type)
-            data = GrapeSwagger::DocMethods::DataType.mapping(data_type)
+          if DataType.primitive?(data_type)
+            data = DataType.mapping(data_type)
             @parsed_param[:type], @parsed_param[:format] = data
           else
             @parsed_param[:type] = data_type
@@ -64,7 +64,7 @@ module GrapeSwagger
           if value_type[:documentation].present?
             param_type = value_type[:documentation][:param_type]
             doc_type = value_type[:documentation][:type]
-            type = GrapeSwagger::DocMethods::DataType.mapping(doc_type) if doc_type && !DataType.request_primitive?(doc_type)
+            type = DataType.mapping(doc_type) if doc_type && !DataType.request_primitive?(doc_type)
             collection_format = value_type[:documentation][:collectionFormat]
           end
 
@@ -81,7 +81,7 @@ module GrapeSwagger
           @parsed_param[:in] = param_type || 'formData'
           @parsed_param[:items] = array_items
           @parsed_param[:type] = 'array'
-          @parsed_param[:collectionFormat] = collection_format if %w(csv ssv tsv pipes multi).include?(collection_format)
+          @parsed_param[:collectionFormat] = collection_format if DataType.collections.include?(collection_format)
         end
 
         def param_type(value_type)
@@ -91,7 +91,7 @@ module GrapeSwagger
           elsif param_type
             param_type
           elsif %w(POST PUT PATCH).include?(value_type[:method])
-            GrapeSwagger::DocMethods::DataType.request_primitive?(value_type[:data_type]) ? 'formData' : 'body'
+            DataType.request_primitive?(value_type[:data_type]) ? 'formData' : 'body'
           else
             'query'
           end

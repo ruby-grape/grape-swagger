@@ -1,5 +1,4 @@
 require 'grape-swagger/doc_methods/status_codes'
-
 require 'grape-swagger/doc_methods/produces_consumes'
 require 'grape-swagger/doc_methods/data_type'
 require 'grape-swagger/doc_methods/extensions'

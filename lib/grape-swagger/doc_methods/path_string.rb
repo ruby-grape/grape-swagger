@@ -20,7 +20,7 @@ module GrapeSwagger
             path.sub!('/{version}', '')
           end
 
-          path = "#{GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options)}#{path}" if options[:add_base_path]
+          path = "#{OptionalObject.build(:base_path, options)}#{path}" if options[:add_base_path]
 
           [item, path.start_with?('/') ? path : "/#{path}"]
         end

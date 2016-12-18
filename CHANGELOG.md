@@ -2,9 +2,17 @@
 
 #### Features
 
-* [#554](https://github.com/ruby-grape/grape-swagger/pull/554): Updates travis.yml to align with grape  - [@LeFnord](https://github.com/LeFnord).
+* Your contribution here.
+
+#### Fixes
 
 * Your contribution here.
+
+### 0.25.3 (December 18, 2016)
+
+#### Features
+
+* [#554](https://github.com/ruby-grape/grape-swagger/pull/554): Updates travis.yml to align with grape  - [@LeFnord](https://github.com/LeFnord).
 
 #### Fixes
 
@@ -12,8 +20,6 @@
 * [#547](https://github.com/ruby-grape/grape-swagger/pull/547): Use entity_name event if type come from a string - [@frodrigo](https://github.com/frodrigo).
 * [#548](https://github.com/ruby-grape/grape-swagger/pull/548): Remove dots from operation id - [@frodrigo](https://github.com/frodrigo).
 * [#553](https://github.com/ruby-grape/grape-swagger/pull/553): Align array params for post, put request - addition to [#540](https://github.com/ruby-grape/grape-swagger/pull/540) - [@LeFnord](https://github.com/LeFnord).
-
-* Your contribution here.
 
 ### 0.25.2 (November 30, 2016)
 

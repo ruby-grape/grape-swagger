@@ -82,7 +82,7 @@ RSpec.shared_context 'entity swagger example' do
 
       class UseResponse < Grape::Entity
         expose :description, documentation: { type: String }
-        expose :items, as: '$responses', using: Entities::ResponseItem, documentation: { is_array: true }
+        expose :items, as: :responses, using: Entities::ResponseItem, documentation: { is_array: true }
       end
 
       class UseItemResponseAsType < Grape::Entity
@@ -135,7 +135,7 @@ RSpec.shared_context 'entity swagger example' do
     {
       'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } } },
       'ResponseItem' => { 'type' => 'object', 'properties' => { 'id' => { 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'type' => 'string' } } },
-      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, '$responses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' } } } },
+      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, :responses => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' } } } },
       'RecursiveModel' => { 'type' => 'object', 'properties' => { 'name' => { 'type' => 'string', 'description' => 'The name.' }, 'children' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/RecursiveModel' }, 'description' => 'The child nodes.' } } },
       'DocumentedHashAndArrayModel' => { 'type' => 'object', 'properties' => { 'raw_hash' => { 'type' => 'object', 'description' => 'Example Hash.' }, 'raw_array' => { 'type' => 'array', 'description' => 'Example Array' } } }
     }
@@ -153,7 +153,7 @@ RSpec.shared_context 'entity swagger example' do
     {
       'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } }, 'description' => 'This returns something' },
       'ResponseItem' => { 'type' => 'object', 'properties' => { 'id' => { 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'type' => 'string' } } },
-      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, '$responses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' } } }, 'description' => 'This returns something' }
+      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, :responses => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' } } }, 'description' => 'This returns something' }
     }
   end
 

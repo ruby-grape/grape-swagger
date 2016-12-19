@@ -12,21 +12,21 @@ describe 'response' do
              params: Entities::UseResponse.documentation,
              failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         post '/params_given' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         desc 'This returns something',
              entity: Entities::UseResponse,
              failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         get '/entity_response' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         desc 'This returns something',
              entity: Entities::UseItemResponseAsType,
              failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         get '/nested_type' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         add_swagger_documentation
@@ -95,7 +95,7 @@ describe 'response' do
         'consumes' => ['application/json'],
         'parameters' => [
           { 'in' => 'formData', 'name' => 'description', 'type' => 'string', 'required' => false },
-          { 'in' => 'formData', 'name' => '$responses', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => false }
+          { 'in' => 'formData', 'name' => 'responses', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => false }
         ],
         'responses' => {
           '201' => { 'description' => 'This returns something' },

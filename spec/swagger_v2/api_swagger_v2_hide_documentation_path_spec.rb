@@ -15,14 +15,14 @@ describe 'hide documentation path' do
           requires :foo, type: Integer
         end
         get '/params_response' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         desc 'This returns something',
              entity: Entities::UseResponse,
              failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         get '/entity_response' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         desc 'This returns something',

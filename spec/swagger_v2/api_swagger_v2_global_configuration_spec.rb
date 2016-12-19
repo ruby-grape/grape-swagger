@@ -13,7 +13,7 @@ describe 'global configuration stuff' do
           requires :foo, type: Integer
         end
         get :configuration do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         add_swagger_documentation format: :json,

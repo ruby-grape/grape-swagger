@@ -12,7 +12,7 @@ describe 'Group Params as Hash' do
         end
       end
       post '/use_groups' do
-        { 'declared_params' => declared(params) }
+        { declared_params: declared(params) }
       end
 
       params do
@@ -24,7 +24,7 @@ describe 'Group Params as Hash' do
         end
       end
       post '/use_given_type' do
-        { 'declared_params' => declared(params) }
+        { declared_params: declared(params) }
       end
 
       add_swagger_documentation

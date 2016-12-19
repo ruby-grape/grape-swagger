@@ -14,7 +14,7 @@ describe 'hidden flag enables a single endpoint parameter to be excluded from th
           end
 
           post do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
         end
 
@@ -33,7 +33,7 @@ describe 'hidden flag enables a single endpoint parameter to be excluded from th
           end
 
           post do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
         end
 
@@ -44,7 +44,7 @@ describe 'hidden flag enables a single endpoint parameter to be excluded from th
           end
 
           post do
-            { 'declared_params' => declared(params) }
+            { declared_params: declared(params) }
           end
         end
 

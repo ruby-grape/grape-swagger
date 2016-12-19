@@ -45,7 +45,7 @@ describe 'type format settings' do
         end
 
         post '/request_types' do
-          { 'declared_params' => declared(params) }
+          { declared_params: declared(params) }
         end
 
         add_swagger_documentation

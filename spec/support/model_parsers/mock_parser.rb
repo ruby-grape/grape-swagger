@@ -19,8 +19,8 @@ RSpec.shared_context 'mock swagger example' do
         class << self
           def documentation
             {
-              :description => { type: String },
-              '$responses' => { is_array: true }
+              description: { type: String },
+              responses: { is_array: true }
             }
           end
         end

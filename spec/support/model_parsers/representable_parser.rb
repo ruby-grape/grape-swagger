@@ -137,14 +137,14 @@ RSpec.shared_context 'representable swagger example' do
         class << self
           def documentation
             {
-              :description => { type: String },
-              '$responses' => { is_array: true }
+              description: { type: String },
+              responses: { is_array: true }
             }
           end
         end
 
         property :description, documentation: { type: String }
-        property :items, as: '$responses', decorator: Entities::ResponseItem, documentation: { is_array: true }
+        property :items, as: :responses, decorator: Entities::ResponseItem, documentation: { is_array: true }
       end
 
       class UseItemResponseAsType < Representable::Decorator

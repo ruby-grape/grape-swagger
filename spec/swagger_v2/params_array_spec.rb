@@ -14,7 +14,7 @@ describe 'Group Params as Array' do
         end
       end
       post '/groups' do
-        { 'declared_params' => declared(params) }
+        { declared_params: declared(params) }
       end
 
       params do
@@ -26,7 +26,7 @@ describe 'Group Params as Array' do
         end
       end
       post '/type_given' do
-        { 'declared_params' => declared(params) }
+        { declared_params: declared(params) }
       end
 
       # as body parameters it would be interpreted a bit different,
@@ -38,7 +38,7 @@ describe 'Group Params as Array' do
       end
 
       post '/array_of_type' do
-        { 'declared_params' => declared(params) }
+        { declared_params: declared(params) }
       end
 
       params do
@@ -56,7 +56,7 @@ describe 'Group Params as Array' do
       end
 
       post '/array_of_type_in_form' do
-        { 'declared_params' => declared(params) }
+        { declared_params: declared(params) }
       end
 
       params do

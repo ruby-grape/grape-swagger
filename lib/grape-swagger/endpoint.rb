@@ -230,9 +230,11 @@ module Grape
     def tag_object(route)
       version = GrapeSwagger::DocMethods::Version.get(route)
       version = [version] unless version.is_a?(Array)
-      [route.path.split('{')[0]
-            .split('/').reject(&:empty?)
-            .delete_if { |i| i == route.prefix.to_s || version.map(&:to_s).include?(i) }.first]
+      Array(
+        route.path.split('{')[0].split('/').reject(&:empty?).delete_if do |i|
+          i == route.prefix.to_s || version.map(&:to_s).include?(i)
+        end.first
+      )
     end
 
     private

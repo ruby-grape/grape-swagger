@@ -6,25 +6,28 @@ before_install:
 
 matrix:
   include:
-    - rvm: 2.3.3
+    - rvm: 2.4.0
       script:
         - bundle exec danger
+    - rvm: 2.4.0
+      env: MODEL_PARSER=grape-swagger-entity
+    - rvm: 2.4.0
+      env: MODEL_PARSER=grape-swagger-representable
+    - rvm: 2.4.0
+      env: GRAPE_VERSION=0.16.2
+    - rvm: 2.4.0
+      env: GRAPE_VERSION=0.17.0
+    - rvm: 2.4.0
+      env: GRAPE_VERSION=0.18.0
+    - rvm: 2.4.0
+      env: GRAPE_VERSION=0.19.0
+    - rvm: 2.4.0
+      env: GRAPE_VERSION=HEAD
     - rvm: 2.3.3
       env: MODEL_PARSER=grape-swagger-entity
     - rvm: 2.3.3
       env: MODEL_PARSER=grape-swagger-representable
     - rvm: 2.3.3
-      env: GRAPE_VERSION=0.14.0
-    - rvm: 2.3.3
-      env: GRAPE_VERSION=0.15.0
-    - rvm: 2.3.3
-      env: GRAPE_VERSION=0.16.2
-    - rvm: 2.3.3
-      env: GRAPE_VERSION=0.17.0
-    - rvm: 2.3.3
-      env: GRAPE_VERSION=0.18.0
-    - rvm: 2.3.3
-      env: GRAPE_VERSION=HEAD
     - rvm: 2.2
     - rvm: ruby-head
     - rvm: jruby-9.1.6.0

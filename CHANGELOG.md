@@ -2,6 +2,9 @@
 
 #### Features
 
+* [#558](https://github.com/ruby-grape/grape-swagger/pull/558): Version cascading including dependency updates (includes: [LeFnord#27](https://github.com/LeFnord/grape-swagger/pull/27)) - [@LeFnord](https://github.com/LeFnord).
+* [#535](https://github.com/ruby-grape/grape-swagger/pull/535): Add support for grape version cascading  - [@qinix](https://github.com/qinix).
+
 * Your contribution here.
 
 #### Fixes

@@ -9,5 +9,9 @@ Metrics/LineLength:
   Exclude:
     - spec/**/*
 
+Metrics/MethodLength:
+  Exclude:
+    - spec/**/*
+
 Style/IndentHash:
   EnforcedStyle: consistent

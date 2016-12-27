@@ -1,7 +1,5 @@
 require 'grape'
 
-require 'grape-swagger/grape/route'
-
 require 'grape-swagger/version'
 require 'grape-swagger/endpoint'
 require 'grape-swagger/errors'

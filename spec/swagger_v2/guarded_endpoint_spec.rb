@@ -36,8 +36,8 @@ class SampleAuth < Grape::Middleware::Base
     context.protected_endpoint = context.options[:route_options][:auth].present?
 
     return unless context.protected_endpoint?
-    scopes = context.options[:route_options][:auth][:scopes].map(&:to_sym)
-    authorize!(*scopes) unless scopes.include? :false
+    scopes = context.options[:route_options][:auth][:scopes]
+    authorize!(*scopes) unless scopes.include? false
     context.access_token = env['HTTP_AUTHORIZATION']
   end
 end

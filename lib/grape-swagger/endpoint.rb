@@ -131,10 +131,8 @@ module Grape
     end
 
     def description_object(route, markdown)
-      description = route.options[:desc] if route.options.key?(:desc)
       description = route.description if route.description.present?
-      description = "# #{description} " if markdown
-      description += "\n #{route.options[:detail]}" if route.options.key?(:detail)
+      description = route.options[:detail] if route.options.key?(:detail)
       description = markdown.markdown(description.to_s).chomp if markdown
 
       description

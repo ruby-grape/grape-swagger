@@ -16,8 +16,8 @@ describe 'namespace' do
       JSON.parse(last_response.body)['paths']['/aspace']['get']
     end
 
-    it 'shows the namespace description in the json spec' do
-      expect(subject['description']).to eql('Description for aspace')
+    it 'shows the namespace summary in the json spec' do
+      expect(subject['summary']).to eql('Description for aspace')
     end
   end
 
@@ -36,8 +36,8 @@ describe 'namespace' do
       JSON.parse(last_response.body)['paths']['/camelCases']['get']
     end
 
-    it 'shows the namespace description in the json spec' do
-      expect(subject['description']).to eql('Look! An endpoint.')
+    it 'shows the namespace summary in the json spec' do
+      expect(subject['summary']).to eql('Look! An endpoint.')
     end
   end
 
@@ -60,8 +60,8 @@ describe 'namespace' do
       JSON.parse(last_response.body)['paths']['/bspace']['get']
     end
 
-    it 'shows the namespace description in the json spec' do
-      expect(subject['description']).to eql('Description for aspace')
+    it 'shows the namespace summary in the json spec' do
+      expect(subject['summary']).to eql('Description for aspace')
     end
   end
 
@@ -84,8 +84,8 @@ describe 'namespace' do
       JSON.parse(last_response.body)['paths']['/mounted/bspace']['get']
     end
 
-    it 'shows the namespace description in the json spec' do
-      expect(subject['description']).to eql('Description for aspace')
+    it 'shows the namespace summary in the json spec' do
+      expect(subject['summary']).to eql('Description for aspace')
     end
   end
 
@@ -112,8 +112,8 @@ describe 'namespace' do
       JSON.parse(last_response.body)['paths']['/mounted/bspace']['get']
     end
 
-    it 'shows the namespace description in the json spec' do
-      expect(subject['description']).to eql('Description for aspace')
+    it 'shows the namespace summary in the json spec' do
+      expect(subject['summary']).to eql('Description for aspace')
     end
   end
 end

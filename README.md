@@ -525,7 +525,7 @@ desc 'Get all kittens!', {
   is_array: true,
   nickname: 'getKittens',
   success: Entities::Kitten, # or success
-  failures: [[401, 'KittenBitesError', Entities::BadKitten]] # or failure
+  failure: [[401, 'KittenBitesError', Entities::BadKitten]] # or failure
   # also explicit as hash: [{ code: 401, mssage: 'KittenBitesError', model: Entities::BadKitten }]
   produces: [ "array", "of", "mime_types" ],
   consumes: [ "array", "of", "mime_types" ]
@@ -755,7 +755,7 @@ You can also document the HTTP status codes with a description and a specified m
 In the following cases, the schema ref would be taken from route.
 
 ```ruby
-desc 'thing', failures: [ { code: 400, message: 'Invalid parameter entry' } ]
+desc 'thing', failure: [ { code: 400, message: 'Invalid parameter entry' } ]
 get '/thing' do
   ...
 end
@@ -764,7 +764,7 @@ end
 ```ruby
 desc 'thing' do
   params Entities::Something.documentation
-  failures [ { code: 400, message: 'Invalid parameter entry' } ]
+  failure [ { code: 400, message: 'Invalid parameter entry' } ]
 end
 get '/thing' do
   ...
@@ -772,7 +772,7 @@ end
 ```
 
 ```ruby
-get '/thing', failures: [
+get '/thing', failure: [
   { code: 400, message: 'Invalid parameter entry' },
   { code: 404, message: 'Not authorized' },
 ] do
@@ -782,7 +782,7 @@ end
 
 By adding a `model` key, e.g. this would be taken.
 ```ruby
-get '/thing', failures: [
+get '/thing', failure: [
   { code: 400, message: 'General error' },
   { code: 422, message: 'Invalid parameter entry', model: Entities::ApiError }
 ] do

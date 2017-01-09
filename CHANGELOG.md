@@ -10,6 +10,8 @@
 
 #### Fixes
 
+* [#561](https://github.com/ruby-grape/grape-swagger/pull/561): Rename failures to failure in readme - [@justincampbell](https://github.com/justincampbell).
+
 * Your contribution here.
 
 ### 0.25.3 (December 18, 2016)

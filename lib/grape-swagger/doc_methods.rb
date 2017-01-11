@@ -27,6 +27,9 @@ module GrapeSwagger
     end
 
     def setup(options)
+      # FIXME: move out after next minor is released
+      GrapeSwagger::Errors::SwaggerSpecDeprecated.tell!(options[:markdown]) if options.key?(:markdown)
+
       options = defaults.merge(options)
 
       # options could be set on #add_swagger_documentation call,
@@ -93,7 +96,6 @@ module GrapeSwagger
         base_path: nil,
         add_base_path: false,
         add_version: true,
-        markdown: false,
         hide_documentation_path: true,
         format: :json,
         authorizations: nil,

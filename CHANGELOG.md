@@ -2,6 +2,8 @@
 
 #### Features
 
+* [#567](https://github.com/ruby-grape/grape-swagger/pull/567): Issue#566: removes markdown - [@LeFnord](https://github.com/LeFnord).
+
 * Your contribution here.
 
 #### Fixes

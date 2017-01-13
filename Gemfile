@@ -15,7 +15,6 @@ gem ENV['MODEL_PARSER'] if ENV.key?('MODEL_PARSER')
 
 group :development, :test do
   gem 'bundler'
-  gem 'kramdown'
   gem 'pry', platforms: [:mri]
   gem 'pry-byebug', platforms: [:mri]
   gem 'rack'
@@ -23,11 +22,8 @@ group :development, :test do
   gem 'rack-test'
   gem 'rake'
   gem 'rdoc'
-  gem 'redcarpet', '< 3.4', platforms: [:mri]
-  gem 'rouge', platforms: [:mri]
   gem 'rspec', '~> 3.0'
   gem 'rubocop', '~> 0.40'
-  gem 'shoulda'
 end
 group :test do
   gem 'grape-entity'

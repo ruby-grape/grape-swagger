@@ -105,12 +105,12 @@ module Grape
     def method_object(route, options, path)
       method = {}
       method[:summary]     = summary_object(route)
-      method[:description] = description_object(route, options[:markdown])
+      method[:description] = description_object(route)
       method[:produces]    = produces_object(route, options[:produces] || options[:format])
       method[:consumes]    = consumes_object(route, options[:format])
       method[:parameters]  = params_object(route)
       method[:security]    = security_object(route)
-      method[:responses]   = response_object(route, options[:markdown])
+      method[:responses]   = response_object(route)
       method[:tags]        = route.options.fetch(:tags, tag_object(route))
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method.delete_if { |_, value| value.blank? }
@@ -130,10 +130,9 @@ module Grape
       summary
     end
 
-    def description_object(route, markdown)
+    def description_object(route)
       description = route.description if route.description.present?
       description = route.options[:detail] if route.options.key?(:detail)
-      description = markdown.markdown(description.to_s).chomp if markdown
 
       description
     end
@@ -178,7 +177,7 @@ module Grape
       parameters
     end
 
-    def response_object(route, markdown)
+    def response_object(route)
       codes = (route.http_codes || route.options[:failure] || [])
 
       codes = apply_success_codes(route) + codes
@@ -199,7 +198,7 @@ module Grape
         next unless !response_model.start_with?('Swagger_doc') &&
                     ((@definitions[response_model] && value[:code].to_s.start_with?('2')) || value[:model])
 
-        @definitions[response_model][:description] = description_object(route, markdown)
+        @definitions[response_model][:description] = description_object(route)
         # TODO: proof that the definition exist, if model isn't specified
         reference = { '$ref' => "#/definitions/#{response_model}" }
         memo[value[:code]][:schema] = if route.options[:is_array]

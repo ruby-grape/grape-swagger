@@ -1,8 +1,12 @@
 language: ruby
 
 sudo: false
+
 before_install:
   - gem install bundler
+
+after_success:
+  - coveralls
 
 matrix:
   include:

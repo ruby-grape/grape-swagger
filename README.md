@@ -1,5 +1,6 @@
 [![Gem Version](https://badge.fury.io/rb/grape-swagger.svg)](http://badge.fury.io/rb/grape-swagger)
 [![Build Status](https://travis-ci.org/ruby-grape/grape-swagger.svg?branch=master)](https://travis-ci.org/ruby-grape/grape-swagger)
+[![Coverage Status](https://coveralls.io/repos/github/ruby-grape/grape-swagger/badge.svg)](https://coveralls.io/github/ruby-grape/grape-swagger)
 [![Dependency Status](https://gemnasium.com/ruby-grape/grape-swagger.svg)](https://gemnasium.com/ruby-grape/grape-swagger)
 [![Code Climate](https://codeclimate.com/github/ruby-grape/grape-swagger.svg)](https://codeclimate.com/github/ruby-grape/grape-swagger)
 
@@ -62,7 +63,7 @@ grape-swagger | swagger spec | grape                   | grape-entity | represen
 
 Grape-swagger generates documentation per [Swagger / OpenAPI Spec 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md).
 
-<!-- validating: http://bigstickcarpet.com/swagger-parser/www/index.html -->
+<!-- validating it with: http://bigstickcarpet.com/swagger-parser/www/index.html -->
 
 <a name="install" />
 ## Installation

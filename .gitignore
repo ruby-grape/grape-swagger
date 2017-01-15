@@ -41,3 +41,4 @@ ToDo.md
 spec/params_entity_spec.rb
 vendor/bundle/
 spec/swagger_v2/x-dummy.rb
+coverage/

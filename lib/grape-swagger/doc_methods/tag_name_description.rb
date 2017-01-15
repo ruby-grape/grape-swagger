@@ -4,13 +4,26 @@ module GrapeSwagger
       class << self
         def build(paths)
           paths.values.each_with_object([]) do |path, memo|
-            path.values.first[:tags].each do |tag|
-              memo << {
-                name: tag,
-                description: "Operations about #{tag.pluralize}"
-              }
+            tags = path.values.first[:tags]
+
+            case tags
+            when String
+              memo << build_memo(tags)
+            when Array
+              path.values.first[:tags].each do |tag|
+                memo << build_memo(tag)
+              end
             end
           end.uniq
+        end
+
+        private
+
+        def build_memo(tag)
+          {
+            name: tag,
+            description: "Operations about #{tag.pluralize}"
+          }
         end
       end
     end

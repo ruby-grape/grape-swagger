@@ -14,10 +14,6 @@ require 'grape-swagger/doc_methods/version'
 
 module GrapeSwagger
   module DocMethods
-    def name
-      @@class_name
-    end
-
     def hide_documentation_path
       @@hide_documentation_path
     end

@@ -5,11 +5,11 @@ RSpec.describe GrapeSwagger::Rake::OapiTasks do
     item = Class.new(Grape::API) do
       version 'v1', using: :path
 
-      resource :item do
+      namespace :item do
         get '/'
       end
 
-      resource :otherItem do
+      namespace :otherItem do
         get '/'
       end
     end
@@ -98,6 +98,17 @@ RSpec.describe GrapeSwagger::Rake::OapiTasks do
         it 'returns complete doc' do
           expect(response['paths'].length).to eql 2
         end
+      end
+    end
+
+    describe 'call it' do
+      before do
+        subject.send(:make_request)
+      end
+      specify do
+        expect(subject).to respond_to :oapi
+        expect(subject.oapi).to be_a String
+        expect(subject.oapi).not_to be_empty
       end
     end
   end

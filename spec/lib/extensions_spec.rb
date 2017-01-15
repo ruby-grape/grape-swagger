@@ -1,6 +1,48 @@
 require 'spec_helper'
 
 describe GrapeSwagger::DocMethods::Extensions do
+  describe '#find_definition' do
+    subject { described_class }
+
+    let(:method) { :get }
+    let(:status) { 200 }
+
+    before { allow(subject).to receive(:method).and_return(method) }
+
+    describe 'no response for status' do
+      let(:path) { { get: { responses: {} } } }
+
+      specify do
+        definition = subject.find_definition(status, path)
+        expect(definition).to be_nil
+      end
+    end
+
+    describe 'response found' do
+      let(:model) { 'Item' }
+
+      describe 'ref given' do
+        let(:path) do
+          { get: { responses: { 200 => { schema: { '$ref' => "#/definitions/#{model}" } } } } }
+        end
+        specify do
+          definition = subject.find_definition(status, path)
+          expect(definition).to eql model
+        end
+      end
+
+      describe 'items given' do
+        let(:path) do
+          { get: { responses: { 200 => { schema: { 'items' => { '$ref' => "#/definitions/#{model}" } } } } } }
+        end
+        specify do
+          definition = subject.find_definition(status, path)
+          expect(definition).to eql model
+        end
+      end
+    end
+  end
+
   describe '#extended? and extension' do
     subject { described_class }
     describe 'return false (default)' do

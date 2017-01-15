@@ -35,9 +35,11 @@ module GrapeSwagger
           store    – save as JSON file, default: false            (optional)
           resource - if given only for that it would be generated (optional)'
         task fetch: :environment do
+          # :nocov:
           make_request
 
           save_to_file? ? File.write(file, @oapi) : $stdout.print(@oapi)
+          # :nocov:
         end
       end
 
@@ -47,6 +49,7 @@ module GrapeSwagger
           params (usage: key=value):
           resource - if given only for that it would be generated (optional)'
         task validate: :environment do
+          # :nocov:
           ENV['store'] = 'true'
           ::Rake::Task['oapi:fetch'].invoke
           exit if error?
@@ -55,6 +58,7 @@ module GrapeSwagger
 
           $stdout.puts 'install swagger-cli with `npm install swagger-cli -g`' if output.nil?
           FileUtils.rm(file)
+          # :nocov:
         end
       end
 
@@ -62,7 +66,7 @@ module GrapeSwagger
       #
       def make_request
         get url_for
-        last_response
+
         @oapi = JSON.pretty_generate(
           JSON.parse(
             last_response.body, symolize_names: true

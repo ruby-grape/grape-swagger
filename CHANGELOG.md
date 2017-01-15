@@ -2,8 +2,9 @@
 
 #### Features
 
-* [#558](https://github.com/ruby-grape/grape-swagger/pull/558): Version cascading including dependency updates (includes: [LeFnord#27](https://github.com/LeFnord/grape-swagger/pull/27)) - [@LeFnord](https://github.com/LeFnord).
-* [#535](https://github.com/ruby-grape/grape-swagger/pull/535): Add support for grape version cascading  - [@qinix](https://github.com/qinix).
+* [#567](https://github.com/ruby-grape/grape-swagger/pull/567): Issue#566: removes markdown - [@LeFnord](https://github.com/LeFnord).
+* [#568](https://github.com/ruby-grape/grape-swagger/pull/568): Adds code coverage w/ coveralls - [@LeFnord](https://github.com/LeFnord).
+* [#570](https://github.com/ruby-grape/grape-swagger/pull/570): Removes dead code -> increases code coverage - [@LeFnord](https://github.com/LeFnord).
 
 * Your contribution here.
 
@@ -12,6 +13,18 @@
 * [#562](https://github.com/ruby-grape/grape-swagger/pull/562): The guard method should allow regular object methods as arguments - [@tim-vandecasteele](https://github.com/tim-vandecasteele).
 
 * Your contribution here.
+
+### 0.26.0 (January 9, 2017)
+
+#### Features
+
+* [#558](https://github.com/ruby-grape/grape-swagger/pull/558): Version cascading including dependency updates (includes: [LeFnord#27](https://github.com/LeFnord/grape-swagger/pull/27)) - [@LeFnord](https://github.com/LeFnord).
+* [#535](https://github.com/ruby-grape/grape-swagger/pull/535): Add support for grape version cascading  - [@qinix](https://github.com/qinix).
+* [#560](https://github.com/ruby-grape/grape-swagger/pull/560): Map clearly Grape desc/detail to Swagger summary/description - [@frodrigo](https://github.com/frodrigo).
+
+#### Fixes
+
+* [#561](https://github.com/ruby-grape/grape-swagger/pull/561): Rename failures to failure in readme - [@justincampbell](https://github.com/justincampbell).
 
 ### 0.25.3 (December 18, 2016)
 

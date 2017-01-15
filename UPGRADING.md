@@ -1,5 +1,11 @@
 ## Upgrading Grape-swagger
 
+### Upgrading to >= 0.26.0
+
+Usage of option `markdown` won't no longer be supported,
+cause OAPI accepts [GFM](https://help.github.com/articles/github-flavored-markdown) and plain text.
+(see: [description of `Info`](https://github.com/OAI/OpenAPI-Specification/blob/OpenAPI.next/versions/2.0.md#info-object))
+
 ### Upgrading to >= 0.25.2
 
 Avoids ambiguous documentation of array parameters,

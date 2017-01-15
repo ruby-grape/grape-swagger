@@ -7,11 +7,7 @@ describe GrapeSwagger::DocMethods::OperationId do
   specify { expect(subject).to respond_to :build }
 
   describe 'build' do
-    if defined?(Grape::VERSION) && Gem::Version.new(::Grape::VERSION) < Gem::Version.new('0.16.0')
-      let(:route) { Grape::Route.new(method: method) }
-    else
-      let(:route) { Grape::Router::Route.new(method, '/path', requirements: {}) }
-    end
+    let(:route) { Grape::Router::Route.new(method, '/path', requirements: {}) }
 
     describe 'GET' do
       let(:method) { 'GET' }

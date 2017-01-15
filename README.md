@@ -1,5 +1,6 @@
 [![Gem Version](https://badge.fury.io/rb/grape-swagger.svg)](http://badge.fury.io/rb/grape-swagger)
 [![Build Status](https://travis-ci.org/ruby-grape/grape-swagger.svg?branch=master)](https://travis-ci.org/ruby-grape/grape-swagger)
+[![Coverage Status](https://coveralls.io/repos/github/ruby-grape/grape-swagger/badge.svg?branch=master)](https://coveralls.io/github/ruby-grape/grape-swagger?branch=master)
 [![Dependency Status](https://gemnasium.com/ruby-grape/grape-swagger.svg)](https://gemnasium.com/ruby-grape/grape-swagger)
 [![Code Climate](https://codeclimate.com/github/ruby-grape/grape-swagger.svg)](https://codeclimate.com/github/ruby-grape/grape-swagger)
 
@@ -16,7 +17,7 @@
 * [Routes Configuration](#routes)
 * [Using Grape Entities](#grape-entity)
 * [Securing the Swagger UI](#oauth)
-* [Markdown](#md_usage)
+* [Markdown (deprecated)](#md_usage)
 * [Example](#example)
 * [Rake Tasks](#rake)
 
@@ -55,14 +56,14 @@ grape-swagger | swagger spec | grape                   | grape-entity | represen
 0.24.0        |     2.0      | >= 0.12.0 ... <= 0.18.0 | <= 0.5.1     | >= 2.4.1      |
 0.25.0        |     2.0      | >= 0.14.0 ... <= 0.18.0 | <= 0.5.2     | >= 2.4.1      |
 0.25.2        |     2.0      | >= 0.14.0 ... <= 0.18.0 | <= 0.6.0     | >= 2.4.1      |
-> 0.25.2      |     2.0      | >= 0.16.2               | <= 0.6.0     | >= 2.4.1      |
+0.26.0        |     2.0      | >= 0.16.2               | <= 0.6.1     | >= 2.4.1      |
 
 <a name="swagger-spec" />
 ## Swagger-Spec
 
 Grape-swagger generates documentation per [Swagger / OpenAPI Spec 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md).
 
-<!-- validating: http://bigstickcarpet.com/swagger-parser/www/index.html -->
+<!-- validating it with: http://bigstickcarpet.com/swagger-parser/www/index.html -->
 
 <a name="install" />
 ## Installation
@@ -196,7 +197,6 @@ end
 * [add_base_path](#add_base_path)
 * [add_version](#add_version)
 * [doc_version](#doc_version)
-* [markdown](#markdown)
 * [endpoint_auth_wrapper](#endpoint_auth_wrapper)
 * [swagger_endpoint_guard](#swagger_endpoint_guard)
 * [token_owner](#token_owner)
@@ -268,18 +268,8 @@ add_swagger_documentation \
 ```
 
 <a name="markdown" />
-#### markdown:
-Allow markdown in `detail`, default is `false`. (disabled) See [below](#md_usage) for details.
-
-```ruby
-add_swagger_documentation \
-  markdown: GrapeSwagger::Markdown::KramdownAdapter.new
-```
-or alternative
-```ruby
-add_swagger_documentation \
-  markdown: GrapeSwagger::Markdown::RedcarpetAdapter.new
-```
+#### markdown: (deprecated)
+OAPI accepts GFM for descriptions
 
 <a name="endpoint_auth_wrapper" />
 #### endpoint_auth_wrapper:
@@ -525,7 +515,7 @@ desc 'Get all kittens!', {
   is_array: true,
   nickname: 'getKittens',
   success: Entities::Kitten, # or success
-  failures: [[401, 'KittenBitesError', Entities::BadKitten]] # or failure
+  failure: [[401, 'KittenBitesError', Entities::BadKitten]] # or failure
   # also explicit as hash: [{ code: 401, mssage: 'KittenBitesError', model: Entities::BadKitten }]
   produces: [ "array", "of", "mime_types" ],
   consumes: [ "array", "of", "mime_types" ]
@@ -755,7 +745,7 @@ You can also document the HTTP status codes with a description and a specified m
 In the following cases, the schema ref would be taken from route.
 
 ```ruby
-desc 'thing', failures: [ { code: 400, message: 'Invalid parameter entry' } ]
+desc 'thing', failure: [ { code: 400, message: 'Invalid parameter entry' } ]
 get '/thing' do
   ...
 end
@@ -764,7 +754,7 @@ end
 ```ruby
 desc 'thing' do
   params Entities::Something.documentation
-  failures [ { code: 400, message: 'Invalid parameter entry' } ]
+  failure [ { code: 400, message: 'Invalid parameter entry' } ]
 end
 get '/thing' do
   ...
@@ -772,7 +762,7 @@ end
 ```
 
 ```ruby
-get '/thing', failures: [
+get '/thing', failure: [
   { code: 400, message: 'Invalid parameter entry' },
   { code: 404, message: 'Not authorized' },
 ] do
@@ -782,7 +772,7 @@ end
 
 By adding a `model` key, e.g. this would be taken.
 ```ruby
-get '/thing', failures: [
+get '/thing', failure: [
   { code: 400, message: 'General error' },
   { code: 422, message: 'Invalid parameter entry', model: Entities::ApiError }
 ] do
@@ -1087,77 +1077,11 @@ The lambda is checking whether the user is authenticated (if not, the token_owne
 role - only admins can see this endpoint.
 
 <a name="md_usage" />
-## Markdown in Detail
+## Markdown in Detail (deprecated)
 
-The grape-swagger gem allows you to add an explanation in markdown in the detail field. Which would result in proper formatted markdown in Swagger UI.
-Grape-swagger uses adapters for several markdown formatters. It includes adapters for [kramdown](http://kramdown.rubyforge.org) (kramdown [syntax](http://kramdown.rubyforge.org/syntax.html)) and [redcarpet](https://github.com/vmg/redcarpet).
-The adapters are packed in the GrapeSwagger::Markdown modules. We do not include the markdown gems in our gemfile, so be sure to include or install the depended gems.
-
-To use it, add a new instance of the adapter to the markdown options of `add_swagger_documentation`, such as:
-```ruby
-add_swagger_documentation \
-  markdown: GrapeSwagger::Markdown::KramdownAdapter.new(options)
-```
-and write your route details in GFM, examples could be find in [details spec](blob/master/spec/swagger_v2/api_swagger_v2_detail_spec.rb)
-
-
-#### Kramdown
-If you want to use kramdown as markdown formatter, you need to add kramdown to your gemfile.
-
-```ruby
-gem 'kramdown'
-```
-
-Configure your api documentation route with:
-```ruby
-add_swagger_documentation \
-  markdown: GrapeSwagger::Markdown::KramdownAdapter.new(options)
-```
-
-
-#### Redcarpet
-As alternative you can use [redcarpet](https://github.com/vmg/redcarpet) as formatter, you need to include redcarpet in your gemspec. If you also want to use [rouge](https://github.com/jneen/rouge) as syntax highlighter you also need to include it.
-
-```ruby
-gem 'redcarpet'
-gem 'rouge'
-```
-
-Configure your api documentation route with:
-
-```ruby
-add_swagger_documentation(
-  markdown: GrapeSwagger::Markdown::RedcarpetAdapter.new(render_options: { highlighter: :rouge })
-)
-```
-
-Alternatively you can disable rouge by adding `:none` as highlighter option. You can add redcarpet extensions and render options trough the `extenstions:` and `render_options:` parameters.
-
-
-#### Custom markdown formatter
-
-You can also add your custom adapter for your favourite markdown formatter, as long it responds to the method `markdown(text)` and it formats the given text.
-
-
-```ruby
-module API
-
-  class FancyAdapter
-   attr_reader :adapter
-
-   def initialize(options)
-    require 'superbmarkdownformatter'
-    @adapter = SuperbMarkdownFormatter.new options
-   end
-
-   def markdown(text)
-      @adapter.render_supreme(text)
-   end
-  end
-
-  add_swagger_documentation markdown: FancyAdapter.new(no_links: true)
-end
-```
+Usage of option `markdown` won't no longer be supported,
+cause OAPI accepts [GFM](https://help.github.com/articles/github-flavored-markdown) and plain text.
+(see: [description of `Info`](https://github.com/OAI/OpenAPI-Specification/blob/OpenAPI.next/versions/2.0.md#info-object))
 
 
 <a="example" />

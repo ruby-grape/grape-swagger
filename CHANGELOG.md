@@ -3,6 +3,7 @@
 #### Features
 
 * [#567](https://github.com/ruby-grape/grape-swagger/pull/567): Issue#566: removes markdown - [@LeFnord](https://github.com/LeFnord).
+* [#568](https://github.com/ruby-grape/grape-swagger/pull/568): Adds code coverage w/ coveralls - [@LeFnord](https://github.com/LeFnord).
 
 * Your contribution here.
 

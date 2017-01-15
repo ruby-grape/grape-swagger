@@ -42,7 +42,7 @@ module GrapeSwagger
         end
       end
 
-      send(guard.split.first.to_sym, *guard.split(/[\s,]+/).drop(1)) unless guard.nil?
+      instance_eval(guard) unless guard.nil?
 
       output_path_definitions = proc do |combi_routes, endpoint|
         output = endpoint.swagger_object(

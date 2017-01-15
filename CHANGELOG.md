@@ -10,6 +10,8 @@
 
 #### Fixes
 
+* [#562](https://github.com/ruby-grape/grape-swagger/pull/562): The guard method should allow regular object methods as arguments - [@tim-vandecasteele](https://github.com/tim-vandecasteele).
+
 * Your contribution here.
 
 ### 0.26.0 (January 9, 2017)

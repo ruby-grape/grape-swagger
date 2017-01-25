@@ -11,6 +11,7 @@
 #### Fixes
 
 * [#562](https://github.com/ruby-grape/grape-swagger/pull/562): The guard method should allow regular object methods as arguments - [@tim-vandecasteele](https://github.com/tim-vandecasteele).
+* [#574](https://github.com/ruby-grape/grape-swagger/pull/574): Fixes #572: `is_array` should only be applied to success - [@LeFnord](https://github.com/LeFnord).
 
 * Your contribution here.
 

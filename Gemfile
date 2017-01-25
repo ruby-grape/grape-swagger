@@ -23,7 +23,7 @@ group :development, :test do
   gem 'rake'
   gem 'rdoc'
   gem 'rspec', '~> 3.0'
-  gem 'rubocop', '~> 0.40'
+  gem 'rubocop', '~> 0.46'
 end
 group :test do
   gem 'coveralls', require: false

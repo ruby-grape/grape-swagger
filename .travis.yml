@@ -3,40 +3,39 @@ language: ruby
 sudo: false
 
 before_install:
+  - gem update --system
   - gem install bundler
 
 after_success:
+  - bundle exec danger
   - coveralls
+
+rvm:
+  - 2.4.0
+  - 2.3.3
+
+env:
+  - MODEL_PARSER=grape-swagger-entity
+  - MODEL_PARSER=grape-swagger-representable
+  - GRAPE_VERSION=0.16.2
+  - GRAPE_VERSION=0.17.0
+  - GRAPE_VERSION=0.18.0
+  - GRAPE_VERSION=0.19.1
+  - GRAPE_VERSION=HEAD
 
 matrix:
   fast_finish: true
+
   include:
-    - rvm: 2.4.0
-      script:
-        - bundle exec danger
-    - rvm: 2.4.0
-      env: MODEL_PARSER=grape-swagger-entity
-    - rvm: 2.4.0
-      env: MODEL_PARSER=grape-swagger-representable
-    - rvm: 2.4.0
-      env: GRAPE_VERSION=0.16.2
-    - rvm: 2.4.0
-      env: GRAPE_VERSION=0.17.0
-    - rvm: 2.4.0
-      env: GRAPE_VERSION=0.18.0
-    - rvm: 2.4.0
-      env: GRAPE_VERSION=0.19.0
-    - rvm: 2.4.0
-      env: GRAPE_VERSION=HEAD
-    - rvm: 2.3.3
-      env: MODEL_PARSER=grape-swagger-entity
-    - rvm: 2.3.3
-      env: MODEL_PARSER=grape-swagger-representable
-    - rvm: 2.3.3
     - rvm: 2.2.6
+      env:
     - rvm: ruby-head
+      env:
     - rvm: jruby-head
+      env:
     - rvm: rbx-2
+      env:
+
   allow_failures:
     - rvm: ruby-head
     - rvm: jruby-head

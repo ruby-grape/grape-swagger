@@ -2,19 +2,25 @@
 
 #### Features
 
+* Your contribution here.
+
+#### Fixes
+
+* Your contribution here.
+
+### 0.26.1 (February 3, 2014)
+
+#### Features
+
 * [#567](https://github.com/ruby-grape/grape-swagger/pull/567): Issue#566: removes markdown - [@LeFnord](https://github.com/LeFnord).
 * [#568](https://github.com/ruby-grape/grape-swagger/pull/568): Adds code coverage w/ coveralls - [@LeFnord](https://github.com/LeFnord).
 * [#570](https://github.com/ruby-grape/grape-swagger/pull/570): Removes dead code -> increases code coverage - [@LeFnord](https://github.com/LeFnord).
 * [#576](https://github.com/ruby-grape/grape-swagger/pull/576): Allows custom format, for params and definition properties - [@LeFnord](https://github.com/LeFnord).
 
-* Your contribution here.
-
 #### Fixes
 
 * [#562](https://github.com/ruby-grape/grape-swagger/pull/562): The guard method should allow regular object methods as arguments - [@tim-vandecasteele](https://github.com/tim-vandecasteele).
 * [#574](https://github.com/ruby-grape/grape-swagger/pull/574): Fixes #572: `is_array` should only be applied to success - [@LeFnord](https://github.com/LeFnord).
-
-* Your contribution here.
 
 ### 0.26.0 (January 9, 2017)
 

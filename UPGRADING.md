@@ -1,6 +1,9 @@
 ## Upgrading Grape-swagger
 
-### Upgrading to >= 0.26.0
+### Upgrading to >= 0.26.1
+
+The format can now be specified,
+to achieve it for definition properties one have to use grape-swagger-entity >= 0.1.6.
 
 Usage of option `markdown` won't no longer be supported,
 cause OAPI accepts [GFM](https://help.github.com/articles/github-flavored-markdown) and plain text.

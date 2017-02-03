@@ -20,7 +20,7 @@ module GrapeSwagger
 
           # optional properties
           document_description(settings)
-          document_type_and_format(data_type)
+          document_type_and_format(settings, data_type)
           document_array_param(value_type, definitions) if value_type[:is_array]
           document_default_value(settings)
           document_range_values(settings)
@@ -51,13 +51,14 @@ module GrapeSwagger
           @parsed_param[:default] = settings[:default] if settings[:default].present?
         end
 
-        def document_type_and_format(data_type)
+        def document_type_and_format(settings, data_type)
           if DataType.primitive?(data_type)
             data = DataType.mapping(data_type)
             @parsed_param[:type], @parsed_param[:format] = data
           else
             @parsed_param[:type] = data_type
           end
+          @parsed_param[:format] = settings[:format] if settings[:format].present?
         end
 
         def document_array_param(value_type, definitions)

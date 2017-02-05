@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe '#542 array of type in post params' do
+describe '#532 allow custom format' do
   let(:app) do
     Class.new(Grape::API) do
       namespace :issue_532 do

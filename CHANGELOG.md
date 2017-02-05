@@ -6,6 +6,8 @@
 
 #### Fixes
 
+* [#580](https://github.com/ruby-grape/grape-swagger/pull/580): Issue #578: fixes duplicated path params - [@LeFnord](https://github.com/LeFnord).
+
 * Your contribution here.
 
 ### 0.26.1 (February 3, 2014)

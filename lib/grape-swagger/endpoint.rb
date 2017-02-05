@@ -237,21 +237,21 @@ module Grape
 
     def partition_params(route)
       declared_params = route.settings[:declared_params] if route.settings[:declared_params].present?
-      required, exposed = route.params.partition { |x| x.first.is_a? String }
+      required = merge_params(route)
       required = GrapeSwagger::DocMethods::Headers.parse(route) + required unless route.headers.nil?
 
       default_type(required)
-      default_type(exposed)
 
       request_params = unless declared_params.nil? && route.headers.nil?
                          parse_request_params(required)
                        end || {}
 
-      if route.params.present? && !route.settings[:declared_params].present?
-        request_params = route.params.merge(request_params)
-      end
+      request_params.empty? ? required : request_params
+    end
 
-      request_params
+    def merge_params(route)
+      param_keys = route.params.keys
+      route.params.delete_if { |key| key.is_a?(String) && param_keys.include?(key.to_sym) }.to_a
     end
 
     def default_type(params)

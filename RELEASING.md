@@ -1,6 +1,6 @@
 # Releasing Grape-Swagger
 
-There're no particular rules about when to release grape-swagger. Release bug fixes frequenty, features not so frequently and breaking API changes rarely.
+There're no particular rules about when to release grape-swagger. Release bug fixes frequently, features not so frequently and breaking API changes rarely.
 
 ### Release
 
@@ -56,7 +56,7 @@ Next Release
 * Your contribution here.
 ```
 
-Comit your changes.
+Commit your changes.
 
 ```
 git add CHANGELOG.md

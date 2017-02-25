@@ -2,6 +2,8 @@
 
 #### Features
 
+* [#583](https://github.com/ruby-grape/grape-swagger/pull/583): Issue #582: document file response - [@LeFnord](https://github.com/LeFnord).
+
 * Your contribution here.
 
 #### Fixes

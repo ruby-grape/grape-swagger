@@ -397,6 +397,7 @@ add_swagger_documentation \
 * [Setting a Swagger default value](#default-value)
 * [Response documentation](#response)
 * [Changing default status codes](#change-status)
+* [File response](#file-response)
 * [Extensions](#extensions)
 
 
@@ -826,6 +827,32 @@ end
 },
 ```
 
+<a name="file-response" />
+#### File response
+
+Set `success` to `File` and sets also produces. If produces wasn't set, it defaults to `application/octet-stream`.
+```ruby
+desc 'Get a file',
+    success: File
+get do
+  # your file reponse
+end
+…
+```
+
+```json
+"produces": [
+  "application/octet-stream"
+],
+"responses": {
+  "200": {
+    "description": "Get a file",
+    "schema": {
+      "type": "file"
+    }
+  }
+}
+```
 
 <a name="extensions" />
 #### Extensions
@@ -1079,13 +1106,13 @@ role - only admins can see this endpoint.
 <a name="md_usage" />
 ## Markdown in Detail (deprecated)
 
-Usage of option `markdown` won't no longer be supported,
+Usage of option `markdown` will no longer be supported,
 cause OAPI accepts [GFM](https://help.github.com/articles/github-flavored-markdown) and plain text.
 (see: [description of `Info`](https://github.com/OAI/OpenAPI-Specification/blob/OpenAPI.next/versions/2.0.md#info-object))
 
 
 <a="example" />
-## Example
+## Examples
 
 Go into example directory and run it: `$ bundle exec rackup`
 go to: `http://localhost:9292/swagger_doc` to get it
@@ -1106,9 +1133,7 @@ class NamespaceApi < Grape::API
     desc 'Document root'
     get '/' do
     end
-  end
 
-  namespace :hudson do
     desc 'This gets something.',
       notes: '_test_'
 
@@ -1117,12 +1142,12 @@ class NamespaceApi < Grape::API
     end
   end
 
-  namespace :colorado do
-    desc 'This gets something for URL using - separator.',
-      notes: '_test_'
-
-    get '/simple-test' do
-      { bla: 'something' }
+  namespace :download do
+    desc 'download files',
+         success: File,
+         produces: ['text/csv']
+    get ':id' do
+      # file response
     end
   end
 end

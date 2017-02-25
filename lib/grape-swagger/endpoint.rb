@@ -138,6 +138,9 @@ module Grape
     end
 
     def produces_object(route, format)
+      return ['application/octet-stream'] if file_response?(route.attributes.success) &&
+                                             !route.attributes.produces.present?
+
       mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format)
 
       route_mime_types = [:formats, :content_types, :produces].map do |producer|
@@ -185,13 +188,14 @@ module Grape
 
       codes.each_with_object({}) do |value, memo|
         memo[value[:code]] = { description: value[:message] }
+        next build_file_response(memo[value[:code]]) if file_response?(value[:model])
 
         response_model = @item
         response_model = expose_params_from_model(value[:model]) if value[:model]
 
-        if memo.key?(200) && route.request_method == 'DELETE' && value[:model].nil?
-          memo[204] = memo.delete(200)
-          value[:code] = 204
+        if route.request_method == 'DELETE' && !value[:model].nil?
+          memo[200] = memo.delete(204)
+          value[:code] = 200
         end
 
         next if memo.key?(204)
@@ -201,7 +205,7 @@ module Grape
         # TODO: proof that the definition exist, if model isn't specified
         reference = { '$ref' => "#/definitions/#{response_model}" }
         memo[value[:code]][:schema] = if route.options[:is_array] && value[:code] < 300
-                                        { 'type' => 'array', 'items' => reference }
+                                        { type: 'array', items: reference }
                                       else
                                         reference
                                       end
@@ -234,6 +238,14 @@ module Grape
     end
 
     private
+
+    def file_response?(value)
+      value.to_s.casecmp('file').zero? ? true : false
+    end
+
+    def build_file_response(memo)
+      memo['schema'] = { type: 'file' }
+    end
 
     def partition_params(route)
       declared_params = route.settings[:declared_params] if route.settings[:declared_params].present?

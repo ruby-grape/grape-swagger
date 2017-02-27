@@ -4,16 +4,12 @@ module GrapeSwagger
       class << self
         def build(route, path = nil)
           if route.options[:nickname]
-            operation_id = route.options[:nickname]
+            route.options[:nickname]
           else
             verb = route.request_method.to_s.downcase
-
             operation = manipulate(path) unless path.nil?
-
-            operation_id = "#{verb}#{operation}"
+            "#{verb}#{operation}"
           end
-
-          operation_id
         end
 
         def manipulate(path)

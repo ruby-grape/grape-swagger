@@ -8,7 +8,7 @@ module GrapeSwagger
           move_methods.include?(http_verb) && includes_body_param?(params)
         end
 
-        def to_definition(params, route, definitions)
+        def to_definition(path, params, route, definitions)
           @definitions = definitions
           unify!(params)
 
@@ -16,7 +16,7 @@ module GrapeSwagger
 
           return (params + correct_array_param(params_to_move)) if should_correct_array?(params_to_move)
 
-          params << parent_definition_of_params(params_to_move, route)
+          params << parent_definition_of_params(params_to_move, path, route)
 
           params
         end
@@ -33,8 +33,8 @@ module GrapeSwagger
           param
         end
 
-        def parent_definition_of_params(params, route)
-          definition_name = OperationId.manipulate(parse_model(route.path))
+        def parent_definition_of_params(params, path, route)
+          definition_name = OperationId.manipulate(parse_model(path))
           referenced_definition = build_definition(definition_name, params, route.request_method.downcase)
           definition = @definitions[referenced_definition]
 

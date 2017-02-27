@@ -4,7 +4,6 @@ describe '#XXX nested entity given as string' do
   let(:app) do
     Class.new(Grape::API) do
       namespace :range_parameter do
-
         desc 'Get a array with range'
         get '/range/:range_start-:range_end' do
           present []

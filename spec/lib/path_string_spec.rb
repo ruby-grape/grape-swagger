@@ -6,7 +6,14 @@ describe GrapeSwagger::DocMethods::PathString do
   specify { expect(subject).to eql GrapeSwagger::DocMethods::PathString }
   specify { expect(subject).to respond_to :build }
 
-  describe 'operation_id_object' do
+  describe 'path_string_object' do
+    specify 'The original route path is not mutated' do
+      route = Struct.new(:version, :path).new
+      route.path = '/foo/:dynamic/bar'
+      subject.build(route, add_version: true)
+      expect(route.path).to eq '/foo/:dynamic/bar'
+    end
+
     describe 'version' do
       describe 'defaults: given, true' do
         let(:options) { { add_version: true } }

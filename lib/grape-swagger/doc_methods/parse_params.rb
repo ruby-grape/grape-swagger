@@ -2,10 +2,8 @@ module GrapeSwagger
   module DocMethods
     class ParseParams
       class << self
-        def call(param, settings, route, definitions)
-          path = route.path
+        def call(param, settings, path, route, definitions)
           method = route.request_method
-
           additional_documentation = settings.fetch(:documentation, {})
           settings.merge!(additional_documentation)
           data_type = DataType.call(settings)

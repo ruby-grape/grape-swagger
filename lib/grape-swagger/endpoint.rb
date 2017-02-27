@@ -108,10 +108,10 @@ module Grape
       method[:description] = description_object(route)
       method[:produces]    = produces_object(route, options[:produces] || options[:format])
       method[:consumes]    = consumes_object(route, options[:format])
-      method[:parameters]  = params_object(route)
+      method[:parameters]  = params_object(route, path)
       method[:security]    = security_object(route)
       method[:responses]   = response_object(route)
-      method[:tags]        = route.options.fetch(:tags, tag_object(route))
+      method[:tags]        = route.options.fetch(:tags, tag_object(route, path))
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method.delete_if { |_, value| value.blank? }
 
@@ -161,7 +161,7 @@ module Grape
       mime_types
     end
 
-    def params_object(route)
+    def params_object(route, path)
       parameters = partition_params(route).map do |param, value|
         value = { required: false }.merge(value) if value.is_a?(Hash)
         _, value = default_type([[param, value]]).first if value == ''
@@ -170,11 +170,11 @@ module Grape
         elsif value[:documentation]
           expose_params(value[:documentation][:type])
         end
-        GrapeSwagger::DocMethods::ParseParams.call(param, value, route, @definitions)
+        GrapeSwagger::DocMethods::ParseParams.call(param, value, path, route, @definitions)
       end
 
       if GrapeSwagger::DocMethods::MoveParams.can_be_moved?(parameters, route.request_method)
-        parameters = GrapeSwagger::DocMethods::MoveParams.to_definition(parameters, route, @definitions)
+        parameters = GrapeSwagger::DocMethods::MoveParams.to_definition(path, parameters, route, @definitions)
       end
 
       parameters
@@ -227,11 +227,11 @@ module Grape
       [default_code]
     end
 
-    def tag_object(route)
+    def tag_object(route, path)
       version = GrapeSwagger::DocMethods::Version.get(route)
       version = [version] unless version.is_a?(Array)
       Array(
-        route.path.split('{')[0].split('/').reject(&:empty?).delete_if do |i|
+        path.split('{')[0].split('/').reject(&:empty?).delete_if do |i|
           i == route.prefix.to_s || version.map(&:to_s).include?(i)
         end.first
       )

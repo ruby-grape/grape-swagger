@@ -9,6 +9,7 @@
 #### Fixes
 
 * [#580](https://github.com/ruby-grape/grape-swagger/pull/580): Issue #578: fixes duplicated path params - [@LeFnord](https://github.com/LeFnord).
+* [#585](https://github.com/ruby-grape/grape-swagger/pull/585): Issue #584: do not mutate route.path - [@LeFnord](https://github.com/LeFnord).
 
 * Your contribution here.
 

@@ -42,7 +42,9 @@ module Grape
         contact:           contact_object(infos),
         license:           license_object(infos),
         version:           infos[:version]
-      }.delete_if { |_, value| value.blank? }
+      }.merge(
+        infos.slice(*infos.keys.select{|k| k.to_s =~ /^x-/})
+      ).delete_if { |_, value| value.blank? }
     end
 
     # sub-objects of info object

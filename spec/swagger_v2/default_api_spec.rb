@@ -139,4 +139,28 @@ describe 'Default API' do
       expect(subject['x-logo']).to eql('http://logo.com/img.png')
     end
   end
+
+  context 'with tags' do
+    def app
+      Class.new(Grape::API) do
+        format :json
+        desc 'This gets something.'
+        get '/something' do
+          { bla: 'something' }
+        end
+        add_swagger_documentation tags: [
+          { name: 'something', description: 'customized description' }
+        ]
+      end
+    end
+
+    subject do
+      get '/swagger_doc'
+      JSON.parse(last_response.body)
+    end
+
+    it 'documents the customized tag' do
+      expect(subject['tags']).to eql([{ 'name' => 'something', 'description' => 'customized description' }])
+    end
+  end
 end

@@ -52,13 +52,7 @@ module GrapeSwagger
         )
 
         paths, definitions   = endpoint.path_and_definition_objects(combi_routes, options)
-        tags                 = GrapeSwagger::DocMethods::TagNameDescription.build(paths)
-
-        if options[:tags]
-          names = options[:tags].map{|t| t[:name]}
-          tags.reject!{|t| names.include?(t[:name])}
-          tags += options[:tags]
-        end
+        tags                 = tags_from(paths, options)
 
         output[:tags]        = tags unless tags.empty? || paths.blank?
         output[:paths]       = paths unless paths.blank?
@@ -115,6 +109,18 @@ module GrapeSwagger
       @@mount_path              = options[:mount_path]
       @@class_name              = options[:class_name] || options[:mount_path].delete('/')
       @@hide_documentation_path = options[:hide_documentation_path]
+    end
+
+    def tags_from(paths, options)
+      tags = GrapeSwagger::DocMethods::TagNameDescription.build(paths)
+
+      if options[:tags]
+        names = options[:tags].map { |t| t[:name] }
+        tags.reject! { |t| names.include?(t[:name]) }
+        tags += options[:tags]
+      end
+
+      tags
     end
   end
 end

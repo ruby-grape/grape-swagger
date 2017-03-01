@@ -99,7 +99,9 @@ describe 'Default API' do
           license_url: 'http://test.com',
           terms_of_service_url: 'http://terms.com',
           contact_email: 'support@test.com',
-          "x-logo": 'http://logo.com/img.png'
+          x: {
+            logo: 'http://logo.com/img.png'
+          }
         }
       end
     end

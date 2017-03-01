@@ -35,16 +35,18 @@ module Grape
 
     # building info object
     def info_object(infos)
-      {
+      result = {
         title:             infos[:title] || 'API title',
         description:       infos[:description],
         termsOfServiceUrl: infos[:terms_of_service_url],
         contact:           contact_object(infos),
         license:           license_object(infos),
         version:           infos[:version]
-      }.merge(
-        infos.slice(*infos.keys.select{|k| k.to_s =~ /^x-/})
-      ).delete_if { |_, value| value.blank? }
+      }
+
+      GrapeSwagger::DocMethods::Extensions.add_extensions_to_info(infos, result)
+
+      result.delete_if { |_, value| value.blank? }
     end
 
     # sub-objects of info object

@@ -3,6 +3,8 @@
 #### Features
 
 * [#583](https://github.com/ruby-grape/grape-swagger/pull/583): Issue #582: document file response - [@LeFnord](https://github.com/LeFnord).
+* [#588](https://github.com/ruby-grape/grape-swagger/pull/588): Allow extension keys in Info object - [@
+mattyr](https://github.com/mattyr)
 
 * Your contribution here.
 

@@ -98,7 +98,10 @@ describe 'Default API' do
           license: 'Apache 2',
           license_url: 'http://test.com',
           terms_of_service_url: 'http://terms.com',
-          contact_email: 'support@test.com'
+          contact_email: 'support@test.com',
+          x: {
+            logo: 'http://logo.com/img.png'
+          }
         }
       end
     end
@@ -130,6 +133,10 @@ describe 'Default API' do
 
     it 'documents the contact email' do
       expect(subject['contact']['email']).to eql('support@test.com')
+    end
+
+    it 'documents the extension field' do
+      expect(subject['x-logo']).to eql('http://logo.com/img.png')
     end
   end
 end

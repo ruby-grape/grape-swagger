@@ -199,7 +199,7 @@ module Grape
         response_model = expose_params_from_model(value[:model]) if value[:model]
 
         if route.request_method == 'DELETE' && !value[:model].nil?
-          memo[200] ||= memo.delete(204)
+          memo[200] ||= memo.delete(204) { {} }
           value[:code] = 200
         end
 

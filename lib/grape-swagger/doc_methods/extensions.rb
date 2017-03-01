@@ -13,6 +13,10 @@ module GrapeSwagger
           add_extensions_to_definition(settings, path, definitions) if settings && extended?(settings, :x_def)
         end
 
+        def add_extensions_to_info(settings, info)
+          add_extension_to(info, extension(settings)) if extended?(settings, :x)
+        end
+
         def add_extensions_to_path(settings, path)
           add_extension_to(path, extension(settings, :x_path))
         end

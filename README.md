@@ -858,10 +858,24 @@ end
 #### Extensions
 
 Swagger spec2.0 supports extensions on different levels, for the moment,
-the documentation on `verb`, `path` and `definition` level would be supported.
+the documentation on `info`, `verb`, `path` and `definition` level would be supported.
 The documented key would be generated from the `x` + `-` + key of the submitted hash,
 for possibilities refer to the [extensions spec](spec/lib/extensions_spec.rb).
 To get an overview *how* the extensions would be defined on grape level, see the following examples:
+
+- `info` extension, add a `x` key to the `info` hash when calling ```add_swagger_documentation```:
+```ruby
+  add_swagger_documentation \
+    info: {
+      x: { some: 'stuff' }
+    }
+```
+this would generate:
+```json
+"info":{
+  "x-some":"stuff"
+}
+```
 
 - `verb` extension, add a `x` key to the `desc` hash:
 ```ruby

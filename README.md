@@ -202,6 +202,7 @@ end
 * [token_owner](#token_owner)
 * [security_definitions](#security_definitions)
 * [models](#models)
+* [tags](#tags)
 * [hide_documentation_path](#hide_documentation_path)
 * [info](#info)
 
@@ -327,6 +328,18 @@ add_swagger_documentation \
      TheApi::Entities::UseResponse,
      TheApi::Entities::ApiError
    ]
+```
+
+<a name="tags" />
+### tags:
+A list of tags to document.  By default tags are automatically generated
+for endpoints based on route names.
+
+```ruby
+add_swagger_documentation \
+  tags: [
+    { name: 'widgets', description: 'A description of widgets' }
+  ]
 ```
 
 <a name="hide_documentation_path" />

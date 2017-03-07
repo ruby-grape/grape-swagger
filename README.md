@@ -438,7 +438,13 @@ desc "Return super-secret information", {
 <a name="hiding" />
 #### Hiding an Endpoint
 
-You can hide an endpoint by adding ```hidden: true``` on the verb method of the endpoint, such as `get`, `post` and `put`:
+You can hide an endpoint by adding ```hidden: true``` in the description of the endpoint:
+
+```ruby
+desc 'Hide this endpoint', hidden: true
+```
+
+Or by adding ```hidden: true``` on the verb method of the endpoint, such as `get`, `post` and `put`:
 
 ```ruby
 get '/kittens', hidden: true do

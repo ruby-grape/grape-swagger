@@ -444,6 +444,12 @@ You can hide an endpoint by adding ```hidden: true``` in the description of the 
 desc 'Hide this endpoint', hidden: true
 ```
 
+Or by adding ```hidden: true``` on the verb method of the endpoint, such as `get`, `post` and `put`:
+
+```ruby
+get '/kittens', hidden: true do
+```
+
 Endpoints can be conditionally hidden by providing a callable object such as a lambda which evaluates to the desired
 state:
 

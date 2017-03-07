@@ -438,10 +438,10 @@ desc "Return super-secret information", {
 <a name="hiding" />
 #### Hiding an Endpoint
 
-You can hide an endpoint by adding ```hidden: true``` in the description of the endpoint:
+You can hide an endpoint by adding ```hidden: true``` on the verb method of the endpoint, such as `get`, `post` and `put`:
 
 ```ruby
-desc 'Hide this endpoint', hidden: true
+get '/kittens', hidden: true do
 ```
 
 Endpoints can be conditionally hidden by providing a callable object such as a lambda which evaluates to the desired

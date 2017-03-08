@@ -19,12 +19,7 @@ module GrapeSwagger
         end
 
         def add_extensions_to_operation(settings, path, route)
-          p settings
-          p path
-          p route.request_method
-          p path[route.request_method.downcase.to_sym]
-          p extension(settings, :x_operation)
-          p add_extension_to(path[route.request_method.downcase.to_sym], extension(settings, :x_operation))
+          add_extension_to(path[route.request_method.downcase.to_sym], extension(settings, :x_operation))
         end
 
         def add_extensions_to_path(settings, path)

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'grape'
 
 require 'grape-swagger/version'

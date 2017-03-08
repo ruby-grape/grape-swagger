@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'representable/json'
 
 RSpec.shared_context 'representable swagger example' do

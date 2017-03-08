@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.shared_context 'the api paths/defs' do
   let(:paths) do
     {

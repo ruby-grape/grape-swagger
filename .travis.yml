@@ -8,7 +8,6 @@ before_install:
 
 after_success:
   - bundle exec danger
-  - coveralls
 
 rvm:
   - 2.4.0

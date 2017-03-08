@@ -17,10 +17,11 @@ describe 'extensions' do
           { 'declared_params' => declared(params) }
         end
 
+        route_setting :x_operation, some: 'stuff'
+
         desc 'This returns something with extension on verb level',
              params: Entities::UseResponse.documentation,
-             failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }],
-             x: { some: 'stuff' }
+             failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         params do
           requires :id, type: Integer
         end

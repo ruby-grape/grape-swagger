@@ -9,12 +9,22 @@ module GrapeSwagger
           add_extension_to(path[method], extension(description)) if description && extended?(description, :x)
 
           settings = route.settings
+          add_extensions_to_operation(settings, path, route) if settings && extended?(settings, :x_operation)
           add_extensions_to_path(settings, path) if settings && extended?(settings, :x_path)
           add_extensions_to_definition(settings, path, definitions) if settings && extended?(settings, :x_def)
         end
 
         def add_extensions_to_info(settings, info)
           add_extension_to(info, extension(settings)) if extended?(settings, :x)
+        end
+
+        def add_extensions_to_operation(settings, path, route)
+          p settings
+          p path
+          p route.request_method
+          p path[route.request_method.downcase.to_sym]
+          p extension(settings, :x_operation)
+          p add_extension_to(path[route.request_method.downcase.to_sym], extension(settings, :x_operation))
         end
 
         def add_extensions_to_path(settings, path)

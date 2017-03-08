@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.shared_context 'mock swagger example' do
   before :all do
     module Entities

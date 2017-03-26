@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'spec_helper'
 
 describe '#537 enum values spec' do
@@ -6,7 +7,7 @@ describe '#537 enum values spec' do
     Class.new(Grape::API) do
       namespace :issue_537 do
         class Spec < Grape::Entity
-          expose :enum_property, documentation: { values: [:foo, :bar] }
+          expose :enum_property, documentation: { values: %i(foo bar) }
           expose :enum_property_default, documentation: { values: %w(a b c), default: 'c' }
           expose :own_format, documentation: { format: 'log' }
         end

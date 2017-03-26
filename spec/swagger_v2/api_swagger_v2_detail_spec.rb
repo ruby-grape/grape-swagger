@@ -1,24 +1,25 @@
 # frozen_string_literal: true
+
 require 'spec_helper'
 
 def details
   <<-DETAILS
-# Burgers in Heaven
+    # Burgers in Heaven
 
-> A burger doesn't come for free
+    > A burger doesn't come for free
 
-If you want to reserve a burger in heaven, you have to do
-some crazy stuff on earth.
+    If you want to reserve a burger in heaven, you have to do
+    some crazy stuff on earth.
 
-```
-def do_good
-puts 'help people'
-end
-```
+    ```
+    def do_good
+    puts 'help people'
+    end
+    ```
 
-* _Will go to Heaven:_ Probably
-* _Will go to Hell:_ Probably not
-DETAILS
+    * _Will go to Heaven:_ Probably
+    * _Will go to Hell:_ Probably not
+  DETAILS
 end
 
 describe 'details' do

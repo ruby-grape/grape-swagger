@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'Form Params' do
@@ -34,7 +35,7 @@ describe 'Form Params' do
       params do
         requires :id, type: Integer, desc: 'id of item'
         requires :name, type: String, desc: 'name of item'
-        optional :conditions, type: Symbol, desc: 'conditions of item', values: [:one, :two]
+        optional :conditions, type: Symbol, desc: 'conditions of item', values: %i(one two)
       end
       post '/items/:id' do
         {}

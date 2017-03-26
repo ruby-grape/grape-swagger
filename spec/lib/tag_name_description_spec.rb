@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'spec_helper'
 
 describe GrapeSwagger::DocMethods::TagNameDescription do
@@ -7,7 +8,7 @@ describe GrapeSwagger::DocMethods::TagNameDescription do
     subject { described_class.send(:build_memo, tag) }
 
     specify do
-      expect(subject.keys).to eql [:name, :description]
+      expect(subject.keys).to eql %i(name description)
       expect(subject).to eql(
         name: tag,
         description: "Operations about #{tag.pluralize}"

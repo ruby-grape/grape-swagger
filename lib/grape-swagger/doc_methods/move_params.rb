@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module GrapeSwagger
   module DocMethods
     class MoveParams
@@ -197,7 +198,7 @@ module GrapeSwagger
         end
 
         def property_keys
-          [:type, :format, :description, :minimum, :maximum, :items]
+          %i(type format description minimum maximum items)
         end
 
         def deletable?(param)

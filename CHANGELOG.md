@@ -2,6 +2,16 @@
 
 #### Features
 
+* Your contribution here.
+
+#### Fixes
+
+* Your contribution here.
+
+###  0.27.0 (March 27, 2014)
+
+#### Features
+
 * [#583](https://github.com/ruby-grape/grape-swagger/pull/583): Issue #582: document file response - [@LeFnord](https://github.com/LeFnord).
 * [#588](https://github.com/ruby-grape/grape-swagger/pull/588): Allow extension keys in Info object - [@mattyr](https://github.com/mattyr).
 * [#589](https://github.com/ruby-grape/grape-swagger/pull/589): Allow overriding tag definitions in Info object - [@mattyr](https://github.com/mattyr).
@@ -17,7 +27,7 @@
 
 * Your contribution here.
 
-### 0.26.1 (February 3, 2014)
+### 0.26.1 (February 3, 2017)
 
 #### Features
 

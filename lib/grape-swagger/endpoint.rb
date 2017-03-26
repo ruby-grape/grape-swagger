@@ -198,9 +198,9 @@ module Grape
         response_model = @item
         response_model = expose_params_from_model(value[:model]) if value[:model]
 
-        if route.request_method == 'DELETE' && !value[:model].nil?
-          memo[200] = memo.delete(204)
-          value[:code] = 200
+        if memo.key?(200) && route.request_method == 'DELETE' && value[:model].nil?
+          memo[204] = memo.delete(200)
+          value[:code] = 204
         end
 
         next if memo.key?(204)

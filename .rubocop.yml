@@ -20,3 +20,6 @@ Metrics/MethodLength:
 
 Style/IndentHash:
   EnforcedStyle: consistent
+
+Style/FileName:
+  Enabled: false

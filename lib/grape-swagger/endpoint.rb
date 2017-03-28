@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'active_support'
 require 'active_support/core_ext/string/inflections.rb'
 
@@ -148,7 +149,7 @@ module Grape
 
       mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format)
 
-      route_mime_types = [:formats, :content_types, :produces].map do |producer|
+      route_mime_types = %i(formats content_types produces).map do |producer|
         possible = route.options[producer]
         GrapeSwagger::DocMethods::ProducesConsumes.call(possible) if possible.present?
       end.flatten.compact.uniq
@@ -161,7 +162,7 @@ module Grape
       if route.settings[:description] && route.settings[:description][:consumes]
         format = route.settings[:description][:consumes]
       end
-      mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format) if [:post, :put].include?(method)
+      mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format) if %i(post put).include?(method)
 
       mime_types
     end

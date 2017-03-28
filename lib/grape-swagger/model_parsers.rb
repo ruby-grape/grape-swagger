@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module GrapeSwagger
   class ModelParsers
     include Enumerable

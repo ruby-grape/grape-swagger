@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'spec_helper'
 
 describe '#579 put / post parameters spec' do

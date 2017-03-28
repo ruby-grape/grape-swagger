@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'grape'
 
 require 'grape-swagger/version'
@@ -107,7 +108,7 @@ module Grape
               ns.options[:swagger][:nested] != false
           end
 
-          parent_standalone_namespaces = standalone_namespaces.reject { |ns_name, _| !name.start_with?(ns_name) }
+          parent_standalone_namespaces = standalone_namespaces.select { |ns_name, _| name.start_with?(ns_name) }
           # add only to the main route
           # if the namespace is not within any other namespace appearing as standalone resource
           # rubocop:disable Style/Next

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'an operation id api' do

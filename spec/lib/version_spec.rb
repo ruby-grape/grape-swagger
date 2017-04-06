@@ -9,7 +9,7 @@ describe GrapeSwagger::DocMethods::Version do
   describe 'grape 0.16.2 version' do
     let(:version) { '[:v1, :v2]' }
     it { is_expected.to be_a Array }
-    it { is_expected.to eql %i(v1 v2) }
+    it { is_expected.to eql %i[v1 v2] }
   end
 
   describe 'newer grape versions' do
@@ -20,9 +20,9 @@ describe GrapeSwagger::DocMethods::Version do
     end
 
     describe 'as Array' do
-      let(:version) { %i(v1 v2) }
+      let(:version) { %i[v1 v2] }
       it { is_expected.to be_a Array }
-      it { is_expected.to eql %i(v1 v2) }
+      it { is_expected.to eql %i[v1 v2] }
     end
   end
 end

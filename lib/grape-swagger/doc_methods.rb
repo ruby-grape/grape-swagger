@@ -39,7 +39,7 @@ module GrapeSwagger
       class_variables_from(options)
 
       if formatter
-        %i(format default_format default_error_formatter).each do |method|
+        %i[format default_format default_error_formatter].each do |method|
           send(method, formatter)
         end
       end

@@ -9,13 +9,13 @@ describe 'Convert values to enum or Range' do
       format :json
 
       params do
-        requires :letter, type: String, values: %w(a b c)
+        requires :letter, type: String, values: %w[a b c]
       end
       post :plain_array do
       end
 
       params do
-        requires :letter, type: String, values: proc { %w(d e f) }
+        requires :letter, type: String, values: proc { %w[d e f] }
       end
       post :array_in_proc do
       end
@@ -51,7 +51,7 @@ describe 'Convert values to enum or Range' do
         'name' => 'letter',
         'type' => 'string',
         'required' => true,
-        'enum' => %w(a b c)
+        'enum' => %w[a b c]
       }]
     end
   end
@@ -65,7 +65,7 @@ describe 'Convert values to enum or Range' do
         'name' => 'letter',
         'type' => 'string',
         'required' => true,
-        'enum' => %w(d e f)
+        'enum' => %w[d e f]
       }]
     end
   end

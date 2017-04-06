@@ -29,7 +29,7 @@ describe '#572 is_array is applied to all possible responses' do
     JSON.parse(last_response.body)
   end
 
-  let(:codes) { %w(200 401 404 429) }
+  let(:codes) { %w[200 401 404 429] }
 
   let(:responses) { subject['paths']['/issue_572']['get']['responses'] }
 

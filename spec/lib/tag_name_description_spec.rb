@@ -8,7 +8,7 @@ describe GrapeSwagger::DocMethods::TagNameDescription do
     subject { described_class.send(:build_memo, tag) }
 
     specify do
-      expect(subject.keys).to eql %i(name description)
+      expect(subject.keys).to eql %i[name description]
       expect(subject).to eql(
         name: tag,
         description: "Operations about #{tag.pluralize}"
@@ -51,7 +51,7 @@ describe GrapeSwagger::DocMethods::TagNameDescription do
         describe 'uniq key' do
           let(:paths) do
             {
-              key_1: { post: { tags: %w(tags_given another_tag_given) } }
+              key_1: { post: { tags: %w[tags_given another_tag_given] } }
             }
           end
 

@@ -41,19 +41,19 @@ describe GrapeSwagger::DocMethods::ParseParams do
       end
 
       describe 'as Array' do
-        let(:values) { proc { %w(a b c) } }
+        let(:values) { proc { %w[a b c] } }
         specify do
           parsed_range = subject.send(:parse_enum_or_range_values, values)
-          expect(parsed_range).to eql(enum: %w(a b c))
+          expect(parsed_range).to eql(enum: %w[a b c])
         end
       end
     end
 
     describe 'values as Array -> enums' do
-      let(:values) { %w(a b c) }
+      let(:values) { %w[a b c] }
       specify do
         parsed_range = subject.send(:parse_enum_or_range_values, values)
-        expect(parsed_range).to eql(enum: %w(a b c))
+        expect(parsed_range).to eql(enum: %w[a b c])
       end
     end
   end

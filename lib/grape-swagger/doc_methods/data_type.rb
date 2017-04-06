@@ -68,7 +68,7 @@ module GrapeSwagger
         end
 
         def request_primitives
-          primitives + %w(object string boolean file json array)
+          primitives + %w[object string boolean file json array]
         end
 
         def primitives
@@ -80,22 +80,22 @@ module GrapeSwagger
         end
 
         def collections
-          %w(csv ssv tsv pipes multi)
+          %w[csv ssv tsv pipes multi]
         end
       end
 
       PRIMITIVE_MAPPINGS = {
-        'integer' => %w(integer int32),
-        'long' => %w(integer int64),
-        'float' => %w(number float),
-        'double' => %w(number double),
-        'byte' => %w(string byte),
-        'date' => %w(string date),
-        'dateTime' => %w(string date-time),
-        'binary' => %w(string binary),
-        'password' => %w(string password),
-        'email' => %w(string email),
-        'uuid' => %w(string uuid)
+        'integer' => %w[integer int32],
+        'long' => %w[integer int64],
+        'float' => %w[number float],
+        'double' => %w[number double],
+        'byte' => %w[string byte],
+        'date' => %w[string date],
+        'dateTime' => %w[string date-time],
+        'binary' => %w[string binary],
+        'password' => %w[string password],
+        'email' => %w[string email],
+        'uuid' => %w[string uuid]
       }.freeze
     end
   end

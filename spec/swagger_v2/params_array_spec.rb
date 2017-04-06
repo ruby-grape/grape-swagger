@@ -125,7 +125,7 @@ describe 'Group Params as Array' do
             'type' => 'integer', 'format' => 'int32', 'description' => 'nested array of integers'
           }
         },
-        'required' => %w(array_of_string array_of_integer)
+        'required' => %w[array_of_string array_of_integer]
       )
     end
   end

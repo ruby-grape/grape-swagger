@@ -11,7 +11,7 @@ RSpec.shared_context 'entity swagger example' do
       end
 
       class EnumValues < Grape::Entity
-        expose :gender, documentation: { type: 'string', desc: 'Content of something.', values: %w(Male Female) }
+        expose :gender, documentation: { type: 'string', desc: 'Content of something.', values: %w[Male Female] }
         expose :number, documentation: { type: 'integer', desc: 'Content of something.', values: [1, 2] }
       end
 
@@ -312,7 +312,7 @@ RSpec.shared_context 'entity swagger example' do
         },
         'QueryInputElement' => {
           'type' => 'object',
-          'required' => %w(key value),
+          'required' => %w[key value],
           'properties' => { 'key' => { 'type' => 'string', 'description' => 'Name of parameter' }, 'value' => { 'type' => 'string', 'description' => 'Value of parameter' } }
         },
         'ApiError' => {
@@ -334,9 +334,9 @@ RSpec.shared_context 'entity swagger example' do
     }
   end
 
-  let(:http_verbs) { %w(get post put delete) }
+  let(:http_verbs) { %w[get post put delete] }
 end
 
 def mounted_paths
-  %w(/thing /other_thing /dummy)
+  %w[/thing /other_thing /dummy]
 end

@@ -57,7 +57,7 @@ describe 'Params Types' do
 
       it 'has consistent types' do
         types = subject.map { |param| param['type'] }
-        expect(types).to eq(%w(string string))
+        expect(types).to eq(%w[string string])
       end
     end
   end

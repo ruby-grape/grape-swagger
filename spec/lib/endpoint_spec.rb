@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Grape::Endpoint do
@@ -50,7 +52,7 @@ describe Grape::Endpoint do
           let(:object) { subject.content_types_for(target_class) }
 
           specify do
-            expect(object).to eql %w(application/xml application/json text/plain)
+            expect(object).to eql %w[application/xml application/json text/plain]
           end
         end
       end

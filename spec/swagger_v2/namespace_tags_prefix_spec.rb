@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'namespace tags check while using prefix and version' do
@@ -6,7 +8,7 @@ describe 'namespace tags check while using prefix and version' do
   before :all do
     module TheApi
       class NamespaceApi < Grape::API
-        version [:v1, :v2]
+        version %i[v1 v2]
       end
 
       class CascadingVersionApi < Grape::API

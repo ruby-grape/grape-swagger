@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `header`' do

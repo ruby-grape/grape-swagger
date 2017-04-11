@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'grape-swagger/doc_methods/status_codes'
 require 'grape-swagger/doc_methods/produces_consumes'
 require 'grape-swagger/doc_methods/data_type'
@@ -37,7 +39,7 @@ module GrapeSwagger
       class_variables_from(options)
 
       if formatter
-        [:format, :default_format, :default_error_formatter].each do |method|
+        %i[format default_format default_error_formatter].each do |method|
           send(method, formatter)
         end
       end

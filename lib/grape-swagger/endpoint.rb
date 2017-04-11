@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support'
 require 'active_support/core_ext/string/inflections.rb'
 
@@ -147,7 +149,7 @@ module Grape
 
       mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format)
 
-      route_mime_types = [:formats, :content_types, :produces].map do |producer|
+      route_mime_types = %i[formats content_types produces].map do |producer|
         possible = route.options[producer]
         GrapeSwagger::DocMethods::ProducesConsumes.call(possible) if possible.present?
       end.flatten.compact.uniq
@@ -160,7 +162,7 @@ module Grape
       if route.settings[:description] && route.settings[:description][:consumes]
         format = route.settings[:description][:consumes]
       end
-      mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format) if [:post, :put].include?(method)
+      mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format) if %i[post put].include?(method)
 
       mime_types
     end
@@ -197,9 +199,9 @@ module Grape
         response_model = @item
         response_model = expose_params_from_model(value[:model]) if value[:model]
 
-        if route.request_method == 'DELETE' && !value[:model].nil?
-          memo[200] = memo.delete(204)
-          value[:code] = 200
+        if memo.key?(200) && route.request_method == 'DELETE' && value[:model].nil?
+          memo[204] = memo.delete(200)
+          value[:code] = 204
         end
 
         next if memo.key?(204)
@@ -284,7 +286,7 @@ module Grape
         param_type = param_type.to_s unless param_type.nil?
         array_key = name.to_s if param_type_is_array?(param_type)
         options[:is_array] = true if array_key && name.start_with?(array_key)
-        memo[name] = options unless %w(Hash Array).include?(param_type) && !options.key?(:documentation)
+        memo[name] = options unless %w[Hash Array].include?(param_type) && !options.key?(:documentation)
       end
     end
 

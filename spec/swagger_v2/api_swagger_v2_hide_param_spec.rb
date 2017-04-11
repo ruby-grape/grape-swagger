@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'hidden flag enables a single endpoint parameter to be excluded from the documentation' do

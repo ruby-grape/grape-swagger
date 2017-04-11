@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'representable/json'
 
 RSpec.shared_context 'representable swagger example' do
@@ -27,7 +29,7 @@ RSpec.shared_context 'representable swagger example' do
       class EnumValues < Representable::Decorator
         include Representable::JSON
 
-        property :gender, documentation: { type: 'string', desc: 'Content of something.', values: %w(Male Female) }
+        property :gender, documentation: { type: 'string', desc: 'Content of something.', values: %w[Male Female] }
         property :number, documentation: { type: 'integer', desc: 'Content of something.', values: [1, 2] }
       end
 
@@ -382,7 +384,7 @@ RSpec.shared_context 'representable swagger example' do
         },
         'QueryInputElement' => {
           'type' => 'object',
-          'required' => %w(key value),
+          'required' => %w[key value],
           'properties' => { 'key' => { 'type' => 'string', 'description' => 'Name of parameter' }, 'value' => { 'type' => 'string', 'description' => 'Value of parameter' } }
         },
         'ApiError' => {
@@ -404,9 +406,9 @@ RSpec.shared_context 'representable swagger example' do
     }
   end
 
-  let(:http_verbs) { %w(get post put delete) }
+  let(:http_verbs) { %w[get post put delete] }
 end
 
 def mounted_paths
-  %w(/thing /other_thing /dummy)
+  %w[/thing /other_thing /dummy]
 end

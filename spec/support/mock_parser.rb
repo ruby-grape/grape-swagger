@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GrapeSwagger
   class MockParser
     attr_reader :model

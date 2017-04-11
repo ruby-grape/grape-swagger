@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'moving body/formData Params to definitions' do
@@ -136,11 +138,11 @@ describe 'moving body/formData Params to definitions' do
                       'city' => { 'type' => 'string', 'description' => 'city' },
                       'country' => { 'type' => 'string', 'description' => 'country' }
                     },
-                    'required' => %w(street postcode city)
+                    'required' => %w[street postcode city]
                   }
                 }
               },
-              'required' => %w(name)
+              'required' => %w[name]
             }
           },
           'description' => 'post in body with nested parameters'
@@ -230,7 +232,7 @@ describe 'moving body/formData Params to definitions' do
                   }
                 }
               },
-              'required' => %w(name)
+              'required' => %w[name]
             }
           },
           'description' => 'put in body with multiple nested parameters'

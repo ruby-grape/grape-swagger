@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe GrapeSwagger::DocMethods::OptionalObject do
@@ -34,7 +36,10 @@ describe GrapeSwagger::DocMethods::OptionalObject do
     end
 
     describe 'option is a proc' do
-      let(:options) { { host: proc { |request| request.host =~ /^example/ ? '/api-example' : '/api' } } }
+      # rubocop:disable RegexpMatch
+      let(:options) do
+        { host: proc { |request| request.host =~ /^example/ ? '/api-example' : '/api' } }
+      end
       specify do
         expect(subject.build(key, options, request)).to eql '/api-example'
       end

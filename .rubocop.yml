@@ -2,6 +2,7 @@ AllCops:
   Exclude:
     - vendor/**/*
     - example/**/*
+  TargetRubyVersion: 2.4
 
 inherit_from: .rubocop_todo.yml
 
@@ -19,3 +20,6 @@ Metrics/MethodLength:
 
 Style/IndentHash:
   EnforcedStyle: consistent
+
+Style/FileName:
+  Enabled: false

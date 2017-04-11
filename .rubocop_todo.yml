@@ -22,7 +22,7 @@ Metrics/ClassLength:
 
 # Offense count: 12
 Metrics/CyclomaticComplexity:
-  Max: 14
+  Max: 15
 
 # Offense count: 129
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives.
@@ -37,7 +37,7 @@ Metrics/MethodLength:
 
 # Offense count: 7
 Metrics/PerceivedComplexity:
-  Max: 15
+  Max: 16
 
 # Offense count: 3
 Style/ClassVars:
@@ -48,15 +48,9 @@ Style/ClassVars:
 Style/Documentation:
   Enabled: false
 
-# Offense count: 5
-# Configuration parameters: ExpectMatchingDefinition, Regex, IgnoreExecutableScripts.
-Style/FileName:
+Style/MixinGrouping:
   Exclude:
-    - 'lib/grape-swagger.rb'
-    - 'spec/swagger_v2/api_swagger_v2_definitions-models_spec.rb'
-    - 'spec/swagger_v2/api_swagger_v2_format-content_type_spec.rb'
-    - 'spec/swagger_v2/api_swagger_v2_type-format_spec.rb'
-    - 'spec/swagger_v2/grape-swagger_spec.rb'
+    - spec/**/*
 
 # Offense count: 1
 # Cop supports --auto-correct.

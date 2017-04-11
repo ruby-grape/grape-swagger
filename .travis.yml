@@ -8,11 +8,10 @@ before_install:
 
 after_success:
   - bundle exec danger
-  - coveralls
 
 rvm:
-  - 2.4.0
-  - 2.3.3
+  - 2.4.1
+  - 2.3.4
 
 env:
   - MODEL_PARSER=grape-swagger-entity
@@ -27,7 +26,7 @@ matrix:
   fast_finish: true
 
   include:
-    - rvm: 2.2.6
+    - rvm: 2.2.7
       env:
     - rvm: ruby-head
       env:

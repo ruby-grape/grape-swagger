@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'Params Multi Types' do
@@ -67,7 +69,7 @@ describe 'Params Multi Types' do
 
     it 'has consistent types' do
       types = subject.map { |param| param['type'] }
-      expect(types).to eq(%w(string string string))
+      expect(types).to eq(%w[string string string])
     end
   end
 end

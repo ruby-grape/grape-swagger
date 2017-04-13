@@ -8,7 +8,7 @@
 
 * Your contribution here.
 
-###  0.27.0 (March 27, 2014)
+###  0.27.0 (March 27, 2017)
 
 #### Features
 
@@ -16,16 +16,12 @@
 * [#588](https://github.com/ruby-grape/grape-swagger/pull/588): Allow extension keys in Info object - [@mattyr](https://github.com/mattyr).
 * [#589](https://github.com/ruby-grape/grape-swagger/pull/589): Allow overriding tag definitions in Info object - [@mattyr](https://github.com/mattyr).
 
-* Your contribution here.
-
 #### Fixes
 
 * [#580](https://github.com/ruby-grape/grape-swagger/pull/580): Issue #578: fixes duplicated path params - [@LeFnord](https://github.com/LeFnord).
 * [#585](https://github.com/ruby-grape/grape-swagger/pull/585): Issue #584: do not mutate route.path - [@LeFnord](https://github.com/LeFnord).
 * [#586](https://github.com/ruby-grape/grape-swagger/pull/586): Issue #587: Parameters delimited by dash cause exception - [@risa](https://github.com/risa).
 * [#593](https://github.com/ruby-grape/grape-swagger/pull/593): Clarify hidden option in readme - [@thogg4](https://github.com/thogg4).
-
-* Your contribution here.
 
 ### 0.26.1 (February 3, 2017)
 

@@ -26,7 +26,8 @@ describe 'global configuration stuff' do
                                   mount_path: 'documentation',
                                   add_base_path: true,
                                   add_version: true,
-                                  security_definitions: { api_key: { foo: 'bar' } }
+                                  security_definitions: { api_key: { foo: 'bar' } },
+                                  security: [{ api_key: [] }]
       end
     end
   end
@@ -49,6 +50,7 @@ describe 'global configuration stuff' do
       expect(subject['schemes']).to eql ['https']
       expect(subject['securityDefinitions'].keys).to include('api_key')
       expect(subject['securityDefinitions']['api_key']).to include('foo' => 'bar')
+      expect(subject['security']).to include('api_key' => [])
     end
   end
 end

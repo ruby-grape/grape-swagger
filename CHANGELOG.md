@@ -4,11 +4,15 @@
 
 * Your contribution here.
 
-* [#602](https://github.com/ruby-grape/grape-swagger/pull/602): Allow security object to be defined - [@markevich](https://github.com/markevich).
-
 #### Fixes
 
 * Your contribution here.
+
+### ###  0.27.1 (April 28, 2017)
+
+#### Features
+
+* [#602](https://github.com/ruby-grape/grape-swagger/pull/602): Allow security object to be defined - [@markevich](https://github.com/markevich).
 
 ###  0.27.0 (March 27, 2017)
 

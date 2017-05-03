@@ -63,11 +63,69 @@ Grape-swagger generates documentation per [Swagger / OpenAPI Spec 2.0](https://g
 
 ## Installation <a name="install" />
 
+### grape-swagger
+
 Add to your Gemfile:
 
 ```ruby
 gem 'grape-swagger'
 ```
+
+### Swagger UI
+
+#### Using gems
+
+There are multiple Rails gems available for instance:
+
+*  grape-swagger-rails
+
+#### Integrate swagger directly
+
+You can integrate Swagger UI directly into your application. For this you have to
+clone Swagger UI from https://github.com/wordnik/swagger-ui and provide all files within
+ `dist` folder as static files. 
+
+Depending on your runtime environment it can be sufficient to copy the `dist` folder
+into your project or project/public folder.
+
+When you use Rails you can copy the folders as follow:
+
+```ruby
+> git clone https://github.com/wordnik/swagger-ui
+> export RAILS_ROOT=./your/rails/root/folder
+> mkdir -p $RAILS_ROOT/vendor/assets/stylesheets/css
+> mkdir -p $RAILS_ROOT/vendor/assets/images
+> mkdir -p $RAILS_ROOT/vendor/assets/javascripts/lib
+> cp -pr swagger-ui/dist/css/* $RAILS_ROOT/vendor/assets/stylesheets/css
+> cp -pr swagger-ui/dist/images/* $RAILS_ROOT/vendor/assets/images
+> cp -pr swagger-ui/dist/lib/* $RAILS_ROOT/vendor/assets/javascripts/lib
+> cp -pr swagger-ui/dist/*js $RAILS_ROOT/vendor/assets/javascripts/
+> cp -pr swagger-ui/dist/index.html $RAILS_ROOT/public/swagger-doc.html
+> cp -pr swagger-ui/dist/o2c.html $RAILS_ROOT/public/o2c.html
+
+```
+
+
+
+After this you have to change all assets pathes  within `public/swagger-doc.html` 
+and prepend `assets/`. The stylesheets file `css/screen.css` does also contain 
+references to assets and has to be changed too.
+ 
+
+On default Swagger UI uses the petstore api. You can change `public/swagger-doc.html` to point directly to your api docs instead of petstore api:
+
+```html
+
+$(function () {
+      window.swaggerUi = new SwaggerUi({
+      url: "http://petstore.swagger.wordnik.com/api/api-docs", // <= change this to your doc url
+      ...
+});
+
+```
+
+`lib/swagger-oauth.js` uses `o2c.html`. In some cases you have to change this reference too.
+
 
 ## Upgrade
 

@@ -94,18 +94,13 @@ describe GrapeSwagger::DocMethods::MoveParams do
 
   describe 'parent_definition_of_params' do
     let(:path) { '/in_body' }
+    let(:route_options) { { requirements: {} } }
     describe 'POST' do
       let(:params) { paths[path][:post][:parameters] }
-      let(:options)  do
-        {
-          method: 'POST'
-        }
-      end
-      let(:env) { Rack::MockRequest.env_for(path, options) }
-      let(:request) { Grape::Request.new(env) }
+      let(:route) { Grape::Router::Route.new('POST', path.dup, route_options) }
 
       specify do
-        subject.to_definition(path, params, request, definitions)
+        subject.to_definition(path, params, route, definitions)
         expect(params).to eql(
           [
             { name: 'InBody', in: 'body', required: true, schema: { '$ref' => '#/definitions/postInBody' } }
@@ -118,16 +113,10 @@ describe GrapeSwagger::DocMethods::MoveParams do
 
     describe 'POST' do
       let(:params) { paths['/in_body/{key}'][:put][:parameters] }
-      let(:options)  do
-        {
-          method: 'PUT'
-        }
-      end
-      let(:env) { Rack::MockRequest.env_for(path, options) }
-      let(:request) { Grape::Request.new(env) }
+      let(:route) { Grape::Router::Route.new('PUT', path.dup, route_options) }
 
       specify do
-        subject.to_definition(path, params, request, definitions)
+        subject.to_definition(path, params, route, definitions)
         expect(params).to eql(
           [
             { in: 'path', name: 'key', description: nil, type: 'integer', format: 'int32', required: true },
@@ -214,8 +203,19 @@ describe GrapeSwagger::DocMethods::MoveParams do
           { name: name, in: 'body', required: true, schema: { '$ref' => "#/definitions/#{reference}" } }
         end
         specify do
-          parameter = subject.send(:build_body_parameter, reference, name)
+          parameter = subject.send(:build_body_parameter, reference, name, {})
           expect(parameter).to eql expected_param
+        end
+
+        describe 'body_name option specified' do
+          let(:route_options) { { body_name: 'body' } }
+          let(:expected_param) do
+            { name: route_options[:body_name], in: 'body', required: true, schema: { '$ref' => "#/definitions/#{reference}" } }
+          end
+          specify do
+            parameter = subject.send(:build_body_parameter, reference, name, route_options)
+            expect(parameter).to eql expected_param
+          end
         end
       end
     end

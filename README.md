@@ -521,6 +521,20 @@ end
 ```
 
 
+#### Overriding the name of the body parameter
+
+By default, body parameters have a generated name based on the operation. For
+deeply nested resources, this name can get very long. To override the name of
+body parameter add `body_name: 'post_body'` after the description.
+
+```ruby
+namespace 'order' do
+  desc 'Create an order', body_name: 'post_body'
+  post do
+    ...
+  end
+end
+```
 
 #### Defining an endpoint as an array <a name="array" />
 

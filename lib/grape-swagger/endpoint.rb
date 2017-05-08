@@ -51,7 +51,6 @@ module Grape
         version:           infos[:version]
       }
 
-      puts infos
       GrapeSwagger::DocMethods::Extensions.add_extensions_to_info(infos, result)
 
       result.delete_if { |_, value| value.blank? }

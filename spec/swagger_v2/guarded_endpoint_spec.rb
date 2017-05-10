@@ -56,7 +56,8 @@ describe 'a guarded api endpoint' do
     class GuardedMountedApi < Grape::API
       resource_owner_valid = proc { |token_owner = nil| token_owner.nil? }
 
-      desc 'Show endpoint if authenticated', hidden: resource_owner_valid
+      desc 'Show endpoint if authenticated'
+      route_setting :swagger, hidden: resource_owner_valid
       get '/auth' do
         { foo: 'bar' }
       end

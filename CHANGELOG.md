@@ -3,6 +3,7 @@
 #### Features
 
 * Your contribution here.
+* [#596](https://github.com/ruby-grape/grape-swagger/pull/596): Use route_settings for hidden and operations extensions - [@thogg4](https://github.com/thogg4).
 * [#607](https://github.com/ruby-grape/grape-swagger/pull/607): Allow body parameter name to be specified - [@tjwp](https://github.com/tjwp).
 
 #### Fixes

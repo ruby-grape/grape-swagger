@@ -3,6 +3,7 @@
 #### Features
 
 * Your contribution here.
+* [#608](https://github.com/ruby-grape/grape-swagger/pull/608): Support extensions on the root object - [@thogg4](https://github.com/thogg4).
 * [#607](https://github.com/ruby-grape/grape-swagger/pull/607): Allow body parameter name to be specified - [@tjwp](https://github.com/tjwp).
 
 #### Fixes

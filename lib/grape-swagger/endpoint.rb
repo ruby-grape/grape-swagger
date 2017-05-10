@@ -23,17 +23,20 @@ module Grape
     #
     # required keys for SwaggerObject
     def swagger_object(target_class, request, options)
-      {
-        info:           info_object(options[:info].merge(version: options[:doc_version])),
-        swagger:        '2.0',
-        produces:       content_types_for(target_class),
-        authorizations: options[:authorizations],
+      object = {
+        info:                info_object(options[:info].merge(version: options[:doc_version])),
+        swagger:             '2.0',
+        produces:            content_types_for(target_class),
+        authorizations:      options[:authorizations],
         securityDefinitions: options[:security_definitions],
-        security: options[:security],
-        host:           GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request),
-        basePath:       GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request),
-        schemes:        options[:schemes].is_a?(String) ? [options[:schemes]] : options[:schemes]
-      }.delete_if { |_, value| value.blank? }
+        security:            options[:security],
+        host:                GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request),
+        basePath:            GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request),
+        schemes:             options[:schemes].is_a?(String) ? [options[:schemes]] : options[:schemes]
+      }
+
+      GrapeSwagger::DocMethods::Extensions.add_extensions_to_root(options, object)
+      object.delete_if { |_, value| value.blank? }
     end
 
     # building info object

@@ -461,7 +461,7 @@ get '/kittens', hidden: true do
 Or by using a route setting:
 
 ```ruby
-route_setting :hidden, true
+route_setting :swagger, { hidden: true }
 gem '/kittens' do
 ```
 

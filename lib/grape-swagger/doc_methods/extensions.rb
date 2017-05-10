@@ -16,6 +16,10 @@ module GrapeSwagger
           add_extensions_to_definition(settings, path, definitions) if settings && extended?(settings, :x_def)
         end
 
+        def add_extensions_to_root(settings, object)
+          add_extension_to(object, extension(settings)) if extended?(settings, :x)
+        end
+
         def add_extensions_to_info(settings, info)
           add_extension_to(info, extension(settings)) if extended?(settings, :x)
         end

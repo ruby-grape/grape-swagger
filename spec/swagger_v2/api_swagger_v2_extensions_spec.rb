@@ -57,13 +57,25 @@ describe 'extensions' do
           { 'declared_params' => declared(params) }
         end
 
-        add_swagger_documentation
+        add_swagger_documentation({ x: { some: 'stuff' } })
       end
     end
   end
 
   def app
     TheApi::ExtensionsApi
+  end
+
+  describe 'extension on root level' do
+    subject do
+      get '/swagger_doc/path_extension'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject).to include 'x-some'
+      expect(subject['x-some']).to eql 'stuff'
+    end
   end
 
   describe 'extension on path level' do

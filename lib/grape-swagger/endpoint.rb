@@ -341,7 +341,8 @@ module Grape
     end
 
     def hidden?(route, options)
-      route_hidden = route.options[:hidden]
+      route_hidden = route.settings.try(:[], :swagger).try(:[], :hidden)
+      route_hidden = route.options[:hidden] if route.options.key?(:hidden)
       return route_hidden unless route_hidden.is_a?(Proc)
       options[:token_owner] ? route_hidden.call(send(options[:token_owner].to_sym)) : route_hidden.call
     end

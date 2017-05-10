@@ -458,6 +458,13 @@ Or by adding ```hidden: true``` on the verb method of the endpoint, such as `get
 get '/kittens', hidden: true do
 ```
 
+Or by using a route setting:
+
+```ruby
+route_setting :hidden, true
+gem '/kittens' do
+```
+
 Endpoints can be conditionally hidden by providing a callable object such as a lambda which evaluates to the desired
 state:
 
@@ -922,6 +929,20 @@ this would generate:
 ```ruby
 desc 'This returns something with extension on verb level',
   x: { some: 'stuff' }
+```
+this would generate:
+```json
+"/path":{
+  "get":{
+    "…":"…",
+    "x-some":"stuff"
+  }
+}
+```
+
+- `operation` extension, by setting via route settings::
+```ruby
+route_setting :x_operation, { some: 'stuff' }
 ```
 this would generate:
 ```json

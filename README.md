@@ -196,6 +196,7 @@ end
 * [swagger_endpoint_guard](#swagger_endpoint_guard)
 * [token_owner](#token_owner)
 * [security_definitions](#security_definitions)
+* [security](#security)
 * [models](#models)
 * [tags](#tags)
 * [hide_documentation_path](#hide_documentation_path)
@@ -309,6 +310,18 @@ add_swagger_documentation \
       in: "header"
     }
   }
+```
+
+#### security: <a name="security" />
+Specify the [Security Object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#securityRequirementObject)
+
+```ruby
+add_swagger_documentation \
+  security: [
+    {
+      api_key: []
+    }
+  ]
 ```
 
 
@@ -508,6 +521,20 @@ end
 ```
 
 
+#### Overriding the name of the body parameter
+
+By default, body parameters have a generated name based on the operation. For
+deeply nested resources, this name can get very long. To override the name of
+body parameter add `body_name: 'post_body'` after the description.
+
+```ruby
+namespace 'order' do
+  desc 'Create an order', body_name: 'post_body'
+  post do
+    ...
+  end
+end
+```
 
 #### Defining an endpoint as an array <a name="array" />
 

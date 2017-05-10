@@ -29,6 +29,7 @@ module Grape
         produces:       content_types_for(target_class),
         authorizations: options[:authorizations],
         securityDefinitions: options[:security_definitions],
+        security: options[:security],
         host:           GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request),
         basePath:       GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request),
         schemes:        options[:schemes].is_a?(String) ? [options[:schemes]] : options[:schemes]

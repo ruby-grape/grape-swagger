@@ -36,7 +36,6 @@ module Grape
       }
 
       GrapeSwagger::DocMethods::Extensions.add_extensions_to_root(options, object)
-        
       object.delete_if { |_, value| value.blank? }
     end
 

@@ -57,7 +57,7 @@ describe 'extensions' do
           { 'declared_params' => declared(params) }
         end
 
-        add_swagger_documentation({ x: { some: 'stuff' } })
+        add_swagger_documentation(x: { some: 'stuff' })
       end
     end
   end

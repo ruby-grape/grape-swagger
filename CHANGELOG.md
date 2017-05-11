@@ -3,13 +3,18 @@
 #### Features
 
 * Your contribution here.
-* [#608](https://github.com/ruby-grape/grape-swagger/pull/608): Support extensions on the root object - [@thogg4](https://github.com/thogg4).
-* [#596](https://github.com/ruby-grape/grape-swagger/pull/596): Use route_settings for hidden and operations extensions - [@thogg4](https://github.com/thogg4).
-* [#607](https://github.com/ruby-grape/grape-swagger/pull/607): Allow body parameter name to be specified - [@tjwp](https://github.com/tjwp).
 
 #### Fixes
 
 * Your contribution here.
+
+### 0.27.2 (May 11, 2017)
+
+#### Features
+
+* [#608](https://github.com/ruby-grape/grape-swagger/pull/608): Support extensions on the root object - [@thogg4](https://github.com/thogg4).
+* [#596](https://github.com/ruby-grape/grape-swagger/pull/596): Use route_settings for hidden and operations extensions - [@thogg4](https://github.com/thogg4).
+* [#607](https://github.com/ruby-grape/grape-swagger/pull/607): Allow body parameter name to be specified - [@tjwp](https://github.com/tjwp).
 
 ### 0.27.1 (April 28, 2017)
 

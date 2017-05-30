@@ -23,17 +23,20 @@ module Grape
     #
     # required keys for SwaggerObject
     def swagger_object(target_class, request, options)
-      {
-        info:           info_object(options[:info].merge(version: options[:doc_version])),
-        swagger:        '2.0',
-        produces:       content_types_for(target_class),
-        authorizations: options[:authorizations],
+      object = {
+        info:                info_object(options[:info].merge(version: options[:doc_version])),
+        swagger:             '2.0',
+        produces:            content_types_for(target_class),
+        authorizations:      options[:authorizations],
         securityDefinitions: options[:security_definitions],
-        security: options[:security],
-        host:           GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request),
-        basePath:       GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request),
-        schemes:        options[:schemes].is_a?(String) ? [options[:schemes]] : options[:schemes]
-      }.delete_if { |_, value| value.blank? }
+        security:            options[:security],
+        host:                GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request),
+        basePath:            GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request),
+        schemes:             options[:schemes].is_a?(String) ? [options[:schemes]] : options[:schemes]
+      }
+
+      GrapeSwagger::DocMethods::Extensions.add_extensions_to_root(options, object)
+      object.delete_if { |_, value| value.blank? }
     end
 
     # building info object
@@ -338,7 +341,8 @@ module Grape
     end
 
     def hidden?(route, options)
-      route_hidden = route.options[:hidden]
+      route_hidden = route.settings.try(:[], :swagger).try(:[], :hidden)
+      route_hidden = route.options[:hidden] if route.options.key?(:hidden)
       return route_hidden unless route_hidden.is_a?(Proc)
       options[:token_owner] ? route_hidden.call(send(options[:token_owner].to_sym)) : route_hidden.call
     end

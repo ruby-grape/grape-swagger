@@ -458,6 +458,13 @@ Or by adding ```hidden: true``` on the verb method of the endpoint, such as `get
 get '/kittens', hidden: true do
 ```
 
+Or by using a route setting:
+
+```ruby
+route_setting :swagger, { hidden: true }
+gem '/kittens' do
+```
+
 Endpoints can be conditionally hidden by providing a callable object such as a lambda which evaluates to the desired
 state:
 
@@ -521,6 +528,20 @@ end
 ```
 
 
+#### Overriding the name of the body parameter
+
+By default, body parameters have a generated name based on the operation. For
+deeply nested resources, this name can get very long. To override the name of
+body parameter add `body_name: 'post_body'` after the description.
+
+```ruby
+namespace 'order' do
+  desc 'Create an order', body_name: 'post_body'
+  post do
+    ...
+  end
+end
+```
 
 #### Defining an endpoint as an array <a name="array" />
 
@@ -885,10 +906,28 @@ end
 #### Extensions <a name="extensions" />
 
 Swagger spec2.0 supports extensions on different levels, for the moment,
-the documentation on `info`, `verb`, `path` and `definition` level would be supported.
+the documentation on the root level object and the `info`, `verb`, `path` and `definition` levels are supported.
 The documented key would be generated from the `x` + `-` + key of the submitted hash,
 for possibilities refer to the [extensions spec](spec/lib/extensions_spec.rb).
 To get an overview *how* the extensions would be defined on grape level, see the following examples:
+
+- root object extension, add a `x` key to the root hash when calling ```add_swagger_documentation```:
+```ruby
+  add_swagger_documentation \
+    x: {
+      some: 'stuff'
+    },
+    info: {
+    }
+```
+this would generate:
+```json
+{
+  "x-some": "stuff",
+  "info":{
+  }
+}
+```
 
 - `info` extension, add a `x` key to the `info` hash when calling ```add_swagger_documentation```:
 ```ruby
@@ -908,6 +947,20 @@ this would generate:
 ```ruby
 desc 'This returns something with extension on verb level',
   x: { some: 'stuff' }
+```
+this would generate:
+```json
+"/path":{
+  "get":{
+    "…":"…",
+    "x-some":"stuff"
+  }
+}
+```
+
+- `operation` extension, by setting via route settings::
+```ruby
+route_setting :x_operation, { some: 'stuff' }
 ```
 this would generate:
 ```json

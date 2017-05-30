@@ -15,6 +15,12 @@ describe 'a hide mounted api' do
         { foo: 'bar' }
       end
 
+      desc 'Hide this endpoint using route setting'
+      route_setting :swagger, hidden: true
+      get '/hide_as_well' do
+        { foo: 'bar' }
+      end
+
       desc 'Lazily show endpoint', hidden: -> { false }
       get '/lazy' do
         { foo: 'bar' }

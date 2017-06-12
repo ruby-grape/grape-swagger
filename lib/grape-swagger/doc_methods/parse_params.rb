@@ -101,7 +101,7 @@ module GrapeSwagger
         def parse_enum_or_range_values(values)
           case values
           when Proc
-            parse_enum_or_range_values(values.call)
+            parse_enum_or_range_values(values.call) if values.parameters.empty?
           when Range
             parse_range_values(values) if values.first.is_a?(Integer)
           else

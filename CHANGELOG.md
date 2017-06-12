@@ -3,6 +3,7 @@
 #### Features
 
 * Your contribution here.
+* [#613](https://github.com/ruby-grape/grape-swagger/pull/613): Fix Proc with arity one in param values - [@timothysu](https://github.com/timothysu).
 
 #### Fixes
 

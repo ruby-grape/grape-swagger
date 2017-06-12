@@ -47,6 +47,14 @@ describe GrapeSwagger::DocMethods::ParseParams do
           expect(parsed_range).to eql(enum: %w[a b c])
         end
       end
+
+      describe 'with arity one' do
+        let(:values) { proc { |v| v < 25 } }
+        specify do
+          parsed_range = subject.send(:parse_enum_or_range_values, values)
+          expect(parsed_range).to be_nil
+        end
+      end
     end
 
     describe 'values as Array -> enums' do

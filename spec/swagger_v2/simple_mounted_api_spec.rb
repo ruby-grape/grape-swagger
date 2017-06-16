@@ -100,6 +100,15 @@ describe 'a simple mounted api' do
           { 'name' => 'custom', 'description' => 'Operations about customs' }
         ],
         'paths' => {
+          '/' => {
+            'get' => {
+              'summary' => 'Document root',
+              'description' => 'Document root',
+              'produces' => ['application/json'],
+              'responses' => { '200' => { 'description' => 'Document root' } },
+              'operationId' => 'get'
+            }
+          },
           '/simple' => {
             'get' => {
               'summary' => 'This gets something.',

@@ -8,6 +8,7 @@
 #### Fixes
 
 * Your contribution here.
+* [#616](https://github.com/ruby-grape/grape-swagger/pull/616): Fix swagger to show root path (#605) - [@NightWolf007](https://github.com/NightWolf007).
 
 ### 0.27.2 (May 11, 2017)
 

@@ -14,7 +14,8 @@ module GrapeSwagger
           path.gsub!(/:(\w+)/, '{\1}')
 
           # set item from path, this could be used for the definitions object
-          item = path.gsub(%r{/{(.+?)}}, '').split('/').last.singularize.underscore.camelize || 'Item'
+          path_name = path.gsub(%r{/{(.+?)}}, '').split('/').last
+          item = path_name.present? ? path_name.singularize.underscore.camelize : 'Item'
 
           if route.version && options[:add_version]
             version = GrapeSwagger::DocMethods::Version.get(route)

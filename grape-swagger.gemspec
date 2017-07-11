@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.summary     = 'Add auto generated documentation to your Grape API that can be displayed with Swagger.'
   s.license     = 'MIT'
 
-  s.required_ruby_version = '>= 2.2.6'
+  s.required_ruby_version = '>= 2.2'
   s.add_runtime_dependency 'grape', '>= 0.16.2'
 
   s.files         = `git ls-files`.split("\n")

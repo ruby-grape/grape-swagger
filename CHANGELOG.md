@@ -3,12 +3,20 @@
 #### Features
 
 * Your contribution here.
-* [#613](https://github.com/ruby-grape/grape-swagger/pull/613): Fix Proc with arity one in param values - [@timothysu](https://github.com/timothysu).
 
 #### Fixes
 
 * Your contribution here.
-* [#616](https://github.com/ruby-grape/grape-swagger/pull/616): Fix swagger to show root path (#605) - [@NightWolf007](https://github.com/NightWolf007).
+
+### 0.27.3 (July 11, 2017)
+
+#### Features
+
+* [#613](https://github.com/ruby-grape/grape-swagger/pull/613): Fix Proc with arity one in param values - [@timothysu](https://github.com/timothysu).
+
+#### Fixes
+
+* [#616](https://github.com/ruby-grape/grape-swagger/pull/616): Fix swagger to show root path ([#605](https://github.com/ruby-grape/grape-swagger/issue/605)) - [@NightWolf007](https://github.com/NightWolf007).
 
 ### 0.27.2 (May 11, 2017)
 

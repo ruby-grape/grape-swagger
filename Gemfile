@@ -6,9 +6,9 @@ ruby RUBY_VERSION
 
 gemspec
 
-gem 'grape', case version = ENV['GRAPE_VERSION'] || '~> 0.19'
+gem 'grape', case version = ENV['GRAPE_VERSION'] || '~> 1.0'
              when 'HEAD'
-               { github: 'ruby-grape/grape' }
+               { git: 'https://github.com/ruby-grape/grape' }
              else
                version
              end
@@ -25,7 +25,7 @@ group :development, :test do
   gem 'rake'
   gem 'rdoc'
   gem 'rspec', '~> 3.0'
-  gem 'rubocop', '~> 0.48'
+  gem 'rubocop', '~> 0.49'
 end
 
 group :test do

@@ -80,7 +80,7 @@ module GrapeSwagger
         end
 
         def collections
-          %w[csv ssv tsv pipes multi]
+          %w[csv ssv tsv pipes multi brackets]
         end
       end
 

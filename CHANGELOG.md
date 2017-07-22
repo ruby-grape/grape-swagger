@@ -2,7 +2,7 @@
 
 #### Features
 
-* Your contribution here.
+* [#622](https://github.com/ruby-grape/grape-swagger/pull/622): Add support for 'brackets' collection format - [@korstiaan](https://github.com/korstiaan).
 
 #### Fixes
 

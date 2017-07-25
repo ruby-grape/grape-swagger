@@ -198,6 +198,7 @@ module Grape
 
       codes.each_with_object({}) do |value, memo|
         memo[value[:code]] = { description: value[:message] }
+        next memo[value[:code]][:schema] = value[:schema] if value[:schema]
         next build_file_response(memo[value[:code]]) if file_response?(value[:model])
 
         response_model = @item

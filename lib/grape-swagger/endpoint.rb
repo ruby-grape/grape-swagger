@@ -192,34 +192,9 @@ module Grape
 
     def response_object(route)
       codes = (route.http_codes || route.options[:failure] || [])
-
       codes = apply_success_codes(route) + codes
       codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2] } : x }
-
-      codes.each_with_object({}) do |value, memo|
-        memo[value[:code]] = { description: value[:message] }
-        next build_file_response(memo[value[:code]]) if file_response?(value[:model])
-
-        response_model = @item
-        response_model = expose_params_from_model(value[:model]) if value[:model]
-
-        if memo.key?(200) && route.request_method == 'DELETE' && value[:model].nil?
-          memo[204] = memo.delete(200)
-          value[:code] = 204
-        end
-
-        next if memo.key?(204)
-        next unless !response_model.start_with?('Swagger_doc') && (@definitions[response_model] || value[:model])
-
-        @definitions[response_model][:description] = description_object(route)
-        # TODO: proof that the definition exist, if model isn't specified
-        reference = { '$ref' => "#/definitions/#{response_model}" }
-        memo[value[:code]][:schema] = if route.options[:is_array] && value[:code] < 300
-                                        { type: 'array', items: reference }
-                                      else
-                                        reference
-                                      end
-      end
+      codes.each_with_object({}) { |value, memo| build_response(route, value, memo) }
     end
 
     def apply_success_codes(route)
@@ -253,8 +228,28 @@ module Grape
       value.to_s.casecmp('file').zero? ? true : false
     end
 
-    def build_file_response(memo)
-      memo['schema'] = { type: 'file' }
+    def build_response(route, value, memo)
+      memo[value[:code]] = { description: value[:message] }
+      return memo[value[:code]][:schema] = value[:schema] if value[:schema].present?
+      return memo[value[:code]][:schema] = { type: 'file' } if file_response?(value[:model])
+
+      response_model = value[:model] ? expose_params_from_model(value[:model]) : @item
+      if memo.key?(200) && route.request_method == 'DELETE' && value[:model].nil?
+        memo[204] = memo.delete(200)
+        value[:code] = 204
+      end
+
+      return if memo.key?(204)
+      return unless !response_model.start_with?('Swagger_doc') && (@definitions[response_model] || value[:model])
+
+      @definitions[response_model][:description] = description_object(route)
+      # TODO: proof that the definition exist, if model isn't specified
+      reference = { '$ref' => "#/definitions/#{response_model}" }
+      memo[value[:code]][:schema] = if route.options[:is_array] && value[:code] < 300
+                                      { type: 'array', items: reference }
+                                    else
+                                      reference
+                                    end
     end
 
     def partition_params(route)

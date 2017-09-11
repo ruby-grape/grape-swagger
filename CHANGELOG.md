@@ -6,6 +6,7 @@
 
 #### Fixes
 
+* [#631](https://github.com/ruby-grape/grape-swagger/pull/631): Fix order of mounts with overrides - [@adie](https://github.com/adie).
 * Your contribution here.
 
 ### 0.27.3 (July 11, 2017)

@@ -6,7 +6,7 @@
 
 #### Fixes
 
-* Your contribution here.
+* [#267](https://github.com/ruby-grape/grape-swagger/pull/633): Fix mounting APIs in route_param namespaces - [@wojciechka](https://github.com/wojciechka).
 
 ### 0.27.3 (July 11, 2017)
 

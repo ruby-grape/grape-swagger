@@ -77,7 +77,7 @@ module Grape
     def path_and_definition_objects(namespace_routes, options)
       @paths = {}
       @definitions = {}
-      namespace_routes.keys.each do |key|
+      namespace_routes.each_key do |key|
         routes = namespace_routes[key]
         path_item(routes, options)
       end
@@ -163,7 +163,7 @@ module Grape
 
     def consumes_object(route, format)
       method = route.request_method.downcase.to_sym
-      if route.settings[:description] && route.settings[:description][:consumes]
+      if route.settings.dig(:description, :consumes)
         format = route.settings[:description][:consumes]
       end
       mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format) if %i[post put].include?(method)
@@ -332,7 +332,7 @@ module Grape
       raise GrapeSwagger::Errors::UnregisteredParser, "No parser registered for #{model_name}." unless parser
 
       properties = parser.new(model, self).call
-      unless properties && properties.any?
+      unless properties&.any?
         raise GrapeSwagger::Errors::SwaggerSpec,
               "Empty model #{model_name}, swagger 2.0 doesn't support empty definitions."
       end

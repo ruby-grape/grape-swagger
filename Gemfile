@@ -25,7 +25,7 @@ group :development, :test do
   gem 'rake'
   gem 'rdoc'
   gem 'rspec', '~> 3.0'
-  gem 'rubocop', '~> 0.49'
+  gem 'rubocop', '~> 0.49.1'
 end
 
 group :test do

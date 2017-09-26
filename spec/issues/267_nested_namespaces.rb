@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 require 'spec_helper'
@@ -31,11 +30,11 @@ describe 'nested namespaces' do
 
   describe '#extract_parent_route' do
     it 'extracts parent for non-namespaced path properly' do
-      expect(app.send :extract_parent_route, '/apps/:app_id/build').to eq('apps')
+      expect(app.send(:extract_parent_route, '/apps/:app_id/build')).to eq('apps')
     end
 
     it 'extracts parent for namespaced path properly' do
-      expect(app.send :extract_parent_route, '/:root/apps/:app_id/build').to eq('apps')
+      expect(app.send(:extract_parent_route, '/:root/apps/:app_id/build')).to eq('apps')
     end
   end
 

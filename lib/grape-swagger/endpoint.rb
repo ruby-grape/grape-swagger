@@ -286,23 +286,33 @@ module Grape
       array_keys = []
       params.select { |param| public_parameter?(param) }.each_with_object({}) do |param, memo|
         name, options = *param
+        name = name.to_s
         param_type = options[:type]
         param_type = param_type.to_s unless param_type.nil?
 
-        array_keys << name.to_s if param_type_is_array?(param_type)
-
-        keys = array_keys.find_all { |key| name.start_with? key }
-        if keys.any?
+        if param_type_is_array?(param_type)
+          array_keys << name
           options[:is_array] = true
-          if settings[:array_use_braces] && !(options[:documentation] && options[:documentation][:param_type] == 'body')
-            keys.sort.reverse_each do |key|
-              name = name.sub(key, "#{key}[]")
+
+          name += '[]' if array_use_braces?(settings, options)
+        else
+          keys = array_keys.find_all { |key| name.start_with? "#{key}[" }
+          if keys.any?
+            options[:is_array] = true
+            if array_use_braces?(settings, options)
+              keys.sort.reverse_each do |key|
+                name = name.sub(key, "#{key}[]")
+              end
             end
           end
         end
 
         memo[name] = options unless %w[Hash Array].include?(param_type) && !options.key?(:documentation)
       end
+    end
+
+    def array_use_braces?(settings, options)
+      settings[:array_use_braces] && !(options[:documentation] && options[:documentation][:param_type] == 'body')
     end
 
     def param_type_is_array?(param_type)

@@ -20,6 +20,7 @@ describe 'nested group params' do
                 requires :param_3, type: String
               end
             end
+            requires :a_array_foo, type: String
           end
           post '/nested_array' do
             { 'declared_params' => declared(params) }
@@ -35,6 +36,7 @@ describe 'nested group params' do
                 requires :param_3, type: String
               end
             end
+            requires :a_hash_foo, type: String
           end
           post '/nested_hash' do
             { 'declared_params' => declared(params) }
@@ -55,7 +57,8 @@ describe 'nested group params' do
             [
               { 'in' => 'formData', 'name' => "a_array#{braces}[param_1]", 'required' => true, 'type' => 'array', 'items' => { 'type' => 'integer', 'format' => 'int32' } },
               { 'in' => 'formData', 'name' => "a_array#{braces}[b_array]#{braces}[param_2]", 'required' => true, 'type' => 'array', 'items' => { 'type' => 'string' } },
-              { 'in' => 'formData', 'name' => "a_array#{braces}[c_hash][param_3]", 'required' => true, 'type' => 'array', 'items' => { 'type' => 'string' } }
+              { 'in' => 'formData', 'name' => "a_array#{braces}[c_hash][param_3]", 'required' => true, 'type' => 'array', 'items' => { 'type' => 'string' } },
+              { 'in' => 'formData', 'name' => 'a_array_foo', 'required' => true, 'type' => 'string' }
             ]
           )
         end
@@ -72,7 +75,8 @@ describe 'nested group params' do
             [
               { 'in' => 'formData', 'name' => 'a_hash[param_1]', 'required' => true, 'type' => 'integer', 'format' => 'int32' },
               { 'in' => 'formData', 'name' => 'a_hash[b_hash][param_2]', 'required' => true, 'type' => 'string' },
-              { 'in' => 'formData', 'name' => "a_hash[c_array]#{braces}[param_3]", 'required' => true, 'type' => 'array', 'items' => { 'type' => 'string' } }
+              { 'in' => 'formData', 'name' => "a_hash[c_array]#{braces}[param_3]", 'required' => true, 'type' => 'array', 'items' => { 'type' => 'string' } },
+              { 'in' => 'formData', 'name' => 'a_hash_foo', 'required' => true, 'type' => 'string' }
             ]
           )
         end

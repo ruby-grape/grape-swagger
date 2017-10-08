@@ -110,7 +110,7 @@ gem 'grape-swagger-entity'
 gem 'grape-swagger-representable'
 ```
 
-If you are not using Rails, make sure to load the parser inside your application initialization logic, e.g., via `require 'grape-swagger/entity'` or `require 'grape-swagger/representable`.
+If you are not using Rails, make sure to load the parser inside your application initialization logic, e.g., via `require 'grape-swagger/entity'` or `require 'grape-swagger/representable'`.
 
 ### Custom Model Parsers
 

@@ -18,7 +18,7 @@
 * [Using Grape Entities](#grape-entity)
 * [Securing the Swagger UI](#oauth)
 * [Markdown (deprecated)](#md_usage)
-* [Example](#example)
+* [Examples](#examples)
 * [Rake Tasks](#rake)
 
 

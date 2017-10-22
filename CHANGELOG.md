@@ -3,6 +3,7 @@
 #### Features
 
 * [#622](https://github.com/ruby-grape/grape-swagger/pull/622): Add support for 'brackets' collection format - [@korstiaan](https://github.com/korstiaan).
+* [#637](https://github.com/ruby-grape/grape-swagger/pull/637): Add an option to add braces to array params - [@adie](https://github.com/adie).
 
 * Your contribution here.
 

@@ -11,6 +11,7 @@
 * [#631](https://github.com/ruby-grape/grape-swagger/pull/631): Fix order of mounts with overrides - [@adie](https://github.com/adie).
 * [#267](https://github.com/ruby-grape/grape-swagger/pull/634): Fix mounting APIs in route_param namespaces - [@milgner](https://github.com/milgner), [@wojciechka](https://github.com/wojciechka).
 * [#642](https://github.com/ruby-grape/grape-swagger/pull/642): Fix examples link in readme - [@iBublik](https://github.com/iBublik).
+* [#641](https://github.com/ruby-grape/grape-swagger/pull/641): Exclude default success code if http_codes define one already - [@anakinj](https://github.com/anakinj).
 
 * Your contribution here.
 

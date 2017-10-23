@@ -191,9 +191,7 @@ module Grape
     end
 
     def response_object(route)
-      codes = (route.http_codes || route.options[:failure] || [])
-
-      codes = apply_success_codes(route) + codes
+      codes = http_codes_from_route(route)
       codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2] } : x }
 
       codes.each_with_object({}) do |value, memo|
@@ -222,7 +220,15 @@ module Grape
       end
     end
 
-    def apply_success_codes(route)
+    def http_codes_from_route(route)
+      if route.http_codes.is_a?(Array) && route.http_codes.any? { |code| code[:code].between?(200, 299) }
+        route.http_codes.clone
+      else
+        success_codes_from_route(route) + (route.http_codes || route.options[:failure] || [])
+      end
+    end
+
+    def success_codes_from_route(route)
       default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
       if @entity.is_a?(Hash)
         default_code[:code] = @entity[:code] if @entity[:code].present?

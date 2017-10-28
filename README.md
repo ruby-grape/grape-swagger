@@ -462,7 +462,7 @@ Or by using a route setting:
 
 ```ruby
 route_setting :swagger, { hidden: true }
-gem '/kittens' do
+get '/kittens' do
 ```
 
 Endpoints can be conditionally hidden by providing a callable object such as a lambda which evaluates to the desired

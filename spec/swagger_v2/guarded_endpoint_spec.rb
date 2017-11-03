@@ -14,14 +14,6 @@ class SampleAuth < Grape::Middleware::Base
       @protected_endpoint || false
     end
 
-    def access_token
-      @_access_token
-    end
-
-    def access_token=(token)
-      @_access_token = token
-    end
-
     def resource_owner
       @resource_owner = true if access_token == '12345'
     end

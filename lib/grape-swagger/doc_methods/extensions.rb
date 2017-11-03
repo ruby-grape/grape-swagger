@@ -68,7 +68,7 @@ module GrapeSwagger
         def concatenate(extensions)
           result = {}
 
-          extensions.values.each do |extension|
+          extensions.each_value do |extension|
             extension.each do |key, value|
               result["x-#{key}"] = value
             end

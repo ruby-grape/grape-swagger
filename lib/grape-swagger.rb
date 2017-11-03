@@ -29,9 +29,9 @@ module Grape
         version_for(options)
         options = { target_class: self }.merge(options)
         @target_class = options[:target_class]
-        auth_wrapper = options[:endpoint_auth_wrapper]
+        auth_wrapper = options[:endpoint_auth_wrapper] || Class.new
 
-        if auth_wrapper && auth_wrapper.method_defined?(:before) && !middleware.flatten.include?(auth_wrapper)
+        if auth_wrapper.method_defined?(:before) && !middleware.flatten.include?(auth_wrapper)
           use auth_wrapper
         end
 
@@ -102,7 +102,7 @@ module Grape
 
       def combine_namespace_routes(namespaces)
         # iterate over each single namespace
-        namespaces.each do |name, _|
+        namespaces.each_key do |name, _|
           # get the parent route for the namespace
           parent_route_name = extract_parent_route(name)
           parent_route = @target_class.combined_routes[parent_route_name]

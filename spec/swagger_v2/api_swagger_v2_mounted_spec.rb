@@ -131,7 +131,7 @@ describe 'swagger spec v2.0' do
 
         specify do
           unexpected_paths = mounted_paths - [expected_path]
-          subject.keys.each do |path|
+          subject.each_key do |path|
             unexpected_paths.each do |unexpected_path|
               expect(path).not_to start_with unexpected_path
             end

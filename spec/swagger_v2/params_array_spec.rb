@@ -101,7 +101,7 @@ describe 'Group Params as Array' do
           { 'in' => 'formData', 'name' => 'typed_group[id]', 'description' => 'integer given', 'type' => 'array', 'items' => { 'type' => 'integer', 'format' => 'int32' }, 'required' => true },
           { 'in' => 'formData', 'name' => 'typed_group[name]', 'description' => 'string given', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => true },
           { 'in' => 'formData', 'name' => 'typed_group[email]', 'description' => 'email given', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => false },
-          { 'in' => 'formData', 'name' => 'typed_group[others]', 'type' => 'array', 'items' => { 'type' => 'integer', 'format' => 'int32' }, 'enum' => [1, 2, 3], 'required' => false }
+          { 'in' => 'formData', 'name' => 'typed_group[others]', 'type' => 'array', 'items' => { 'type' => 'integer', 'format' => 'int32', 'enum' => [1, 2, 3] }, 'required' => false }
         ]
       )
     end

@@ -13,6 +13,7 @@
 * [#642](https://github.com/ruby-grape/grape-swagger/pull/642): Fix examples link in readme - [@iBublik](https://github.com/iBublik).
 * [#641](https://github.com/ruby-grape/grape-swagger/pull/641): Exclude default success code if http_codes define one already - [@anakinj](https://github.com/anakinj).
 * [#651](https://github.com/ruby-grape/grape-swagger/pull/651): Apply `values` and `default` of array params to its items - [@yewton](https://github.com/yewton).
+* [#654](https://github.com/ruby-grape/grape-swagger/pull/654): Allow setting the consumes for PATCH methods - [@anakinj](https://github.com/anakinj).
 
 * Your contribution here.
 

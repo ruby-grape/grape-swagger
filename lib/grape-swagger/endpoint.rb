@@ -161,14 +161,11 @@ module Grape
       route_mime_types.present? ? route_mime_types : mime_types
     end
 
-    def consumes_object(route, format)
-      method = route.request_method.downcase.to_sym
-      if route.settings.dig(:description, :consumes)
-        format = route.settings[:description][:consumes]
-      end
-      mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format) if %i[post put].include?(method)
+    SUPPORTS_CONSUMES = %i[post put patch].freeze
 
-      mime_types
+    def consumes_object(route, format)
+      return unless SUPPORTS_CONSUMES.include?(route.request_method.downcase.to_sym)
+      GrapeSwagger::DocMethods::ProducesConsumes.call(route.settings.dig(:description, :consumes) || format)
     end
 
     def params_object(route, path)

@@ -14,6 +14,7 @@
 * [#641](https://github.com/ruby-grape/grape-swagger/pull/641): Exclude default success code if http_codes define one already - [@anakinj](https://github.com/anakinj).
 * [#651](https://github.com/ruby-grape/grape-swagger/pull/651): Apply `values` and `default` of array params to its items - [@yewton](https://github.com/yewton).
 * [#654](https://github.com/ruby-grape/grape-swagger/pull/654): Allow setting the consumes for PATCH methods - [@anakinj](https://github.com/anakinj).
+* [#656](https://github.com/ruby-grape/grape-swagger/pull/656): Fix `description` field may be null - [@soranoba](https://github.com/soranoba).
 
 * Your contribution here.
 

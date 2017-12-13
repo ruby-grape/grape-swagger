@@ -31,9 +31,7 @@ module Grape
         @target_class = options[:target_class]
         auth_wrapper = options[:endpoint_auth_wrapper] || Class.new
 
-        if auth_wrapper.method_defined?(:before) && !middleware.flatten.include?(auth_wrapper)
-          use auth_wrapper
-        end
+        use auth_wrapper if auth_wrapper.method_defined?(:before) && !middleware.flatten.include?(auth_wrapper)
 
         documentation_class.setup(options)
         mount(documentation_class)
@@ -126,6 +124,7 @@ module Grape
             @target_class.combined_namespace_routes[parent_route_name] = [] unless parent_route
             @target_class.combined_namespace_routes[parent_route_name].push(*namespace_routes)
           end
+          # rubocop:enable Style/Next
         end
       end
 

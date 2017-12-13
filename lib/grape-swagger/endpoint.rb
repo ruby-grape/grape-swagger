@@ -143,6 +143,7 @@ module Grape
     def description_object(route)
       description = route.description if route.description.present?
       description = route.options[:detail] if route.options.key?(:detail)
+      description ||= ''
 
       description
     end
@@ -192,6 +193,7 @@ module Grape
       codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2] } : x }
 
       codes.each_with_object({}) do |value, memo|
+        value[:message] ||= ''
         memo[value[:code]] = { description: value[:message] }
         next build_file_response(memo[value[:code]]) if file_response?(value[:model])
 

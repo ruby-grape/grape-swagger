@@ -6,6 +6,9 @@ AllCops:
     - example/**/*
   TargetRubyVersion: 2.4
 
+Layout/EmptyLinesAroundArguments:
+  Enabled: false
+
 Layout/IndentHash:
   EnforcedStyle: consistent
 
@@ -22,6 +25,8 @@ Metrics/MethodLength:
   Exclude:
     - spec/**/*
 
+Naming:
+  Enabled: false
 
-Style/FileName:
+Style/RegexpLiteral:
   Enabled: false

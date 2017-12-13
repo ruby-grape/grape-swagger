@@ -262,6 +262,7 @@ module Grape
       memo['schema'] = { type: 'file' }
     end
 
+    # rubocop:disable Style/IfUnlessModifier
     def partition_params(route)
       declared_params = route.settings[:declared_params] if route.settings[:declared_params].present?
       required = merge_params(route)
@@ -275,6 +276,7 @@ module Grape
 
       request_params.empty? ? required : request_params
     end
+    # rubocop:enable Style/IfUnlessModifier
 
     def merge_params(route)
       param_keys = route.params.keys

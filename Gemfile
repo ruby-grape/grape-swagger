@@ -17,6 +17,8 @@ gem ENV['MODEL_PARSER'] if ENV.key?('MODEL_PARSER')
 
 group :development, :test do
   gem 'bundler'
+  # FIXME: change to official repo after release
+  gem 'grape-entity', git: 'https://github.com/LeFnord/grape-entity'
   gem 'pry', platforms: [:mri]
   gem 'pry-byebug', platforms: [:mri]
   gem 'rack'
@@ -30,7 +32,6 @@ end
 
 group :test do
   gem 'coveralls', require: false
-  gem 'grape-entity', '~>0.5'
   gem 'grape-swagger-entity'
   gem 'ruby-grape-danger', '~> 0.1.1', require: false
   gem 'simplecov', require: false

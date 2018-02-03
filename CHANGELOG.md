@@ -2,9 +2,17 @@
 
 #### Features
 
-* [#622](https://github.com/ruby-grape/grape-swagger/pull/622): Add support for 'brackets' collection format - [@korstiaan](https://github.com/korstiaan).
+* Your contribution here.
+
+#### Fixes
 
 * Your contribution here.
+
+### 0.28.0 (February 3, 2018)
+
+#### Features
+
+* [#622](https://github.com/ruby-grape/grape-swagger/pull/622): Add support for 'brackets' collection format - [@korstiaan](https://github.com/korstiaan).
 
 #### Fixes
 
@@ -15,8 +23,6 @@
 * [#651](https://github.com/ruby-grape/grape-swagger/pull/651): Apply `values` and `default` of array params to its items - [@yewton](https://github.com/yewton).
 * [#654](https://github.com/ruby-grape/grape-swagger/pull/654): Allow setting the consumes for PATCH methods - [@anakinj](https://github.com/anakinj).
 * [#656](https://github.com/ruby-grape/grape-swagger/pull/656): Fix `description` field may be null - [@soranoba](https://github.com/soranoba).
-
-* Your contribution here.
 
 ### 0.27.3 (July 11, 2017)
 

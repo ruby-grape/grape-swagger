@@ -17,7 +17,6 @@
 * [Routes Configuration](#routes)
 * [Using Grape Entities](#grape-entity)
 * [Securing the Swagger UI](#oauth)
-* [Markdown (deprecated)](#md_usage)
 * [Examples](#examples)
 * [Rake Tasks](#rake)
 
@@ -263,10 +262,6 @@ Specify the version of the documentation at [info section](https://github.com/OA
 add_swagger_documentation \
    doc_version: '0.0.1'
 ```
-
-
-#### markdown: (deprecated) <a name="markdown" />
-OAPI accepts GFM for descriptions
 
 
 #### endpoint_auth_wrapper: <a name="endpoint_auth_wrapper" />
@@ -1198,15 +1193,7 @@ The lambda is checking whether the user is authenticated (if not, the token_owne
 role - only admins can see this endpoint.
 
 
-## Markdown in Detail (deprecated) <a name="md_usage" />
-
-Usage of option `markdown` will no longer be supported,
-cause OAPI accepts [GFM](https://help.github.com/articles/github-flavored-markdown) and plain text.
-(see: [description of `Info`](https://github.com/OAI/OpenAPI-Specification/blob/OpenAPI.next/versions/2.0.md#info-object))
-
-
-<a="example" />
-## Examples
+## Examples <a="example" />
 
 Go into example directory and run it: `$ bundle exec rackup`
 go to: `http://localhost:9292/swagger_doc` to get it

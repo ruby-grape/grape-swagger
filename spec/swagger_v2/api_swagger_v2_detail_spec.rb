@@ -48,7 +48,7 @@ describe 'details' do
             { 'declared_params' => declared(params) }
           end
 
-          add_swagger_documentation markdown: 'foo'
+          add_swagger_documentation
         end
       end
     end

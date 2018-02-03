@@ -17,8 +17,7 @@ gem ENV['MODEL_PARSER'] if ENV.key?('MODEL_PARSER')
 
 group :development, :test do
   gem 'bundler'
-  # FIXME: change to official repo after release
-  gem 'grape-entity', git: 'https://github.com/LeFnord/grape-entity'
+  gem 'grape-entity'
   gem 'pry', platforms: [:mri]
   gem 'pry-byebug', platforms: [:mri]
   gem 'rack'

@@ -6,7 +6,7 @@
 
 #### Fixes
 
-* Your contribution here.
+* [#664](https://github.com/ruby-grape/grape-swagger/pull/662): Removed all references to obsolete `hide_format` parameter - [@jonmchan](https://github.com/jonmchan).
 
 ### 0.28.0 (February 3, 2018)
 

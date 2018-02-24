@@ -2,7 +2,7 @@
 
 #### Features
 
-* Your contribution here.
+* [#667](https://github.com/ruby-grape/grape-swagger/pull/667):  Make route summary optional - [@obduk](https://github.com/obduk).
 
 #### Fixes
 

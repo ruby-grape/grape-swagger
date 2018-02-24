@@ -134,7 +134,7 @@ module Grape
 
     def summary_object(route)
       summary = route.options[:desc] if route.options.key?(:desc)
-      summary = route.description if route.description.present?
+      summary = route.description if route.description.present? && route.options.key?(:detail)
       summary = route.options[:summary] if route.options.key?(:summary)
 
       summary

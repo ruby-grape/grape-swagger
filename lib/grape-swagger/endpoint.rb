@@ -224,8 +224,13 @@ module Grape
       end
     end
 
+    def success_code?(code)
+      status = code.is_a?(Array) ? code.first : code[:code]
+      status.between?(200, 299)
+    end
+
     def http_codes_from_route(route)
-      if route.http_codes.is_a?(Array) && route.http_codes.any? { |code| code[:code].between?(200, 299) }
+      if route.http_codes.is_a?(Array) && route.http_codes.any? { |code| success_code?(code) }
         route.http_codes.clone
       else
         success_codes_from_route(route) + (route.http_codes || route.options[:failure] || [])

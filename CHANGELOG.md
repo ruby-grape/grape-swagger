@@ -2,6 +2,8 @@
 
 #### Features
 
+* [#670](https://github.com/ruby-grape/grape-swagger/pull/670): Add support for deprecated field - [@ioanatia](https://github.com/ioanatia).
+
 * Your contribution here.
 
 #### Fixes

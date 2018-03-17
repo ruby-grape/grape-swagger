@@ -1145,7 +1145,6 @@ This is how to configure the grape_swagger documentation:
                             title: 'My API',
                             doc_version: '0.0.1',
                             hide_documentation_path: true,
-                            hide_format: true,
                             endpoint_auth_wrapper: WineBouncer::OAuth2, # This is the middleware for securing the Swagger UI
                             swagger_endpoint_guard: 'oauth2 false',     # this is the guard method and scope
                             token_owner: 'resource_owner'               # This is the method returning the owner of the token

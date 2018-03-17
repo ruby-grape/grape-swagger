@@ -50,7 +50,6 @@ describe 'mount override api' do
     end
 
     it 'shows documentation from new endpoint' do
-      expect(subject['summary']).to eql('new endpoint')
       expect(subject['parameters'][0]['description']).to eql('new param')
       expect(subject['parameters'][0]['type']).to eql('string')
       expect(subject['responses']['200']['description']).to eql('new message')

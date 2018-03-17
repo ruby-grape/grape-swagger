@@ -106,8 +106,7 @@ describe 'swagger spec v2.0' do
         end
 
         version 'v3', using: :path
-        add_swagger_documentation hide_format: true,
-                                  base_path: '/api',
+        add_swagger_documentation base_path: '/api',
                                   info: {
                                     title: 'The API title to be displayed on the API homepage.',
                                     description: 'A description of the API.',

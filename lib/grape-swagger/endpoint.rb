@@ -123,9 +123,14 @@ module Grape
       method[:responses]   = response_object(route)
       method[:tags]        = route.options.fetch(:tags, tag_object(route, path))
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
+      method[:deprecated] = deprecated_object(route)
       method.delete_if { |_, value| value.blank? }
 
       [route.request_method.downcase.to_sym, method]
+    end
+
+    def deprecated_object(route)
+      route.options[:deprecated] if route.options.key?(:deprecated)
     end
 
     def security_object(route)

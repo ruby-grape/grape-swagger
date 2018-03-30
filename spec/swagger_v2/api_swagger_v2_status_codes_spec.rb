@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'http status code behaivours' do
+describe 'http status code behaviours' do
   include_context "#{MODEL_PARSER} swagger example"
 
   subject do
@@ -10,7 +10,7 @@ describe 'http status code behaivours' do
     JSON.parse(last_response.body)
   end
 
-  context 'when non-default success codes are deifined' do
+  context 'when non-default success codes are defined' do
     let(:app) do
       Class.new(Grape::API) do
         desc 'Has explicit success http_codes defined' do
@@ -28,6 +28,26 @@ describe 'http status code behaivours' do
 
     it 'only includes the defined http_codes' do
       expect(subject['paths']['/accepting_endpoint']['post']['responses'].keys.sort).to eq(%w[202 204 400].sort)
+    end
+  end
+
+  context 'when success and failures are defined' do
+    let(:app) do
+      Class.new(Grape::API) do
+        desc 'Has explicit success http_codes defined' do
+          success code: 202, model: Entities::UseResponse, message: 'a changed status code'
+          failure [[400, 'Bad Request']]
+        end
+
+        post '/accepting_endpoint' do
+          'We got the message!'
+        end
+        add_swagger_documentation
+      end
+    end
+
+    it 'only includes the defined http codes' do
+      expect(subject['paths']['/accepting_endpoint']['post']['responses'].keys.sort).to eq(%w[202 400].sort)
     end
   end
 

@@ -1215,7 +1215,7 @@ class NamespaceApi < Grape::API
     end
 
     desc 'This gets something.',
-      notes: '_test_'
+      detail: '_test_'
 
     get '/simple' do
       { bla: 'something' }

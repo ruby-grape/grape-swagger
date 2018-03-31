@@ -2,15 +2,15 @@
 
 #### Features
 
-* [#667](https://github.com/ruby-grape/grape-swagger/pull/667):  Make route summary optional - [@obduk](https://github.com/obduk).
+* [#667](https://github.com/ruby-grape/grape-swagger/pull/667): Make route summary optional - [@obduk](https://github.com/obduk).
 * [#670](https://github.com/ruby-grape/grape-swagger/pull/670): Add support for deprecated field - [@ioanatia](https://github.com/ioanatia).
-* [#672](https://github.com/ruby-grape/grape-swagger/pull/672): Rename 'notes' to 'detail' in README - [@kjleitz](https://github.com/kjleitz).
 
 * Your contribution here.
 
 #### Fixes
 
 * [#664](https://github.com/ruby-grape/grape-swagger/pull/662): Removed all references to obsolete `hide_format` parameter - [@jonmchan](https://github.com/jonmchan).
+* [#672](https://github.com/ruby-grape/grape-swagger/pull/672): Rename 'notes' to 'detail' in README - [@kjleitz](https://github.com/kjleitz).
 
 ### 0.28.0 (February 3, 2018)
 

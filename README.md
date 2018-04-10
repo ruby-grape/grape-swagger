@@ -402,6 +402,7 @@ add_swagger_documentation \
 * [Specify endpoint details](#details)
 * [Overriding the route summary](#summary)
 * [Overriding the tags](#tags)
+* [Deprecating routes](#deprecating-routes)
 * [Defining an endpoint as an array](#array)
 * [Using an options hash](#options)
 * [Overriding parameter type](#overriding-param-type)
@@ -522,6 +523,19 @@ namespace 'order' do
 end
 ```
 
+
+#### Deprecating routes <a name="deprecating-routes" />
+
+To deprecate a route add `deprecated: true` after the description.
+
+```ruby
+namespace 'order' do
+  desc 'This is a deprecated route', deprecated: true
+  get :order_id do
+    ...
+  end
+end
+```
 
 #### Overriding the name of the body parameter
 

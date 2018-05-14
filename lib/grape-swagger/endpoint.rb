@@ -195,7 +195,7 @@ module Grape
 
     def response_object(route)
       codes = http_codes_from_route(route)
-      codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2] } : x }
+      codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2], examples: x[3] } : x }
 
       codes.each_with_object({}) do |value, memo|
         value[:message] ||= ''
@@ -221,6 +221,8 @@ module Grape
                                       else
                                         reference
                                       end
+
+        memo[value[:code]][:examples] = value[:examples] if value[:examples]
       end
     end
 
@@ -243,6 +245,7 @@ module Grape
         default_code[:code] = @entity[:code] if @entity[:code].present?
         default_code[:model] = @entity[:model] if @entity[:model].present?
         default_code[:message] = @entity[:message] || route.description || default_code[:message].sub('{item}', @item)
+        default_code[:examples] = @entity[:examples] if @entity[:examples]
       else
         default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
         default_code[:model] = @entity if @entity

@@ -1023,10 +1023,10 @@ By specifying examples to `success` and `failure`.
 
 ```ruby
 desc 'This returns examples' do
-  success model: Entities::UseResponse, examples: { 'application/json' => { description: 'Names list', items: [{ id: '123', name: 'John' }] } }
-  failure [[404, 'NotFound', Entities::ApiError, { 'application/json' => { code: 404, message: 'Not found' } }]]
+  success model: Thing, examples: { 'application/json' => { description: 'Names list', items: [{ id: '123', name: 'John' }] } }
+  failure [[404, 'NotFound', ApiError, { 'application/json' => { code: 404, message: 'Not found' } }]]
 end
-get '/response_examples' do
+get '/thing' do
   ...
 end
 ```
@@ -1038,7 +1038,7 @@ The result will look like following:
     "200": {
       "description": "This returns examples",
       "schema": {
-        "$ref": "#/definitions/UseResponse"
+        "$ref": "#/definitions/Thing"
       },
       "examples": {
         "application/json": {

@@ -18,6 +18,13 @@ describe 'response with examples' do
           { 'declared_params' => declared(params) }
         end
 
+        desc 'This does not return examples' do
+          success model: Entities::UseResponse
+          failure [[404, 'NotFound', Entities::ApiError]]
+        end
+        get '/response_no_examples' do
+          { 'declared_params' => declared(params) }
+        end
         add_swagger_documentation
       end
     end
@@ -50,6 +57,26 @@ describe 'response with examples' do
         },
         'tags' => ['response_examples'],
         'operationId' => 'getResponseExamples'
+      )
+    end
+  end
+
+  describe 'response no examples' do
+    subject do
+      get '/swagger_doc/response_no_examples'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['paths']['/response_no_examples']['get']).to eql(
+        'description' => 'This does not return examples',
+        'produces' => ['application/json'],
+        'responses' => {
+          '200' => { 'description' => 'This does not return examples', 'schema' => { '$ref' => '#/definitions/UseResponse' } },
+          '404' => { 'description' => 'NotFound', 'schema' => { '$ref' => '#/definitions/ApiError' } }
+        },
+        'tags' => ['response_no_examples'],
+        'operationId' => 'getResponseNoExamples'
       )
     end
   end

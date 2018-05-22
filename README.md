@@ -1015,6 +1015,60 @@ route_setting :x_def, [{ for: 422, other: 'stuff' }, { for: 200, some: 'stuff' }
 ```
 
 
+#### Response examples documentation <a name="response-examples" />
+
+You can also add examples to your responses by using the `desc` DSL with block syntax.
+
+By specifying examples to `success` and `failure`.
+
+```ruby
+desc 'This returns examples' do
+  success model: Thing, examples: { 'application/json' => { description: 'Names list', items: [{ id: '123', name: 'John' }] } }
+  failure [[404, 'NotFound', ApiError, { 'application/json' => { code: 404, message: 'Not found' } }]]
+end
+get '/thing' do
+  ...
+end
+```
+
+The result will look like following:
+
+```json
+  "responses": {
+    "200": {
+      "description": "This returns examples",
+      "schema": {
+        "$ref": "#/definitions/Thing"
+      },
+      "examples": {
+        "application/json": {
+          "description": "Names list",
+          "items": [
+            {
+              "id": "123",
+              "name": "John"
+            }
+          ]
+        }
+      }
+    },
+    "404": {
+      "description": "NotFound",
+      "schema": {
+        "$ref": "#/definitions/ApiError"
+      },
+      "examples": {
+        "application/json": {
+          "code": 404,
+          "message": "Not found"
+        }
+      }
+    }
+  }
+```
+
+Failure information can be passed as an array of arrays or an array of hashes.
+
 
 ## Using Grape Entities <a name="grape-entity" />
 
@@ -1169,7 +1223,7 @@ The guard method should inject the Security Requirement Object into the endpoint
 The 'oauth2 false' added to swagger_documentation is making the main Swagger endpoint protected with OAuth, i.e. the
 access_token is being retreiving from the HTTP request, but the 'false' scope is for skipping authorization and
 showing the UI for everyone. If the scope would be set to something else, like 'oauth2 admin', for example, than the UI
- wouldn't be displayed at all to unauthorized users.  
+ wouldn't be displayed at all to unauthorized users.
 
 Further on, the guard could be used, where necessary, for endpoint access protection. Put it prior to the endpoint's method:
 

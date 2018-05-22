@@ -334,7 +334,7 @@ add_swagger_documentation \
 ```
 
 
-### tags: <a name="tags" />
+#### tags: <a name="tags" />
 A list of tags to document.  By default tags are automatically generated
 for endpoints based on route names.
 
@@ -372,26 +372,6 @@ add_swagger_documentation \
 
 A hash merged into the `info` key of the JSON documentation.
 
-<!-- #### *authorizations*:
-This value is added to the `authorizations` key in the JSON documentation. -->
-
-<!-- #### *api_documentation*:
-Customize the Swagger API documentation route, typically contains a `desc` field. The default description is "Swagger compatible API description".
-
-```ruby
-add_swagger_documentation \
-   api_documentation: { desc: 'Reticulated splines API swagger-compatible documentation.' }
-```
-
-
-#### *specific_api_documentation*:
-Customize the Swagger API specific documentation route, typically contains a `desc` field. The default description is "Swagger compatible API description for specific API".
-
-```ruby
-add_swagger_documentation \
-   specific_api_documentation: { desc: 'Reticulated splines API swagger-compatible endpoint documentation.' }
-``` -->
-
 
 
 ## Routes Configuration <a name="routes" />
@@ -403,6 +383,7 @@ add_swagger_documentation \
 * [Overriding the route summary](#summary)
 * [Overriding the tags](#tags)
 * [Deprecating routes](#deprecating-routes)
+* [Overriding the name of the body parameter](#body-param)
 * [Defining an endpoint as an array](#array)
 * [Using an options hash](#options)
 * [Overriding parameter type](#overriding-param-type)
@@ -416,11 +397,10 @@ add_swagger_documentation \
 * [Changing default status codes](#change-status)
 * [File response](#file-response)
 * [Extensions](#extensions)
-
-
+* [Response examples documentation](#response-examples)
 
 #### Swagger Header Parameters  <a name="headers" />
- <a name="headers" />
+
 Swagger also supports the documentation of parameters passed in the header. Since grape's ```params[]``` doesn't return header parameters we can specify header parameters seperately in a block after the description.
 
 ```ruby
@@ -437,7 +417,6 @@ desc "Return super-secret information", {
   }
 }
 ```
-
 
 
 #### Hiding an Endpoint <a name="hiding" />
@@ -469,7 +448,6 @@ desc 'Conditionally hide this endpoint', hidden: lambda { ENV['EXPERIMENTAL'] !=
 ```
 
 
-
 #### Overriding Auto-Generated Nicknames <a name="overriding-auto-generated-nicknames" />
 
 You can specify a swagger nickname to use instead of the auto generated name by adding `:nickname 'string'``` in the description of the endpoint.
@@ -477,7 +455,6 @@ You can specify a swagger nickname to use instead of the auto generated name by 
 ```ruby
 desc 'Get a full list of pets', nickname: 'getAllPets'
 ```
-
 
 
 #### Specify endpoint details <a name="details" />
@@ -490,7 +467,6 @@ desc 'Get all kittens!' do
 end
 get '/kittens' do
 ```
-
 
 
 #### Overriding the route summary <a name="summary" />
@@ -506,7 +482,6 @@ namespace 'order' do
   end
 end
 ```
-
 
 
 #### Overriding the tags <a name="tags" />
@@ -537,7 +512,8 @@ namespace 'order' do
 end
 ```
 
-#### Overriding the name of the body parameter
+
+#### Overriding the name of the body parameter  <a name="body-param" />
 
 By default, body parameters have a generated name based on the operation. For
 deeply nested resources, this name can get very long. To override the name of
@@ -552,6 +528,7 @@ namespace 'order' do
 end
 ```
 
+
 #### Defining an endpoint as an array <a name="array" />
 
 You can define an endpoint as an array by adding `is_array` in the description:
@@ -559,7 +536,6 @@ You can define an endpoint as an array by adding `is_array` in the description:
 ```ruby
 desc 'Get a full list of pets', is_array: true
 ```
-
 
 
 #### Using an options hash <a name="options" />
@@ -582,7 +558,6 @@ get '/kittens' do
 ```
 
 
-
 #### Overriding parameter type <a name="overriding-param-type" />
 
 You can override paramType, using the documentation hash. See [parameter object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#parameter-object) for available types.
@@ -595,7 +570,6 @@ post :act do
   ...
 end
 ```
-
 
 
 #### Overriding data type of the parameter <a name="overriding-type-of-param" />
@@ -622,7 +596,6 @@ end
 ```
 
 
-
 #### Multiple types <a name="multiple-types" />
 
 By default when you set multiple types, the first type is selected as swagger type
@@ -644,7 +617,6 @@ end
   "required": true
 }
 ```
-
 
 
 #### Array of data type <a name="array-type" />
@@ -671,7 +643,6 @@ end
   "required": true
 }
 ```
-
 
 
 #### Collection format of arrays <a name="collection-format" />
@@ -708,7 +679,6 @@ end
 ```
 
 
-
 #### Hiding parameters <a name="hiding-parameters" />
 
 Exclude single optional parameter from the documentation
@@ -722,7 +692,6 @@ post :act do
   ...
 end
 ```
-
 
 
 #### Setting a Swagger default value <a name="default-value" />
@@ -793,7 +762,6 @@ namespace 'store/order', desc: 'Order operations within a store', swagger: { nes
   end
 end
 ```
-
 
 
 #### Response documentation <a name="response" />
@@ -1190,8 +1158,8 @@ end
 ```
 
 
-## Securing the Swagger UI <a name="oauth" />
 
+## Securing the Swagger UI <a name="oauth" />
 
 The Swagger UI on Grape could be secured from unauthorized access using any middleware, which provides certain methods:
 
@@ -1258,6 +1226,7 @@ users, you could pass a lambda to the :hidden key of a endpoint's description:
 
 The lambda is checking whether the user is authenticated (if not, the token_owner is nil by default), and has the admin
 role - only admins can see this endpoint.
+
 
 
 ## Examples <a="example" />

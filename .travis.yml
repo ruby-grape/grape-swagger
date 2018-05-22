@@ -11,33 +11,29 @@ after_success:
   - bundle exec danger
 
 rvm:
-  - 2.5.0
-  - 2.4.3
-
+  - 2.5.1
+  - 2.4.4
 env:
   - MODEL_PARSER=grape-swagger-entity
   - MODEL_PARSER=grape-swagger-representable
   - GRAPE_VERSION=0.17.0
   - GRAPE_VERSION=0.18.0
   - GRAPE_VERSION=0.19.2
-  - GRAPE_VERSION=1.0.1
+  - GRAPE_VERSION=1.0.3
   - GRAPE_VERSION=HEAD
 
 matrix:
   fast_finish: true
 
   include:
-    - rvm: 2.3.6
+    - rvm: 2.3.7
       env:
     - rvm: ruby-head
       env:
     - rvm: jruby-head
-      env:
-    - rvm: rbx-3
       env:
 
   allow_failures:
-    - rvm: 2.3.6
+    - rvm: 2.3.7
     - rvm: ruby-head
     - rvm: jruby-head
-    - rvm: rbx-3

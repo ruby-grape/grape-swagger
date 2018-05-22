@@ -195,7 +195,7 @@ module Grape
 
     def response_object(route)
       codes = http_codes_from_route(route)
-      codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2] } : x }
+      codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2], examples: x[3] } : x }
 
       codes.each_with_object({}) do |value, memo|
         value[:message] ||= ''
@@ -214,13 +214,9 @@ module Grape
         next unless !response_model.start_with?('Swagger_doc') && (@definitions[response_model] || value[:model])
 
         @definitions[response_model][:description] = description_object(route)
-        # TODO: proof that the definition exist, if model isn't specified
-        reference = { '$ref' => "#/definitions/#{response_model}" }
-        memo[value[:code]][:schema] = if route.options[:is_array] && value[:code] < 300
-                                        { type: 'array', items: reference }
-                                      else
-                                        reference
-                                      end
+
+        memo[value[:code]][:schema] = build_reference(route, value, response_model)
+        memo[value[:code]][:examples] = value[:examples] if value[:examples]
       end
     end
 
@@ -243,6 +239,7 @@ module Grape
         default_code[:code] = @entity[:code] if @entity[:code].present?
         default_code[:model] = @entity[:model] if @entity[:model].present?
         default_code[:message] = @entity[:message] || route.description || default_code[:message].sub('{item}', @item)
+        default_code[:examples] = @entity[:examples] if @entity[:examples]
       else
         default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
         default_code[:model] = @entity if @entity
@@ -263,6 +260,12 @@ module Grape
     end
 
     private
+
+    def build_reference(route, value, response_model)
+      # TODO: proof that the definition exist, if model isn't specified
+      reference = { '$ref' => "#/definitions/#{response_model}" }
+      route.options[:is_array] && value[:code] < 300 ? { type: 'array', items: reference } : reference
+    end
 
     def file_response?(value)
       value.to_s.casecmp('file').zero? ? true : false
@@ -294,9 +297,8 @@ module Grape
     end
 
     def default_type(params)
-      params.each do |param|
-        param[-1] = param.last == '' ? { required: true, type: 'Integer' } : param.last
-      end
+      default_param_type = { required: true, type: 'Integer' }
+      params.each { |param| param[-1] = param.last == '' ? default_param_type : param.last }
     end
 
     def parse_request_params(params)

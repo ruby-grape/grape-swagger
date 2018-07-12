@@ -6,7 +6,7 @@
 
 #### Fixes
 
-* Your contribution here.
+* [#681](https://github.com/ruby-grape/grape-swagger/pull/681): Provide error schemas when an endpoint can return a 204 - [@adstratm](https://github.com/adstratm).
 
 ###  0.29.0 (May 22, 2018)
 

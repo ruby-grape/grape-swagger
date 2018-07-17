@@ -180,7 +180,7 @@ module GrapeSwagger
 
             param[:type] = if param[:items][:type] == 'array'
                              'string'
-                           elsif param[:items].keys.include?('$ref')
+                           elsif param[:items].key?('$ref')
                              param[:type] = 'object'
                            else
                              param[:items][:type]

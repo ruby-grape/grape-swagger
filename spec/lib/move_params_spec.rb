@@ -340,7 +340,7 @@ describe GrapeSwagger::DocMethods::MoveParams do
             type: 'array',
             items: {
               type: 'string'
-            }, 
+            },
             required: true
           }
         ]
@@ -386,7 +386,7 @@ describe GrapeSwagger::DocMethods::MoveParams do
               type: 'array',
               items: {
                 type: 'array'
-              }, 
+              },
               required: true
             }
           ]
@@ -419,7 +419,7 @@ describe GrapeSwagger::DocMethods::MoveParams do
               type: 'array',
               items: {
                 '$ref' => '#/definitions/StreetLine'
-              }, 
+              },
               required: true
             }
           ]
@@ -455,7 +455,7 @@ describe GrapeSwagger::DocMethods::MoveParams do
               type: 'array',
               items: {
                 type: 'string'
-              }, 
+              },
               required: true
             }
           ]
@@ -489,7 +489,7 @@ describe GrapeSwagger::DocMethods::MoveParams do
               items: {
                 type: 'integer',
                 format: 'int32'
-              }, 
+              },
               required: true
             }
           ]

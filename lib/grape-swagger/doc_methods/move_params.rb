@@ -177,9 +177,16 @@ module GrapeSwagger
         def prepare_nested_types(params)
           params.each do |param|
             next unless param[:items]
-            param[:type] = param[:items][:type] == 'array' ? 'string' : param[:items][:type]
+
+            param[:type] = if param[:items][:type] == 'array'
+                             'string'
+                           elsif param[:items].keys.include?('$ref')
+                             param[:type] = 'object'
+                           else
+                             param[:items][:type]
+                           end
             param[:format] = param[:items][:format] if param[:items][:format]
-            param.delete(:items)
+            param.delete(:items) if param[:type] != 'object'
           end
         end
 

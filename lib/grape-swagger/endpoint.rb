@@ -200,6 +200,9 @@ module Grape
       codes.each_with_object({}) do |value, memo|
         value[:message] ||= ''
         memo[value[:code]] = { description: value[:message] }
+
+        memo[value[:code]][:headers] = value[:headers] if value[:headers]
+
         next build_file_response(memo[value[:code]]) if file_response?(value[:model])
 
         response_model = @item
@@ -217,7 +220,6 @@ module Grape
 
         memo[value[:code]][:schema] = build_reference(route, value, response_model)
         memo[value[:code]][:examples] = value[:examples] if value[:examples]
-        memo[value[:code]][:headers] = value[:headers] if value[:headers]
       end
     end
 

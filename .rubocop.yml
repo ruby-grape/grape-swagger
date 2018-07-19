@@ -16,6 +16,9 @@ Metrics/BlockLength:
   Exclude:
     - spec/**/*
 
+Metrics/ClassLength:
+  Max: 300
+
 Metrics/LineLength:
   Max: 120
   Exclude:

@@ -398,6 +398,7 @@ A hash merged into the `info` key of the JSON documentation.
 * [File response](#file-response)
 * [Extensions](#extensions)
 * [Response examples documentation](#response-examples)
+* [Response headers documentation](#response-headers)
 
 #### Swagger Header Parameters  <a name="headers" />
 
@@ -1037,6 +1038,60 @@ The result will look like following:
 
 Failure information can be passed as an array of arrays or an array of hashes.
 
+#### Response headers documentation <a name="response-headers" />
+
+You can also add header information to your responses by using the `desc` DSL with block syntax.
+
+By specifying headers to `success` and `failure`.
+
+```ruby
+desc 'This returns headers' do
+  success model: Thing, headers: { 'Location' => { description: 'Location of resource', type: 'string' } }
+  failure [[404, 'NotFound', ApiError, { 'application/json' => { code: 404, message: 'Not found' } }, { 'Date' => { description: 'Date of failure', type: 'string' } }]]
+end
+get '/thing' do
+  ...
+end
+```
+
+The result will look like following:
+
+```json
+  "responses": {
+    "200": {
+      "description": "This returns examples",
+      "schema": {
+        "$ref": "#/definitions/Thing"
+      },
+      "headers": {
+        "Location": {
+          "description": "Location of resource",
+          "type": "string"
+        }
+      }
+    },
+    "404": {
+      "description": "NotFound",
+      "schema": {
+        "$ref": "#/definitions/ApiError"
+      },
+      "examples": {
+        "application/json": {
+          "code": 404,
+          "message": "Not found"
+        }
+      },
+      "headers": {
+        "Date": {
+          "description": "Date of failure",
+          "type": "string"
+        }
+      }
+    }
+  }
+```
+
+Failure information can be passed as an array of arrays or an array of hashes.
 
 ## Using Grape Entities <a name="grape-entity" />
 

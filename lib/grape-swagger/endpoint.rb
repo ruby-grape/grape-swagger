@@ -210,7 +210,7 @@ module Grape
           value[:code] = 204
         end
 
-        next if memo.key?(204)
+        next if value[:code] == 204
         next unless !response_model.start_with?('Swagger_doc') && (@definitions[response_model] || value[:model])
 
         @definitions[response_model][:description] = description_object(route)

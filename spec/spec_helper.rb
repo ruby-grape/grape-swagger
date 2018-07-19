@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
-require 'simplecov'
-require 'coveralls'
+if RUBY_ENGINE == 'ruby'
+  require 'simplecov'
+  require 'coveralls'
 
-SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-SimpleCov.start do
-  add_filter 'spec/'
-  add_filter 'example/'
+  SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+  SimpleCov.start do
+    add_filter 'spec/'
+    add_filter 'example/'
+  end
+  Coveralls.wear!
 end
-Coveralls.wear!
 
 $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 

@@ -2,7 +2,7 @@
 
 #### Features
 
-* Your contribution here.
+* [#684](https://github.com/ruby-grape/grape-swagger/pull/684): Add response headers - [@jdmurphy](https://github.com/jdmurphy).
 
 #### Fixes
 

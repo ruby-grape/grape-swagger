@@ -6,7 +6,7 @@
 
 #### Fixes
 
-* Your contribution here.
+* [#683](https://github.com/ruby-grape/grape-swagger/pull/683): Fix handling of arrays of complex entities in params so that valid OpenAPI spec is generated - [@jdmurphy](https://github.com/jdmurphy).
 
 ###  0.29.0 (May 22, 2018)
 

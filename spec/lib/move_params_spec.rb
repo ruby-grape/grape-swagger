@@ -325,5 +325,193 @@ describe GrapeSwagger::DocMethods::MoveParams do
         it { expect(params).to eql expected_params }
       end
     end
+
+    describe 'prepare_nested_types' do
+      before :each do
+        subject.send(:prepare_nested_types, params)
+      end
+
+      let(:params) do
+        [
+          {
+            in: 'body',
+            name: 'address[street_lines]',
+            description: 'street lines',
+            type: 'array',
+            items: {
+              type: 'string'
+            },
+            required: true
+          }
+        ]
+      end
+
+      context 'when params contains nothing with :items key' do
+        let(:params) do
+          [
+            {
+              in: 'body',
+              name: 'phone_number',
+              description: 'phone number',
+              type: 'string',
+              required: true
+            }
+          ]
+        end
+
+        let(:expected_params) do
+          [
+            {
+              in: 'body',
+              name: 'phone_number',
+              description: 'phone number',
+              type: 'string',
+              required: true
+            }
+          ]
+        end
+
+        it 'does nothing' do
+          expect(params).to eq expected_params
+        end
+      end
+
+      context 'when params contains :items key with array type' do
+        let(:params) do
+          [
+            {
+              in: 'body',
+              name: 'address_street_lines',
+              description: 'street lines',
+              type: 'array',
+              items: {
+                type: 'array'
+              },
+              required: true
+            }
+          ]
+        end
+
+        let(:expected_params) do
+          [
+            {
+              in: 'body',
+              name: 'address_street_lines',
+              description: 'street lines',
+              type: 'string',
+              required: true
+            }
+          ]
+        end
+
+        it 'sets type to string and removes :items' do
+          expect(params).to eq expected_params
+        end
+      end
+
+      context 'when params contains :items key with $ref' do
+        let(:params) do
+          [
+            {
+              in: 'body',
+              name: 'address_street_lines',
+              description: 'street lines',
+              type: 'array',
+              items: {
+                '$ref' => '#/definitions/StreetLine'
+              },
+              required: true
+            }
+          ]
+        end
+
+        let(:expected_params) do
+          [
+            {
+              in: 'body',
+              name: 'address_street_lines',
+              description: 'street lines',
+              type: 'object',
+              items: {
+                '$ref' => '#/definitions/StreetLine'
+              },
+              required: true
+            }
+          ]
+        end
+
+        it 'sets type to object and does not remove :items' do
+          expect(params).to eq expected_params
+        end
+      end
+
+      context 'when params contains :items without $ref or array type' do
+        let(:params) do
+          [
+            {
+              in: 'body',
+              name: 'address_street_lines',
+              description: 'street lines',
+              type: 'array',
+              items: {
+                type: 'string'
+              },
+              required: true
+            }
+          ]
+        end
+
+        let(:expected_params) do
+          [
+            {
+              in: 'body',
+              name: 'address_street_lines',
+              description: 'street lines',
+              type: 'string',
+              required: true
+            }
+          ]
+        end
+
+        it 'sets type to :items :type and removes :items' do
+          expect(params).to eq expected_params
+        end
+      end
+
+      context 'when params contains :items key with :format' do
+        let(:params) do
+          [
+            {
+              in: 'body',
+              name: 'street_number',
+              description: 'street number',
+              type: 'array',
+              items: {
+                type: 'integer',
+                format: 'int32'
+              },
+              required: true
+            }
+          ]
+        end
+
+        let(:expected_params) do
+          [
+            {
+              in: 'body',
+              name: 'street_number',
+              description: 'street number',
+              type: 'integer',
+              format: 'int32',
+              required: true
+            }
+          ]
+        end
+
+        it 'sets format and removes :items' do
+          expect(params).to eq expected_params
+        end
+      end
+    end
   end
 end

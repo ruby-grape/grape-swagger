@@ -18,6 +18,22 @@ describe 'response with headers' do
           { 'declared_params' => declared(params) }
         end
 
+        desc 'A 204 can have headers too' do
+          success Hash[status: 204, message: 'No content', headers: { 'Location' => { description: 'Location of resource', type: 'string' } }]
+          failure [[400, 'Bad Request', Entities::ApiError, { 'application/json' => { code: 400, message: 'Bad request' } }, { 'Date' => { description: 'Date of failure', type: 'string' } }]]
+        end
+        delete '/no_content_response_headers' do
+          { 'declared_params' => declared(params) }
+        end
+
+        desc 'A file can have headers too' do
+          success Hash[status: 200, model: 'File', headers: { 'Cache-Control' => { description: 'Directive for caching', type: 'string' } }]
+          failure [[404, 'NotFound', Entities::ApiError, { 'application/json' => { code: 404, message: 'Not found' } }, { 'Date' => { description: 'Date of failure', type: 'string' } }]]
+        end
+        get '/file_response_headers' do
+          { 'declared_params' => declared(params) }
+        end
+
         desc 'This syntax also returns headers' do
           success model: Entities::UseResponse, headers: { 'Location' => { description: 'Location of resource', type: 'string' } }
           failure [
@@ -81,6 +97,66 @@ describe 'response with headers' do
         },
         'tags' => ['response_headers'],
         'operationId' => 'getResponseHeaders'
+      )
+    end
+  end
+
+  describe 'no content response headers' do
+    let(:header_204) do
+      { 'Location' => { 'description' => 'Location of resource', 'type' => 'string' } }
+    end
+    let(:header_400) do
+      { 'Date' => { 'description' => 'Date of failure', 'type' => 'string' } }
+    end
+    let(:examples_400) do
+      { 'application/json' => { 'code' => 400, 'message' => 'Bad request' } }
+    end
+
+    subject do
+      get '/swagger_doc/no_content_response_headers', {}
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['paths']['/no_content_response_headers']['delete']).to eql(
+        'description' => 'A 204 can have headers too',
+        'produces' => ['application/json'],
+        'responses' => {
+          '204' => { 'description' => 'No content', 'headers' => header_204 },
+          '400' => { 'description' => 'Bad Request', 'headers' => header_400, 'schema' => { '$ref' => '#/definitions/ApiError' }, 'examples' => examples_400 }
+        },
+        'tags' => ['no_content_response_headers'],
+        'operationId' => 'deleteNoContentResponseHeaders'
+      )
+    end
+  end
+
+  describe 'file response headers' do
+    let(:header_200) do
+      { 'Cache-Control' => { 'description' => 'Directive for caching', 'type' => 'string' } }
+    end
+    let(:header_404) do
+      { 'Date' => { 'description' => 'Date of failure', 'type' => 'string' } }
+    end
+    let(:examples_404) do
+      { 'application/json' => { 'code' => 404, 'message' => 'Not found' } }
+    end
+
+    subject do
+      get '/swagger_doc/file_response_headers'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['paths']['/file_response_headers']['get']).to eql(
+        'description' => 'A file can have headers too',
+        'produces' => ['application/json'],
+        'responses' => {
+          '200' => { 'description' => 'A file can have headers too', 'headers' => header_200, 'schema' => { 'type' => 'file' } },
+          '404' => { 'description' => 'NotFound', 'headers' => header_404, 'schema' => { '$ref' => '#/definitions/ApiError' }, 'examples' => examples_404 }
+        },
+        'tags' => ['file_response_headers'],
+        'operationId' => 'getFileResponseHeaders'
       )
     end
   end

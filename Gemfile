@@ -26,11 +26,11 @@ group :development, :test do
   gem 'rake'
   gem 'rdoc'
   gem 'rspec', '~> 3.0'
-  gem 'rubocop', '~>0.51', require: false
+  gem 'rubocop', '~> 0.58', require: false
 end
 
 group :test do
-  gem 'coveralls', require: false
+  gem 'coveralls', '~> 0.8', require: false
   gem 'grape-swagger-entity'
   gem 'ruby-grape-danger', '~> 0.1.1', require: false
   gem 'simplecov', require: false

@@ -17,7 +17,7 @@
 * [Routes Configuration](#routes)
 * [Using Grape Entities](#grape-entity)
 * [Securing the Swagger UI](#oauth)
-* [Examples](#examples)
+* [Example](#example)
 * [Rake Tasks](#rake)
 
 
@@ -1284,7 +1284,7 @@ role - only admins can see this endpoint.
 
 
 
-## Examples <a="example" />
+## Example <a name="example" />
 
 Go into example directory and run it: `$ bundle exec rackup`
 go to: `http://localhost:9292/swagger_doc` to get it

@@ -2,12 +2,17 @@
 
 #### Features
 
-* [#686](https://github.com/ruby-grape/grape-swagger/pull/686): Allow response headers for responses with no content and for files - [@jdmurphy](https://github.com/jdmurphy).
 * Your contribution here.
 
 #### Fixes
 
 * Your contribution here.
+
+###  0.30.1 (July 19, 2018)
+
+#### Features
+
+* [#686](https://github.com/ruby-grape/grape-swagger/pull/686): Allow response headers for responses with no content and for files - [@jdmurphy](https://github.com/jdmurphy).
 
 ###  0.30.0 (July 19, 2018)
 

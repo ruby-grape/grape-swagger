@@ -513,5 +513,180 @@ describe GrapeSwagger::DocMethods::MoveParams do
         end
       end
     end
+
+    describe 'recursive_call' do
+      before :each do
+        subject.send(:recursive_call, properties, 'test', nested_params)
+      end
+
+      let(:properties) { {} }
+
+      context 'when nested params is an array' do
+        let(:nested_params) do
+          [
+            {
+              in: 'body',
+              name: 'aliases',
+              description: 'The aliases of test.',
+              type: 'array',
+              items: { type: 'string' },
+              required: true
+            }
+          ]
+        end
+
+        let(:expected_properties) do
+          {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                aliases: {
+                  type: 'string',
+                  description: 'The aliases of test.'
+                }
+              },
+              required: [:aliases]
+            }
+          }
+        end
+
+        it 'adds property as symbol with array type and items' do
+          expect(properties[:test]).to eq expected_properties
+        end
+      end
+
+      context 'when nested params is not an array' do
+        let(:nested_params) do
+          [
+            {
+              in: 'body',
+              name: 'id',
+              description: 'The unique ID of test.',
+              type: 'string',
+              required: true
+            }
+          ]
+        end
+
+        let(:expected_properties) do
+          {
+            type: 'object',
+            required: [:id],
+            properties: {
+              id: {
+                type: 'string',
+                description: 'The unique ID of test.'
+              }
+            }
+          }
+        end
+
+        it 'adds property as symbol with object type' do
+          expect(properties[:test]).to eq expected_properties
+        end
+      end
+    end
+
+    describe 'add_properties_to_definition' do
+      before :each do
+        subject.send(:add_properties_to_definition, definition, properties, [])
+      end
+
+      context 'when definition has items key' do
+        let(:definition) do
+          {
+            type: 'array',
+            items:  {
+              type: 'object',
+              properties: {
+                description: 'Test description'
+              }
+            }
+          }
+        end
+
+        let(:properties) do
+          {
+            strings: {
+              type: 'string',
+              description: 'string elements'
+            }
+          }
+        end
+
+        let(:expected_definition) do
+          {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                description: 'Test description',
+                strings: {
+                  type: 'string',
+                  description: 'string elements'
+                }
+              }
+            }
+          }
+        end
+
+        it 'deep merges properties into definition item properties' do
+          expect(definition).to eq expected_definition
+        end
+      end
+
+      context 'when definition does not have items key' do
+        let(:definition) do
+          {
+            type: 'object',
+            properties: {
+              parent: {
+                type: 'object',
+                description: 'Parent to child'
+              }
+            }
+          }
+        end
+
+        let(:properties) do
+          {
+            parent: {
+              type: 'object',
+              properties: {
+                id: {
+                  type: 'string',
+                  description: 'Parent ID'
+                }
+              },
+              required: [:id]
+            }
+          }
+        end
+
+        let(:expected_definition) do
+          {
+            type: 'object',
+            properties: {
+              parent: {
+                type: 'object',
+                description: 'Parent to child',
+                properties: {
+                  id: {
+                    type: 'string',
+                    description: 'Parent ID'
+                  }
+                },
+                required: [:id]
+              }
+            }
+          }
+        end
+
+        it 'deep merges properties into definition properties' do
+          expect(definition).to eq expected_definition
+        end
+      end
+    end
   end
 end

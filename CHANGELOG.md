@@ -6,6 +6,7 @@
 
 #### Fixes
 
+* [#688](https://github.com/ruby-grape/grape-swagger/pull/688): Use deep merge for nested parameter definitions - [@jdmurphy](https://github.com/jdmurphy).
 * Your contribution here.
 
 ###  0.30.1 (July 19, 2018)

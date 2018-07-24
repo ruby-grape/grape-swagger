@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'active_support/core_ext/hash/deep_merge'
+
 module GrapeSwagger
   module DocMethods
     class MoveParams
@@ -114,11 +116,11 @@ module GrapeSwagger
 
         def recursive_call(properties, property, nested_params)
           if should_expose_as_array?(nested_params)
-            properties[property] = array_type
-            move_params_to_new(properties[property][:items], nested_params)
+            properties[property.to_sym] = array_type
+            move_params_to_new(properties[property.to_sym][:items], nested_params)
           else
-            properties[property] = object_type
-            move_params_to_new(properties[property], nested_params)
+            properties[property.to_sym] = object_type
+            move_params_to_new(properties[property.to_sym], nested_params)
           end
         end
 
@@ -135,10 +137,10 @@ module GrapeSwagger
 
         def add_properties_to_definition(definition, properties, required)
           if definition.key?(:items)
-            definition[:items][:properties].merge!(properties)
+            definition[:items][:properties].deep_merge!(properties)
             add_to_required(definition[:items], required)
           else
-            definition[:properties].merge!(properties)
+            definition[:properties].deep_merge!(properties)
             add_to_required(definition, required)
           end
         end

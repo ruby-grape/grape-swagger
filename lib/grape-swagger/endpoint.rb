@@ -306,13 +306,13 @@ module Grape
     end
 
     def parse_request_params(params)
-      array_key = nil
+      array_keys = []
       params.select { |param| public_parameter?(param) }.each_with_object({}) do |param, memo|
         name, options = *param
         param_type = options[:type]
         param_type = param_type.to_s unless param_type.nil?
-        array_key = name.to_s if param_type_is_array?(param_type)
-        options[:is_array] = true if array_key && name.start_with?(array_key)
+        array_keys << name.to_s if param_type_is_array?(param_type)
+        options[:is_array] = true if array_keys.any? { |key| name == key || name.start_with?(key + '[') }
         memo[name] = options unless %w[Hash Array].include?(param_type) && !options.key?(:documentation)
       end
     end

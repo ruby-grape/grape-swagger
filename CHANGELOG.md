@@ -7,7 +7,7 @@
 #### Fixes
 
 * [#688](https://github.com/ruby-grape/grape-swagger/pull/688): Use deep merge for nested parameter definitions - [@jdmurphy](https://github.com/jdmurphy).
-* [#692](https://github.com/ruby-grape/grape-swagger/pull/692): Fix compatibility description in README - [@darren](https://github.com/darren987469).
+* [#691](https://github.com/ruby-grape/grape-swagger/pull/691): Disregard order when parsing request params for arrays - [@jdmurphy](https://github.com/jdmurphy).
 * Your contribution here.
 
 ###  0.30.1 (July 19, 2018)

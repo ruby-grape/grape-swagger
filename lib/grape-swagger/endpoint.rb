@@ -293,7 +293,6 @@ module Grape
 
       request_params.empty? ? required : request_params
     end
-    # rubocop:enable Style/IfUnlessModifier
 
     def merge_params(route)
       param_keys = route.params.keys

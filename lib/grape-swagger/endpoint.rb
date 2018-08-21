@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require 'active_support'
-require 'active_support/core_ext/string/inflections.rb'
+require 'active_support/core_ext/string/inflections'
+require 'grape-swagger/endpoint/params_parser'
 
 module Grape
   class Endpoint
@@ -118,7 +119,7 @@ module Grape
       method[:description] = description_object(route)
       method[:produces]    = produces_object(route, options[:produces] || options[:format])
       method[:consumes]    = consumes_object(route, options[:format])
-      method[:parameters]  = params_object(route, path)
+      method[:parameters]  = params_object(route, options, path)
       method[:security]    = security_object(route)
       method[:responses]   = response_object(route)
       method[:tags]        = route.options.fetch(:tags, tag_object(route, path))
@@ -174,8 +175,8 @@ module Grape
       GrapeSwagger::DocMethods::ProducesConsumes.call(route.settings.dig(:description, :consumes) || format)
     end
 
-    def params_object(route, path)
-      parameters = partition_params(route).map do |param, value|
+    def params_object(route, options, path)
+      parameters = partition_params(route, options).map do |param, value|
         value = { required: false }.merge(value) if value.is_a?(Hash)
         _, value = default_type([[param, value]]).first if value == ''
         if value[:type]
@@ -279,8 +280,7 @@ module Grape
       memo['schema'] = { type: 'file' }
     end
 
-    # rubocop:disable Style/IfUnlessModifier
-    def partition_params(route)
+    def partition_params(route, settings)
       declared_params = route.settings[:declared_params] if route.settings[:declared_params].present?
       required = merge_params(route)
       required = GrapeSwagger::DocMethods::Headers.parse(route) + required unless route.headers.nil?
@@ -288,12 +288,11 @@ module Grape
       default_type(required)
 
       request_params = unless declared_params.nil? && route.headers.nil?
-                         parse_request_params(required)
+                         GrapeSwagger::Endpoint::ParamsParser.parse_request_params(required, settings)
                        end || {}
 
       request_params.empty? ? required : request_params
     end
-    # rubocop:enable Style/IfUnlessModifier
 
     def merge_params(route)
       param_keys = route.params.keys
@@ -303,27 +302,6 @@ module Grape
     def default_type(params)
       default_param_type = { required: true, type: 'Integer' }
       params.each { |param| param[-1] = param.last == '' ? default_param_type : param.last }
-    end
-
-    def parse_request_params(params)
-      array_keys = []
-      params.select { |param| public_parameter?(param) }.each_with_object({}) do |param, memo|
-        name, options = *param
-        param_type = options[:type]
-        param_type = param_type.to_s unless param_type.nil?
-        array_keys << name.to_s if param_type_is_array?(param_type)
-        options[:is_array] = true if array_keys.any? { |key| name == key || name.start_with?(key + '[') }
-        memo[name] = options unless %w[Hash Array].include?(param_type) && !options.key?(:documentation)
-      end
-    end
-
-    def param_type_is_array?(param_type)
-      return false unless param_type
-      return true if param_type == 'Array'
-      param_types = param_type.match(/\[(.*)\]$/)
-      return false unless param_types
-      param_types = param_types[0].split(',') if param_types
-      param_types.size == 1
     end
 
     def expose_params(value)
@@ -368,14 +346,6 @@ module Grape
       route_hidden = route.options[:hidden] if route.options.key?(:hidden)
       return route_hidden unless route_hidden.is_a?(Proc)
       options[:token_owner] ? route_hidden.call(send(options[:token_owner].to_sym)) : route_hidden.call
-    end
-
-    def public_parameter?(param)
-      param_options = param.last
-      return true unless param_options.key?(:documentation) && !param_options[:required]
-      param_hidden = param_options[:documentation].fetch(:hidden, false)
-      param_hidden = param_hidden.call if param_hidden.is_a?(Proc)
-      !param_hidden
     end
   end
 end

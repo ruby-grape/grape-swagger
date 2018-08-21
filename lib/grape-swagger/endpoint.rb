@@ -326,13 +326,13 @@ module Grape
       parser = GrapeSwagger.model_parsers.find(model)
       raise GrapeSwagger::Errors::UnregisteredParser, "No parser registered for #{model_name}." unless parser
 
-      properties = parser.new(model, self).call
+      properties, required = parser.new(model, self).call
       unless properties&.any?
         raise GrapeSwagger::Errors::SwaggerSpec,
               "Empty model #{model_name}, swagger 2.0 doesn't support empty definitions."
       end
 
-      @definitions[model_name] = GrapeSwagger::DocMethods::BuildModelDefinition.build(model, properties)
+      @definitions[model_name] = GrapeSwagger::DocMethods::BuildModelDefinition.build(model, properties, required)
 
       model_name
     end

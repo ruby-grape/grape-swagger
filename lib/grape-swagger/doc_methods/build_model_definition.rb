@@ -24,7 +24,8 @@ module GrapeSwagger
         end
 
         def parse_entity(model)
-          return unless model.respond_to?(:documentation)
+          is_a_grape_entity = defined?(Grape::Entity) && model.ancestors.is_a?(Grape::Entity)
+          return unless is_a_grape_entity
 
           deprecated_workflow_for('grape-swagger-entity')
 
@@ -34,7 +35,8 @@ module GrapeSwagger
         end
 
         def parse_representable(model)
-          return unless model.respond_to?(:map)
+          is_a_representable = defined?(::Representable) && model.ancestors.include?(::Representable::Decorator)
+          return unless is_a_representable
 
           deprecated_workflow_for('grape-swagger-representable')
 
@@ -44,7 +46,7 @@ module GrapeSwagger
         end
 
         def deprecated_workflow_for(gem_name)
-          warn "DEPRECATED: You using old #{gem_name} version, wich not provides" \
+          warn "DEPRECATED: You using old #{gem_name} version, wich not provides " \
             "required attributes, to solve this problem please update #{gem_name}"
         end
       end

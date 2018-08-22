@@ -13,6 +13,7 @@ require './api/entities'
 
 class Base < Grape::API
   require 'grape-entity'
+  require 'grape-swagger-entity'
   require '../lib/grape-swagger'
   format :json
 

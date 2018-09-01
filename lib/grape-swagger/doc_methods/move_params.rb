@@ -207,7 +207,7 @@ module GrapeSwagger
         end
 
         def property_keys
-          %i[type format description minimum maximum items enum]
+          %i[type format description minimum maximum items enum default]
         end
 
         def deletable?(param)

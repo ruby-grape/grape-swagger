@@ -44,6 +44,7 @@ module GrapeSwagger
 
         def setup_definition(def_extension, path, definitions)
           return unless def_extension.key?(:for)
+
           status = def_extension[:for]
 
           definition = find_definition(status, path)
@@ -60,6 +61,7 @@ module GrapeSwagger
 
         def add_extension_to(part, extensions)
           return if part.nil?
+
           concatenate(extensions).each do |key, value|
             part[key] = value unless key.start_with?('x-for')
           end

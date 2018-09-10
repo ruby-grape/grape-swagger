@@ -172,6 +172,7 @@ module Grape
 
     def consumes_object(route, format)
       return unless SUPPORTS_CONSUMES.include?(route.request_method.downcase.to_sym)
+
       GrapeSwagger::DocMethods::ProducesConsumes.call(route.settings.dig(:description, :consumes) || format)
     end
 
@@ -321,6 +322,7 @@ module Grape
       model_name = model_name(model)
 
       return model_name if @definitions.key?(model_name)
+
       @definitions[model_name] = nil
 
       parser = GrapeSwagger.model_parsers.find(model)
@@ -345,6 +347,7 @@ module Grape
       route_hidden = route.settings.try(:[], :swagger).try(:[], :hidden)
       route_hidden = route.options[:hidden] if route.options.key?(:hidden)
       return route_hidden unless route_hidden.is_a?(Proc)
+
       options[:token_owner] ? route_hidden.call(send(options[:token_owner].to_sym)) : route_hidden.call
     end
   end

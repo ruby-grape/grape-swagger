@@ -64,12 +64,15 @@ module Grape
           route_path = route.path
           route_match = route_path.split(/^.*?#{route.prefix.to_s}/).last
           next unless route_match
+
           route_match = route_match.match('\/([\w|-]*?)[\.\/\(]') || route_match.match('\/([\w|-]*)$')
           next unless route_match
+
           resource = route_match.captures.first
           resource = '/' if resource.empty?
           @target_class.combined_routes[resource] ||= []
           next if doc_klass.hide_documentation_path && route.path.match(/#{doc_klass.mount_path}($|\/|\(\.)/)
+
           @target_class.combined_routes[resource].unshift route
         end
       end
@@ -131,6 +134,7 @@ module Grape
       def extract_parent_route(name)
         route_name = name.match(%r{^/?([^/]*).*$})[1]
         return route_name unless route_name.include? ':'
+
         matches = name.match(/\/[a-z]+/)
         matches.nil? ? route_name : matches[0].delete('/')
       end

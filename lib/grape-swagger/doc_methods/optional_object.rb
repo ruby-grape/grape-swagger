@@ -7,6 +7,7 @@ module GrapeSwagger
         def build(key, options, request = nil)
           if options[key]
             return evaluate(key, options, request) if options[key].is_a?(Proc)
+
             options[key]
           else
             request.send(default_values[key])

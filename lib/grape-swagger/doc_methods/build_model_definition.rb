@@ -44,8 +44,8 @@ module GrapeSwagger
         end
 
         def deprecated_workflow_for(gem_name)
-          warn "DEPRECATED: You using old #{gem_name} version, wich not provides" \
-            "required attributes, to solve this problem please update #{gem_name}"
+          warn "DEPRECATED: You are using old #{gem_name} version, which doesn't provide " \
+            "required attributes. To solve this problem, please update #{gem_name}"
         end
       end
     end

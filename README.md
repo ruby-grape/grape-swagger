@@ -200,7 +200,7 @@ end
 * [tags](#tags)
 * [hide_documentation_path](#hide_documentation_path)
 * [info](#info)
-* [array_uses_braces](#array_uses_braces)
+* [array_use_braces](#array_use_braces)
 
 You can pass a hash with optional configuration settings to ```add_swagger_documentation```.
 The examples show the default value.
@@ -372,7 +372,7 @@ add_swagger_documentation \
 
 A hash merged into the `info` key of the JSON documentation.
 
-#### array_uses_braces: <a name="array_uses_braces" />
+#### array_use_braces: <a name="array_use_braces" />
 ```ruby
 add_swagger_documentation \
   array_use_braces: true
@@ -383,12 +383,12 @@ params do
   optional :metadata, type: Array[String]
 end
 ```
- with `array_uses_braces: true`:
+ with `array_use_braces: true`:
 ```
 metadata[]: { "name": "Asset ID", "value": "12345" }
 metadata[]: { "name": "Asset Tag", "value": "654321"}
 ```
- with `array_uses_braces: false`:
+ with `array_use_braces: false`:
 ```
 metadata: {"name": "Asset ID", "value": "123456"}
 metadata: {"name": "Asset Tag", "value": "654321"}

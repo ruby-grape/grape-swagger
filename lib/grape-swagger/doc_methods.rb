@@ -32,6 +32,8 @@ module GrapeSwagger
       target_class     = options[:target_class]
       guard            = options[:swagger_endpoint_guard]
       formatter        = options[:format]
+      api_doc          = options[:api_documentation].dup
+      specific_api_doc = options[:specific_api_documentation].dup
 
       class_variables_from(options)
 
@@ -40,6 +42,8 @@ module GrapeSwagger
           send(method, formatter)
         end
       end
+
+      desc api_doc.delete(:desc), api_doc
 
       instance_eval(guard) unless guard.nil?
 
@@ -67,10 +71,14 @@ module GrapeSwagger
         output_path_definitions.call(target_class.combined_namespace_routes, self)
       end
 
+      desc specific_api_doc.delete(:desc), { params:
+        specific_api_doc.delete(:params) || {} }.merge(specific_api_doc)
+
       params do
         requires :name, type: String, desc: 'Resource name of mounted API'
         optional :locale, type: Symbol, desc: 'Locale of API documentation'
       end
+
       get "#{mount_path}/:name" do
         I18n.locale = params[:locale] || I18n.default_locale
 

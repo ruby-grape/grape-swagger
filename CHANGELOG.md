@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#710](https://github.com/ruby-grape/grape-swagger/issues/710): Reimplemented `api_documentation` and `specific_api_documentation` options - [@dblock](https://github.com/dblock).
 * Your contribution here.
 
 #### Fixes

@@ -41,7 +41,7 @@ describe 'format, content_type' do
           { 'declared_params' => declared(params) }
         end
 
-        desc 'This uses produces for produces',
+        desc 'This uses consumes for consumes',
              failure: [{ code: 400, model: Entities::ApiError }],
              consumes: ['application/www_url_encoded'],
              entity: Entities::UseResponse

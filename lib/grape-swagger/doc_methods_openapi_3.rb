@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# require 'grape-swagger/endpoint'
+# require 'grape-swagger/openapi_3/endpoint'
 
 require 'grape-swagger/doc_methods/status_codes'
 require 'grape-swagger/doc_methods/produces_consumes'
@@ -16,7 +16,7 @@ require 'grape-swagger/doc_methods/headers'
 require 'grape-swagger/doc_methods/build_model_definition'
 require 'grape-swagger/doc_methods/version'
 
-module GrapeSwagger
+module GrapeOpenAPI
   module DocMethods
     def hide_documentation_path
       @@hide_documentation_path
@@ -34,8 +34,6 @@ module GrapeSwagger
       target_class     = options[:target_class]
       guard            = options[:swagger_endpoint_guard]
       formatter        = options[:format]
-      api_doc          = options[:api_documentation].dup
-      specific_api_doc = options[:specific_api_documentation].dup
 
       class_variables_from(options)
 
@@ -45,7 +43,7 @@ module GrapeSwagger
         end
       end
 
-      desc api_doc.delete(:desc), api_doc
+      instance_eval(guard) unless guard.nil?
 
       output_path_definitions = proc do |combi_routes, endpoint|
         output = endpoint.swagger_object(
@@ -64,8 +62,6 @@ module GrapeSwagger
         output
       end
 
-      instance_eval(guard) unless guard.nil?
-
       get mount_path do
         header['Access-Control-Allow-Origin']   = '*'
         header['Access-Control-Request-Method'] = '*'
@@ -73,16 +69,10 @@ module GrapeSwagger
         output_path_definitions.call(target_class.combined_namespace_routes, self)
       end
 
-      desc specific_api_doc.delete(:desc), { params:
-        specific_api_doc.delete(:params) || {} }.merge(specific_api_doc)
-
       params do
         requires :name, type: String, desc: 'Resource name of mounted API'
         optional :locale, type: Symbol, desc: 'Locale of API documentation'
       end
-
-      instance_eval(guard) unless guard.nil?
-
       get "#{mount_path}/:name" do
         I18n.locale = params[:locale] || I18n.default_locale
 

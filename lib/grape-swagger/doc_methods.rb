@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# require 'grape-swagger/endpoint'
+
 require 'grape-swagger/doc_methods/status_codes'
 require 'grape-swagger/doc_methods/produces_consumes'
 require 'grape-swagger/doc_methods/data_type'

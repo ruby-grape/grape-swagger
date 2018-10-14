@@ -2,10 +2,10 @@
 
 require 'grape'
 
-require 'grape-swagger/openapi_3/endpoint'
 require 'grape-swagger/errors'
+require 'grape-swagger/openapi_3/endpoint'
+require 'grape-swagger/openapi_3/doc_methods'
 
-require 'grape-swagger/doc_methods_openapi_3'
 require 'grape-swagger/model_parsers'
 
 module GrapeSwagger

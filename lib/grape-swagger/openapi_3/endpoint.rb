@@ -23,10 +23,7 @@ module Grape
     # openapi 3.0 related parts
     #
     # required keys for SwaggerObject
-    def swagger_object(_, request, options)
-      puts request.inspect
-      puts options.inspect
-
+    def swagger_object(_target_class, _request, options)
       object = {
         info:                info_object(options[:info].merge(version: options[:doc_version])),
         openapi:             '3.0.0',

@@ -854,7 +854,7 @@ get '/thing', failure: [
   # ...
 end
 ```
-If no status code is defined [defaults](/lib/grape-swagger/endpoint.rb#L210) would be taken.
+If no status code is defined [defaults](/lib/grape-swagger/swagger_2/endpoint.rb#L210) would be taken.
 
 The result is then something like following:
 

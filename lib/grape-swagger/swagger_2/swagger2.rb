@@ -3,10 +3,10 @@
 require 'grape'
 
 require 'grape-swagger/version'
-require 'grape-swagger/endpoint'
 require 'grape-swagger/errors'
 
-require 'grape-swagger/doc_methods'
+require 'grape-swagger/swagger_2/endpoint'
+require 'grape-swagger/swagger_2/doc_methods'
 require 'grape-swagger/model_parsers'
 
 module GrapeSwagger

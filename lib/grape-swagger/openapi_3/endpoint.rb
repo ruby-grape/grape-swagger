@@ -72,7 +72,9 @@ module Grape
     end
 
     # building path and definitions objects
-    def path_and_definition_objects(namespace_routes, options)
+    def path_and_definition_objects(namespace_routes, target_class, options)
+      @content_types = content_types_for(target_class)
+
       @paths = {}
       @definitions = {}
       namespace_routes.each_key do |key|
@@ -114,8 +116,8 @@ module Grape
       method = {}
       method[:summary]     = summary_object(route)
       method[:description] = description_object(route)
-      method[:produces]    = produces_object(route, options[:produces] || options[:format])
-      method[:consumes]    = consumes_object(route, options[:format])
+      # method[:produces]    = produces_object(route, options[:produces] || options[:format])
+      # method[:consumes]    = consumes_object(route, options[:format])
       method[:parameters]  = params_object(route, options, path)
       method[:security]    = security_object(route)
       method[:responses]   = response_object(route)
@@ -216,8 +218,9 @@ module Grape
         next unless !response_model.start_with?('Swagger_doc') && (@definitions[response_model] || value[:model])
 
         @definitions[response_model][:description] = description_object(route)
+        ref = build_reference(route, value, response_model)
 
-        memo[value[:code]][:schema] = build_reference(route, value, response_model)
+        memo[value[:code]][:content] = @content_types.map { |c| [c, { schema: ref }] }.to_h
         memo[value[:code]][:examples] = value[:examples] if value[:examples]
       end
     end

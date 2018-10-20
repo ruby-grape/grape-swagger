@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# require 'grape-swagger/openapi_3/endpoint'
-
 require 'grape-swagger/doc_methods/status_codes'
 require 'grape-swagger/doc_methods/produces_consumes'
 require 'grape-swagger/doc_methods/data_type'
@@ -10,7 +8,7 @@ require 'grape-swagger/doc_methods/operation_id'
 require 'grape-swagger/doc_methods/optional_object'
 require 'grape-swagger/doc_methods/path_string'
 require 'grape-swagger/doc_methods/tag_name_description'
-require 'grape-swagger/doc_methods/parse_params'
+require 'grape-swagger/openapi_3/doc_methods/parse_params'
 require 'grape-swagger/doc_methods/move_params'
 require 'grape-swagger/doc_methods/headers'
 require 'grape-swagger/doc_methods/build_model_definition'
@@ -52,7 +50,7 @@ module GrapeOpenAPI
           options
         )
 
-        paths, definitions   = endpoint.path_and_definition_objects(combi_routes, options)
+        paths, definitions   = endpoint.path_and_definition_objects(combi_routes, target_class, options)
         tags                 = tags_from(paths, options)
 
         output[:tags]        = tags unless tags.empty? || paths.blank?

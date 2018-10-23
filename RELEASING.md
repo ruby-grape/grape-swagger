@@ -1,6 +1,6 @@
 # Releasing Grape-Swagger
 
-There're no particular rules about when to release grape-swagger. Release bug fixes frequently, features not so frequently and breaking API changes rarely.
+There are no particular rules about when to release grape-swagger. Any co-maintainer is encouraged to release bug fixes frequently, features not so frequently and breaking API changes rarely.
 
 ### Release
 
@@ -13,18 +13,13 @@ rake
 
 Check that the last build succeeded in [Travis CI](https://travis-ci.org/ruby-grape/grape-swagger) for all supported platforms.
 
-Increment the version, modify [lib/grape-swagger/version.rb](lib/grape-swagger/version.rb).
-
-*  Increment the third number if the release has bug fixes and/or very minor features, only (eg. change `0.7.1` to `0.7.2`).
-*  Increment the second number if the release contains major features or breaking API changes (eg. change `0.7.1` to `0.8.0`).
-
-Change "Next Release" in [CHANGELOG.md](CHANGELOG.md) to the new version.
+Change "Next" in [CHANGELOG.md](CHANGELOG.md) to the current date.
 
 ```
 ### 0.7.2 (February 6, 2014)
 ```
 
-Remove the line with "Your contribution here.", since there will be no more contributions to this release.
+Remove the lines with "Your contribution here.", since there will be no more contributions to this release.
 
 Commit your changes.
 
@@ -47,11 +42,18 @@ Pushed grape-swagger 0.7.2 to rubygems.org.
 
 ### Prepare for the Next Version
 
+Increment the minor version, the third number, modify [lib/grape-swagger/version.rb](lib/grape-swagger/version.rb). For example, change `0.7.1` to `0.7.2`. Major versions are incremented in pull requests that require it.
+
 Add the next release to [CHANGELOG.md](CHANGELOG.md).
 
 ```
-Next Release
-============
+### 0.7.3 (Next)
+
+#### Features
+
+* Your contribution here.
+
+#### Fixes
 
 * Your contribution here.
 ```
@@ -59,8 +61,8 @@ Next Release
 Commit your changes.
 
 ```
-git add CHANGELOG.md
-git commit -m "Preparing for next release."
+git add CHANGELOG.md lib/grape-swagger/version.rb
+git commit -m "Preparing for next developer iteration, 0.7.3."
 git push origin master
 ```
 

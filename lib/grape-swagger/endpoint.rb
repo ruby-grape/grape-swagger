@@ -25,15 +25,15 @@ module Grape
     # required keys for SwaggerObject
     def swagger_object(target_class, request, options)
       object = {
-        info:                info_object(options[:info].merge(version: options[:doc_version])),
-        swagger:             '2.0',
-        produces:            content_types_for(target_class),
-        authorizations:      options[:authorizations],
+        info: info_object(options[:info].merge(version: options[:doc_version])),
+        swagger: '2.0',
+        produces: content_types_for(target_class),
+        authorizations: options[:authorizations],
         securityDefinitions: options[:security_definitions],
-        security:            options[:security],
-        host:                GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request),
-        basePath:            GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request),
-        schemes:             options[:schemes].is_a?(String) ? [options[:schemes]] : options[:schemes]
+        security: options[:security],
+        host: GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request),
+        basePath: GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request),
+        schemes: options[:schemes].is_a?(String) ? [options[:schemes]] : options[:schemes]
       }
 
       GrapeSwagger::DocMethods::Extensions.add_extensions_to_root(options, object)
@@ -43,12 +43,12 @@ module Grape
     # building info object
     def info_object(infos)
       result = {
-        title:             infos[:title] || 'API title',
-        description:       infos[:description],
+        title: infos[:title] || 'API title',
+        description: infos[:description],
         termsOfServiceUrl: infos[:terms_of_service_url],
-        contact:           contact_object(infos),
-        license:           license_object(infos),
-        version:           infos[:version]
+        contact: contact_object(infos),
+        license: license_object(infos),
+        version: infos[:version]
       }
 
       GrapeSwagger::DocMethods::Extensions.add_extensions_to_info(infos, result)
@@ -61,7 +61,7 @@ module Grape
     def license_object(infos)
       {
         name: infos.delete(:license),
-        url:  infos.delete(:license_url)
+        url: infos.delete(:license_url)
       }.delete_if { |_, value| value.blank? }
     end
 

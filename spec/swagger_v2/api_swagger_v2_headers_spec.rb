@@ -12,7 +12,7 @@ describe 'headers' do
 
         desc 'This returns something',
              failure: [{ code: 400, model: Entities::ApiError }],
-             headers:  {
+             headers: {
                'X-Rate-Limit-Limit' => {
                  'description' => 'The number of allowed requests in the current period',
                  'type' => 'integer'

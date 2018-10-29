@@ -45,7 +45,7 @@ module Grape
       result = {
         title: infos[:title] || 'API title',
         description: infos[:description],
-        termsOfServiceUrl: infos[:terms_of_service_url],
+        termsOfService: infos[:terms_of_service_url],
         contact: contact_object(infos),
         license: license_object(infos),
         version: infos[:version]

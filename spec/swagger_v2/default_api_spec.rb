@@ -128,7 +128,7 @@ describe 'Default API' do
     end
 
     it 'documents the terms of service url' do
-      expect(subject['termsOfServiceUrl']).to eql('http://terms.com')
+      expect(subject['termsOfService']).to eql('http://terms.com')
     end
 
     it 'documents the contact email' do

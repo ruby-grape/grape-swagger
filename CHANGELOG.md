@@ -3,8 +3,9 @@
 #### Features
 
 * Your contribution here.
+* [#717](https://github.com/ruby-grape/grape-swagger/pull/717): Adds support for grape >= 1.2 - [@myxoh](https://github.com/myxoh).
 
-### Fixes
+#### Fixes
 
 * Your contribution here.
 

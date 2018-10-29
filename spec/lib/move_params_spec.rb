@@ -597,7 +597,7 @@ describe GrapeSwagger::DocMethods::MoveParams do
         let(:definition) do
           {
             type: 'array',
-            items:  {
+            items: {
               type: 'object',
               properties: {
                 description: 'Test description'

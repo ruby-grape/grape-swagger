@@ -37,4 +37,3 @@ matrix:
     - rvm: 2.3.7
     - rvm: ruby-head
     - rvm: jruby-head
-    - env: GRAPE_VERSION=HEAD

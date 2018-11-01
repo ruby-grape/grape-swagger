@@ -3,15 +3,6 @@
 require 'spec_helper'
 
 describe GrapeSwagger::DocMethods::DataType do
-  before do
-    stub_const 'MyEntity', Class.new
-    MyEntity.class_eval do
-      def self.entity_name
-        'MyInteger'
-      end
-    end
-  end
-
   subject { described_class.call(value) }
 
   describe 'standards' do
@@ -26,78 +17,83 @@ describe GrapeSwagger::DocMethods::DataType do
   describe 'Hash' do
     let(:value) { { type: Hash } }
 
-    it { expect(subject).to eql 'object' }
+    it { is_expected.to eq 'object' }
   end
 
   describe 'Multi types in a string' do
     let(:value) { { type: '[String, Integer]' } }
 
-    it { expect(subject).to eql 'string' }
+    it { is_expected.to eq 'string' }
   end
 
   describe 'Multi types in a string stating with A' do
     let(:value) { { type: '[Apple, Orange]' } }
 
-    it { expect(subject).to eql 'Apple' }
+    it { is_expected.to eq 'Apple' }
   end
 
   describe 'Multi types in array' do
     let(:value) { { type: [String, Integer] } }
 
-    it { expect(subject).to eql 'string' }
+    it { is_expected.to eq 'string' }
   end
 
   describe 'Types in array with entity_name' do
+    before do
+      stub_const 'MyEntity', Class.new
+      allow(MyEntity).to receive(:entity_name).and_return 'MyInteger'
+    end
+
     let(:value) { { type: '[MyEntity]' } }
 
-    it { expect(subject).to eql 'MyInteger' }
+    it { is_expected.to eq 'MyInteger' }
   end
 
   describe 'Rack::Multipart::UploadedFile' do
     let(:value) { { type: Rack::Multipart::UploadedFile } }
 
-    it { expect(subject).to eql 'file' }
+    it { is_expected.to eq 'file' }
   end
 
   describe 'Virtus::Attribute::Boolean' do
     let(:value) { { type: Virtus::Attribute::Boolean } }
 
-    it { expect(subject).to eql 'boolean' }
+    it { is_expected.to eq 'boolean' }
   end
 
   describe 'BigDecimal' do
     let(:value) { { type: BigDecimal } }
 
-    it { expect(subject).to eql 'double' }
+    it { is_expected.to eq 'double' }
   end
 
   describe 'DateTime' do
     let(:value) { { type: DateTime } }
 
-    it { expect(subject).to eql 'dateTime' }
+    it { is_expected.to eq 'dateTime' }
   end
 
   describe 'Numeric' do
     let(:value) { { type: Numeric } }
 
-    it { expect(subject).to eql 'long' }
+    it { is_expected.to eq 'long' }
   end
 
   describe 'Symbol' do
     let(:value) { { type: Symbol } }
 
-    it { expect(subject).to eql 'string' }
+    it { is_expected.to eq 'string' }
   end
 
   describe '[String]' do
     let(:value) { { type: '[String]' } }
 
-    it { expect(subject).to eq('string') }
+    it { is_expected.to eq('string') }
   end
 
   describe '[Integer]' do
     let(:value) { { type: '[Integer]' } }
 
-    it { expect(subject).to eq('integer') }
+    it { is_expected.to eq('integer') }
   end
 end

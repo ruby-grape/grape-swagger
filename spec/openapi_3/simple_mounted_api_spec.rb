@@ -90,7 +90,6 @@ describe 'a simple mounted api' do
           'title' => 'API title', 'version' => '0.0.1'
         },
         'openapi' => '3.0.0',
-        # 'produces' => ['application/xml', 'application/json', 'application/octet-stream', 'text/plain'],
         'servers' => [
           'url' => 'http://example.org'
         ],
@@ -107,41 +106,36 @@ describe 'a simple mounted api' do
           '/' => {
             'get' => {
               'description' => 'Document root',
-              'produces' => ['application/json'],
-              'responses' => { '200' => { 'description' => 'Document root' } },
+              'responses' => { '200' => { 'content' => { 'application/json' => {} }, 'description' => 'Document root' } },
               'operationId' => 'get'
             }
           },
           '/simple' => {
             'get' => {
               'description' => 'This gets something.',
-              'produces' => ['application/json'],
               'tags' => ['simple'],
               'operationId' => 'getSimple',
-              'responses' => { '200' => { 'description' => 'This gets something.' } }
+              'responses' => { '200' => { 'content' => { 'application/json' => {} }, 'description' => 'This gets something.' } }
             }
           },
           '/simple-test' => {
             'get' => {
               'description' => 'This gets something for URL using - separator.',
-              'produces' => ['application/json'],
               'tags' => ['simple-test'],
               'operationId' => 'getSimpleTest',
-              'responses' => { '200' => { 'description' => 'This gets something for URL using - separator.' } }
+              'responses' => { '200' => { 'content' => { 'application/json' => {} }, 'description' => 'This gets something for URL using - separator.' } }
             }
           },
           '/simple-head-test' => {
             'head' => {
-              'produces' => ['application/json'],
-              'responses' => { '200' => { 'description' => 'head SimpleHeadTest' } },
+              'responses' => { '200' => { 'content' => { 'application/json' => {} }, 'description' => 'head SimpleHeadTest' } },
               'tags' => ['simple-head-test'],
               'operationId' => 'headSimpleHeadTest'
             }
           },
           '/simple-options-test' => {
             'options' => {
-              'produces' => ['application/json'],
-              'responses' => { '200' => { 'description' => 'option SimpleOptionsTest' } },
+              'responses' => { '200' => { 'content' => { 'application/json' => {} }, 'description' => 'option SimpleOptionsTest' } },
               'tags' => ['simple-options-test'],
               'operationId' => 'optionsSimpleOptionsTest'
             }
@@ -149,7 +143,6 @@ describe 'a simple mounted api' do
           '/simple_with_headers' => {
             'get' => {
               'description' => 'this gets something else',
-              'produces' => ['application/json'],
               'parameters' => [
                 { 'in' => 'header', 'name' => 'XAuthToken', 'description' => 'A required header.', 'type' => 'string', 'required' => true },
                 { 'in' => 'header', 'name' => 'XOtherHeader', 'description' => 'An optional header.', 'type' => 'string', 'required' => false }
@@ -157,16 +150,15 @@ describe 'a simple mounted api' do
               'tags' => ['simple_with_headers'],
               'operationId' => 'getSimpleWithHeaders',
               'responses' => {
-                '200' => { 'description' => 'this gets something else' },
-                '403' => { 'description' => 'invalid pony' },
-                '405' => { 'description' => 'no ponies left!' }
+                '200' => { 'content' => { 'application/json' => {} }, 'description' => 'this gets something else' },
+                '403' => { 'content' => { 'application/json' => {} }, 'description' => 'invalid pony' },
+                '405' => { 'content' => { 'application/json' => {} }, 'description' => 'no ponies left!' }
               }
             }
           },
           '/items' => {
             'post' => {
               'description' => 'this takes an array of parameters',
-              'produces' => ['application/json'],
               'consumes' => ['application/json'],
               'parameters' => [{ 'in' => 'formData', 'name' => 'items[]', 'description' => 'array of items', 'required' => false, 'type' => 'array', 'items' => { 'type' => 'string' } }],
               'tags' => ['items'],
@@ -177,11 +169,10 @@ describe 'a simple mounted api' do
           '/custom' => {
             'get' => {
               'description' => 'this uses a custom parameter',
-              'produces' => ['application/json'],
               'parameters' => [{ 'in' => 'formData', 'name' => 'custom', 'description' => 'array of items', 'required' => false, 'type' => 'array', 'items' => { 'type' => 'CustomType' } }],
               'tags' => ['custom'],
               'operationId' => 'getCustom',
-              'responses' => { '200' => { 'description' => 'this uses a custom parameter' } }
+              'responses' => { '200' => { 'content' => { 'application/json' => {} }, 'description' => 'this uses a custom parameter' } }
             }
           }
         }
@@ -210,10 +201,9 @@ describe 'a simple mounted api' do
           '/simple' => {
             'get' => {
               'description' => 'This gets something.',
-              'produces' => ['application/json'],
               'tags' => ['simple'],
               'operationId' => 'getSimple',
-              'responses' => { '200' => { 'description' => 'This gets something.' } }
+              'responses' => { '200' => { 'content' => { 'application/json' => {} }, 'description' => 'This gets something.' } }
             }
           }
         }
@@ -234,7 +224,7 @@ describe 'a simple mounted api' do
           'openapi' => '3.0.0',
           # 'produces' => ['application/xml', 'application/json', 'application/octet-stream', 'text/plain'],
           'servers' => [
-              'url' => 'http://example.org'
+            'url' => 'http://example.org'
           ],
           'tags' => [
             { 'name' => 'simple-test', 'description' => 'Operations about simple-tests' }
@@ -243,10 +233,9 @@ describe 'a simple mounted api' do
             '/simple-test' => {
               'get' => {
                 'description' => 'This gets something for URL using - separator.',
-                'produces' => ['application/json'],
                 'tags' => ['simple-test'],
                 'operationId' => 'getSimpleTest',
-                'responses' => { '200' => { 'description' => 'This gets something for URL using - separator.' } }
+                'responses' => { '200' => { 'content' => { 'application/json' => {} }, 'description' => 'This gets something for URL using - separator.' } }
               }
             }
           }
@@ -265,7 +254,6 @@ describe 'a simple mounted api' do
           '/simple_with_headers' => {
             'get' => {
               'description' => 'this gets something else',
-              'produces' => ['application/json'],
               'parameters' => [
                 { 'in' => 'header', 'name' => 'XAuthToken', 'description' => 'A required header.', 'type' => 'string', 'required' => true },
                 { 'in' => 'header', 'name' => 'XOtherHeader', 'description' => 'An optional header.', 'type' => 'string', 'required' => false }
@@ -273,9 +261,9 @@ describe 'a simple mounted api' do
               'tags' => ['simple_with_headers'],
               'operationId' => 'getSimpleWithHeaders',
               'responses' => {
-                '200' => { 'description' => 'this gets something else' },
-                '403' => { 'description' => 'invalid pony' },
-                '405' => { 'description' => 'no ponies left!' }
+                '200' => { 'content' => { 'application/json' => {} }, 'description' => 'this gets something else' },
+                '403' => { 'content' => { 'application/json' => {} }, 'description' => 'invalid pony' },
+                '405' => { 'content' => { 'application/json' => {} }, 'description' => 'no ponies left!' }
               }
             }
           }
@@ -294,7 +282,6 @@ describe 'a simple mounted api' do
           '/items' => {
             'post' => {
               'description' => 'this takes an array of parameters',
-              'produces' => ['application/json'],
               'consumes' => ['application/json'],
               'parameters' => [{ 'in' => 'formData', 'name' => 'items[]', 'description' => 'array of items', 'required' => false, 'type' => 'array', 'items' => { 'type' => 'string' } }],
               'tags' => ['items'],
@@ -317,11 +304,10 @@ describe 'a simple mounted api' do
           '/custom' => {
             'get' => {
               'description' => 'this uses a custom parameter',
-              'produces' => ['application/json'],
               'parameters' => [{ 'in' => 'formData', 'name' => 'custom', 'description' => 'array of items', 'required' => false, 'type' => 'array', 'items' => { 'type' => 'CustomType' } }],
               'tags' => ['custom'],
               'operationId' => 'getCustom',
-              'responses' => { '200' => { 'description' => 'this uses a custom parameter' } }
+              'responses' => { '200' => { 'content' => { 'application/json' => {} }, 'description' => 'this uses a custom parameter' } }
             }
           }
         )

@@ -116,11 +116,13 @@ module Grape
       method = {}
       method[:summary]     = summary_object(route)
       method[:description] = description_object(route)
-      # method[:produces]    = produces_object(route, options[:produces] || options[:format])
       # method[:consumes]    = consumes_object(route, options[:format])
       method[:parameters]  = params_object(route, options, path)
       method[:security]    = security_object(route)
-      method[:responses]   = response_object(route)
+
+      produces = produces_object(route, options[:produces] || options[:format])
+
+      method[:responses]   = response_object(route, produces)
       method[:tags]        = route.options.fetch(:tags, tag_object(route, path))
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method[:deprecated] = deprecated_object(route)
@@ -194,7 +196,7 @@ module Grape
       parameters
     end
 
-    def response_object(route)
+    def response_object(route, content_types)
       codes = http_codes_from_route(route)
       codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2], examples: x[3], headers: x[4] } : x }
 
@@ -214,13 +216,23 @@ module Grape
           value[:code] = 204
         end
 
-        next if value[:code] == 204
-        next unless !response_model.start_with?('Swagger_doc') && (@definitions[response_model] || value[:model])
+        next if value[:code] == 204 || value[:code] == 201
+
+        model = !response_model.start_with?('Swagger_doc') && (@definitions[response_model] || value[:model])
+
+        ref = build_reference(route, value, response_model)
+        memo[value[:code]][:content] = content_types.map do |c|
+          if model
+            [c, { schema: ref }]
+          else
+            [c, {}]
+          end
+        end.to_h
+
+        next unless model
 
         @definitions[response_model][:description] = description_object(route)
-        ref = build_reference(route, value, response_model)
 
-        memo[value[:code]][:content] = @content_types.map { |c| [c, { schema: ref }] }.to_h
         memo[value[:code]][:examples] = value[:examples] if value[:examples]
       end
     end

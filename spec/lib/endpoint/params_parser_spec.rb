@@ -9,18 +9,20 @@ describe GrapeSwagger::Endpoint::ParamsParser do
   let(:parser) { described_class.new(params, settings) }
 
   describe '#parse_request_params' do
+    subject(:parse_request_params) { parser.parse_request_params }
+
     context 'when param is of array type' do
       let(:params) { [['param_1', { type: 'Array[String]' }]] }
 
       it 'adds is_array option' do
-        expect(parser.parse_request_params).to eq('param_1' => { type: 'Array[String]', is_array: true })
+        expect(parse_request_params['param_1']).to eq(type: 'Array[String]', is_array: true)
       end
 
       context 'and array_use_braces setting set to true' do
         let(:settings) { { array_use_braces: true } }
 
         it 'adds braces to the param key' do
-          expect(parser.parse_request_params.keys.first).to eq 'param_1[]'
+          expect(parse_request_params.keys.first).to eq 'param_1[]'
         end
       end
     end
@@ -29,7 +31,7 @@ describe GrapeSwagger::Endpoint::ParamsParser do
       let(:params) { [['param_1', { type: 'String' }]] }
 
       it 'does not change options' do
-        expect(parser.parse_request_params).to eq('param_1' => { type: 'String' })
+        expect(parse_request_params['param_1']).to eq(type: 'String')
       end
 
       context 'and array_use_braces setting set to true' do
@@ -45,18 +47,18 @@ describe GrapeSwagger::Endpoint::ParamsParser do
       let(:params) { [['param_1', { type: 'Array' }], ['param_1[param_2]', { type: 'String' }]] }
 
       it 'skips root parameter' do
-        expect(parser.parse_request_params).not_to have_key 'param_1'
+        is_expected.not_to have_key 'param_1'
       end
 
       it 'adds is_array option to the nested param' do
-        expect(parser.parse_request_params).to eq('param_1[param_2]' => { type: 'String', is_array: true })
+        expect(parse_request_params['param_1[param_2]']).to eq(type: 'String', is_array: true)
       end
 
       context 'and array_use_braces setting set to true' do
         let(:settings) { { array_use_braces: true } }
 
         it 'adds braces to the param key' do
-          expect(parser.parse_request_params.keys.first).to eq 'param_1[][param_2]'
+          expect(parse_request_params.keys.first).to eq 'param_1[][param_2]'
         end
       end
     end
@@ -65,18 +67,18 @@ describe GrapeSwagger::Endpoint::ParamsParser do
       let(:params) { [['param_1', { type: 'Hash' }], ['param_1[param_2]', { type: 'String' }]] }
 
       it 'skips root parameter' do
-        expect(parser.parse_request_params).not_to have_key 'param_1'
+        is_expected.not_to have_key 'param_1'
       end
 
       it 'does not change options to the nested param' do
-        expect(parser.parse_request_params).to eq('param_1[param_2]' => { type: 'String' })
+        expect(parse_request_params['param_1[param_2]']).to eq(type: 'String')
       end
 
       context 'and array_use_braces setting set to true' do
         let(:settings) { { array_use_braces: true } }
 
         it 'does not add braces to the param key' do
-          expect(parser.parse_request_params.keys.first).to eq 'param_1[param_2]'
+          expect(parse_request_params.keys.first).to eq 'param_1[param_2]'
         end
       end
     end

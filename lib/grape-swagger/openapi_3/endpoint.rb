@@ -3,6 +3,7 @@
 require 'active_support'
 require 'active_support/core_ext/string/inflections'
 require 'grape-swagger/endpoint/params_parser'
+require 'grape-swagger/openapi_3/doc_methods/parse_request_body'
 
 module Grape
   class Endpoint
@@ -116,10 +117,13 @@ module Grape
       method = {}
       method[:summary]     = summary_object(route)
       method[:description] = description_object(route)
-      # method[:consumes]    = consumes_object(route, options[:format])
       method[:parameters]  = params_object(route, options, path)
       method[:security]    = security_object(route)
+      if %w[POST PUT PATCH].include?(route.request_method)
+        method[:requestBody] = response_body_object(route, options, path)
+      end
 
+      # method[:consumes]    = consumes_object(route, options[:format])
       produces = produces_object(route, options[:produces] || options[:format])
 
       method[:responses]   = response_object(route, produces)
@@ -192,6 +196,36 @@ module Grape
       if GrapeSwagger::DocMethods::MoveParams.can_be_moved?(parameters, route.request_method)
         parameters = GrapeSwagger::DocMethods::MoveParams.to_definition(path, parameters, route, @definitions)
       end
+
+      parameters
+    end
+
+    def response_body_object(route, options, path)
+      parameters = partition_params(route, options).map do |param, value|
+        value = { required: false }.merge(value) if value.is_a?(Hash)
+        _, value = default_type([[param, value]]).first if value == ''
+        if value[:type]
+          expose_params(value[:type])
+        elsif value[:documentation]
+          expose_params(value[:documentation][:type])
+        end
+
+        GrapeSwagger::DocMethods::ParseRequestBody.call(param, value, path, route, @definitions)
+      end.flatten
+
+      parameters = {
+        'content' => parameters.group_by { |p| p[:in] }.map do |_k, v|
+          required_values = v.select { |param| param[:required] }
+          [
+            'application/x-www-form-urlencoded',
+            { 'schema' => {
+              'type' => 'object',
+              'required' => required_values.map { |required| required[:name] },
+              'properties' => v.map { |value| [value[:name], value.except(:name, :in, :required)] }.to_h
+            } }
+          ]
+        end.to_h
+      }
 
       parameters
     end

@@ -52,13 +52,14 @@ module GrapeSwagger
         end
 
         def document_type_and_format(settings, data_type)
+          @parsed_param[:schema] = {}
           if DataType.primitive?(data_type)
             data = DataType.mapping(data_type)
-            @parsed_param[:type], @parsed_param[:format] = data
+            @parsed_param[:schema][:type], @parsed_param[:schema][:format] = data
           else
-            @parsed_param[:type] = data_type
+            @parsed_param[:schema][:type] = data_type
           end
-          @parsed_param[:format] = settings[:format] if settings[:format].present?
+          @parsed_param[:schema][:format] = settings[:format] if settings[:format].present?
         end
 
         def document_array_param(value_type, definitions)

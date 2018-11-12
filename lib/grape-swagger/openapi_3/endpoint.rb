@@ -117,13 +117,15 @@ module Grape
       method = {}
       method[:summary]     = summary_object(route)
       method[:description] = description_object(route)
-      method[:parameters]  = params_object(route, options, path)
+
+      parameters = params_object(route, options, path).partition { |p| p[:in] == 'body' || p[:in] == 'formData' }
+
+      method[:parameters]  = parameters.last
       method[:security]    = security_object(route)
       if %w[POST PUT PATCH].include?(route.request_method)
-        method[:requestBody] = response_body_object(route, options, path)
+        method[:requestBody] = response_body_object(route, path, parameters.first)
       end
 
-      # method[:consumes]    = consumes_object(route, options[:format])
       produces = produces_object(route, options[:produces] || options[:format])
 
       method[:responses]   = response_object(route, produces)
@@ -200,28 +202,17 @@ module Grape
       parameters
     end
 
-    def response_body_object(route, options, path)
-      parameters = partition_params(route, options).map do |param, value|
-        value = { required: false }.merge(value) if value.is_a?(Hash)
-        _, value = default_type([[param, value]]).first if value == ''
-        if value[:type]
-          expose_params(value[:type])
-        elsif value[:documentation]
-          expose_params(value[:documentation][:type])
-        end
-
-        GrapeSwagger::DocMethods::ParseRequestBody.call(param, value, path, route, @definitions)
-      end.flatten
-
+    def response_body_object(_, _, parameters)
       parameters = {
         'content' => parameters.group_by { |p| p[:in] }.map do |_k, v|
+          properties = v.map { |value| [value[:name], value.except(:name, :in, :required, :schema).merge(value[:schema])] }.to_h
           required_values = v.select { |param| param[:required] }
           [
             'application/x-www-form-urlencoded',
             { 'schema' => {
               'type' => 'object',
               'required' => required_values.map { |required| required[:name] },
-              'properties' => v.map { |value| [value[:name], value.except(:name, :in, :required)] }.to_h
+              'properties' => properties
             } }
           ]
         end.to_h

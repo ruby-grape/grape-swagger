@@ -76,7 +76,7 @@ module GrapeSwagger
           if definitions[value_type[:data_type]]
             array_items['$ref'] = "#/definitions/#{@parsed_param[:type]}"
           else
-            array_items[:type] = type || @parsed_param[:type] == 'array' ? 'string' : @parsed_param[:type]
+            array_items[:type] = type || @parsed_param[:schema][:type] == 'array' ? 'string' : @parsed_param[:schema][:type]
           end
           array_items[:format] = @parsed_param.delete(:format) if @parsed_param[:format]
 
@@ -88,7 +88,7 @@ module GrapeSwagger
 
           @parsed_param[:in] = param_type || 'formData'
           @parsed_param[:items] = array_items
-          @parsed_param[:type] = 'array'
+          @parsed_param[:schema][:type] = 'array'
           @parsed_param[:collectionFormat] = collection_format if DataType.collections.include?(collection_format)
         end
 

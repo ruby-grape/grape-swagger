@@ -206,15 +206,10 @@ module Grape
       parameters = {
         'content' => parameters.group_by { |p| p[:in] }.map do |_k, v|
           properties = v.map { |value| [value[:name], value.except(:name, :in, :required, :schema).merge(value[:schema])] }.to_h
-          required_values = v.select { |param| param[:required] }
-          [
-            'application/x-www-form-urlencoded',
-            { 'schema' => {
-              'type' => 'object',
-              'required' => required_values.map { |required| required[:name] },
-              'properties' => properties
-            } }
-          ]
+          required_values = v.select { |param| param[:required] }.map { |required| required[:name] }
+          result = { 'schema' => { 'type' => 'object', 'properties' => properties } }
+          result['required'] = required_values unless required_values.empty?
+          ['application/x-www-form-urlencoded', result]
         end.to_h
       }
 

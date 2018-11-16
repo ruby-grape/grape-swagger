@@ -135,7 +135,10 @@ describe 'a simple mounted api' do
           },
           '/simple-options-test' => {
             'options' => {
-              'responses' => { '200' => { 'content' => { 'application/json' => {} }, 'description' => 'option SimpleOptionsTest' } },
+              'responses' => {
+                '200' => { 'content' => { 'application/json' => {} },
+                           'description' => 'option SimpleOptionsTest' }
+              },
               'tags' => ['simple-options-test'],
               'operationId' => 'optionsSimpleOptionsTest'
             }
@@ -143,36 +146,64 @@ describe 'a simple mounted api' do
           '/simple_with_headers' => {
             'get' => {
               'description' => 'this gets something else',
-              'parameters' => [
-                { 'in' => 'header', 'name' => 'XAuthToken', 'description' => 'A required header.', 'type' => 'string', 'required' => true },
-                { 'in' => 'header', 'name' => 'XOtherHeader', 'description' => 'An optional header.', 'type' => 'string', 'required' => false }
-              ],
-              'tags' => ['simple_with_headers'],
               'operationId' => 'getSimpleWithHeaders',
-              'responses' => {
-                '200' => { 'content' => { 'application/json' => {} }, 'description' => 'this gets something else' },
-                '403' => { 'content' => { 'application/json' => {} }, 'description' => 'invalid pony' },
-                '405' => { 'content' => { 'application/json' => {} }, 'description' => 'no ponies left!' }
-              }
-            }
-          },
-          '/items' => {
-            'post' => {
-              'description' => 'this takes an array of parameters',
-              'consumes' => ['application/json'],
-              'parameters' => [{ 'in' => 'formData', 'name' => 'items[]', 'description' => 'array of items', 'required' => false, 'type' => 'array', 'items' => { 'type' => 'string' } }],
-              'tags' => ['items'],
-              'operationId' => 'postItems',
-              'responses' => { '201' => { 'description' => 'this takes an array of parameters' } }
+              'parameters' => [
+                { 'description' => 'A required header.',
+                  'in' => 'header',
+                  'name' => 'XAuthToken',
+                  'required' => true,
+                  'schema' => { 'type' => 'string' } },
+                {
+                  'description' => 'An optional header.',
+                  'in' => 'header',
+                  'name' => 'XOtherHeader',
+                  'required' => false,
+                  'schema' => { 'type' => 'string' }
+                }
+              ],
+              'responses' => { '200' => { 'content' => { 'application/json' => {} },
+                                          'description' => 'this gets something else' },
+                               '403' => { 'content' => { 'application/json' => {} },
+                                          'description' => 'invalid pony' },
+                               '405' => { 'content' => { 'application/json' => {} },
+                                          'description' => 'no ponies left!' } },
+              'tags' => ['simple_with_headers']
             }
           },
           '/custom' => {
             'get' => {
               'description' => 'this uses a custom parameter',
-              'parameters' => [{ 'in' => 'formData', 'name' => 'custom', 'description' => 'array of items', 'required' => false, 'type' => 'array', 'items' => { 'type' => 'CustomType' } }],
-              'tags' => ['custom'],
               'operationId' => 'getCustom',
-              'responses' => { '200' => { 'content' => { 'application/json' => {} }, 'description' => 'this uses a custom parameter' } }
+              'responses' => { '200' => {
+                'content' => { 'application/json' => {} },
+                'description' => 'this uses a custom parameter'
+              } },
+              'tags' => ['custom']
+            }
+          },
+          '/items' => {
+            'post' => {
+              'description' => 'this takes an array of parameters',
+              'operationId' => 'postItems',
+              'requestBody' => {
+                'content' => {
+                  'application/x-www-form-urlencoded' => {
+                    'schema' => {
+                      'properties' => {
+                        'items[]' => {
+                          'description' => 'array of items',
+                          'items' => { 'type' => 'string' },
+                          'type' => 'array'
+                        }
+                      }, 'type' => 'object'
+                    }
+                  }
+                }
+              },
+              'responses' => {
+                '201' => { 'description' => 'this takes an array of parameters' }
+              },
+              'tags' => ['items']
             }
           }
         }
@@ -255,8 +286,8 @@ describe 'a simple mounted api' do
             'get' => {
               'description' => 'this gets something else',
               'parameters' => [
-                { 'in' => 'header', 'name' => 'XAuthToken', 'description' => 'A required header.', 'type' => 'string', 'required' => true },
-                { 'in' => 'header', 'name' => 'XOtherHeader', 'description' => 'An optional header.', 'type' => 'string', 'required' => false }
+                { 'in' => 'header', 'name' => 'XAuthToken', 'description' => 'A required header.', 'schema' => { 'type' => 'string' }, 'required' => true },
+                { 'in' => 'header', 'name' => 'XOtherHeader', 'description' => 'An optional header.', 'schema' => { 'type' => 'string' }, 'required' => false }
               ],
               'tags' => ['simple_with_headers'],
               'operationId' => 'getSimpleWithHeaders',
@@ -282,8 +313,20 @@ describe 'a simple mounted api' do
           '/items' => {
             'post' => {
               'description' => 'this takes an array of parameters',
-              'consumes' => ['application/json'],
-              'parameters' => [{ 'in' => 'formData', 'name' => 'items[]', 'description' => 'array of items', 'required' => false, 'type' => 'array', 'items' => { 'type' => 'string' } }],
+              'requestBody' => {
+                'content' => { 'application/x-www-form-urlencoded' => {
+                  'schema' => {
+                    'properties' => {
+                      'items[]' => {
+                        'description' => 'array of items',
+                        'items' => { 'type' => 'string' },
+                        'type' => 'array'
+                      }
+                    },
+                    'type' => 'object'
+                  }
+                } }
+              },
               'tags' => ['items'],
               'operationId' => 'postItems',
               'responses' => { '201' => { 'description' => 'this takes an array of parameters' } }
@@ -300,14 +343,17 @@ describe 'a simple mounted api' do
       end
 
       specify do
+        fail("TODO: Fix")
         expect(subject['paths']).to eq(
           '/custom' => {
             'get' => {
               'description' => 'this uses a custom parameter',
-              'parameters' => [{ 'in' => 'formData', 'name' => 'custom', 'description' => 'array of items', 'required' => false, 'type' => 'array', 'items' => { 'type' => 'CustomType' } }],
-              'tags' => ['custom'],
               'operationId' => 'getCustom',
-              'responses' => { '200' => { 'content' => { 'application/json' => {} }, 'description' => 'this uses a custom parameter' } }
+              'responses' => {
+                '200' => { 'content' => { 'application/json' => {} },
+                           'description' => 'this uses a custom parameter' }
+              },
+              'tags' => ['custom']
             }
           }
         )

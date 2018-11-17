@@ -53,7 +53,7 @@ describe 'response' do
             'description' => 'This returns something',
             'content' => {
               'application/json' => {
-                'schema' => { '$ref' => '#/definitions/UseItemResponseAsType' }
+                'schema' => { '$ref' => '#/components/schemas/UseItemResponseAsType' }
               }
             }
           },
@@ -61,7 +61,7 @@ describe 'response' do
             'description' => 'NotFound',
             'content' => {
               'application/json' => {
-                'schema' => { '$ref' => '#/definitions/ApiError' }
+                'schema' => { '$ref' => '#/components/schemas/ApiError' }
               }
             }
           }
@@ -69,7 +69,7 @@ describe 'response' do
         'tags' => ['nested_type'],
         'operationId' => 'getNestedType'
       )
-      expect(subject['definitions']).to eql(swagger_nested_type)
+      expect(subject['components']['schemas']).to eql(swagger_nested_type)
     end
   end
 
@@ -87,7 +87,7 @@ describe 'response' do
             'description' => 'This returns something',
             'content' => {
               'application/json' => {
-                'schema' => { '$ref' => '#/definitions/UseResponse' }
+                'schema' => { '$ref' => '#/components/schemas/UseResponse' }
               }
             }
           },
@@ -95,7 +95,7 @@ describe 'response' do
             'description' => 'NotFound',
             'content' => {
               'application/json' => {
-                'schema' => { '$ref' => '#/definitions/ApiError' }
+                'schema' => { '$ref' => '#/components/schemas/ApiError' }
               }
             }
           }
@@ -103,7 +103,7 @@ describe 'response' do
         'tags' => ['entity_response'],
         'operationId' => 'getEntityResponse'
       )
-      expect(subject['definitions']).to eql(swagger_entity_as_response_object)
+      expect(subject['components']['schemas']).to eql(swagger_entity_as_response_object)
     end
   end
 
@@ -114,7 +114,6 @@ describe 'response' do
     end
 
     specify do
-      fail("TODO: Fix")
       expect(subject['paths']['/params_given']['post']).to eql(
         'description' => 'This returns something',
         'requestBody' => {
@@ -140,7 +139,7 @@ describe 'response' do
             'description' => 'NotFound',
             'content' => {
               'application/json' => {
-                'schema' => { '$ref' => '#/definitions/ApiError' }
+                'schema' => { '$ref' => '#/components/schemas/ApiError' }
               }
             }
           }
@@ -148,7 +147,7 @@ describe 'response' do
         'tags' => ['params_given'],
         'operationId' => 'postParamsGiven'
       )
-      expect(subject['definitions']).to eql(swagger_params_as_response_object)
+      expect(subject['components']['schemas']).to eql(swagger_params_as_response_object)
     end
   end
 end

@@ -301,7 +301,7 @@ module Grape
 
     def build_reference(route, value, response_model)
       # TODO: proof that the definition exist, if model isn't specified
-      reference = { '$ref' => "#/definitions/#{response_model}" }
+      reference = { '$ref' => "#/components/schemas/#{response_model}" }
       route.options[:is_array] && value[:code] < 300 ? { type: 'array', items: reference } : reference
     end
 

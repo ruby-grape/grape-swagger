@@ -208,7 +208,7 @@ module Grape
           properties = v.map { |value| [value[:name], value.except(:name, :in, :required, :schema).merge(value[:schema])] }.to_h
           required_values = v.select { |param| param[:required] }.map { |required| required[:name] }
           result = { 'schema' => { 'type' => 'object', 'properties' => properties } }
-          result['required'] = required_values unless required_values.empty?
+          result['schema']['required'] = required_values unless required_values.empty?
           ['application/x-www-form-urlencoded', result]
         end.to_h
       }

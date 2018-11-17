@@ -114,12 +114,24 @@ describe 'response' do
     end
 
     specify do
+      fail("TODO: Fix")
       expect(subject['paths']['/params_given']['post']).to eql(
         'description' => 'This returns something',
-        'parameters' => [
-          { 'in' => 'formData', 'name' => 'description', 'type' => 'string', 'required' => false },
-          { 'in' => 'formData', 'name' => '$responses', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => false }
-        ],
+        'requestBody' => {
+          'content' => {
+            'application/x-www-form-urlencoded' => {
+              'schema' => {
+                'properties' => {
+                  '$responses' => {
+                    'items' => { 'type' => 'string' }, 'type' => 'array'
+                  },
+                  'description' => { 'type' => 'string' }
+                },
+                'type' => 'object'
+              }
+            }
+          }
+        },
         'responses' => {
           '201' => {
             'description' => 'This returns something'

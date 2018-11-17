@@ -74,7 +74,7 @@ module GrapeSwagger
 
           array_items = {}
           if definitions[value_type[:data_type]]
-            array_items['$ref'] = "#/definitions/#{@parsed_param[:type]}"
+            array_items['$ref'] = "#/components/schemas/#{@parsed_param[:type]}"
           else
             array_items[:type] = type || @parsed_param[:schema][:type] == 'array' ? 'string' : @parsed_param[:schema][:type]
           end

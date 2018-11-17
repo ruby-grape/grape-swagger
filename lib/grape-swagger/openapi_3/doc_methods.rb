@@ -55,7 +55,10 @@ module GrapeOpenAPI
 
         output[:tags]        = tags unless tags.empty? || paths.blank?
         output[:paths]       = paths unless paths.blank?
-        output[:definitions] = definitions unless definitions.blank?
+        unless definitions.blank?
+          output[:components] = {}
+          output[:components][:schemas] = definitions
+        end
 
         output
       end

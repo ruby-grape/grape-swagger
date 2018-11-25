@@ -110,9 +110,17 @@ module GrapeSwagger
           when Proc
             parse_enum_or_range_values(values.call) if values.parameters.empty?
           when Range
-            parse_range_values(values) if values.first.is_a?(Integer)
+            if values.first.is_a?(Numeric)
+              parse_range_values(values)
+            else
+              { enum: values.to_a }
+            end
           else
-            { enum: values } if values
+            if values.respond_to? :each
+              { enum: values }
+            else
+              { enum: [values] }
+            end
           end
         end
 

@@ -1,14 +1,22 @@
-### 0.31.2 (Next)
+### Next
 
 #### Features
 
 * Your contribution here.
+
+#### Fixes
+
+* Your contribution here.
+
+### 0.32.0 (November 26, 2018)
+
+#### Features
+
 * [#717](https://github.com/ruby-grape/grape-swagger/pull/717): Adds support for grape >= 1.2 - [@myxoh](https://github.com/myxoh).
 
 #### Fixes
 
 * [#720](https://github.com/ruby-grape/grape-swagger/pull/720): Fix: corrected `termsOfService` field name in additional info - [@dblock](https://github.com/dblock).
-* Your contribution here.
 
 ### 0.31.1 (October 23, 2018)
 

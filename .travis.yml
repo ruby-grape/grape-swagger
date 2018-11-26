@@ -34,6 +34,6 @@ matrix:
       env:
 
   allow_failures:
-    - rvm: 2.3.7
+    - rvm: 2.3.8
     - rvm: ruby-head
     - rvm: jruby-head

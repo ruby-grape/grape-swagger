@@ -118,6 +118,7 @@ describe 'response' do
         'description' => 'This returns something',
         'requestBody' => {
           'content' => {
+            'application/json' => { 'schema' => { 'properties' => {}, 'type' => 'object' } },
             'application/x-www-form-urlencoded' => {
               'schema' => {
                 'properties' => {

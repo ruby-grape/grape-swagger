@@ -47,7 +47,6 @@ describe 'Form Params' do
 
   subject do
     get '/swagger_doc/items'
-    puts last_response.body
     JSON.parse(last_response.body)
   end
 
@@ -68,6 +67,7 @@ describe 'Form Params' do
     }]
 
     expect(subject['paths']['/items/{id}']['post']['requestBody']).to eq 'content' => {
+      'application/json' => { 'schema' => { 'properties' => {}, 'type' => 'object' } },
       'application/x-www-form-urlencoded' => {
         'schema' => {
           'properties' => {

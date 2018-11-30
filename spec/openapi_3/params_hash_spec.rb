@@ -42,6 +42,7 @@ describe 'Group Params as Hash' do
     specify do
       expect(subject['paths']['/use_groups']['post']).to include('requestBody')
       expect(subject['paths']['/use_groups']['post']['requestBody']['content']).to eql(
+        'application/json' => { 'schema' => { 'properties' => {}, 'type' => 'object' } },
         'application/x-www-form-urlencoded' => {
           'schema' => {
             'properties' => {
@@ -65,6 +66,7 @@ describe 'Group Params as Hash' do
     specify do
       expect(subject['paths']['/use_given_type']['post']).to include('requestBody')
       expect(subject['paths']['/use_given_type']['post']['requestBody']['content']).to eql(
+        'application/json' => { 'schema' => { 'properties' => {}, 'type' => 'object' } },
         'application/x-www-form-urlencoded' => {
           'schema' => {
             'properties' => {

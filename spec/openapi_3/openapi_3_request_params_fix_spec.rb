@@ -48,11 +48,12 @@ describe 'additional parameter settings' do
   specify do
     expect(subject['paths']['/bookings/{id}']['put']['parameters']).to eql(
       [
-        { 'in' => 'path', 'name' => 'id', 'schema' => { 'format' => 'int32', 'type' => 'integer' }, 'required' => true },
+        { 'in' => 'path', 'name' => 'id', 'schema' => { 'format' => 'int32', 'type' => 'integer' }, 'required' => true }
       ]
     )
 
     expect(subject['paths']['/bookings/{id}']['put']['requestBody']).to eql('content' => {
+      'application/json' => { 'schema' => { 'properties' => {}, 'type' => 'object' } },
       'application/x-www-form-urlencoded' => {
         'schema' => {
           'properties' => { 'name' => { 'type' => 'string' } },

@@ -32,6 +32,7 @@ describe 'Params Types' do
 
     it 'reads param type correctly' do
       expect(subject['requestBody']).to eq 'content' => {
+        'application/json' => { 'schema' => { 'properties' => {}, 'type' => 'object' } },
         'application/x-www-form-urlencoded' => {
           'schema' => {
             'properties' => {
@@ -80,6 +81,7 @@ describe 'Params Types' do
 
     it 'reads param type correctly' do
       expect(subject).to eq 'content' => {
+        'application/json' => { 'schema' => { 'properties' => {}, 'type' => 'object' } },
         'application/x-www-form-urlencoded' => {
           'schema' => {
             'properties' => {

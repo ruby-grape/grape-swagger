@@ -187,6 +187,7 @@ describe 'a simple mounted api' do
               'operationId' => 'postItems',
               'requestBody' => {
                 'content' => {
+                  'application/json' => { 'schema' => { 'properties' => {}, 'type' => 'object' } },
                   'application/x-www-form-urlencoded' => {
                     'schema' => {
                       'properties' => {
@@ -314,18 +315,21 @@ describe 'a simple mounted api' do
             'post' => {
               'description' => 'this takes an array of parameters',
               'requestBody' => {
-                'content' => { 'application/x-www-form-urlencoded' => {
-                  'schema' => {
-                    'properties' => {
-                      'items[]' => {
-                        'description' => 'array of items',
-                        'items' => { 'type' => 'string' },
-                        'type' => 'array'
-                      }
-                    },
-                    'type' => 'object'
+                'content' => {
+                  'application/json' => { 'schema' => { 'properties' => {}, 'type' => 'object' } },
+                  'application/x-www-form-urlencoded' => {
+                    'schema' => {
+                      'properties' => {
+                        'items[]' => {
+                          'description' => 'array of items',
+                          'items' => { 'type' => 'string' },
+                          'type' => 'array'
+                        }
+                      },
+                      'type' => 'object'
+                    }
                   }
-                } }
+                }
               },
               'tags' => ['items'],
               'operationId' => 'postItems',
@@ -339,11 +343,11 @@ describe 'a simple mounted api' do
     describe 'supports custom params types' do
       subject do
         get '/swagger_doc/custom.json'
+        raise('TODO: Fix')
         JSON.parse(last_response.body)
       end
 
       specify do
-        fail("TODO: Fix")
         expect(subject['paths']).to eq(
           '/custom' => {
             'get' => {

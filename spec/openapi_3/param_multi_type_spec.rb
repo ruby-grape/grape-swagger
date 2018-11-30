@@ -30,13 +30,16 @@ describe 'Params Multi Types' do
   end
 
   it 'reads request body type correctly' do
-    expect(subject['requestBody']['content']).to eq('application/x-www-form-urlencoded' => {
-      'schema' => {
-        'properties' => { 'another_input' => { 'type' => 'string' }, 'input' => { 'type' => 'string' } },
-        'required' => %w[input another_input],
-        'type' => 'object'
+    expect(subject['requestBody']['content']).to eq(
+      'application/json' => { 'schema' => { 'properties' => {}, 'type' => 'object' } },
+      'application/x-www-form-urlencoded' => {
+        'schema' => {
+          'properties' => { 'another_input' => { 'type' => 'string' }, 'input' => { 'type' => 'string' } },
+          'required' => %w[input another_input],
+          'type' => 'object'
+        }
       }
-    })
+    )
   end
 
   describe 'header params' do

@@ -3,7 +3,6 @@
 require 'active_support'
 require 'active_support/core_ext/string/inflections'
 require 'grape-swagger/endpoint/params_parser'
-require 'grape-swagger/openapi_3/doc_methods/parse_request_body'
 
 module Grape
   class Endpoint
@@ -28,11 +27,16 @@ module Grape
       object = {
         info:                info_object(options[:info].merge(version: options[:doc_version])),
         openapi:             '3.0.0',
-        authorizations:      options[:authorizations],
-        securityDefinitions: options[:security_definitions],
         security:            options[:security],
+        authorizations:      options[:authorizations],
         servers:             options[:servers].is_a?(Hash) ? [options[:servers]] : options[:servers]
       }
+
+      if options[:security_definitions] || options[:security]
+        components = { securitySchemes: options[:security_definitions] }
+        components.delete_if { |_, value| value.blank? }
+        object[:components] = components
+      end
 
       GrapeSwagger::DocMethods::Extensions.add_extensions_to_root(options, object)
       object.delete_if { |_, value| value.blank? }
@@ -43,7 +47,7 @@ module Grape
       result = {
         title:             infos[:title] || 'API title',
         description:       infos[:description],
-        termsOfServiceUrl: infos[:terms_of_service_url],
+        termsOfService:    infos[:terms_of_service_url],
         contact:           contact_object(infos),
         license:           license_object(infos),
         version:           infos[:version]
@@ -123,7 +127,8 @@ module Grape
       method[:parameters]  = parameters.last
       method[:security]    = security_object(route)
       if %w[POST PUT PATCH].include?(route.request_method)
-        method[:requestBody] = response_body_object(route, path, parameters.first)
+        consumes = consumes_object(route, options[:format])
+        method[:requestBody] = response_body_object(route, path, consumes, parameters.first)
       end
 
       produces = produces_object(route, options[:produces] || options[:format])
@@ -202,18 +207,23 @@ module Grape
       parameters
     end
 
-    def response_body_object(_, _, parameters)
-      parameters = {
-        'content' => parameters.group_by { |p| p[:in] }.map do |_k, v|
-          properties = v.map { |value| [value[:name], value.except(:name, :in, :required, :schema).merge(value[:schema])] }.to_h
-          required_values = v.select { |param| param[:required] }.map { |required| required[:name] }
-          result = { 'schema' => { 'type' => 'object', 'properties' => properties } }
-          result['schema']['required'] = required_values unless required_values.empty?
-          ['application/x-www-form-urlencoded', result]
-        end.to_h
-      }
+    def response_body_object(_, _, consumes, parameters)
+      body_parameters, form_parameters = parameters.partition { |p| p[:in] == 'body' }
+      result = consumes.map { |c| response_body_parameter_object(body_parameters, c) }
 
-      parameters
+      unless form_parameters.empty?
+        result << response_body_parameter_object(form_parameters, 'application/x-www-form-urlencoded')
+      end
+
+      { content: result.to_h }
+    end
+
+    def response_body_parameter_object(parameters, content_type)
+      properties = parameters.map { |value| [value[:name], value.except(:name, :in, :required, :schema).merge(value[:schema])] }.to_h
+      required_values = parameters.select { |param| param[:required] }.map { |required| required[:name] }
+      result = { schema: { type: :object, properties: properties } }
+      result[:schema][:required] = required_values unless required_values.empty?
+      [content_type, result]
     end
 
     def response_object(route, content_types)
@@ -363,7 +373,7 @@ module Grape
       properties, required = parser.new(model, self).call
       unless properties&.any?
         raise GrapeSwagger::Errors::SwaggerSpec,
-              "Empty model #{model_name}, swagger 2.0 doesn't support empty definitions."
+              "Empty model #{model_name}, openapi 3.0 doesn't support empty definitions."
       end
 
       @definitions[model_name] = GrapeSwagger::DocMethods::BuildModelDefinition.build(model, properties, required)

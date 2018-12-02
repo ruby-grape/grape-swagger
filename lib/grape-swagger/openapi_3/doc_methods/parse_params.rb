@@ -74,7 +74,7 @@ module GrapeSwagger
 
           array_items = {}
           if definitions[value_type[:data_type]]
-            array_items['$ref'] = "#/components/schemas/#{@parsed_param[:type]}"
+            array_items['$ref'] = "#/components/schemas/#{@parsed_param[:schema][:type]}"
           else
             array_items[:type] = type || @parsed_param[:schema][:type] == 'array' ? 'string' : @parsed_param[:schema][:type]
           end
@@ -116,10 +116,12 @@ module GrapeSwagger
               { enum: values.to_a }
             end
           else
-            if values.respond_to? :each
-              { enum: values }
-            else
-              { enum: [values] }
+            if values
+              if values.respond_to? :each
+                { enum: values }
+              else
+                { enum: [values] }
+              end
             end
           end
         end

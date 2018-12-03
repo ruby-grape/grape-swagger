@@ -149,7 +149,6 @@ module Grape
     def description_object(route)
       description = route.description if route.description.present?
       description = route.options[:detail] if route.options.key?(:detail)
-      description ||= ''
 
       description
     end

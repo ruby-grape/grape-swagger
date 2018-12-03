@@ -132,7 +132,6 @@ describe 'a simple mounted api' do
           },
           '/simple-head-test' => {
             'head' => {
-              'description' => '',
               'produces' => ['application/json'],
               'parameters' => [],
               'responses' => { '200' => { 'description' => 'head SimpleHeadTest' } },
@@ -142,7 +141,6 @@ describe 'a simple mounted api' do
           },
           '/simple-options-test' => {
             'options' => {
-              'description' => '',
               'produces' => ['application/json'],
               'parameters' => [],
               'responses' => { '200' => { 'description' => 'option SimpleOptionsTest' } },

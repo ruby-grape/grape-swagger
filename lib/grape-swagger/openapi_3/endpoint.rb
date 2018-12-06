@@ -208,18 +208,30 @@ module Grape
     end
 
     def response_body_object(_, _, consumes, parameters)
-      body_parameters, form_parameters = parameters.partition { |p| p[:in] == 'body' }
-      result = consumes.map { |c| response_body_parameter_object(body_parameters, c) }
+      file_params, other_params = parameters.partition { |p| p[:schema][:type] == 'file' }
+      body_params, form_params = other_params.partition { |p| p[:in] == 'body' || p[:schema][:type] == 'json' }
+      result = consumes.map { |c| response_body_parameter_object(body_params, c) }
 
-      unless form_parameters.empty?
-        result << response_body_parameter_object(form_parameters, 'application/x-www-form-urlencoded')
+      unless form_params.empty?
+        result << response_body_parameter_object(form_params, 'application/x-www-form-urlencoded')
+      end
+
+      unless file_params.empty?
+        result << response_body_parameter_object(file_params, 'application/octet-stream')
       end
 
       { content: result.to_h }
     end
 
     def response_body_parameter_object(parameters, content_type)
-      properties = parameters.map { |value| [value[:name], value.except(:name, :in, :required, :schema).merge(value[:schema])] }.to_h
+      properties = parameters.map do |value|
+        value[:schema][:type] = 'object' if value[:schema][:type] == 'json'
+        if value[:schema][:type] == 'file'
+          value[:schema][:format] = 'binary'
+          value[:schema][:type] = 'string'
+        end
+        [value[:name], value.except(:name, :in, :required, :schema).merge(value[:schema])]
+      end.to_h
       required_values = parameters.select { |param| param[:required] }.map { |required| required[:name] }
       result = { schema: { type: :object, properties: properties } }
       result[:schema][:required] = required_values unless required_values.empty?

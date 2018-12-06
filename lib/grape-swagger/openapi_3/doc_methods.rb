@@ -9,7 +9,7 @@ require 'grape-swagger/doc_methods/optional_object'
 require 'grape-swagger/doc_methods/path_string'
 require 'grape-swagger/doc_methods/tag_name_description'
 require 'grape-swagger/openapi_3/doc_methods/parse_params'
-require 'grape-swagger/doc_methods/move_params'
+require 'grape-swagger/openapi_3/doc_methods/move_params'
 require 'grape-swagger/doc_methods/headers'
 require 'grape-swagger/doc_methods/build_model_definition'
 require 'grape-swagger/doc_methods/version'
@@ -56,7 +56,7 @@ module GrapeOpenAPI
         output[:tags]        = tags unless tags.empty? || paths.blank?
         output[:paths]       = paths unless paths.blank?
         unless definitions.blank?
-          output[:components] = {}
+          output[:components] ||= {}
           output[:components][:schemas] = definitions
         end
 

@@ -80,7 +80,6 @@ describe 'Group Params as Array' do
       describe 'retrieves the documentation for grouped parameters' do
         subject do
           get '/swagger_doc/groups'
-          puts last_response.body
           JSON.parse(last_response.body)
         end
 
@@ -101,7 +100,6 @@ describe 'Group Params as Array' do
       describe 'retrieves the documentation for typed group parameters' do
         subject do
           get '/swagger_doc/type_given'
-          puts last_response.body
           JSON.parse(last_response.body)
         end
 
@@ -152,7 +150,7 @@ describe 'Group Params as Array' do
                 'type' => 'string', 'description' => 'nested array of strings'
               },
               'array_of_integer' => {
-                'type' => 'integer', 'description' => 'nested array of integers'
+                'type' => 'integer', 'format' => 'int32', 'description' => 'nested array of integers'
               }
             },
             'required' => %w[array_of_string array_of_integer]
@@ -163,13 +161,12 @@ describe 'Group Params as Array' do
       describe 'documentation for simple and array parameters' do
         subject do
           get '/swagger_doc/object_and_array'
-          puts last_response.body
           JSON.parse(last_response.body)
         end
 
         specify do
-          expect(subject['definitions']['postObjectAndArray']['type']).to eql 'object'
-          expect(subject['definitions']['postObjectAndArray']['properties']).to eql(
+          expect(subject['components']['schemas']['postObjectAndArray']['type']).to eql 'object'
+          expect(subject['components']['schemas']['postObjectAndArray']['properties']).to eql(
             'array_of_string' => {
               'type' => 'array',
               'description' => 'array of strings',

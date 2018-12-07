@@ -30,7 +30,7 @@ group :development, :test do
   if RUBY_VERSION == '2.6.0'
     gem 'rubocop', git: 'https://github.com/rubocop-hq/rubocop.git', require: false
   else
-    gem 'rubocop', '~> 0.60', require: false
+    gem 'rubocop', '~> 0.61', require: false
   end
 end
 

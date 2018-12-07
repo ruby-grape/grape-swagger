@@ -33,7 +33,6 @@ describe 'Default API' do
             'get' => {
               'description' => 'This gets something.',
               'produces' => ['application/json'],
-              'parameters' => [],
               'tags' => ['something'],
               'operationId' => 'getSomething',
               'responses' => { '200' => { 'description' => 'This gets something.' } }
@@ -80,7 +79,6 @@ describe 'Default API' do
                                 'get' => {
                                   'description' => 'This gets something.',
                                   'produces' => ['application/json'],
-                                  'parameters' => [],
                                   'tags' => ['something'],
                                   'operationId' => 'getSomething',
                                   'responses' => { '200' => { 'description' => 'This gets something.' } }

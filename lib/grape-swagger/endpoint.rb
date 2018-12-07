@@ -191,7 +191,7 @@ module Grape
         parameters = GrapeSwagger::DocMethods::MoveParams.to_definition(path, parameters, route, @definitions)
       end
 
-      parameters
+      parameters.presence
     end
 
     def response_object(route)

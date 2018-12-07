@@ -104,7 +104,6 @@ describe 'a simple mounted api' do
             'get' => {
               'description' => 'Document root',
               'produces' => ['application/json'],
-              'tags' => [],
               'responses' => { '200' => { 'description' => 'Document root' } },
               'operationId' => 'get'
             }

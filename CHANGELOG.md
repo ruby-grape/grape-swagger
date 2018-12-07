@@ -7,6 +7,7 @@
 #### Fixes
 
 * Your contribution here.
+* [#729](https://github.com/ruby-grape/grape-swagger/pull/729): Allow empty security array for endpoints - [@fotos](https://github.com/fotos).
 
 ### 0.32.0 (November 26, 2018)
 

@@ -351,6 +351,7 @@ RSpec.shared_context 'representable swagger example' do
           'get' => {
             'description' => 'This gets Things.',
             'produces' => ['application/json'],
+            'parameters' => [],
             'responses' => { '200' => { 'description' => 'get Horses', 'schema' => { '$ref' => '#/definitions/Something' } }, '401' => { 'description' => 'HorsesOutError', 'schema' => { '$ref' => '#/definitions/ApiError' } } },
             'tags' => ['thing2'],
             'operationId' => 'getThing2'

@@ -191,7 +191,7 @@ module Grape
         parameters = GrapeSwagger::DocMethods::MoveParams.to_definition(path, parameters, route, @definitions)
       end
 
-      parameters
+      parameters.presence
     end
 
     def response_object(route)
@@ -257,11 +257,12 @@ module Grape
     def tag_object(route, path)
       version = GrapeSwagger::DocMethods::Version.get(route)
       version = [version] unless version.is_a?(Array)
+
       Array(
         path.split('{')[0].split('/').reject(&:empty?).delete_if do |i|
           i == route.prefix.to_s || version.map(&:to_s).include?(i)
         end.first
-      )
+      ).presence
     end
 
     private

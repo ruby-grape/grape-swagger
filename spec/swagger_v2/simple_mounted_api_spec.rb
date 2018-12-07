@@ -104,8 +104,6 @@ describe 'a simple mounted api' do
             'get' => {
               'description' => 'Document root',
               'produces' => ['application/json'],
-              'parameters' => [],
-              'tags' => [],
               'responses' => { '200' => { 'description' => 'Document root' } },
               'operationId' => 'get'
             }
@@ -114,7 +112,6 @@ describe 'a simple mounted api' do
             'get' => {
               'description' => 'This gets something.',
               'produces' => ['application/json'],
-              'parameters' => [],
               'tags' => ['simple'],
               'operationId' => 'getSimple',
               'responses' => { '200' => { 'description' => 'This gets something.' } }
@@ -124,7 +121,6 @@ describe 'a simple mounted api' do
             'get' => {
               'description' => 'This gets something for URL using - separator.',
               'produces' => ['application/json'],
-              'parameters' => [],
               'tags' => ['simple-test'],
               'operationId' => 'getSimpleTest',
               'responses' => { '200' => { 'description' => 'This gets something for URL using - separator.' } }
@@ -133,7 +129,6 @@ describe 'a simple mounted api' do
           '/simple-head-test' => {
             'head' => {
               'produces' => ['application/json'],
-              'parameters' => [],
               'responses' => { '200' => { 'description' => 'head SimpleHeadTest' } },
               'tags' => ['simple-head-test'],
               'operationId' => 'headSimpleHeadTest'
@@ -142,7 +137,6 @@ describe 'a simple mounted api' do
           '/simple-options-test' => {
             'options' => {
               'produces' => ['application/json'],
-              'parameters' => [],
               'responses' => { '200' => { 'description' => 'option SimpleOptionsTest' } },
               'tags' => ['simple-options-test'],
               'operationId' => 'optionsSimpleOptionsTest'
@@ -211,7 +205,6 @@ describe 'a simple mounted api' do
             'get' => {
               'description' => 'This gets something.',
               'produces' => ['application/json'],
-              'parameters' => [],
               'tags' => ['simple'],
               'operationId' => 'getSimple',
               'responses' => { '200' => { 'description' => 'This gets something.' } }
@@ -243,7 +236,6 @@ describe 'a simple mounted api' do
               'get' => {
                 'description' => 'This gets something for URL using - separator.',
                 'produces' => ['application/json'],
-                'parameters' => [],
                 'tags' => ['simple-test'],
                 'operationId' => 'getSimpleTest',
                 'responses' => { '200' => { 'description' => 'This gets something for URL using - separator.' } }

@@ -125,7 +125,7 @@ module Grape
       method[:tags]        = route.options.fetch(:tags, tag_object(route, path))
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method[:deprecated] = deprecated_object(route)
-      method.delete_if { |_, value| value.blank? }
+      method.delete_if { |_, value| value.nil? }
 
       [route.request_method.downcase.to_sym, method]
     end
@@ -149,7 +149,6 @@ module Grape
     def description_object(route)
       description = route.description if route.description.present?
       description = route.options[:detail] if route.options.key?(:detail)
-      description ||= ''
 
       description
     end

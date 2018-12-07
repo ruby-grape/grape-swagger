@@ -10,7 +10,24 @@ describe 'security requirement on endpoint method' do
         { foo: 'bar' }
       end
 
-      add_swagger_documentation
+      desc 'Endpoint without security requirement', security: []
+      get '/without_security' do
+        { foo: 'bar' }
+      end
+
+      add_swagger_documentation(
+        security_definitions: {
+          petstore_auth: {
+            type: 'oauth2',
+            flow: 'implicit',
+            authorizationUrl: 'https://petstore.swagger.io/oauth/dialog',
+            scopes: {
+              'read:pets': 'read your pets',
+              'write:pets': 'modify pets in your account'
+            }
+          }
+        }
+      )
     end
   end
 
@@ -21,5 +38,9 @@ describe 'security requirement on endpoint method' do
 
   it 'defines the security requirement on the endpoint method' do
     expect(subject['paths']['/with_security']['get']['security']).to eql ['oauth_pets' => ['read:pets', 'write:pets']]
+  end
+
+  it 'defines an empty security requirement on the endpoint method' do
+    expect(subject['paths']['/without_security']['get']['security']).to eql []
   end
 end

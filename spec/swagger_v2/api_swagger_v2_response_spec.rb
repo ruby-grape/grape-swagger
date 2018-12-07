@@ -49,7 +49,6 @@ describe 'response' do
       expect(subject['paths']['/nested_type']['get']).to eql(
         'description' => 'This returns something',
         'produces' => ['application/json'],
-        'parameters' => [],
         'responses' => {
           '200' => { 'description' => 'This returns something', 'schema' => { '$ref' => '#/definitions/UseItemResponseAsType' } },
           '400' => { 'description' => 'NotFound', 'schema' => { '$ref' => '#/definitions/ApiError' } }
@@ -71,7 +70,6 @@ describe 'response' do
       expect(subject['paths']['/entity_response']['get']).to eql(
         'description' => 'This returns something',
         'produces' => ['application/json'],
-        'parameters' => [],
         'responses' => {
           '200' => { 'description' => 'This returns something', 'schema' => { '$ref' => '#/definitions/UseResponse' } },
           '400' => { 'description' => 'NotFound', 'schema' => { '$ref' => '#/definitions/ApiError' } }

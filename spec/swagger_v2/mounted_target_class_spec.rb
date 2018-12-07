@@ -41,7 +41,6 @@ describe 'docs mounted separately from api' do
           'get' => {
             'description' => 'This gets something.',
             'produces' => ['application/json'],
-            'parameters' => [],
             'responses' => { '200' => { 'description' => 'This gets something.' } },
             'tags' => ['simple'],
             'operationId' => 'getSimple'
@@ -64,7 +63,6 @@ describe 'docs mounted separately from api' do
           'get' => {
             'description' => 'This gets something.',
             'produces' => ['application/json'],
-            'parameters' => [],
             'responses' => {
               '200' => { 'description' => 'This gets something.' }
             },

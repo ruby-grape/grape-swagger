@@ -96,4 +96,16 @@ describe GrapeSwagger::DocMethods::DataType do
 
     it { is_expected.to eq('integer') }
   end
+
+  describe 'Custom Type with :name method defined' do
+    class CustomNumericObject
+      def self.custom_type_data_type_override
+        'integer'
+      end
+    end
+
+    let(:value) { { type: 'CustomNumericObject' } }
+
+    it { is_expected.to eq('Integer') }
+  end
 end

@@ -55,7 +55,16 @@ module GrapeSwagger
           elsif model.respond_to?(:name)
             model.name.demodulize.camelize
           else
-            model.to_s.split('::').last
+            klass = begin
+                      Object.const_get(model, false)
+                    rescue NameError
+                      nil
+                    end
+            if klass.respond_to?(:custom_type_data_type_override)
+              klass.custom_type_data_type_override.camelize
+            else
+              model.to_s.split('::').last
+            end
           end
         end
 

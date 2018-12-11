@@ -2,7 +2,7 @@
 
 #### Features
 
-* Your contribution here.
+* [#733](https://github.com/ruby-grape/grape-swagger/pull/733): Override a Custom Type data type with `:custom_type_data_type_override` - [@shanempope](https://github.com/shanempope).
 
 #### Fixes
 

@@ -216,9 +216,7 @@ module Grape
         result << response_body_parameter_object(form_params, 'application/x-www-form-urlencoded')
       end
 
-      unless file_params.empty?
-        result << response_body_parameter_object(file_params, 'application/octet-stream')
-      end
+      result << response_body_parameter_object(file_params, 'application/octet-stream') unless file_params.empty?
 
       { content: result.to_h }
     end
@@ -246,9 +244,17 @@ module Grape
         value[:message] ||= ''
         memo[value[:code]] = { description: value[:message] }
 
-        memo[value[:code]][:headers] = value[:headers] if value[:headers]
+        if value[:headers]
+          value[:headers].each do |_, header|
+            header[:schema] = { type: header.delete(:type) }
+          end
+          memo[value[:code]][:headers] = value[:headers]
+        end
 
-        next build_file_response(memo[value[:code]]) if file_response?(value[:model])
+        if file_response?(value[:model])
+          memo[value[:code]][:content] = [content_object(value, value[:model], {}, 'application/octet-stream')].to_h
+          next
+        end
 
         response_model = @item
         response_model = expose_params_from_model(value[:model]) if value[:model]
@@ -263,19 +269,29 @@ module Grape
         model = !response_model.start_with?('Swagger_doc') && (@definitions[response_model] || value[:model])
 
         ref = build_reference(route, value, response_model)
-        memo[value[:code]][:content] = content_types.map do |c|
-          if model
-            [c, { schema: ref }]
-          else
-            [c, {}]
-          end
-        end.to_h
+
+        memo[value[:code]][:content] = content_types.map { |c| content_object(value, model, ref, c) }.to_h
 
         next unless model
 
         @definitions[response_model][:description] = description_object(route)
+      end
+    end
 
-        memo[value[:code]][:examples] = value[:examples] if value[:examples]
+    def content_object(value, model, ref, content_type)
+      if model
+        hash = { schema: ref }
+        if value[:examples]
+          if value[:examples].keys.length == 1
+            hash[:example] = value[:examples].values.first
+          else
+            hash[:examples] = value[:examples].map { |k, v| [k, { value: v }] }.to_h
+          end
+        end
+
+        [content_type, hash]
+      else
+        [content_type, {}]
       end
     end
 

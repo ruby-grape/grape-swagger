@@ -99,7 +99,7 @@ describe GrapeSwagger::DocMethods::DataType do
 
   describe 'Custom Type with :name method defined' do
     class CustomNumericObject
-      def self.custom_type_data_type_override
+      def self.data_type
         'integer'
       end
     end

@@ -60,8 +60,8 @@ module GrapeSwagger
                     rescue NameError
                       nil
                     end
-            if klass.respond_to?(:custom_type_data_type_override)
-              klass.custom_type_data_type_override.camelize
+            if klass.respond_to?(:data_type)
+              klass.data_type.camelize
             else
               model.to_s.split('::').last
             end

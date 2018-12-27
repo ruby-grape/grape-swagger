@@ -23,13 +23,18 @@ module Grape
     # openapi 3.0 related parts
     #
     # required keys for SwaggerObject
-    def swagger_object(_target_class, _request, options)
+    def swagger_object(_target_class, request, options)
+      url = GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request)
+      base_path = GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request)
+      servers = options[:servers] || [{ url: "#{request.scheme}://#{url}#{base_path}" }]
+      servers = servers.is_a?(Hash) ? [servers] : servers
+
       object = {
         info:                info_object(options[:info].merge(version: options[:doc_version])),
         openapi:             '3.0.0',
         security:            options[:security],
         authorizations:      options[:authorizations],
-        servers:             options[:servers].is_a?(Hash) ? [options[:servers]] : options[:servers]
+        servers: servers
       }
 
       if options[:security_definitions] || options[:security]

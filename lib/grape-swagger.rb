@@ -4,6 +4,7 @@ require 'grape'
 
 require 'grape-swagger/instance'
 
+require 'grape-swagger/errors'
 require 'grape-swagger/version'
 require 'grape-swagger/model_parsers'
 
@@ -14,41 +15,6 @@ module GrapeSwagger
     end
   end
   autoload :Rake, 'grape-swagger/rake/oapi_tasks'
-end
-
-def add_swagger_documentation(options = {})
-  options = { target_class: self }.merge(options)
-
-  version_for(options)
-
-  documentation_class = if options[:openapi_version] == '3.0'
-                          require 'grape-swagger/openapi_3/openapi3'
-                          OpenApi.new.add_swagger_documentation(options)
-                        else
-                          require 'grape-swagger/swagger_2/swagger2'
-                          Swagger.new.add_swagger_documentation(options)
-                        end
-
-  @target_class = options[:target_class]
-
-  mount(documentation_class)
-
-  @target_class.combined_routes = {}
-  combine_routes(@target_class, documentation_class)
-
-  @target_class.combined_namespaces = {}
-  combine_namespaces(@target_class)
-
-  @target_class.combined_namespace_routes = {}
-  @target_class.combined_namespace_identifiers = {}
-  combine_namespace_routes(@target_class.combined_namespaces)
-
-  exclusive_route_keys = @target_class.combined_routes.keys - @target_class.combined_namespaces.keys
-  exclusive_route_keys.each do |key|
-    @target_class.combined_namespace_routes[key] = @target_class.combined_routes[key]
-  end
-
-  documentation_class
 end
 
 module SwaggerRouting
@@ -146,11 +112,10 @@ module SwaggerDocumentationAdder
   include SwaggerRouting
 
   def add_swagger_documentation(options = {})
-    documentation_class = create_documentation_class
-
-    version_for(options)
     options = { target_class: self }.merge(options)
+    version_for(options)
     @target_class = options[:target_class]
+    documentation_class = create_documentation_class(options[:openapi_version])
     auth_wrapper = options[:endpoint_auth_wrapper] || Class.new
 
     use auth_wrapper if auth_wrapper.method_defined?(:before) && !middleware.flatten.include?(auth_wrapper)
@@ -195,9 +160,17 @@ module SwaggerDocumentationAdder
     end
   end
 
-  def create_documentation_class
-    Class.new(GrapeInstance) do
-      extend GrapeSwagger::DocMethods
+  def create_documentation_class(openapi_version)
+    Class.new(Grape::API) do
+      if openapi_version == '3.0'
+        require 'grape-swagger/openapi_3/endpoint'
+        require 'grape-swagger/openapi_3/doc_methods'
+        extend GrapeOpenAPI::DocMethods
+      else
+        require 'grape-swagger/swagger_2/endpoint'
+        require 'grape-swagger/swagger_2/doc_methods'
+        extend GrapeSwagger::DocMethods
+      end
     end
   end
 end

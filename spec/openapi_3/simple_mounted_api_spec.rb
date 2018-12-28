@@ -61,7 +61,7 @@ describe 'a simple mounted api' do
              'custom' => { type: CustomType, description: 'array of items', is_array: true }
            }
 
-      get '/custom' do
+      post '/custom' do
         {}
       end
     end
@@ -171,14 +171,26 @@ describe 'a simple mounted api' do
             }
           },
           '/custom' => {
-            'get' => {
+            'post' => {
               'description' => 'this uses a custom parameter',
-              'operationId' => 'getCustom',
-              'responses' => { '200' => {
-                'content' => { 'application/json' => {} },
-                'description' => 'this uses a custom parameter'
-              } },
-              'tags' => ['custom']
+              'operationId' => 'postCustom',
+              'requestBody' => {
+                'content' => {
+                  'application/json' => { 'schema' => { 'properties' => {}, 'type' => 'object' } },
+                  'application/x-www-form-urlencoded' => {
+                    'schema' => {
+                      'properties' => {
+                        'custom' => {
+                          'description' => 'array of items',
+                          'items' => { 'type' => 'CustomType' },
+                          'type' => 'array'
+                        }
+                      },
+                      'type' => 'object'
+                    }
+                  }
+                }
+              }, 'responses' => { '201' => { 'description' => 'this uses a custom parameter' } }, 'tags' => ['custom']
             }
           },
           '/items' => {
@@ -340,24 +352,38 @@ describe 'a simple mounted api' do
       end
     end
 
+    # TODO: Rendering a custom param type the way it is done here is not valid OpenAPI
+    # (nor I believe it is valid Swagger 2.0). We should render such a type with a JSON reference
+    # under components/schemas.
     describe 'supports custom params types' do
       subject do
         get '/swagger_doc/custom.json'
-        raise('TODO: Fix')
         JSON.parse(last_response.body)
       end
 
       specify do
         expect(subject['paths']).to eq(
           '/custom' => {
-            'get' => {
+            'post' => {
               'description' => 'this uses a custom parameter',
-              'operationId' => 'getCustom',
-              'responses' => {
-                '200' => { 'content' => { 'application/json' => {} },
-                           'description' => 'this uses a custom parameter' }
-              },
-              'tags' => ['custom']
+              'operationId' => 'postCustom',
+              'requestBody' => {
+                'content' => {
+                  'application/json' => { 'schema' => { 'properties' => {}, 'type' => 'object' } },
+                  'application/x-www-form-urlencoded' => {
+                    'schema' => {
+                      'properties' => {
+                        'custom' => {
+                          'description' => 'array of items',
+                          'items' => { 'type' => 'CustomType' },
+                          'type' => 'array'
+                        }
+                      },
+                      'type' => 'object'
+                    }
+                  }
+                }
+              }, 'responses' => { '201' => { 'description' => 'this uses a custom parameter' } }, 'tags' => ['custom']
             }
           }
         )

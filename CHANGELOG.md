@@ -7,6 +7,7 @@
 #### Fixes
 
 * Your contribution here.
+* [#737](https://github.com/ruby-grape/grape-swagger/pull/737): Add swagger endpoint guard to both doc endpoints - [@urkle](https://github.com/urkle).
 
 ### 0.32.1 (December 7, 2018)
 

@@ -22,7 +22,7 @@ Gemspec/RequiredRubyVersion:
 
 # Offense count: 30
 Metrics/AbcSize:
-  Max: 57
+  Max: 59
 
 # Offense count: 10
 Metrics/CyclomaticComplexity:
@@ -31,7 +31,7 @@ Metrics/CyclomaticComplexity:
 # Offense count: 22
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/MethodLength:
-  Max: 44
+  Max: 45
 
 # Offense count: 7
 Metrics/PerceivedComplexity:

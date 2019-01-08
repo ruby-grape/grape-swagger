@@ -45,8 +45,6 @@ module GrapeSwagger
 
       desc api_doc.delete(:desc), api_doc
 
-      instance_eval(guard) unless guard.nil?
-
       output_path_definitions = proc do |combi_routes, endpoint|
         output = endpoint.swagger_object(
           target_class,
@@ -64,6 +62,8 @@ module GrapeSwagger
         output
       end
 
+      instance_eval(guard) unless guard.nil?
+
       get mount_path do
         header['Access-Control-Allow-Origin']   = '*'
         header['Access-Control-Request-Method'] = '*'
@@ -78,6 +78,8 @@ module GrapeSwagger
         requires :name, type: String, desc: 'Resource name of mounted API'
         optional :locale, type: Symbol, desc: 'Locale of API documentation'
       end
+
+      instance_eval(guard) unless guard.nil?
 
       get "#{mount_path}/:name" do
         I18n.locale = params[:locale] || I18n.default_locale

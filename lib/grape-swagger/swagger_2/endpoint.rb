@@ -5,7 +5,7 @@ require 'active_support/core_ext/string/inflections'
 require 'grape-swagger/endpoint/params_parser'
 
 module Grape
-  class Endpoint # rubocop:disable Metrics/ClassLength
+  module Swagger2Endpoint
     def content_types_for(target_class)
       content_types = (target_class.content_types || {}).values
 

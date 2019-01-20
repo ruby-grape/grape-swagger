@@ -4,7 +4,7 @@ require 'active_support/core_ext/hash/deep_merge'
 
 module GrapeSwagger
   module DocMethods
-    class MoveParams
+    class OpenAPIMoveParams
       class << self
         attr_accessor :definitions
 

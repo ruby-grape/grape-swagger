@@ -41,7 +41,7 @@ module Extension
     description[:auth] = { scopes: scopes }
   end
 
-  Grape::API.extend self
+  GrapeInstance.extend self
 end
 
 describe 'a guarded api endpoint' do

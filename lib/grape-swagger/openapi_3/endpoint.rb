@@ -5,7 +5,7 @@ require 'active_support/core_ext/string/inflections'
 require 'grape-swagger/endpoint/params_parser'
 
 module Grape
-  class Endpoint
+  module OpenAPI3Endpoint
     def content_types_for(target_class)
       content_types = (target_class.content_types || {}).values
 
@@ -30,10 +30,10 @@ module Grape
       servers = servers.is_a?(Hash) ? [servers] : servers
 
       object = {
-        info:                info_object(options[:info].merge(version: options[:doc_version])),
-        openapi:             '3.0.0',
-        security:            options[:security],
-        authorizations:      options[:authorizations],
+        info: info_object(options[:info].merge(version: options[:doc_version])),
+        openapi: '3.0.0',
+        security: options[:security],
+        authorizations: options[:authorizations],
         servers: servers
       }
 
@@ -50,12 +50,12 @@ module Grape
     # building info object
     def info_object(infos)
       result = {
-        title:             infos[:title] || 'API title',
-        description:       infos[:description],
-        termsOfService:    infos[:terms_of_service_url],
-        contact:           contact_object(infos),
-        license:           license_object(infos),
-        version:           infos[:version]
+        title: infos[:title] || 'API title',
+        description: infos[:description],
+        termsOfService: infos[:terms_of_service_url],
+        contact: contact_object(infos),
+        license: license_object(infos),
+        version: infos[:version]
       }
 
       GrapeSwagger::DocMethods::Extensions.add_extensions_to_info(infos, result)
@@ -68,7 +68,7 @@ module Grape
     def license_object(infos)
       {
         name: infos.delete(:license),
-        url:  infos.delete(:license_url)
+        url: infos.delete(:license_url)
       }.delete_if { |_, value| value.blank? }
     end
 
@@ -202,11 +202,11 @@ module Grape
         elsif value[:documentation]
           expose_params(value[:documentation][:type])
         end
-        GrapeSwagger::DocMethods::ParseParams.call(param, value, path, route, @definitions)
+        GrapeSwagger::DocMethods::OpenAPIParseParams.call(param, value, path, route, @definitions)
       end
 
-      if GrapeSwagger::DocMethods::MoveParams.can_be_moved?(parameters, route.request_method)
-        parameters = GrapeSwagger::DocMethods::MoveParams.to_definition(path, parameters, route, @definitions)
+      if GrapeSwagger::DocMethods::OpenAPIMoveParams.can_be_moved?(parameters, route.request_method)
+        parameters = GrapeSwagger::DocMethods::OpenAPIMoveParams.to_definition(path, parameters, route, @definitions)
       end
 
       parameters

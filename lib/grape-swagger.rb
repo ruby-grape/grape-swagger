@@ -7,6 +7,10 @@ require 'grape-swagger/instance'
 require 'grape-swagger/errors'
 require 'grape-swagger/version'
 require 'grape-swagger/model_parsers'
+require 'grape-swagger/swagger_2/endpoint'
+require 'grape-swagger/openapi_3/endpoint'
+require 'grape-swagger/openapi_3/doc_methods'
+require 'grape-swagger/swagger_2/doc_methods'
 
 module GrapeSwagger
   class << self
@@ -140,6 +144,10 @@ module SwaggerDocumentationAdder
     @target_class.combined_routes = combined_routes
     @target_class.combined_namespaces = combined_namespaces
 
+    endpoint_type = options[:openapi_version] == '3.0' ? Grape::OpenAPI3Endpoint : Grape::Swagger2Endpoint
+    set_endpoint_type(@target_class, endpoint_type)
+    set_endpoint_type(documentation_class, endpoint_type)
+
     documentation_class
   end
 
@@ -147,6 +155,13 @@ module SwaggerDocumentationAdder
 
   def version_for(options)
     options[:version] = version if version
+  end
+
+  def set_endpoint_type(app, klass)
+    app.endpoints.each do |endpoint|
+      endpoint.class.include(klass)
+      set_endpoint_type(endpoint.options[:app], klass) if endpoint.options[:app]
+    end
   end
 
   def combine_namespaces(app)
@@ -171,14 +186,10 @@ module SwaggerDocumentationAdder
   end
 
   def create_documentation_class(openapi_version)
-    Class.new(Grape::API) do
+    Class.new(GrapeInstance) do
       if openapi_version == '3.0'
-        require 'grape-swagger/openapi_3/endpoint'
-        require 'grape-swagger/openapi_3/doc_methods'
         extend GrapeOpenAPI::DocMethods
       else
-        require 'grape-swagger/swagger_2/endpoint'
-        require 'grape-swagger/swagger_2/doc_methods'
         extend GrapeSwagger::DocMethods
       end
     end

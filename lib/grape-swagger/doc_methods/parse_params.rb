@@ -25,6 +25,7 @@ module GrapeSwagger
           document_default_value(settings) unless value_type[:is_array]
           document_range_values(settings) unless value_type[:is_array]
           document_required(settings)
+          document_additional_properties(settings)
 
           @parsed_param
         end
@@ -89,6 +90,11 @@ module GrapeSwagger
           @parsed_param[:items] = array_items
           @parsed_param[:type] = 'array'
           @parsed_param[:collectionFormat] = collection_format if DataType.collections.include?(collection_format)
+        end
+
+        def document_additional_properties(settings)
+          additional_properties = settings[:additionalProperties]
+          @parsed_param[:additionalProperties] = additional_properties if additional_properties
         end
 
         def param_type(value_type)

@@ -2,7 +2,7 @@
 
 module GrapeSwagger
   module DocMethods
-    class ParseParams
+    class OpenAPIParseParams
       class << self
         def call(param, settings, path, route, definitions)
           method = route.request_method
@@ -44,11 +44,11 @@ module GrapeSwagger
         def document_range_values(settings)
           values               = settings[:values] || nil
           enum_or_range_values = parse_enum_or_range_values(values)
-          @parsed_param.merge!(enum_or_range_values) if enum_or_range_values
+          @parsed_param[:schema].merge!(enum_or_range_values) if enum_or_range_values
         end
 
         def document_default_value(settings)
-          @parsed_param[:default] = settings[:default] if settings[:default].present?
+          @parsed_param[:schema][:default] = settings[:default] if settings[:default].present?
         end
 
         def document_type_and_format(settings, data_type)
@@ -76,6 +76,7 @@ module GrapeSwagger
           if definitions[value_type[:data_type]]
             array_items['$ref'] = "#/components/schemas/#{@parsed_param[:schema][:type]}"
           else
+            puts value_type.inspect
             array_items[:type] = type || @parsed_param[:schema][:type] == 'array' ? 'string' : @parsed_param[:schema][:type]
           end
           array_items[:format] = @parsed_param.delete(:format) if @parsed_param[:format]

@@ -25,13 +25,8 @@ group :development, :test do
   gem 'rack-test'
   gem 'rake'
   gem 'rdoc'
-  gem 'rspec', '~> 3.0'
-  # TODO: change back after 2.6.0 release and updated rubocop version
-  if RUBY_VERSION == '2.6.0'
-    gem 'rubocop', git: 'https://github.com/rubocop-hq/rubocop.git', require: false
-  else
-    gem 'rubocop', '~> 0.61', require: false
-  end
+  gem 'rspec', '~> 3.8'
+  gem 'rubocop', '~> 0.63', require: false
 end
 
 group :test do

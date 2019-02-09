@@ -41,7 +41,7 @@ module Extension
     description[:auth] = { scopes: scopes }
   end
 
-  Grape::API.extend self
+  GrapeInstance.extend self
 end
 
 describe 'a guarded api endpoint' do
@@ -68,47 +68,95 @@ describe 'a guarded api endpoint' do
     GuardedApi
   end
 
-  context 'when a correct token is passed with the request' do
-    subject do
-      get '/swagger_doc.json', {}, 'HTTP_AUTHORIZATION' => '12345'
-      JSON.parse(last_response.body)
-    end
+  let(:endpoint) { '/swagger_doc.json' }
+  let(:auth_token) { nil }
 
-    it 'retrieves swagger-documentation for the endpoint' do
-      expect(subject).to eq(
-        'info' => { 'title' => 'API title', 'version' => '0.0.1' },
-        'swagger' => '2.0',
-        'produces' => ['application/xml', 'application/json', 'application/octet-stream', 'text/plain'],
-        'host' => 'example.org',
-        'tags' => [{ 'name' => 'auth', 'description' => 'Operations about auths' }],
-        'paths' => {
-          '/auth' => {
-            'get' => {
-              'description' => 'Show endpoint if authenticated',
-              'produces' => ['application/json'],
-              'tags' => ['auth'],
-              'operationId' => 'getAuth',
-              'responses' => { '200' => { 'description' => 'Show endpoint if authenticated' } }
+  subject do
+    get endpoint, {}, 'HTTP_AUTHORIZATION' => auth_token
+    JSON.parse(last_response.body)
+  end
+
+  context 'accessing the main doc endpoint' do
+    let(:endpoint) { '/swagger_doc.json' }
+
+    context 'when a correct token is passed with the request' do
+      let(:auth_token) { '12345' }
+
+      it 'retrieves swagger-documentation for the endpoint' do
+        expect(subject).to eq(
+          'info' => { 'title' => 'API title', 'version' => '0.0.1' },
+          'swagger' => '2.0',
+          'produces' => ['application/xml', 'application/json', 'application/octet-stream', 'text/plain'],
+          'host' => 'example.org',
+          'tags' => [{ 'name' => 'auth', 'description' => 'Operations about auths' }],
+          'paths' => {
+            '/auth' => {
+              'get' => {
+                'description' => 'Show endpoint if authenticated',
+                'produces' => ['application/json'],
+                'tags' => ['auth'],
+                'operationId' => 'getAuth',
+                'responses' => { '200' => { 'description' => 'Show endpoint if authenticated' } }
+              }
             }
           }
-        }
-      )
+        )
+      end
+    end
+
+    context 'when a bad token is passed with the request' do
+      let(:auth_token) { '123456' }
+
+      it 'does not retrieve swagger-documentation for the endpoint - only the info_object' do
+        expect(subject).to eq(
+          'info' => { 'title' => 'API title', 'version' => '0.0.1' },
+          'swagger' => '2.0',
+          'produces' => ['application/xml', 'application/json', 'application/octet-stream', 'text/plain'],
+          'host' => 'example.org'
+        )
+      end
     end
   end
 
-  context 'when a bad token is passed with the request' do
-    subject do
-      get '/swagger_doc.json', {}, 'HTTP_AUTHORIZATION' => '123456'
-      JSON.parse(last_response.body)
+  context 'accessing the tag specific endpoint' do
+    let(:endpoint) { '/swagger_doc/auth.json' }
+
+    context 'when a correct token is passed with the request' do
+      let(:auth_token) { '12345' }
+
+      it 'retrieves swagger-documentation for the endpoint' do
+        expect(subject).to eq(
+          'info' => { 'title' => 'API title', 'version' => '0.0.1' },
+          'swagger' => '2.0',
+          'produces' => ['application/xml', 'application/json', 'application/octet-stream', 'text/plain'],
+          'host' => 'example.org',
+          'tags' => [{ 'name' => 'auth', 'description' => 'Operations about auths' }],
+          'paths' => {
+            '/auth' => {
+              'get' => {
+                'description' => 'Show endpoint if authenticated',
+                'produces' => ['application/json'],
+                'tags' => ['auth'],
+                'operationId' => 'getAuth',
+                'responses' => { '200' => { 'description' => 'Show endpoint if authenticated' } }
+              }
+            }
+          }
+        )
+      end
     end
 
-    it 'does not retrieve swagger-documentation for the endpoint - only the info_object' do
-      expect(subject).to eq(
-        'info' => { 'title' => 'API title', 'version' => '0.0.1' },
-        'swagger' => '2.0',
-        'produces' => ['application/xml', 'application/json', 'application/octet-stream', 'text/plain'],
-        'host' => 'example.org'
-      )
+    context 'when a bad token is passed with the request' do
+      let(:auth_token) { '123456' }
+
+      it 'does not retrieve swagger-documentation for the endpoint - only the info_object' do
+        expect(subject).to eq(
+          'info' => { 'title' => 'API title', 'version' => '0.0.1' },
+          'swagger' => '2.0',
+          'produces' => ['application/xml', 'application/json', 'application/octet-stream', 'text/plain'],
+          'host' => 'example.org'
+        )
+      end
     end
   end
 end

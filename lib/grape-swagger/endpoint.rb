@@ -25,15 +25,15 @@ module Grape
     # required keys for SwaggerObject
     def swagger_object(target_class, request, options)
       object = {
-        info:                info_object(options[:info].merge(version: options[:doc_version])),
-        swagger:             '2.0',
-        produces:            content_types_for(target_class),
-        authorizations:      options[:authorizations],
+        info: info_object(options[:info].merge(version: options[:doc_version])),
+        swagger: '2.0',
+        produces: content_types_for(target_class),
+        authorizations: options[:authorizations],
         securityDefinitions: options[:security_definitions],
-        security:            options[:security],
-        host:                GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request),
-        basePath:            GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request),
-        schemes:             options[:schemes].is_a?(String) ? [options[:schemes]] : options[:schemes]
+        security: options[:security],
+        host: GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request),
+        basePath: GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request),
+        schemes: options[:schemes].is_a?(String) ? [options[:schemes]] : options[:schemes]
       }
 
       GrapeSwagger::DocMethods::Extensions.add_extensions_to_root(options, object)
@@ -43,12 +43,12 @@ module Grape
     # building info object
     def info_object(infos)
       result = {
-        title:             infos[:title] || 'API title',
-        description:       infos[:description],
-        termsOfServiceUrl: infos[:terms_of_service_url],
-        contact:           contact_object(infos),
-        license:           license_object(infos),
-        version:           infos[:version]
+        title: infos[:title] || 'API title',
+        description: infos[:description],
+        termsOfService: infos[:terms_of_service_url],
+        contact: contact_object(infos),
+        license: license_object(infos),
+        version: infos[:version]
       }
 
       GrapeSwagger::DocMethods::Extensions.add_extensions_to_info(infos, result)
@@ -61,7 +61,7 @@ module Grape
     def license_object(infos)
       {
         name: infos.delete(:license),
-        url:  infos.delete(:license_url)
+        url: infos.delete(:license_url)
       }.delete_if { |_, value| value.blank? }
     end
 
@@ -125,7 +125,7 @@ module Grape
       method[:tags]        = route.options.fetch(:tags, tag_object(route, path))
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method[:deprecated] = deprecated_object(route)
-      method.delete_if { |_, value| value.blank? }
+      method.delete_if { |_, value| value.nil? }
 
       [route.request_method.downcase.to_sym, method]
     end
@@ -149,7 +149,6 @@ module Grape
     def description_object(route)
       description = route.description if route.description.present?
       description = route.options[:detail] if route.options.key?(:detail)
-      description ||= ''
 
       description
     end
@@ -192,7 +191,7 @@ module Grape
         parameters = GrapeSwagger::DocMethods::MoveParams.to_definition(path, parameters, route, @definitions)
       end
 
-      parameters
+      parameters.presence
     end
 
     def response_object(route)
@@ -258,11 +257,12 @@ module Grape
     def tag_object(route, path)
       version = GrapeSwagger::DocMethods::Version.get(route)
       version = [version] unless version.is_a?(Array)
+
       Array(
         path.split('{')[0].split('/').reject(&:empty?).delete_if do |i|
           i == route.prefix.to_s || version.map(&:to_s).include?(i)
         end.first
-      )
+      ).presence
     end
 
     private

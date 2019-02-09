@@ -261,7 +261,7 @@ RSpec.shared_context 'representable swagger example' do
       'info' => {
         'title' => 'The API title to be displayed on the API homepage.',
         'description' => 'A description of the API.',
-        'termsOfServiceUrl' => 'www.The-URL-of-the-terms-and-service.com',
+        'termsOfService' => 'www.The-URL-of-the-terms-and-service.com',
         'contact' => { 'name' => 'Contact name', 'email' => 'Contact@email.com', 'url' => 'Contact URL' },
         'license' => { 'name' => 'The name of the license.', 'url' => 'www.The-URL-of-the-license.org' },
         'version' => '0.0.1'

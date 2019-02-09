@@ -14,7 +14,7 @@ module GrapeSwagger
 
           # required properties
           @parsed_param = {
-            in:   param_type(value_type),
+            in: param_type(value_type),
             name: settings[:full_name] || param
           }
 

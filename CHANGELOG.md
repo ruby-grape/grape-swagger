@@ -7,6 +7,30 @@
 #### Fixes
 
 * Your contribution here.
+* [#737](https://github.com/ruby-grape/grape-swagger/pull/737): Add swagger endpoint guard to both doc endpoints - [@urkle](https://github.com/urkle).
+
+### 0.32.1 (December 7, 2018)
+
+#### Fixes
+
+* [#731](https://github.com/ruby-grape/grape-swagger/pull/731): Skip empty parameters and tags arrays - [@fotos](https://github.com/fotos).
+* [#729](https://github.com/ruby-grape/grape-swagger/pull/729): Allow empty security array for endpoints - [@fotos](https://github.com/fotos).
+
+### 0.32.0 (November 26, 2018)
+
+#### Features
+
+* [#717](https://github.com/ruby-grape/grape-swagger/pull/717): Adds support for grape >= 1.2 - [@myxoh](https://github.com/myxoh).
+
+#### Fixes
+
+* [#720](https://github.com/ruby-grape/grape-swagger/pull/720): Fix: corrected `termsOfService` field name in additional info - [@dblock](https://github.com/dblock).
+
+### 0.31.1 (October 23, 2018)
+
+#### Features
+
+* [#710](https://github.com/ruby-grape/grape-swagger/issues/710): Re-implement `api_documentation` and `specific_api_documentation` options - [@dblock](https://github.com/dblock).
 
 ###  0.31.0 (August 22, 2018)
 
@@ -14,7 +38,6 @@
 
 * [#622](https://github.com/ruby-grape/grape-swagger/pull/622): Add support for 'brackets' collection format - [@korstiaan](https://github.com/korstiaan).
 * [#637](https://github.com/ruby-grape/grape-swagger/pull/637): Add an option to add braces to array params - [@adie](https://github.com/adie).
-
 * [#688](https://github.com/ruby-grape/grape-swagger/pull/688): Use deep merge for nested parameter definitions - [@jdmurphy](https://github.com/jdmurphy).
 * [#691](https://github.com/ruby-grape/grape-swagger/pull/691): Disregard order when parsing request params for arrays - [@jdmurphy](https://github.com/jdmurphy).
 * [#696](https://github.com/ruby-grape/grape-swagger/pull/696): Delegate required properties parsing to model parsers - [@Bugagazavr](https://github.com/Bugagazavr).

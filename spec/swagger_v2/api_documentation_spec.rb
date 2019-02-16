@@ -27,12 +27,12 @@ describe 'API with additional options' do
             'locale' => {
               desc: 'Locale of API documentation',
               required: false,
-              type: 'Symbol'
+              type: Symbol
             },
             'name' => {
               desc: 'Resource name of mounted API',
               required: true,
-              type: 'String'
+              type: String
             }
           }
         }

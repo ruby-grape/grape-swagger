@@ -10,8 +10,8 @@ after_success:
 
 rvm:
   - 2.4.5
-  - 2.5.3
-  - 2.6.1
+  - 2.5.4
+  - 2.6.2
 env:
   - MODEL_PARSER=grape-swagger-entity
   - MODEL_PARSER=grape-swagger-representable

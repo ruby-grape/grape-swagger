@@ -1,7 +1,5 @@
 language: ruby
 
-sudo: false
-
 before_install:
   - gem install bundler
 
@@ -9,8 +7,8 @@ after_success:
   - bundle exec danger
 
 rvm:
-  - 2.4.5
-  - 2.5.4
+  - 2.4.6
+  - 2.5.5
   - 2.6.2
 env:
   - MODEL_PARSER=grape-swagger-entity

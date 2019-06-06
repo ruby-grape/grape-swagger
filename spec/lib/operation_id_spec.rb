@@ -47,6 +47,9 @@ describe GrapeSwagger::DocMethods::OperationId do
       it 'GET with path /simple_test/bar-foo{id}' do
         expect(subject.build(route, '/simple_test/bar-foo{id}')).to eql 'getSimpleTestBarFooId'
       end
+      it 'GET path with optional format' do
+        expect(subject.build(route, 'foo(.{format})')).to eql 'getFoo(.Format)'
+      end
     end
   end
 end

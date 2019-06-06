@@ -7,6 +7,7 @@
 #### Fixes
 
 * Your contribution here.
+* [#746](https://github.com/ruby-grape/grape-swagger/pull/746): Fix path with optional format - [@fnordfish](https://github.com/fnordfish).
 * [#743](https://github.com/ruby-grape/grape-swagger/pull/743): CI: use 2.4.6, 2.5.5 - [@olleolleolle](https://github.com/olleolleolle).
 * [#737](https://github.com/ruby-grape/grape-swagger/pull/737): Add swagger endpoint guard to both doc endpoints - [@urkle](https://github.com/urkle).
 

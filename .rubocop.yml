@@ -9,7 +9,7 @@ AllCops:
 Layout/EmptyLinesAroundArguments:
   Enabled: false
 
-Layout/IndentHash:
+Layout/IndentFirstHashElement:
   EnforcedStyle: consistent
 
 Metrics/BlockLength:

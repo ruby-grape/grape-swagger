@@ -8,7 +8,6 @@
 
 * Your contribution here.
 
-
 ### 2.0.0 (November7, 2023)
 
 #### Features

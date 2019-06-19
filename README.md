@@ -900,7 +900,7 @@ end
 },
 ```
 
-#### Multiple status codes for success <a name="multiple-success-response"></a>
+#### Multiple status codes for response <a name="multiple-status-response"></a>
 
 Multiple values can be provided for `success` and `failure` attributes in the response.
 

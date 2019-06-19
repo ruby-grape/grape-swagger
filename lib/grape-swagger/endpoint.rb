@@ -238,20 +238,13 @@ module Grape
     end
 
     def success_codes_from_route(route)
-      default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
-      if @entity.is_a?(Hash)
-        default_code[:code] = @entity[:code] if @entity[:code].present?
-        default_code[:model] = @entity[:model] if @entity[:model].present?
-        default_code[:message] = @entity[:message] || route.description || default_code[:message].sub('{item}', @item)
-        default_code[:examples] = @entity[:examples] if @entity[:examples]
-        default_code[:headers] = @entity[:headers] if @entity[:headers]
-      else
-        default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
-        default_code[:model] = @entity if @entity
-        default_code[:message] = route.description || default_code[:message].sub('{item}', @item)
+      if @entity.is_a?(Array)
+        return @entity.map do |entity|
+          success_code_from_entity(route, entity)
+        end
       end
 
-      [default_code]
+      [success_code_from_entity(route, @entity)]
     end
 
     def tag_object(route, path)
@@ -349,6 +342,23 @@ module Grape
       return route_hidden unless route_hidden.is_a?(Proc)
 
       options[:token_owner] ? route_hidden.call(send(options[:token_owner].to_sym)) : route_hidden.call
+    end
+
+    def success_code_from_entity(route, entity)
+      default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
+      if entity.is_a?(Hash)
+        default_code[:code] = entity[:code] if entity[:code].present?
+        default_code[:model] = entity[:model] if entity[:model].present?
+        default_code[:message] = entity[:message] || route.description || default_code[:message].sub('{item}', @item)
+        default_code[:examples] = entity[:examples] if entity[:examples]
+        default_code[:headers] = entity[:headers] if entity[:headers]
+      else
+        default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
+        default_code[:model] = entity if entity
+        default_code[:message] = route.description || default_code[:message].sub('{item}', @item)
+      end
+
+      default_code
     end
   end
 end

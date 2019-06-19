@@ -31,6 +31,17 @@ describe 'response' do
           { 'declared_params' => declared(params) }
         end
 
+        desc 'This returns something',
+             success: [
+               { code: 200, message: 'Request has succeeded' },
+               { code: 201, message: 'Successful Operation' },
+               { code: 204, message: 'Request was fulfilled' }
+             ],
+             failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
+        get '/multiple-success-responses' do
+          { 'declared_params' => declared(params) }
+        end
+
         add_swagger_documentation
       end
     end
@@ -102,6 +113,29 @@ describe 'response' do
         },
         'tags' => ['params_given'],
         'operationId' => 'postParamsGiven'
+      )
+      expect(subject['definitions']).to eql(swagger_params_as_response_object)
+    end
+  end
+
+  describe 'uses params as response object when response contains multiple values for success' do
+    subject do
+      get '/swagger_doc/multiple-success-responses'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['paths']['/multiple-success-responses']['get']).to eql(
+        'description' => 'This returns something',
+        'produces' => ['application/json'],
+        'responses' => {
+          '200' => { 'description' => 'Request has succeeded' },
+          '201' => { 'description' => 'Successful Operation' },
+          '204' => { 'description' => 'Request was fulfilled' },
+          '400' => { 'description' => 'NotFound', 'schema' => { '$ref' => '#/definitions/ApiError' } }
+        },
+        'tags' => ['multiple-success-responses'],
+        'operationId' => 'getMultipleSuccessResponses'
       )
       expect(subject['definitions']).to eql(swagger_params_as_response_object)
     end

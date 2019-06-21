@@ -34,7 +34,7 @@ by enforcing correct usage of both possibilities:
 
 ### Upgrading to >= 0.25.0
 
-The global tag set now only includes tags for documented routes. This behaviour has impact in particular for calling the documtation of a specific route.
+The global tag set now only includes tags for documented routes. This behaviour has impact in particular for calling the documentation of a specific route.
 
 ### Upgrading to >= 0.21.0
 

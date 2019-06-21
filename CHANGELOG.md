@@ -7,6 +7,11 @@
 #### Fixes
 
 * Your contribution here.
+
+### 0.33.0 (June 21, 2019)
+
+#### Fixes
+
 * [#747](https://github.com/ruby-grape/grape-swagger/pull/747): Allow multiple different success responses - [@charanftp3](https://github.com/charanpanchagnula).
 * [#746](https://github.com/ruby-grape/grape-swagger/pull/746): Fix path with optional format - [@fnordfish](https://github.com/fnordfish).
 * [#743](https://github.com/ruby-grape/grape-swagger/pull/743): CI: use 2.4.6, 2.5.5 - [@olleolleolle](https://github.com/olleolleolle).

@@ -4,12 +4,13 @@ require 'grape'
 
 require 'grape-swagger/instance'
 
-require 'grape-swagger/version'
-require 'grape-swagger/endpoint'
 require 'grape-swagger/errors'
-
-require 'grape-swagger/doc_methods'
+require 'grape-swagger/version'
 require 'grape-swagger/model_parsers'
+require 'grape-swagger/swagger_2/endpoint'
+require 'grape-swagger/openapi_3/endpoint'
+require 'grape-swagger/openapi_3/doc_methods'
+require 'grape-swagger/swagger_2/doc_methods'
 
 module GrapeSwagger
   class << self
@@ -112,11 +113,10 @@ module SwaggerDocumentationAdder
   include SwaggerRouting
 
   def add_swagger_documentation(options = {})
-    documentation_class = create_documentation_class
-
-    version_for(options)
     options = { target_class: self }.merge(options)
+    version_for(options)
     @target_class = options[:target_class]
+    documentation_class = create_documentation_class(options[:openapi_version])
     auth_wrapper = options[:endpoint_auth_wrapper] || Class.new
 
     use auth_wrapper if auth_wrapper.method_defined?(:before) && !middleware.flatten.include?(auth_wrapper)
@@ -138,6 +138,11 @@ module SwaggerDocumentationAdder
     exclusive_route_keys.each do |key|
       @target_class.combined_namespace_routes[key] = @target_class.combined_routes[key]
     end
+
+    endpoint_type = options[:openapi_version] == '3.0' ? Grape::OpenAPI3Endpoint : Grape::Swagger2Endpoint
+    set_endpoint_type(@target_class, endpoint_type)
+    set_endpoint_type(documentation_class, endpoint_type)
+
     documentation_class
   end
 
@@ -145,6 +150,13 @@ module SwaggerDocumentationAdder
 
   def version_for(options)
     options[:version] = version if version
+  end
+
+  def set_endpoint_type(app, klass)
+    app.endpoints.each do |endpoint|
+      endpoint.class.include(klass)
+      set_endpoint_type(endpoint.options[:app], klass) if endpoint.options[:app]
+    end
   end
 
   def combine_namespaces(app)
@@ -161,9 +173,13 @@ module SwaggerDocumentationAdder
     end
   end
 
-  def create_documentation_class
+  def create_documentation_class(openapi_version)
     Class.new(GrapeInstance) do
-      extend GrapeSwagger::DocMethods
+      if openapi_version == '3.0'
+        extend GrapeOpenAPI::DocMethods
+      else
+        extend GrapeSwagger::DocMethods
+      end
     end
   end
 end

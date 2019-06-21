@@ -11,7 +11,7 @@ RSpec.shared_context 'mock swagger example' do
               id: { type: Integer, desc: 'Identity of Something' },
               text: { type: String, desc: 'Content of something.' },
               links: { type: 'link', is_array: true },
-              others: { type: 'text', is_array: false }
+              others: { type: 'string', is_array: false }
             }
           end
         end
@@ -176,6 +176,229 @@ RSpec.shared_context 'mock swagger example' do
     }
   end
 
+  let(:openapi_json) do
+    {
+      'components' => {
+        'schemas' => {
+          'ApiError' => {
+            'description' => 'This gets Things.',
+            'properties' => { 'mock_data' => { 'description' => "it's a mock", 'type' => 'string' } },
+            'type' => 'object'
+          },
+          'QueryInput' => {
+            'description' => 'nested route inside namespace',
+            'properties' => {
+              'mock_data' => { 'description' => "it's a mock", 'type' => 'string' }
+            },
+            'type' => 'object'
+          }, 'Something' => {
+            'description' => 'This gets Things.',
+            'properties' => {
+              'mock_data' => { 'description' => "it's a mock", 'type' => 'string' }
+            },
+            'type' => 'object'
+          }
+        }
+      },
+      'info' => {
+        'contact' => {
+          'email' => 'Contact@email.com',
+          'name' => 'Contact name',
+          'url' => 'www.The-Contact-URL.org'
+        },
+        'description' => 'A description of the API.',
+        'license' => {
+          'name' => 'The name of the license.',
+          'url' => 'www.The-URL-of-the-license.org'
+        },
+        'termsOfService' => 'www.The-URL-of-the-terms-and-service.com',
+        'title' => 'The API title to be displayed on the API homepage.',
+        'version' => '0.0.1'
+      },
+      'openapi' => '3.0.0',
+      'paths' => {
+        '/dummy/{id}' => {
+          'delete' => {
+            'description' => 'dummy route.',
+            'operationId' => 'deleteDummyId',
+            'parameters' => [{
+              'in' => 'path', 'name' => 'id', 'required' => true, 'schema' => { 'format' => 'int32', 'type' => 'integer' }
+            }],
+            'responses' => {
+              '204' => { 'description' => 'dummy route.' },
+              '401' => { 'content' => { 'application/json' => {} }, 'description' => 'Unauthorized' }
+            },
+            'tags' => ['dummy']
+          }
+        }, '/thing' => {
+          'get' => {
+            'description' => 'This gets Things.',
+            'operationId' => 'getThing',
+            'parameters' => [
+              { 'description' => 'Identity of Something',
+                'in' => 'query',
+                'name' => 'id',
+                'required' => false,
+                'schema' => { 'format' => 'int32', 'type' => 'integer' } },
+              { 'description' => 'Content of something.',
+                'in' => 'query',
+                'name' => 'text',
+                'required' => false,
+                'schema' => { 'type' => 'string' } },
+              { 'in' => 'query',
+                'name' => 'others',
+                'required' => false,
+                'schema' => { 'type' => 'string' } }
+            ],
+            'responses' => {
+              '200' => {
+                'content' => { 'application/json' => {} },
+                'description' => 'This gets Things.'
+              },
+              '401' => {
+                'content' => { 'application/json' => { 'schema' => { '$ref' => '#/components/schemas/ApiError' } } },
+                'description' => 'Unauthorized'
+              }
+            }, 'tags' => ['thing']
+          }, 'post' => {
+            'description' => 'This creates Thing.',
+            'operationId' => 'postThing',
+            'requestBody' => {
+              'content' => {
+                'application/json' => {
+                  'schema' => { 'properties' => {}, 'type' => 'object' }
+                },
+                'application/x-www-form-urlencoded' => {
+                  'schema' => {
+                    'properties' => {
+                      'links' => { 'items' => { 'type' => 'string' }, 'type' => 'array' },
+                      'text' => { 'description' => 'Content of something.', 'type' => 'string' }
+                    },
+                    'required' => %w[text links],
+                    'type' => 'object'
+                  }
+                }
+              }
+            },
+            'responses' => {
+              '201' => { 'description' => 'This creates Thing.' },
+              '422' => { 'content' => { 'application/json' => {} }, 'description' => 'Unprocessible Entity' }
+            },
+            'tags' => ['thing']
+          }
+        },
+        '/thing/{id}' => {
+          'delete' => {
+            'description' => 'This deletes Thing.',
+            'operationId' => 'deleteThingId',
+            'parameters' => [{
+              'in' => 'path',
+              'name' => 'id',
+              'required' => true,
+              'schema' => { 'format' => 'int32', 'type' => 'integer' }
+            }],
+            'responses' => {
+              '200' => {
+                'content' => { 'application/json' => { 'schema' => { '$ref' => '#/components/schemas/Something' } } },
+                'description' => 'This deletes Thing.'
+              }
+            },
+            'tags' => ['thing']
+          },
+          'get' => {
+            'description' => 'This gets Thing.',
+            'operationId' => 'getThingId',
+            'parameters' => [{
+              'in' => 'path',
+              'name' => 'id',
+              'required' => true,
+              'schema' => { 'format' => 'int32', 'type' => 'integer' }
+            }],
+            'responses' => {
+              '200' => { 'content' => { 'application/json' => {} }, 'description' => 'getting a single thing' },
+              '401' => { 'content' => { 'application/json' => {} }, 'description' => 'Unauthorized' }
+            },
+            'tags' => ['thing']
+          },
+          'put' => {
+            'description' => 'This updates Thing.',
+            'operationId' => 'putThingId',
+            'parameters' => [{
+              'in' => 'path',
+              'name' => 'id',
+              'required' => true,
+              'schema' => { 'format' => 'int32', 'type' => 'integer' }
+            }],
+            'requestBody' => {
+              'content' => {
+                'application/json' => { 'schema' => { 'properties' => {}, 'type' => 'object' } },
+                'application/x-www-form-urlencoded' => {
+                  'schema' => {
+                    'properties' => {
+                      'links' => { 'items' => { 'type' => 'string' }, 'type' => 'array' },
+                      'text' => { 'description' => 'Content of something.', 'type' => 'string' }
+                    },
+                    'type' => 'object'
+                  }
+                }
+              }
+            },
+            'responses' => {
+              '200' => {
+                'content' => {
+                  'application/json' => { 'schema' => { '$ref' => '#/components/schemas/Something' } }
+                },
+                'description' => 'This updates Thing.'
+              }
+            },
+            'tags' => ['thing']
+          }
+        },
+        '/thing2' => {
+          'get' => {
+            'description' => 'This gets Things.',
+            'operationId' => 'getThing2',
+            'responses' => {
+              '200' => {
+                'content' => { 'application/json' => { 'schema' => { '$ref' => '#/components/schemas/Something' } } },
+                'description' => 'get Horses'
+              },
+              '401' => {
+                'content' => {
+                  'application/json' => { 'schema' => { '$ref' => '#/components/schemas/ApiError' } }
+                },
+                'description' => 'HorsesOutError'
+              }
+            }, 'tags' => ['thing2']
+          }
+        },
+        '/v3/other_thing/{elements}' => {
+          'get' => {
+            'description' => 'nested route inside namespace',
+            'operationId' => 'getV3OtherThingElements',
+            'responses' => {
+              '200' => {
+                'content' => {
+                  'application/json' => { 'schema' => { '$ref' => '#/components/schemas/QueryInput' } }
+                },
+                'description' => 'nested route inside namespace'
+              }
+            }, 'tags' => ['other_thing'],
+            'x-amazon-apigateway-auth' => { 'type' => 'none' },
+            'x-amazon-apigateway-integration' => { 'httpMethod' => 'get', 'type' => 'aws', 'uri' => 'foo_bar_uri' }
+          }
+        }
+      },
+      'servers' => [{ 'url' => 'http://example.org/api' }],
+      'tags' => [
+        { 'description' => 'Operations about other_things', 'name' => 'other_thing' },
+        { 'description' => 'Operations about things', 'name' => 'thing' },
+        { 'description' => 'Operations about thing2s', 'name' => 'thing2' },
+        { 'description' => 'Operations about dummies', 'name' => 'dummy' }
+      ]
+    }
+  end
+
   let(:swagger_json) do
     {
       'info' => {
@@ -217,7 +440,7 @@ RSpec.shared_context 'mock swagger example' do
               { 'in' => 'query', 'name' => 'id', 'description' => 'Identity of Something', 'type' => 'integer', 'format' => 'int32', 'required' => false },
               { 'in' => 'query', 'name' => 'text', 'description' => 'Content of something.', 'type' => 'string', 'required' => false },
               { 'in' => 'formData', 'name' => 'links', 'type' => 'array', 'items' => { 'type' => 'link' }, 'required' => false },
-              { 'in' => 'query', 'name' => 'others', 'type' => 'text', 'required' => false }
+              { 'in' => 'query', 'name' => 'others', 'type' => 'string', 'required' => false }
             ],
             'responses' => { '200' => { 'description' => 'This gets Things.' }, '401' => { 'description' => 'Unauthorized', 'schema' => { '$ref' => '#/definitions/ApiError' } } },
             'tags' => ['thing'],

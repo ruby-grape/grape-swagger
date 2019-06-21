@@ -55,8 +55,17 @@ module GrapeSwagger
           response = path[method][:responses][status]
           return if response.nil?
 
-          return response[:schema]['$ref'].split('/').last if response[:schema].key?('$ref')
-          return response[:schema]['items']['$ref'].split('/').last if response[:schema].key?('items')
+          # Swagger 2
+          if response[:schema]
+            return response[:schema]['$ref'].split('/').last if response[:schema].key?('$ref')
+            return response[:schema]['items']['$ref'].split('/').last if response[:schema].key?('items')
+          end
+
+          # OpenAPI 3
+          response[:content].each do |_,v|
+            return v[:schema]['$ref'].split('/').last if v[:schema].key?('$ref')
+            return v[:schema]['items']['$ref'].split('/').last if v[:schema].key?('items')
+          end
         end
 
         def add_extension_to(part, extensions)

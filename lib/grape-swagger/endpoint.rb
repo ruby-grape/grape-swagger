@@ -78,8 +78,7 @@ module Grape
     def path_and_definition_objects(namespace_routes, options)
       @paths = {}
       @definitions = {}
-      namespace_routes.each_key do |key|
-        routes = namespace_routes[key]
+      namespace_routes.each_value do |routes|
         path_item(routes, options)
       end
 

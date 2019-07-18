@@ -111,7 +111,7 @@ describe '751 deeply nested objects' do
   end
 
   describe 'Correctness of vrp Services' do
-    let(:get_service_response) { subject['definitions']['postVrpSubmit']['properties']['vrp']['items']['properties']['services'] }
+    let(:get_service_response) { subject['definitions']['postVrpSubmit']['properties']['vrp']['properties']['services'] }
     specify do
       expect(get_service_response).to include(
         'type' => 'array',
@@ -129,32 +129,29 @@ describe '751 deeply nested objects' do
             },
             'activity' => {
               'type' => 'object',
-              'items' => {
-                'type' => 'object',
-                'properties' => {
-                  'duration' => {
-                    'type' => 'string'
-                  },
-                  'point_id' => {
-                    'type' => 'string'
-                  },
-                  'timewindows' => {
-                    'type' => 'array',
-                    'items' => {
-                      'type' => 'object',
-                      'properties' => {
-                        'start' => {
-                          'type' => 'string'
-                        },
-                        'end' => {
-                          'type' => 'string'
-                        }
+              'properties' => {
+                'duration' => {
+                  'type' => 'string'
+                },
+                'point_id' => {
+                  'type' => 'string'
+                },
+                'timewindows' => {
+                  'type' => 'array',
+                  'items' => {
+                    'type' => 'object',
+                    'properties' => {
+                      'start' => {
+                        'type' => 'string'
+                      },
+                      'end' => {
+                        'type' => 'string'
                       }
                     }
                   }
-                },
-                'required' => ['point_id']
-              }
+                }
+              },
+              'required' => ['point_id']
             }, 'activities' => {
               'type' => 'array',
               'items' => {

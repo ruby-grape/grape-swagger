@@ -51,21 +51,32 @@ module GrapeSwagger
 
         def move_params_to_new(definition, params)
           params, nested_params = params.partition { |x| !x[:name].to_s.include?('[') }
+          params.each do |param|
+            property = param[:name]
+            param_properties, param_required = build_properties([param])
+            add_properties_to_definition(definition, param_properties, param_required)
+            related_nested_params, nested_params = nested_params.partition { |x| x[:name].start_with?("#{property}[") }
+            prepare_nested_names(property, related_nested_params)
 
-          unless params.blank?
-            properties, required = build_properties(params)
-            add_properties_to_definition(definition, properties, required)
+            next if related_nested_params.blank?
+
+            nested_definition = if should_expose_as_array?([param])
+                                  move_params_to_new(array_type, related_nested_params)
+                                else
+                                  move_params_to_new(object_type, related_nested_params)
+                                end
+            if definition.key?(:items)
+              definition[:items][:properties][property.to_sym].deep_merge!(nested_definition)
+            else
+              definition[:properties][property.to_sym].deep_merge!(nested_definition)
+            end
           end
-
-          nested_properties = build_nested_properties(nested_params) unless nested_params.blank?
-          add_properties_to_definition(definition, nested_properties, []) unless nested_params.blank?
+          definition
         end
 
         def build_properties(params)
           properties = {}
           required = []
-
-          prepare_nested_types(params) if should_expose_as_array?(params)
 
           params.each do |param|
             name = param[:name].to_sym
@@ -100,28 +111,6 @@ module GrapeSwagger
             else
               memo[x] = value
             end
-          end
-        end
-
-        def build_nested_properties(params, properties = {})
-          property = params.bsearch { |x| x[:name].include?('[') }[:name].split('[').first
-
-          nested_params, params = params.partition { |x| x[:name].start_with?("#{property}[") }
-          prepare_nested_names(property, nested_params)
-
-          recursive_call(properties, property, nested_params) unless nested_params.empty?
-          build_nested_properties(params, properties) unless params.empty?
-
-          properties
-        end
-
-        def recursive_call(properties, property, nested_params)
-          if should_expose_as_array?(nested_params)
-            properties[property.to_sym] = array_type
-            move_params_to_new(properties[property.to_sym][:items], nested_params)
-          else
-            properties[property.to_sym] = object_type
-            move_params_to_new(properties[property.to_sym], nested_params)
           end
         end
 
@@ -175,22 +164,6 @@ module GrapeSwagger
 
         def object_type
           { type: 'object', properties: {} }
-        end
-
-        def prepare_nested_types(params)
-          params.each do |param|
-            next unless param[:items]
-
-            param[:type] = if param[:items][:type] == 'array'
-                             'string'
-                           elsif param[:items].key?('$ref')
-                             param[:type] = 'object'
-                           else
-                             param[:items][:type]
-                           end
-            param[:format] = param[:items][:format] if param[:items][:format]
-            param.delete(:items) if param[:type] != 'object'
-          end
         end
 
         def prepare_nested_names(property, params)

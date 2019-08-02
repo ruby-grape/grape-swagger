@@ -28,7 +28,7 @@ module GrapeSwagger
             name += '[]' if array_use_braces?(options)
           end
 
-          memo[name] = options #unless %w[Hash Array].include?(param_type) && !options.key?(:documentation)
+          memo[name] = options
         end
       end
 

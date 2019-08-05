@@ -11,6 +11,7 @@ module GrapeSwagger
             end
             parameters.reject! { |p| p[:name] == b[:name] } if move_down(b, related_parameters)
           end
+          parameters
         end
 
         def move_down(parameter, related_parameters)

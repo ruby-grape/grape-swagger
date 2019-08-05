@@ -36,4 +36,56 @@ describe GrapeSwagger::DocMethods::FormatData do
       expect(subject.to_format(params).first).to include(name: 'param1[param2]', type: 'string')
     end
   end
+
+  context 'when params contain a complex array' do
+    let(:params) do
+      [
+        { name: 'id', required: true, type: 'string' },
+        { name: 'description', required: false, type: 'string' },
+        { name: 'stuffs', required: true, type: 'array' },
+        { name: 'stuffs[id]', required: true, type: 'string' }
+      ]
+    end
+
+    let(:expected_params) do
+      [
+        { name: 'id', required: true, type: 'string' },
+        { name: 'description', required: false, type: 'string' },
+        { name: 'stuffs[id]', required: true, type: 'array', items: { type: 'string' } }
+      ]
+    end
+
+    it 'parses params correctly and adds array type all concerned elements' do
+      expect(subject.to_format(params)).to eq expected_params
+    end
+
+    context 'when array params are not contiguous with parent array' do
+      let(:params) do
+        [
+          { name: 'id', required: true, type: 'string' },
+          { name: 'description', required: false, type: 'string' },
+          { name: 'stuffs', required: true, type: 'array' },
+          { name: 'stuffs[owners]', required: true, type: 'array' },
+          { name: 'stuffs[creators]', required: true, type: 'array' },
+          { name: 'stuffs[owners][id]', required: true, type: 'string' },
+          { name: 'stuffs[creators][id]', required: true, type: 'string' },
+          { name: 'stuffs_and_things', required: true, type: 'string' }
+        ]
+      end
+
+      let(:expected_params) do
+        [
+          { name: 'id', required: true, type: 'string' },
+          { name: 'description', required: false, type: 'string' },
+          { name: 'stuffs[owners][id]', required: true, type: 'array', items: { type: 'string' } },
+          { name: 'stuffs[creators][id]', required: true, type: 'array', items: { type: 'string' } },
+          { name: 'stuffs_and_things', required: true, type: 'string' }
+        ]
+      end
+
+      it 'parses params correctly and adds array type all concerned elements' do
+        expect(subject.to_format(params)).to eq expected_params
+      end
+    end
+  end
 end

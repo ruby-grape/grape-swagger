@@ -221,7 +221,8 @@ module Grape
 
     def add_array(parameter, related_parameters)
       related_parameters.each do |p|
-        p[:items] = { type: p[:type], format: p[:format], enum: p[:enum], is_array: p[:is_array] }
+        p_type = p[:type] == 'array' ? 'string' : p[:type]
+        p[:items] = { type: p_type, format: p[:format], enum: p[:enum], is_array: p[:is_array] }
         p[:items].delete_if { |_k, v| v.nil? }
         p[:type] = 'array'
         p[:is_array] = parameter[:is_array]

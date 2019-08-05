@@ -43,28 +43,6 @@ describe '751 deeply nested objects' do
           end
           this.mutually_exclusive :activity, :activities
         end
-
-        def self.vrp_request_vehicle(this)
-          this.requires(:id, type: String, allow_blank: false)
-          this.optional(:cost_time_multiplier, type: Float)
-
-          this.optional(:matrix_id, type: String)
-          this.optional(:router_mode, type: String)
-          this.exactly_one_of :matrix_id, :router_mode
-
-          this.optional(:skills, type: Array[Array[String]])
-
-          this.optional(:start_point_id, type: String)
-          this.optional(:end_point_id, type: String)
-
-          this.optional(:sequence_timewindows, type: Array) do
-            Vrp.vrp_request_timewindow(self)
-          end
-          this.optional(:timewindow, type: Hash) do
-            Vrp.vrp_request_timewindow(self)
-          end
-          this.mutually_exclusive :sequence_timewindows, :timewindow
-        end
       end
 
       namespace :vrp do
@@ -78,10 +56,6 @@ describe '751 deeply nested objects' do
 
               optional(:services, type: Array) do
                 Vrp.vrp_request_service(self)
-              end
-
-              optional(:vehicles, type: Array) do
-                Vrp.vrp_request_vehicle(self)
               end
             end
           end
@@ -205,74 +179,6 @@ describe '751 deeply nested objects' do
                   }
                 },
                 'required' => ['point_id']
-              }
-            }
-          },
-          'required' => ['id']
-        }
-      )
-    end
-  end
-
-  describe 'Correctness of vrp Vehicles' do
-    let(:get_points_response) { subject['definitions']['postVrpSubmit']['properties']['vrp']['properties']['vehicles'] }
-    specify do
-      expect(get_points_response).to eql(
-        'type' => 'array',
-        'items' => {
-          'type' => 'object',
-          'properties' => {
-            'id' => {
-              'type' => 'string'
-            },
-            'cost_time_multiplier' => {
-              'type' => 'float',
-              'format' => 'number'
-            },
-            'matrix_id' => {
-              'type' => 'string'
-            },
-            'router_mode' => {
-              'type' => 'string'
-            },
-            'skills' => {
-              'type' => 'array',
-              'items' => {
-                'type' => 'array',
-                'items' => {
-                  'type' => 'string'
-                }
-              }
-            },
-            'start_point_id' => {
-              'type' => 'string'
-            },
-            'end_point_id' => {
-              'type' => 'string'
-            },
-            'timewindow' => {
-              'type' => 'object',
-              'properties' => {
-                'start' => {
-                  'type' => 'string'
-                },
-                'end' => {
-                  'type' => 'string'
-                }
-              }
-            },
-            'sequence_timewindows' => {
-              'type' => 'array',
-              'items' => {
-                'type' => 'object',
-                'properties' => {
-                  'start' => {
-                    'type' => 'string'
-                  },
-                  'end' => {
-                    'type' => 'string'
-                  }
-                }
               }
             }
           },

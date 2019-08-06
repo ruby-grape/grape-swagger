@@ -26,19 +26,9 @@ module GrapeSwagger
             options[:is_array] = true
 
             name += '[]' if array_use_braces?(options)
-          else
-            keys = array_keys.find_all { |key| name.start_with? "#{key}[" }
-            if keys.any?
-              options[:is_array] = true
-              if array_use_braces?(options)
-                keys.sort.reverse_each do |key|
-                  name = name.sub(key, "#{key}[]")
-                end
-              end
-            end
           end
 
-          memo[name] = options unless %w[Hash Array].include?(param_type) && !options.key?(:documentation)
+          memo[name] = options
         end
       end
 

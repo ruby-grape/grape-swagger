@@ -178,10 +178,10 @@ module Grape
       parameters = partition_params(route, options).map do |param, value|
         value = { required: false }.merge(value) if value.is_a?(Hash)
         _, value = default_type([[param, value]]).first if value == ''
-        if value[:type]
-          expose_params(value[:type])
-        elsif value[:documentation]
+        if value.dig(:documentation, :type)
           expose_params(value[:documentation][:type])
+        elsif value[:type]
+          expose_params(value[:type])
         end
         GrapeSwagger::DocMethods::ParseParams.call(param, value, path, route, @definitions)
       end

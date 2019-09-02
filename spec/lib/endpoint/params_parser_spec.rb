@@ -56,13 +56,53 @@ describe GrapeSwagger::Endpoint::ParamsParser do
     end
 
     context 'when param is nested in a param of hash type' do
-      let(:params) { [['param_1', { type: 'Hash' }], ['param_1[param_2]', { type: 'String' }]] }
+      let(:params) { [param_1, param_2] }
+      let(:param_1) { ['param_1', { type: 'Hash' }] }
+      let(:param_2) { ['param_1[param_2]', { type: 'String' }] }
 
       context 'and array_use_braces setting set to true' do
         let(:settings) { { array_use_braces: true } }
 
-        it 'does not add braces to the param key' do
-          expect(parse_request_params.keys.last).to eq 'param_1[param_2]'
+        context 'and param is of simple type' do
+          it 'does not add braces to the param key' do
+            expect(parse_request_params.keys.last).to eq 'param_1[param_2]'
+          end
+        end
+
+        context 'and param is of array type' do
+          let(:param_2) { ['param_1[param_2]', { type: 'Array[String]' }] }
+
+          it 'adds braces to the param key' do
+            expect(parse_request_params.keys.last).to eq 'param_1[param_2][]'
+          end
+
+          context 'and `param_type` option is set to body' do
+            let(:param_2) do
+              ['param_1[param_2]', { type: 'Array[String]', documentation: { param_type: 'body' } }]
+            end
+
+            it 'does not add braces to the param key' do
+              expect(parse_request_params.keys.last).to eq 'param_1[param_2]'
+            end
+          end
+
+          context 'and `in` option is set to body' do
+            let(:param_2) do
+              ['param_1[param_2]', { type: 'Array[String]', documentation: { in: 'body' } }]
+            end
+
+            it 'does not add braces to the param key' do
+              expect(parse_request_params.keys.last).to eq 'param_1[param_2]'
+            end
+          end
+
+          context 'and hash `param_type` option is set to body' do
+            let(:param_1) { ['param_1', { type: 'Hash', documentation: { param_type: 'body' } }] }
+
+            it 'does not add braces to the param key' do
+              expect(parse_request_params.keys.last).to eq 'param_1[param_2]'
+            end
+          end
         end
       end
     end

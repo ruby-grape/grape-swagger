@@ -6,7 +6,7 @@
 
 #### Fixes
 
-* Your contribution here.
+* [#757](https://github.com/ruby-grape/grape-swagger/pull/757): Fix `array_use_braces` for nested body params - [@bikolya](https://github.com/bikolya).
 
 ### 0.33.0 (June 21, 2019)
 

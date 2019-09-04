@@ -251,10 +251,10 @@ module Grape
     def tag_object(route, path)
       version = GrapeSwagger::DocMethods::Version.get(route)
       version = [version] unless version.is_a?(Array)
-
+      prefix = route.prefix.to_s.split('/').reject(&:empty?)
       Array(
         path.split('{')[0].split('/').reject(&:empty?).delete_if do |i|
-          i == route.prefix.to_s || version.map(&:to_s).include?(i)
+          prefix.include?(i) || version.map(&:to_s).include?(i)
         end.first
       ).presence
     end

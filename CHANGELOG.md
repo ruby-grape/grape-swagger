@@ -6,7 +6,7 @@
 
 #### Fixes
 
-* Your contribution here.
+* [#756](https://github.com/ruby-grape/grape-swagger/pull/756): Fix reference creation when custom type for documentation is provided - [@bikolya](https://github.com/bikolya).
 
 ### 0.33.0 (June 21, 2019)
 

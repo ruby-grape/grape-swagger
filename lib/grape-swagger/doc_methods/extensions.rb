@@ -87,7 +87,12 @@ module GrapeSwagger
           part.select { |x| x == identifier }
         end
 
-        def method
+        def method(*args)
+          # We're shadowing Object.method(:symbol) here so we provide
+          # a compatibility layer for code that introspects the methods
+          # of this class
+          return super if args.size.positive?
+
           @route.request_method.downcase.to_sym
         end
       end

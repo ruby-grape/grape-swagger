@@ -10,7 +10,9 @@ describe 'document hash and array' do
       class TestApi < Grape::API
         format :json
 
-        documentation = ::Entities::DocumentedHashAndArrayModel.documentation if ::Entities::DocumentedHashAndArrayModel.respond_to?(:documentation)
+        if ::Entities::DocumentedHashAndArrayModel.respond_to?(:documentation)
+          documentation = ::Entities::DocumentedHashAndArrayModel.documentation
+        end
 
         desc 'This returns something'
         namespace :arbitrary do

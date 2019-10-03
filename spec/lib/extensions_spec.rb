@@ -3,6 +3,16 @@
 require 'spec_helper'
 
 describe GrapeSwagger::DocMethods::Extensions do
+  context 'it should not break method introspection' do
+    describe '.method' do
+      describe 'method introspection' do
+        specify do
+          expect(described_class.method(described_class.methods.first)).to be_a(Method)
+        end
+      end
+    end
+  end
+
   describe '#find_definition' do
     subject { described_class }
 

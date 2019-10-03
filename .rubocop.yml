@@ -4,12 +4,12 @@ AllCops:
   Exclude:
     - vendor/**/*
     - example/**/*
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.6
 
 Layout/EmptyLinesAroundArguments:
   Enabled: false
 
-Layout/IndentHash:
+Layout/IndentFirstHashElement:
   EnforcedStyle: consistent
 
 Metrics/BlockLength:

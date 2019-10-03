@@ -900,6 +900,45 @@ end
 },
 ```
 
+#### Multiple status codes for response <a name="multiple-status-response"></a>
+
+Multiple values can be provided for `success` and `failure` attributes in the response.
+
+```ruby
+desc 'Attach a field to an entity through a PUT',
+    success: [
+      { code: 201, model: Entities::UseResponse, message: 'Successfully created' },
+      { code: 204, message: 'Already exists' }
+    ],
+    failure: [
+      { code: 400, message: 'Bad request' },
+      { code: 404, message: 'Not found' }
+    ]  
+put do
+  # your code comes here
+end
+```
+
+```json
+"responses": {
+  "201": {
+    "description": "Successfully created",
+    "schema": {
+      "$ref": "#/definitions/UseResponse"
+    }
+  },
+  "204": {
+    "description": "Already exists"
+  },
+  "400": {
+    "description": "Bad request"
+  },
+  "404": {
+    "description": "Not found"
+  }
+},
+```
+
 
 #### File response <a name="file-response"></a>
 

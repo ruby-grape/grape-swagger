@@ -123,10 +123,10 @@ describe 'Group Params as Array' do
             'type' => 'object',
             'properties' => {
               'array_of_string' => {
-                'type' => 'string', 'description' => 'nested array of strings'
+                'items' => { 'type' => 'string' }, 'type' => 'array', 'description' => 'nested array of strings'
               },
               'array_of_integer' => {
-                'type' => 'integer', 'format' => 'int32', 'description' => 'nested array of integers'
+                'items' => { 'type' => 'integer', 'format' => 'int32' }, 'type' => 'array', 'description' => 'nested array of integers'
               }
             },
             'required' => %w[array_of_string array_of_integer]

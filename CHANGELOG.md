@@ -3,9 +3,11 @@
 #### Features
 
 * Your contribution here.
+* [#761](https://github.com/ruby-grape/grape-swagger/pull/761): Add an option to configure root element for responses - [@bikolya](https://github.com/bikolya).
 
 #### Fixes
 
+* Your contribution here.
 * [#757](https://github.com/ruby-grape/grape-swagger/pull/757): Fix `array_use_braces` for nested body params - [@bikolya](https://github.com/bikolya).
 * [#756](https://github.com/ruby-grape/grape-swagger/pull/756): Fix reference creation when custom type for documentation is provided - [@bikolya](https://github.com/bikolya).
 

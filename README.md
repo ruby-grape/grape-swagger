@@ -189,6 +189,7 @@ end
 * [base_path](#base_path)
 * [mount_path](#mount_path)
 * [add_base_path](#add_base_path)
+* [add_root](#add_root)
 * [add_version](#add_version)
 * [doc_version](#doc_version)
 * [endpoint_auth_wrapper](#endpoint_auth_wrapper)
@@ -246,6 +247,13 @@ Add `basePath` key to the documented path keys, default is: `false`.
 ```ruby
 add_swagger_documentation \
    add_base_path: true # only if base_path given
+```
+
+#### add_root: <a name="add_root"></a>
+Add root element to all the responses, default is: `false`.
+```ruby
+add_swagger_documentation \
+   add_root: true
 ```
 
 #### add_version: <a name="add_version"></a>
@@ -447,6 +455,7 @@ add_swagger_documentation \
 * [Extensions](#extensions)
 * [Response examples documentation](#response-examples)
 * [Response headers documentation](#response-headers)
+* [Adding root element to responses](#response-root)
 
 #### Swagger Header Parameters  <a name="headers"></a>
 
@@ -913,7 +922,7 @@ desc 'Attach a field to an entity through a PUT',
     failure: [
       { code: 400, message: 'Bad request' },
       { code: 404, message: 'Not found' }
-    ]  
+    ]
 put do
   # your code comes here
 end
@@ -1179,6 +1188,60 @@ The result will look like following:
 ```
 
 Failure information can be passed as an array of arrays or an array of hashes.
+
+#### Adding root element to responses <a name="response-root"></a>
+
+You can specify a custom root element for a successful response:
+
+```ruby
+route_setting :swagger, root: 'cute_kitten'
+desc 'Get a kitten' do
+  http_codes [{ code: 200, model: Entities::Kitten }]
+end
+get '/kittens/:id' do
+end
+```
+
+The result will look like following:
+
+```
+  "responses": {
+    "200": {
+      "description": "Get a kitten",
+      "schema": {
+        "type": "object",
+        "properties": { "cute_kitten": { "$ref": "#/definitions/Kitten" } }
+      }
+    }
+  }
+```
+
+If you specify `true`, the value of the root element will be deduced based on the model name.
+E.g. in the following example the root element will be "kittens":
+
+```ruby
+route_setting :swagger, root: true
+desc 'Get kittens' do
+  is_array true
+  http_codes [{ code: 200, model: Entities::Kitten }]
+end
+get '/kittens' do
+end
+```
+
+The result will look like following:
+
+```
+  "responses": {
+    "200": {
+      "description": "Get kittens",
+      "schema": {
+        "type": "object",
+        "properties": { "type": "array", "items": { "kittens": { "$ref": "#/definitions/Kitten" } } }
+      }
+    }
+  }
+```
 
 ## Using Grape Entities <a name="grape-entity"></a>
 

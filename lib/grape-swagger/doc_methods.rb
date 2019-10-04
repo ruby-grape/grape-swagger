@@ -103,6 +103,7 @@ module GrapeSwagger
         base_path: nil,
         add_base_path: false,
         add_version: true,
+        add_root: false,
         hide_documentation_path: true,
         format: :json,
         authorizations: nil,

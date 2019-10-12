@@ -29,12 +29,25 @@ describe 'namespace tags check while using prefix and version' do
           end
         end
       end
+
+      class NestedPrefixApi < Grape::API
+        version :v1
+        prefix 'nested_prefix/api'
+
+        namespace :deep_namespace do
+          desc 'This gets something within a deeply nested resource'
+          get '/deep' do
+            { bla: 'something' }
+          end
+        end
+      end
     end
 
     class TagApi < Grape::API
       prefix :api
       mount TheApi::CascadingVersionApi
       mount TheApi::NamespaceApi
+      mount TheApi::NestedPrefixApi
       add_swagger_documentation
     end
   end
@@ -55,7 +68,8 @@ describe 'namespace tags check while using prefix and version' do
           { 'name' => 'hudson', 'description' => 'Operations about hudsons' },
           { 'name' => 'colorado', 'description' => 'Operations about colorados' },
           { 'name' => 'thames', 'description' => 'Operations about thames' },
-          { 'name' => 'niles', 'description' => 'Operations about niles' }
+          { 'name' => 'niles', 'description' => 'Operations about niles' },
+          { 'name' => 'deep_namespace', 'description' => 'Operations about deep_namespaces' }
         ]
       )
 

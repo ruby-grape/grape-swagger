@@ -8,6 +8,7 @@
 #### Fixes
 
 * Your contribution here.
+* [#758](https://github.com/ruby-grape/grape-swagger/pull/758): Handle cases where a route's prefix is a nested URL - [@SimonKaluza](https://github.com/simonkaluza).
 * [#757](https://github.com/ruby-grape/grape-swagger/pull/757): Fix `array_use_braces` for nested body params - [@bikolya](https://github.com/bikolya).
 * [#756](https://github.com/ruby-grape/grape-swagger/pull/756): Fix reference creation when custom type for documentation is provided - [@bikolya](https://github.com/bikolya).
 

@@ -21,6 +21,9 @@
 * [#743](https://github.com/ruby-grape/grape-swagger/pull/743): CI: use 2.4.6, 2.5.5 - [@olleolleolle](https://github.com/olleolleolle).
 * [#737](https://github.com/ruby-grape/grape-swagger/pull/737): Add swagger endpoint guard to both doc endpoints - [@urkle](https://github.com/urkle).
 
+#### Changes
+* [#749](https://github.com/ruby-grape/grape-swagger/pull/749) Drop support for Ruby 2.3 and below - [@LeFnord](https://github.com/LeFnord).
+
 ### 0.32.1 (December 7, 2018)
 
 #### Fixes

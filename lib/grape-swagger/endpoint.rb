@@ -78,8 +78,7 @@ module Grape
     def path_and_definition_objects(namespace_routes, options)
       @paths = {}
       @definitions = {}
-      namespace_routes.each_key do |key|
-        routes = namespace_routes[key]
+      namespace_routes.each_value do |routes|
         path_item(routes, options)
       end
 
@@ -121,7 +120,7 @@ module Grape
       method[:consumes]    = consumes_object(route, options[:format])
       method[:parameters]  = params_object(route, options, path)
       method[:security]    = security_object(route)
-      method[:responses]   = response_object(route)
+      method[:responses]   = response_object(route, options)
       method[:tags]        = route.options.fetch(:tags, tag_object(route, path))
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method[:deprecated] = deprecated_object(route)
@@ -179,10 +178,10 @@ module Grape
       parameters = partition_params(route, options).map do |param, value|
         value = { required: false }.merge(value) if value.is_a?(Hash)
         _, value = default_type([[param, value]]).first if value == ''
-        if value[:type]
-          expose_params(value[:type])
-        elsif value[:documentation]
+        if value.dig(:documentation, :type)
           expose_params(value[:documentation][:type])
+        elsif value[:type]
+          expose_params(value[:type])
         end
         GrapeSwagger::DocMethods::ParseParams.call(param, value, path, route, @definitions)
       end
@@ -191,10 +190,12 @@ module Grape
         parameters = GrapeSwagger::DocMethods::MoveParams.to_definition(path, parameters, route, @definitions)
       end
 
+      GrapeSwagger::DocMethods::FormatData.to_format(parameters)
+
       parameters.presence
     end
 
-    def response_object(route)
+    def response_object(route, options)
       codes = http_codes_from_route(route)
       codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2], examples: x[3], headers: x[4] } : x }
 
@@ -219,7 +220,7 @@ module Grape
 
         @definitions[response_model][:description] = description_object(route)
 
-        memo[value[:code]][:schema] = build_reference(route, value, response_model)
+        memo[value[:code]][:schema] = build_reference(route, value, response_model, options)
         memo[value[:code]][:examples] = value[:examples] if value[:examples]
       end
     end
@@ -238,39 +239,49 @@ module Grape
     end
 
     def success_codes_from_route(route)
-      default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
-      if @entity.is_a?(Hash)
-        default_code[:code] = @entity[:code] if @entity[:code].present?
-        default_code[:model] = @entity[:model] if @entity[:model].present?
-        default_code[:message] = @entity[:message] || route.description || default_code[:message].sub('{item}', @item)
-        default_code[:examples] = @entity[:examples] if @entity[:examples]
-        default_code[:headers] = @entity[:headers] if @entity[:headers]
-      else
-        default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
-        default_code[:model] = @entity if @entity
-        default_code[:message] = route.description || default_code[:message].sub('{item}', @item)
+      if @entity.is_a?(Array)
+        return @entity.map do |entity|
+          success_code_from_entity(route, entity)
+        end
       end
 
-      [default_code]
+      [success_code_from_entity(route, @entity)]
     end
 
     def tag_object(route, path)
       version = GrapeSwagger::DocMethods::Version.get(route)
       version = [version] unless version.is_a?(Array)
-
+      prefix = route.prefix.to_s.split('/').reject(&:empty?)
       Array(
         path.split('{')[0].split('/').reject(&:empty?).delete_if do |i|
-          i == route.prefix.to_s || version.map(&:to_s).include?(i)
+          prefix.include?(i) || version.map(&:to_s).include?(i)
         end.first
       ).presence
     end
 
     private
 
-    def build_reference(route, value, response_model)
+    def build_reference(route, value, response_model, settings)
       # TODO: proof that the definition exist, if model isn't specified
       reference = { '$ref' => "#/definitions/#{response_model}" }
-      route.options[:is_array] && value[:code] < 300 ? { type: 'array', items: reference } : reference
+      return reference unless value[:code] < 300
+
+      reference = { type: 'array', items: reference } if route.options[:is_array]
+      build_root(route, reference, response_model, settings)
+    end
+
+    def build_root(route, reference, response_model, settings)
+      default_root = route.options[:is_array] ? response_model.downcase.pluralize : response_model.downcase
+      case route.settings.dig(:swagger, :root)
+      when true
+        { type: 'object', properties: { default_root => reference } }
+      when false
+        reference
+      when nil
+        settings[:add_root] ? { type: 'object', properties: { default_root => reference } } : reference
+      else
+        { type: 'object', properties: { route.settings.dig(:swagger, :root) => reference } }
+      end
     end
 
     def file_response?(value)
@@ -352,6 +363,23 @@ module Grape
       return route_hidden unless route_hidden.is_a?(Proc)
 
       options[:token_owner] ? route_hidden.call(send(options[:token_owner].to_sym)) : route_hidden.call
+    end
+
+    def success_code_from_entity(route, entity)
+      default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
+      if entity.is_a?(Hash)
+        default_code[:code] = entity[:code] if entity[:code].present?
+        default_code[:model] = entity[:model] if entity[:model].present?
+        default_code[:message] = entity[:message] || route.description || default_code[:message].sub('{item}', @item)
+        default_code[:examples] = entity[:examples] if entity[:examples]
+        default_code[:headers] = entity[:headers] if entity[:headers]
+      else
+        default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
+        default_code[:model] = entity if entity
+        default_code[:message] = route.description || default_code[:message].sub('{item}', @item)
+      end
+
+      default_code
     end
   end
 end

@@ -4,6 +4,7 @@ require 'grape-swagger/doc_methods/status_codes'
 require 'grape-swagger/doc_methods/produces_consumes'
 require 'grape-swagger/doc_methods/data_type'
 require 'grape-swagger/doc_methods/extensions'
+require 'grape-swagger/doc_methods/format_data'
 require 'grape-swagger/doc_methods/operation_id'
 require 'grape-swagger/doc_methods/optional_object'
 require 'grape-swagger/doc_methods/path_string'
@@ -102,6 +103,7 @@ module GrapeSwagger
         base_path: nil,
         add_base_path: false,
         add_version: true,
+        add_root: false,
         hide_documentation_path: true,
         format: :json,
         authorizations: nil,

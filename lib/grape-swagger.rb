@@ -26,7 +26,7 @@ module SwaggerRouting
   def combine_routes(app, doc_klass)
     app.routes.each do |route|
       route_path = route.path
-      route_match = route_path.split(/^.*?#{route.prefix.to_s}/).last
+      route_match = route_path.split(/^.*?#{route.prefix}/).last
       next unless route_match
 
       route_match = route_match.match('\/([\w|-]*?)[\.\/\(]') || route_match.match('\/([\w|-]*)$')

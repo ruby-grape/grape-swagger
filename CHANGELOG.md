@@ -3,11 +3,26 @@
 #### Features
 
 * Your contribution here.
+* [#761](https://github.com/ruby-grape/grape-swagger/pull/761): Add an option to configure root element for responses - [@bikolya](https://github.com/bikolya).
 
 #### Fixes
 
 * Your contribution here.
+* [#758](https://github.com/ruby-grape/grape-swagger/pull/758): Handle cases where a route's prefix is a nested URL - [@SimonKaluza](https://github.com/simonkaluza).
+* [#757](https://github.com/ruby-grape/grape-swagger/pull/757): Fix `array_use_braces` for nested body params - [@bikolya](https://github.com/bikolya).
+* [#756](https://github.com/ruby-grape/grape-swagger/pull/756): Fix reference creation when custom type for documentation is provided - [@bikolya](https://github.com/bikolya).
+
+### 0.33.0 (June 21, 2019)
+
+#### Fixes
+
+* [#747](https://github.com/ruby-grape/grape-swagger/pull/747): Allow multiple different success responses - [@charanftp3](https://github.com/charanpanchagnula).
+* [#746](https://github.com/ruby-grape/grape-swagger/pull/746): Fix path with optional format - [@fnordfish](https://github.com/fnordfish).
+* [#743](https://github.com/ruby-grape/grape-swagger/pull/743): CI: use 2.4.6, 2.5.5 - [@olleolleolle](https://github.com/olleolleolle).
 * [#737](https://github.com/ruby-grape/grape-swagger/pull/737): Add swagger endpoint guard to both doc endpoints - [@urkle](https://github.com/urkle).
+
+#### Changes
+* [#749](https://github.com/ruby-grape/grape-swagger/pull/749) Drop support for Ruby 2.3 and below - [@LeFnord](https://github.com/LeFnord).
 
 ### 0.32.1 (December 7, 2018)
 

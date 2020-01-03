@@ -3,7 +3,10 @@
 #### Features
 
 * Your contribution here.
+* [#768](https://github.com/ruby-grape/grape-swagger/pull/768): Uses ruby 2.7, fixes grape to 1.2.5 (cause of dry-types) - [@LeFnord](https://github.com/LeFnord).
 * [#761](https://github.com/ruby-grape/grape-swagger/pull/761): Add an option to configure root element for responses - [@bikolya](https://github.com/bikolya).
+* [#749](https://github.com/ruby-grape/grape-swagger/pull/749) Drop support for Ruby 2.3 and below - [@LeFnord](https://github.com/LeFnord).
+
 
 #### Fixes
 
@@ -11,6 +14,7 @@
 * [#758](https://github.com/ruby-grape/grape-swagger/pull/758): Handle cases where a route's prefix is a nested URL - [@SimonKaluza](https://github.com/simonkaluza).
 * [#757](https://github.com/ruby-grape/grape-swagger/pull/757): Fix `array_use_braces` for nested body params - [@bikolya](https://github.com/bikolya).
 * [#756](https://github.com/ruby-grape/grape-swagger/pull/756): Fix reference creation when custom type for documentation is provided - [@bikolya](https://github.com/bikolya).
+* [#764](https://github.com/ruby-grape/grape-swagger/pull/764): Fix root element for multi-word entities - [@bikolya](https://github.com/bikolya).
 
 ### 0.33.0 (June 21, 2019)
 

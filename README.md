@@ -104,9 +104,9 @@ Also added support for [representable](https://github.com/apotonick/representabl
 
 ```ruby
 # For Grape::Entity ( https://github.com/ruby-grape/grape-entity )
-gem 'grape-swagger-entity'
+gem 'grape-swagger-entity', '~> 0.3'
 # For representable ( https://github.com/apotonick/representable )
-gem 'grape-swagger-representable'
+gem 'grape-swagger-representable', '~> 0.2'
 ```
 
 If you are not using Rails, make sure to load the parser inside your application initialization logic, e.g., via `require 'grape-swagger/entity'` or `require 'grape-swagger/representable'`.

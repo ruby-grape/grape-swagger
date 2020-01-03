@@ -58,20 +58,27 @@ describe 'referenceEntity' do
     expect(subject['paths']['/kind']['get']['parameters']).to eq [{
       'in' => 'query',
       'name' => 'something',
-      'description' => 'something as parameter',
-      'type' => 'string',
-      'required' => false,
-      'allowMultiple' => false
+      'description' => 'Something interesting.',
+      'type' => 'SomethingCustom',
+      'required' => false
     }]
 
-    expect(subject['definitions'].keys).to include 'Something'
-    expect(subject['definitions']['Something']).to eq(
-      'type' => 'object', 'properties' => { 'text' => { 'type' => 'string' } }
+    expect(subject['definitions'].keys).to include 'SomethingCustom'
+    expect(subject['definitions']['SomethingCustom']).to eq(
+      'type' => 'object', 'properties' => { 'text' => { 'type' => 'string', 'description' => 'Content of something.' } }
     )
 
-    expect(subject['definitions'].keys).to include 'Kind'
-    expect(subject['definitions']['Kind']).to eq(
-      'properties' => { 'something' => { '$ref' => '#/definitions/Something' } }
+    expect(subject['definitions'].keys).to include 'KindCustom'
+    expect(subject['definitions']['KindCustom']).to eq(
+      'type' => 'object',
+      'properties' => {
+        'title' => { 'type' => 'string', 'description' => 'Title of the kind.' },
+        'something' => {
+          '$ref' => '#/definitions/SomethingCustom',
+          'description' => 'Something interesting.'
+        }
+      },
+      'description' => 'This returns kind and something or an error'
     )
   end
 end

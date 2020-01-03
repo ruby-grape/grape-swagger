@@ -186,7 +186,7 @@ module Grape
         GrapeSwagger::DocMethods::ParseParams.call(param, value, path, route, @definitions)
       end
 
-      if GrapeSwagger::DocMethods::MoveParams.can_be_moved?(parameters, route.request_method)
+      if GrapeSwagger::DocMethods::MoveParams.can_be_moved?(route.request_method, parameters)
         parameters = GrapeSwagger::DocMethods::MoveParams.to_definition(path, parameters, route, @definitions)
       end
 
@@ -271,7 +271,8 @@ module Grape
     end
 
     def build_root(route, reference, response_model, settings)
-      default_root = route.options[:is_array] ? response_model.downcase.pluralize : response_model.downcase
+      default_root = response_model.underscore
+      default_root = default_root.pluralize if route.options[:is_array]
       case route.settings.dig(:swagger, :root)
       when true
         { type: 'object', properties: { default_root => reference } }

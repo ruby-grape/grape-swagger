@@ -31,6 +31,13 @@ describe 'response with root' do
         end
 
         route_setting :swagger, root: true
+        desc 'This returns underscored root',
+             http_codes: [{ code: 200, model: Entities::ApiError }]
+        get '/response_with_root_underscore' do
+          { 'declared_params' => declared(params) }
+        end
+
+        route_setting :swagger, root: true
         desc 'This returns something',
              is_array: true,
              http_codes: [{ code: 200, model: Entities::Something }]
@@ -93,6 +100,21 @@ describe 'response with root' do
       expect(schema).to eq(
         'type' => 'object',
         'properties' => { 'something' => { '$ref' => '#/definitions/Something' } }
+      )
+    end
+  end
+
+  describe 'GET /response_with_root_underscore' do
+    subject do
+      get '/swagger_doc/response_with_root_underscore'
+      JSON.parse(last_response.body)
+    end
+
+    it 'adds root to the response' do
+      schema = subject.dig('paths', '/response_with_root_underscore', 'get', 'responses', '200', 'schema')
+      expect(schema).to eq(
+        'type' => 'object',
+        'properties' => { 'api_error' => { '$ref' => '#/definitions/ApiError' } }
       )
     end
   end

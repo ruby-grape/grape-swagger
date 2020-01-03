@@ -120,7 +120,7 @@ module Grape
       method[:consumes]    = consumes_object(route, options[:format])
       method[:parameters]  = params_object(route, options, path)
       method[:security]    = security_object(route)
-      method[:responses]   = response_object(route)
+      method[:responses]   = response_object(route, options)
       method[:tags]        = route.options.fetch(:tags, tag_object(route, path))
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method[:deprecated] = deprecated_object(route)
@@ -186,7 +186,7 @@ module Grape
         GrapeSwagger::DocMethods::ParseParams.call(param, value, path, route, @definitions)
       end
 
-      if GrapeSwagger::DocMethods::MoveParams.can_be_moved?(parameters, route.request_method)
+      if GrapeSwagger::DocMethods::MoveParams.can_be_moved?(route.request_method, parameters)
         parameters = GrapeSwagger::DocMethods::MoveParams.to_definition(path, parameters, route, @definitions)
       end
 
@@ -195,7 +195,7 @@ module Grape
       parameters.presence
     end
 
-    def response_object(route)
+    def response_object(route, options)
       codes = http_codes_from_route(route)
       codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2], examples: x[3], headers: x[4] } : x }
 
@@ -220,7 +220,7 @@ module Grape
 
         @definitions[response_model][:description] = description_object(route)
 
-        memo[value[:code]][:schema] = build_reference(route, value, response_model)
+        memo[value[:code]][:schema] = build_reference(route, value, response_model, options)
         memo[value[:code]][:examples] = value[:examples] if value[:examples]
       end
     end
@@ -251,20 +251,38 @@ module Grape
     def tag_object(route, path)
       version = GrapeSwagger::DocMethods::Version.get(route)
       version = [version] unless version.is_a?(Array)
-
+      prefix = route.prefix.to_s.split('/').reject(&:empty?)
       Array(
         path.split('{')[0].split('/').reject(&:empty?).delete_if do |i|
-          i == route.prefix.to_s || version.map(&:to_s).include?(i)
+          prefix.include?(i) || version.map(&:to_s).include?(i)
         end.first
       ).presence
     end
 
     private
 
-    def build_reference(route, value, response_model)
+    def build_reference(route, value, response_model, settings)
       # TODO: proof that the definition exist, if model isn't specified
       reference = { '$ref' => "#/definitions/#{response_model}" }
-      route.options[:is_array] && value[:code] < 300 ? { type: 'array', items: reference } : reference
+      return reference unless value[:code] < 300
+
+      reference = { type: 'array', items: reference } if route.options[:is_array]
+      build_root(route, reference, response_model, settings)
+    end
+
+    def build_root(route, reference, response_model, settings)
+      default_root = response_model.underscore
+      default_root = default_root.pluralize if route.options[:is_array]
+      case route.settings.dig(:swagger, :root)
+      when true
+        { type: 'object', properties: { default_root => reference } }
+      when false
+        reference
+      when nil
+        settings[:add_root] ? { type: 'object', properties: { default_root => reference } } : reference
+      else
+        { type: 'object', properties: { route.settings.dig(:swagger, :root) => reference } }
+      end
     end
 
     def file_response?(value)

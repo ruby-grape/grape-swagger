@@ -40,13 +40,13 @@ describe GrapeSwagger::DocMethods::MoveParams do
     describe 'movable params' do
       specify 'allowed verbs' do
         allowed_verbs.each do |verb|
-          expect(subject.can_be_moved?(movable_params, verb)).to be true
+          expect(subject.can_be_moved?(verb, movable_params)).to be true
         end
       end
 
       specify 'not allowed verbs' do
         not_allowed_verbs.each do |verb|
-          expect(subject.can_be_moved?(movable_params, verb)).to be false
+          expect(subject.can_be_moved?(verb, movable_params)).to be false
         end
       end
     end
@@ -54,13 +54,13 @@ describe GrapeSwagger::DocMethods::MoveParams do
     describe 'not movable params' do
       specify 'allowed verbs' do
         allowed_verbs.each do |verb|
-          expect(subject.can_be_moved?(not_movable_params, verb)).to be false
+          expect(subject.can_be_moved?(verb, not_movable_params)).to be false
         end
       end
 
       specify 'not allowed verbs' do
         not_allowed_verbs.each do |verb|
-          expect(subject.can_be_moved?(not_movable_params, verb)).to be false
+          expect(subject.can_be_moved?(verb, not_movable_params)).to be false
         end
       end
     end

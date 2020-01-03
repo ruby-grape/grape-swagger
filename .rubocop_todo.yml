@@ -13,12 +13,6 @@ Gemspec/RequiredRubyVersion:
   Exclude:
     - 'grape-swagger.gemspec'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Lint/UnneededCopEnableDirective:
-  Exclude:
-    - 'spec/lib/optional_object_spec.rb'
-
 # Offense count: 30
 Metrics/AbcSize:
   Max: 59

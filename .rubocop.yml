@@ -4,13 +4,18 @@ AllCops:
   Exclude:
     - vendor/**/*
     - example/**/*
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 2.7
 
 Layout/EmptyLinesAroundArguments:
   Enabled: false
 
-Layout/IndentFirstHashElement:
+Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
+
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    - spec/**/*
 
 Metrics/BlockLength:
   Exclude:
@@ -18,11 +23,6 @@ Metrics/BlockLength:
 
 Metrics/ClassLength:
   Max: 300
-
-Metrics/LineLength:
-  Max: 120
-  Exclude:
-    - spec/**/*
 
 Metrics/MethodLength:
   Exclude:

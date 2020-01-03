@@ -3,7 +3,10 @@
 #### Features
 
 * Your contribution here.
+* [#768](https://github.com/ruby-grape/grape-swagger/pull/768): Uses ruby 2.7, fixes grape to 1.2.5 (cause of dry-types) - [@LeFnord](https://github.com/LeFnord).
 * [#761](https://github.com/ruby-grape/grape-swagger/pull/761): Add an option to configure root element for responses - [@bikolya](https://github.com/bikolya).
+* [#749](https://github.com/ruby-grape/grape-swagger/pull/749) Drop support for Ruby 2.3 and below - [@LeFnord](https://github.com/LeFnord).
+
 
 #### Fixes
 

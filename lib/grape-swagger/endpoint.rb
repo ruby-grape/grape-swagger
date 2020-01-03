@@ -186,7 +186,7 @@ module Grape
         GrapeSwagger::DocMethods::ParseParams.call(param, value, path, route, @definitions)
       end
 
-      if GrapeSwagger::DocMethods::MoveParams.can_be_moved?(parameters, route.request_method)
+      if GrapeSwagger::DocMethods::MoveParams.can_be_moved?(route.request_method, parameters)
         parameters = GrapeSwagger::DocMethods::MoveParams.to_definition(path, parameters, route, @definitions)
       end
 

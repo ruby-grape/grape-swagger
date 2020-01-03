@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'docs mounted separately from api' do
+xdescribe 'docs mounted separately from api' do
   before :all do
     class ActualApi < Grape::API
       desc 'Document root'

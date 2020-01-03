@@ -8,7 +8,7 @@ module GrapeSwagger
       class << self
         attr_accessor :definitions
 
-        def can_be_moved?(params, http_verb)
+        def can_be_moved?(http_verb, params)
           move_methods.include?(http_verb) && includes_body_param?(params)
         end
 

@@ -9,7 +9,7 @@
 * Your contribution here.
 
 
-### 0.34.0 (January 3, 2020)
+### 0.34.0 (January 11, 2020)
 
 #### Features
 

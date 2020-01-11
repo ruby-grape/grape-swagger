@@ -186,7 +186,7 @@ RSpec.shared_context 'representable swagger example' do
         property :prop_time,      documentation: { type: Time, desc: 'prop_time description' }
         property :prop_password,  documentation: { type: 'password', desc: 'prop_password description' }
         property :prop_email,     documentation: { type: 'email', desc: 'prop_email description' }
-        property :prop_boolean,   documentation: { type: Virtus::Attribute::Boolean, desc: 'prop_boolean description' }
+        property :prop_boolean,   documentation: { type: Grape::API::Boolean, desc: 'prop_boolean description' }
         property :prop_file,      documentation: { type: File, desc: 'prop_file description' }
         property :prop_json,      documentation: { type: JSON, desc: 'prop_json description' }
       end

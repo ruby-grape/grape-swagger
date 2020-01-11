@@ -116,7 +116,7 @@ RSpec.shared_context 'entity swagger example' do
         expose :prop_time,      documentation: { type: Time, desc: 'prop_time description' }
         expose :prop_password,  documentation: { type: 'password', desc: 'prop_password description' }
         expose :prop_email,     documentation: { type: 'email', desc: 'prop_email description' }
-        expose :prop_boolean,   documentation: { type: Virtus::Attribute::Boolean, desc: 'prop_boolean description' }
+        expose :prop_boolean,   documentation: { type: Grape::API::Boolean, desc: 'prop_boolean description' }
         expose :prop_file,      documentation: { type: File, desc: 'prop_file description' }
         expose :prop_json,      documentation: { type: JSON, desc: 'prop_json description' }
       end

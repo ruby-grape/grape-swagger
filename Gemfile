@@ -6,12 +6,14 @@ ruby RUBY_VERSION
 
 gemspec
 
-gem 'grape', case version = ENV['GRAPE_VERSION'] || '< 1.3.0'
-             when 'HEAD'
-               { git: 'https://github.com/ruby-grape/grape' }
-             else
-               version
-             end
+gem 'grape', git: 'https://github.com/ruby-grape/grape'
+
+# gem 'grape', case version = ENV['GRAPE_VERSION'] || '< 1.3.0'
+#              when 'HEAD'
+#                { git: 'https://github.com/ruby-grape/grape' }
+#              else
+#                version
+#              end
 
 gem ENV['MODEL_PARSER'] if ENV.key?('MODEL_PARSER')
 group :development, :test do
@@ -25,7 +27,7 @@ group :development, :test do
   gem 'rake'
   gem 'rdoc'
   gem 'rspec', '~> 3.9'
-  gem 'rubocop', '~> 0.75', require: false
+  gem 'rubocop', '~> 0.79', require: false
 end
 
 group :test do

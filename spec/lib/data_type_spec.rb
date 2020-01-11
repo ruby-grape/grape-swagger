@@ -55,8 +55,8 @@ describe GrapeSwagger::DocMethods::DataType do
     it { is_expected.to eq 'file' }
   end
 
-  describe 'Virtus::Attribute::Boolean' do
-    let(:value) { { type: Virtus::Attribute::Boolean } }
+  describe 'Grape::API::Boolean' do
+    let(:value) { { type: Grape::API::Boolean } }
 
     it { is_expected.to eq 'boolean' }
   end

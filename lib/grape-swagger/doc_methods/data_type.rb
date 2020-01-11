@@ -16,7 +16,7 @@ module GrapeSwagger
             'object'
           when 'Rack::Multipart::UploadedFile', 'File'
             'file'
-          when 'Virtus::Attribute::Boolean'
+          when 'Grape::API::Boolean'
             'boolean'
           when 'BigDecimal'
             'double'

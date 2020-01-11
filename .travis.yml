@@ -21,9 +21,9 @@ matrix:
 
   include:
     - rvm: 2.4.9
-      env:
+      env: GRAPE_VERSION=1.2.5
     - rvm: ruby-head
-      env:
+      env: GRAPE_VERSION=HEAD
     - rvm: jruby-head
       env:
 

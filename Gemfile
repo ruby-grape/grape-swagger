@@ -6,7 +6,7 @@ ruby RUBY_VERSION
 
 gemspec
 
-gem 'grape', case version = ENV['GRAPE_VERSION'] || '~> 1.2'
+gem 'grape', case version = ENV['GRAPE_VERSION'] || '< 1.3.0'
              when 'HEAD'
                { git: 'https://github.com/ruby-grape/grape' }
              else

@@ -11,10 +11,9 @@ rvm:
   - 2.6.5
   - 2.7.0
 env:
-  # - GRAPE_VERSION=1.2.5 MODEL_PARSER=grape-swagger-entity
-  # - GRAPE_VERSION=1.2.5 MODEL_PARSER=grape-swagger-representable
-  # - GRAPE_VERSION=1.0.3
-  # - GRAPE_VERSION=1.2.5
+  - GRAPE_VERSION=1.3.0 MODEL_PARSER=grape-swagger-entity
+  - GRAPE_VERSION=1.3.0 MODEL_PARSER=grape-swagger-representable
+  - GRAPE_VERSION=1.3.0
   - GRAPE_VERSION=HEAD
 
 matrix:
@@ -24,7 +23,7 @@ matrix:
     - rvm: 2.4.9
       env:
     - rvm: ruby-head
-      env: GRAPE_VERSION=HEAD
+      env:
     - rvm: jruby-head
       env:
 

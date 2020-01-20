@@ -6,7 +6,11 @@
 
 #### Fixes
 
-* Your contribution here.
+### 0.34.2 (January 20, 2020)
+
+#### Fixes
+
+* [#773](https://github.com/ruby-grape/grape-swagger/pull/773): Freeze rack version to 2.0.8 - [@LeFnord](https://github.com/LeFnord).
 
 
 ### 0.34.0 (January 11, 2020)

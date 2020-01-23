@@ -4,6 +4,8 @@
 
 * Your contribution here.
 
+* [#775](https://github.com/ruby-grape/grape-swagger/pull/775): Add in token_owner support to param hidden procs - [@urkle](https://github.com/urkle).
+
 #### Fixes
 
 ### 0.34.2 (January 20, 2020)

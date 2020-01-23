@@ -5,8 +5,9 @@ require 'spec_helper'
 describe GrapeSwagger::Endpoint::ParamsParser do
   let(:settings) { {} }
   let(:params) { [] }
+  let(:endpoint) { nil }
 
-  let(:parser) { described_class.new(params, settings) }
+  let(:parser) { described_class.new(params, settings, endpoint) }
 
   describe '#parse_request_params' do
     subject(:parse_request_params) { parser.parse_request_params }

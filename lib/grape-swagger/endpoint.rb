@@ -301,7 +301,7 @@ module Grape
       default_type(required)
 
       request_params = unless declared_params.nil? && route.headers.nil?
-                         GrapeSwagger::Endpoint::ParamsParser.parse_request_params(required, settings)
+                         GrapeSwagger::Endpoint::ParamsParser.parse_request_params(required, settings, self)
                        end || {}
 
       request_params.empty? ? required : request_params

@@ -3,10 +3,12 @@
 #### Features
 
 * Your contribution here.
-
+* [#777](https://github.com/ruby-grape/grape-swagger/pull/777): Make usage of grape >= 1.3, rack >= 2.1 - [@LeFnord](https://github.com/LeFnord).
 * [#775](https://github.com/ruby-grape/grape-swagger/pull/775): Add in token_owner support to param hidden procs - [@urkle](https://github.com/urkle).
 
 #### Fixes
+
+* Your contribution here.
 
 ### 0.34.2 (January 20, 2020)
 

@@ -743,9 +743,12 @@ end
 Exclude single optional parameter from the documentation
 
 ```ruby
+not_admins = lambda { |token_owner = nil| token_owner.nil? || !token_owner.admin? }
+
 params do
   optional :one, documentation: { hidden: true }
-  optional :two, documentation: { hidden: -> { true } }
+  optional :two, documentation: { hidden: -> { |t=nil| true } }
+  optional :three, documentation: { hidden: not_admins }
 end
 post :act do
   ...

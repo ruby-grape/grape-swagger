@@ -38,8 +38,9 @@ module GrapeSwagger
         end
 
         def parent_definition_of_params(params, path, route)
-          definition_name = OperationId.manipulate(parse_model(path))
-          referenced_definition = build_definition(definition_name, params, route.request_method.downcase)
+          has_params_model_name = route.options[:params_model_name].present?
+          definition_name = has_params_model_name ? route.options[:params_model_name] : OperationId.manipulate(parse_model(path))
+          referenced_definition = build_definition(definition_name, params, has_params_model_name ? nil : route.request_method.downcase)
           definition = @definitions[referenced_definition]
 
           move_params_to_new(definition, params)

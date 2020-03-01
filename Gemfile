@@ -20,13 +20,13 @@ group :development, :test do
   gem 'pry', platforms: [:mri]
   gem 'pry-byebug', platforms: [:mri]
 
-  gem 'rack', '~> 2.1'
+  gem 'rack', '~> 2.2'
   gem 'rack-cors'
   gem 'rack-test'
   gem 'rake'
   gem 'rdoc'
   gem 'rspec', '~> 3.9'
-  gem 'rubocop', '~> 0.79', require: false
+  gem 'rubocop', '~> 0.80', require: false
 end
 
 group :test do

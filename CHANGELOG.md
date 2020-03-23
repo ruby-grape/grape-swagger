@@ -3,6 +3,8 @@
 #### Features
 
 * Your contribution here.
+* [#782](https://github.com/ruby-grape/grape-swagger/pull/782): Allow passing class name as string for rake task initializer - [@misdoro](https://github.com/misdoro).
+
 
 #### Fixes
 

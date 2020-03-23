@@ -3,13 +3,26 @@
 #### Features
 
 * Your contribution here.
+* [#782](https://github.com/ruby-grape/grape-swagger/pull/782): Allow passing class name as string for rake task initializer - [@misdoro](https://github.com/misdoro).
+
 
 #### Fixes
 
-* Your contribution here.
+### 1.0.0 (February 10, 2020)
+
+#### Features
+
+* [#777](https://github.com/ruby-grape/grape-swagger/pull/777): Make usage of grape >= 1.3, rack >= 2.1 - [@LeFnord](https://github.com/LeFnord).
+* [#775](https://github.com/ruby-grape/grape-swagger/pull/775): Add in token_owner support to param hidden procs - [@urkle](https://github.com/urkle).
+
+### 0.34.2 (January 20, 2020)
+
+#### Fixes
+
+* [#773](https://github.com/ruby-grape/grape-swagger/pull/773): Freeze rack version to 2.0.8 - [@LeFnord](https://github.com/LeFnord).
 
 
-### 0.34.0 (January 3, 2020)
+### 0.34.0 (January 11, 2020)
 
 #### Features
 
@@ -33,10 +46,6 @@
 * [#746](https://github.com/ruby-grape/grape-swagger/pull/746): Fix path with optional format - [@fnordfish](https://github.com/fnordfish).
 * [#743](https://github.com/ruby-grape/grape-swagger/pull/743): CI: use 2.4.6, 2.5.5 - [@olleolleolle](https://github.com/olleolleolle).
 * [#737](https://github.com/ruby-grape/grape-swagger/pull/737): Add swagger endpoint guard to both doc endpoints - [@urkle](https://github.com/urkle).
-
-#### Changes
-
-* [#749](https://github.com/ruby-grape/grape-swagger/pull/749) Drop support for Ruby 2.3 and below - [@LeFnord](https://github.com/LeFnord).
 
 
 ### 0.32.1 (December 7, 2018)

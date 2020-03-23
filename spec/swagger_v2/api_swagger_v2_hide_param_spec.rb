@@ -7,12 +7,19 @@ describe 'hidden flag enables a single endpoint parameter to be excluded from th
   before :all do
     module TheApi
       class HideParamsApi < Grape::API
+        helpers do
+          def resource_owner
+            '123'
+          end
+        end
+
         namespace :flat_params_endpoint do
           desc 'This is a endpoint with a flat parameter hierarchy'
           params do
             requires :name, type: String, documentation: { desc: 'name' }
             optional :favourite_color, type: String, documentation: { desc: 'I should not be anywhere', hidden: true }
-            optional :proc_param, type: String, documentation: { desc: 'I should not be anywhere', hidden: -> { true } }
+            optional :proc_param, type: String, documentation: { desc: 'I should not be anywhere', hidden: proc { true } }
+            optional :proc_with_token, type: String, documentation: { desc: 'I may be somewhere', hidden: proc { |token_owner = nil| token_owner.nil? } }
           end
 
           post do
@@ -50,7 +57,7 @@ describe 'hidden flag enables a single endpoint parameter to be excluded from th
           end
         end
 
-        add_swagger_documentation
+        add_swagger_documentation token_owner: 'resource_owner'
       end
     end
   end
@@ -63,8 +70,12 @@ describe 'hidden flag enables a single endpoint parameter to be excluded from th
       JSON.parse(last_response.body)
     end
 
-    specify do
+    it 'ignores parameters that are explicitly hidden' do
       expect(subject['paths']['/flat_params_endpoint']['post']['parameters'].map { |p| p['name'] }).not_to include('favourite_color', 'proc_param')
+    end
+
+    it 'allows procs to consult the token_owner' do
+      expect(subject['paths']['/flat_params_endpoint']['post']['parameters'].map { |p| p['name'] }).to include('proc_with_token')
     end
   end
 

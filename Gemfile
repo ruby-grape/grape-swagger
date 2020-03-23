@@ -6,7 +6,7 @@ ruby RUBY_VERSION
 
 gemspec
 
-gem 'grape', case version = ENV['GRAPE_VERSION'] || '~> 1.2'
+gem 'grape', case version = ENV['GRAPE_VERSION'] || '>= 1.3.0'
              when 'HEAD'
                { git: 'https://github.com/ruby-grape/grape' }
              else
@@ -14,19 +14,19 @@ gem 'grape', case version = ENV['GRAPE_VERSION'] || '~> 1.2'
              end
 
 gem ENV['MODEL_PARSER'] if ENV.key?('MODEL_PARSER')
-
 group :development, :test do
   gem 'bundler'
   gem 'grape-entity'
   gem 'pry', platforms: [:mri]
   gem 'pry-byebug', platforms: [:mri]
-  gem 'rack'
+
+  gem 'rack', '~> 2.2'
   gem 'rack-cors'
   gem 'rack-test'
   gem 'rake'
   gem 'rdoc'
   gem 'rspec', '~> 3.9'
-  gem 'rubocop', '~> 0.75', require: false
+  gem 'rubocop', '~> 0.80', require: false
 end
 
 group :test do

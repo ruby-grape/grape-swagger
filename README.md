@@ -48,9 +48,11 @@ grape-swagger | swagger spec | grape                   | grape-entity | represen
 0.10.5        |     1.2      | >= 0.10.0 ... <= 0.14.0 |  < 0.5.0     | n/a           |
 0.11.0        |     1.2      |               >= 0.16.2 |  < 0.5.0     | n/a           |
 0.25.2        |     2.0      | >= 0.14.0 ... <= 0.18.0 | <= 0.6.0     | >= 2.4.1      |
-0.26.0        |     2.0      | >= 0.16.2     <= 1.1.0  | <= 0.6.1     | >= 2.4.1      |
+0.26.0        |     2.0      | >= 0.16.2 ... <= 1.1.0  | <= 0.6.1     | >= 2.4.1      |
 0.27.0        |     2.0      | >= 0.16.2 ... <= 1.1.0  | >= 0.5.0     | >= 2.4.1      |
 0.32.0        |     2.0      | >= 0.16.2               | >= 0.5.0     | >= 2.4.1      |
+0.34.0        |     2.0      | >= 0.16.2 ... < 1.3.0   | >= 0.5.0     | >= 2.4.1      |
+1.0.0         |     2.0      | >= 1.3.0                | >= 0.5.0     | >= 2.4.1      |
 
 
 ## Swagger-Spec <a name="swagger-spec"></a>
@@ -742,9 +744,12 @@ end
 Exclude single optional parameter from the documentation
 
 ```ruby
+not_admins = lambda { |token_owner = nil| token_owner.nil? || !token_owner.admin? }
+
 params do
   optional :one, documentation: { hidden: true }
-  optional :two, documentation: { hidden: -> { true } }
+  optional :two, documentation: { hidden: -> { |t=nil| true } }
+  optional :three, documentation: { hidden: not_admins }
 end
 post :act do
   ...
@@ -1481,11 +1486,17 @@ end
 
 ## Rake Tasks <a name="rake"></a>
 
-Add these lines to your Rakefile, and initialize the Task class with your Api class – be sure your Api class is available.
+Add these lines to your Rakefile, and initialize the Task class with your Api class.
 
 ```ruby
 require 'grape-swagger/rake/oapi_tasks'
 GrapeSwagger::Rake::OapiTasks.new(::Api::Base)
+```
+
+You may initialize with the class name as a string if the class is not yet loaded at the time Rakefile is parsed:
+```ruby
+require 'grape-swagger/rake/oapi_tasks'
+GrapeSwagger::Rake::OapiTasks.new('::Api::Base')
 ```
 
 #### OpenApi/Swagger Documentation

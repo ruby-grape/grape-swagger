@@ -3,15 +3,16 @@
 module GrapeSwagger
   module Endpoint
     class ParamsParser
-      attr_reader :params, :settings
+      attr_reader :params, :settings, :endpoint
 
-      def self.parse_request_params(params, settings)
-        new(params, settings).parse_request_params
+      def self.parse_request_params(params, settings, endpoint)
+        new(params, settings, endpoint).parse_request_params
       end
 
-      def initialize(params, settings)
+      def initialize(params, settings, endpoint)
         @params = params
         @settings = settings
+        @endpoint = endpoint
       end
 
       def parse_request_params
@@ -55,7 +56,13 @@ module GrapeSwagger
         return true unless param_options.key?(:documentation) && !param_options[:required]
 
         param_hidden = param_options[:documentation].fetch(:hidden, false)
-        param_hidden = param_hidden.call if param_hidden.is_a?(Proc)
+        if param_hidden.is_a?(Proc)
+          param_hidden = if settings[:token_owner]
+                           param_hidden.call(endpoint.send(settings[:token_owner].to_sym))
+                         else
+                           param_hidden.call
+                         end
+        end
         !param_hidden
       end
 

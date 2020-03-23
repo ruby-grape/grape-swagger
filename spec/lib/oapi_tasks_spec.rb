@@ -3,8 +3,8 @@
 require 'spec_helper'
 
 RSpec.describe GrapeSwagger::Rake::OapiTasks do
-  let(:api) do
-    item = Class.new(Grape::API) do
+  module Api
+    class Item < Grape::API
       version 'v1', using: :path
 
       namespace :item do
@@ -16,14 +16,24 @@ RSpec.describe GrapeSwagger::Rake::OapiTasks do
       end
     end
 
-    Class.new(Grape::API) do
+    class Base < Grape::API
       prefix :api
-      mount item
+      mount Api::Item
       add_swagger_documentation add_version: true
     end
   end
 
-  subject { described_class.new(api) }
+  subject { described_class.new(Api::Base) }
+
+  describe '.new' do
+    it 'accepts class name as a constant' do
+      expect(described_class.new(::Api::Base).send(:api_class)).to eq(Api::Base)
+    end
+
+    it 'accepts class name as a string' do
+      expect(described_class.new('::Api::Base').send(:api_class)).to eq(Api::Base)
+    end
+  end
 
   describe '#make_request' do
     describe 'complete documentation' do

@@ -1486,11 +1486,17 @@ end
 
 ## Rake Tasks <a name="rake"></a>
 
-Add these lines to your Rakefile, and initialize the Task class with your Api class – be sure your Api class is available.
+Add these lines to your Rakefile, and initialize the Task class with your Api class.
 
 ```ruby
 require 'grape-swagger/rake/oapi_tasks'
 GrapeSwagger::Rake::OapiTasks.new(::Api::Base)
+```
+
+You may initialize with the class name as a string if the class is not yet loaded at the time Rakefile is parsed:
+```ruby
+require 'grape-swagger/rake/oapi_tasks'
+GrapeSwagger::Rake::OapiTasks.new('::Api::Base')
 ```
 
 #### OpenApi/Swagger Documentation

@@ -17,6 +17,12 @@ Layout/LineLength:
   Exclude:
     - spec/**/*
 
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
 Metrics/BlockLength:
   Exclude:
     - spec/**/*
@@ -36,7 +42,9 @@ Style/RegexpLiteral:
 
 Style/HashEachMethods:
   Enabled: true
+
 Style/HashTransformKeys:
   Enabled: true
+
 Style/HashTransformValues:
   Enabled: true

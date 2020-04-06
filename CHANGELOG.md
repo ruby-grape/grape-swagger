@@ -3,6 +3,7 @@
 #### Features
 
 * Your contribution here.
+* [#785](https://github.com/ruby-grape/grape-swagger/pull/785): Add extensions for params - [@MaximeRDY](https://github.com/MaximeRDY).
 * [#782](https://github.com/ruby-grape/grape-swagger/pull/782): Allow passing class name as string for rake task initializer - [@misdoro](https://github.com/misdoro).
 
 

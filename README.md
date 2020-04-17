@@ -1084,6 +1084,20 @@ or, for more definitions:
 route_setting :x_def, [{ for: 422, other: 'stuff' }, { for: 200, some: 'stuff' }]
 ```
 
+- `params` extension, add a `x` key to the `documentation` hash :
+```ruby
+requires :foo, type: String, documentation: { x: { some: 'stuff' } }
+```
+this would generate:
+```json
+{
+  "in": "formData",
+  "name": "foo",
+  "type": "string",
+  "required": true,
+  "x-some": "stuff"
+}
+```
 
 #### Response examples documentation <a name="response-examples"></a>
 

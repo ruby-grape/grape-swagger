@@ -26,6 +26,7 @@ module GrapeSwagger
           document_range_values(settings) unless value_type[:is_array]
           document_required(settings)
           document_additional_properties(settings)
+          document_add_extensions(settings)
 
           @parsed_param
         end
@@ -60,6 +61,10 @@ module GrapeSwagger
             @parsed_param[:type] = data_type
           end
           @parsed_param[:format] = settings[:format] if settings[:format].present?
+        end
+
+        def document_add_extensions(settings)
+          GrapeSwagger::DocMethods::Extensions.add_extensions_to_root(settings, @parsed_param)
         end
 
         def document_array_param(value_type, definitions)

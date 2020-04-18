@@ -345,7 +345,6 @@ module Grape
         raise GrapeSwagger::Errors::SwaggerSpec,
               "Empty model #{model_name}, swagger 2.0 doesn't support empty definitions."
       end
-
       @definitions[model_name] = GrapeSwagger::DocMethods::BuildModelDefinition.build(model, properties, required)
 
       model_name

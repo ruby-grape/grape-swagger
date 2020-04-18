@@ -52,7 +52,7 @@ module GrapeSwagger
             model.entity_name
           elsif model.to_s.end_with?('::Entity', '::Entities')
             model.to_s.split('::')[0..-2].join('::')
-          elsif model.to_s.start_with?('Entity::', 'Entities::')
+          elsif model.to_s.start_with?('Entity::', 'Entities::', 'Representable::')
             model.to_s.split('::')[1..-1].join('::')
           else
             model.to_s

@@ -5,9 +5,9 @@
 * Your contribution here.
 * [#785](https://github.com/ruby-grape/grape-swagger/pull/785): Add extensions for params - [@MaximeRDY](https://github.com/MaximeRDY).
 * [#782](https://github.com/ruby-grape/grape-swagger/pull/782): Allow passing class name as string for rake task initializer - [@misdoro](https://github.com/misdoro).
+* [#786](https://github.com/ruby-grape/grape-swagger/pull/786): Use full entity name as a default - [@mrexox](https://github.com/mrexox)
 
 #### Fixes
-* [#786](https://github.com/ruby-grape/grape-swagger/pull/786): Use full entity name as a default - [@mrexox](https://github.com/mrexox)
 
 ### 1.0.0 (February 10, 2020)
 

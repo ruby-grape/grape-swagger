@@ -6,6 +6,8 @@ AllCops:
     - example/**/*
   TargetRubyVersion: 2.7
 
+#  Layout stuff
+#
 Layout/EmptyLinesAroundArguments:
   Enabled: false
 
@@ -17,12 +19,19 @@ Layout/LineLength:
   Exclude:
     - spec/**/*
 
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+# Lint stuff
+#
 Lint/RaiseException:
   Enabled: true
 
 Lint/StructNewOverride:
   Enabled: true
 
+# Metrics stuff
+#
 Metrics/BlockLength:
   Exclude:
     - spec/**/*
@@ -34,11 +43,15 @@ Metrics/MethodLength:
   Exclude:
     - spec/**/*
 
+# Naming stuff
+#
 Naming:
   Enabled: false
 
-Style/RegexpLiteral:
-  Enabled: false
+# Style stuff
+#
+Style/ExponentialNotation:
+  Enabled: true
 
 Style/HashEachMethods:
   Enabled: true
@@ -48,3 +61,6 @@ Style/HashTransformKeys:
 
 Style/HashTransformValues:
   Enabled: true
+
+Style/RegexpLiteral:
+  Enabled: false

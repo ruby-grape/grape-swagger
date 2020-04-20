@@ -82,11 +82,11 @@ describe 'definition names' do
     JSON.parse(last_response.body)['definitions']
   end
 
-  specify { expect(subject).to include 'Class1' }
-  specify { expect(subject).to include 'Class2' }
+  specify { expect(subject).to include 'TestDefinition::DummyEntities::WithVeryLongName::AnotherGroupingModule::Class1' }
+  specify { expect(subject).to include 'TestDefinition::DummyEntities::WithVeryLongName::AnotherGroupingModule::Class2' }
   specify { expect(subject).to include 'FooKlass' }
-  specify { expect(subject).to include 'FourthEntity' }
-  specify { expect(subject).to include 'FithEntity' }
+  specify { expect(subject).to include 'TestDefinition::DummyEntities::WithVeryLongName::AnotherGroupingModule::Class4::FourthEntity' }
+  specify { expect(subject).to include 'TestDefinition::DummyEntities::WithVeryLongName::AnotherGroupingModule::Class5::FithEntity' }
   specify { expect(subject).to include 'BarKlass' }
-  specify { expect(subject).to include 'SeventhEntity' }
+  specify { expect(subject).to include 'TestDefinition::DummyEntities::WithVeryLongName::AnotherGroupingModule::Class7::SeventhEntity' }
 end

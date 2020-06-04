@@ -4,8 +4,8 @@ module GrapeSwagger
   module DocMethods
     class BuildModelDefinition
       class << self
-        def build(model, properties, required)
-          definition = { type: 'object', properties: properties }
+        def build(model, properties, required, other_def_properties = {})
+          definition = { type: 'object', properties: properties }.merge(other_def_properties)
 
           if required.nil?
             required_attrs = required_attributes(model)

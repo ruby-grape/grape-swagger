@@ -30,6 +30,7 @@ Bundler.setup :default, :test
 
 require 'rack'
 require 'rack/test'
+require 'pry'
 
 RSpec.configure do |config|
   require 'rspec/expectations'

@@ -340,14 +340,56 @@ module Grape
       parser = GrapeSwagger.model_parsers.find(model)
       raise GrapeSwagger::Errors::UnregisteredParser, "No parser registered for #{model_name}." unless parser
 
-      properties, required = parser.new(model, self).call
-      unless properties&.any?
-        raise GrapeSwagger::Errors::SwaggerSpec,
-              "Empty model #{model_name}, swagger 2.0 doesn't support empty definitions."
+      parsed_response = parser.new(model, self).call
+      if parsed_response.is_a?(Hash) && parsed_response.keys.first == :allOf
+        refs_or_models = parsed_response[:allOf]
+        parsed = parse_refs_and_models(refs_or_models, model)
+
+        @definition[model_name] =
+          {
+            allOf: parsed
+          }
+      else
+        properties, required = parsed_response
+        unless properties&.any?
+          raise GrapeSwagger::Errors::SwaggerSpec,
+                "Empty model #{model_name}, swagger 2.0 doesn't support empty definitions."
+        end
+        properties, other_def_properties = parse_properties(properties)
+        @definitions[model_name] = GrapeSwagger::DocMethods::BuildModelDefinition.build(model, properties, required, other_def_properties)
       end
-      @definitions[model_name] = GrapeSwagger::DocMethods::BuildModelDefinition.build(model, properties, required)
+
 
       model_name
+    end
+
+    def parse_properties(properties)
+      other_properties = {}
+
+      discriminator_key, discriminator_value =
+        properties.find do |key, value|
+          value[:documentation].try(:[], :is_discriminator)
+        end
+
+      if discriminator_key
+        discriminator_value.delete(:documentation)
+        properties[discriminator_key] = discriminator_value
+
+        other_properties[:discriminator] = discriminator_key
+      end
+
+      [properties, other_properties]
+    end
+
+    def parse_refs_and_models(refs_or_models, model)
+      refs_or_models.map do |ref_or_models|
+          if ref_or_models.is_a?(Hash) && ref_or_models.keys.first == '$ref'
+            ref_or_models
+          else
+            properties, required = ref_or_models
+            GrapeSwagger::DocMethods::BuildModelDefinition.build(model, properties, required)
+          end
+      end
     end
 
     def model_name(name)

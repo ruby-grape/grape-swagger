@@ -17,32 +17,29 @@ describe 'Inheritance and Discriminator' do
             type: 'string',
             required: true
           }
-
         end
 
         class Cat < Pet
           expose :huntingSkill, documentation: {
-            type: "string",
-            description: "The measured skill for hunting",
-            default: "lazy",
-            enum: [
-              "clueless",
-              "lazy",
-              "adventurous",
-              "aggressive"
+            type: 'string',
+            description: 'The measured skill for hunting',
+            default: 'lazy',
+            values: %w[
+              clueless
+              lazy
+              adventurous
+              aggressive
             ]
           }
         end
       end
       class NameApi < Grape::API
-        add_swagger_documentation models: [Entities::Pet]
+        add_swagger_documentation models: [Entities::Pet, Entities::Cat]
       end
     end
   end
 
-
-  context "Parent model" do
-
+  context 'Parent model' do
     let(:app) { InheritanceTest::NameApi }
 
     subject do
@@ -50,9 +47,10 @@ describe 'Inheritance and Discriminator' do
       JSON.parse(last_response.body)['definitions']
     end
 
-    specify {
+    specify do
       subject['InheritanceTest::Entities::Pet'].key?('discriminator')
       subject['InheritanceTest::Entities::Pet']['discriminator'] = 'type'
-    }
+      subject['InheritanceTest::Entities::Cat'].key?('allOf')
+    end
   end
 end

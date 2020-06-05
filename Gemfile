@@ -32,8 +32,8 @@ end
 group :test do
   gem 'coveralls_reborn', require: false
   gem 'grape-swagger-entity',
-    git: 'https://github.com/MaximeRDY/grape-swagger-entity',
-    branch: 'features/inheritance_and_discriminator'
+      git: 'https://github.com/MaximeRDY/grape-swagger-entity',
+      branch: 'features/inheritance_and_discriminator'
   gem 'ruby-grape-danger', '~> 0.1.1', require: false
   gem 'simplecov', require: false
 end

@@ -3,6 +3,7 @@
 #### Features
 
 * Your contribution here.
+* [#793](https://github.com/ruby-grape/grape-swagger/pull/793): Features/inheritance and discriminator - [@MaximeRDY](https://github.com/MaximeRDY).
 
 #### Fixes
 

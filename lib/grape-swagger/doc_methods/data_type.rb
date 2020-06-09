@@ -48,7 +48,7 @@ module GrapeSwagger
         end
 
         def parse_entity_name(model)
-          if model.methods(false).include?(:entity_name)
+          if model.respond_to?(:entity_name)
             model.entity_name
           elsif model.to_s.end_with?('::Entity', '::Entities')
             model.to_s.split('::')[0..-2].join('_')

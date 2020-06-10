@@ -108,7 +108,7 @@ module GrapeSwagger
             'path'
           elsif param_type
             param_type
-          elsif %w[POST PUT PATCH].include?(value_type[:method])
+          elsif %w[DELETE POST PUT PATCH].include?(value_type[:method])
             DataType.request_primitive?(value_type[:data_type]) ? 'formData' : 'body'
           else
             'query'

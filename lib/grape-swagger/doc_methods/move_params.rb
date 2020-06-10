@@ -189,7 +189,7 @@ module GrapeSwagger
         end
 
         def move_methods
-          [:post, :put, :patch, 'POST', 'PUT', 'PATCH']
+          [:delete, :post, :put, :patch, 'DELETE', 'POST', 'PUT', 'PATCH']
         end
 
         def includes_body_param?(params)

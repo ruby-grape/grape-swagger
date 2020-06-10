@@ -30,11 +30,11 @@ describe GrapeSwagger::DocMethods::MoveParams do
     end
 
     let(:allowed_verbs) do
-      [:post, :put, :patch, 'POST', 'PUT', 'PATCH']
+      [:delete, :post, :put, :patch, 'DELETE', 'POST', 'PUT', 'PATCH']
     end
 
     let(:not_allowed_verbs) do
-      [:get, :delete, 'GET', 'DELETE']
+      [:get, 'GET']
     end
 
     describe 'movable params' do

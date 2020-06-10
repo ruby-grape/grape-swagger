@@ -166,7 +166,7 @@ module Grape
       route_mime_types.present? ? route_mime_types : mime_types
     end
 
-    SUPPORTS_CONSUMES = %i[post put patch].freeze
+    SUPPORTS_CONSUMES = %i[delete post put patch].freeze
 
     def consumes_object(route, format)
       return unless SUPPORTS_CONSUMES.include?(route.request_method.downcase.to_sym)

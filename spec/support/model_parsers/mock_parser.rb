@@ -261,6 +261,7 @@ RSpec.shared_context 'mock swagger example' do
           'delete' => {
             'description' => 'This deletes Thing.',
             'produces' => ['application/json'],
+            'consumes' => ['application/json'],
             'parameters' => [{ 'in' => 'path', 'name' => 'id', 'type' => 'integer', 'format' => 'int32', 'required' => true }],
             'responses' => { '200' => { 'description' => 'This deletes Thing.', 'schema' => { '$ref' => '#/definitions/Something' } } },
             'tags' => ['thing'],
@@ -280,6 +281,7 @@ RSpec.shared_context 'mock swagger example' do
           'delete' => {
             'description' => 'dummy route.',
             'produces' => ['application/json'],
+            'consumes' => ['application/json'],
             'parameters' => [{ 'in' => 'path', 'name' => 'id', 'type' => 'integer', 'format' => 'int32', 'required' => true }],
             'responses' => { '204' => { 'description' => 'dummy route.' }, '401' => { 'description' => 'Unauthorized' } },
             'tags' => ['dummy'],

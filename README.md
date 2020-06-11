@@ -44,15 +44,15 @@ This screenshot is based on the [Hussars](https://github.com/LeFnord/hussars) sa
 The following versions of grape, grape-entity and grape-swagger can currently be used together.
 
 | grape-swagger | swagger spec | grape                   | grape-entity | representable |
-|---------------|--------------|-------------------------|--------------|---------------|
-| 0.10.5        |     1.2      | >= 0.10.0 ... <= 0.14.0 |  < 0.5.0     | n/a           |
-| 0.11.0        |     1.2      |               >= 0.16.2 |  < 0.5.0     | n/a           |
-| 0.25.2        |     2.0      | >= 0.14.0 ... <= 0.18.0 | <= 0.6.0     | >= 2.4.1      |
-| 0.26.0        |     2.0      | >= 0.16.2 ... <= 1.1.0  | <= 0.6.1     | >= 2.4.1      |
-| 0.27.0        |     2.0      | >= 0.16.2 ... <= 1.1.0  | >= 0.5.0     | >= 2.4.1      |
-| 0.32.0        |     2.0      | >= 0.16.2               | >= 0.5.0     | >= 2.4.1      |
-| 0.34.0        |     2.0      | >= 0.16.2 ... < 1.3.0   | >= 0.5.0     | >= 2.4.1      |
-| >= 1.0.0      |     2.0      | >= 1.3.0                | >= 0.5.0     | >= 2.4.1      |
+| ------------- | ------------ | ----------------------- | ------------ | ------------- |
+| 0.10.5        | 1.2          | >= 0.10.0 ... <= 0.14.0 | < 0.5.0      | n/a           |
+| 0.11.0        | 1.2          | >= 0.16.2               | < 0.5.0      | n/a           |
+| 0.25.2        | 2.0          | >= 0.14.0 ... <= 0.18.0 | <= 0.6.0     | >= 2.4.1      |
+| 0.26.0        | 2.0          | >= 0.16.2 ... <= 1.1.0  | <= 0.6.1     | >= 2.4.1      |
+| 0.27.0        | 2.0          | >= 0.16.2 ... <= 1.1.0  | >= 0.5.0     | >= 2.4.1      |
+| 0.32.0        | 2.0          | >= 0.16.2               | >= 0.5.0     | >= 2.4.1      |
+| 0.34.0        | 2.0          | >= 0.16.2 ... < 1.3.0   | >= 0.5.0     | >= 2.4.1      |
+| >= 1.0.0      | 2.0          | >= 1.3.0                | >= 0.5.0     | >= 2.4.1      |
 
 
 ## Swagger-Spec <a name="swagger-spec"></a>
@@ -1380,6 +1380,94 @@ module API
   add_swagger_documentation
 end
 ```
+
+#### Inheritance with allOf and discriminator
+```ruby
+module Entities
+  class Pet < Grape::Entity
+    expose :type, documentation: {
+      type: 'string',
+      is_discriminator: true,
+      required: true
+    }
+    expose :name, documentation: {
+      type: 'string',
+      required: true
+    }
+  end
+
+  class Cat < Pet
+    expose :huntingSkill, documentation: {
+      type: 'string',
+      description: 'The measured skill for hunting',
+      default: 'lazy',
+      values: %w[
+        clueless
+        lazy
+        adventurous
+        aggressive
+      ]
+    }
+  end
+end
+```
+
+Should generate this definitions:
+```JSON
+{
+  "definitions": {
+    "Pet": {
+      "type": "object",
+      "discriminator": "petType",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "petType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "petType"
+      ]
+    },
+    "Cat": {
+      "description": "A representation of a cat",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Pet"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "huntingSkill": {
+              "type": "string",
+              "description": "The measured skill for hunting",
+              "default": "lazy",
+              "enum": [
+                "clueless",
+                "lazy",
+                "adventurous",
+                "aggressive"
+              ]
+            },
+            "petType": {
+              "type": "string",
+              "enum": ["Cat"]
+            }
+          },
+          "required": [
+            "huntingSkill",
+            "petType"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
 
 
 

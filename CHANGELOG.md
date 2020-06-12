@@ -7,6 +7,7 @@
 #### Fixes
 
 * Your contribution here.
+* [#796](https://github.com/ruby-grape/grape-swagger/pull/796): Support grape 1.4.0 - [@thedanielhanke](https://github.com/thedanielhanke).
 
 
 ### 1.1.0 (April 20, 2020)

@@ -189,7 +189,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         'type' => 'object',
         'properties' => {
           'data' => {
-            '$ref' => '#/definitions/NestedModule::ApiResponse',
+            '$ref' => '#/definitions/NestedModule_ApiResponse',
             'description' => 'request data'
           }
         },
@@ -207,7 +207,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
     end
 
     specify do
-      expect(subject['definitions']['NestedModule::ApiResponse']).not_to be_nil
+      expect(subject['definitions']['NestedModule_ApiResponse']).not_to be_nil
     end
 
     specify do

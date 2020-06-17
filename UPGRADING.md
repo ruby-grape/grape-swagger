@@ -1,5 +1,9 @@
 ## Upgrading Grape-swagger
 
+### Upgrading to >= 1.1.1
+
+Full class name is modified to use `_` separator (e.g. `A_B_C` instead of `A::B::C`).
+
 ### Upgrading to >= 1.1.0
 
 Full class name is used for referencing entity by default (e.g. `A::B::C` instead of just `C`). `Entity` and `Entities` suffixes and prefixes are omitted (e.g. if entity name is `Entities::SomeScope::MyFavourite::Entity` only `SomeScope::MyFavourite` will be used).

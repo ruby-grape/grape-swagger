@@ -11,6 +11,9 @@ AllCops:
 Layout/EmptyLinesAroundArguments:
   Enabled: false
 
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
@@ -24,6 +27,12 @@ Layout/SpaceAroundMethodCallOperator:
 
 # Lint stuff
 #
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+
+Lint/MixedRegexpCaptureTypes:
+  Enabled: true
+
 Lint/RaiseException:
   Enabled: true
 
@@ -38,6 +47,9 @@ Metrics/BlockLength:
 
 Metrics/ClassLength:
   Max: 300
+
+Metrics/CyclomaticComplexity:
+  Max: 17
 
 Metrics/MethodLength:
   Exclude:
@@ -63,4 +75,16 @@ Style/HashTransformValues:
   Enabled: true
 
 Style/RegexpLiteral:
+  Enabled: false
+
+Style/RedundantFetchBlock:
+  Enabled: true
+
+Style/RedundantRegexpCharacterClass:
+  Enabled: true
+
+Style/RedundantRegexpEscape:
+  Enabled: true
+
+Style/SlicingWithRange:
   Enabled: false

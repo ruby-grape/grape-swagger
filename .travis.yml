@@ -33,3 +33,5 @@ jobs:
     - rvm: 2.4.10
     - rvm: ruby-head
     - rvm: jruby-head
+
+    - env: GRAPE_VERSION=HEAD

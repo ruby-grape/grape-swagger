@@ -109,6 +109,7 @@ end
 module SwaggerDocumentationAdder
   attr_accessor :combined_namespaces, :combined_namespace_identifiers
   attr_accessor :combined_routes, :combined_namespace_routes
+
   include SwaggerRouting
 
   def add_swagger_documentation(options = {})

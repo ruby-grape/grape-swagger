@@ -8,6 +8,7 @@
 #### Fixes
 
 * Your contribution here.
+* [#798](https://github.com/ruby-grape/grape-swagger/pull/798): Modify full entity name separator - [@GarrettB71](https://github.com/GarrettB71).
 * [#796](https://github.com/ruby-grape/grape-swagger/pull/796): Support grape 1.4.0 - [@thedanielhanke](https://github.com/thedanielhanke).
 
 

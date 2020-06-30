@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
 
   s.required_ruby_version = '>= 2.4'
-  s.add_runtime_dependency 'grape', '~> 1.3.0'
+  s.add_runtime_dependency 'grape', '~> 1.3'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec}/*`.split("\n")

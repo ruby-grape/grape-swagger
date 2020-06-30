@@ -6,8 +6,13 @@ AllCops:
     - example/**/*
   TargetRubyVersion: 2.7
 
+#  Layout stuff
+#
 Layout/EmptyLinesAroundArguments:
   Enabled: false
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
 
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
@@ -17,6 +22,25 @@ Layout/LineLength:
   Exclude:
     - spec/**/*
 
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+# Lint stuff
+#
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+
+Lint/MixedRegexpCaptureTypes:
+  Enabled: true
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+# Metrics stuff
+#
 Metrics/BlockLength:
   Exclude:
     - spec/**/*
@@ -24,19 +48,43 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Max: 300
 
+Metrics/CyclomaticComplexity:
+  Max: 17
+
 Metrics/MethodLength:
   Exclude:
     - spec/**/*
 
+# Naming stuff
+#
 Naming:
   Enabled: false
+
+# Style stuff
+#
+Style/ExponentialNotation:
+  Enabled: true
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
 
 Style/RegexpLiteral:
   Enabled: false
 
-Style/HashEachMethods:
+Style/RedundantFetchBlock:
   Enabled: true
-Style/HashTransformKeys:
+
+Style/RedundantRegexpCharacterClass:
   Enabled: true
-Style/HashTransformValues:
+
+Style/RedundantRegexpEscape:
   Enabled: true
+
+Style/SlicingWithRange:
+  Enabled: false

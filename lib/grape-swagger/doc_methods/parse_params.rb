@@ -26,6 +26,7 @@ module GrapeSwagger
           document_range_values(settings) unless value_type[:is_array]
           document_required(settings)
           document_additional_properties(settings)
+          document_add_extensions(settings)
 
           @parsed_param
         end
@@ -62,6 +63,10 @@ module GrapeSwagger
           @parsed_param[:format] = settings[:format] if settings[:format].present?
         end
 
+        def document_add_extensions(settings)
+          GrapeSwagger::DocMethods::Extensions.add_extensions_to_root(settings, @parsed_param)
+        end
+
         def document_array_param(value_type, definitions)
           if value_type[:documentation].present?
             param_type = value_type[:documentation][:param_type]
@@ -72,6 +77,19 @@ module GrapeSwagger
 
           param_type ||= value_type[:param_type]
 
+          array_items = parse_array_item(
+            definitions,
+            type,
+            value_type
+          )
+
+          @parsed_param[:in] = param_type || 'formData'
+          @parsed_param[:items] = array_items
+          @parsed_param[:type] = 'array'
+          @parsed_param[:collectionFormat] = collection_format if DataType.collections.include?(collection_format)
+        end
+
+        def parse_array_item(definitions, type, value_type)
           array_items = {}
           if definitions[value_type[:data_type]]
             array_items['$ref'] = "#/definitions/#{@parsed_param[:type]}"
@@ -86,10 +104,7 @@ module GrapeSwagger
 
           array_items[:default] = value_type[:default] if value_type[:default].present?
 
-          @parsed_param[:in] = param_type || 'formData'
-          @parsed_param[:items] = array_items
-          @parsed_param[:type] = 'array'
-          @parsed_param[:collectionFormat] = collection_format if DataType.collections.include?(collection_format)
+          array_items
         end
 
         def document_additional_properties(settings)

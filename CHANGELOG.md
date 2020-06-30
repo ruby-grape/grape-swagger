@@ -3,10 +3,22 @@
 #### Features
 
 * Your contribution here.
-* [#782](https://github.com/ruby-grape/grape-swagger/pull/782): Allow passing class name as string for rake task initializer - [@misdoro](https://github.com/misdoro).
-
+* [#793](https://github.com/ruby-grape/grape-swagger/pull/793): Features/inheritance and discriminator - [@MaximeRDY](https://github.com/MaximeRDY).
 
 #### Fixes
+
+* Your contribution here.
+* [#796](https://github.com/ruby-grape/grape-swagger/pull/796): Support grape 1.4.0 - [@thedanielhanke](https://github.com/thedanielhanke).
+
+
+### 1.1.0 (April 20, 2020)
+
+#### Features
+
+* [#785](https://github.com/ruby-grape/grape-swagger/pull/785): Add extensions for params - [@MaximeRDY](https://github.com/MaximeRDY).
+* [#782](https://github.com/ruby-grape/grape-swagger/pull/782): Allow passing class name as string for rake task initializer - [@misdoro](https://github.com/misdoro).
+* [#786](https://github.com/ruby-grape/grape-swagger/pull/786): Use full entity name as a default - [@mrexox](https://github.com/mrexox).
+
 
 ### 1.0.0 (February 10, 2020)
 
@@ -14,6 +26,7 @@
 
 * [#777](https://github.com/ruby-grape/grape-swagger/pull/777): Make usage of grape >= 1.3, rack >= 2.1 - [@LeFnord](https://github.com/LeFnord).
 * [#775](https://github.com/ruby-grape/grape-swagger/pull/775): Add in token_owner support to param hidden procs - [@urkle](https://github.com/urkle).
+
 
 ### 0.34.2 (January 20, 2020)
 

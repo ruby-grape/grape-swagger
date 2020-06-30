@@ -35,5 +35,5 @@ describe '#427 nested entity given as string' do
     JSON.parse(last_response.body)['definitions']
   end
 
-  specify { expect(subject.keys).to include 'RoleEntity', 'WithoutRole' }
+  specify { expect(subject.keys).to include 'RoleEntity', 'Permission::WithoutRole' }
 end

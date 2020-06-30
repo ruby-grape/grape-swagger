@@ -14,6 +14,7 @@ gem 'grape', case version = ENV['GRAPE_VERSION'] || '>= 1.3.0'
              end
 
 gem ENV['MODEL_PARSER'] if ENV.key?('MODEL_PARSER')
+
 group :development, :test do
   gem 'bundler'
   gem 'grape-entity'
@@ -26,12 +27,16 @@ group :development, :test do
   gem 'rake'
   gem 'rdoc'
   gem 'rspec', '~> 3.9'
-  gem 'rubocop', '~> 0.80', require: false
+  gem 'rubocop', '~> 0.85', require: false
 end
 
 group :test do
   gem 'coveralls_reborn', require: false
-  gem 'grape-swagger-entity'
+
   gem 'ruby-grape-danger', '~> 0.1.1', require: false
   gem 'simplecov', require: false
+
+  unless ENV['MODEL_PARSER'] == 'grape-swagger-entity'
+    gem 'grape-swagger-entity', git: 'https://github.com/ruby-grape/grape-swagger-entity'
+  end
 end

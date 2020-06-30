@@ -77,6 +77,19 @@ module GrapeSwagger
 
           param_type ||= value_type[:param_type]
 
+          array_items = parse_array_item(
+            definitions,
+            type,
+            value_type
+          )
+
+          @parsed_param[:in] = param_type || 'formData'
+          @parsed_param[:items] = array_items
+          @parsed_param[:type] = 'array'
+          @parsed_param[:collectionFormat] = collection_format if DataType.collections.include?(collection_format)
+        end
+
+        def parse_array_item(definitions, type, value_type)
           array_items = {}
           if definitions[value_type[:data_type]]
             array_items['$ref'] = "#/definitions/#{@parsed_param[:type]}"
@@ -91,10 +104,7 @@ module GrapeSwagger
 
           array_items[:default] = value_type[:default] if value_type[:default].present?
 
-          @parsed_param[:in] = param_type || 'formData'
-          @parsed_param[:items] = array_items
-          @parsed_param[:type] = 'array'
-          @parsed_param[:collectionFormat] = collection_format if DataType.collections.include?(collection_format)
+          array_items
         end
 
         def document_additional_properties(settings)

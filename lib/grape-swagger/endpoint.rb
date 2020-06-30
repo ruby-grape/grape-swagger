@@ -196,10 +196,7 @@ module Grape
     end
 
     def response_object(route, options)
-      codes = http_codes_from_route(route)
-      codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2], examples: x[3], headers: x[4] } : x }
-
-      codes.each_with_object({}) do |value, memo|
+      codes(route).each_with_object({}) do |value, memo|
         value[:message] ||= ''
         memo[value[:code]] = { description: value[:message] }
 
@@ -222,6 +219,12 @@ module Grape
 
         memo[value[:code]][:schema] = build_reference(route, value, response_model, options)
         memo[value[:code]][:examples] = value[:examples] if value[:examples]
+      end
+    end
+
+    def codes(route)
+      http_codes_from_route(route).map do |x|
+        x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2], examples: x[3], headers: x[4] } : x
       end
     end
 
@@ -340,12 +343,10 @@ module Grape
       parser = GrapeSwagger.model_parsers.find(model)
       raise GrapeSwagger::Errors::UnregisteredParser, "No parser registered for #{model_name}." unless parser
 
-      properties, required = parser.new(model, self).call
-      unless properties&.any?
-        raise GrapeSwagger::Errors::SwaggerSpec,
-              "Empty model #{model_name}, swagger 2.0 doesn't support empty definitions."
-      end
-      @definitions[model_name] = GrapeSwagger::DocMethods::BuildModelDefinition.build(model, properties, required)
+      parsed_response = parser.new(model, self).call
+
+      @definitions[model_name] =
+        GrapeSwagger::DocMethods::BuildModelDefinition.parse_params_from_model(parsed_response, model, model_name)
 
       model_name
     end

@@ -82,11 +82,11 @@ describe 'definition names' do
     JSON.parse(last_response.body)['definitions']
   end
 
-  specify { expect(subject).to include 'TestDefinition::DummyEntities::WithVeryLongName::AnotherGroupingModule::Class1' }
-  specify { expect(subject).to include 'TestDefinition::DummyEntities::WithVeryLongName::AnotherGroupingModule::Class2' }
+  specify { expect(subject).to include 'TestDefinition_DummyEntities_WithVeryLongName_AnotherGroupingModule_Class1' }
+  specify { expect(subject).to include 'TestDefinition_DummyEntities_WithVeryLongName_AnotherGroupingModule_Class2' }
   specify { expect(subject).to include 'FooKlass' }
-  specify { expect(subject).to include 'TestDefinition::DummyEntities::WithVeryLongName::AnotherGroupingModule::Class4::FourthEntity' }
-  specify { expect(subject).to include 'TestDefinition::DummyEntities::WithVeryLongName::AnotherGroupingModule::Class5::FithEntity' }
+  specify { expect(subject).to include 'TestDefinition_DummyEntities_WithVeryLongName_AnotherGroupingModule_Class4_FourthEntity' }
+  specify { expect(subject).to include 'TestDefinition_DummyEntities_WithVeryLongName_AnotherGroupingModule_Class5_FithEntity' }
   specify { expect(subject).to include 'BarKlass' }
-  specify { expect(subject).to include 'TestDefinition::DummyEntities::WithVeryLongName::AnotherGroupingModule::Class7::SeventhEntity' }
+  specify { expect(subject).to include 'TestDefinition_DummyEntities_WithVeryLongName_AnotherGroupingModule_Class7_SeventhEntity' }
 end

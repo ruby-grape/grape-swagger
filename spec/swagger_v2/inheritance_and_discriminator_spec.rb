@@ -48,9 +48,9 @@ describe 'Inheritance and Discriminator' do
     end
 
     specify do
-      subject['InheritanceTest::Entities::Pet'].key?('discriminator')
-      subject['InheritanceTest::Entities::Pet']['discriminator'] = 'type'
-      subject['InheritanceTest::Entities::Cat'].key?('allOf')
+      subject['InheritanceTest_Entities_Pet'].key?('discriminator')
+      subject['InheritanceTest_Entities_Pet']['discriminator'] = 'type'
+      subject['InheritanceTest_Entities_Cat'].key?('allOf')
     end
   end
 end

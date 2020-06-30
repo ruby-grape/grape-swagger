@@ -196,10 +196,7 @@ module Grape
     end
 
     def response_object(route, options)
-      codes = http_codes_from_route(route)
-      codes.map! { |x| x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2], examples: x[3], headers: x[4] } : x }
-
-      codes.each_with_object({}) do |value, memo|
+      codes(route).each_with_object({}) do |value, memo|
         value[:message] ||= ''
         memo[value[:code]] = { description: value[:message] }
 
@@ -222,6 +219,12 @@ module Grape
 
         memo[value[:code]][:schema] = build_reference(route, value, response_model, options)
         memo[value[:code]][:examples] = value[:examples] if value[:examples]
+      end
+    end
+
+    def codes(route)
+      http_codes_from_route(route).map do |x|
+        x.is_a?(Array) ? { code: x[0], message: x[1], model: x[2], examples: x[3], headers: x[4] } : x
       end
     end
 

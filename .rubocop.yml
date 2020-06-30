@@ -64,3 +64,6 @@ Style/HashTransformValues:
 
 Style/RegexpLiteral:
   Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Max: 14

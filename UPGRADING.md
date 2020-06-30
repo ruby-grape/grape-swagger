@@ -1,6 +1,6 @@
 ## Upgrading Grape-swagger
 
-### Upgrading to >= 1.1.1
+### Upgrading to >= 1.2.0
 
 Full class name is modified to use `_` separator (e.g. `A_B_C` instead of `A::B::C`).
 

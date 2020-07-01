@@ -55,6 +55,8 @@ describe 'definition names' do
             class Class7
               class SeventhEntity < Class6::SixthEntity
                 expose :seventh_thing
+
+                private_class_method :entity_name
               end
             end
           end

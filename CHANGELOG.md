@@ -2,13 +2,22 @@
 
 #### Features
 
-* [#794](https://github.com/ruby-grape/grape-swagger/pull/794): Allow entity_name to be inherited, fixes #659 - [@urkle](https://githubcom/urkle).
 * Your contribution here.
-* [#793](https://github.com/ruby-grape/grape-swagger/pull/793): Features/inheritance and discriminator - [@MaximeRDY](https://github.com/MaximeRDY).
 
 #### Fixes
 
 * Your contribution here.
+
+
+### 1.2.0 (July 1, 2020)
+
+#### Features
+
+* [#794](https://github.com/ruby-grape/grape-swagger/pull/794): Allow `entity_name` to be inherited, fixes issue #659 - [@urkle](https://github.com/urkle).
+* [#793](https://github.com/ruby-grape/grape-swagger/pull/793): Features/inheritance and discriminator - [@MaximeRDY](https://github.com/MaximeRDY).
+
+#### Fixes
+
 * [#798](https://github.com/ruby-grape/grape-swagger/pull/798): Modify full entity name separator - [@GarrettB71](https://github.com/GarrettB71).
 * [#796](https://github.com/ruby-grape/grape-swagger/pull/796): Support grape 1.4.0 - [@thedanielhanke](https://github.com/thedanielhanke).
 

@@ -22,6 +22,20 @@ describe 'referenceEntity' do
           expose :title, documentation: { type: 'string', desc: 'Title of the kind.' }
           expose :something, documentation: { type: Something, desc: 'Something interesting.' }
         end
+
+        class Base < Grape::Entity
+          def self.entity_name
+            parts = to_s.split('::')
+
+            "MyAPI::#{parts.last}"
+          end
+
+          expose :title, documentation: { type: 'string', desc: 'Title of the parent.' }
+        end
+
+        class Child < Base
+          expose :child, documentation: { type: 'string', desc: 'Child property.' }
+        end
       end
 
       class ResponseModelApi < Grape::API
@@ -40,6 +54,16 @@ describe 'referenceEntity' do
           present kind, with: Entities::Kind
         end
 
+        desc 'This returns a child entity',
+             entity: Entities::Child,
+             http_codes: [
+               { code: 200, message: 'OK', model: Entities::Child }
+             ]
+        get '/child' do
+          child = OpenStruct.new text: 'child'
+          present child, with: Entities::Child
+        end
+
         add_swagger_documentation # models: [MyAPI::Entities::Something, MyAPI::Entities::Kind]
       end
     end
@@ -49,36 +73,57 @@ describe 'referenceEntity' do
     MyAPI::ResponseModelApi
   end
 
-  subject do
-    get '/swagger_doc/kind'
-    JSON.parse(last_response.body)
+  describe 'kind' do
+    subject do
+      get '/swagger_doc/kind'
+      JSON.parse(last_response.body)
+    end
+
+    it 'should document specified models' do
+      expect(subject['paths']['/kind']['get']['parameters']).to eq [{
+        'in' => 'query',
+        'name' => 'something',
+        'description' => 'Something interesting.',
+        'type' => 'SomethingCustom',
+        'required' => false
+      }]
+
+      expect(subject['definitions'].keys).to include 'SomethingCustom'
+      expect(subject['definitions']['SomethingCustom']).to eq(
+        'type' => 'object', 'properties' => { 'text' => { 'type' => 'string', 'description' => 'Content of something.' } }
+      )
+
+      expect(subject['definitions'].keys).to include 'KindCustom'
+      expect(subject['definitions']['KindCustom']).to eq(
+        'type' => 'object',
+        'properties' => {
+          'title' => { 'type' => 'string', 'description' => 'Title of the kind.' },
+          'something' => {
+            '$ref' => '#/definitions/SomethingCustom',
+            'description' => 'Something interesting.'
+          }
+        },
+        'description' => 'This returns kind and something or an error'
+      )
+    end
   end
 
-  it 'should document specified models' do
-    expect(subject['paths']['/kind']['get']['parameters']).to eq [{
-      'in' => 'query',
-      'name' => 'something',
-      'description' => 'Something interesting.',
-      'type' => 'SomethingCustom',
-      'required' => false
-    }]
+  describe 'child' do
+    subject do
+      get '/swagger_doc/child'
+      JSON.parse(last_response.body)
+    end
 
-    expect(subject['definitions'].keys).to include 'SomethingCustom'
-    expect(subject['definitions']['SomethingCustom']).to eq(
-      'type' => 'object', 'properties' => { 'text' => { 'type' => 'string', 'description' => 'Content of something.' } }
-    )
-
-    expect(subject['definitions'].keys).to include 'KindCustom'
-    expect(subject['definitions']['KindCustom']).to eq(
-      'type' => 'object',
-      'properties' => {
-        'title' => { 'type' => 'string', 'description' => 'Title of the kind.' },
-        'something' => {
-          '$ref' => '#/definitions/SomethingCustom',
-          'description' => 'Something interesting.'
-        }
-      },
-      'description' => 'This returns kind and something or an error'
-    )
+    it 'should document specified models' do
+      expect(subject['definitions'].keys).to include 'MyAPI::Child'
+      expect(subject['definitions']['MyAPI::Child']).to eq(
+        'type' => 'object',
+        'properties' => {
+          'title' => { 'type' => 'string', 'description' => 'Title of the parent.' },
+          'child' => { 'type' => 'string', 'description' => 'Child property.' }
+        },
+        'description' => 'This returns a child entity'
+      )
+    end
   end
 end

@@ -2,7 +2,29 @@
 
 ### Upgrading to >= 1.2.0
 
-Full class name is modified to use `_` separator (e.g. `A_B_C` instead of `A::B::C`).
+- The entity_name class method is now called on parent classes for inherited entities. Now you can do this
+
+```ruby
+module Some::Long::Module
+  class Base < Grape::Entity
+    # ... other shared logic
+    def self.entity_name
+      "V2::#{self.to_s.demodulize}"
+    end
+  end
+
+  def MyEntity < Base
+    # ....
+  end
+
+  def OtherEntity < Base
+    # revert back to the default behavior by hiding the method
+    private_class_method :entity_name
+  end
+end
+```
+
+- Full class name is modified to use `_` separator (e.g. `A_B_C` instead of `A::B::C`).
 
 ### Upgrading to >= 1.1.0
 

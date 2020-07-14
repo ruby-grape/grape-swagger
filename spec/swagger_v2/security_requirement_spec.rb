@@ -5,7 +5,7 @@ require 'spec_helper'
 describe 'security requirement on endpoint method' do
   def app
     Class.new(Grape::API) do
-      desc 'Endpoint with security requirement', security: [oauth_pets: ['read:pets', 'write:pets']]
+      desc 'Endpoint with security requirement', security: [{ oauth_pets: ['read:pets', 'write:pets'] }]
       get '/with_security' do
         { foo: 'bar' }
       end
@@ -37,7 +37,7 @@ describe 'security requirement on endpoint method' do
   end
 
   it 'defines the security requirement on the endpoint method' do
-    expect(subject['paths']['/with_security']['get']['security']).to eql ['oauth_pets' => ['read:pets', 'write:pets']]
+    expect(subject['paths']['/with_security']['get']['security']).to eql [{ 'oauth_pets' => ['read:pets', 'write:pets'] }]
   end
 
   it 'defines an empty security requirement on the endpoint method' do

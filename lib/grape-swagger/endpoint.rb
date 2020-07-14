@@ -175,15 +175,18 @@ module Grape
     end
 
     def params_object(route, options, path)
-      parameters = partition_params(route, options).map do |param, value|
+      parameters = build_request_params(route, options).each_with_object([]) do |(param, value), memo|
+        next if hidden_parameter?(value)
+
         value = { required: false }.merge(value) if value.is_a?(Hash)
         _, value = default_type([[param, value]]).first if value == ''
+
         if value.dig(:documentation, :type)
           expose_params(value[:documentation][:type])
         elsif value[:type]
           expose_params(value[:type])
         end
-        GrapeSwagger::DocMethods::ParseParams.call(param, value, path, route, @definitions)
+        memo << GrapeSwagger::DocMethods::ParseParams.call(param, value, path, route, @definitions)
       end
 
       if GrapeSwagger::DocMethods::MoveParams.can_be_moved?(route.request_method, parameters)
@@ -253,7 +256,7 @@ module Grape
 
     def tag_object(route, path)
       version = GrapeSwagger::DocMethods::Version.get(route)
-      version = [version] unless version.is_a?(Array)
+      version = Array(version)
       prefix = route.prefix.to_s.split('/').reject(&:empty?)
       Array(
         path.split('{')[0].split('/').reject(&:empty?).delete_if do |i|
@@ -296,16 +299,13 @@ module Grape
       memo['schema'] = { type: 'file' }
     end
 
-    def partition_params(route, settings)
-      declared_params = route.settings[:declared_params] if route.settings[:declared_params].present?
+    def build_request_params(route, settings)
       required = merge_params(route)
       required = GrapeSwagger::DocMethods::Headers.parse(route) + required unless route.headers.nil?
 
       default_type(required)
 
-      request_params = unless declared_params.nil? && route.headers.nil?
-                         GrapeSwagger::Endpoint::ParamsParser.parse_request_params(required, settings, self)
-                       end || {}
+      request_params = GrapeSwagger::Endpoint::ParamsParser.parse_request_params(required, settings, self)
 
       request_params.empty? ? required : request_params
     end
@@ -361,6 +361,16 @@ module Grape
       return route_hidden unless route_hidden.is_a?(Proc)
 
       options[:token_owner] ? route_hidden.call(send(options[:token_owner].to_sym)) : route_hidden.call
+    end
+
+    def hidden_parameter?(value)
+      return false if value.dig(:required)
+
+      if value.dig(:documentation, :hidden).is_a?(Proc)
+        value.dig(:documentation, :hidden).call
+      else
+        value.dig(:documentation, :hidden)
+      end
     end
 
     def success_code_from_entity(route, entity)

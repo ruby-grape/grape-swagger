@@ -19,7 +19,7 @@ describe 'hidden flag enables a single endpoint parameter to be excluded from th
             requires :name, type: String, documentation: { desc: 'name' }
             optional :favourite_color, type: String, documentation: { desc: 'I should not be anywhere', hidden: true }
             optional :proc_param, type: String, documentation: { desc: 'I should not be anywhere', hidden: proc { true } }
-            optional :proc_with_token, type: String, documentation: { desc: 'I may be somewhere', hidden: proc { |token_owner = nil| token_owner.nil? } }
+            optional :proc_with_token, type: String, documentation: { desc: 'I may be somewhere', hidden: proc { false } }
           end
 
           post do

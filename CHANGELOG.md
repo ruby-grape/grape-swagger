@@ -7,6 +7,7 @@
 #### Fixes
 
 * Your contribution here.
+* [#801](https://github.com/ruby-grape/grape-swagger/pull/801): Fixes behaviour after grape upgrade to 1.4.0 - [@LeFnord](https://github.com/LeFnord).
 
 
 ### 1.2.0 (July 1, 2020)

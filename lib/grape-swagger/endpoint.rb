@@ -78,11 +78,11 @@ module Grape
     def path_and_definition_objects(namespace_routes, options)
       @paths = {}
       @definitions = {}
+      add_definitions_from options[:models]
       namespace_routes.each_value do |routes|
         path_item(routes, options)
       end
 
-      add_definitions_from options[:models]
       [@paths, @definitions]
     end
 
@@ -207,19 +207,20 @@ module Grape
 
         next build_file_response(memo[value[:code]]) if file_response?(value[:model])
 
-        response_model = @item
-        response_model = expose_params_from_model(value[:model]) if value[:model]
-
         if memo.key?(200) && route.request_method == 'DELETE' && value[:model].nil?
           memo[204] = memo.delete(200)
           value[:code] = 204
+          next
         end
 
-        next if value[:code] == 204
-        next unless !response_model.start_with?('Swagger_doc') && (@definitions[response_model] || value[:model])
+        # Explicitly request no model with { model: '' }
+        next if value[:model] == ''
 
-        @definitions[response_model][:description] = description_object(route)
+        response_model = value[:model] ? expose_params_from_model(value[:model]) : @item
+        next unless @definitions[response_model]
+        next if response_model.start_with?('Swagger_doc')
 
+        @definitions[response_model][:description] ||= "#{response_model} model"
         memo[value[:code]][:schema] = build_reference(route, value, response_model, options)
         memo[value[:code]][:examples] = value[:examples] if value[:examples]
       end

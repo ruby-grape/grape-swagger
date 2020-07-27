@@ -7,7 +7,7 @@
 #### Fixes
 
 * Your contribution here.
-
+* [#804](https://github.com/ruby-grape/grape-swagger/pull/804): Don't overwrite model description with the route description. - [@Bhacaz](https://github.com/Bhacaz)
 
 ### 1.2.1 (July 15, 2020)
 

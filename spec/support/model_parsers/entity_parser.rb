@@ -145,23 +145,23 @@ RSpec.shared_context 'entity swagger example' do
 
   let(:swagger_nested_type) do
     {
-      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } }, 'description' => 'This returns something' },
+      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } }, 'description' => 'ApiError model' },
       'ResponseItem' => { 'type' => 'object', 'properties' => { 'id' => { 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'type' => 'string' } } },
-      'UseItemResponseAsType' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, 'responses' => { '$ref' => '#/definitions/ResponseItem' } }, 'description' => 'This returns something' }
+      'UseItemResponseAsType' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, 'responses' => { '$ref' => '#/definitions/ResponseItem' } }, 'description' => 'UseItemResponseAsType model' }
     }
   end
 
   let(:swagger_entity_as_response_object) do
     {
-      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } }, 'description' => 'This returns something' },
+      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } }, 'description' => 'ApiError model' },
       'ResponseItem' => { 'type' => 'object', 'properties' => { 'id' => { 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'type' => 'string' } } },
-      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, '$responses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' } } }, 'description' => 'This returns something' }
+      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, '$responses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' } } }, 'description' => 'UseResponse model' }
     }
   end
 
   let(:swagger_params_as_response_object) do
     {
-      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'description' => 'status code', 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'description' => 'error message', 'type' => 'string' } }, 'description' => 'This returns something' }
+      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'description' => 'status code', 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'description' => 'error message', 'type' => 'string' } }, 'description' => 'ApiError model' }
     }
   end
 
@@ -300,7 +300,7 @@ RSpec.shared_context 'entity swagger example' do
           'type' => 'object',
           'required' => ['elements'],
           'properties' => { 'elements' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/QueryInputElement' }, 'description' => 'Set of configuration' } },
-          'description' => 'nested route inside namespace'
+          'description' => 'QueryInput model'
         },
         'QueryInputElement' => {
           'type' => 'object',
@@ -310,7 +310,7 @@ RSpec.shared_context 'entity swagger example' do
         'ApiError' => {
           'type' => 'object',
           'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } },
-          'description' => 'This gets Things.'
+          'description' => 'ApiError model'
         },
         'Something' => {
           'type' => 'object',
@@ -320,7 +320,7 @@ RSpec.shared_context 'entity swagger example' do
             'links' => { 'type' => 'array', 'items' => { 'type' => 'link' } },
             'others' => { 'type' => 'text' }
           },
-          'description' => 'This gets Things.'
+          'description' => 'Something model'
         }
       }
     }

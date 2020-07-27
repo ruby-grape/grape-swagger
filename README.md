@@ -859,10 +859,11 @@ get '/thing', failure: [
 end
 ```
 
-By adding a `model` key, e.g. this would be taken.
+By adding a `model` key, e.g. this would be taken. Setting an empty string will act like an empty body.
 ```ruby
 get '/thing', failure: [
   { code: 400, message: 'General error' },
+  { code: 403, message: 'Forbidden error', model: '' },
   { code: 422, message: 'Invalid parameter entry', model: Entities::ApiError }
 ] do
   # ...

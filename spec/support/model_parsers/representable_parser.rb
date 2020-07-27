@@ -218,22 +218,22 @@ RSpec.shared_context 'representable swagger example' do
 
   let(:swagger_nested_type) do
     {
-      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'description' => 'status code', 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'description' => 'error message', 'type' => 'string' } }, 'description' => 'This returns something' },
-      'UseItemResponseAsType' => { 'type' => 'object', 'properties' => { 'description' => { 'description' => '', 'type' => 'string' }, 'responses' => { 'description' => '', 'type' => 'ResponseItem' } }, 'description' => 'This returns something' }
+      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'description' => 'status code', 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'description' => 'error message', 'type' => 'string' } }, 'description' => 'ApiError model' },
+      'UseItemResponseAsType' => { 'type' => 'object', 'properties' => { 'description' => { 'description' => '', 'type' => 'string' }, 'responses' => { 'description' => '', 'type' => 'ResponseItem' } }, 'description' => 'UseItemResponseAsType model' }
     }
   end
 
   let(:swagger_entity_as_response_object) do
     {
-      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'description' => 'status code', 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'description' => 'error message', 'type' => 'string' } }, 'description' => 'This returns something' },
+      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'description' => 'status code', 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'description' => 'error message', 'type' => 'string' } }, 'description' => 'ApiError model' },
       'ResponseItem' => { 'type' => 'object', 'properties' => { 'id' => { 'description' => '', 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'description' => '', 'type' => 'string' } } },
-      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'description' => '', 'type' => 'string' }, '$responses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' }, 'description' => '' } }, 'description' => 'This returns something' }
+      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'description' => '', 'type' => 'string' }, '$responses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' }, 'description' => '' } }, 'description' => 'UseResponse model' }
     }
   end
 
   let(:swagger_params_as_response_object) do
     {
-      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'description' => 'status code', 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'description' => 'error message', 'type' => 'string' } }, 'description' => 'This returns something' }
+      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'description' => 'status code', 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'description' => 'error message', 'type' => 'string' } }, 'description' => 'ApiError model' }
     }
   end
 
@@ -372,7 +372,7 @@ RSpec.shared_context 'representable swagger example' do
           'type' => 'object',
           'required' => ['elements'],
           'properties' => { 'elements' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/QueryInputElement' }, 'description' => 'Set of configuration' } },
-          'description' => 'nested route inside namespace'
+          'description' => 'QueryInput model'
         },
         'QueryInputElement' => {
           'type' => 'object',
@@ -382,7 +382,7 @@ RSpec.shared_context 'representable swagger example' do
         'ApiError' => {
           'type' => 'object',
           'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } },
-          'description' => 'This gets Things.'
+          'description' => 'ApiError model'
         },
         'Something' => {
           'type' => 'object',
@@ -392,7 +392,7 @@ RSpec.shared_context 'representable swagger example' do
             'links' => { 'type' => 'array', 'items' => { 'description' => '', 'type' => 'link' } },
             'others' => { 'description' => '', 'type' => 'text' }
           },
-          'description' => 'This gets Things.'
+          'description' => 'Something model'
         }
       }
     }

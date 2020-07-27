@@ -103,7 +103,7 @@ describe 'referenceEntity' do
             'description' => 'Something interesting.'
           }
         },
-        'description' => 'This returns kind and something or an error'
+        'description' => 'KindCustom model'
       )
     end
   end
@@ -122,7 +122,7 @@ describe 'referenceEntity' do
           'title' => { 'type' => 'string', 'description' => 'Title of the parent.' },
           'child' => { 'type' => 'string', 'description' => 'Child property.' }
         },
-        'description' => 'This returns a child entity'
+        'description' => 'MyAPI::Child model'
       )
     end
   end

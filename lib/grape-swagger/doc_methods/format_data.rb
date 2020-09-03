@@ -7,7 +7,7 @@ module GrapeSwagger
         def to_format(parameters)
           parameters.reject { |parameter| parameter[:in] == 'body' }.each do |b|
             related_parameters = parameters.select do |p|
-              p[:name] != b[:name] && p[:name].to_s.include?(b[:name].to_s.gsub(/\[\]\z/, '') + '[')
+              p[:name] != b[:name] && p[:name].to_s.include?("#{b[:name].to_s.gsub(/\[\]\z/, '')}[")
             end
             parameters.reject! { |p| p[:name] == b[:name] } if move_down(b, related_parameters)
           end
@@ -30,7 +30,7 @@ module GrapeSwagger
 
         def add_braces(parameter, related_parameters)
           param_name = parameter[:name].gsub(/\A(.*)\[\]\z/, '\1')
-          related_parameters.each { |p| p[:name] = p[:name].gsub(param_name, param_name + '[]') }
+          related_parameters.each { |p| p[:name] = p[:name].gsub(param_name, "#{param_name}[]") }
         end
 
         def add_array(parameter, related_parameters)

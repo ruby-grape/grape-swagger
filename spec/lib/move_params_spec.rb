@@ -97,7 +97,7 @@ describe GrapeSwagger::DocMethods::MoveParams do
     let(:route_options) { { requirements: {} } }
     describe 'POST' do
       let(:params) { paths[path][:post][:parameters] }
-      let(:route) { Grape::Router::Route.new('POST', path.dup, route_options) }
+      let(:route) { Grape::Router::Route.new('POST', path.dup, **route_options) }
 
       specify do
         subject.to_definition(path, params, route, definitions)
@@ -113,7 +113,7 @@ describe GrapeSwagger::DocMethods::MoveParams do
 
     describe 'POST' do
       let(:params) { paths['/in_body/{key}'][:put][:parameters] }
-      let(:route) { Grape::Router::Route.new('PUT', path.dup, route_options) }
+      let(:route) { Grape::Router::Route.new('PUT', path.dup, **route_options) }
 
       specify do
         subject.to_definition(path, params, route, definitions)

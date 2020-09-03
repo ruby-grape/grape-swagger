@@ -54,6 +54,16 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           put '/in_body/:id' do
             { 'declared_params' => declared(params) }
           end
+
+          desc 'post in body with entity',
+               success: ::Entities::ResponseItem
+          params do
+            optional :names, type: Array[String], documentation: { desc: 'names', param_type: 'body' }
+          end
+
+          post '/in_body2' do
+            { 'declared_params' => declared(params) }
+          end
         end
 
         namespace :with_entity_param do
@@ -166,6 +176,25 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           'name' => { 'type' => 'string', 'description' => 'name' }
         },
         'description' => 'put in body with entity'
+      )
+    end
+
+    specify do
+      expect(subject['paths']['/with_entities/in_body2']['post']['parameters']).to eql(
+        [
+          { 'name' => 'WithEntitiesInBody2', 'in' => 'body', 'required' => true, 'schema' => { '$ref' => '#/definitions/postWithEntitiesInBody2' } }
+        ]
+      )
+    end
+
+    specify do
+      expect(subject['definitions']['postWithEntitiesInBody2']).to eql(
+        'type' => 'object',
+        'properties' => {
+          'names' => { 'type' => 'array', 'description' => 'names', 'items' => { 'type' => 'string' } }
+        },
+        'required' => ['names'],
+        'description' => 'post in body with entity'
       )
     end
   end

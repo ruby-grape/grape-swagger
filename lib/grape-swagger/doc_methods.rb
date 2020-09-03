@@ -17,82 +17,7 @@ require 'grape-swagger/doc_methods/version'
 
 module GrapeSwagger
   module DocMethods
-    def hide_documentation_path
-      @@hide_documentation_path
-    end
-
-    def mount_path
-      @@mount_path
-    end
-
-    def setup(options)
-      options = defaults.merge(options)
-
-      # options could be set on #add_swagger_documentation call,
-      # for available options see #defaults
-      target_class     = options[:target_class]
-      guard            = options[:swagger_endpoint_guard]
-      formatter        = options[:format]
-      api_doc          = options[:api_documentation].dup
-      specific_api_doc = options[:specific_api_documentation].dup
-
-      class_variables_from(options)
-
-      if formatter
-        %i[format default_format default_error_formatter].each do |method|
-          send(method, formatter)
-        end
-      end
-
-      desc api_doc.delete(:desc), api_doc
-
-      output_path_definitions = proc do |combi_routes, endpoint|
-        output = endpoint.swagger_object(
-          target_class,
-          endpoint.request,
-          options
-        )
-
-        paths, definitions   = endpoint.path_and_definition_objects(combi_routes, options)
-        tags                 = tags_from(paths, options)
-
-        output[:tags]        = tags unless tags.empty? || paths.blank?
-        output[:paths]       = paths unless paths.blank?
-        output[:definitions] = definitions unless definitions.blank?
-
-        output
-      end
-
-      instance_eval(guard) unless guard.nil?
-
-      get mount_path do
-        header['Access-Control-Allow-Origin']   = '*'
-        header['Access-Control-Request-Method'] = '*'
-
-        output_path_definitions.call(target_class.combined_namespace_routes, self)
-      end
-
-      desc specific_api_doc.delete(:desc), { params:
-        specific_api_doc.delete(:params) || {} }.merge(specific_api_doc)
-
-      params do
-        requires :name, type: String, desc: 'Resource name of mounted API'
-        optional :locale, type: Symbol, desc: 'Locale of API documentation'
-      end
-
-      instance_eval(guard) unless guard.nil?
-
-      get "#{mount_path}/:name" do
-        I18n.locale = params[:locale] || I18n.default_locale
-
-        combined_routes = target_class.combined_namespace_routes[params[:name]]
-        error!({ error: 'named resource not exist' }, 400) if combined_routes.nil?
-
-        output_path_definitions.call({ params[:name] => combined_routes }, self)
-      end
-    end
-
-    def defaults
+    DEFAULTS =
       {
         info: {},
         models: [],
@@ -114,16 +39,28 @@ module GrapeSwagger
         endpoint_auth_wrapper: nil,
         swagger_endpoint_guard: nil,
         token_owner: nil
-      }
+      }.freeze
+
+    FORMATTER_METHOD = %i[format default_format default_error_formatter].freeze
+
+    def self.output_path_definitions(combi_routes, endpoint, target_class, options)
+      output = endpoint.swagger_object(
+        target_class,
+        endpoint.request,
+        options
+      )
+
+      paths, definitions   = endpoint.path_and_definition_objects(combi_routes, options)
+      tags                 = tags_from(paths, options)
+
+      output[:tags]        = tags unless tags.empty? || paths.blank?
+      output[:paths]       = paths unless paths.blank?
+      output[:definitions] = definitions unless definitions.blank?
+
+      output
     end
 
-    def class_variables_from(options)
-      @@mount_path              = options[:mount_path]
-      @@class_name              = options[:class_name] || options[:mount_path].delete('/')
-      @@hide_documentation_path = options[:hide_documentation_path]
-    end
-
-    def tags_from(paths, options)
+    def self.tags_from(paths, options)
       tags = GrapeSwagger::DocMethods::TagNameDescription.build(paths)
 
       if options[:tags]
@@ -133,6 +70,72 @@ module GrapeSwagger
       end
 
       tags
+    end
+
+    def hide_documentation_path
+      @@hide_documentation_path
+    end
+
+    def mount_path
+      @@mount_path
+    end
+
+    def setup(options)
+      options = DEFAULTS.merge(options)
+
+      # options could be set on #add_swagger_documentation call,
+      # for available options see #defaults
+      target_class     = options[:target_class]
+      guard            = options[:swagger_endpoint_guard]
+      api_doc          = options[:api_documentation].dup
+      specific_api_doc = options[:specific_api_documentation].dup
+
+      class_variables_from(options)
+
+      setup_formatter(options[:format])
+
+      desc api_doc.delete(:desc), api_doc
+
+      instance_eval(guard) unless guard.nil?
+
+      get mount_path do
+        header['Access-Control-Allow-Origin']   = '*'
+        header['Access-Control-Request-Method'] = '*'
+
+        GrapeSwagger::DocMethods
+          .output_path_definitions(target_class.combined_namespace_routes, self, target_class, options)
+      end
+
+      desc specific_api_doc.delete(:desc), { params: specific_api_doc.delete(:params) || {}, **specific_api_doc }
+
+      params do
+        requires :name, type: String, desc: 'Resource name of mounted API'
+        optional :locale, type: Symbol, desc: 'Locale of API documentation'
+      end
+
+      instance_eval(guard) unless guard.nil?
+
+      get "#{mount_path}/:name" do
+        I18n.locale = params[:locale] || I18n.default_locale
+
+        combined_routes = target_class.combined_namespace_routes[params[:name]]
+        error!({ error: 'named resource not exist' }, 400) if combined_routes.nil?
+
+        GrapeSwagger::DocMethods
+          .output_path_definitions({ params[:name] => combined_routes }, self, target_class, options)
+      end
+    end
+
+    def class_variables_from(options)
+      @@mount_path              = options[:mount_path]
+      @@class_name              = options[:class_name] || options[:mount_path].delete('/')
+      @@hide_documentation_path = options[:hide_documentation_path]
+    end
+
+    def setup_formatter(formatter)
+      return unless formatter
+
+      FORMATTER_METHOD.each { |method| send(method, formatter) }
     end
   end
 end

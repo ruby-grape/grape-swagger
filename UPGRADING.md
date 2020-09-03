@@ -1,5 +1,9 @@
 ## Upgrading Grape-swagger
 
+### Upgrading to >= 1.3.0
+
+- The model (entity) description no longer comes from the route description. It will have a default value: `<<EntityName>> model`.
+
 ### Upgrading to >= 1.2.0
 
 - The entity_name class method is now called on parent classes for inherited entities. Now you can do this

@@ -112,7 +112,7 @@ RSpec.shared_context 'mock swagger example' do
             'description' => "it's a mock"
           }
         },
-        'description' => 'This returns something'
+        'description' => 'ApiError model'
       },
       'UseItemResponseAsType' => {
         'type' => 'object',
@@ -122,7 +122,7 @@ RSpec.shared_context 'mock swagger example' do
             'description' => "it's a mock"
           }
         },
-        'description' => 'This returns something'
+        'description' => 'UseItemResponseAsType model'
       }
     }
   end
@@ -137,7 +137,7 @@ RSpec.shared_context 'mock swagger example' do
             'description' => "it's a mock"
           }
         },
-        'description' => 'This returns something'
+        'description' => 'UseResponse model'
       },
       'ApiError' => {
         'type' => 'object',
@@ -147,7 +147,7 @@ RSpec.shared_context 'mock swagger example' do
             'description' => "it's a mock"
           }
         },
-        'description' => 'This returns something'
+        'description' => 'ApiError model'
       }
     }
   end
@@ -162,7 +162,7 @@ RSpec.shared_context 'mock swagger example' do
             'description' => "it's a mock"
           }
         },
-        'description' => 'This returns something'
+        'description' => 'ApiError model'
       }
     }
   end
@@ -296,7 +296,7 @@ RSpec.shared_context 'mock swagger example' do
               'description' => "it's a mock"
             }
           },
-          'description' => 'nested route inside namespace'
+          'description' => 'QueryInput model'
         },
         'ApiError' => {
           'type' => 'object',
@@ -306,7 +306,7 @@ RSpec.shared_context 'mock swagger example' do
               'description' => "it's a mock"
             }
           },
-          'description' => 'This gets Things.'
+          'description' => 'ApiError model'
         },
         'Something' => {
           'type' => 'object',
@@ -316,7 +316,7 @@ RSpec.shared_context 'mock swagger example' do
               'description' => "it's a mock"
             }
           },
-          'description' => 'This gets Things.'
+          'description' => 'Something model'
         }
       }
     }

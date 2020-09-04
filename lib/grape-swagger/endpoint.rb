@@ -11,7 +11,7 @@ module Grape
 
       if content_types.empty?
         formats       = [target_class.format, target_class.default_format].compact.uniq
-        formats       = Grape::Formatter.formatters({}).keys if formats.empty?
+        formats       = Grape::Formatter.formatters(**{}).keys if formats.empty?
         content_types = Grape::ContentTypes::CONTENT_TYPES.select do |content_type, _mime_type|
           formats.include? content_type
         end.values
@@ -365,7 +365,7 @@ module Grape
     end
 
     def hidden_parameter?(value)
-      return false if value.dig(:required)
+      return false if value[:required]
 
       if value.dig(:documentation, :hidden).is_a?(Proc)
         value.dig(:documentation, :hidden).call

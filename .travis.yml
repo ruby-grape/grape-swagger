@@ -29,8 +29,12 @@ jobs:
       env:
     - rvm: jruby-head
       env:
+    - rvm: truffleruby-head
+      env:
+      script: bundle exec rake spec
 
   allow_failures:
     - rvm: 2.4.10
     - rvm: ruby-head
     - rvm: jruby-head
+    - rvm: truffleruby-head

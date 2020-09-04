@@ -4,6 +4,7 @@ AllCops:
   Exclude:
     - vendor/**/*
     - example/**/*
+  NewCops: enable
   TargetRubyVersion: 2.7
 
 #  Layout stuff
@@ -80,8 +81,12 @@ Style/CaseLikeIf:
 Style/ExponentialNotation:
   Enabled: true
 
+Style/ExplicitBlockArgument:
+  Enabled: false
+
 Style/HashAsLastArrayItem:
   Enabled: true
+
 Style/HashEachMethods:
   Enabled: true
 
@@ -114,5 +119,3 @@ Style/RedundantRegexpEscape:
 
 Style/SlicingWithRange:
   Enabled: false
-
-

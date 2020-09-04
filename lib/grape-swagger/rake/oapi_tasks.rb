@@ -74,6 +74,7 @@ module GrapeSwagger
 
       # helper methods
       #
+      # rubocop:disable Style/StringConcatenation
       def make_request
         get url_for
 
@@ -83,6 +84,7 @@ module GrapeSwagger
           )
         ) + "\n"
       end
+      # rubocop:enable Style/StringConcatenation
 
       def url_for
         oapi_route = api_class.routes[-2]

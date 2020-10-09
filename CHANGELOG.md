@@ -7,6 +7,7 @@
 #### Fixes
 
 * Your contribution here.
+* [#811](https://github.com/ruby-grape/grape-swagger/pull/811): Fixes #809: supports utf8 route names - [@LeFnord](https://github.com/LeFnord).
 
 
 ### 1.3.0 (September 3, 2020)

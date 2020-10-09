@@ -29,7 +29,10 @@ module SwaggerRouting
       route_match = route_path.split(/^.*?#{route.prefix}/).last
       next unless route_match
 
-      route_match = route_match.match('\/([\w|-]*?)[\.\/\(]') || route_match.match('\/([\w|-]*)$')
+      # want to match emojis … ;)
+      # route_match = route_match
+      #   .match('\/([\p{Alnum}|\p{Emoji}|\-|\_]*?)[\.\/\(]') || route_match.match('\/([\p{Alpha}|\p{Emoji}|\-|\_]*)$')
+      route_match = route_match.match('\/([\p{Alnum}|\-|\_]*?)[\.\/\(]') || route_match.match('\/([\p{Alpha}|\-|\_]*)$')
       next unless route_match
 
       resource = route_match.captures.first
@@ -85,7 +88,7 @@ module SwaggerRouting
     route_name = name.match(%r{^/?([^/]*).*$})[1]
     return route_name unless route_name.include? ':'
 
-    matches = name.match(/\/[a-z]+/)
+    matches = name.match(/\/\p{Alpha}+/)
     matches.nil? ? route_name : matches[0].delete('/')
   end
 

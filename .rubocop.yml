@@ -73,6 +73,9 @@ Naming:
 Style/AccessorGrouping:
   Enabled: true
 
+Style/AsciiComments:
+  Enabled: false
+
 Style/ArrayCoercion:
   Enabled: true
 

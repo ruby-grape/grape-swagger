@@ -28,6 +28,10 @@ Layout/SpaceAroundMethodCallOperator:
 
 # Lint stuff
 #
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - spec/**/*
+
 Lint/DeprecatedOpenSSLConstant:
   Enabled: true
 

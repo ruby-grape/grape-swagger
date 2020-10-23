@@ -201,8 +201,7 @@ module Grape
     def response_object(route, options)
       codes(route).each_with_object({}) do |value, memo|
         value[:message] ||= ''
-        memo[value[:code]] = { description: value[:message] }
-
+        memo[value[:code]] = { description: value[:message] ||= '' } unless memo[value[:code]].present?
         memo[value[:code]][:headers] = value[:headers] if value[:headers]
 
         next build_file_response(memo[value[:code]]) if file_response?(value[:model])
@@ -221,7 +220,7 @@ module Grape
         next if response_model.start_with?('Swagger_doc')
 
         @definitions[response_model][:description] ||= "#{response_model} model"
-        memo[value[:code]][:schema] = build_reference(route, value, response_model, options)
+        build_memo_schema(memo, route, value, response_model, options)
         memo[value[:code]][:examples] = value[:examples] if value[:examples]
       end
     end
@@ -268,13 +267,43 @@ module Grape
 
     private
 
+    def build_memo_schema(memo, route, value, response_model, options)
+      if memo[value[:code]][:schema] && value[:as]
+        memo[value[:code]][:schema][:properties].merge!(build_reference(route, value, response_model, options))
+      elsif value[:as]
+        memo[value[:code]][:schema] = {
+          type: :object,
+          properties: build_reference(route, value, response_model, options)
+        }
+      else
+        memo[value[:code]][:schema] = build_reference(route, value, response_model, options)
+      end
+    end
+
     def build_reference(route, value, response_model, settings)
       # TODO: proof that the definition exist, if model isn't specified
-      reference = { '$ref' => "#/definitions/#{response_model}" }
+      reference = if value.key?(:as)
+                    { value[:as] => build_reference_hash(response_model) }
+                  else
+                    build_reference_hash(response_model)
+                  end
       return reference unless value[:code] < 300
 
-      reference = { type: 'array', items: reference } if route.options[:is_array]
+      if value.key?(:as) && value.key?(:is_array)
+        reference[value[:as]] = build_reference_array(reference[value[:as]])
+      elsif route.options[:is_array]
+        reference = build_reference_array(reference)
+      end
+
       build_root(route, reference, response_model, settings)
+    end
+
+    def build_reference_hash(response_model)
+      { '$ref' => "#/definitions/#{response_model}" }
+    end
+
+    def build_reference_array(reference)
+      { type: 'array', items: reference }
     end
 
     def build_root(route, reference, response_model, settings)
@@ -382,6 +411,8 @@ module Grape
         default_code[:message] = entity[:message] || route.description || default_code[:message].sub('{item}', @item)
         default_code[:examples] = entity[:examples] if entity[:examples]
         default_code[:headers] = entity[:headers] if entity[:headers]
+        default_code[:as] = entity[:as] if entity[:as]
+        default_code[:is_array] = entity[:is_array] if entity[:is_array]
       else
         default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
         default_code[:model] = entity if entity

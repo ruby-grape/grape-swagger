@@ -3,6 +3,7 @@
 #### Features
 
 * Your contribution here.
+* [#813](https://github.com/ruby-grape/grape-swagger/pull/813): Handle multiple presents - [@AntoineGuestin](https://github.com/AntoineGuestin).
 
 #### Fixes
 

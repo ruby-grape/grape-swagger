@@ -28,7 +28,7 @@ Metrics/MethodLength:
 
 # Offense count: 7
 Metrics/PerceivedComplexity:
-  Max: 14
+  Max: 16
 
 # Offense count: 3
 Style/ClassVars:

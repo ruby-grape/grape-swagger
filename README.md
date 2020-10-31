@@ -458,6 +458,7 @@ add_swagger_documentation \
 * [Response examples documentation](#response-examples)
 * [Response headers documentation](#response-headers)
 * [Adding root element to responses](#response-root)
+* [Multiple present Response](#multiple-response)
 
 #### Swagger Header Parameters  <a name="headers"></a>
 
@@ -1258,6 +1259,75 @@ The result will look like following:
       "schema": {
         "type": "object",
         "properties": { "type": "array", "items": { "kittens": { "$ref": "#/definitions/Kitten" } } }
+      }
+    }
+  }
+```
+#### Multiple present Response <a name="multiple-response"></a>
+
+You can specify a custom multiple response by using the `as` key:
+```ruby
+desc 'Multiple response',
+  success: [
+    { model: Entities::EnumValues, as: :gender },
+    { model: Entities::Something, as: :somethings }
+  ]
+end
+
+get '/things' do
+  ...
+end
+```
+The result will look like following:
+```
+  "responses": {
+    "200": {
+      "description": "Multiple response",
+      "schema":{
+        "type":"object",
+        "properties":{
+          "gender":{
+            "$ref":"#/definitions/EnumValues"
+          },
+          "somethings":{
+            "$ref":"#/definitions/Something"
+          }
+        }
+      }
+    }
+  }
+```
+You can also specify if the response is an array, with the `is_array` key:
+```ruby
+desc 'Multiple response with array',
+  success: [
+    { model: Entities::EnumValues, as: :gender },
+    { model: Entities::Something, as: :somethings, is_array: true }
+  ]
+end
+
+get '/things' do
+  ...
+end
+```
+The result will look like following:
+```
+  "responses": {
+    "200": {
+      "description": "Multiple response with array",
+      "schema":{
+        "type":"object",
+        "properties":{
+          "gender":{
+            "$ref":"#/definitions/EnumValues"
+          },
+          "somethings":{
+            "type":"array",
+            "items":{
+                "$ref":"#/definitions/Something"
+            }
+          }
+        }
       }
     }
   }

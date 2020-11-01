@@ -12,24 +12,28 @@ describe 'Convert values to enum or Range' do
         requires :letter, type: String, values: %w[a b c]
       end
       post :plain_array do
+        { message: 'hi' }
       end
 
       params do
         requires :letter, type: String, values: proc { %w[d e f] }
       end
       post :array_in_proc do
+        { message: 'hi' }
       end
 
       params do
         requires :letter, type: String, values: 'a'..'z'
       end
       post :range_letter do
+        { message: 'hi' }
       end
 
       params do
         requires :integer, type: Integer, values: -5..5
       end
       post :range_integer do
+        { message: 'hi' }
       end
 
       add_swagger_documentation
@@ -107,12 +111,14 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
         requires :letter, type: String, values: proc { 'string' }
       end
       post :non_array_in_proc do
+        { message: 'hi' }
       end
 
       params do
         requires :float, type: Float, values: -5.0..5.0
       end
       post :range_float do
+        { message: 'hi' }
       end
 
       add_swagger_documentation

@@ -11,6 +11,7 @@ describe 'Float Params' do
         requires :a_float, type: Float
       end
       post :splines do
+        { message: 'hi' }
       end
 
       add_swagger_documentation

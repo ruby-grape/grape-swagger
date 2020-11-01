@@ -9,6 +9,7 @@ RSpec.shared_context 'namespace example' do
         namespace :hudson do
           desc 'Document root'
           get '/' do
+            { message: 'hi' }
           end
         end
 

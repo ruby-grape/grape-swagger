@@ -80,6 +80,7 @@ describe 'swagger spec v2.0' do
         requires :id, type: Integer
       end
       delete '/dummy/:id' do
+        {}
       end
 
       namespace :other_thing do

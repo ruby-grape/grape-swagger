@@ -17,6 +17,7 @@ describe 'namespace tags check while using prefix and version' do
         namespace :hudson do
           desc 'Document root'
           get '/' do
+            { message: 'hi' }
           end
         end
 

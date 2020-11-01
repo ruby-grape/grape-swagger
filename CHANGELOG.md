@@ -3,11 +3,20 @@
 #### Features
 
 * Your contribution here.
-* [#813](https://github.com/ruby-grape/grape-swagger/pull/813): Handle multiple presents - [@AntoineGuestin](https://github.com/AntoineGuestin).
 
 #### Fixes
 
 * Your contribution here.
+
+
+### 1.3.1 (November 1, 2020)
+
+#### Features
+
+* [#813](https://github.com/ruby-grape/grape-swagger/pull/813): Handle multiple presents - [@AntoineGuestin](https://github.com/AntoineGuestin).
+
+#### Fixes
+
 * [#811](https://github.com/ruby-grape/grape-swagger/pull/811): Fixes #809: supports utf8 route names - [@LeFnord](https://github.com/LeFnord).
 
 

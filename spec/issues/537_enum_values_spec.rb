@@ -15,6 +15,7 @@ describe '#537 enum values spec' do
         desc 'create account',
              success: Spec
         get do
+          { message: 'hi' }
         end
       end
 

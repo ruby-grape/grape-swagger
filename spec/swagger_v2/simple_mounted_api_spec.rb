@@ -9,6 +9,7 @@ describe 'a simple mounted api' do
     class SimpleMountedApi < Grape::API
       desc 'Document root'
       get do
+        { message: 'hi' }
       end
 
       desc 'This gets something.',

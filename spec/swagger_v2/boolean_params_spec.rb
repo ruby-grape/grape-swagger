@@ -11,6 +11,7 @@ describe 'Boolean Params' do
         requires :a_boolean, type: Grape::API::Boolean
       end
       post :splines do
+        { message: 'hi' }
       end
 
       add_swagger_documentation

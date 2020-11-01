@@ -11,12 +11,14 @@ describe 'Params Types' do
         requires :input, type: String
       end
       post :action do
+        { message: 'hi' }
       end
 
       params do
         requires :input, type: String, default: '14', documentation: { type: 'email', default: '42' }
       end
       post :action_with_doc do
+        { message: 'hi' }
       end
 
       add_swagger_documentation
@@ -49,6 +51,7 @@ describe 'Params Types' do
             requires :input, type: String
           end
           post :action do
+            { message: 'hi' }
           end
 
           add_swagger_documentation

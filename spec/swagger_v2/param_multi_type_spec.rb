@@ -16,6 +16,7 @@ describe 'Params Multi Types' do
         requires :another_input, type: [String, Integer]
       end
       post :action do
+        { message: 'hi' }
       end
 
       add_swagger_documentation
@@ -61,6 +62,7 @@ describe 'Params Multi Types' do
           requires :another_input, type: [String, Integer]
         end
         post :action do
+          { message: 'hi' }
         end
 
         add_swagger_documentation

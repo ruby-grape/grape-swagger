@@ -270,11 +270,18 @@ module Grape
     def build_memo_schema(memo, route, value, response_model, options)
       if memo[value[:code]][:schema] && value[:as]
         memo[value[:code]][:schema][:properties].merge!(build_reference(route, value, response_model, options))
+
+        if value[:required]
+          memo[value[:code]][:schema][:required] ||= []
+          memo[value[:code]][:schema][:required] << value[:as].to_s
+        end
+
       elsif value[:as]
         memo[value[:code]][:schema] = {
           type: :object,
           properties: build_reference(route, value, response_model, options)
         }
+        memo[value[:code]][:schema][:required] = [value[:as].to_s] if value[:required]
       else
         memo[value[:code]][:schema] = build_reference(route, value, response_model, options)
       end
@@ -413,6 +420,7 @@ module Grape
         default_code[:headers] = entity[:headers] if entity[:headers]
         default_code[:as] = entity[:as] if entity[:as]
         default_code[:is_array] = entity[:is_array] if entity[:is_array]
+        default_code[:required] = entity[:required] if entity[:required]
       else
         default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
         default_code[:model] = entity if entity

@@ -3,7 +3,9 @@
 module GrapeSwagger
   module Errors
     class UnregisteredParser < StandardError; end
+
     class SwaggerSpec < StandardError; end
+
     class SwaggerSpecDeprecated < SwaggerSpec
       class << self
         def tell!(what)

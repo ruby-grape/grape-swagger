@@ -33,6 +33,7 @@ describe 'Inheritance and Discriminator' do
           }
         end
       end
+
       class NameApi < Grape::API
         add_swagger_documentation models: [Entities::Pet, Entities::Cat]
       end

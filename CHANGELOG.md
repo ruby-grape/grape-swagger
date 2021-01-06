@@ -3,6 +3,7 @@
 #### Features
 
 * Your contribution here.
+ * [#815](https://github.com/ruby-grape/grape-swagger/pull/813): Add required for multiple presents - [@MaximeRDY](https://github.com/MaximeRDY).
 
 #### Fixes
 

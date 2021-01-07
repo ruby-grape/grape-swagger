@@ -27,7 +27,7 @@ group :development, :test do
   gem 'rake'
   gem 'rdoc'
   gem 'rspec', '~> 3.9'
-  gem 'rubocop', '1.6.1', require: false
+  gem 'rubocop', '~> 1.0', require: false
 end
 
 group :test do

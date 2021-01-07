@@ -11,7 +11,7 @@ describe '#776 multiple presents spec' do
         desc 'Get multiple presents',
              success: [
                { model: Entities::EnumValues, as: :gender },
-               { model: Entities::Something, as: :somethings, is_array: true }
+               { model: Entities::Something, as: :somethings, is_array: true, required: true }
              ]
 
         get do
@@ -50,7 +50,10 @@ describe '#776 multiple presents spec' do
           '$ref' => '#/definitions/EnumValues'
         }
       },
-      'type' => 'object'
+      'type' => 'object',
+      'required' => [
+        'somethings'
+      ]
     })
   end
 end

@@ -1302,7 +1302,7 @@ You can also specify if the response is an array, with the `is_array` key:
 desc 'Multiple response with array',
   success: [
     { model: Entities::EnumValues, as: :gender },
-    { model: Entities::Something, as: :somethings, is_array: true }
+    { model: Entities::Something, as: :somethings, is_array: true, required: true }
   ]
 end
 
@@ -1327,7 +1327,8 @@ The result will look like following:
                 "$ref":"#/definitions/Something"
             }
           }
-        }
+        },
+        "required": ["somethings"]
       }
     }
   }

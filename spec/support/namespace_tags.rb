@@ -3,7 +3,9 @@
 RSpec.shared_context 'namespace example' do
   before :all do
     module TheApi
+      # rubocop:disable Lint/EmptyClass
       class CustomType; end
+      # rubocop:enable Lint/EmptyClass
 
       class NamespaceApi < Grape::API
         namespace :hudson do

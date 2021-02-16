@@ -19,7 +19,7 @@ MODEL_PARSER = ENV.key?('MODEL_PARSER') ? ENV['MODEL_PARSER'].to_s.downcase.sub(
 require 'grape'
 require 'grape-swagger'
 
-Dir[File.join(Dir.getwd, 'spec/support/*.rb')].sort.each { |f| require f }
+Dir[File.join(Dir.getwd, 'spec/support/*.rb')].each { |f| require f }
 require "grape-swagger/#{MODEL_PARSER}" if MODEL_PARSER != 'mock'
 require File.join(Dir.getwd, "spec/support/model_parsers/#{MODEL_PARSER}_parser.rb")
 

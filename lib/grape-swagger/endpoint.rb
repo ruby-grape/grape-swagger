@@ -329,7 +329,7 @@ module Grape
     end
 
     def file_response?(value)
-      value.to_s.casecmp('file').zero? ? true : false
+      value.to_s.casecmp('file').zero?
     end
 
     def build_file_response(memo)

@@ -16,14 +16,14 @@ module GrapeSwagger
       subhash = @parsers.except(klass).to_a
       insert_at = subhash.index(subhash.assoc(before_klass))
       insert_at = subhash.length - 1 if insert_at.nil?
-      @parsers = Hash[subhash.insert(insert_at, [klass, ancestor])]
+      @parsers = subhash.insert(insert_at, [klass, ancestor]).to_h
     end
 
     def insert_after(after_klass, klass, ancestor)
       subhash = @parsers.except(klass).to_a
       insert_at = subhash.index(subhash.assoc(after_klass))
       insert_at = subhash.length - 1 if insert_at.nil?
-      @parsers = Hash[subhash.insert(insert_at + 1, [klass, ancestor])]
+      @parsers = subhash.insert(insert_at + 1, [klass, ancestor]).to_h
     end
 
     def each

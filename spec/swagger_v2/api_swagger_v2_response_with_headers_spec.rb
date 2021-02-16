@@ -19,7 +19,8 @@ describe 'response with headers' do
         end
 
         desc 'A 204 can have headers too' do
-          success Hash[status: 204, message: 'No content', headers: { 'Location' => { description: 'Location of resource', type: 'string' } }]
+          foo = { status: 204, message: 'No content', headers: { 'Location' => { description: 'Location of resource', type: 'string' } } }
+          success foo
           failure [[400, 'Bad Request', Entities::ApiError, { 'application/json' => { code: 400, message: 'Bad request' } }, { 'Date' => { description: 'Date of failure', type: 'string' } }]]
         end
         delete '/no_content_response_headers' do
@@ -27,7 +28,8 @@ describe 'response with headers' do
         end
 
         desc 'A file can have headers too' do
-          success Hash[status: 200, model: 'File', headers: { 'Cache-Control' => { description: 'Directive for caching', type: 'string' } }]
+          foo = { status: 200, model: 'File', headers: { 'Cache-Control': { description: 'Directive for caching', type: 'string' } } }
+          success foo
           failure [[404, 'NotFound', Entities::ApiError, { 'application/json' => { code: 404, message: 'Not found' } }, { 'Date' => { description: 'Date of failure', type: 'string' } }]]
         end
         get '/file_response_headers' do

@@ -8,7 +8,7 @@
 #### Fixes
 
 * Your contribution here.
-
+* [#822](https://github.com/ruby-grape/grape-swagger/pull/822): Corrected the related parameter lookup on request params - [@Jack12816](https://github.com/Jack12816).
 
 ### 1.3.1 (November 1, 2020)
 

@@ -15,7 +15,7 @@ jobs:
       matrix:
         ruby-version: ['2.6', '2.7', '3.0']
         grape-version: [1.5.2, 1.4.0, 1.3.3]
-        model-parser: [grape-swagger-entity, grape-swagger-representable]
+        model-parser: [grape-swagger-entity, grape-swagger-representable, '']
 
     steps:
     - uses: actions/checkout@v2

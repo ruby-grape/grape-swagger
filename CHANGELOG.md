@@ -3,7 +3,9 @@
 #### Features
 
 * Your contribution here.
- * [#815](https://github.com/ruby-grape/grape-swagger/pull/815): Add required for multiple presents - [@MaximeRDY](https://github.com/MaximeRDY).
+
+* [#818](https://github.com/ruby-grape/grape-swagger/pull/818): Adds ruby 3.0 support - [@LeFnord](https://github.com/LeFnord).
+* [#815](https://github.com/ruby-grape/grape-swagger/pull/815): Add required for multiple presents - [@MaximeRDY](https://github.com/MaximeRDY).
 
 #### Fixes
 

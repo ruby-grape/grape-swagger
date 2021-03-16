@@ -1,5 +1,9 @@
 ## Upgrading Grape-swagger
 
+### Upgrading to >= 1.4.0
+
+- Official support for ruby < 2.5 removed, ruby 2.5 only in testing mode, but no support.
+
 ### Upgrading to >= 1.3.0
 
 - The model (entity) description no longer comes from the route description. It will have a default value: `<<EntityName>> model`.

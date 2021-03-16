@@ -27,6 +27,7 @@ module GrapeSwagger
           document_required(settings)
           document_additional_properties(settings)
           document_add_extensions(settings)
+          document_example(settings)
 
           @parsed_param
         end
@@ -110,6 +111,11 @@ module GrapeSwagger
         def document_additional_properties(settings)
           additional_properties = settings[:additionalProperties]
           @parsed_param[:additionalProperties] = additional_properties if additional_properties
+        end
+
+        def document_example(settings)
+          example = settings[:example]
+          @parsed_param[:example] = example if example
         end
 
         def param_type(value_type)

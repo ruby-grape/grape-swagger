@@ -451,6 +451,7 @@ add_swagger_documentation \
 * [Collection Format](#collection-format)
 * [Hiding parameters](#hiding-parameters)
 * [Setting a Swagger default value](#default-value)
+* [Example parameter value](#param-example)
 * [Response documentation](#response)
 * [Changing default status codes](#change-status)
 * [File response](#file-response)
@@ -769,8 +770,6 @@ params do
 end
 ```
 
-The example parameter will populate the Swagger UI with the example value, and can be used for optional or required parameters.
-
 Grape uses the option `default` to set a default value for optional parameters. This is different in that Grape will set your parameter to the provided default if the parameter is omitted, whereas the example value above will only set the value in the UI itself. This will set the Swagger `defaultValue` to the provided value. Note that the example value will override the Grape default value.
 
 ```ruby
@@ -780,6 +779,16 @@ params do
 end
 ```
 
+#### Example parameter value <a name="param-example"></a>
+
+The example parameter will populate the Swagger UI with the example value, and can be used for optional or required parameters.
+
+```ruby
+params do
+  requires :id, type: Integer, documentation: { example: 123 }
+  optional :name, type String, documentation: { example: 'Buddy Guy' }
+end
+```
 
 #### Expose nested namespace as standalone route
 

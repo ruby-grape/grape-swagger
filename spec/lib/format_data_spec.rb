@@ -87,5 +87,29 @@ describe GrapeSwagger::DocMethods::FormatData do
         expect(subject.to_format(params)).to eq expected_params
       end
     end
+
+    context 'when array params are not related' do
+      let(:params) do
+        [
+          { name: 'id', required: true, type: 'string' },
+          { name: 'description', required: false, type: 'string' },
+          { name: 'ids[]', required: true, type: 'array', items: { type: 'string' } },
+          { name: 'user_ids[]', required: true, type: 'array', items: { type: 'string' } }
+        ]
+      end
+
+      let(:expected_params) do
+        [
+          { name: 'id', required: true, type: 'string' },
+          { name: 'description', required: false, type: 'string' },
+          { name: 'ids[]', required: true, type: 'array', items: { type: 'string' } },
+          { name: 'user_ids[]', required: true, type: 'array', items: { type: 'string' } }
+        ]
+      end
+
+      it 'parses params correctly and adds array type all concerned elements' do
+        expect(subject.to_format(params)).to eq expected_params
+      end
+    end
   end
 end

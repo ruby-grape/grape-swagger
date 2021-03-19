@@ -4,13 +4,22 @@
 
 * Your contribution here.
 
+#### Fixes
+
+* Your contribution here.
+
+
+### 1.4.0 (March 20, 2021)
+
+#### Features
+
 * [#818](https://github.com/ruby-grape/grape-swagger/pull/818): Adds ruby 3.0 support - [@LeFnord](https://github.com/LeFnord).
 * [#815](https://github.com/ruby-grape/grape-swagger/pull/815): Add required for multiple presents - [@MaximeRDY](https://github.com/MaximeRDY).
 
 #### Fixes
 
-* Your contribution here.
 * [#822](https://github.com/ruby-grape/grape-swagger/pull/822): Corrected the related parameter lookup on request params - [@Jack12816](https://github.com/Jack12816).
+
 
 ### 1.3.1 (November 1, 2020)
 

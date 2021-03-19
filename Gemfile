@@ -33,7 +33,7 @@ end
 group :test do
   gem 'coveralls_reborn', require: false
 
-  gem 'ruby-grape-danger', '~> 0.1.1', require: false
+  gem 'ruby-grape-danger', '~> 0.2.0', require: false
   gem 'simplecov', require: false
 
   unless ENV['MODEL_PARSER'] == 'grape-swagger-entity'

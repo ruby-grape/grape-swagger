@@ -8,7 +8,7 @@ RSpec.shared_context 'the api paths/defs' do
           produces: ['application/json'],
           consumes: ['application/json'],
           parameters: [
-            { in: 'body', name: 'in_body_1', description: 'in_body_1', type: 'integer', format: 'int32', required: true },
+            { in: 'body', name: 'in_body_1', description: 'in_body_1', type: 'integer', format: 'int32', required: true, example: 23 },
             { in: 'body', name: 'in_body_2', description: 'in_body_2', type: 'string', required: false },
             { in: 'body', name: 'in_body_3', description: 'in_body_3', type: 'string', required: false }
           ],
@@ -31,7 +31,7 @@ RSpec.shared_context 'the api paths/defs' do
             { in: 'path', name: 'key', description: nil, type: 'integer', format: 'int32', required: true },
             { in: 'body', name: 'in_body_1', description: 'in_body_1', type: 'integer', format: 'int32', required: true },
             { in: 'body', name: 'in_body_2', description: 'in_body_2', type: 'string', required: false },
-            { in: 'body', name: 'in_body_3', description: 'in_body_3', type: 'string', required: false }
+            { in: 'body', name: 'in_body_3', description: 'in_body_3', type: 'string', required: false, example: 'my example string' }
           ],
           responses: { 200 => { description: 'put in body /wo entity', schema: { '$ref' => '#/definitions/InBody' } } },
           tags: ['in_body'],
@@ -85,7 +85,7 @@ RSpec.shared_context 'the api paths/defs' do
     {
       type: 'object',
       properties: {
-        in_body_1: { type: 'integer', format: 'int32', description: 'in_body_1' },
+        in_body_1: { type: 'integer', format: 'int32', description: 'in_body_1', example: 23 },
         in_body_2: { type: 'string', description: 'in_body_2' },
         in_body_3: { type: 'string', description: 'in_body_3' }
       },
@@ -99,7 +99,7 @@ RSpec.shared_context 'the api paths/defs' do
       properties: {
         in_body_1: { type: 'integer', format: 'int32', description: 'in_body_1' },
         in_body_2: { type: 'string', description: 'in_body_2' },
-        in_body_3: { type: 'string', description: 'in_body_3' }
+        in_body_3: { type: 'string', description: 'in_body_3', example: 'my example string' }
       },
       required: [:in_body_1]
     }

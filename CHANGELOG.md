@@ -6,7 +6,7 @@
 
 #### Fixes
 
-* Your contribution here.
+* [#833](https://github.com/ruby-grape/grape-swagger/pull/833): Fixes issue of examples not showing for `in: 'body'` parameters - [@stevenou](https://github.com/stevenou)
 
 
 ### 1.4.0 (March 20, 2021)

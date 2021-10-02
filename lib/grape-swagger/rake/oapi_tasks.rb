@@ -64,7 +64,7 @@ module GrapeSwagger
           ::Rake::Task['oapi:fetch'].invoke
           exit if error?
 
-          output = system "swagger validate #{file}"
+          output = system "swagger-cli validate #{file}"
 
           $stdout.puts 'install swagger-cli with `npm install swagger-cli -g`' if output.nil?
           FileUtils.rm(file)

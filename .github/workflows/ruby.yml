@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         ruby-version: ['2.6', '2.7', '3.0', 'head']
-        grape-version: [1.5.3, 1.4.0]
+        grape-version: [1.6.0, 1.5.3]
         model-parser: [grape-swagger-entity, grape-swagger-representable, '']
 
     steps:

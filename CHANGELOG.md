@@ -6,6 +6,7 @@
 
 #### Fixes
 
+* #[#839](https://github.com/ruby-grape/grape-swagger/pull/839): Fixes documentation of `false` or `nil` default parameter values - [@magni-](https://github.com/magni-)
 * Your contribution here.
 
 

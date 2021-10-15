@@ -9,6 +9,7 @@ describe 'Boolean Params' do
 
       params do
         requires :a_boolean, type: Grape::API::Boolean
+        optional :another_boolean, type: Grape::API::Boolean, default: false
       end
       post :splines do
         { message: 'hi' }
@@ -27,7 +28,8 @@ describe 'Boolean Params' do
 
   it 'converts boolean types' do
     expect(subject).to eq [
-      { 'in' => 'formData', 'name' => 'a_boolean', 'type' => 'boolean', 'required' => true }
+      { 'in' => 'formData', 'name' => 'a_boolean', 'type' => 'boolean', 'required' => true },
+      { 'in' => 'formData', 'name' => 'another_boolean', 'type' => 'boolean', 'required' => false, 'default' => false }
     ]
   end
 end

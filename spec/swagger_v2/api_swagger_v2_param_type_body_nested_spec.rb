@@ -96,6 +96,27 @@ describe 'moving body/formData Params to definitions' do
           end
         end
 
+        namespace :nested_params_array do
+          desc 'post in body with array of nested parameters',
+               detail: 'more details description',
+               success: Entities::UseNestedWithAddress
+          params do
+            optional :contacts, type: Array, documentation: { additional_properties: true } do
+              requires :name, type: String, documentation: { desc: 'name', in: 'body' }
+              optional :addresses, type: Array do
+                requires :street, type: String, documentation: { desc: 'street', in: 'body' }
+                requires :postcode, type: String, documentation: { desc: 'postcode', in: 'body' }
+                requires :city, type: String, documentation: { desc: 'city', in: 'body' }
+                optional :country, type: String, documentation: { desc: 'country', in: 'body' }
+              end
+            end
+          end
+
+          post '/in_body' do
+            { 'declared_params' => declared(params) }
+          end
+        end
+
         add_swagger_documentation
       end
     end
@@ -277,6 +298,56 @@ describe 'moving body/formData Params to definitions' do
             }
           },
           'description' => 'put in body with multiple nested parameters'
+        )
+      end
+    end
+  end
+
+  describe 'array of nested body parameters given' do
+    subject do
+      get '/swagger_doc/nested_params_array'
+      JSON.parse(last_response.body)
+    end
+
+    describe 'POST' do
+      specify do
+        expect(subject['paths']['/nested_params_array/in_body']['post']['parameters']).to eql(
+          [
+            { 'name' => 'NestedParamsArrayInBody', 'in' => 'body', 'required' => true, 'schema' => { '$ref' => '#/definitions/postNestedParamsArrayInBody' } }
+          ]
+        )
+      end
+
+      specify do
+        expect(subject['definitions']['postNestedParamsArrayInBody']).to eql(
+          'type' => 'object',
+          'properties' => {
+            'contacts' => {
+              'type' => 'array',
+              'items' => {
+                'type' => 'object',
+                'additionalProperties' => true,
+                'properties' => {
+                  'name' => { 'type' => 'string', 'description' => 'name' },
+                  'addresses' => {
+                    'type' => 'array',
+                    'items' => {
+                      'type' => 'object',
+                      'properties' => {
+                        'street' => { 'type' => 'string', 'description' => 'street' },
+                        'postcode' => { 'type' => 'string', 'description' => 'postcode' },
+                        'city' => { 'type' => 'string', 'description' => 'city' },
+                        'country' => { 'type' => 'string', 'description' => 'country' }
+                      },
+                      'required' => %w[street postcode city]
+                    }
+                  }
+                },
+                'required' => %w[name]
+              }
+            }
+          },
+          'description' => 'post in body with array of nested parameters'
         )
       end
     end

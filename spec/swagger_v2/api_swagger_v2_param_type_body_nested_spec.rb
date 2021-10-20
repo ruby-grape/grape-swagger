@@ -13,7 +13,7 @@ describe 'moving body/formData Params to definitions' do
                detail: 'more details description',
                success: Entities::UseNestedWithAddress
           params do
-            optional :contact, type: Hash do
+            optional :contact, type: Hash, documentation: { additional_properties: true } do
               requires :name, type: String, documentation: { desc: 'name', in: 'body' }
               optional :addresses, type: Array do
                 requires :street, type: String, documentation: { desc: 'street', in: 'body' }
@@ -126,6 +126,7 @@ describe 'moving body/formData Params to definitions' do
           'properties' => {
             'contact' => {
               'type' => 'object',
+              'additionalProperties' => true,
               'properties' => {
                 'name' => { 'type' => 'string', 'description' => 'name' },
                 'addresses' => {

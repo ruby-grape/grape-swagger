@@ -13,6 +13,13 @@ describe '#832 array of objects with nested Float/BigDecimal fields' do
             requires :object_param, type: Hash do
               requires :float_param, type: Float
               requires :big_decimal_param, type: BigDecimal
+              requires :object_param, type: Hash do
+                requires :float_param, type: Float
+                requires :big_decimal_param, type: BigDecimal
+                requires :array_param, type: Array do
+                  requires :integer_param, type: Integer
+                end
+              end
             end
           end
         end
@@ -69,6 +76,33 @@ describe '#832 array of objects with nested Float/BigDecimal fields' do
           'items' => {
             'type' => 'number',
             'format' => 'double'
+          }
+        }, {
+          'in' => 'formData',
+          'name' => 'array_param[object_param][object_param][float_param]',
+          'type' => 'array',
+          'required' => true,
+          'items' => {
+            'type' => 'number',
+            'format' => 'float'
+          }
+        }, {
+          'in' => 'formData',
+          'name' => 'array_param[object_param][object_param][big_decimal_param]',
+          'type' => 'array',
+          'required' => true,
+          'items' => {
+            'type' => 'number',
+            'format' => 'double'
+          }
+        }, {
+          'in' => 'formData',
+          'name' => 'array_param[object_param][object_param][array_param][integer_param]',
+          'type' => 'array',
+          'required' => true,
+          'items' => {
+            'type' => 'integer',
+            'format' => 'int32'
           }
         }
       ]

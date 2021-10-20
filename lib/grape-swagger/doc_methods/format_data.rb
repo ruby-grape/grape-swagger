@@ -35,6 +35,8 @@ module GrapeSwagger
 
         def add_array(parameter, related_parameters)
           related_parameters.each do |p|
+            next if p.key?(:items)
+
             p_type = p[:type] == 'array' ? 'string' : p[:type]
             p[:items] = { type: p_type, format: p[:format], enum: p[:enum], is_array: p[:is_array] }
             p[:items].delete_if { |_k, v| v.nil? }

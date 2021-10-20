@@ -194,8 +194,7 @@ module GrapeSwagger
         end
 
         def includes_body_param?(params)
-          params.map { |x| return true if x[:in] == 'body' || x[:param_type] == 'body' }
-          false
+          params.any? { |x| x[:in] == 'body' || x[:param_type] == 'body' }
         end
 
         def should_expose_as_array?(params)
@@ -203,8 +202,7 @@ module GrapeSwagger
         end
 
         def should_exposed_as(params)
-          params.map { |x| return 'object' if x[:type] && x[:type] != 'array' }
-          'array'
+          params.any? { |x| x[:type] && x[:type] != 'array' } ? 'object' : 'array'
         end
       end
     end

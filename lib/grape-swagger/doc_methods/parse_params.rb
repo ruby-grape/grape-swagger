@@ -109,7 +109,11 @@ module GrapeSwagger
         end
 
         def document_additional_properties(settings)
-          additional_properties = settings[:additionalProperties]
+          if settings.key?(:additionalProperties)
+            GrapeSwagger::Errors::SwaggerSpecDeprecated.tell!(:additionalProperties)
+          end
+
+          additional_properties = settings[:additional_properties] || settings[:additionalProperties]
           @parsed_param[:additionalProperties] = additional_properties if additional_properties
         end
 

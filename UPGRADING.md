@@ -1,5 +1,9 @@
 ## Upgrading Grape-swagger
 
+### Upgrading to >= 1.4.1
+
+- `additionalProperties` has been deprecated and will be removed in a future version of `grape-swagger`. It has been replaced with `additional_properties`.
+
 ### Upgrading to >= 1.4.0
 
 - Official support for ruby < 2.5 removed, ruby 2.5 only in testing mode, but no support.

@@ -451,6 +451,7 @@ add_swagger_documentation \
 * [Collection Format](#collection-format)
 * [Hiding parameters](#hiding-parameters)
 * [Setting a Swagger default value](#default-value)
+* [Setting `additionalProperties` for `object`-type parameters](#additional-properties)
 * [Example parameter value](#param-example)
 * [Response documentation](#response)
 * [Changing default status codes](#change-status)
@@ -778,6 +779,36 @@ params do
   optional :temperature, type: Integer, desc: 'Temperature of the coffee in celcius', default: 72
 end
 ```
+
+### Setting `additionalProperties` for `object`-type parameters <a name="additional-properties">
+
+Use the `additional_properties` option in the `documentation` hash for `object`-type parameters to set [`additionalProperties`](https://swagger.io/specification/v2/#model-with-mapdictionary-properties).
+
+#### Allow any additional properties
+```ruby
+params do
+  optional :thing, type: Hash, documentation: { additional_properties: true }
+end
+```
+
+#### Allow any additional properties of a particular type
+```ruby
+params do
+  optional :thing, type: Hash, documentation: { additional_properties: String }
+end
+```
+
+#### Allow any additional properties matching a defined schema
+```ruby
+class Entity < Grape::Entity
+  expose :this
+end
+
+params do
+  optional :thing, type: Hash, documentation: { additional_properties: Entity }
+end
+```
+
 
 #### Example parameter value <a name="param-example"></a>
 

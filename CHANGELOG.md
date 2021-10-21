@@ -6,8 +6,9 @@
 
 #### Fixes
 
+* [#840](https://github.com/ruby-grape/grape-swagger/pull/840): Fixes documentation of `additionalProperties` field when used with array parameters, or when setting it to `false` - [@magni-](https://github.com/magni-)
 * [#841](https://github.com/ruby-grape/grape-swagger/pull/839): Fixes `type` and `format` values for object fields nested in an array ([#832](https://github.com/ruby-grape/grape-swagger/issue/832)) - [@magni-](https://github.com/magni-)
-* #[#839](https://github.com/ruby-grape/grape-swagger/pull/839): Fixes documentation of `false` or `nil` default parameter values - [@magni-](https://github.com/magni-)
+* [#839](https://github.com/ruby-grape/grape-swagger/pull/839): Fixes documentation of `false` or `nil` default parameter values - [@magni-](https://github.com/magni-)
 * Your contribution here.
 
 

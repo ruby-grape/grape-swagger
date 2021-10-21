@@ -103,9 +103,9 @@ module GrapeSwagger
 
         def document_as_property(param)
           property_keys.each_with_object({}) do |x, memo|
-            value = param[x]
-            next if value.blank?
+            next unless param.key?(x)
 
+            value = param[x]
             if x == :type && @definitions[value].present?
               memo['$ref'] = "#/definitions/#{value}"
             else
@@ -181,7 +181,8 @@ module GrapeSwagger
         end
 
         def property_keys
-          %i[type format description minimum maximum items enum default additionalProperties example]
+          %i[type format description minimum maximum items enum default additional_properties additionalProperties
+             example]
         end
 
         def deletable?(param)
@@ -193,8 +194,7 @@ module GrapeSwagger
         end
 
         def includes_body_param?(params)
-          params.map { |x| return true if x[:in] == 'body' || x[:param_type] == 'body' }
-          false
+          params.any? { |x| x[:in] == 'body' || x[:param_type] == 'body' }
         end
 
         def should_expose_as_array?(params)
@@ -202,8 +202,7 @@ module GrapeSwagger
         end
 
         def should_exposed_as(params)
-          params.map { |x| return 'object' if x[:type] && x[:type] != 'array' }
-          'array'
+          params.any? { |x| x[:type] && x[:type] != 'array' } ? 'object' : 'array'
         end
       end
     end

@@ -25,7 +25,7 @@ module GrapeSwagger
           document_default_value(settings) unless value_type[:is_array]
           document_range_values(settings) unless value_type[:is_array]
           document_required(settings)
-          document_additional_properties(settings)
+          document_additional_properties(definitions, settings) unless value_type[:is_array]
           document_add_extensions(settings)
           document_example(settings)
 
@@ -105,12 +105,38 @@ module GrapeSwagger
 
           array_items[:default] = value_type[:default] if value_type[:default].present?
 
+          set_additional_properties, additional_properties = parse_additional_properties(definitions, value_type)
+          array_items[:additionalProperties] = additional_properties if set_additional_properties
+
           array_items
         end
 
-        def document_additional_properties(settings)
-          additional_properties = settings[:additionalProperties]
-          @parsed_param[:additionalProperties] = additional_properties if additional_properties
+        def document_additional_properties(definitions, settings)
+          set_additional_properties, additional_properties = parse_additional_properties(definitions, settings)
+          @parsed_param[:additionalProperties] = additional_properties if set_additional_properties
+        end
+
+        def parse_additional_properties(definitions, settings)
+          return false unless settings.key?(:additionalProperties) || settings.key?(:additional_properties)
+
+          value =
+            if settings.key?(:additionalProperties)
+              GrapeSwagger::Errors::SwaggerSpecDeprecated.tell!(:additionalProperties)
+              settings[:additionalProperties]
+            else
+              settings[:additional_properties]
+            end
+
+          parsed_value =
+            if definitions[value.to_s]
+              { '$ref': "#/definitions/#{value}" }
+            elsif value.is_a?(Class)
+              { type: DataType.call(value) }
+            else
+              value
+            end
+
+          [true, parsed_value]
         end
 
         def document_example(settings)

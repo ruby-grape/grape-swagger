@@ -105,23 +105,26 @@ module GrapeSwagger
 
           array_items[:default] = value_type[:default] if value_type[:default].present?
 
-          additional_properties = parse_additional_properties(value_type)
-          array_items[:additionalProperties] = additional_properties if additional_properties
+          set_additional_properties, additional_properties = parse_additional_properties(value_type)
+          array_items[:additionalProperties] = additional_properties if set_additional_properties
 
           array_items
         end
 
         def document_additional_properties(settings)
-          additional_properties = parse_additional_properties(settings)
-          @parsed_param[:additionalProperties] = additional_properties if additional_properties
+          set_additional_properties, additional_properties = parse_additional_properties(settings)
+          @parsed_param[:additionalProperties] = additional_properties if set_additional_properties
         end
 
         def parse_additional_properties(settings)
           if settings.key?(:additionalProperties)
             GrapeSwagger::Errors::SwaggerSpecDeprecated.tell!(:additionalProperties)
+            [true, settings[:additionalProperties]]
+          elsif settings.key?(:additional_properties)
+            [true, settings[:additional_properties]]
+          else
+            [false, nil]
           end
-
-          settings[:additional_properties] || settings[:additionalProperties]
         end
 
         def document_example(settings)

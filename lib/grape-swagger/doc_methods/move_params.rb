@@ -103,9 +103,9 @@ module GrapeSwagger
 
         def document_as_property(param)
           property_keys.each_with_object({}) do |x, memo|
-            value = param[x]
-            next if value.blank?
+            next unless param.key?(x)
 
+            value = param[x]
             if x == :type && @definitions[value].present?
               memo['$ref'] = "#/definitions/#{value}"
             else

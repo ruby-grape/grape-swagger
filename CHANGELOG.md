@@ -7,6 +7,7 @@
 * [#852](https://github.com/ruby-grape/grape-swagger/pull/852): Fix example to work without error - [@takahashim](https://github.com/takahashim)
 * Your contribution here.
 * [#853](https://github.com/ruby-grape/grape-swagger/pull/853): Add webrick gem so that example works in Ruby 3.x - [@takahashim](https://github.com/takahashim)
+* [#844](https://github.com/ruby-grape/grape-swagger/pull/844): Fixes the regexp used for parsing routes - [@senhalil](https://github.com/senhalil)
 
 ### 1.4.2 (October 22, 2021)
 

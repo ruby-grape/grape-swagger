@@ -76,22 +76,29 @@ module GrapeSwagger
       #
       # rubocop:disable Style/StringConcatenation
       def make_request
-        get url_for
+        @oapi_specs = []
+        urls_for(api_class).each do |url|
+          get url
+          @oapi_specs << JSON.parse(last_response.body, symolize_names: true)
+        end
 
-        @oapi = JSON.pretty_generate(
-          JSON.parse(
-            last_response.body, symolize_names: true
-          )
-        ) + "\n"
+        @oapi = JSON.pretty_generate(@oapi_specs) + "\n"
       end
       # rubocop:enable Style/StringConcatenation
 
-      def url_for
-        oapi_route = api_class.routes[-2]
-        path = oapi_route.path.sub(/\(\.\w+\)$/, '').sub(/\(\.:\w+\)$/, '')
-        path.sub!(':version', oapi_route.version.to_s)
+      def urls_for(api_class)
+        api_class.routes.
+          map(&:path).
+          select { |e| e.include?('/doc') }.
+          select { |e| !e.include?(':name') }.
+          map { |e| format_path(e) }.
+          map { |e| [e, ENV['resource']].join('/').chomp('/') }
+      end
 
-        [path, ENV['resource']].join('/').chomp('/')
+      def format_path(path)
+        oapi_route = api_class.routes.select { |e| e.path == path }.first
+        path = path.sub(/\(\.\w+\)$/, '').sub(/\(\.:\w+\)$/, '')
+        path.sub(':version', oapi_route.version.to_s)
       end
 
       def save_to_file?
@@ -99,7 +106,7 @@ module GrapeSwagger
       end
 
       def error?
-        JSON.parse(@oapi).keys.first == 'error'
+        JSON.parse(@oapi).map { |e| e.keys.first == 'error' }.any?
       end
 
       def file

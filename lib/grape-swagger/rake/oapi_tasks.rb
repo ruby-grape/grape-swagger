@@ -46,9 +46,12 @@ module GrapeSwagger
           resource - if given only for that it would be generated (optional)'
         task fetch: :environment do
           # :nocov:
-          make_request
+          urls_for(api_class).each do |url|
+            make_request(url)
 
-          save_to_file? ? File.write(file, @oapi) : $stdout.print(@oapi)
+            save_to_file? ? File.write(file(url), @oapi) : $stdout.print(@oapi)
+          end
+
           # :nocov:
         end
       end
@@ -64,10 +67,15 @@ module GrapeSwagger
           ::Rake::Task['oapi:fetch'].invoke
           exit if error?
 
-          output = system "swagger-cli validate #{file}"
+          urls_for(api_class).each do |url|
+            @output = system "swagger-cli validate #{file(url)}"
 
-          $stdout.puts 'install swagger-cli with `npm install swagger-cli -g`' if output.nil?
-          FileUtils.rm(file)
+            FileUtils.rm(
+              file(url)
+            )
+          end
+
+          $stdout.puts 'install swagger-cli with `npm install swagger-cli -g`' if @output.nil?
           # :nocov:
         end
       end
@@ -75,14 +83,12 @@ module GrapeSwagger
       # helper methods
       #
       # rubocop:disable Style/StringConcatenation
-      def make_request
-        @oapi_specs = []
-        urls_for(api_class).each do |url|
-          get url
-          @oapi_specs << JSON.parse(last_response.body, symolize_names: true)
-        end
+      def make_request(url)
+        get url
 
-        @oapi = JSON.pretty_generate(@oapi_specs) + "\n"
+        @oapi = JSON.pretty_generate(
+          JSON.parse(last_response.body, symolize_names: true)
+        ) + "\n"
       end
       # rubocop:enable Style/StringConcatenation
 
@@ -106,11 +112,18 @@ module GrapeSwagger
       end
 
       def error?
-        JSON.parse(@oapi).map { |e| e.keys.first == 'error' }.any?
+        JSON.parse(@oapi).keys.first == 'error'
       end
 
-      def file
-        name = ENV['store'] == 'true' || ENV['store'].blank? ? 'swagger_doc.json' : ENV['store']
+      def file(url)
+        api_version = url.split('/').last
+
+        name = if ENV['store'] == 'true' || ENV['store'].blank?
+          "swagger_doc_#{api_version}.json"
+        else
+          ENV['store'].sub('.json', "_#{api_version}.json")
+        end
+
         File.join(Dir.getwd, name)
       end
 

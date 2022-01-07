@@ -95,7 +95,7 @@ module GrapeSwagger
       def urls_for(api_class)
         api_class.routes.
           map(&:path).
-          select { |e| e.include?('/doc') }.
+          select { |e| e.include?('doc') }.
           select { |e| !e.include?(':name') }.
           map { |e| format_path(e) }.
           map { |e| [e, ENV['resource']].join('/').chomp('/') }

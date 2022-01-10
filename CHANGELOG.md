@@ -1,13 +1,8 @@
-### Next
-
-#### Features
-
-* Your contribution here.
+### 1.4.3 (January 5, 2022)
 
 #### Fixes
 
-* Your contribution here.
-
+* [#846] (https://github.com/ruby-grape/grape-swagger/pull/846): Fixes oapi rake tasks, allows generating sepcs for different API versions.     
 
 ### 1.4.2 (October 22, 2021)
 

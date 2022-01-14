@@ -93,12 +93,12 @@ module GrapeSwagger
       # rubocop:enable Style/StringConcatenation
 
       def urls_for(api_class)
-        api_class.routes.
-          map(&:path).
-          select { |e| e.include?('doc') }.
-          select { |e| !e.include?(':name') }.
-          map { |e| format_path(e) }.
-          map { |e| [e, ENV['resource']].join('/').chomp('/') }
+        api_class.routes
+                 .map(&:path)
+                 .select { |e| e.include?('doc') }
+                 .reject { |e| e.include?(':name') }
+                 .map { |e| format_path(e) }
+                 .map { |e| [e, ENV['resource']].join('/').chomp('/') }
       end
 
       def format_path(path)
@@ -119,10 +119,10 @@ module GrapeSwagger
         api_version = url.split('/').last
 
         name = if ENV['store'] == 'true' || ENV['store'].blank?
-          "swagger_doc_#{api_version}.json"
-        else
-          ENV['store'].sub('.json', "_#{api_version}.json")
-        end
+                 "swagger_doc_#{api_version}.json"
+               else
+                 ENV['store'].sub('.json', "_#{api_version}.json")
+               end
 
         File.join(Dir.getwd, name)
       end

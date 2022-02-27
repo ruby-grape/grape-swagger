@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby-version: ['2.6', '2.7', '3.0', 'head']
-        grape-version: [1.6.0, 1.5.3]
+        ruby-version: ['2.7', '3.0', '3.1', 'head']
+        grape-version: [1.6.2, 1.5.3]
         model-parser: [grape-swagger-entity, grape-swagger-representable, '']
 
     steps:

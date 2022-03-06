@@ -6,6 +6,7 @@
 
 #### Fixes
 
+* [#850](https://github.com/ruby-grape/grape-swagger/pull/850): Fix value of `enum` to be `Array` - [@takahashim](https://github.com/takahashim)
 * Your contribution here.
 
 

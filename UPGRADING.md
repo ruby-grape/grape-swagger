@@ -3,6 +3,7 @@
 ### Upgrading to >= 1.4.2
 
 - `additionalProperties` has been deprecated and will be removed in a future version of `grape-swagger`. It has been replaced with `additional_properties`.
+- The value of the `enum` attribute is now always an Array. If it has only one value, it will be a one-element Array.
 
 ### Upgrading to >= 1.4.0
 

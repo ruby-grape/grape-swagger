@@ -107,6 +107,10 @@ Style/HashTransformKeys:
 Style/HashTransformValues:
   Enabled: true
 
+Style/OpenStructUse:
+  Exclude:
+    - spec/**/*
+
 Style/RegexpLiteral:
   Enabled: false
 

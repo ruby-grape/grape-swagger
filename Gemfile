@@ -28,6 +28,7 @@ group :development, :test do
   gem 'rdoc'
   gem 'rspec', '~> 3.9'
   gem 'rubocop', '~> 1.0', require: false
+  gem 'webrick'
 end
 
 group :test do

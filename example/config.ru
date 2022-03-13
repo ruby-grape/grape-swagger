@@ -1,4 +1,5 @@
-require 'rack/cors'
+Bundler.require ENV['RACK_ENV']
+
 use Rack::Cors do
   allow do
     origins '*'
@@ -12,7 +13,6 @@ require './api/endpoints'
 require './api/entities'
 
 class Base < Grape::API
-  require 'grape-entity'
   require '../lib/grape-swagger'
   format :json
 

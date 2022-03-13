@@ -4,6 +4,8 @@
 
 * [#850](https://github.com/ruby-grape/grape-swagger/pull/850): Fix value of `enum` to be `Array` - [@takahashim](https://github.com/takahashim)
 * [#846] (https://github.com/ruby-grape/grape-swagger/pull/846): Fixes oapi rake tasks, allows generating sepcs for different API versions.
+* [#852](https://github.com/ruby-grape/grape-swagger/pull/852): Fix example to work without error - [@takahashim](https://github.com/takahashim)
+* Your contribution here.
 
 ### 1.4.2 (October 22, 2021)
 

@@ -350,13 +350,13 @@ module Grape
     def merge_params(route)
       path_params = get_path_params(route.app&.inheritable_setting&.namespace_stackable)
       param_keys = route.params.keys
-      
+
       # Merge path params options into route params
       route_params = route.params
-      route_params.keys.each do |key|
+      route_params.each_key do |key|
         path = path_params[key] || {}
         params = route_params[key]
-        params = {} if !params.is_a? Hash
+        params = {} unless params.is_a? Hash
         route_params[key] = path.merge(params)
       end
 
@@ -369,7 +369,8 @@ module Grape
       params = {}
       return param unless stackable_values
       return params unless stackable_values.is_a? Grape::Util::StackableValues
-      stackable_values&.new_values[:namespace]&.each do |namespace|
+
+      stackable_values&.new_values&.dig(:namespace)&.each do |namespace|
         space = namespace.space.to_s.gsub(':', '')
         params[space] = namespace.options || {}
       end

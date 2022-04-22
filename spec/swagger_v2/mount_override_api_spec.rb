@@ -25,8 +25,8 @@ describe 'mount override api' do
     end
 
     Class.new(Grape::API) do
-      mount new_api
       mount old_api
+      mount new_api
 
       add_swagger_documentation format: :json
     end

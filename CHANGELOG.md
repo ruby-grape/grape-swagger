@@ -1,3 +1,5 @@
+* [#859](https://github.com/ruby-grape/grape-swagger/pull/859): Fixes (restores) route ordering - [@dchandekstark](https://github.com/ruby-grape/grape-swagger)
+
 ### 1.4.3 (January 5, 2022)
 
 #### Fixes

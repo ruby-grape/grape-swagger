@@ -63,7 +63,7 @@ module GrapeSwagger
           resource - if given only for that it would be generated (optional)'
         task validate: :environment do
           # :nocov:
-          ENV['store'] = 'true'
+          ENV.store('store', 'true')
           ::Rake::Task['oapi:fetch'].invoke
           exit if error?
 
@@ -98,7 +98,7 @@ module GrapeSwagger
                  .select { |e| e.include?('doc') }
                  .reject { |e| e.include?(':name') }
                  .map { |e| format_path(e) }
-                 .map { |e| [e, ENV['resource']].join('/').chomp('/') }
+                 .map { |e| [e, ENV.fetch('resource', nil)].join('/').chomp('/') }
       end
 
       def format_path(path)
@@ -108,7 +108,7 @@ module GrapeSwagger
       end
 
       def save_to_file?
-        ENV['store'].present? && !error?
+        ENV.fetch('store', nil).present? && !error?
       end
 
       def error?
@@ -118,10 +118,10 @@ module GrapeSwagger
       def file(url)
         api_version = url.split('/').last
 
-        name = if ENV['store'] == 'true' || ENV['store'].blank?
+        name = if ENV.fetch('store', nil) == 'true' || ENV.fetch('store', nil).blank?
                  "swagger_doc_#{api_version}.json"
                else
-                 ENV['store'].sub('.json', "_#{api_version}.json")
+                 ENV.fetch('store').sub('.json', "_#{api_version}.json")
                end
 
         File.join(Dir.getwd, name)

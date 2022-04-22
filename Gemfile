@@ -6,14 +6,14 @@ ruby RUBY_VERSION
 
 gemspec
 
-gem 'grape', case version = ENV['GRAPE_VERSION'] || '>= 1.5.0'
+gem 'grape', case version = ENV.fetch('GRAPE_VERSION', '>= 1.5.0')
              when 'HEAD'
                { git: 'https://github.com/ruby-grape/grape' }
              else
                version
              end
 
-gem ENV['MODEL_PARSER'] if ENV.key?('MODEL_PARSER')
+gem ENV.fetch('MODEL_PARSER') if ENV.key?('MODEL_PARSER')
 
 group :development, :test do
   gem 'bundler'
@@ -39,7 +39,7 @@ group :test do
 end
 
 group :test, :development do
-  unless ENV['MODEL_PARSER'] == 'grape-swagger-entity'
+  unless ENV.fetch('MODEL_PARSER', nil) == 'grape-swagger-entity'
     gem 'grape-swagger-entity', git: 'https://github.com/ruby-grape/grape-swagger-entity'
   end
 end

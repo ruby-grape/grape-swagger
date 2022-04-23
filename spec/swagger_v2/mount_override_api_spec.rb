@@ -32,17 +32,6 @@ describe 'mount override api' do
     end
   end
 
-  context 'actual api request' do
-    subject do
-      get '/'
-      last_response.body
-    end
-
-    it 'returns data from new endpoint' do
-      is_expected.to eq 'new'
-    end
-  end
-
   context 'api documentation' do
     subject do
       get '/swagger_doc'

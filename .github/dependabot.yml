@@ -12,3 +12,9 @@ updates:
       day: "friday"
     assignees:
       - "LeFnord"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule: 
+      interval: weekly
+    assignees: 
+     - "LeFnord"

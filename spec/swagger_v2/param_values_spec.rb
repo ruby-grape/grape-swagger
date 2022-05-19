@@ -141,7 +141,7 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
         'name' => 'letter',
         'type' => 'string',
         'required' => true,
-        'enum' => 'string'
+        'enum' => %w[string]
       }]
     end
   end

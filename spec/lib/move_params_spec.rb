@@ -103,11 +103,26 @@ describe GrapeSwagger::DocMethods::MoveParams do
         subject.to_definition(path, params, route, definitions)
         expect(params).to eql(
           [
-            { name: 'InBody', in: 'body', required: true, schema: { '$ref' => '#/definitions/postInBody' } }
+            { name: 'postInBody', in: 'body', required: true, schema: { '$ref' => '#/definitions/postInBody' } }
           ]
         )
         expect(subject.definitions['postInBody']).not_to include :description
         expect(subject.definitions['postInBody']).to eql expected_post_defs
+      end
+
+      context 'with a nickname' do
+        let(:route_options) { { nickname: 'post-body' } }
+
+        specify do
+          subject.to_definition(path, params, route, definitions)
+          expect(params).to eql(
+            [
+              { name: 'post-body', in: 'body', required: true, schema: { '$ref' => '#/definitions/post-body' } }
+            ]
+          )
+          expect(subject.definitions['post-body']).not_to include :description
+          expect(subject.definitions['post-body']).to eql expected_post_defs
+        end
       end
     end
 
@@ -120,11 +135,27 @@ describe GrapeSwagger::DocMethods::MoveParams do
         expect(params).to eql(
           [
             { in: 'path', name: 'key', description: nil, type: 'integer', format: 'int32', required: true },
-            { name: 'InBody', in: 'body', required: true, schema: { '$ref' => '#/definitions/putInBody' } }
+            { name: 'putInBody', in: 'body', required: true, schema: { '$ref' => '#/definitions/putInBody' } }
           ]
         )
         expect(subject.definitions['putInBody']).not_to include :description
         expect(subject.definitions['putInBody']).to eql expected_put_defs
+      end
+
+      context 'with a nickname' do
+        let(:route_options) { { nickname: 'put-body' } }
+
+        specify do
+          subject.to_definition(path, params, route, definitions)
+          expect(params).to eql(
+            [
+              { in: 'path', name: 'key', description: nil, type: 'integer', format: 'int32', required: true },
+              { name: 'put-body', in: 'body', required: true, schema: { '$ref' => '#/definitions/put-body' } }
+            ]
+          )
+          expect(subject.definitions['put-body']).not_to include :description
+          expect(subject.definitions['put-body']).to eql expected_put_defs
+        end
       end
     end
   end
@@ -167,31 +198,16 @@ describe GrapeSwagger::DocMethods::MoveParams do
       let(:params) { [{ in: 'body', name: 'address[street][name]', description: 'street', type: 'string', required: true }] }
       before do
         subject.instance_variable_set(:@definitions, definitions)
-        subject.send(:build_definition, name, params, verb)
+        subject.send(:build_definition, name, params)
       end
 
-      describe 'verb given' do
-        let(:verb) { 'post' }
-        let(:name) { 'Foo' }
-        let(:definitions) { {} }
+      let(:name) { 'FooBar' }
+      let(:definitions) { {} }
 
-        specify do
-          definition = definitions.to_a.first
-          expect(definition.first).to eql 'postFoo'
-          expect(definition.last).to eql(type: 'object', properties: {})
-        end
-      end
-
-      describe 'no verb given' do
-        let(:name) { 'FooBar' }
-        let(:definitions) { {} }
-        let(:verb) { nil }
-
-        specify do
-          definition = definitions.to_a.first
-          expect(definition.first).to eql 'FooBar'
-          expect(definition.last).to eql(type: 'object', properties: {})
-        end
+      specify do
+        definition = definitions.to_a.first
+        expect(definition.first).to eql 'FooBar'
+        expect(definition.last).to eql(type: 'object', properties: {})
       end
     end
 

@@ -75,7 +75,7 @@ describe '751 deeply nested objects' do
   end
 
   describe 'Correctness of vrp Points' do
-    let(:get_points_response) { subject['definitions']['postVrpSubmit']['properties']['vrp']['properties']['points'] }
+    let(:get_points_response) { subject['definitions']['vrp']['properties']['vrp']['properties']['points'] }
     specify do
       expect(get_points_response).to eql(
         'type' => 'array',
@@ -111,7 +111,7 @@ describe '751 deeply nested objects' do
   end
 
   describe 'Correctness of vrp Services' do
-    let(:get_service_response) { subject['definitions']['postVrpSubmit']['properties']['vrp']['properties']['services'] }
+    let(:get_service_response) { subject['definitions']['vrp']['properties']['vrp']['properties']['services'] }
     specify do
       expect(get_service_response).to include(
         'type' => 'array',

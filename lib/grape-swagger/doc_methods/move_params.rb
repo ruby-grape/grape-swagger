@@ -38,8 +38,8 @@ module GrapeSwagger
         end
 
         def parent_definition_of_params(params, path, route)
-          definition_name = OperationId.manipulate(parse_model(path))
-          referenced_definition = build_definition(definition_name, params, route.request_method.downcase)
+          definition_name = OperationId.build(route, path)
+          referenced_definition = build_definition(definition_name, params)
           definition = @definitions[referenced_definition]
 
           move_params_to_new(definition, params)
@@ -151,8 +151,7 @@ module GrapeSwagger
           end
         end
 
-        def build_definition(name, params, verb = nil)
-          name = "#{verb}#{name}" if verb
+        def build_definition(name, params)
           @definitions[name] = should_expose_as_array?(params) ? array_type : object_type
 
           name

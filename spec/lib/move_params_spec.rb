@@ -212,26 +212,24 @@ describe GrapeSwagger::DocMethods::MoveParams do
     end
 
     describe 'build_body_parameter' do
-      describe 'name given' do
-        let(:name) { 'Foo' }
-        let(:reference) { 'Bar' }
+      let(:name) { 'Foo' }
+      let(:reference) { 'Bar' }
+      let(:expected_param) do
+        { name: name, in: 'body', required: true, schema: { '$ref' => "#/definitions/#{name}" } }
+      end
+      specify do
+        parameter = subject.send(:build_body_parameter, name, {})
+        expect(parameter).to eql expected_param
+      end
+
+      describe 'body_name option specified' do
+        let(:route_options) { { body_name: 'body' } }
         let(:expected_param) do
-          { name: name, in: 'body', required: true, schema: { '$ref' => "#/definitions/#{reference}" } }
+          { name: route_options[:body_name], in: 'body', required: true, schema: { '$ref' => "#/definitions/#{name}" } }
         end
         specify do
-          parameter = subject.send(:build_body_parameter, reference, name, {})
+          parameter = subject.send(:build_body_parameter, name, route_options)
           expect(parameter).to eql expected_param
-        end
-
-        describe 'body_name option specified' do
-          let(:route_options) { { body_name: 'body' } }
-          let(:expected_param) do
-            { name: route_options[:body_name], in: 'body', required: true, schema: { '$ref' => "#/definitions/#{reference}" } }
-          end
-          specify do
-            parameter = subject.send(:build_body_parameter, reference, name, route_options)
-            expect(parameter).to eql expected_param
-          end
         end
       end
     end

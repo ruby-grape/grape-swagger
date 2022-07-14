@@ -19,6 +19,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'grape', '~> 1.3'
 
   s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec}/*`.split("\n")
   s.require_paths = ['lib']
 end

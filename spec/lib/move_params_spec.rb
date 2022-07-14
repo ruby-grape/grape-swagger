@@ -111,7 +111,7 @@ describe GrapeSwagger::DocMethods::MoveParams do
       end
     end
 
-    describe 'POST' do
+    describe 'PUT' do
       let(:params) { paths['/in_body/{key}'][:put][:parameters] }
       let(:route) { Grape::Router::Route.new('PUT', path.dup, **route_options) }
 

@@ -103,8 +103,8 @@ describe '#579 put / post parameters spec' do
         [
           { 'in' => 'path', 'name' => 'guid', 'type' => 'string', 'format' => 'guid', 'required' => true },
           {
-            'name' => 'Issue579ImplicitBodyParameter', 'in' => 'body', 'required' => true, 'schema' => {
-              '$ref' => '#/definitions/putIssue579ImplicitBodyParameter'
+            'name' => 'putIssue579ImplicitBodyParameterGuid', 'in' => 'body', 'required' => true, 'schema' => {
+              '$ref' => '#/definitions/putIssue579ImplicitBodyParameterGuid'
             }
           }
         ]
@@ -130,8 +130,8 @@ describe '#579 put / post parameters spec' do
         [
           { 'in' => 'path', 'name' => 'guid', 'type' => 'string', 'format' => 'guid', 'required' => true },
           {
-            'name' => 'Issue579ExplicitBodyParameter', 'in' => 'body', 'required' => true, 'schema' => {
-              '$ref' => '#/definitions/putIssue579ExplicitBodyParameter'
+            'name' => 'putIssue579ExplicitBodyParameterGuid', 'in' => 'body', 'required' => true, 'schema' => {
+              '$ref' => '#/definitions/putIssue579ExplicitBodyParameterGuid'
             }
           }
         ]
@@ -157,7 +157,7 @@ describe '#579 put / post parameters spec' do
         [
           { 'in' => 'path', 'name' => 'guid', 'type' => 'string', 'format' => 'guid', 'required' => true },
           {
-            'name' => 'Issue579NamespaceParamGuidBodyParameter', 'in' => 'body', 'required' => true, 'schema' => {
+            'name' => 'putIssue579NamespaceParamGuidBodyParameter', 'in' => 'body', 'required' => true, 'schema' => {
               '$ref' => '#/definitions/putIssue579NamespaceParamGuidBodyParameter'
             }
           }

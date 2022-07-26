@@ -1,5 +1,15 @@
 ## Upgrading Grape-swagger
 
+### Upgrading to >= 1.5.0
+
+- The names generated for body parameter definitions and their references has changed. It'll now include the HTTP action as well as any path parameters.
+  - E.g, given a `PUT /things/:id` endpoint, `paths.things/{id}.put.parameters` in the generated Swaggerfile will contain the following:
+  - With `grape-swagger < 1.5.0`: `{ "name": "Things", ..., "schema": { "$ref": "#/definitions/putThings" } }`
+  - With `grape-swagger >= 1.5.0`: `{ "name": "putThingsId", ..., "schema": { "$ref": "#/definitions/putThingsId" } }`
+- If you use the `nickname` option for an endpoint, that nickname will be used for both the parameter name and its definition reference.
+  - E.g., if the endpoint above were nicknamed `put-thing`, the generated Swaggerfile will contain `{ "name": "put-thing", ..., "schema": { "$ref": "#/definitions/put-thing" } }`
+
+
 ### Upgrading to >= 1.4.2
 
 - `additionalProperties` has been deprecated and will be removed in a future version of `grape-swagger`. It has been replaced with `additional_properties`.

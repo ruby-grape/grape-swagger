@@ -38,15 +38,15 @@ module GrapeSwagger
         end
 
         def parent_definition_of_params(params, path, route)
-          definition_name = OperationId.manipulate(parse_model(path))
-          referenced_definition = build_definition(definition_name, params, route.request_method.downcase)
-          definition = @definitions[referenced_definition]
+          definition_name = OperationId.build(route, path)
+          build_definition(definition_name, params)
+          definition = @definitions[definition_name]
 
           move_params_to_new(definition, params)
 
           definition[:description] = route.description if route.try(:description)
 
-          build_body_parameter(referenced_definition, definition_name, route.options)
+          build_body_parameter(definition_name, route.options)
         end
 
         def move_params_to_new(definition, params)
@@ -142,17 +142,16 @@ module GrapeSwagger
           definition[:required].push(*value)
         end
 
-        def build_body_parameter(reference, name, options)
+        def build_body_parameter(name, options)
           {}.tap do |x|
             x[:name] = options[:body_name] || name
             x[:in] = 'body'
             x[:required] = true
-            x[:schema] = { '$ref' => "#/definitions/#{reference}" }
+            x[:schema] = { '$ref' => "#/definitions/#{name}" }
           end
         end
 
-        def build_definition(name, params, verb = nil)
-          name = "#{verb}#{name}" if verb
+        def build_definition(name, params)
           @definitions[name] = should_expose_as_array?(params) ? array_type : object_type
 
           name

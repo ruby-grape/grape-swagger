@@ -817,7 +817,7 @@ The example parameter will populate the Swagger UI with the example value, and c
 ```ruby
 params do
   requires :id, type: Integer, documentation: { example: 123 }
-  optional :name, type String, documentation: { example: 'Buddy Guy' }
+  optional :name, type: String, documentation: { example: 'Buddy Guy' }
 end
 ```
 
@@ -843,7 +843,7 @@ namespace 'store/order', desc: 'Order operations within a store', swagger: { nes
   get :order_id do
   	...
   end
-  namespace 'actions', desc: 'Order actions' do, nested: false
+  namespace 'actions', desc: 'Order actions', nested: false do
     get 'evaluate' do
       ...
     end
@@ -1265,7 +1265,7 @@ end
 
 The result will look like following:
 
-```
+```json
   "responses": {
     "200": {
       "description": "Get a kitten",
@@ -1292,7 +1292,7 @@ end
 
 The result will look like following:
 
-```
+```json
   "responses": {
     "200": {
       "description": "Get kittens",
@@ -1319,7 +1319,7 @@ get '/things' do
 end
 ```
 The result will look like following:
-```
+```json
   "responses": {
     "200": {
       "description": "Multiple response",
@@ -1351,7 +1351,7 @@ get '/things' do
 end
 ```
 The result will look like following:
-```
+```json
   "responses": {
     "200": {
       "description": "Multiple response with array",
@@ -1525,7 +1525,7 @@ end
 ```
 
 Should generate this definitions:
-```JSON
+```json
 {
   "definitions": {
     "Pet": {

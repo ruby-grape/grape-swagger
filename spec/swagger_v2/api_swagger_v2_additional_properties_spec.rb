@@ -37,7 +37,7 @@ describe 'parsing additional_parameters' do
     specify do
       expect(subject.dig('paths', '/things', 'post', 'parameters')).to eql(
         [
-          { 'name' => 'Things', 'in' => 'body', 'required' => true, 'schema' => { '$ref' => '#/definitions/postThings' } }
+          { 'name' => 'postThings', 'in' => 'body', 'required' => true, 'schema' => { '$ref' => '#/definitions/postThings' } }
         ]
       )
     end

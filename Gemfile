@@ -6,14 +6,14 @@ ruby RUBY_VERSION
 
 gemspec
 
-gem 'grape', case version = ENV['GRAPE_VERSION'] || '>= 1.5.0'
+gem 'grape', case version = ENV.fetch('GRAPE_VERSION', '~> 1.6')
              when 'HEAD'
                { git: 'https://github.com/ruby-grape/grape' }
              else
                version
              end
 
-gem ENV['MODEL_PARSER'] if ENV.key?('MODEL_PARSER')
+gem ENV.fetch('MODEL_PARSER', nil) if ENV.key?('MODEL_PARSER')
 
 group :development, :test do
   gem 'bundler'

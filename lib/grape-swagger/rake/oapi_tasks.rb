@@ -98,7 +98,7 @@ module GrapeSwagger
                  .select { |e| e.include?('doc') }
                  .reject { |e| e.include?(':name') }
                  .map { |e| format_path(e) }
-                 .map { |e| [e, ENV['resource']].join('/').chomp('/') }
+                 .map { |e| [e, ENV.fetch('resource', nil)].join('/').chomp('/') }
       end
 
       def format_path(path)

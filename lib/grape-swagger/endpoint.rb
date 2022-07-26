@@ -348,13 +348,39 @@ module Grape
     end
 
     def merge_params(route)
+      path_params = get_path_params(route.app&.inheritable_setting&.namespace_stackable)
       param_keys = route.params.keys
+
+      # Merge path params options into route params
+      route_params = route.params
+      route_params.each_key do |key|
+        path = path_params[key] || {}
+        params = route_params[key]
+        params = {} unless params.is_a? Hash
+        route_params[key] = path.merge(params)
+      end
+
       route.params.delete_if { |key| key.is_a?(String) && param_keys.include?(key.to_sym) }.to_a
+    end
+
+    # Iterates over namespaces recursively
+    # to build a hash of path params with options, including type
+    def get_path_params(stackable_values)
+      params = {}
+      return param unless stackable_values
+      return params unless stackable_values.is_a? Grape::Util::StackableValues
+
+      stackable_values&.new_values&.dig(:namespace)&.each do |namespace|
+        space = namespace.space.to_s.gsub(':', '')
+        params[space] = namespace.options || {}
+      end
+      inherited_params = get_path_params(stackable_values.inherited_values)
+      inherited_params.merge(params)
     end
 
     def default_type(params)
       default_param_type = { required: true, type: 'Integer' }
-      params.each { |param| param[-1] = param.last == '' ? default_param_type : param.last }
+      params.each { |param| param[-1] = param.last.empty? ? default_param_type : param.last }
     end
 
     def expose_params(value)

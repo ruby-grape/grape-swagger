@@ -1,3 +1,9 @@
+### 1.4.4
+
+#### Fixes
+
+* [#840](https://github.com/ruby-grape/grape-swagger/pull/847): Fix documentation of `route_param` type when used with nested endpoints - [@dmoss18](https://github.com/dmoss18)
+
 ### 1.4.3 (January 5, 2022)
 
 #### Fixes

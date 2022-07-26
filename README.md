@@ -1718,9 +1718,10 @@ GrapeSwagger::Rake::OapiTasks.new('::Api::Base')
 ```
 rake oapi:fetch
 params:
-- store={ true | file_name } – save as JSON (optional)
+- store={ true | file_name.json } – save as JSON (optional)
 - resource=resource_name     – get only for this one (optional)
 ```
+For mutliversion API it creates several files with following naming: file_name_`API_VERSION`.json      
 
 #### OpenApi/Swagger Validation
 

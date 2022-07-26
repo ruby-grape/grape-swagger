@@ -1,4 +1,8 @@
-### 1.4.4
+### 1.5.5
+
+#### Features
+
+* [#862](https://github.com/ruby-grape/grape-swagger/pull/862): Allow using nicknames for body definitions - [@magni-](https://github.com/magni-)
 
 #### Fixes
 
@@ -12,6 +16,7 @@
 * [#846](https://github.com/ruby-grape/grape-swagger/pull/846): Fixes oapi rake tasks, allows generating sepcs for different API versions.
 * [#852](https://github.com/ruby-grape/grape-swagger/pull/852): Fix example to work without error - [@takahashim](https://github.com/takahashim)
 * [#853](https://github.com/ruby-grape/grape-swagger/pull/853): Add webrick gem so that example works in Ruby 3.x - [@takahashim](https://github.com/takahashim)
+* [#844](https://github.com/ruby-grape/grape-swagger/pull/844): Fixes the regexp used for parsing routes - [@senhalil](https://github.com/senhalil)
 * [#862](https://github.com/ruby-grape/grape-swagger/pull/862): Allow using nicknames for body definitions - [@magni-](https://github.com/magni-)
 * Your contribution here.
 

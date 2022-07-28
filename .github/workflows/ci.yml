@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0'
+          ruby-version: '3.1'
           bundler-cache: true
       - name: Run rubocop
         run: bundle exec rubocop --parallel --format progress

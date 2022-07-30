@@ -384,14 +384,17 @@ module Grape
     end
 
     def expose_params(value)
-      if value.is_a?(Class) && GrapeSwagger.model_parsers.find(value)
-        expose_params_from_model(value)
-      elsif value.is_a?(String)
+      case value
+      when Class
+        expose_params_from_model(value) if GrapeSwagger.model_parsers.find(value)
+      when String
         begin
-          expose_params(Object.const_get(value.gsub(/\[|\]/, ''))) # try to load class from its name
+          expose_params(Object.const_get(value))
         rescue NameError
           nil
         end
+      when Array
+        expose_params(value.first)
       end
     end
 

@@ -8,14 +8,17 @@ on:
     branches:
       - '*'
 
+permissions:
+  contents: read
+
 jobs:
   rubocop:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0'
+          ruby-version: '3.1'
           bundler-cache: true
       - name: Run rubocop
         run: bundle exec rubocop --parallel --format progress
@@ -30,7 +33,7 @@ jobs:
         model-parser: [grape-swagger-entity, grape-swagger-representable, '']
     steps:
     - name: Check out branch
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:

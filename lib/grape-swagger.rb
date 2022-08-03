@@ -31,8 +31,8 @@ module SwaggerRouting
 
       # want to match emojis … ;)
       # route_match = route_match
-      #   .match('\/([\p{Alnum}|\p{Emoji}|\-|\_]*?)[\.\/\(]') || route_match.match('\/([\p{Alpha}|\p{Emoji}|\-|\_]*)$')
-      route_match = route_match.match('\/([\p{Alnum}|\-|\_]*?)[\.\/\(]') || route_match.match('\/([\p{Alpha}|\-|\_]*)$')
+      #   .match('\/([\p{Alnum}p{Emoji}\-\_]*?)[\.\/\(]') || route_match.match('\/([\p{Alpha}\p{Emoji}\-\_]*)$')
+      route_match = route_match.match('\/([\p{Alnum}\-\_]*?)[\.\/\(]') || route_match.match('\/([\p{Alpha}\-\_]*)$')
       next unless route_match
 
       resource = route_match.captures.first

@@ -1,4 +1,32 @@
-* [#859](https://github.com/ruby-grape/grape-swagger/pull/859): Fixes (restores) route ordering - [@dchandekstark](https://github.com/ruby-grape/grape-swagger)
+### next
+
+#### Features
+
+* Your contribution here.
+
+#### Fixes
+
+* Your contribution here.
+
+
+### 1.5.0 (July 28, 2022)
+
+#### Features
+
+* [#862](https://github.com/ruby-grape/grape-swagger/pull/862): Allow using nicknames for body definitions - [@magni-](https://github.com/magni-)
+
+#### Fixes
+
+* [#860](https://github.com/ruby-grape/grape-swagger/pull/860) chore: Included githubactions in the dependabot config [@naveensrinivasan](https://github.com/naveensrinivasan)
+* [#843](https://github.com/ruby-grape/grape-swagger/pull/843) Syntax errors in README.md examples [@remvee](https://github.com/remvee)
+* [#844](https://github.com/ruby-grape/grape-swagger/pull/844) Fixes the regexp used for parsing routes [@senhalil](https://github.com/senhalil)
+* [#847](https://github.com/ruby-grape/grape-swagger/pull/847) Parse route_param type for nested endpoints [@dmoss18](https://github.com/dmoss18)
+* [#856](https://github.com/ruby-grape/grape-swagger/pull/856) Remove unused methods in GrapeSwagger::DocMethods::BuildModelDefinition [@takahashim](https://github.com/takahashim)
+* [#858](https://github.com/ruby-grape/grape-swagger/pull/858): Set permissions for GitHub actions [@naveensrinivasan](https://github.com/naveensrinivasan)
+* [#853](https://github.com/ruby-grape/grape-swagger/pull/853): Add webrick to support Ruby 3.x [@takahashim](https://github.com/takahashim)
+* [#852](https://github.com/ruby-grape/grape-swagger/pull/852): Fix example to work [@takahashim](https://github.com/takahashim)
+* [#846](https://github.com/ruby-grape/grape-swagger/pull/846): Refactor oapi fetch task [@Vachman](https://github.com/Vachman)
+* [#850](https://github.com/ruby-grape/grape-swagger/pull/850): Fix value of enum to be Array [@takahashim](https://github.com/takahashim)
 
 ### 1.4.3 (January 5, 2022)
 
@@ -8,6 +36,7 @@
 * [#846](https://github.com/ruby-grape/grape-swagger/pull/846): Fixes oapi rake tasks, allows generating sepcs for different API versions.
 * [#852](https://github.com/ruby-grape/grape-swagger/pull/852): Fix example to work without error - [@takahashim](https://github.com/takahashim)
 * [#853](https://github.com/ruby-grape/grape-swagger/pull/853): Add webrick gem so that example works in Ruby 3.x - [@takahashim](https://github.com/takahashim)
+* [#844](https://github.com/ruby-grape/grape-swagger/pull/844): Fixes the regexp used for parsing routes - [@senhalil](https://github.com/senhalil)
 * [#862](https://github.com/ruby-grape/grape-swagger/pull/862): Allow using nicknames for body definitions - [@magni-](https://github.com/magni-)
 * Your contribution here.
 

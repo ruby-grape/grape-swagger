@@ -5,7 +5,7 @@ require 'active_support/core_ext/string/inflections'
 require 'grape-swagger/endpoint/params_parser'
 
 module Grape
-  class Endpoint
+  class Endpoint # rubocop:disable Metrics/ClassLength
     def content_types_for(target_class)
       content_types = (target_class.content_types || {}).values
 
@@ -241,7 +241,8 @@ module Grape
       if route.http_codes.is_a?(Array) && route.http_codes.any? { |code| success_code?(code) }
         route.http_codes.clone
       else
-        success_codes_from_route(route) + (route.http_codes || route.options[:failure] || [])
+        success_codes_from_route(route) + default_code_from_route(route) +
+          (route.http_codes || route.options[:failure] || [])
       end
     end
 
@@ -267,6 +268,21 @@ module Grape
     end
 
     private
+
+    def default_code_from_route(route)
+      entity = route.options[:default_response]
+      return [] if entity.nil?
+
+      default_code = { code: 'default', message: 'Default Response' }
+      if entity.is_a?(Hash)
+        default_code[:message] = entity[:message] || default_code[:message]
+        default_code[:model] = entity[:model] if entity[:model].present?
+      else
+        default_code[:model] = entity
+      end
+
+      [default_code]
+    end
 
     def build_memo_schema(memo, route, value, response_model, options)
       if memo[value[:code]][:schema] && value[:as]
@@ -295,7 +311,7 @@ module Grape
                   else
                     build_reference_hash(response_model)
                   end
-      return reference unless value[:code] < 300
+      return reference unless value[:code] == 'default' || value[:code] < 300
 
       if value.key?(:as) && value.key?(:is_array)
         reference[value[:as]] = build_reference_array(reference[value[:as]])

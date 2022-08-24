@@ -137,6 +137,12 @@ RSpec.describe GrapeSwagger::Rake::OapiTasks do
       it 'returns swagger_doc.json' do
         expect(subject.send(:file, docs_url)).to end_with 'swagger_doc.json'
       end
+      
+      context 'api has version' do
+        it 'returns versioned swagger_doc.json' do
+          expect(File.basename(subject.send(:file, docs_url))).to eq('swagger_doc_v1.json')
+        end
+      end
     end
 
     describe 'store given' do

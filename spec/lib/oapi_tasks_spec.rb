@@ -137,7 +137,7 @@ RSpec.describe GrapeSwagger::Rake::OapiTasks do
       it 'returns swagger_doc.json' do
         expect(subject.send(:file, docs_url)).to end_with 'swagger_doc.json'
       end
-      
+
       context 'api has version' do
         it 'returns versioned swagger_doc.json' do
           expect(File.basename(subject.send(:file, docs_url))).to eq('swagger_doc_v1.json')
@@ -154,6 +154,12 @@ RSpec.describe GrapeSwagger::Rake::OapiTasks do
         it 'returns swagger_doc.json' do
           expect(subject.send(:file, docs_url)).to end_with 'swagger_doc.json'
         end
+
+        context 'api has version' do
+          it 'returns versioned swagger_doc.json' do
+            expect(File.basename(subject.send(:file, docs_url))).to eq('swagger_doc_v1.json')
+          end
+        end
       end
 
       describe 'name given' do
@@ -162,6 +168,12 @@ RSpec.describe GrapeSwagger::Rake::OapiTasks do
 
         it 'returns swagger_doc.json' do
           expect(subject.send(:file, docs_url)).to include(name.split('.')[0])
+        end
+
+        context 'api has version' do
+          it 'returns versioned oapi_doc.json' do
+            expect(File.basename(subject.send(:file, docs_url))).to eq('oapi_doc_v1.json')
+          end
         end
       end
     end

@@ -21,7 +21,7 @@ group :development, :test do
   gem 'pry', platforms: [:mri]
   gem 'pry-byebug', platforms: [:mri]
 
-  gem 'rack', '~> 2.2'
+  gem 'rack', '~> 3.0'
   gem 'rack-cors'
   gem 'rack-test'
   gem 'rake'

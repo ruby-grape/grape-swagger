@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#872](https://github.com/ruby-grape/grape-swagger/pull/872): Add `consumes` and `produces` options to `add_swagger_documentation` - [@spaceraccoon](https://github.com/spaceraccoon)
 * Your contribution here.
 
 #### Fixes

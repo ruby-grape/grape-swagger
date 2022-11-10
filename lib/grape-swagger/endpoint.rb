@@ -97,18 +97,17 @@ module Grape
       routes.each do |route|
         next if hidden?(route, options)
 
-        @item, path = GrapeSwagger::DocMethods::PathString.build(route, options)
-        @entity = route.entity || route.options[:success]
-
-        verb, method_object = method_object(route, options, path)
-
-        if @paths.key?(path.to_s)
-          @paths[path.to_s][verb] = method_object
-        else
-          @paths[path.to_s] = { verb => method_object }
+        GrapeSwagger::DocMethods::PathString.generate_optional_segments(route.path.dup).each do |path|
+          @item, path = GrapeSwagger::DocMethods::PathString.build(route, path, options)
+          @entity = route.entity || route.options[:success]
+          verb, method_object = method_object(route, options, path)
+          if @paths.key?(path.to_s)
+            @paths[path.to_s][verb] = method_object
+          else
+            @paths[path.to_s] = { verb => method_object }
+          end
+          GrapeSwagger::DocMethods::Extensions.add(@paths[path.to_s], @definitions, route)
         end
-
-        GrapeSwagger::DocMethods::Extensions.add(@paths[path.to_s], @definitions, route)
       end
     end
 

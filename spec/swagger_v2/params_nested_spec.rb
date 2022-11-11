@@ -10,6 +10,9 @@ describe 'nested group params' do
         Class.new(Grape::API) do
           format :json
 
+          desc 'nested array' do
+            consumes ['application/x-www-form-urlencoded']
+          end
           params do
             requires :a_array, type: Array do
               requires :param_1, type: Integer
@@ -26,6 +29,9 @@ describe 'nested group params' do
             { 'declared_params' => declared(params) }
           end
 
+          desc 'nested hash' do
+            consumes ['application/x-www-form-urlencoded']
+          end
           params do
             requires :a_hash, type: Hash do
               requires :param_1, type: Integer

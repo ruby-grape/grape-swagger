@@ -11,33 +11,37 @@ describe 'response' do
         format :json
 
         desc 'This returns something',
-             params: Entities::UseResponse.documentation,
-             failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
+          consumes: ['application/x-www-form-urlencoded'],
+          params: Entities::UseResponse.documentation,
+          failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         post '/params_given' do
           { 'declared_params' => declared(params) }
         end
 
         desc 'This returns something',
-             entity: Entities::UseResponse,
-             failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
+          consumes: ['application/x-www-form-urlencoded'],
+          entity: Entities::UseResponse,
+          failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         get '/entity_response' do
           { 'declared_params' => declared(params) }
         end
 
         desc 'This returns something',
-             entity: Entities::UseItemResponseAsType,
-             failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
+          consumes: ['application/x-www-form-urlencoded'],
+          entity: Entities::UseItemResponseAsType,
+          failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         get '/nested_type' do
           { 'declared_params' => declared(params) }
         end
 
         desc 'This returns something',
-             success: [
-               { code: 200, message: 'Request has succeeded' },
-               { code: 201, message: 'Successful Operation' },
-               { code: 204, message: 'Request was fulfilled' }
-             ],
-             failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
+          consumes: ['application/x-www-form-urlencoded'],
+          success: [
+            { code: 200, message: 'Request has succeeded' },
+            { code: 201, message: 'Successful Operation' },
+            { code: 204, message: 'Request was fulfilled' }
+          ],
+          failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         get '/multiple-success-responses' do
           { 'declared_params' => declared(params) }
         end
@@ -102,7 +106,7 @@ describe 'response' do
       expect(subject['paths']['/params_given']['post']).to eql(
         'description' => 'This returns something',
         'produces' => ['application/json'],
-        'consumes' => ['application/json'],
+        'consumes' => ['application/x-www-form-urlencoded'],
         'parameters' => [
           { 'in' => 'formData', 'name' => 'description', 'type' => 'string', 'required' => false },
           { 'in' => 'formData', 'name' => '$responses', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => false }

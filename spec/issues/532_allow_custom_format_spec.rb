@@ -6,6 +6,10 @@ describe '#532 allow custom format' do
   let(:app) do
     Class.new(Grape::API) do
       namespace :issue_532 do
+        desc 'issue_532' do
+          consumes ['application/x-www-form-urlencoded']
+        end
+
         params do
           requires :logs, type: String, documentation: { format: 'log' }
           optional :phone_number, type: Integer, documentation: { format: 'phone_number' }

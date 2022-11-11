@@ -119,6 +119,14 @@ module Grape
       method[:produces]    = produces_object(route, options[:produces] || options[:format])
       method[:consumes]    = consumes_object(route, options[:format])
       method[:parameters]  = params_object(route, options, path)
+      # if any parameters are file type, automatically set consumes
+      if method[:parameters].present? &&
+        GrapeSwagger::DocMethods::FileParams.includes_file_param?(method[:parameters]) &&
+        ['application/x-www-form-urlencoded', 'multipart/form-data'].none? do |consume|
+          method[:consumes].include?(consume)
+        end
+       method[:consumes] = ['application/x-www-form-urlencoded', 'multipart/form-data']
+     end
       method[:security]    = security_object(route)
       method[:responses]   = response_object(route, options)
       method[:tags]        = route.options.fetch(:tags, tag_object(route, path))
@@ -189,7 +197,9 @@ module Grape
         memo << GrapeSwagger::DocMethods::ParseParams.call(param, value, path, route, @definitions)
       end
 
-      if GrapeSwagger::DocMethods::MoveParams.can_be_moved?(route.request_method, parameters)
+      if GrapeSwagger::DocMethods::FileParams.includes_file_param?(parameters)
+        parameters = GrapeSwagger::DocMethods::FileParams.to_formdata(parameters)
+      elsif GrapeSwagger::DocMethods::MoveParams.can_be_moved?(route.request_method, parameters)
         parameters = GrapeSwagger::DocMethods::MoveParams.to_definition(path, parameters, route, @definitions)
       end
 

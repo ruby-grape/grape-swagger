@@ -7,7 +7,9 @@ describe 'additional parameter settings' do
     module TheApi
       class RequestParamFix < Grape::API
         resource :bookings do
-          desc 'Update booking'
+          desc 'Update booking' do
+            consumes ['application/x-www-form-urlencoded']
+          end
           params do
             optional :name, type: String
           end
@@ -15,17 +17,23 @@ describe 'additional parameter settings' do
             { 'declared_params' => declared(params) }
           end
 
-          desc 'Get booking details'
+          desc 'Get booking details' do
+            consumes ['application/x-www-form-urlencoded']
+          end
           get ':id' do
             { 'declared_params' => declared(params) }
           end
 
-          desc 'Get booking details by access_number'
+          desc 'Get booking details by access_number' do
+            consumes ['application/x-www-form-urlencoded']
+          end
           get '/conf/:access_number' do
             { 'declared_params' => declared(params) }
           end
 
-          desc 'Remove booking'
+          desc 'Remove booking' do
+            consumes ['application/x-www-form-urlencoded']
+          end
           delete ':id' do
             { 'declared_params' => declared(params) }
           end

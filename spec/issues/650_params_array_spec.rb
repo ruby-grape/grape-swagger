@@ -5,6 +5,9 @@ require 'spec_helper'
 describe '#605 Group Params as Array' do
   let(:app) do
     Class.new(Grape::API) do
+      desc 'array_of_range' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :array_of_range_string, type: [String], values: %w[a b c]
         requires :array_of_range_integer, type: [Integer], values: [1, 2, 3]
@@ -13,6 +16,9 @@ describe '#605 Group Params as Array' do
         { 'declared_params' => declared(params) }
       end
 
+      desc 'array_with_default' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :array_with_default_string, type: [String], default: 'abc'
         requires :array_with_default_integer, type: Array[Integer], default: 123

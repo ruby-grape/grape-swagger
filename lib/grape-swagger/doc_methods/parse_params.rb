@@ -27,7 +27,7 @@ module GrapeSwagger
           document_required(settings)
           document_additional_properties(definitions, settings) unless value_type[:is_array]
           document_add_extensions(settings)
-          document_example(settings)
+          document_example(settings) if @parsed_param[:in] == 'body'
 
           @parsed_param
         end

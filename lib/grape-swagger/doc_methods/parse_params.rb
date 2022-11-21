@@ -21,7 +21,7 @@ module GrapeSwagger
           # optional properties
           document_description(settings)
           document_type_and_format(settings, data_type)
-          document_array_param(value_type, definitions) if value_type[:is_array]
+          document_array_param(value_type, definitions, consumes) if value_type[:is_array]
           document_default_value(settings) unless value_type[:is_array]
           document_range_values(settings) unless value_type[:is_array]
           document_required(settings)
@@ -68,15 +68,12 @@ module GrapeSwagger
           GrapeSwagger::DocMethods::Extensions.add_extensions_to_root(settings, @parsed_param)
         end
 
-        def document_array_param(value_type, definitions)
+        def document_array_param(value_type, definitions, consumes)
           if value_type[:documentation].present?
-            param_type = value_type[:documentation][:param_type] || value_type[:documentation][:in]
             doc_type = value_type[:documentation][:type]
             type = DataType.mapping(doc_type) if doc_type && !DataType.request_primitive?(doc_type)
             collection_format = value_type[:documentation][:collectionFormat]
           end
-
-          param_type ||= value_type[:param_type]
 
           array_items = parse_array_item(
             definitions,
@@ -84,10 +81,32 @@ module GrapeSwagger
             value_type
           )
 
-          @parsed_param[:in] = param_type || 'formData'
+          @parsed_param[:in] = array_param_type(value_type, consumes)
           @parsed_param[:items] = array_items
           @parsed_param[:type] = 'array'
           @parsed_param[:collectionFormat] = collection_format if DataType.collections.include?(collection_format)
+        end
+
+        def array_param_type(value_type, consumes)
+          if value_type[:documentation].present?
+            param_type = value_type[:documentation][:param_type] || value_type[:documentation][:in]
+          end
+
+          param_type ||= value_type[:param_type]
+
+          if param_type
+            param_type
+          elsif %w[POST PUT PATCH].include?(value_type[:method])
+            if consumes.include?('application/x-www-form-urlencoded') || consumes.include?('multipart/form-data')
+              'formData'
+            else
+              'body'
+            end
+          elsif DataType.query_array_primitive?(value_type[:data_type])
+            'query'
+          else
+            'formData'
+          end
         end
 
         def parse_array_item(definitions, type, value_type)

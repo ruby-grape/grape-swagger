@@ -39,6 +39,7 @@ module GrapeSwagger
         endpoint_auth_wrapper: nil,
         swagger_endpoint_guard: nil,
         token_owner: nil
+        default_route_visibility: :public
       }.freeze
 
     FORMATTER_METHOD = %i[format default_format default_error_formatter].freeze

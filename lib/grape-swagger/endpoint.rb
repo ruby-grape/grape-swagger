@@ -419,11 +419,22 @@ module Grape
     end
 
     def hidden?(route, options)
-      route_hidden = route.settings.try(:[], :swagger).try(:[], :hidden)
-      route_hidden = route.options[:hidden] if route.options.key?(:hidden)
-      return route_hidden unless route_hidden.is_a?(Proc)
+      return !public?(route, options) if options[:default_route_visibility] == :hidden
 
-      options[:token_owner] ? route_hidden.call(send(options[:token_owner].to_sym)) : route_hidden.call
+      scan_route_for_value(:hidden, route, options)
+    end
+
+    def public?(route, options)
+      scan_route_for_value(:public, route, options)
+    end
+
+    def scan_route_for_value(key, route, options)
+      key = key.to_sym
+      route_value = route.settings.try(:[], :swagger).try(:[], key)
+      route_value = route.options[key] if route.options.key?(key)
+      return route_value unless route_value.is_a?(Proc)
+
+      options[:token_owner] ? route_value.call(send(options[:token_owner].to_sym)) : route_value.call
     end
 
     def hidden_parameter?(value)

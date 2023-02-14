@@ -38,7 +38,7 @@ module GrapeSwagger
         specific_api_documentation: { desc: 'Swagger compatible API description for specific API' },
         endpoint_auth_wrapper: nil,
         swagger_endpoint_guard: nil,
-        token_owner: nil
+        token_owner: nil,
         default_route_visibility: :public
       }.freeze
 

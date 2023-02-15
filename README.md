@@ -206,6 +206,7 @@ end
 * [array_use_braces](#array_use_braces)
 * [api_documentation](#api_documentation)
 * [specific_api_documentation](#specific_api_documentation)
+* [default_route_visibility](#default_route_visibility)
 
 You can pass a hash with optional configuration settings to ```add_swagger_documentation```.
 The examples show the default value.
@@ -432,10 +433,27 @@ add_swagger_documentation \
    specific_api_documentation: { desc: 'Reticulated splines API swagger-compatible endpoint documentation.' }
 ```
 
+#### default_route_visibility
+By default, grape-swagger will include all routes in the genrated documentation. You can configure this via `default_route_visibility`:
+```rb
+add_swagger_documentation \
+  default_route_visibility: :hidden
+```
+Grape-swagger will now *exclude* all routes in the generated documentation. You can then explicitly mark specific routes public like this:
+```rb
+desc 'Get all accounts', public: true
+get 'accounts' do
+  ['account1', 'account2']
+end
+```
+
+**Please note**: Marking a route `public: false` or `hidden: false` will simply fall back to the overall `default_route_visibility`. You should consider `public` and `hidden` to be flags that only take effect when their value is truthy.
+
 ## Routes Configuration <a name="routes"></a>
 
 * [Swagger Header Parameters](#headers)
 * [Hiding an Endpoint](#hiding)
+* [Hiding all Endpoints](#hiding-all-endpoints)
 * [Overriding Auto-Generated Nicknames](#overriding-auto-generated-nicknames)
 * [Specify endpoint details](#details)
 * [Overriding the route summary](#summary)
@@ -508,6 +526,34 @@ state:
 
 ```ruby
 desc 'Conditionally hide this endpoint', hidden: lambda { ENV['EXPERIMENTAL'] != 'true' }
+```
+
+#### Hiding all endpoints <a name="hiding-all-endpoints"></a>
+You can hide all endpoints by default via `default_endpoint_visibility: :hidden`. You'll need to explicitly add `public: true` to each endpoint. This is functionally the inverse of the above [Hiding an Endpoint](#hiding) section.
+
+You can show an endpoint by adding ```public: true``` in the description of the endpoint:
+```ruby
+desc 'Show this endpoint', public: true
+```
+
+Or by adding ```public: true``` on the verb method of the endpoint, such as `get`, `post` and `put`:
+
+```ruby
+get '/kittens', public: true do
+```
+
+Or by using a route setting:
+
+```ruby
+route_setting :swagger, { public: true }
+get '/kittens' do
+```
+
+Endpoints can be conditionally shown by providing a callable object such as a lambda which evaluates to the desired
+state:
+
+```ruby
+desc 'Conditionally hide this endpoint', public: lambda { ENV['EXPERIMENTAL'] != 'true' }
 ```
 
 

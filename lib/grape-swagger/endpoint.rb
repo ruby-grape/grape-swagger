@@ -3,6 +3,7 @@
 require 'active_support'
 require 'active_support/core_ext/string/inflections'
 require 'grape-swagger/endpoint/params_parser'
+require 'grape-swagger/endpoint/visibility'
 
 module Grape
   class Endpoint
@@ -95,7 +96,7 @@ module Grape
     # path object
     def path_item(routes, options)
       routes.each do |route|
-        next if hidden?(route, options)
+        next if GrapeSwagger::Endpoint::Visibility.hidden_route?(route, options)
 
         @item, path = GrapeSwagger::DocMethods::PathString.build(route, options)
         @entity = route.entity || route.options[:success]
@@ -176,7 +177,7 @@ module Grape
 
     def params_object(route, options, path)
       parameters = build_request_params(route, options).each_with_object([]) do |(param, value), memo|
-        next if hidden_parameter?(value)
+        next if GrapeSwagger::Endpoint::Visibility.hidden_parameter?(value)
 
         value = { required: false }.merge(value) if value.is_a?(Hash)
         _, value = default_type([[param, value]]).first if value == ''
@@ -416,35 +417,6 @@ module Grape
 
     def model_name(name)
       GrapeSwagger::DocMethods::DataType.parse_entity_name(name)
-    end
-
-    def hidden?(route, options)
-      return !public?(route, options) if options[:default_route_visibility] == :hidden
-
-      scan_route_for_value(:hidden, route, options)
-    end
-
-    def public?(route, options)
-      scan_route_for_value(:public, route, options)
-    end
-
-    def scan_route_for_value(key, route, options)
-      key = key.to_sym
-      route_value = route.settings.try(:[], :swagger).try(:[], key)
-      route_value = route.options[key] if route.options.key?(key)
-      return route_value unless route_value.is_a?(Proc)
-
-      options[:token_owner] ? route_value.call(send(options[:token_owner].to_sym)) : route_value.call
-    end
-
-    def hidden_parameter?(value)
-      return false if value[:required]
-
-      if value.dig(:documentation, :hidden).is_a?(Proc)
-        value.dig(:documentation, :hidden).call
-      else
-        value.dig(:documentation, :hidden)
-      end
     end
 
     def success_code_from_entity(route, entity)

@@ -206,6 +206,8 @@ end
 * [array_use_braces](#array_use_braces)
 * [api_documentation](#api_documentation)
 * [specific_api_documentation](#specific_api_documentation)
+* [consumes](#consumes)
+* [produces](#produces)
 
 You can pass a hash with optional configuration settings to ```add_swagger_documentation```.
 The examples show the default value.
@@ -430,6 +432,24 @@ Customize the Swagger API specific documentation route, typically contains a `de
 ```ruby
 add_swagger_documentation \
    specific_api_documentation: { desc: 'Reticulated splines API swagger-compatible endpoint documentation.' }
+```
+
+#### consumes
+
+Customize the Swagger API default global `consumes` field value.
+
+```ruby
+add_swagger_documentation \
+   consumes: ['application/json', 'application/x-www-form-urlencoded']
+```
+
+#### produces
+
+Customize the Swagger API default global `produces` field value.
+
+```ruby
+add_swagger_documentation \
+   produces: ['text/plain']
 ```
 
 ## Routes Configuration <a name="routes"></a>

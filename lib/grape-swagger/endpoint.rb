@@ -27,7 +27,8 @@ module Grape
       object = {
         info: info_object(options[:info].merge(version: options[:doc_version])),
         swagger: '2.0',
-        produces: content_types_for(target_class),
+        produces: options[:produces] || content_types_for(target_class),
+        consumes: options[:consumes],
         authorizations: options[:authorizations],
         securityDefinitions: options[:security_definitions],
         security: options[:security],
@@ -117,7 +118,7 @@ module Grape
       method[:summary]     = summary_object(route)
       method[:description] = description_object(route)
       method[:produces]    = produces_object(route, options[:produces] || options[:format])
-      method[:consumes]    = consumes_object(route, options[:format])
+      method[:consumes]    = consumes_object(route, options[:consumes] || options[:format])
       method[:parameters]  = params_object(route, options, path)
       method[:security]    = security_object(route)
       method[:responses]   = response_object(route, options)

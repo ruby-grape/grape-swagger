@@ -6,7 +6,9 @@ describe '#553 array of type in post/put params' do
   let(:app) do
     Class.new(Grape::API) do
       namespace :in_form_data do
-        desc 'create foo'
+        desc 'create foo' do
+          consumes ['application/x-www-form-urlencoded']
+        end
         params do
           requires :guid, type: Array[String]
         end
@@ -14,7 +16,9 @@ describe '#553 array of type in post/put params' do
           # your code goes here
         end
 
-        desc 'put specific foo'
+        desc 'put specific foo' do
+          consumes ['application/x-www-form-urlencoded']
+        end
         params do
           requires :id
           requires :guid, type: Array[String]
@@ -25,7 +29,9 @@ describe '#553 array of type in post/put params' do
       end
 
       namespace :in_body do
-        desc 'create foo'
+        desc 'create foo' do
+          consumes ['application/x-www-form-urlencoded']
+        end
         params do
           requires :guid, type: Array[String], documentation: { param_type: 'body' }
         end
@@ -33,7 +39,9 @@ describe '#553 array of type in post/put params' do
           # your code goes here
         end
 
-        desc 'put specific foo'
+        desc 'put specific foo' do
+          consumes ['application/x-www-form-urlencoded']
+        end
         params do
           requires :id
           requires :guid, type: Array[String], documentation: { param_type: 'body' }

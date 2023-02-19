@@ -7,6 +7,9 @@ describe 'Form Params' do
     Class.new(Grape::API) do
       format :json
 
+      desc 'get items' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :name, type: String, desc: 'name of item'
       end
@@ -14,6 +17,9 @@ describe 'Form Params' do
         {}
       end
 
+      desc 'get item' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :id, type: Integer, desc: 'id of item'
         requires :name, type: String, desc: 'name of item'
@@ -32,6 +38,9 @@ describe 'Form Params' do
         {}
       end
 
+      desc 'create item' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :id, type: Integer, desc: 'id of item'
         requires :name, type: String, desc: 'name of item'

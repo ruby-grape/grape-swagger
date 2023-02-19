@@ -75,6 +75,14 @@ module GrapeSwagger
           PRIMITIVE_MAPPINGS.keys.map(&:downcase)
         end
 
+        def query_array_primitive?(type)
+          query_array_primitives.include?(type.to_s.downcase)
+        end
+
+        def query_array_primitives
+          primitives << 'string'
+        end
+
         def mapping(value)
           PRIMITIVE_MAPPINGS[value] || 'string'
         end

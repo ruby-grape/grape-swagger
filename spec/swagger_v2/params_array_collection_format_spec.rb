@@ -52,7 +52,7 @@ describe 'Group Array Params, using collection format' do
     specify do
       expect(subject['paths']['/array_of_strings_without_collection_format']['get']['parameters']).to eql(
         [
-          { 'in' => 'formData', 'name' => 'array_of_strings', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => false, 'description' => 'array in csv collection format' }
+          { 'in' => 'query', 'name' => 'array_of_strings', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => false, 'description' => 'array in csv collection format' }
         ]
       )
     end
@@ -67,7 +67,7 @@ describe 'Group Array Params, using collection format' do
     specify do
       expect(subject['paths']['/array_of_strings_multi_collection_format']['get']['parameters']).to eql(
         [
-          { 'in' => 'formData', 'name' => 'array_of_strings', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => false, 'collectionFormat' => 'multi', 'description' => 'array in multi collection format' }
+          { 'in' => 'query', 'name' => 'array_of_strings', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => false, 'collectionFormat' => 'multi', 'description' => 'array in multi collection format' }
         ]
       )
     end
@@ -82,7 +82,7 @@ describe 'Group Array Params, using collection format' do
     specify do
       expect(subject['paths']['/array_of_strings_brackets_collection_format']['get']['parameters']).to eql(
         [
-          { 'in' => 'formData', 'name' => 'array_of_strings', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => false, 'collectionFormat' => 'brackets', 'description' => 'array in brackets collection format' }
+          { 'in' => 'query', 'name' => 'array_of_strings', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => false, 'collectionFormat' => 'brackets', 'description' => 'array in brackets collection format' }
         ]
       )
     end
@@ -97,7 +97,7 @@ describe 'Group Array Params, using collection format' do
     specify do
       expect(subject['paths']['/array_of_strings_invalid_collection_format']['get']['parameters']).to eql(
         [
-          { 'in' => 'formData', 'name' => 'array_of_strings', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => false }
+          { 'in' => 'query', 'name' => 'array_of_strings', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => false }
         ]
       )
     end

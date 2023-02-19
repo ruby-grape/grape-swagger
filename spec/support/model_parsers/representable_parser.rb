@@ -306,7 +306,7 @@ RSpec.shared_context 'representable swagger example' do
           'post' => {
             'description' => 'This creates Thing.',
             'produces' => ['application/json'],
-            'consumes' => ['application/json'],
+            'consumes' => ['application/x-www-form-urlencoded'],
             'parameters' => [
               { 'in' => 'formData', 'name' => 'text', 'description' => 'Content of something.', 'type' => 'string', 'required' => true },
               { 'in' => 'formData', 'name' => 'links', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => true }
@@ -328,7 +328,7 @@ RSpec.shared_context 'representable swagger example' do
           'put' => {
             'description' => 'This updates Thing.',
             'produces' => ['application/json'],
-            'consumes' => ['application/json'],
+            'consumes' => ['application/x-www-form-urlencoded'],
             'parameters' => [
               { 'in' => 'path', 'name' => 'id', 'type' => 'integer', 'format' => 'int32', 'required' => true },
               { 'in' => 'formData', 'name' => 'text', 'description' => 'Content of something.', 'type' => 'string', 'required' => false },

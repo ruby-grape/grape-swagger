@@ -7,6 +7,9 @@ describe 'Group Params as Hash' do
     Class.new(Grape::API) do
       format :json
 
+      desc 'use groups' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :required_group, type: Hash do
           requires :required_param_1
@@ -17,6 +20,9 @@ describe 'Group Params as Hash' do
         { 'declared_params' => declared(params) }
       end
 
+      desc 'use given type' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :typed_group, type: Hash do
           requires :id, type: Integer, desc: 'integer given'

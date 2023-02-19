@@ -2,11 +2,9 @@
 
 source 'http://rubygems.org'
 
-ruby RUBY_VERSION
-
 gemspec
 
-gem 'grape', case version = ENV.fetch('GRAPE_VERSION', '~> 1.6')
+gem 'grape', case version = ENV.fetch('GRAPE_VERSION', '~> 1.7')
              when 'HEAD'
                { git: 'https://github.com/ruby-grape/grape' }
              else

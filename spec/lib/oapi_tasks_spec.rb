@@ -30,7 +30,7 @@ RSpec.describe GrapeSwagger::Rake::OapiTasks do
 
   describe '.new' do
     it 'accepts class name as a constant' do
-      expect(described_class.new(::Api::Base).send(:api_class)).to eq(Api::Base)
+      expect(described_class.new(Api::Base).send(:api_class)).to eq(Api::Base)
     end
 
     it 'accepts class name as a string' do

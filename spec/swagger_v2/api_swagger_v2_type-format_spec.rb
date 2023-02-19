@@ -28,7 +28,8 @@ describe 'type format settings' do
     module TheApi
       class TypeFormatApi < Grape::API
         desc 'full set of request data types',
-             success: Entities::TypedDefinition
+          consumes: ['application/x-www-form-urlencoded'],
+          success: Entities::TypedDefinition
 
         params do
           # grape supported data types

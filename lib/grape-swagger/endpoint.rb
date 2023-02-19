@@ -118,7 +118,7 @@ module Grape
       method[:description] = description_object(route)
       method[:produces]    = produces_object(route, options[:produces] || options[:format])
       method[:consumes]    = consumes_object(route, options[:format])
-      method[:parameters]  = params_object(route, options, path)
+      method[:parameters]  = params_object(route, options, path, method[:consumes])
       method[:security]    = security_object(route)
       method[:responses]   = response_object(route, options)
       method[:tags]        = route.options.fetch(:tags, tag_object(route, path))
@@ -174,7 +174,7 @@ module Grape
       GrapeSwagger::DocMethods::ProducesConsumes.call(route.settings.dig(:description, :consumes) || format)
     end
 
-    def params_object(route, options, path)
+    def params_object(route, options, path, consumes)
       parameters = build_request_params(route, options).each_with_object([]) do |(param, value), memo|
         next if hidden_parameter?(value)
 
@@ -186,7 +186,7 @@ module Grape
         elsif value[:type]
           expose_params(value[:type])
         end
-        memo << GrapeSwagger::DocMethods::ParseParams.call(param, value, path, route, @definitions)
+        memo << GrapeSwagger::DocMethods::ParseParams.call(param, value, path, route, @definitions, consumes)
       end
 
       if GrapeSwagger::DocMethods::MoveParams.can_be_moved?(route.request_method, parameters)

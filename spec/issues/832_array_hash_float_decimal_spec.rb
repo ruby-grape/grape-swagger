@@ -6,6 +6,9 @@ describe '#832 array of objects with nested Float/BigDecimal fields' do
   let(:app) do
     Class.new(Grape::API) do
       resource :issue_832 do
+        desc 'issue_832' do
+          consumes ['application/x-www-form-urlencoded']
+        end
         params do
           requires :array_param, type: Array do
             requires :float_param, type: Float

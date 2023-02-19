@@ -8,6 +8,9 @@ describe 'Convert values to enum or Range' do
     Class.new(Grape::API) do
       format :json
 
+      desc 'plain_array' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :letter, type: String, values: %w[a b c]
       end
@@ -15,6 +18,9 @@ describe 'Convert values to enum or Range' do
         { message: 'hi' }
       end
 
+      desc 'array_in_proc' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :letter, type: String, values: proc { %w[d e f] }
       end
@@ -22,6 +28,9 @@ describe 'Convert values to enum or Range' do
         { message: 'hi' }
       end
 
+      desc 'range_letter' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :letter, type: String, values: 'a'..'z'
       end
@@ -29,6 +38,9 @@ describe 'Convert values to enum or Range' do
         { message: 'hi' }
       end
 
+      desc 'range_integer' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :integer, type: Integer, values: -5..5
       end
@@ -107,6 +119,9 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
     Class.new(Grape::API) do
       format :json
 
+      desc 'non_array_in_proc' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :letter, type: String, values: proc { 'string' }
       end
@@ -114,6 +129,9 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
         { message: 'hi' }
       end
 
+      desc 'range_float' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :float, type: Float, values: -5.0..5.0
       end

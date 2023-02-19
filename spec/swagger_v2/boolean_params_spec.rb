@@ -7,6 +7,9 @@ describe 'Boolean Params' do
     Class.new(Grape::API) do
       format :json
 
+      desc 'splines' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :a_boolean, type: Grape::API::Boolean
         optional :another_boolean, type: Grape::API::Boolean, default: false

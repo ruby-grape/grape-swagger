@@ -12,6 +12,7 @@ describe 'swagger spec v2.0' do
 
         #  Thing stuff
         desc 'This gets Things.' do
+          consumes ['application/x-www-form-urlencoded']
           params Entities::Something.documentation
           http_codes [{ code: 401, message: 'Unauthorized', model: Entities::ApiError }]
         end
@@ -21,6 +22,7 @@ describe 'swagger spec v2.0' do
         end
 
         desc 'This gets Things.' do
+          consumes ['application/x-www-form-urlencoded']
           http_codes [
             { code: 200, message: 'get Horses', model: Entities::Something },
             { code: 401, message: 'HorsesOutError', model: Entities::ApiError }
@@ -32,6 +34,7 @@ describe 'swagger spec v2.0' do
         end
 
         desc 'This gets Thing.' do
+          consumes ['application/x-www-form-urlencoded']
           http_codes [{ code: 200, message: 'getting a single thing' }, { code: 401, message: 'Unauthorized' }]
         end
         params do
@@ -43,7 +46,8 @@ describe 'swagger spec v2.0' do
         end
 
         desc 'This creates Thing.',
-             success: Entities::Something
+          consumes: ['application/x-www-form-urlencoded'],
+          success: Entities::Something
         params do
           requires :text, type: String, documentation: { type: 'string', desc: 'Content of something.' }
           requires :links, type: Array, documentation: { type: 'link', is_array: true }
@@ -54,7 +58,8 @@ describe 'swagger spec v2.0' do
         end
 
         desc 'This updates Thing.',
-             success: Entities::Something
+          consumes: ['application/x-www-form-urlencoded'],
+          success: Entities::Something
         params do
           requires :id, type: Integer
           optional :text, type: String, desc: 'Content of something.'
@@ -66,7 +71,8 @@ describe 'swagger spec v2.0' do
         end
 
         desc 'This deletes Thing.',
-             entity: Entities::Something
+          consumes: ['application/x-www-form-urlencoded'],
+          entity: Entities::Something
         params do
           requires :id, type: Integer
         end
@@ -76,7 +82,8 @@ describe 'swagger spec v2.0' do
         end
 
         desc 'dummy route.',
-             failure: [{ code: 401, message: 'Unauthorized' }]
+          consumes: ['application/x-www-form-urlencoded'],
+          failure: [{ code: 401, message: 'Unauthorized' }]
         params do
           requires :id, type: Integer
         end
@@ -86,11 +93,12 @@ describe 'swagger spec v2.0' do
 
         namespace :other_thing do
           desc 'nested route inside namespace',
-               entity: Entities::QueryInput,
-               x: {
-                 'amazon-apigateway-auth' => { type: 'none' },
-                 'amazon-apigateway-integration' => { type: 'aws', uri: 'foo_bar_uri', httpMethod: 'get' }
-               }
+            consumes: ['application/x-www-form-urlencoded'],
+            entity: Entities::QueryInput,
+            x: {
+              'amazon-apigateway-auth' => { type: 'none' },
+              'amazon-apigateway-integration' => { type: 'aws', uri: 'foo_bar_uri', httpMethod: 'get' }
+            }
 
           params do
             requires :elements, documentation: {

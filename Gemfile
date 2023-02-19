@@ -2,11 +2,9 @@
 
 source 'http://rubygems.org'
 
-ruby RUBY_VERSION
-
 gemspec
 
-gem 'grape', case version = ENV.fetch('GRAPE_VERSION', '~> 1.6')
+gem 'grape', case version = ENV.fetch('GRAPE_VERSION', '~> 1.7')
              when 'HEAD'
                { git: 'https://github.com/ruby-grape/grape' }
              else
@@ -21,7 +19,7 @@ group :development, :test do
   gem 'pry', platforms: [:mri]
   gem 'pry-byebug', platforms: [:mri]
 
-  gem 'rack', '~> 2.2'
+  gem 'rack', '~> 3.0'
   gem 'rack-cors'
   gem 'rack-test'
   gem 'rake'

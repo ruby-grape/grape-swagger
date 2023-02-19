@@ -21,21 +21,7 @@ describe 'API with additional options' do
     expect(subject).to eq(
       [
         { description: 'Swagger compatible API description' },
-        {
-          description: 'Swagger compatible API description for specific API',
-          params: {
-            'locale' => {
-              desc: 'Locale of API documentation',
-              required: false,
-              type: 'Symbol'
-            },
-            'name' => {
-              desc: 'Resource name of mounted API',
-              required: true,
-              type: 'String'
-            }
-          }
-        }
+        { description: 'Swagger compatible API description for specific API', params: {} }
       ]
     )
   end

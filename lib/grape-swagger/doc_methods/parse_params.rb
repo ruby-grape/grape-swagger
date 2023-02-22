@@ -103,6 +103,10 @@ module GrapeSwagger
           enum_or_range_values = parse_enum_or_range_values(values)
           array_items.merge!(enum_or_range_values) if enum_or_range_values
 
+          # I want to show "items": { "type": enum_type, "enum": ["value_1", "value_2", "value_3", ....] }
+          # if this parameter type is "array" and values are present
+          array_items[:items] = enum_or_range_values if enum_or_range_values
+
           array_items[:default] = value_type[:default] if value_type[:default].present?
 
           set_additional_properties, additional_properties = parse_additional_properties(definitions, value_type)

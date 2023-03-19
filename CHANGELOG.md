@@ -2,13 +2,19 @@
 
 #### Features
 
-* [#872](https://github.com/ruby-grape/grape-swagger/pull/872): Add `consumes` and `produces` options to `add_swagger_documentation` - [@spaceraccoon](https://github.com/spaceraccoon)
-* [#868](https://github.com/ruby-grape/grape-swagger/pull/868): Add `default` endpoint option to specify default response - [@dhruvCW](https://github.com/dhruvCW)
 * Your contribution here.
 
 #### Fixes
 
 * Your contribution here.
+
+
+### 1.6.0 (March 19, 2023)
+
+#### Features
+
+* [#872](https://github.com/ruby-grape/grape-swagger/pull/872): Add `consumes` and `produces` options to `add_swagger_documentation` - [@spaceraccoon](https://github.com/spaceraccoon)
+* [#868](https://github.com/ruby-grape/grape-swagger/pull/868): Add `default` endpoint option to specify default response - [@dhruvCW](https://github.com/dhruvCW)
 
 
 ### 1.5.0 (July 28, 2022)

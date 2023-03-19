@@ -15,7 +15,8 @@ describe 'response' do
              failure: [
                { code: 400, message: 'NotFound', model: '' },
                { code: 404, message: 'BadRequest', model: Entities::ApiError }
-             ]
+             ],
+             default_response: { message: 'Error', model: Entities::ApiError }
         get '/use-response' do
           { 'declared_params' => declared(params) }
         end
@@ -42,7 +43,8 @@ describe 'response' do
         'responses' => {
           '200' => { 'description' => 'This returns something', 'schema' => { '$ref' => '#/definitions/UseResponse' } },
           '400' => { 'description' => 'NotFound' },
-          '404' => { 'description' => 'BadRequest', 'schema' => { '$ref' => '#/definitions/ApiError' } }
+          '404' => { 'description' => 'BadRequest', 'schema' => { '$ref' => '#/definitions/ApiError' } },
+          'default' => { 'description' => 'Error', 'schema' => { '$ref' => '#/definitions/ApiError' } }
         },
         'tags' => ['use-response'],
         'operationId' => 'getUseResponse'

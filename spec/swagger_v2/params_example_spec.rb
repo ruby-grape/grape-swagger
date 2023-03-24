@@ -35,7 +35,7 @@ describe 'Param example' do
           { 'in' => 'query', 'name' => 'id', 'type' => 'integer', 'example' => 123, 'format' => 'int32', 'required' => true },
           { 'in' => 'query', 'name' => 'name', 'type' => 'string', 'example' => 'Person', 'required' => false },
           { 'in' => 'query', 'name' => 'obj', 'type' => 'Object', 'example' => { 'foo' => 'bar' }, 'required' => false },
-          { 'in' => 'query', 'name' => 'boolean_true', 'type' => 'boolean', 'example' => true, 'required' => false},
+          { 'in' => 'query', 'name' => 'boolean_true', 'type' => 'boolean', 'example' => true, 'required' => false },
           { 'in' => 'query', 'name' => 'boolean_false', 'type' => 'boolean', 'example' => false, 'required' => false }
         ]
       )

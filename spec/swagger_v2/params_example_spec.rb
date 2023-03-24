@@ -11,6 +11,8 @@ describe 'Param example' do
         requires :id, type: Integer, documentation: { example: 123 }
         optional :name, type: String, documentation: { example: 'Person' }
         optional :obj, type: 'Object', documentation: { example: { 'foo' => 'bar' } }
+        optional :boolean_true, type: Grape::API::Boolean, documentation: { example: true }
+        optional :boolean_false, type: Grape::API::Boolean, documentation: { example: false }
       end
 
       get '/endpoint_with_examples' do
@@ -32,7 +34,9 @@ describe 'Param example' do
         [
           { 'in' => 'query', 'name' => 'id', 'type' => 'integer', 'example' => 123, 'format' => 'int32', 'required' => true },
           { 'in' => 'query', 'name' => 'name', 'type' => 'string', 'example' => 'Person', 'required' => false },
-          { 'in' => 'query', 'name' => 'obj', 'type' => 'Object', 'example' => { 'foo' => 'bar' }, 'required' => false }
+          { 'in' => 'query', 'name' => 'obj', 'type' => 'Object', 'example' => { 'foo' => 'bar' }, 'required' => false },
+          { 'in' => 'query', 'name' => 'boolean_true', 'type' => 'boolean', 'example' => true, 'required' => false},
+          { 'in' => 'query', 'name' => 'boolean_false', 'type' => 'boolean', 'example' => false, 'required' => false }
         ]
       )
     end

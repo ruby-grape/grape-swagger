@@ -141,7 +141,7 @@ module GrapeSwagger
 
         def document_example(settings)
           example = settings[:example]
-          @parsed_param[:example] = example if example
+          @parsed_param[:example] = example if !example.nil?
         end
 
         def param_type(value_type)

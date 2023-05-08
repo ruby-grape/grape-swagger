@@ -171,7 +171,7 @@ module GrapeSwagger
         end
 
         def parse_range_values(values)
-          { minimum: values.first, maximum: values.last }
+          { minimum: values.begin, maximum: values.end }.compact
         end
       end
     end

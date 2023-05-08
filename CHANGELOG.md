@@ -5,6 +5,7 @@
 * Your contribution here.
 
 #### Fixes
+* [#868](https://github.com/ruby-grape/grape-swagger/pull/896): Fix parsing endless range values - [@dhruvCW](https://github.com/dhruvCW)
 
 * Your contribution here.
 

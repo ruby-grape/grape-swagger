@@ -5,9 +5,15 @@
 * Your contribution here.
 
 #### Fixes
-* [#868](https://github.com/ruby-grape/grape-swagger/pull/896): Fix parsing endless range values - [@dhruvCW](https://github.com/dhruvCW)
 
 * Your contribution here.
+
+
+### 1.6.1 (May 21, 2023)
+
+#### Fixes
+
+* [#868](https://github.com/ruby-grape/grape-swagger/pull/896): Fix parsing endless range values - [@dhruvCW](https://github.com/dhruvCW)
 
 
 ### 1.6.0 (March 19, 2023)

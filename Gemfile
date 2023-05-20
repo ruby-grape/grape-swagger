@@ -19,13 +19,13 @@ group :development, :test do
   gem 'pry', platforms: [:mri]
   gem 'pry-byebug', platforms: [:mri]
 
-  gem 'rack', '~> 3.0'
+  gem 'rack'
   gem 'rack-cors'
   gem 'rack-test'
   gem 'rake'
   gem 'rdoc'
   gem 'rspec', '~> 3.9'
-  gem 'rubocop', '~> 1.0', require: false
+  gem 'rubocop', '~> 1.50', require: false
   gem 'webrick'
 end
 

@@ -1,4 +1,4 @@
-name: Ruby
+name: RSpec
 
 on:
   push:
@@ -23,14 +23,14 @@ jobs:
       - name: Run rubocop
         run: bundle exec rubocop --parallel --format progress
 
-  rspec:
+  grape-16:
     runs-on: ubuntu-latest
     needs: ['rubocop']
+    env:
+      GRAPE_VERSION: '1.6.2'
     strategy:
       matrix:
         ruby-version: ['3.0', '3.1', '3.2', 'head']
-        grape-version: [1.6.2, 1.7.0]
-        model-parser: [grape-swagger-entity, grape-swagger-representable, '']
     steps:
     - name: Check out branch
       uses: actions/checkout@v3
@@ -38,8 +38,83 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby-version }}
-        GRAPE_VERSION: ${{ matrix.grape-version }}
-        MODEL_PARSER: ${{ matrix.model-parser }}
-        bundler-cache: true
-    - name: Run rspec rest of the suite
-      run: bundle exec rspec
+    - name: Run rspec wo model parser
+      run: |
+        bundle update
+        bundle exec rspec
+    - name: Run rspec w entity parser
+      env:
+        MODEL_PARSER: grape-swagger-entity
+      run: |
+        bundle update
+        bundle exec rspec
+    - name: Run rspec w representable parser
+      env:
+        MODEL_PARSER: grape-swagger-representable
+      run: |
+        bundle update
+        bundle exec rspec
+
+  grape-17:
+    runs-on: ubuntu-latest
+    needs: ['rubocop']
+    env:
+      GRAPE_VERSION: '1.7.1'
+    strategy:
+      matrix:
+        ruby-version: ['3.0', '3.1', '3.2', 'head']
+    steps:
+    - name: Check out branch
+      uses: actions/checkout@v3
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+    - name: Run rspec wo model parser
+      run: |
+        bundle update
+        bundle exec rspec
+    - name: Run rspec w entity parser
+      env:
+        MODEL_PARSER: grape-swagger-entity
+      run: |
+        bundle update
+        bundle exec rspec
+    - name: Run rspec w representable parser
+      env:
+        MODEL_PARSER: grape-swagger-representable
+      run: |
+        bundle update
+        bundle exec rspec
+
+  grape-HEAD:
+    runs-on: ubuntu-latest
+    needs: ['rubocop']
+    env:
+      GRAPE_VERSION: 'HEAD'
+    strategy:
+      matrix:
+        ruby-version: ['3.0', '3.1', '3.2', 'head']
+    steps:
+    - name: Check out branch
+      uses: actions/checkout@v3
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+    - name: Run rspec wo model parser
+      run: |
+        bundle update
+        bundle exec rspec
+    - name: Run rspec w entity parser
+      env:
+        MODEL_PARSER: grape-swagger-entity
+      run: |
+        bundle update
+        bundle exec rspec
+    - name: Run rspec w representable parser
+      env:
+        MODEL_PARSER: grape-swagger-representable
+      run: |
+        bundle update
+        bundle exec rspec

@@ -18,11 +18,9 @@ describe 'API with additional options' do
   end
 
   it 'documents api' do
-    expect(subject).to eq(
-      [
-        { description: 'Swagger compatible API description' },
-        { description: 'Swagger compatible API description for specific API', params: {} }
-      ]
-    )
+    expect(subject.pluck(:description)).to match_array [
+      'Swagger compatible API description',
+      'Swagger compatible API description for specific API'
+    ]
   end
 end

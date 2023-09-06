@@ -26,7 +26,10 @@ group :development, :test do
   gem 'rdoc'
   gem 'rspec', '~> 3.9'
   gem 'rubocop', '~> 1.50', require: false
-  gem 'webrick'
+
+  unless ENV['MODEL_PARSER'] == 'grape-swagger-entity'
+    gem 'grape-swagger-entity', git: 'https://github.com/ruby-grape/grape-swagger-entity'
+  end
 end
 
 group :test do
@@ -34,10 +37,4 @@ group :test do
 
   gem 'ruby-grape-danger', '~> 0.2.0', require: false
   gem 'simplecov', require: false
-end
-
-group :test, :development do
-  unless ENV['MODEL_PARSER'] == 'grape-swagger-entity'
-    gem 'grape-swagger-entity', git: 'https://github.com/ruby-grape/grape-swagger-entity'
-  end
 end

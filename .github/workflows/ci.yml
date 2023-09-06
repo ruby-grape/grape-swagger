@@ -15,7 +15,7 @@ jobs:
   rubocop:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
@@ -23,17 +23,17 @@ jobs:
       - name: Run rubocop
         run: bundle exec rubocop --parallel --format progress
 
-  grape-16:
+  grape-17:
     runs-on: ubuntu-latest
     needs: ['rubocop']
     env:
-      GRAPE_VERSION: '1.6.2'
+      GRAPE_VERSION: '1.7.1'
     strategy:
       matrix:
-        ruby-version: ['3.0', '3.1', '3.2', 'head']
+        ruby-version: ['3.1', '3.2', 'head']
     steps:
     - name: Check out branch
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
@@ -55,17 +55,17 @@ jobs:
         bundle update
         bundle exec rspec
 
-  grape-17:
+  grape-18:
     runs-on: ubuntu-latest
     needs: ['rubocop']
     env:
-      GRAPE_VERSION: '1.7.1'
+      GRAPE_VERSION: '1.8.0'
     strategy:
       matrix:
-        ruby-version: ['3.0', '3.1', '3.2', 'head']
+        ruby-version: ['3.1', '3.2', 'head']
     steps:
     - name: Check out branch
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
@@ -94,10 +94,10 @@ jobs:
       GRAPE_VERSION: 'HEAD'
     strategy:
       matrix:
-        ruby-version: ['3.0', '3.1', '3.2', 'head']
+        ruby-version: ['3.1', '3.2', 'head']
     steps:
     - name: Check out branch
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:

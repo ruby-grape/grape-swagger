@@ -413,7 +413,7 @@ module Grape
     end
 
     def expose_params_from_model(model)
-      model = model.is_a?(String) ? model.constantize : model
+      model = model.constantize if model.is_a?(String)
       model_name = model_name(model)
 
       return model_name if @definitions.key?(model_name)

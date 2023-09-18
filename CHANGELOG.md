@@ -6,6 +6,7 @@
 
 #### Fixes
 
+* [#903](https://github.com/ruby-grape/grape-swagger/pull/903): Accept `example` documentation parameter for arrays - [@VladMomotov](https://github.com/VladMomotov)
 * Your contribution here.
 
 

@@ -4,6 +4,7 @@ AllCops:
   Exclude:
     - vendor/**/*
     - example/**/*
+  UseCache: true
   NewCops: enable
   TargetRubyVersion: 3.2
   SuggestExtensions: false
@@ -24,29 +25,11 @@ Layout/LineLength:
   Exclude:
     - spec/**/*
 
-Layout/SpaceAroundMethodCallOperator:
-  Enabled: true
-
 # Lint stuff
 #
 Lint/ConstantDefinitionInBlock:
   Exclude:
     - spec/**/*
-
-Lint/DeprecatedOpenSSLConstant:
-  Enabled: true
-
-Lint/DuplicateElsifCondition:
-  Enabled: true
-
-Lint/MixedRegexpCaptureTypes:
-  Enabled: true
-
-Lint/RaiseException:
-  Enabled: true
-
-Lint/StructNewOverride:
-  Enabled: true
 
 # Metrics stuff
 #
@@ -71,66 +54,24 @@ Naming:
 
 # Style stuff
 #
-Style/AccessorGrouping:
-  Enabled: true
-
 Style/AsciiComments:
   Enabled: false
-
-Style/ArrayCoercion:
-  Enabled: true
-
-Style/BisectedAttrAccessor:
-  Enabled: true
-
-Style/CaseLikeIf:
-  Enabled: true
-
-Style/ExponentialNotation:
-  Enabled: true
 
 Style/ExplicitBlockArgument:
   Enabled: false
 
-Style/HashAsLastArrayItem:
-  Enabled: true
-
-Style/HashEachMethods:
-  Enabled: true
-
-Style/HashLikeCase:
-  Enabled: true
-
 Style/HashSyntax:
   Enabled: false
-
-Style/HashTransformKeys:
-  Enabled: true
-
-Style/HashTransformValues:
-  Enabled: true
 
 Style/OpenStructUse:
   Exclude:
     - spec/**/*
 
-Style/RegexpLiteral:
+Style/RedundantArrayConstructor:
   Enabled: false
 
-Style/RedundantAssignment:
-  Enabled: true
-
-Style/RedundantFetchBlock:
-  Enabled: true
-
-Style/RedundantFileExtensionInRequire:
-  Enabled: true
-
-Style/RedundantRegexpCharacterClass:
-  Enabled: true
-
-Style/RedundantRegexpEscape:
-  Enabled: true
+Style/RegexpLiteral:
+  Enabled: false
 
 Style/SlicingWithRange:
   Enabled: false

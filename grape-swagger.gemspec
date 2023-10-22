@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path('lib', __dir__)
-require 'grape-swagger/version'
+require_relative 'lib/grape-swagger/version'
 
 Gem::Specification.new do |s|
   s.name        = 'grape-swagger'

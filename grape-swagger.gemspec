@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path('lib', __dir__)
-require 'grape-swagger/version'
+require 'lib/grape-swagger/version'
 
 Gem::Specification.new do |s|
   s.name        = 'grape-swagger'
@@ -18,6 +17,6 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.7'
   s.add_runtime_dependency 'grape', '~> 1.3'
 
-  s.files         = `git ls-files`.split("\n")
+  s.files = Dir['lib/**/*', 'CHANGELOG.md', 'CONTRIBUTING.md', 'README.md', 'RELEASING.md', 'UPGRADING.md', 'LICENSE.txt', 'grape-swagger.gemspec']
   s.require_paths = ['lib']
 end

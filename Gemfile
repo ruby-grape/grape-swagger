@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 gemspec
 
-gem 'grape', case version = ENV.fetch('GRAPE_VERSION', '~> 1.7')
+gem 'grape', case version = ENV.fetch('GRAPE_VERSION', '~> 1.8')
              when 'HEAD'
                { git: 'https://github.com/ruby-grape/grape' }
              else
@@ -34,7 +34,6 @@ end
 
 group :test do
   gem 'coveralls_reborn', require: false
-
   gem 'ruby-grape-danger', '~> 0.2.0', require: false
   gem 'simplecov', require: false
 end

@@ -6,8 +6,14 @@
 
 #### Fixes
 
-* [#903](https://github.com/ruby-grape/grape-swagger/pull/903): Accept `example` documentation parameter for arrays - [@VladMomotov](https://github.com/VladMomotov)
 * Your contribution here.
+
+### 1.6.2
+
+#### Fixes
+
+* [#903](https://github.com/ruby-grape/grape-swagger/pull/903): Accept `example` documentation parameter for arrays - [@VladMomotov](https://github.com/VladMomotov)
+* [#911](https://github.com/ruby-grape/grape-swagger/pull/911): Fix compatibility with Grape 2.0.0 - [@mscrivo](https://github.com/mscrivo)
 
 
 ### 1.6.1 (May 21, 2023)

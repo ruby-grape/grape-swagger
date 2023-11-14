@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#910](https://github.com/ruby-grape/grape-swagger/pull/910): Allow using Grape v2 - [@ninoseki](https://github.com/ninoseki)
 * Your contribution here.
 
 #### Fixes

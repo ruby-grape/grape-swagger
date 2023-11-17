@@ -2,13 +2,22 @@
 
 #### Features
 
-* [#910](https://github.com/ruby-grape/grape-swagger/pull/910): Allow using Grape v2 - [@ninoseki](https://github.com/ninoseki)
 * Your contribution here.
 
 #### Fixes
 
-* [#903](https://github.com/ruby-grape/grape-swagger/pull/903): Accept `example` documentation parameter for arrays - [@VladMomotov](https://github.com/VladMomotov)
 * Your contribution here.
+
+
+### 2.0.0 (November7, 2023)
+
+#### Features
+
+* [#910](https://github.com/ruby-grape/grape-swagger/pull/910): Allow using Grape v2 - [@ninoseki](https://github.com/ninoseki)
+
+#### Fixes
+
+* [#903](https://github.com/ruby-grape/grape-swagger/pull/903): Accept `example` documentation parameter for arrays - [@VladMomotov](https://github.com/VladMomotov)
 
 
 ### 1.6.1 (May 21, 2023)
@@ -56,7 +65,6 @@
 * [#853](https://github.com/ruby-grape/grape-swagger/pull/853): Add webrick gem so that example works in Ruby 3.x - [@takahashim](https://github.com/takahashim)
 * [#844](https://github.com/ruby-grape/grape-swagger/pull/844): Fixes the regexp used for parsing routes - [@senhalil](https://github.com/senhalil)
 * [#862](https://github.com/ruby-grape/grape-swagger/pull/862): Allow using nicknames for body definitions - [@magni-](https://github.com/magni-)
-* Your contribution here.
 
 ### 1.4.2 (October 22, 2021)
 

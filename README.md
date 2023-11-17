@@ -53,6 +53,7 @@ The following versions of grape, grape-entity and grape-swagger can currently be
 | 0.32.0        | 2.0          | >= 0.16.2               | >= 0.5.0     | >= 2.4.1      |
 | 0.34.0        | 2.0          | >= 0.16.2 ... < 1.3.0   | >= 0.5.0     | >= 2.4.1      |
 | >= 1.0.0      | 2.0          | >= 1.3.0                | >= 0.5.0     | >= 2.4.1      |
+| >= 2.0.0      | 2.0          | >= 1.7.0                | >= 0.5.0     | >= 2.4.1      |
 
 
 ## Swagger-Spec <a name="swagger-spec"></a>

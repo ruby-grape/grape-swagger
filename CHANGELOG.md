@@ -4,12 +4,14 @@
 
 * Your contribution here.
 
+* [#914](https://github.com/ruby-grape/grape-swagger/pull/914): Support Ruby 3.3 - [@LeFnord](https://github.com/LeFnord)
+
 #### Fixes
 
 * Your contribution here.
 
 
-### 2.0.0 (November7, 2023)
+### 2.0.0 (November 7, 2023)
 
 #### Features
 

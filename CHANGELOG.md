@@ -4,12 +4,19 @@
 
 * Your contribution here.
 
-* [#914](https://github.com/ruby-grape/grape-swagger/pull/914): Support Ruby 3.3 - [@LeFnord](https://github.com/LeFnord)
-
 #### Fixes
 
 * Your contribution here.
 
+### 2.0.1 (Januar 2, 2024)
+
+#### Features
+
+* [#914](https://github.com/ruby-grape/grape-swagger/pull/914): Support Ruby 3.3 - [@LeFnord](https://github.com/LeFnord)
+
+#### Fixes
+
+* [#916](https://github.com/ruby-grape/grape-swagger/pull/916): Restore Ruby 3.0 support - [@godfat](https://github.com/godfat)
 
 ### 2.0.0 (November 7, 2023)
 

@@ -86,6 +86,7 @@ module GrapeSwagger
                                else
                                  document_as_property(param)
                                end
+            add_extension_properties(properties[name], param)
 
             required << name if deletable?(param) && param[:required]
           end
@@ -99,6 +100,12 @@ module GrapeSwagger
             property[:description] = param.delete(:description) unless param[:description].nil?
             property[:example] = param.delete(:example) unless param[:example].nil?
             property[:items] = document_as_property(param)[:items]
+          end
+        end
+
+        def add_extension_properties(definition, values)
+          values.each do |key, value|
+            definition[key] = value if key.start_with?('x-')
           end
         end
 

@@ -6,7 +6,7 @@
 
 #### Fixes
 
-* Your contribution here.
+* [#918](https://github.com/ruby-grape/grape-swagger/pull/918): Fix params extension does not work when param_type is body - [@numbata](https://github.com/numbata)
 
 ### 2.0.1 (Januar 2, 2024)
 

@@ -6,7 +6,15 @@
 
 #### Fixes
 
+* Your contribution here.
+
+
+### 2.0.2 (Februar 2, 2024)
+
+#### Fixes
+
 * [#918](https://github.com/ruby-grape/grape-swagger/pull/918): Fix params extension does not work when param_type is body - [@numbata](https://github.com/numbata)
+
 
 ### 2.0.1 (Januar 2, 2024)
 
@@ -17,6 +25,7 @@
 #### Fixes
 
 * [#916](https://github.com/ruby-grape/grape-swagger/pull/916): Restore Ruby 3.0 support - [@godfat](https://github.com/godfat)
+
 
 ### 2.0.0 (November 7, 2023)
 

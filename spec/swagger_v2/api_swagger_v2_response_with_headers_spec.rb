@@ -123,6 +123,7 @@ describe 'response with headers' do
       expect(subject['paths']['/no_content_response_headers']['delete']).to eql(
         'description' => 'A 204 can have headers too',
         'produces' => ['application/json'],
+        'consumes' => ['application/json'],
         'responses' => {
           '204' => { 'description' => 'No content', 'headers' => header_204 },
           '400' => { 'description' => 'Bad Request', 'headers' => header_400, 'schema' => { '$ref' => '#/definitions/ApiError' }, 'examples' => examples_400 }

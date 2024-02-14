@@ -108,6 +108,10 @@ module GrapeSwagger
           set_additional_properties, additional_properties = parse_additional_properties(definitions, value_type)
           array_items[:additionalProperties] = additional_properties if set_additional_properties
 
+          if value_type.key?(:items)
+            GrapeSwagger::DocMethods::Extensions.add_extensions_to_root(value_type[:items], array_items)
+          end
+
           array_items
         end
 
@@ -171,7 +175,7 @@ module GrapeSwagger
         end
 
         def parse_range_values(values)
-          { minimum: values.first, maximum: values.last }
+          { minimum: values.begin, maximum: values.end }.compact
         end
       end
     end

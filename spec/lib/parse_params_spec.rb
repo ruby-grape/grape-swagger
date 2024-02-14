@@ -12,6 +12,20 @@ describe GrapeSwagger::DocMethods::ParseParams do
       parsed_range = subject.send(:parse_range_values, start_value..end_value)
       expect(parsed_range).to eql(minimum: start_value, maximum: end_value)
     end
+
+    describe 'endless range' do
+      specify do
+        parsed_range = subject.send(:parse_range_values, start_value..)
+        expect(parsed_range).to eql(minimum: start_value)
+      end
+    end
+
+    describe 'beginless range' do
+      specify do
+        parsed_range = subject.send(:parse_range_values, ..end_value)
+        expect(parsed_range).to eql(maximum: end_value)
+      end
+    end
   end
 
   describe '#parse_enum_or_range_values' do

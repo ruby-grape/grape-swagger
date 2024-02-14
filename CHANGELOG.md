@@ -9,6 +9,50 @@
 * Your contribution here.
 
 
+### 2.0.2 (Februar 2, 2024)
+
+#### Fixes
+
+* [#918](https://github.com/ruby-grape/grape-swagger/pull/918): Fix params extension does not work when param_type is body - [@numbata](https://github.com/numbata)
+
+
+### 2.0.1 (Januar 2, 2024)
+
+#### Features
+
+* [#914](https://github.com/ruby-grape/grape-swagger/pull/914): Support Ruby 3.3 - [@LeFnord](https://github.com/LeFnord)
+
+#### Fixes
+
+* [#916](https://github.com/ruby-grape/grape-swagger/pull/916): Restore Ruby 3.0 support - [@godfat](https://github.com/godfat)
+
+
+### 2.0.0 (November 7, 2023)
+
+#### Features
+
+* [#910](https://github.com/ruby-grape/grape-swagger/pull/910): Allow using Grape v2 - [@ninoseki](https://github.com/ninoseki)
+
+#### Fixes
+
+* [#903](https://github.com/ruby-grape/grape-swagger/pull/903): Accept `example` documentation parameter for arrays - [@VladMomotov](https://github.com/VladMomotov)
+
+
+### 1.6.1 (May 21, 2023)
+
+#### Fixes
+
+* [#868](https://github.com/ruby-grape/grape-swagger/pull/896): Fix parsing endless range values - [@dhruvCW](https://github.com/dhruvCW)
+
+
+### 1.6.0 (March 19, 2023)
+
+#### Features
+
+* [#872](https://github.com/ruby-grape/grape-swagger/pull/872): Add `consumes` and `produces` options to `add_swagger_documentation` - [@spaceraccoon](https://github.com/spaceraccoon)
+* [#868](https://github.com/ruby-grape/grape-swagger/pull/868): Add `default` endpoint option to specify default response - [@dhruvCW](https://github.com/dhruvCW)
+
+
 ### 1.5.0 (July 28, 2022)
 
 #### Features
@@ -38,7 +82,6 @@
 * [#853](https://github.com/ruby-grape/grape-swagger/pull/853): Add webrick gem so that example works in Ruby 3.x - [@takahashim](https://github.com/takahashim)
 * [#844](https://github.com/ruby-grape/grape-swagger/pull/844): Fixes the regexp used for parsing routes - [@senhalil](https://github.com/senhalil)
 * [#862](https://github.com/ruby-grape/grape-swagger/pull/862): Allow using nicknames for body definitions - [@magni-](https://github.com/magni-)
-* Your contribution here.
 
 ### 1.4.2 (October 22, 2021)
 

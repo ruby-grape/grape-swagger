@@ -39,12 +39,12 @@ module GrapeSwagger
 
             p_type = p[:type] == 'array' ? 'string' : p[:type]
             p[:items] = { type: p_type, format: p[:format], enum: p[:enum], is_array: p[:is_array] }
-            p[:items].delete_if { |_k, v| v.nil? }
+            p[:items].compact!
             p[:type] = 'array'
             p[:is_array] = parameter[:is_array]
             p.delete(:format)
             p.delete(:enum)
-            p.delete_if { |_k, v| v.nil? }
+            p.compact!
           end
         end
       end

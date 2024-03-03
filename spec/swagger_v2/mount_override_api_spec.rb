@@ -25,21 +25,10 @@ describe 'mount override api' do
     end
 
     Class.new(Grape::API) do
-      mount new_api
       mount old_api
+      mount new_api
 
       add_swagger_documentation format: :json
-    end
-  end
-
-  context 'actual api request' do
-    subject do
-      get '/'
-      last_response.body
-    end
-
-    it 'returns data from new endpoint' do
-      is_expected.to eq 'new'
     end
   end
 

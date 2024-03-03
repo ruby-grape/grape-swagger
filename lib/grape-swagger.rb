@@ -40,7 +40,7 @@ module SwaggerRouting
       @target_class.combined_routes[resource] ||= []
       next if doc_klass.hide_documentation_path && route.path.match(/#{doc_klass.mount_path}($|\/|\(\.)/)
 
-      @target_class.combined_routes[resource].unshift route
+      @target_class.combined_routes[resource] << route
     end
   end
 

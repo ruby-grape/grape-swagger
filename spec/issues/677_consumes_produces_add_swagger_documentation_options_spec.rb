@@ -81,9 +81,10 @@ describe '#677 consumes and produces options are included in add_swagger_documen
           end
         end
 
-        add_swagger_documentation \
-          format: :json, \
+        add_swagger_documentation(
+          format: :json,
           consumes: ['application/json', 'application/x-www-form-urlencoded']
+        )
       end
     end
 

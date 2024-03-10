@@ -2,7 +2,7 @@
 
 #### Features
 
-* Your contribution here.
+* [#888](https://github.com/ruby-grape/grape-swagger/pull/888): Add default_route_visibility to easily hide all endpoints - [@dmoss18](https://github.com/dmoss18)
 
 #### Fixes
 

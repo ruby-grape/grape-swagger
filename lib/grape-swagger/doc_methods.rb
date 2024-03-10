@@ -14,6 +14,7 @@ require 'grape-swagger/doc_methods/move_params'
 require 'grape-swagger/doc_methods/headers'
 require 'grape-swagger/doc_methods/build_model_definition'
 require 'grape-swagger/doc_methods/version'
+require 'grape-swagger/doc_methods/file_params'
 
 module GrapeSwagger
   module DocMethods

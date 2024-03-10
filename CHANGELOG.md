@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#885](https://github.com/ruby-grape/grape-swagger/pull/885): Don't document non-schema object examples - [@spaceraccoon](https://github.com/spaceraccoon)
 * Your contribution here.
 
 #### Fixes

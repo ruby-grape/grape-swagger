@@ -70,7 +70,7 @@ module GrapeSwagger
 
         def document_array_param(value_type, definitions)
           if value_type[:documentation].present?
-            param_type = value_type[:documentation][:param_type]
+            param_type = value_type[:documentation][:param_type] || value_type[:documentation][:in]
             doc_type = value_type[:documentation][:type]
             type = DataType.mapping(doc_type) if doc_type && !DataType.request_primitive?(doc_type)
             collection_format = value_type[:documentation][:collectionFormat]

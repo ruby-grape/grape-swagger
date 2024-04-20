@@ -8,6 +8,7 @@
 
 * Your contribution here.
 * [#922](https://github.com/ruby-grape/grape-swagger/pull/922): Force request body to be an schema object - [@numbata](https://github.com/numbata)
+* [#923](https://github.com/ruby-grape/grape-swagger/pull/923): Enabled schema definitions for body parameters in DELETE requests - [@numbata](https://github.com/numbata)
 
 ### 2.0.2 (Februar 2, 2024)
 

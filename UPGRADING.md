@@ -1,5 +1,14 @@
 ## Upgrading Grape-swagger
 
+### Upgrading to >= x.y.z
+
+- Grape-swagger now documents array parameters within an object schema in Swagger. This aligns with grape's JSON structure requirements and ensures the documentation is correct.
+  - Previously, arrays were documented as standalone arrays, which could be incorrect based on grape's expectations.
+  - Check your API documentation and update your code or tests that use the old array format.
+
+  Attention: This update may require you to make changes to ensure your API integrations continue to work correctly.
+  For detailed reasons behind this update, refer to GitHub issue #666.
+
 ### Upgrading to >= 1.5.0
 
 - The names generated for body parameter definitions and their references has changed. It'll now include the HTTP action as well as any path parameters.

@@ -7,7 +7,7 @@
 #### Fixes
 
 * Your contribution here.
-
+* [#922](https://github.com/ruby-grape/grape-swagger/pull/922): Force request body to be an schema object - [@numbata](https://github.com/numbata)
 
 ### 2.0.2 (Februar 2, 2024)
 

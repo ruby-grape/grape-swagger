@@ -96,26 +96,38 @@ describe '#553 array of type in post/put params' do
     describe 'in body' do
       describe 'post request' do
         let(:params) { subject['paths']['/in_body']['post']['parameters'] }
+        let(:definitions) { subject['definitions'] }
 
         specify do
           expect(params).to eql(
             [
               {
                 'in' => 'body',
-                'name' => 'guid',
+                'name' => 'postInBody',
                 'required' => true,
-                'schema' => {
+                'schema' => { '$ref' => '#/definitions/postInBody' }
+              }
+            ]
+          )
+          expect(definitions).to include(
+            'postInBody' => {
+              'description' => 'create foo',
+              'type' => 'object',
+              'properties' => {
+                'guid' => {
                   'type' => 'array',
                   'items' => { 'type' => 'string' }
                 }
-              }
-            ]
+              },
+              'required' => ['guid']
+            }
           )
         end
       end
 
       describe 'put request' do
         let(:params) { subject['paths']['/in_body/{id}']['put']['parameters'] }
+        let(:definitions) { subject['definitions'] }
 
         specify do
           expect(params).to eql(
@@ -128,14 +140,24 @@ describe '#553 array of type in post/put params' do
               },
               {
                 'in' => 'body',
-                'name' => 'guid',
+                'name' => 'putInBodyId',
                 'required' => true,
-                'schema' => {
+                'schema' => { '$ref' => '#/definitions/putInBodyId' }
+              }
+            ]
+          )
+          expect(definitions).to include(
+            'putInBodyId' => {
+              'description' => 'put specific foo',
+              'type' => 'object',
+              'properties' => {
+                'guid' => {
                   'type' => 'array',
                   'items' => { 'type' => 'string' }
                 }
-              }
-            ]
+              },
+              'required' => ['guid']
+            }
           )
         end
       end

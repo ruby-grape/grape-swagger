@@ -39,19 +39,35 @@ describe '#539 post params given as array' do
   let(:definitions) { subject['definitions'] }
 
   specify do
-    expect(parameters).to eql(
+    expect(parameters).to match(
       [
         {
-          'in' => 'body', 'name' => 'elements', 'required' => true, 'schema' => {
-            'type' => 'array', 'items' => { '$ref' => '#/definitions/Element' }
-          }
+          'name' => 'postIssue539',
+          'required' => true,
+          'in' => 'body',
+          'schema' => { '$ref' => '#/definitions/postIssue539' }
         }
       ]
     )
   end
 
   specify do
-    expect(definitions).to eql(
+    expect(definitions).to include(
+      'postIssue539' => {
+        'description' => 'create account',
+        'type' => 'object',
+        'properties' => {
+          'elements' => {
+            'type' => 'array', 'items' => { '$ref' => '#/definitions/Element' }
+          }
+        },
+        'required' => ['elements']
+      }
+    )
+  end
+
+  specify do
+    expect(definitions).to include(
       'Element' => {
         'type' => 'object',
         'properties' => {

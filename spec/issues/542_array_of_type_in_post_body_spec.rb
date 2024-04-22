@@ -25,22 +25,37 @@ describe '#542 array of type in post params' do
   end
 
   let(:parameters) { subject['paths']['/issue_542']['post']['parameters'] }
+  let(:definitions) { subject['definitions'] }
 
   specify do
     expect(parameters).to eql(
       [
         {
           'in' => 'body',
-          'name' => 'logs',
+          'name' => 'postIssue542',
           'required' => true,
           'schema' => {
+            '$ref' => '#/definitions/postIssue542'
+          }
+        }
+      ]
+    )
+  end
+
+  specify do
+    expect(definitions).to include(
+      'postIssue542' => {
+        'type' => 'object',
+        'properties' => {
+          'logs' => {
             'type' => 'array',
             'items' => {
               'type' => 'string'
             }
           }
-        }
-      ]
+        },
+        'required' => ['logs']
+      }
     )
   end
 end

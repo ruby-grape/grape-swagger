@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'ostruct'
+
 module GrapeSwagger
   class MockParser
     attr_reader :model, :endpoint

@@ -14,6 +14,10 @@ RSpec.describe GrapeSwagger::Rake::OapiTasks do
       namespace :otherItem do
         get '/'
       end
+
+      namespace :my_doc do
+        get '/'
+      end
     end
 
     class Base < Grape::API
@@ -115,7 +119,7 @@ RSpec.describe GrapeSwagger::Rake::OapiTasks do
         end
 
         it 'returns complete doc' do
-          expect(response['paths'].length).to eql 2
+          expect(response['paths'].length).to eql 3
         end
       end
     end
@@ -128,6 +132,14 @@ RSpec.describe GrapeSwagger::Rake::OapiTasks do
         expect(subject).to respond_to :oapi
         expect(subject.oapi).to be_a String
         expect(subject.oapi).not_to be_empty
+      end
+    end
+  end
+
+  describe '#urls_for' do
+    describe 'match only the path to mount_path' do
+      it do
+        expect(subject.send(:urls_for, api_class)).to match_array ['/api/swagger_doc']
       end
     end
   end

@@ -7,9 +7,16 @@
 #### Fixes
 
 * Your contribution here.
+
+
+### 2.0.3 (April 26, 2024)
+
+#### Fixes
+
 * [#922](https://github.com/ruby-grape/grape-swagger/pull/922): Force request body to be an schema object - [@numbata](https://github.com/numbata)
 * [#923](https://github.com/ruby-grape/grape-swagger/pull/923): Enabled schema definitions for body parameters in DELETE requests - [@numbata](https://github.com/numbata)
 * [#924](https://github.com/ruby-grape/grape-swagger/pull/924): fix: Use mount_path to narrow down urls_for - [@chibicco](https://github.com/chibicco)
+
 
 ### 2.0.2 (Februar 2, 2024)
 

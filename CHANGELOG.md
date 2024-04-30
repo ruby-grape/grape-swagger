@@ -7,6 +7,7 @@
 #### Fixes
 
 * Your contribution here.
+* [#926](https://github.com/ruby-grape/grape-swagger/pull/926): Refactor route and namespace combination logic - [@numbata](https://github.com/numbata)
 
 
 ### 2.0.3 (April 26, 2024)

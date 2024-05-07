@@ -49,14 +49,14 @@ describe '#721 set default parameter location based on consumes' do
 
   specify do
     expect(post_parameters).to eql(
-      [{'in'=>'body', 'name'=>'postIssue721', 'required'=>true, 'schema'=>{'$ref'=>'#/definitions/postIssue721'}}]
+      [{ 'in' => 'body', 'name' => 'postIssue721', 'required' => true, 'schema' => { '$ref' => '#/definitions/postIssue721' } }]
     )
     expect(post_schema).to eql(
-      {'description'=>'create item', 'properties'=>{'logs'=>{'type'=>'string'}, 'phone_number'=>{'format'=>'int32', 'type'=>'integer'}}, 'required'=>['logs'], 'type'=>'object'}
+      { 'description' => 'create item', 'properties' => { 'logs' => { 'type' => 'string' }, 'phone_number' => { 'format' => 'int32', 'type' => 'integer' } }, 'required' => ['logs'], 'type' => 'object' }
     )
     puts put_parameters
     expect(put_parameters).to eql(
-      [{'in'=>'path', 'name'=>'id', 'type'=>'integer', 'format'=>'int32', 'required'=>true}, {'in'=>'formData', 'name'=>'logs', 'type'=>'string', 'required'=>true}, {'in'=>'formData', 'name'=>'phone_number', 'type'=>'integer', 'format'=>'int32', 'required'=>false}]
+      [{ 'in' => 'path', 'name' => 'id', 'type' => 'integer', 'format' => 'int32', 'required' => true }, { 'in' => 'formData', 'name' => 'logs', 'type' => 'string', 'required' => true }, { 'in' => 'formData', 'name' => 'phone_number', 'type' => 'integer', 'format' => 'int32', 'required' => false }]
     )
   end
 end

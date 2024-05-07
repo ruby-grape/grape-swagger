@@ -155,7 +155,11 @@ module GrapeSwagger
           elsif param_type
             param_type
           elsif %w[POST PUT PATCH].include?(value_type[:method])
-            consumes.include?('application/x-www-form-urlencoded') || consumes.include?('multipart/form-data') ? 'formData' : 'body'
+            if consumes.include?('application/x-www-form-urlencoded') || consumes.include?('multipart/form-data')
+              'formData'
+            else
+              'body'
+            end
           else
             'query'
           end

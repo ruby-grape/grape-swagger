@@ -10,8 +10,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
       class ParamTypeApi < Grape::API
         # using `:param_type`
         desc 'full set of request param types',
-          consumes: ['application/x-www-form-urlencoded'],
-          success: Entities::UseResponse
+             consumes: ['application/x-www-form-urlencoded'],
+             success: Entities::UseResponse
         params do
           optional :in_query, type: String, documentation: { param_type: 'query' }
           optional :in_header, type: String, documentation: { param_type: 'header' }
@@ -22,8 +22,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         end
 
         desc 'full set of request param types',
-          consumes: ['application/x-www-form-urlencoded'],
-          success: Entities::UseResponse
+             consumes: ['application/x-www-form-urlencoded'],
+             success: Entities::UseResponse
         params do
           requires :in_path, type: Integer
           optional :in_query, type: String, documentation: { param_type: 'query' }
@@ -35,8 +35,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         end
 
         desc 'full set of request param types',
-          consumes: ['application/x-www-form-urlencoded'],
-          success: Entities::UseResponse
+             consumes: ['application/x-www-form-urlencoded'],
+             success: Entities::UseResponse
         params do
           optional :in_path, type: Integer
           optional :in_query, type: String, documentation: { param_type: 'query' }
@@ -49,8 +49,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
         # using `:in`
         desc 'full set of request param types using `:in`',
-          consumes: ['application/x-www-form-urlencoded'],
-          success: Entities::UseResponse
+             consumes: ['application/x-www-form-urlencoded'],
+             success: Entities::UseResponse
         params do
           optional :in_query, type: String, documentation: { in: 'query' }
           optional :in_header, type: String, documentation: { in: 'header' }
@@ -61,8 +61,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         end
 
         desc 'full set of request param types using `:in`',
-          consumes: ['application/x-www-form-urlencoded'],
-          success: Entities::UseResponse
+             consumes: ['application/x-www-form-urlencoded'],
+             success: Entities::UseResponse
         params do
           requires :in_path, type: Integer
           optional :in_query, type: String, documentation: { in: 'query' }
@@ -74,7 +74,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         end
 
         desc 'full set of request param types using `:in`',
-          consumes: ['application/x-www-form-urlencoded']
+             consumes: ['application/x-www-form-urlencoded']
         params do
           optional :in_path, type: Integer
           optional :in_query, type: String, documentation: { in: 'query' }
@@ -87,8 +87,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
         # file
         desc 'file download',
-          consumes: ['application/x-www-form-urlencoded'],
-          success: Entities::UseResponse
+             consumes: ['application/x-www-form-urlencoded'],
+             success: Entities::UseResponse
         params do
           requires :name, type: String
         end
@@ -98,8 +98,8 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         end
 
         desc 'file upload',
-          consumes: ['application/x-www-form-urlencoded'],
-          success: Entities::UseResponse
+             consumes: ['application/x-www-form-urlencoded'],
+             success: Entities::UseResponse
         params do
           requires :name, type: File
         end

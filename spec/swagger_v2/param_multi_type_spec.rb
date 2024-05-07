@@ -55,9 +55,9 @@ describe 'Params Multi Types' do
       Class.new(Grape::API) do
         format :json
 
-        desc 'Some API', 
-          consumes: ['application/x-www-form-urlencoded'],
-          headers: { 'My-Header' => { required: true, description: 'Set this!' } }
+        desc 'Some API',
+             consumes: ['application/x-www-form-urlencoded'],
+             headers: { 'My-Header' => { required: true, description: 'Set this!' } }
         params do
           if Grape::VERSION < '0.14'
             requires :input, type: [String, Integer]

@@ -53,8 +53,8 @@ describe 'Params Types' do
           format :json
 
           desc 'Some API',
-            consumes: ['application/x-www-form-urlencoded'],
-            headers: { 'My-Header' => { required: true, description: 'Set this!' } }
+               consumes: ['application/x-www-form-urlencoded'],
+               headers: { 'My-Header' => { required: true, description: 'Set this!' } }
           params do
             requires :input, type: String
           end

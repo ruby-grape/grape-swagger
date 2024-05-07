@@ -142,6 +142,7 @@ describe 'Group Params as Array' do
         specify do
           expect(subject['definitions']['postArrayOfType']).to eql(
             'type' => 'object',
+            'description' => 'array_of_type',
             'properties' => {
               'array_of_string' => {
                 'items' => { 'type' => 'string' }, 'type' => 'array', 'description' => 'nested array of strings', 'example' => %w[a b]

@@ -75,6 +75,3 @@ Style/RegexpLiteral:
 
 Style/SlicingWithRange:
   Enabled: false
-
-Metrics/ParameterLists:
-  Max: 6

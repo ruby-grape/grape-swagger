@@ -4,7 +4,7 @@ module GrapeSwagger
   module DocMethods
     class ParseParams
       class << self
-        def call(param, settings, path, route, definitions, consumes)
+        def call(param, settings, path, route, definitions, consumes) # rubocop:disable Metrics/ParameterLists
           method = route.request_method
           additional_documentation = settings.fetch(:documentation, {})
           settings.merge!(additional_documentation)

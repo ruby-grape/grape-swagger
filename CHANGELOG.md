@@ -2,7 +2,7 @@
 
 #### Features
 
-* [#880](https://github.com/ruby-grape/grape-swagger/pull/880): Set default parameter location based on consumes - [@spaceraccoon](https://github.com/spaceraccoon)
+* [#927](https://github.com/ruby-grape/grape-swagger/pull/927): Set default parameter location based on consumes - [@spaceraccoon](https://github.com/spaceraccoon)
 * Your contribution here.
 
 #### Fixes

@@ -7,6 +7,9 @@ describe 'Float Params' do
     Class.new(Grape::API) do
       format :json
 
+      desc 'splines' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :a_float, type: Float
       end

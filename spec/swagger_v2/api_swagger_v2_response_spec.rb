@@ -11,6 +11,7 @@ describe 'response' do
         format :json
 
         desc 'This returns something',
+             consumes: ['application/x-www-form-urlencoded'],
              params: Entities::UseResponse.documentation,
              failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         post '/params_given' do
@@ -18,6 +19,7 @@ describe 'response' do
         end
 
         desc 'This returns something',
+             consumes: ['application/x-www-form-urlencoded'],
              entity: Entities::UseResponse,
              failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         get '/entity_response' do
@@ -25,6 +27,7 @@ describe 'response' do
         end
 
         desc 'This returns something',
+             consumes: ['application/x-www-form-urlencoded'],
              entity: Entities::UseItemResponseAsType,
              failure: [{ code: 400, message: 'NotFound', model: Entities::ApiError }]
         get '/nested_type' do
@@ -32,6 +35,7 @@ describe 'response' do
         end
 
         desc 'This returns something',
+             consumes: ['application/x-www-form-urlencoded'],
              success: [
                { code: 200, message: 'Request has succeeded' },
                { code: 201, message: 'Successful Operation' },
@@ -102,7 +106,7 @@ describe 'response' do
       expect(subject['paths']['/params_given']['post']).to eql(
         'description' => 'This returns something',
         'produces' => ['application/json'],
-        'consumes' => ['application/json'],
+        'consumes' => ['application/x-www-form-urlencoded'],
         'parameters' => [
           { 'in' => 'formData', 'name' => 'description', 'type' => 'string', 'required' => false },
           { 'in' => 'formData', 'name' => '$responses', 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => false }

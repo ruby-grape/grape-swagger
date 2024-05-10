@@ -14,7 +14,9 @@ describe 'hidden flag enables a single endpoint parameter to be excluded from th
         end
 
         namespace :flat_params_endpoint do
-          desc 'This is a endpoint with a flat parameter hierarchy'
+          desc 'This is a endpoint with a flat parameter hierarchy' do
+            consumes ['application/x-www-form-urlencoded']
+          end
           params do
             requires :name, type: String, documentation: { desc: 'name' }
             optional :favourite_color, type: String, documentation: { desc: 'I should not be anywhere', hidden: true }
@@ -28,7 +30,9 @@ describe 'hidden flag enables a single endpoint parameter to be excluded from th
         end
 
         namespace :nested_params_endpoint do
-          desc 'This is a endpoint with a nested parameter hierarchy'
+          desc 'This is a endpoint with a nested parameter hierarchy' do
+            consumes ['application/x-www-form-urlencoded']
+          end
           params do
             optional :name, type: String, documentation: { desc: 'name' }
             optional :hidden_attribute, type: Hash do
@@ -47,7 +51,9 @@ describe 'hidden flag enables a single endpoint parameter to be excluded from th
         end
 
         namespace :required_param_endpoint do
-          desc 'This endpoint has hidden defined for a required parameter'
+          desc 'This endpoint has hidden defined for a required parameter' do
+            consumes ['application/x-www-form-urlencoded']
+          end
           params do
             requires :name, type: String, documentation: { desc: 'name', hidden: true }
           end

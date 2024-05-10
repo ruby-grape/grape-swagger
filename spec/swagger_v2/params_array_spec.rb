@@ -13,6 +13,9 @@ describe 'Group Params as Array' do
         Class.new(Grape::API) do
           format :json
 
+          desc 'groups' do
+            consumes ['application/x-www-form-urlencoded']
+          end
           params do
             requires :required_group, type: Array do
               requires :required_param_1
@@ -23,6 +26,9 @@ describe 'Group Params as Array' do
             { 'declared_params' => declared(params) }
           end
 
+          desc 'type_given' do
+            consumes ['application/x-www-form-urlencoded']
+          end
           params do
             requires :typed_group, type: Array do
               requires :id, type: Integer, desc: 'integer given'
@@ -38,6 +44,10 @@ describe 'Group Params as Array' do
           # as body parameters it would be interpreted a bit different,
           # cause it could not be distinguished anymore, so this would be translated to one array,
           # see also next example for the difference
+          desc 'array_of_type' do
+            consumes ['application/x-www-form-urlencoded']
+          end
+
           params do
             requires :array_of_string, type: Array[String], documentation: { param_type: 'body', desc: 'nested array of strings', example: %w[a b] }
             requires :array_of_integer, type: Array[Integer], documentation: { param_type: 'body', desc: 'nested array of integers' }
@@ -45,6 +55,10 @@ describe 'Group Params as Array' do
 
           post '/array_of_type' do
             { 'declared_params' => declared(params) }
+          end
+
+          desc 'object_and_array' do
+            consumes ['application/x-www-form-urlencoded']
           end
 
           params do
@@ -56,6 +70,10 @@ describe 'Group Params as Array' do
             { 'declared_params' => declared(params) }
           end
 
+          desc 'array_of_type_in_form' do
+            consumes ['application/x-www-form-urlencoded']
+          end
+
           params do
             requires :array_of_string, type: Array[String]
             requires :array_of_integer, type: Array[Integer]
@@ -63,6 +81,10 @@ describe 'Group Params as Array' do
 
           post '/array_of_type_in_form' do
             { 'declared_params' => declared(params) }
+          end
+
+          desc 'array_of_entities' do
+            consumes ['application/x-www-form-urlencoded']
           end
 
           params do
@@ -120,6 +142,7 @@ describe 'Group Params as Array' do
         specify do
           expect(subject['definitions']['postArrayOfType']).to eql(
             'type' => 'object',
+            'description' => 'array_of_type',
             'properties' => {
               'array_of_string' => {
                 'items' => { 'type' => 'string' }, 'type' => 'array', 'description' => 'nested array of strings', 'example' => %w[a b]

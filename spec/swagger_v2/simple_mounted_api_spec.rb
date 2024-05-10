@@ -9,12 +9,14 @@ describe 'a simple mounted api' do
     # rubocop:enable Lint/EmptyClass
 
     class SimpleMountedApi < Grape::API
-      desc 'Document root'
+      desc 'Document root',
+           consumes: ['application/x-www-form-urlencoded']
       get do
         { message: 'hi' }
       end
 
       desc 'This gets something.',
+           consumes: ['application/x-www-form-urlencoded'],
            notes: '_test_'
 
       get '/simple' do
@@ -22,6 +24,7 @@ describe 'a simple mounted api' do
       end
 
       desc 'This gets something for URL using - separator.',
+           consumes: ['application/x-www-form-urlencoded'],
            notes: '_test_'
 
       get '/simple-test' do
@@ -37,6 +40,7 @@ describe 'a simple mounted api' do
       end
 
       desc 'this gets something else',
+           consumes: ['application/x-www-form-urlencoded'],
            headers: {
              'XAuthToken' => { description: 'A required header.', required: true },
              'XOtherHeader' => { description: 'An optional header.', required: false }
@@ -51,6 +55,7 @@ describe 'a simple mounted api' do
       end
 
       desc 'this takes an array of parameters',
+           consumes: ['application/x-www-form-urlencoded'],
            params: {
              'items[]' => { description: 'array of items', is_array: true }
            }
@@ -60,6 +65,7 @@ describe 'a simple mounted api' do
       end
 
       desc 'this uses a custom parameter',
+           consumes: ['application/x-www-form-urlencoded'],
            params: {
              'custom' => { type: CustomType, description: 'array of items', is_array: true }
            }
@@ -166,7 +172,7 @@ describe 'a simple mounted api' do
             'post' => {
               'description' => 'this takes an array of parameters',
               'produces' => ['application/json'],
-              'consumes' => ['application/json'],
+              'consumes' => ['application/x-www-form-urlencoded'],
               'parameters' => [{ 'in' => 'formData', 'name' => 'items[]', 'description' => 'array of items', 'required' => false, 'type' => 'array', 'items' => { 'type' => 'string' } }],
               'tags' => ['items'],
               'operationId' => 'postItems',
@@ -290,7 +296,7 @@ describe 'a simple mounted api' do
             'post' => {
               'description' => 'this takes an array of parameters',
               'produces' => ['application/json'],
-              'consumes' => ['application/json'],
+              'consumes' => ['application/x-www-form-urlencoded'],
               'parameters' => [{ 'in' => 'formData', 'name' => 'items[]', 'description' => 'array of items', 'required' => false, 'type' => 'array', 'items' => { 'type' => 'string' } }],
               'tags' => ['items'],
               'operationId' => 'postItems',

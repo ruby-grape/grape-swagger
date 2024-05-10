@@ -21,6 +21,7 @@ describe '#579 put / post parameters spec' do
         namespace :implicit do
           namespace :body_parameter do
             desc 'update spec',
+                 consumes: ['application/x-www-form-urlencoded'],
                  success: BodySpec,
                  params: BodySpec.documentation
             put ':guid' do
@@ -30,6 +31,7 @@ describe '#579 put / post parameters spec' do
 
           namespace :form_parameter do
             desc 'update spec',
+                 consumes: ['application/x-www-form-urlencoded'],
                  success: Spec,
                  params: Spec.documentation
             put ':guid' do
@@ -41,6 +43,7 @@ describe '#579 put / post parameters spec' do
         namespace :explicit do
           namespace :body_parameter do
             desc 'update spec',
+                 consumes: ['application/x-www-form-urlencoded'],
                  success: BodySpec,
                  params: BodySpec.documentation
             params do
@@ -53,6 +56,7 @@ describe '#579 put / post parameters spec' do
 
           namespace :form_parameter do
             desc 'update spec',
+                 consumes: ['application/x-www-form-urlencoded'],
                  success: Spec,
                  params: Spec.documentation
             params do
@@ -68,6 +72,7 @@ describe '#579 put / post parameters spec' do
           route_param :guid do
             namespace :body_parameter do
               desc 'update spec',
+                   consumes: ['application/x-www-form-urlencoded'],
                    success: BodySpec,
                    params: BodySpec.documentation
               put do
@@ -77,6 +82,7 @@ describe '#579 put / post parameters spec' do
 
             namespace :form_parameter do
               desc 'update spec',
+                   consumes: ['application/x-www-form-urlencoded'],
                    success: Spec,
                    params: Spec.documentation
               put do

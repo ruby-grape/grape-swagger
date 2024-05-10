@@ -7,6 +7,9 @@ describe 'Params Types' do
     Class.new(Grape::API) do
       format :json
 
+      desc 'action' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :input, type: String
       end
@@ -14,6 +17,9 @@ describe 'Params Types' do
         { message: 'hi' }
       end
 
+      desc 'action_with_doc' do
+        consumes ['application/x-www-form-urlencoded']
+      end
       params do
         requires :input, type: String, default: '14', documentation: { type: 'email', default: '42' }
       end
@@ -46,7 +52,9 @@ describe 'Params Types' do
         Class.new(Grape::API) do
           format :json
 
-          desc 'Some API', headers: { 'My-Header' => { required: true, description: 'Set this!' } }
+          desc 'Some API',
+               consumes: ['application/x-www-form-urlencoded'],
+               headers: { 'My-Header' => { required: true, description: 'Set this!' } }
           params do
             requires :input, type: String
           end

@@ -11,6 +11,7 @@ describe 'swagger spec v2.0' do
 
       #  Thing stuff
       desc 'This gets Things.' do
+        consumes ['application/x-www-form-urlencoded']
         params Entities::Something.documentation
         http_codes [{ code: 401, message: 'Unauthorized', model: Entities::ApiError }]
       end
@@ -20,6 +21,7 @@ describe 'swagger spec v2.0' do
       end
 
       desc 'This gets Things.' do
+        consumes ['application/x-www-form-urlencoded']
         http_codes [
           { code: 200, message: 'get Horses', model: Entities::Something },
           { code: 401, message: 'HorsesOutError', model: Entities::ApiError }
@@ -31,6 +33,7 @@ describe 'swagger spec v2.0' do
       end
 
       desc 'This gets Thing.' do
+        consumes ['application/x-www-form-urlencoded']
         http_codes [{ code: 200, message: 'getting a single thing' }, { code: 401, message: 'Unauthorized' }]
       end
       params do
@@ -42,6 +45,7 @@ describe 'swagger spec v2.0' do
       end
 
       desc 'This creates Thing.',
+           consumes: ['application/x-www-form-urlencoded'],
            success: Entities::Something
       params do
         requires :text, type: String, documentation: { type: 'string', desc: 'Content of something.' }
@@ -53,6 +57,7 @@ describe 'swagger spec v2.0' do
       end
 
       desc 'This updates Thing.',
+           consumes: ['application/x-www-form-urlencoded'],
            success: Entities::Something
       params do
         requires :id, type: Integer
@@ -65,6 +70,7 @@ describe 'swagger spec v2.0' do
       end
 
       desc 'This deletes Thing.',
+           consumes: ['application/x-www-form-urlencoded'],
            entity: Entities::Something
       params do
         requires :id, type: Integer
@@ -75,6 +81,7 @@ describe 'swagger spec v2.0' do
       end
 
       desc 'dummy route.',
+           consumes: ['application/x-www-form-urlencoded'],
            failure: [{ code: 401, message: 'Unauthorized' }]
       params do
         requires :id, type: Integer
@@ -85,6 +92,7 @@ describe 'swagger spec v2.0' do
 
       namespace :other_thing do
         desc 'nested route inside namespace',
+             consumes: ['application/x-www-form-urlencoded'],
              entity: Entities::QueryInput,
              x: {
                'amazon-apigateway-auth' => { type: 'none' },

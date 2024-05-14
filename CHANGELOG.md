@@ -2,13 +2,22 @@
 
 #### Features
 
-* [#927](https://github.com/ruby-grape/grape-swagger/pull/927): Set default parameter location based on consumes - [@spaceraccoon](https://github.com/spaceraccoon)
-* [#929](https://github.com/ruby-grape/grape-swagger/pull/929): Set query parameter for array of primitive types - [@spaceraccoon](https://github.com/spaceraccoon)
 * Your contribution here.
 
 #### Fixes
 
 * Your contribution here.
+
+
+### 2.1.0 (May 14, 2024)
+
+#### Features
+
+* [#927](https://github.com/ruby-grape/grape-swagger/pull/927): Set default parameter location based on consumes - [@spaceraccoon](https://github.com/spaceraccoon)
+* [#929](https://github.com/ruby-grape/grape-swagger/pull/929): Set query parameter for array of primitive types - [@spaceraccoon](https://github.com/spaceraccoon)
+
+#### Fixes
+
 * [#926](https://github.com/ruby-grape/grape-swagger/pull/926): Refactor route and namespace combination logic - [@numbata](https://github.com/numbata)
 
 

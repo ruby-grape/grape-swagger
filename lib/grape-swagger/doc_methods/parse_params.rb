@@ -70,13 +70,10 @@ module GrapeSwagger
 
         def document_array_param(value_type, definitions)
           if value_type[:documentation].present?
-            param_type = value_type[:documentation][:param_type] || value_type[:documentation][:in]
             doc_type = value_type[:documentation][:type]
             type = DataType.mapping(doc_type) if doc_type && !DataType.request_primitive?(doc_type)
             collection_format = value_type[:documentation][:collectionFormat]
           end
-
-          param_type ||= value_type[:param_type]
 
           array_items = parse_array_item(
             definitions,
@@ -84,7 +81,6 @@ module GrapeSwagger
             value_type
           )
 
-          @parsed_param[:in] = param_type || 'formData'
           @parsed_param[:items] = array_items
           @parsed_param[:type] = 'array'
           @parsed_param[:collectionFormat] = collection_format if DataType.collections.include?(collection_format)
@@ -150,7 +146,7 @@ module GrapeSwagger
 
         def param_type(value_type, consumes)
           param_type = value_type[:param_type] || value_type[:in]
-          if value_type[:path].include?("{#{value_type[:param_name]}}")
+          if !value_type[:is_array] && value_type[:path].include?("{#{value_type[:param_name]}}")
             'path'
           elsif param_type
             param_type
@@ -160,6 +156,8 @@ module GrapeSwagger
             else
               'body'
             end
+          elsif value_type[:is_array] && !DataType.query_array_primitive?(value_type[:data_type])
+            'formData'
           else
             'query'
           end

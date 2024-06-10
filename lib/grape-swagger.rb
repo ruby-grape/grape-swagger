@@ -45,12 +45,10 @@ module SwaggerRouting
   end
 
   def determine_namespaced_routes(name, parent_route, routes)
-    if parent_route.nil?
-      routes.values.flatten
-    else
-      parent_route.reject do |route|
-        !route_path_start_with?(route, name) || !route_instance_variable_equals?(route, name)
-      end
+    return routes.values.flatten if parent_route.nil?
+
+    parent_route.select do |route|
+      route_path_start_with?(route, name) || route_namespace_equals?(route, name)
     end
   end
 
@@ -94,20 +92,27 @@ module SwaggerRouting
     matches.nil? ? route_name : matches[0].delete('/')
   end
 
-  def route_instance_variable(route)
-    route.instance_variable_get(:@options)[:namespace]
-  end
+  def route_namespace_equals?(route, name)
+    patterns = Enumerator.new do |yielder|
+      yielder << "/#{name}"
+      yielder << "/:version/#{name}"
+    end
 
-  def route_instance_variable_equals?(route, name)
-    route_instance_variable(route) == "/#{name}" ||
-      route_instance_variable(route) == "/:version/#{name}"
+    patterns.any? { |p| route.namespace == p }
   end
 
   def route_path_start_with?(route, name)
-    route_prefix = route.prefix ? "/#{route.prefix}/#{name}" : "/#{name}"
-    route_versioned_prefix = route.prefix ? "/#{route.prefix}/:version/#{name}" : "/:version/#{name}"
+    patterns = Enumerator.new do |yielder|
+      if route.prefix
+        yielder << "/#{route.prefix}/#{name}"
+        yielder << "/#{route.prefix}/:version/#{name}"
+      else
+        yielder << "/#{name}"
+        yielder << "/:version/#{name}"
+      end
+    end
 
-    route.path.start_with?(route_prefix, route_versioned_prefix)
+    patterns.any? { |p| route.path.start_with?(p) }
   end
 end
 

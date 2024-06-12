@@ -4,8 +4,7 @@ module GrapeSwagger
   module DocMethods
     class PathString
       class << self
-        def build(route, options = {})
-          path = route.path.dup
+        def build(route, path, options = {})
           # always removing format
           path.sub!(/\(\.\w+?\)$/, '')
           path.sub!('(.:format)', '')
@@ -28,6 +27,23 @@ module GrapeSwagger
           path = "#{OptionalObject.build(:base_path, options)}#{path}" if options[:add_base_path]
 
           [item, path.start_with?('/') ? path : "/#{path}"]
+        end
+
+        def generate_optional_segments(path)
+          # always removing format
+          path.sub!(/\(\.\w+?\)$/, '')
+          path.sub!('(.:format)', '')
+
+          paths = []
+          if path.match(/\(.+\)/)
+            # recurse with included optional segment
+            paths.concat(generate_optional_segments(path.sub(/\([^\)]+\)/, '')))
+            # recurse with excluded optional segment
+            paths.concat(generate_optional_segments(path.sub(/\(/, '').sub(/\)/, '')))
+          else
+            paths << path
+          end
+          paths
         end
       end
     end

@@ -25,6 +25,7 @@ module GrapeSwagger
           document_default_value(settings) unless value_type[:is_array]
           document_range_values(settings) unless value_type[:is_array]
           document_required(settings)
+          document_length_limits(value_type)
           document_additional_properties(definitions, settings) unless value_type[:is_array]
           document_add_extensions(settings)
           document_example(settings)
@@ -160,6 +161,16 @@ module GrapeSwagger
             'formData'
           else
             'query'
+          end
+        end
+
+        def document_length_limits(value_type)
+          if value_type[:is_array]
+            @parsed_param[:minItems] = value_type[:min_length] if value_type.key?(:min_length)
+            @parsed_param[:maxItems] = value_type[:max_length] if value_type.key?(:max_length)
+          else
+            @parsed_param[:minLength] = value_type[:min_length] if value_type.key?(:min_length)
+            @parsed_param[:maxLength] = value_type[:max_length] if value_type.key?(:max_length)
           end
         end
 

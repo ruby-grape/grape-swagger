@@ -26,6 +26,7 @@ describe '#533 specify status codes' do
              success: { code: 204, message: 'a changed status code' }
         patch do
           status 204
+          body false
         end
 
         desc 'Delete some stuff',

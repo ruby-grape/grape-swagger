@@ -13,7 +13,7 @@ describe 'Param example' do
         optional :obj, type: 'Object', documentation: { example: { 'foo' => 'bar' } }
       end
 
-      get '/endpoint_with_examples' do
+      post '/endpoint_with_examples' do
         { 'declared_params' => declared(params) }
       end
 
@@ -27,13 +27,11 @@ describe 'Param example' do
       JSON.parse(last_response.body)
     end
 
+    let(:parameters) { subject['definitions']['postEndpointWithExamples']['properties'] }
+
     specify do
-      expect(subject['paths']['/endpoint_with_examples']['get']['parameters']).to eql(
-        [
-          { 'in' => 'query', 'name' => 'id', 'type' => 'integer', 'example' => 123, 'format' => 'int32', 'required' => true },
-          { 'in' => 'query', 'name' => 'name', 'type' => 'string', 'example' => 'Person', 'required' => false },
-          { 'in' => 'query', 'name' => 'obj', 'type' => 'Object', 'example' => { 'foo' => 'bar' }, 'required' => false }
-        ]
+      expect(parameters).to eql(
+        { 'id' => { 'type' => 'integer', 'format' => 'int32', 'example' => 123 }, 'name' => { 'type' => 'string', 'example' => 'Person' }, 'obj' => { 'type' => 'Object', 'example' => { 'foo' => 'bar' } } }
       )
     end
   end

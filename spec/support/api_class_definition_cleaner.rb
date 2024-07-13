@@ -40,6 +40,9 @@ module ApiClassDefinitionCleaner
       next if new_objects.empty?
 
       new_objects.each do |object|
+        # Skip anonymous class definitions
+        next if object.name.nil?
+
         parts = object.to_s.split('::')
         parent = parts.size > 1 ? Object.const_get(parts[0..-2].join('::')) : Object
         parent.send(:remove_const, parts.last.to_sym) if parent.const_defined?(parts.last.to_sym)

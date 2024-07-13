@@ -25,6 +25,7 @@ RSpec.configure do |config|
   config.include RSpec::Matchers
   config.mock_with :rspec
   config.include Rack::Test::Methods
+  config.include ApiClassDefinitionCleaner
   config.raise_errors_for_deprecations!
 
   config.order = 'random'

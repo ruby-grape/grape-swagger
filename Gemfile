@@ -32,6 +32,7 @@ group :development, :test do
   gem 'rdoc'
   gem 'rspec', '~> 3.9'
   gem 'rubocop', '~> 1.50', require: false
+  gem "openapi3_parser", "~> 0.10.0"
 
   unless ENV['MODEL_PARSER'] == 'grape-swagger-entity'
     gem 'grape-swagger-entity', git: 'https://github.com/ruby-grape/grape-swagger-entity'

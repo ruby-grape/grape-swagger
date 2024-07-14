@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'grape-swagger/endpoint/info_object_builder'
+
 module GrapeSwagger
   module DocMethods
     class ParseParams

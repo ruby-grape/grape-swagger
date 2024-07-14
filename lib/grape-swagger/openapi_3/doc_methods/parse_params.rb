@@ -1,55 +1,13 @@
 # frozen_string_literal: true
 
+require 'grape-swagger/doc_methods/parse_params'
+require 'grape-swagger/endpoint/info_object_builder'
+
 module GrapeSwagger
   module DocMethods
-    class OpenAPIParseParams
+    class OpenAPIParseParams < GrapeSwagger::DocMethods::ParseParams
       class << self
-        def call(param, settings, path, route, definitions)
-          method = route.request_method
-          additional_documentation = settings.fetch(:documentation, {})
-          settings.merge!(additional_documentation)
-          data_type = DataType.call(settings)
-
-          value_type = settings.merge(data_type: data_type, path: path, param_name: param, method: method)
-
-          # required properties
-          @parsed_param = {
-            in:   param_type(value_type),
-            name: settings[:full_name] || param
-          }
-
-          # optional properties
-          document_description(settings)
-          document_type_and_format(settings, data_type)
-          document_array_param(value_type, definitions) if value_type[:is_array]
-          document_default_value(settings) unless value_type[:is_array]
-          document_range_values(settings) unless value_type[:is_array]
-          document_required(settings)
-
-          @parsed_param
-        end
-
         private
-
-        def document_description(settings)
-          description = settings[:desc] || settings[:description]
-          @parsed_param[:description] = description if description
-        end
-
-        def document_required(settings)
-          @parsed_param[:required] = settings[:required] || false
-          @parsed_param[:required] = true if @parsed_param[:in] == 'path'
-        end
-
-        def document_range_values(settings)
-          values               = settings[:values] || nil
-          enum_or_range_values = parse_enum_or_range_values(values)
-          @parsed_param[:schema].merge!(enum_or_range_values) if enum_or_range_values
-        end
-
-        def document_default_value(settings)
-          @parsed_param[:schema][:default] = settings[:default] if settings[:default].present?
-        end
 
         def document_type_and_format(settings, data_type)
           @parsed_param[:schema] = {}
@@ -76,7 +34,6 @@ module GrapeSwagger
           if definitions[value_type[:data_type]]
             array_items['$ref'] = "#/components/schemas/#{@parsed_param[:schema][:type]}"
           else
-            puts value_type.inspect
             array_items[:type] = type || @parsed_param[:schema][:type] == 'array' ? 'string' : @parsed_param[:schema][:type]
           end
           array_items[:format] = @parsed_param.delete(:format) if @parsed_param[:format]
@@ -91,19 +48,6 @@ module GrapeSwagger
           @parsed_param[:items] = array_items
           @parsed_param[:schema][:type] = 'array'
           @parsed_param[:collectionFormat] = collection_format if DataType.collections.include?(collection_format)
-        end
-
-        def param_type(value_type)
-          param_type = value_type[:param_type] || value_type[:in]
-          if value_type[:path].include?("{#{value_type[:param_name]}}")
-            'path'
-          elsif param_type
-            param_type
-          elsif %w[POST PUT PATCH].include?(value_type[:method])
-            DataType.request_primitive?(value_type[:data_type]) ? 'formData' : 'body'
-          else
-            'query'
-          end
         end
 
         def parse_enum_or_range_values(values)
@@ -125,10 +69,6 @@ module GrapeSwagger
               end
             end
           end
-        end
-
-        def parse_range_values(values)
-          { minimum: values.first, maximum: values.last }
         end
       end
     end

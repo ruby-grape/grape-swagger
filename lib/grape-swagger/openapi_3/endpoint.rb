@@ -5,7 +5,7 @@ require 'active_support/core_ext/string/inflections'
 require 'grape-swagger/endpoint/params_parser'
 
 module Grape
-  module OpenAPI3Endpoint
+  module OpenAPI3Endpoint # rubocop:disable Metrics/ModuleLength
     def content_types_for(target_class)
       content_types = (target_class.content_types || {}).values
 
@@ -30,7 +30,7 @@ module Grape
       servers = servers.is_a?(Hash) ? [servers] : servers
 
       object = {
-        info: info_object(options[:info].merge(version: options[:doc_version])),
+        info: GrapeSwagger::Endpoint::InfoObjectBuilder.build(options[:info].merge(version: options[:doc_version])),
         openapi: '3.0.0',
         security: options[:security],
         authorizations: options[:authorizations],
@@ -45,40 +45,6 @@ module Grape
 
       GrapeSwagger::DocMethods::Extensions.add_extensions_to_root(options, object)
       object.delete_if { |_, value| value.blank? }
-    end
-
-    # building info object
-    def info_object(infos)
-      result = {
-        title: infos[:title] || 'API title',
-        description: infos[:description],
-        termsOfService: infos[:terms_of_service_url],
-        contact: contact_object(infos),
-        license: license_object(infos),
-        version: infos[:version]
-      }
-
-      GrapeSwagger::DocMethods::Extensions.add_extensions_to_info(infos, result)
-
-      result.delete_if { |_, value| value.blank? }
-    end
-
-    # sub-objects of info object
-    # license
-    def license_object(infos)
-      {
-        name: infos.delete(:license),
-        url: infos.delete(:license_url)
-      }.delete_if { |_, value| value.blank? }
-    end
-
-    # contact
-    def contact_object(infos)
-      {
-        name: infos.delete(:contact_name),
-        email: infos.delete(:contact_email),
-        url: infos.delete(:contact_url)
-      }.delete_if { |_, value| value.blank? }
     end
 
     # building path and definitions objects
@@ -193,7 +159,7 @@ module Grape
       GrapeSwagger::DocMethods::ProducesConsumes.call(route.settings.dig(:description, :consumes) || format)
     end
 
-    def params_object(route, options, path)
+    def params_object(route, options, path, consumes)
       parameters = partition_params(route, options).map do |param, value|
         value = { required: false }.merge(value) if value.is_a?(Hash)
         _, value = default_type([[param, value]]).first if value == ''
@@ -202,7 +168,7 @@ module Grape
         elsif value[:documentation]
           expose_params(value[:documentation][:type])
         end
-        GrapeSwagger::DocMethods::OpenAPIParseParams.call(param, value, path, route, @definitions)
+        GrapeSwagger::DocMethods::OpenAPIParseParams.call(param, value, path, route, @definitions, consumes)
       end
 
       if GrapeSwagger::DocMethods::OpenAPIMoveParams.can_be_moved?(parameters, route.request_method)

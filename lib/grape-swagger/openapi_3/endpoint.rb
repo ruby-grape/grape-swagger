@@ -26,8 +26,11 @@ module Grape
     def swagger_object(_target_class, request, options)
       url = GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request)
       base_path = GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request)
-      servers = options[:servers] || [{ url: "#{request.scheme}://#{url}#{base_path}" }]
-      servers = servers.is_a?(Hash) ? [servers] : servers
+      servers = if options[:servers]
+                  Array.wrap(options[:servers])
+                else
+                  [{ url: "#{request.scheme}://#{url}#{base_path}" }]
+                end
 
       object = {
         info: GrapeSwagger::Endpoint::InfoObjectBuilder.build(options[:info].merge(version: options[:doc_version])),
@@ -93,12 +96,14 @@ module Grape
       method[:summary]     = summary_object(route)
       method[:description] = description_object(route)
 
-      parameters = params_object(route, options, path).partition { |p| p[:in] == 'body' || p[:in] == 'formData' }
+      consumes = consumes_object(route, options[:consumes] || options[:format])
+
+      parameters = params_object(route, options, path, consumes)
+                   .partition { |p| p[:in] == 'body' || p[:in] == 'formData' }
 
       method[:parameters]  = parameters.last
       method[:security]    = security_object(route)
       if %w[POST PUT PATCH].include?(route.request_method)
-        consumes = consumes_object(route, options[:format])
         method[:requestBody] = response_body_object(route, path, consumes, parameters.first)
       end
 
@@ -193,17 +198,24 @@ module Grape
     end
 
     def response_body_parameter_object(parameters, content_type)
-      properties = parameters.map do |value|
+      properties = parameters.each_with_object({}) do |value, accum|
         value[:schema][:type] = 'object' if value[:schema][:type] == 'json'
         if value[:schema][:type] == 'file'
           value[:schema][:format] = 'binary'
           value[:schema][:type] = 'string'
         end
-        [value[:name], value.except(:name, :in, :required, :schema).merge(value[:schema])]
-      end.to_h
-      required_values = parameters.select { |param| param[:required] }.map { |required| required[:name] }
-      result = { schema: { type: :object, properties: properties } }
-      result[:schema][:required] = required_values unless required_values.empty?
+        accum[value[:name]] = value.except(:name, :in, :required, :schema).merge(value[:schema])
+      end
+
+      if properties.values.one?
+        object_reference = properties.values.first['$ref']
+        result = { schema: { '$ref' => object_reference } }
+      else
+        result = { schema: { type: :object, properties: properties } }
+        required_values = parameters.select { |param| param[:required] }.map { |required| required[:name] }
+        result[:schema][:required] = required_values unless required_values.empty?
+      end
+
       [content_type, result]
     end
 
@@ -213,10 +225,12 @@ module Grape
 
       codes.each_with_object({}) do |value, memo|
         value[:message] ||= ''
-        memo[value[:code]] = { description: value[:message] }
+        memo[value[:code]] = {
+          description: value[:message]
+        }
 
         if value[:headers]
-          value[:headers].each do |_, header|
+          value[:headers].each_value do |header|
             header[:schema] = { type: header.delete(:type) }
           end
           memo[value[:code]][:headers] = value[:headers]
@@ -241,7 +255,7 @@ module Grape
 
         ref = build_reference(route, value, response_model)
 
-        memo[value[:code]][:content] = content_types.map { |c| content_object(value, model, ref, c) }.to_h
+        memo[value[:code]][:content] = content_types.to_h { |c| content_object(value, model, ref, c) }
 
         next unless model
 
@@ -256,7 +270,7 @@ module Grape
           if value[:examples].keys.length == 1
             hash[:example] = value[:examples].values.first
           else
-            hash[:examples] = value[:examples].map { |k, v| [k, { value: v }] }.to_h
+            hash[:examples] = value[:examples].transform_values { |v| { value: v } }
           end
         end
 

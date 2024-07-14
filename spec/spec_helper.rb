@@ -28,6 +28,15 @@ RSpec.configure do |config|
   config.include ApiClassDefinitionCleaner
   config.raise_errors_for_deprecations!
 
+  config.define_derived_metadata(file_path: /spec\/openapi_3/) do |metadata|
+    metadata[:type] ||= :openapi3
+  end
+  config.define_derived_metadata(file_path: /spec\/swagger_v2/) do |metadata|
+    metadata[:type] ||= :swagger2
+  end
+
+  config.include OpenAPI3ResponseValidationHelper, type: :openapi3
+
   config.order = 'random'
   config.seed = 40_834
 end

@@ -67,24 +67,27 @@ describe 'Form Params' do
     }]
 
     expect(subject['paths']['/items/{id}']['post']['requestBody']).to eq 'content' => {
-      'application/json' => { 'schema' => { 'properties' => {}, 'type' => 'object' } },
-      'application/x-www-form-urlencoded' => {
+      'application/json' => {
         'schema' => {
-          'properties' => {
-            'conditions' => {
-              'description' => 'conditions of item',
-              'enum' => %w[one two],
-              'type' => 'string'
-            },
-            'name' => {
-              'description' => 'name of item',
-              'type' => 'string'
-            }
-          },
-          'required' => ['name'],
-          'type' => 'object'
+          '$ref' => '#/components/schemas/postItems'
         }
       }
     }
+
+    expect(subject['components']['schemas']['postItems']).to match(
+      'properties' => {
+        'conditions' => {
+          'description' => 'conditions of item',
+          'enum' => %w[one two],
+          'type' => 'string'
+        },
+        'name' => {
+          'description' => 'name of item',
+          'type' => 'string'
+        }
+      },
+      'required' => ['name'],
+      'type' => 'object'
+    )
   end
 end

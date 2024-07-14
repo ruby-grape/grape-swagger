@@ -84,7 +84,7 @@ describe 'Group Params as Array' do
         end
 
         specify do
-          expect(subject['paths']['/groups']['post']['requestBody']['content']['application/x-www-form-urlencoded']).to eql(
+          expect(subject['paths']['/groups']['post']['requestBody']['content']['application/json']).to eql(
             'schema' => {
               'properties' => {
                 "required_group#{braces}[required_param_1]" => { 'items' => { 'type' => 'string' }, 'type' => 'array' },

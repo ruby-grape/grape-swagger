@@ -85,11 +85,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
     specify do
       expect(subject['paths']['/wo_entities/in_body']['post']['requestBody']['content']['application/json']).to eql(
         'schema' => {
-          'properties' => {
-            'WoEntitiesInBody' => { '$ref' => '#/components/schemas/postWoEntitiesInBody' }
-          },
-          'required' => ['WoEntitiesInBody'],
-          'type' => 'object'
+          '$ref' => '#/components/schemas/postWoEntitiesInBody'
         }
       )
     end
@@ -116,11 +112,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
       expect(subject['paths']['/wo_entities/in_body/{key}']['put']['requestBody']['content']['application/json']).to eql(
         'schema' => {
-          'properties' => {
-            'WoEntitiesInBody' => { '$ref' => '#/components/schemas/putWoEntitiesInBody' }
-          },
-          'required' => ['WoEntitiesInBody'],
-          'type' => 'object'
+          '$ref' => '#/components/schemas/putWoEntitiesInBody'
         }
       )
     end
@@ -147,13 +139,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
     specify do
       expect(subject['paths']['/with_entities/in_body']['post']['requestBody']['content']['application/json']).to eql(
         'schema' => {
-          'properties' => {
-            'WithEntitiesInBody' => {
-              '$ref' => '#/components/schemas/postWithEntitiesInBody'
-            }
-          },
-          'required' => ['WithEntitiesInBody'],
-          'type' => 'object'
+          '$ref' => '#/components/schemas/postWithEntitiesInBody'
         }
       )
     end
@@ -183,11 +169,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
       expect(subject['paths']['/with_entities/in_body/{id}']['put']['requestBody']['content']['application/json']).to eql(
         'schema' => {
-          'properties' => {
-            'WithEntitiesInBody' => { '$ref' => '#/components/schemas/putWithEntitiesInBody' }
-          },
-          'required' => ['WithEntitiesInBody'],
-          'type' => 'object'
+          '$ref' => '#/components/schemas/putWithEntitiesInBody'
         }
       )
     end
@@ -207,11 +189,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
     let(:request_parameters_definition) do
       {
         'schema' => {
-          'properties' => {
-            'WithEntityParam' => { '$ref' => '#/components/schemas/postWithEntityParam' }
-          },
-          'required' => ['WithEntityParam'],
-          'type' => 'object'
+          '$ref' => '#/components/schemas/postWithEntityParam'
         }
       }
     end
@@ -219,7 +197,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
     let(:request_body_parameters_definition) do
       {
         'description' => 'put in body with entity parameter',
-        'properties' => { 'data' => { '$ref' => '#/components/schemas/ApiResponse', 'description' => 'request data' } },
+        'properties' => { 'data' => { '$ref' => '#/components/schemas/NestedModule_ApiResponse', 'description' => 'request data' } },
         'type' => 'object'
       }
     end
@@ -234,7 +212,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
     end
 
     specify do
-      expect(subject['components']['schemas']['ApiResponse']).not_to be_nil
+      expect(subject['components']['schemas']['NestedModule_ApiResponse']).not_to be_nil
     end
 
     specify do

@@ -157,7 +157,6 @@ describe 'response with examples' do
 
     subject do
       get '/swagger_doc/response_failure_examples'
-      puts last_response.body
       JSON.parse(last_response.body)
     end
 

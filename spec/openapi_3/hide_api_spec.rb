@@ -39,7 +39,6 @@ describe 'a hide mounted api' do
 
   subject do
     get '/swagger_doc.json'
-    puts last_response.body
     JSON.parse(last_response.body)
   end
 

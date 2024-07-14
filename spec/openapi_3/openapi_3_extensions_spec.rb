@@ -82,7 +82,6 @@ describe 'extensions' do
   describe 'extension on path level' do
     subject do
       get '/swagger_doc/path_extension'
-      puts last_response.body
       JSON.parse(last_response.body)
     end
 
@@ -95,7 +94,6 @@ describe 'extensions' do
   describe 'extension on verb level' do
     subject do
       get '/swagger_doc/verb_extension'
-      puts last_response.body
       JSON.parse(last_response.body)
     end
 
@@ -108,7 +106,6 @@ describe 'extensions' do
   describe 'extension on definition level' do
     subject do
       get '/swagger_doc/definitions_extension'
-      puts last_response.body
       JSON.parse(last_response.body)
     end
 
@@ -122,7 +119,6 @@ describe 'extensions' do
   describe 'extension on definition level' do
     subject do
       get '/swagger_doc/multiple_definitions_extension'
-      puts last_response.body
       JSON.parse(last_response.body)
     end
 
@@ -137,7 +133,6 @@ describe 'extensions' do
   describe 'extension on definition level' do
     subject do
       get '/swagger_doc/non_existent_status_definitions_extension'
-      puts last_response.body
       JSON.parse(last_response.body)
     end
 

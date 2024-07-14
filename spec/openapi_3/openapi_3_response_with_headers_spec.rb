@@ -188,7 +188,6 @@ describe 'response with headers' do
 
     subject do
       get '/swagger_doc/file_response_headers'
-      puts last_response.body
       JSON.parse(last_response.body)
     end
 

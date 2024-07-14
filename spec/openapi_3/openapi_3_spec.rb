@@ -124,7 +124,6 @@ describe 'swagger spec v2.0' do
   describe 'whole documentation' do
     subject do
       get '/v3/swagger_doc'
-      puts last_response.body
       JSON.parse(last_response.body)
     end
 

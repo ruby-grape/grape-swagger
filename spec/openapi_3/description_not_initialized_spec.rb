@@ -30,7 +30,6 @@ describe 'details' do
 
     subject do
       get '/swagger_doc'
-      puts last_response.body
       JSON.parse(last_response.body)
     end
 

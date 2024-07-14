@@ -85,7 +85,6 @@ describe 'namespace tags check' do
   describe 'retrieves swagger-documentation on /swagger_doc' do
     subject do
       get '/swagger_doc.json'
-      puts last_response.body
       JSON.parse(last_response.body)
     end
 
@@ -111,7 +110,6 @@ describe 'namespace tags check' do
   describe 'retrieves the documentation for mounted-api' do
     subject do
       get '/swagger_doc/colorado.json'
-      puts last_response.body
       JSON.parse(last_response.body)
     end
 
@@ -129,7 +127,6 @@ describe 'namespace tags check' do
     describe 'includes headers' do
       subject do
         get '/swagger_doc/thames.json'
-        puts last_response.body
         JSON.parse(last_response.body)
       end
 

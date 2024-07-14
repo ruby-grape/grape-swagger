@@ -46,7 +46,6 @@ describe 'Group Array Params, using collection format' do
   describe 'documentation for array parameter in default csv collectionFormat' do
     subject do
       get '/swagger_doc/array_of_strings_without_collection_format'
-      puts last_response.body
       JSON.parse(last_response.body)
     end
 
@@ -62,7 +61,6 @@ describe 'Group Array Params, using collection format' do
   describe 'documentation for array parameters in multi collectionFormat set from documentation' do
     subject do
       get '/swagger_doc/array_of_strings_multi_collection_format'
-      puts last_response.body
       JSON.parse(last_response.body)
     end
 
@@ -78,7 +76,6 @@ describe 'Group Array Params, using collection format' do
   describe 'documentation for array parameters in brackets collectionFormat set from documentation' do
     subject do
       get '/swagger_doc/array_of_strings_brackets_collection_format'
-      puts last_response.body
       JSON.parse(last_response.body)
     end
 
@@ -94,7 +91,6 @@ describe 'Group Array Params, using collection format' do
   describe 'documentation for array parameters with collectionFormat set to invalid option' do
     subject do
       get '/swagger_doc/array_of_strings_invalid_collection_format'
-      puts last_response.body
       JSON.parse(last_response.body)
     end
 

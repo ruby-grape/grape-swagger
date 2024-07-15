@@ -50,7 +50,7 @@ module GrapeSwagger
         options
       )
 
-      paths, definitions   = endpoint.path_and_definition_objects(combi_routes, options)
+      paths, definitions   = endpoint.path_and_definition_objects(combi_routes, options, endpoint.request)
       tags                 = tags_from(paths, options)
 
       output[:tags]        = tags unless tags.empty? || paths.blank?

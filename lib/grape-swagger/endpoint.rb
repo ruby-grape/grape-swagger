@@ -12,7 +12,7 @@ module Grape
       if content_types.empty?
         formats       = [target_class.format, target_class.default_format].compact.uniq
         formats       = Grape::Formatter.formatters(**{}).keys if formats.empty?
-        content_types = Grape::ContentTypes::CONTENT_TYPES.select do |content_type, _mime_type|
+        content_types = Grape::ContentTypes::DEFAULTS.select do |content_type, _mime_type|
           formats.include? content_type
         end.values
       end

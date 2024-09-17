@@ -7,7 +7,7 @@ module GrapeSwagger
         def call(*args)
           return ['application/json'] unless args.flatten.present?
 
-          args.flatten.map { |x| Grape::ContentTypes::CONTENT_TYPES[x] || x }.uniq
+          args.flatten.map { |x| GrapeSwagger::CONTENT_TYPE_DEFAULTS[x] || x }.uniq
         end
       end
     end

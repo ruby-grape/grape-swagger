@@ -22,182 +22,52 @@ jobs:
           bundler-cache: true
       - name: Run rubocop
         run: bundle exec rubocop --parallel --format progress
-
-  grape-17:
+  test:
+    strategy:
+      matrix:
+        entry:
+          - { ruby: '3.0', grape: '1.7.1' }
+          - { ruby: '3.1', grape: '1.7.1' }
+          - { ruby: '3.2', grape: '1.7.1' }
+          - { ruby: '3.3', grape: '1.7.1' }
+          - { ruby: 'head', grape: '1.7.1' }
+          - { ruby: '3.0', grape: '1.8.0' }
+          - { ruby: '3.1', grape: '1.8.0' }
+          - { ruby: '3.2', grape: '1.8.0' }
+          - { ruby: '3.3', grape: '1.8.0' }
+          - { ruby: 'head', grape: '1.8.0' }
+          - { ruby: '3.0', grape: '2.0.0' }
+          - { ruby: '3.1', grape: '2.0.0' }
+          - { ruby: '3.2', grape: '2.0.0' }
+          - { ruby: '3.3', grape: '2.0.0' }
+          - { ruby: 'head', grape: '2.0.0' }
+          - { ruby: '3.0', grape: '2.1.3' }
+          - { ruby: '3.1', grape: '2.1.3' }
+          - { ruby: '3.2', grape: '2.1.3' }
+          - { ruby: '3.3', grape: '2.1.3' }
+          - { ruby: 'head', grape: '2.1.3' }
+          - { ruby: '3.0', grape: '2.2.0' }
+          - { ruby: '3.1', grape: '2.2.0' }
+          - { ruby: '3.2', grape: '2.2.0' }
+          - { ruby: '3.3', grape: '2.2.0' }
+          - { ruby: 'head', grape: '2.2.0' }
+          - { ruby: '3.0', grape: 'HEAD' }
+          - { ruby: '3.1', grape: 'HEAD' }
+          - { ruby: '3.2', grape: 'HEAD' }
+          - { ruby: '3.3', grape: 'HEAD' }
+          - { ruby: 'head', grape: 'HEAD' }
+    name: test (ruby=${{ matrix.entry.ruby }}, grape=${{ matrix.entry.grape }})
     runs-on: ubuntu-latest
     needs: ['rubocop']
     env:
-      GRAPE_VERSION: '1.7.1'
-    strategy:
-      matrix:
-        ruby-version: ['3.0', '3.1', '3.2', '3.3', 'head']
+      GRAPE_VERSION: ${{ matrix.entry.grape }}
     steps:
     - name: Check out branch
       uses: actions/checkout@v4
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: ${{ matrix.ruby-version }}
-    - name: Run rspec wo model parser
-      run: |
-        bundle update
-        bundle exec rspec
-    - name: Run rspec w entity parser
-      env:
-        MODEL_PARSER: grape-swagger-entity
-      run: |
-        bundle update
-        bundle exec rspec
-    - name: Run rspec w representable parser
-      env:
-        MODEL_PARSER: grape-swagger-representable
-      run: |
-        bundle update
-        bundle exec rspec
-
-  grape-18:
-    runs-on: ubuntu-latest
-    needs: ['rubocop']
-    env:
-      GRAPE_VERSION: '1.8.0'
-    strategy:
-      matrix:
-        ruby-version: ['3.0', '3.1', '3.2', '3.3', 'head']
-    steps:
-    - name: Check out branch
-      uses: actions/checkout@v4
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby-version }}
-    - name: Run rspec wo model parser
-      run: |
-        bundle update
-        bundle exec rspec
-    - name: Run rspec w entity parser
-      env:
-        MODEL_PARSER: grape-swagger-entity
-      run: |
-        bundle update
-        bundle exec rspec
-    - name: Run rspec w representable parser
-      env:
-        MODEL_PARSER: grape-swagger-representable
-      run: |
-        bundle update
-        bundle exec rspec
-
-  grape-20:
-    runs-on: ubuntu-latest
-    needs: ['rubocop']
-    env:
-      GRAPE_VERSION: '2.0.0'
-    strategy:
-      matrix:
-        ruby-version: ['3.0', '3.1', '3.2', '3.3', 'head']
-    steps:
-    - name: Check out branch
-      uses: actions/checkout@v4
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby-version }}
-    - name: Run rspec wo model parser
-      run: |
-        bundle update
-        bundle exec rspec
-    - name: Run rspec w entity parser
-      env:
-        MODEL_PARSER: grape-swagger-entity
-      run: |
-        bundle update
-        bundle exec rspec
-    - name: Run rspec w representable parser
-      env:
-        MODEL_PARSER: grape-swagger-representable
-      run: |
-        bundle update
-        bundle exec rspec
-
-  grape-21:
-    runs-on: ubuntu-latest
-    needs: ['rubocop']
-    env:
-      GRAPE_VERSION: '2.1.3'
-    strategy:
-      matrix:
-        ruby-version: ['3.0', '3.1', '3.2', '3.3', 'head']
-    steps:
-    - name: Check out branch
-      uses: actions/checkout@v4
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby-version }}
-    - name: Run rspec wo model parser
-      run: |
-        bundle update
-        bundle exec rspec
-    - name: Run rspec w entity parser
-      env:
-        MODEL_PARSER: grape-swagger-entity
-      run: |
-        bundle update
-        bundle exec rspec
-    - name: Run rspec w representable parser
-      env:
-        MODEL_PARSER: grape-swagger-representable
-      run: |
-        bundle update
-        bundle exec rspec
-
-  grape-22:
-    runs-on: ubuntu-latest
-    needs: ['rubocop']
-    env:
-      GRAPE_VERSION: '2.2.0'
-    strategy:
-      matrix:
-        ruby-version: ['3.0', '3.1', '3.2', '3.3', 'head']
-    steps:
-    - name: Check out branch
-      uses: actions/checkout@v4
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby-version }}
-    - name: Run rspec wo model parser
-      run: |
-        bundle update
-        bundle exec rspec
-    - name: Run rspec w entity parser
-      env:
-        MODEL_PARSER: grape-swagger-entity
-      run: |
-        bundle update
-        bundle exec rspec
-    - name: Run rspec w representable parser
-      env:
-        MODEL_PARSER: grape-swagger-representable
-      run: |
-        bundle update
-        bundle exec rspec
-
-  grape-HEAD:
-    runs-on: ubuntu-latest
-    needs: ['rubocop']
-    env:
-      GRAPE_VERSION: 'HEAD'
-    strategy:
-      matrix:
-        ruby-version: ['3.0', '3.1', '3.2', '3.3', 'head']
-    steps:
-    - name: Check out branch
-      uses: actions/checkout@v4
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby-version }}
+        ruby-version: ${{ matrix.entry.ruby }}
     - name: Run rspec wo model parser
       run: |
         bundle update

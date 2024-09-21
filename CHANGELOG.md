@@ -1,8 +1,20 @@
+### 2.1.2 (Next)
+
+#### Features
+
+* Your contribution here.
+
+#### Fixes
+
+* Your contribution here.
+
+
 ### 2.1.1 (Sep 21, 2024)
 
 #### Fixes
 
 * [#940](https://github.com/ruby-grape/grape-swagger/pull/940): Grape 2.2.0 compatibility - [@padde](https://github.com/padde)
+
 
 ### 2.1.0 (May 14, 2024)
 

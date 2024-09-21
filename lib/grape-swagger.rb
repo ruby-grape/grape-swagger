@@ -18,6 +18,24 @@ module GrapeSwagger
     end
   end
   autoload :Rake, 'grape-swagger/rake/oapi_tasks'
+
+  # Copied from https://github.com/ruby-grape/grape/blob/v2.2.0/lib/grape/formatter.rb
+  FORMATTER_DEFAULTS = {
+    json: Grape::Formatter::Json,
+    jsonapi: Grape::Formatter::Json,
+    serializable_hash: Grape::Formatter::SerializableHash,
+    txt: Grape::Formatter::Txt,
+    xml: Grape::Formatter::Xml
+  }.freeze
+
+  # Copied from https://github.com/ruby-grape/grape/blob/v2.2.0/lib/grape/content_types.rb
+  CONTENT_TYPE_DEFAULTS = {
+    xml: 'application/xml',
+    serializable_hash: 'application/json',
+    json: 'application/json',
+    binary: 'application/octet-stream',
+    txt: 'text/plain'
+  }.freeze
 end
 
 module SwaggerRouting

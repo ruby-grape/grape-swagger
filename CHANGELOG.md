@@ -6,6 +6,7 @@
 
 #### Fixes
 
+* [#940](https://github.com/ruby-grape/grape-swagger/pull/940): Grape 2.2.0 compatibility - [@padde](https://github.com/padde)
 * Your contribution here.
 
 

@@ -19,7 +19,7 @@ group :development, :test do
   gem 'pry', platforms: [:mri]
   gem 'pry-byebug', platforms: [:mri]
 
-  grape_version = ENV.fetch('GRAPE_VERSION', '2.1.0')
+  grape_version = ENV.fetch('GRAPE_VERSION', '2.2.0')
   if grape_version == 'HEAD' || Gem::Version.new(grape_version) >= Gem::Version.new('2.0.0')
     gem 'rack', '>= 3.0'
   else

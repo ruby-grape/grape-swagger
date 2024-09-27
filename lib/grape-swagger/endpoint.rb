@@ -3,6 +3,7 @@
 require 'active_support'
 require 'active_support/core_ext/string/inflections'
 require 'grape-swagger/endpoint/params_parser'
+require 'grape-swagger/endpoint/visibility'
 
 module Grape
   class Endpoint # rubocop:disable Metrics/ClassLength
@@ -96,7 +97,7 @@ module Grape
     # path object
     def path_item(routes, options)
       routes.each do |route|
-        next if hidden?(route, options)
+        next if GrapeSwagger::Endpoint::Visibility.hidden_route?(route, options)
 
         @item, path = GrapeSwagger::DocMethods::PathString.build(route, options)
         @entity = route.entity || route.options[:success]
@@ -177,7 +178,7 @@ module Grape
 
     def params_object(route, options, path, consumes)
       parameters = build_request_params(route, options).each_with_object([]) do |(param, value), memo|
-        next if hidden_parameter?(value)
+        next if GrapeSwagger::Endpoint::Visibility.hidden_parameter?(value)
 
         value = { required: false }.merge(value) if value.is_a?(Hash)
         _, value = default_type([[param, value]]).first if value == ''
@@ -433,24 +434,6 @@ module Grape
 
     def model_name(name)
       GrapeSwagger::DocMethods::DataType.parse_entity_name(name)
-    end
-
-    def hidden?(route, options)
-      route_hidden = route.settings.try(:[], :swagger).try(:[], :hidden)
-      route_hidden = route.options[:hidden] if route.options.key?(:hidden)
-      return route_hidden unless route_hidden.is_a?(Proc)
-
-      options[:token_owner] ? route_hidden.call(send(options[:token_owner].to_sym)) : route_hidden.call
-    end
-
-    def hidden_parameter?(value)
-      return false if value[:required]
-
-      if value.dig(:documentation, :hidden).is_a?(Proc)
-        value.dig(:documentation, :hidden).call
-      else
-        value.dig(:documentation, :hidden)
-      end
     end
 
     def success_code_from_entity(route, entity)

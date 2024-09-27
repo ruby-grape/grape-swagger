@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#879](https://github.com/ruby-grape/grape-swagger/pull/879): Add support for optional path segments - [@spaceraccoon](https://github.com/spaceraccoon)
 * Your contribution here.
 
 #### Fixes

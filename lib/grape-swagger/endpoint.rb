@@ -377,7 +377,7 @@ module Grape
         route_params[key] = path.merge(params)
       end
 
-      route.params.delete_if { |key| key.is_a?(String) && param_keys.include?(key.to_sym) }.to_a
+      route_params.delete_if { |key| key.is_a?(String) && param_keys.include?(key.to_sym) }.to_a
     end
 
     # Iterates over namespaces recursively

@@ -51,7 +51,7 @@ describe 'swagger spec v2.0' do
         requires :text, type: String, documentation: { type: 'string', desc: 'Content of something.' }
         requires :links, type: Array, documentation: { type: 'link', is_array: true }
       end
-      post '/thing', http_codes: [{ code: 422, message: 'Unprocessible Entity' }] do
+      post '/thing', http_codes: [{ code: 422, message: 'Unprocessable Entity' }] do
         something = OpenStruct.new text: 'something'
         present something, with: Entities::Something
       end

@@ -485,7 +485,7 @@ add_swagger_documentation \
 
 #### Swagger Header Parameters  <a name="headers"></a>
 
-Swagger also supports the documentation of parameters passed in the header. Since grape's ```params[]``` doesn't return header parameters we can specify header parameters seperately in a block after the description.
+Swagger also supports the documentation of parameters passed in the header. Since grape's ```params[]``` doesn't return header parameters we can specify header parameters separately in a block after the description.
 
 ```ruby
 desc "Return super-secret information", {
@@ -955,7 +955,8 @@ The result is then something like following:
 
 #### Changing default status codes <a name="change-status"></a>
 
-The default status codes, one could be found (-> [status codes](lib/grape-swagger/doc_methods/status_codes.rb)) can be changed to your specific needs, to achive it, you have to change it for grape itself and for the documentation.
+
+The default status codes, one could be found (-> [status codes](lib/grape-swagger/doc_methods/status_codes.rb)) can be changed to your specific needs, to achieve it, you have to change it for grape itself and for the documentation.
 
 ```ruby
 desc 'Get a list of stuff',
@@ -1678,7 +1679,7 @@ This is how to configure the grape_swagger documentation:
 The guard method should inject the Security Requirement Object into the endpoint's route settings (see Grape::DSL::Settings.route_setting method).
 
 The 'oauth2 false' added to swagger_documentation is making the main Swagger endpoint protected with OAuth, i.e. the
-access_token is being retreiving from the HTTP request, but the 'false' scope is for skipping authorization and
+access_token is being retrieving from the HTTP request, but the 'false' scope is for skipping authorization and
 showing the UI for everyone. If the scope would be set to something else, like 'oauth2 admin', for example, than the UI
  wouldn't be displayed at all to unauthorized users.
 
@@ -1786,7 +1787,7 @@ params:
 - store={ true | file_name.json } – save as JSON (optional)
 - resource=resource_name     – get only for this one (optional)
 ```
-For mutliversion API it creates several files with following naming: file_name_`API_VERSION`.json      
+For multiversion API it creates several files with following naming: file_name_`API_VERSION`.json
 
 #### OpenApi/Swagger Validation
 

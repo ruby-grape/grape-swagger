@@ -165,7 +165,7 @@ RSpec.shared_context 'entity swagger example' do
     }
   end
 
-  let(:swagger_typed_defintion) do
+  let(:swagger_typed_definition) do
     {
       'prop_boolean' => { 'description' => 'prop_boolean description', 'type' => 'boolean' },
       'prop_date' => { 'description' => 'prop_date description', 'type' => 'string', 'format' => 'date' },

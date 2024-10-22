@@ -183,7 +183,7 @@ RSpec.shared_context 'mock swagger example' do
     }
   end
 
-  let(:swagger_typed_defintion) do
+  let(:swagger_typed_definition) do
     {
       'mock_data' => {
         'type' => 'string',

@@ -37,8 +37,8 @@ describe 'definition names' do
             end
 
             class Class5
-              class FithEntity < Class4::FourthEntity
-                expose :fith_thing
+              class FifthEntity < Class4::FourthEntity
+                expose :fifth_thing
               end
             end
 
@@ -69,7 +69,7 @@ describe 'definition names' do
           DummyEntities::WithVeryLongName::AnotherGroupingModule::Class2::Entities,
           DummyEntities::WithVeryLongName::AnotherGroupingModule::Class3::Entity,
           DummyEntities::WithVeryLongName::AnotherGroupingModule::Class4::FourthEntity,
-          DummyEntities::WithVeryLongName::AnotherGroupingModule::Class5::FithEntity,
+          DummyEntities::WithVeryLongName::AnotherGroupingModule::Class5::FifthEntity,
           DummyEntities::WithVeryLongName::AnotherGroupingModule::Class6::SixthEntity,
           DummyEntities::WithVeryLongName::AnotherGroupingModule::Class7::SeventhEntity
         ]
@@ -88,7 +88,7 @@ describe 'definition names' do
   specify { expect(subject).to include 'TestDefinition_DummyEntities_WithVeryLongName_AnotherGroupingModule_Class2' }
   specify { expect(subject).to include 'FooKlass' }
   specify { expect(subject).to include 'TestDefinition_DummyEntities_WithVeryLongName_AnotherGroupingModule_Class4_FourthEntity' }
-  specify { expect(subject).to include 'TestDefinition_DummyEntities_WithVeryLongName_AnotherGroupingModule_Class5_FithEntity' }
+  specify { expect(subject).to include 'TestDefinition_DummyEntities_WithVeryLongName_AnotherGroupingModule_Class5_FifthEntity' }
   specify { expect(subject).to include 'BarKlass' }
   specify { expect(subject).to include 'TestDefinition_DummyEntities_WithVeryLongName_AnotherGroupingModule_Class7_SeventhEntity' }
 end

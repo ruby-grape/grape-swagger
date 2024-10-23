@@ -16,7 +16,7 @@ describe '#923 Body params for DELETE action' do
     end
   end
 
-  describe 'retrieves the documentation for delete parameters as a schema defintion' do
+  describe 'retrieves the documentation for delete parameters as a schema definition' do
     subject do
       get '/swagger_doc'
       JSON.parse(last_response.body)

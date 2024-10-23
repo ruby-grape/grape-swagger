@@ -45,7 +45,7 @@ describe 'extensions' do
 
         desc 'This returns something with extension on definition level',
              success: Entities::OtherItem
-        get '/non_existend_status_definitions_extension' do
+        get '/non_existent_status_definitions_extension' do
           { 'declared_params' => declared(params) }
         end
 
@@ -132,7 +132,7 @@ describe 'extensions' do
 
   describe 'extension on definition level' do
     subject do
-      get '/swagger_doc/non_existend_status_definitions_extension'
+      get '/swagger_doc/non_existent_status_definitions_extension'
       JSON.parse(last_response.body)
     end
 

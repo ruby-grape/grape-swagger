@@ -23,7 +23,7 @@ def details
 end
 
 describe 'details' do
-  describe 'take deatils as it is' do
+  describe 'take details as it is' do
     include_context "#{MODEL_PARSER} swagger example"
 
     before :all do

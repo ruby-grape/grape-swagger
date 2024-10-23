@@ -7,6 +7,7 @@
 #### Fixes
 
 * [#943](https://github.com/ruby-grape/grape-swagger/pull/943): Fix route_param documentation and type - [@4ndv](https://github.com/4ndv)
+* [#944](https://github.com/ruby-grape/grape-swagger/pull/944): Amend a few typographic errors - [@pieterocp](https://github.com/pieterocp)
 * Your contribution here.
 
 

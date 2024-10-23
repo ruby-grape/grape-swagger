@@ -87,7 +87,7 @@ module GrapeSwagger
         get url
 
         @oapi = JSON.pretty_generate(
-          JSON.parse(last_response.body, symolize_names: true)
+          JSON.parse(last_response.body, symbolize_names: true)
         ) + "\n"
       end
       # rubocop:enable Style/StringConcatenation

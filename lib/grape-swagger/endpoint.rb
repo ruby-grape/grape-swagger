@@ -311,12 +311,14 @@ module Grape
     end
 
     def build_primitive_response(memo, _route, value, _options)
-      type = GrapeSwagger::DocMethods::DataType.call(value[:type])
+      data_type = GrapeSwagger::DocMethods::DataType.call(value[:type])
+      type, format = GrapeSwagger::DocMethods::DataType.mapping(data_type)
 
       if memo[value[:code]].include?(:schema) && value.include?(:as)
-        memo[value[:code]][:schema][:properties].merge!(value[:as] => { type: type })
+        memo[value[:code]][:schema][:properties].merge!(value[:as] => { type: type, format: format }.compact)
       elsif value.include?(:as)
-        memo[value[:code]][:schema] = { type: :object, properties: { value[:as] => { type: type } } }
+        memo[value[:code]][:schema] =
+          { type: :object, properties: { value[:as] => { type: type, format: format }.compact } }
       else
         memo[value[:code]][:schema] = { type: type }
       end

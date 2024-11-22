@@ -207,11 +207,8 @@ module Grape
 
         next build_file_response(memo[value[:code]]) if file_response?(value[:model])
 
-        if memo.key?(200) && route.request_method == 'DELETE' && value[:model].nil?
-          memo[204] = memo.delete(200)
-          value[:code] = 204
-          next
-        end
+        next build_delete_response(memo, value) if delete_response?(memo, route, value)
+        next build_primitive_response(memo, route, value, options) if value[:type]
 
         # Explicitly request no model with { model: '' }
         next if value[:model] == ''
@@ -284,6 +281,15 @@ module Grape
       [default_code]
     end
 
+    def build_delete_response(memo, value)
+      memo[204] = memo.delete(200)
+      value[:code] = 204
+    end
+
+    def delete_response?(memo, route, value)
+      memo.key?(200) && route.request_method == 'DELETE' && value[:model].nil?
+    end
+
     def build_memo_schema(memo, route, value, response_model, options)
       if memo[value[:code]][:schema] && value[:as]
         memo[value[:code]][:schema][:properties].merge!(build_reference(route, value, response_model, options))
@@ -301,6 +307,18 @@ module Grape
         memo[value[:code]][:schema][:required] = [value[:as].to_s] if value[:required]
       else
         memo[value[:code]][:schema] = build_reference(route, value, response_model, options)
+      end
+    end
+
+    def build_primitive_response(memo, _route, value, _options)
+      type = GrapeSwagger::DocMethods::DataType.call(value[:type])
+
+      if memo[value[:code]].include?(:schema) && value.include?(:as)
+        memo[value[:code]][:schema][:properties].merge!(value[:as] => { type: type })
+      elsif value.include?(:as)
+        memo[value[:code]][:schema] = { type: :object, properties: { value[:as] => { type: type } } }
+      else
+        memo[value[:code]][:schema] = { type: type }
       end
     end
 
@@ -387,7 +405,7 @@ module Grape
       return param unless stackable_values
       return params unless stackable_values.is_a? Grape::Util::StackableValues
 
-      stackable_values&.new_values&.dig(:namespace)&.each do |namespace|
+      stackable_values&.new_values&.dig(:namespace)&.each do |namespace| # rubocop:disable Style/SafeNavigationChainLength
         space = namespace.space.to_s.gsub(':', '')
         params[space] = namespace.options || {}
       end
@@ -464,6 +482,7 @@ module Grape
         default_code[:as] = entity[:as] if entity[:as]
         default_code[:is_array] = entity[:is_array] if entity[:is_array]
         default_code[:required] = entity[:required] if entity[:required]
+        default_code[:type] = entity[:type] if entity[:type]
       else
         default_code = GrapeSwagger::DocMethods::StatusCodes.get[route.request_method.downcase.to_sym]
         default_code[:model] = entity if entity

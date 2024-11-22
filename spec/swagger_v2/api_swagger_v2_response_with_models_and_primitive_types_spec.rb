@@ -15,7 +15,8 @@ describe 'response' do
                { type: 'Integer', as: :integer_response },
                { model: Entities::UseResponse, as: :user_response },
                { type: 'String', as: :string_response },
-               { type: 'Float', as: :float_response }
+               { type: 'Float', as: :float_response },
+               { type: 'Hash', as: :hash_response }
              ],
              failure: [
                { code: 400, message: 'NotFound', model: '' },
@@ -54,7 +55,8 @@ describe 'response' do
                 'user_response' => { '$ref' => '#/definitions/UseResponse' },
                 'integer_response' => { 'type' => 'integer', 'format' => 'int32' },
                 'string_response' => { 'type' => 'string' },
-                'float_response' => { 'type' => 'number', 'format' => 'float' }
+                'float_response' => { 'type' => 'number', 'format' => 'float' },
+                'hash_response' => { 'type' => 'object' }
               }
             }
           },

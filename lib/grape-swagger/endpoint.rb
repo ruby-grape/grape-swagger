@@ -208,7 +208,7 @@ module Grape
         next build_file_response(memo[value[:code]]) if file_response?(value[:model])
 
         next build_delete_response(memo, value) if delete_response?(memo, route, value)
-        next build_primitive_response(memo, route, value, options) if value[:type]
+        next build_response_for_type_parameter(memo, route, value, options) if value[:type]
 
         # Explicitly request no model with { model: '' }
         next if value[:model] == ''
@@ -310,9 +310,8 @@ module Grape
       end
     end
 
-    def build_primitive_response(memo, _route, value, _options)
-      data_type = GrapeSwagger::DocMethods::DataType.call(value[:type])
-      type, format = GrapeSwagger::DocMethods::DataType.mapping(data_type)
+    def build_response_for_type_parameter(memo, _route, value, _options)
+      type, format = prepare_type_and_format(value)
 
       if memo[value[:code]].include?(:schema) && value.include?(:as)
         memo[value[:code]][:schema][:properties].merge!(value[:as] => { type: type, format: format }.compact)
@@ -321,6 +320,16 @@ module Grape
           { type: :object, properties: { value[:as] => { type: type, format: format }.compact } }
       else
         memo[value[:code]][:schema] = { type: type }
+      end
+    end
+
+    def prepare_type_and_format(value)
+      data_type = GrapeSwagger::DocMethods::DataType.call(value[:type])
+
+      if GrapeSwagger::DocMethods::DataType.primitive?(data_type)
+        GrapeSwagger::DocMethods::DataType.mapping(data_type)
+      else
+        data_type
       end
     end
 

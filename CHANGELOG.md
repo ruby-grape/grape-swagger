@@ -2,7 +2,7 @@
 
 #### Features
 
-* Your contribution here.
+* [#945](https://github.com/ruby-grape/grape-swagger/pull/945): Add support for primitive data types in responses - [@gregg-platogo](https://github.com/gregg-platogo).
 
 #### Fixes
 

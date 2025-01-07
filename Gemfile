@@ -4,6 +4,7 @@ source 'http://rubygems.org'
 
 gemspec
 
+# gem 'grape', git: 'https://github.com/ruby-grape/grape'
 gem 'grape', case version = ENV.fetch('GRAPE_VERSION', '< 3.0')
              when 'HEAD'
                { git: 'https://github.com/ruby-grape/grape' }

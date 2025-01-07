@@ -1,4 +1,15 @@
-### 2.1.2 (Next)
+### Next
+
+#### Features
+
+* your contribution
+
+#### Fixes
+
+* your contribution
+
+
+### 2.1.2 (Jan 7, 2025)
 
 #### Features
 

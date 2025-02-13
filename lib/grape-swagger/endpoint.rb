@@ -3,9 +3,19 @@
 require 'active_support'
 require 'active_support/core_ext/string/inflections'
 require 'grape-swagger/endpoint/params_parser'
+require 'grape-swagger/endpoint/path_params_parser'
+require 'grape-swagger/endpoint/contract_parser'
+require 'grape-swagger/endpoint/header_params_parser'
 
 module Grape
   class Endpoint # rubocop:disable Metrics/ClassLength
+    REQUEST_PARAM_PARSERS = [
+        GrapeSwagger::Endpoint::PathParamsParser,
+        GrapeSwagger::Endpoint::HeaderParamsParser,
+        GrapeSwagger::Endpoint::ContractParser,
+        GrapeSwagger::Endpoint::ParamsParser,
+    ].freeze
+
     def content_types_for(target_class)
       content_types = (target_class.content_types || {}).values
 
@@ -383,45 +393,25 @@ module Grape
     end
 
     def build_request_params(route, settings)
-      required = merge_params(route)
-      required = GrapeSwagger::DocMethods::Headers.parse(route) + required unless route.headers.nil?
+      # default_type(required)
+      # request_params.empty? ? required : request_params
 
-      default_type(required)
-
-      request_params = GrapeSwagger::Endpoint::ParamsParser.parse_request_params(required, settings, self)
-
-      request_params.empty? ? required : request_params
-    end
-
-    def merge_params(route)
-      path_params = get_path_params(route.app&.inheritable_setting&.namespace_stackable)
-      param_keys = route.params.keys
-
-      # Merge path params options into route params
-      route_params = route.params
-      route_params.each_key do |key|
-        path = path_params[key] || {}
-        params = route_params[key]
-        params = {} unless params.is_a? Hash
-        route_params[key] = path.merge(params)
+      result = REQUEST_PARAM_PARSERS.each_with_object({}) do |parser_klass, accum|
+        params = parser_klass.parse(
+          route,
+          accum,
+          settings,
+          self
+        )
+        puts "KLASS: #{parser_klass}"
+        puts "ACCUM: #{accum.inspect}"
+        puts "PARMS: #{params.inspect}"
+        accum.merge!(params.symbolize_keys)
       end
 
-      route_params.delete_if { |key| key.is_a?(String) && param_keys.include?(key.to_sym) }.to_a
-    end
+      puts "TOTAL PARMS: #{result.inspect}"
 
-    # Iterates over namespaces recursively
-    # to build a hash of path params with options, including type
-    def get_path_params(stackable_values)
-      params = {}
-      return param unless stackable_values
-      return params unless stackable_values.is_a? Grape::Util::StackableValues
-
-      stackable_values&.new_values&.dig(:namespace)&.each do |namespace| # rubocop:disable Style/SafeNavigationChainLength
-        space = namespace.space.to_s.gsub(':', '')
-        params[space] = namespace.options || {}
-      end
-      inherited_params = get_path_params(stackable_values.inherited_values)
-      inherited_params.merge(params)
+      result
     end
 
     def default_type(params)

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module DocMethods
-    class Headers
+  module Endpoint
+    class HeadersParser
       class << self
         def parse(route)
           route.headers.to_a.map do |route_header|

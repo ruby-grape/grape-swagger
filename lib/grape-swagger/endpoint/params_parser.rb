@@ -3,19 +3,23 @@
 module GrapeSwagger
   module Endpoint
     class ParamsParser
-      attr_reader :params, :settings, :endpoint
+      attr_reader :route, :params, :settings, :endpoint
 
-      def self.parse_request_params(params, settings, endpoint)
-        new(params, settings, endpoint).parse_request_params
+      class << self
+        def parse(route, params, settings, endpoint)
+          new(route, params, settings, endpoint).parse
+        end
+
+        alias parse_request_params parse
       end
 
-      def initialize(params, settings, endpoint)
+      def initialize(_route, params, settings, endpoint)
         @params = params
         @settings = settings
         @endpoint = endpoint
       end
 
-      def parse_request_params
+      def parse
         public_params.each_with_object({}) do |(name, options), memo|
           name = name.to_s
           param_type = options[:type]
@@ -29,6 +33,7 @@ module GrapeSwagger
           memo[name] = options
         end
       end
+      alias parse_request_params parse
 
       private
 
@@ -48,11 +53,10 @@ module GrapeSwagger
       end
 
       def public_params
-        params.select { |param| public_parameter?(param) }
+        params.select { |key, param| public_parameter?(param) }
       end
 
-      def public_parameter?(param)
-        param_options = param.last
+      def public_parameter?(param_options)
         return true unless param_options.key?(:documentation) && !param_options[:required]
 
         param_hidden = param_options[:documentation].fetch(:hidden, false)

@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Grape::Endpoint do
   subject do
-    described_class.new(Grape::Util::InheritableSetting.new, path: '/', method: :get)
+    described_class.new(nil, Grape::Util::InheritableSetting.new, path: '/', method: :get)
   end
 
   describe '.content_types_for' do
@@ -49,7 +49,7 @@ describe Grape::Endpoint do
   describe 'parse_request_params' do
     let(:subject) { GrapeSwagger::Endpoint::ParamsParser }
     before do
-      subject.send(:parse_request_params, params, {}, nil)
+      subject.send(:parse, params, {}, nil)
     end
 
     context 'when params do not contain an array' do

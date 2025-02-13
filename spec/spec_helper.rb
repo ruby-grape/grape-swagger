@@ -19,6 +19,7 @@ require 'grape-swagger-entity'
 
 Bundler.setup :default, :test
 
+require 'pry'
 require 'rack'
 require 'rack/test'
 

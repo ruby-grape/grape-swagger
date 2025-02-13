@@ -190,6 +190,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
     end
 
     specify do
+      puts JSON.pretty_generate(subject)
       expect(subject['paths']['/with_dry_schema_params']).to eq({})
     end
   end

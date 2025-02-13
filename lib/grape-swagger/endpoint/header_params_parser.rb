@@ -19,16 +19,16 @@ module GrapeSwagger
         route.headers.each_with_object({}) do |(name, definition), accum|
           params = {
             documentation: {
-              desc: definition["description"] || definition[:description],
+              desc: definition['description'] || definition[:description],
               in: 'header'
-            },
+            }
           }
           params[:type] = definition[:type].titleize if definition[:type]
 
           accum[name] = definition
-            .symbolize_keys
-            .except(:description, "description")
-            .merge(params)
+                        .symbolize_keys
+                        .except(:description, 'description')
+                        .merge(params)
         end
       end
     end

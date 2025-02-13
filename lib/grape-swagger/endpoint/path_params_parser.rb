@@ -18,7 +18,7 @@ module GrapeSwagger
       def parse
         stackable_values = route.app&.inheritable_setting&.namespace_stackable
 
-        get_params = get_path_params(stackable_values)
+        get_path_params(stackable_values)
         path_params = build_path_params(stackable_values)
 
         fulfill_params(path_params)
@@ -41,7 +41,7 @@ module GrapeSwagger
       def fetch_inherited_params(stackable_values)
         return {} unless stackable_values.new_values
 
-        namespaces = stackable_values.new_values.dig(:namespace) || []
+        namespaces = stackable_values.new_values[:namespace] || []
 
         namespaces.each_with_object({}) do |namespace, params|
           space = namespace.space.to_s.gsub(':', '')
@@ -50,17 +50,16 @@ module GrapeSwagger
       end
 
       def fulfill_params(path_params)
-        param_keys = route.params.keys
+        route.params.keys
         # Merge path params options into route params
         route.params.each_with_object({}) do |(param, definition), accum|
           value = (path_params[param] || {}).merge(
-            definition.is_a?(Hash) ? definition : {},
+            definition.is_a?(Hash) ? definition : {}
           )
 
           accum[param.to_sym] = value.empty? ? DEFAULT_PARAM_TYPE : value
         end
       end
-
 
       # Iterates over namespaces recursively
       # to build a hash of path params with options, including type

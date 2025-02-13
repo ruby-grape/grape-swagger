@@ -163,9 +163,7 @@ module GrapeSwagger
         end
 
         def prepare_nested_names(property, params)
-          params.each do |x|
-            x[:name] = x[:name].to_s.sub(property.to_s, '').sub('[', '').sub(']', '')
-          end
+          params.each { |x| x[:name] = x[:name].sub(property.to_s, '').sub('[', '').sub(']', '') }
         end
 
         def unify!(params)

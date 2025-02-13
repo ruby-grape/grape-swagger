@@ -10,8 +10,8 @@ require 'grape-swagger/endpoint/header_params_parser'
 module Grape
   class Endpoint # rubocop:disable Metrics/ClassLength
     REQUEST_PARAM_PARSERS = [
-        GrapeSwagger::Endpoint::PathParamsParser,
         GrapeSwagger::Endpoint::HeaderParamsParser,
+        GrapeSwagger::Endpoint::PathParamsParser,
         GrapeSwagger::Endpoint::ContractParser,
         GrapeSwagger::Endpoint::ParamsParser,
     ].freeze

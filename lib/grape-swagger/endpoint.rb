@@ -393,25 +393,15 @@ module Grape
     end
 
     def build_request_params(route, settings)
-      # default_type(required)
-      # request_params.empty? ? required : request_params
-
-      result = REQUEST_PARAM_PARSERS.each_with_object({}) do |parser_klass, accum|
+      REQUEST_PARAM_PARSERS.each_with_object({}) do |parser_klass, accum|
         params = parser_klass.parse(
           route,
           accum,
           settings,
           self
         )
-        puts "KLASS: #{parser_klass}"
-        puts "ACCUM: #{accum.inspect}"
-        puts "PARMS: #{params.inspect}"
-        accum.merge!(params.symbolize_keys)
+        accum.merge!(params.stringify_keys)
       end
-
-      puts "TOTAL PARMS: #{result.inspect}"
-
-      result
     end
 
     def default_type(params)

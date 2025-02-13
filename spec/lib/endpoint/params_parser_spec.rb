@@ -7,7 +7,7 @@ describe GrapeSwagger::Endpoint::ParamsParser do
   let(:params) { [] }
   let(:endpoint) { nil }
 
-  let(:parser) { described_class.new(params, settings, endpoint) }
+  let(:parser) { described_class.new(nil, params, settings, endpoint) }
 
   describe '#parse_request_params' do
     subject(:parse_request_params) { parser.parse_request_params }

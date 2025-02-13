@@ -21,11 +21,11 @@ module GrapeSwagger
 
   # Copied from https://github.com/ruby-grape/grape/blob/v2.2.0/lib/grape/formatter.rb
   FORMATTER_DEFAULTS = {
+    xml: Grape::Formatter::Xml,
+    serializable_hash: Grape::Formatter::SerializableHash,
     json: Grape::Formatter::Json,
     jsonapi: Grape::Formatter::Json,
-    serializable_hash: Grape::Formatter::SerializableHash,
     txt: Grape::Formatter::Txt,
-    xml: Grape::Formatter::Xml
   }.freeze
 
   # Copied from https://github.com/ruby-grape/grape/blob/v2.2.0/lib/grape/content_types.rb

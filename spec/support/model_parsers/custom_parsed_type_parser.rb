@@ -12,15 +12,15 @@ class CustomParsedTypeParser
 
   def call
     {
-      type: "object",
+      type: 'object',
       properties: {
         custom: {
           type: 'boolean',
           description: "it's a custom type",
-          default: true,
+          default: true
         }
       },
-      required: [],
+      required: []
     }
   end
 end

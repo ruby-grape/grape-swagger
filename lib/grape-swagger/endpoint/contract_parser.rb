@@ -31,7 +31,7 @@ module GrapeSwagger
       def contract_defined?
         endpoint_settings = @endpoint&.route&.app&.inheritable_setting&.namespace_stackable
         binding.pry
-        return false unless endpoint_settings
+        false unless endpoint_settings
       end
     end
   end

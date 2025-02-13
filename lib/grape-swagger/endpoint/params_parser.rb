@@ -49,7 +49,7 @@ module GrapeSwagger
       end
 
       def public_params
-        params.select { |key, param| public_parameter?(param) }
+        params.select { |_key, param| public_parameter?(param) }
       end
 
       def public_parameter?(param_options)

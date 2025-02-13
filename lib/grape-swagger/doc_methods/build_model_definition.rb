@@ -4,9 +4,9 @@ module GrapeSwagger
   module DocMethods
     class BuildModelDefinition
       class << self
-        OBJECT_ATTRIBUTE_KEYS = [
-            :$ref, :type,
-          ].freeze
+        OBJECT_ATTRIBUTE_KEYS = %i[
+          $ref type
+        ].freeze
 
         def build(_model, properties, required, other_def_properties = {})
           definition = { type: 'object', properties: properties }.merge(other_def_properties)

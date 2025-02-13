@@ -16,11 +16,11 @@ gem ENV.fetch('MODEL_PARSER', nil) if ENV.key?('MODEL_PARSER')
 
 group :development, :test do
   gem 'bundler'
+  gem 'dry-schema'
   gem 'grape-entity'
   gem 'pry', platforms: [:mri]
   gem 'pry-byebug', platforms: [:mri]
-  gem 'dry-schema'
-  gem "super_diff", require: false
+  gem 'super_diff', require: false
 
   grape_version = ENV.fetch('GRAPE_VERSION', '2.2.0')
   if grape_version == 'HEAD' || Gem::Version.new(grape_version) >= Gem::Version.new('2.0.0')

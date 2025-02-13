@@ -11,8 +11,7 @@ require 'grape-swagger'
 Dir[File.join(Dir.getwd, 'spec/support/*.rb')].each { |f| require f }
 require "grape-swagger/#{MODEL_PARSER}" if MODEL_PARSER != 'mock'
 require File.join(Dir.getwd, "spec/support/model_parsers/#{MODEL_PARSER}_parser.rb")
-require_relative './support/model_parsers/custom_parsed_type_parser'
-
+require_relative 'support/model_parsers/custom_parsed_type_parser'
 
 require 'grape-entity'
 require 'grape-swagger-entity'

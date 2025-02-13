@@ -7,7 +7,7 @@ module GrapeSwagger
         def to_format(parameters)
           parameters.reject { |parameter| parameter[:in] == 'body' }.each do |b|
             related_parameters = parameters.select do |p|
-              p[:name] != b[:name] && p[:name].to_s.start_with?("#{b[:name].to_s.gsub(/\[\]\z/, '')}[")
+              p[:name] != b[:name] && p[:name].start_with?("#{b[:name].to_s.gsub(/\[\]\z/, '')}[")
             end
             parameters.reject! { |p| p[:name] == b[:name] } if move_down(b, related_parameters)
           end

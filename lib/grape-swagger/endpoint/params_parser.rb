@@ -5,12 +5,8 @@ module GrapeSwagger
     class ParamsParser
       attr_reader :route, :params, :settings, :endpoint
 
-      class << self
-        def parse(route, params, settings, endpoint)
-          new(route, params, settings, endpoint).parse
-        end
-
-        alias parse_request_params parse
+      def self.parse(route, params, settings, endpoint)
+        new(route, params, settings, endpoint).parse
       end
 
       def initialize(_route, params, settings, endpoint)

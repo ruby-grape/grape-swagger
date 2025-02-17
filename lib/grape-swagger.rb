@@ -25,7 +25,7 @@ module GrapeSwagger
     serializable_hash: Grape::Formatter::SerializableHash,
     json: Grape::Formatter::Json,
     jsonapi: Grape::Formatter::Json,
-    txt: Grape::Formatter::Txt,
+    txt: Grape::Formatter::Txt
   }.freeze
 
   # Copied from https://github.com/ruby-grape/grape/blob/v2.2.0/lib/grape/content_types.rb

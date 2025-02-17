@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module Endpoint
-    class PathParamsParser
+  module RequestParamParsers
+    class Route
       DEFAULT_PARAM_TYPE = { required: true, type: 'Integer' }.freeze
 
       attr_reader :route
@@ -29,13 +29,12 @@ module GrapeSwagger
       def build_path_params(stackable_values)
         params = {}
 
-        loop do
-          break params unless stackable_values
-          break params unless stackable_values.is_a? Grape::Util::StackableValues
-
+        while stackable_values.is_a?(Grape::Util::StackableValues)
           params.merge!(fetch_inherited_params(stackable_values))
           stackable_values = stackable_values.inherited_values
         end
+
+        params
       end
 
       def fetch_inherited_params(stackable_values)

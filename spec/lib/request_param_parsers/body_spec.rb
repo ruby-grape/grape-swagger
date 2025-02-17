@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe GrapeSwagger::Endpoint::ParamsParser do
+describe GrapeSwagger::RequestParamParsers::Body do
   let(:settings) { {} }
   let(:params) { [] }
   let(:endpoint) { nil }
@@ -10,7 +10,7 @@ describe GrapeSwagger::Endpoint::ParamsParser do
   let(:parser) { described_class.new(nil, params, settings, endpoint) }
 
   describe '#parse_request_params' do
-    subject(:parse_request_params) { parser.parse_request_params }
+    subject(:parse_request_params) { parser.parse }
 
     context 'when param is of array type' do
       let(:params) { [['param_1', { type: 'Array[String]' }]] }
@@ -39,7 +39,7 @@ describe GrapeSwagger::Endpoint::ParamsParser do
         let(:settings) { { array_use_braces: true } }
 
         it 'does not add braces to the param key' do
-          expect(parser.parse_request_params.keys.first).to eq 'param_1'
+          expect(parser.parse.keys.first).to eq 'param_1'
         end
       end
     end

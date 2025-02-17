@@ -47,9 +47,9 @@ describe Grape::Endpoint do
   end
 
   describe 'parse_request_params' do
-    let(:subject) { GrapeSwagger::Endpoint::ParamsParser }
+    let(:subject) { GrapeSwagger::RequestParamParsers::Body }
     before do
-      subject.send(:parse, nil, params, {}, nil)
+      subject.parse(nil, params, {}, nil)
     end
 
     context 'when params do not contain an array' do

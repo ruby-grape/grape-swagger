@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module Endpoint
-    class ParamsParser
+  module RequestParamParsers
+    class Body
       attr_reader :route, :params, :settings, :endpoint
 
       def self.parse(route, params, settings, endpoint)
@@ -29,7 +29,6 @@ module GrapeSwagger
           memo[name] = options
         end
       end
-      alias parse_request_params parse
 
       private
 

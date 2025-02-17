@@ -16,7 +16,6 @@ gem ENV.fetch('MODEL_PARSER', nil) if ENV.key?('MODEL_PARSER')
 
 group :development, :test do
   gem 'bundler'
-  gem 'dry-schema'
   gem 'grape-entity'
   gem 'pry', platforms: [:mri]
   gem 'pry-byebug', platforms: [:mri]

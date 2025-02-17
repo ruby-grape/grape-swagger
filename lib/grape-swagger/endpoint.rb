@@ -2,18 +2,16 @@
 
 require 'active_support'
 require 'active_support/core_ext/string/inflections'
-require 'grape-swagger/endpoint/params_parser'
-require 'grape-swagger/endpoint/path_params_parser'
-require 'grape-swagger/endpoint/contract_parser'
-require 'grape-swagger/endpoint/header_params_parser'
+require_relative 'request_param_parsers/headers'
+require_relative 'request_param_parsers/route'
+require_relative 'request_param_parsers/body'
 
 module Grape
   class Endpoint # rubocop:disable Metrics/ClassLength
     REQUEST_PARAM_PARSERS = [
-      GrapeSwagger::Endpoint::HeaderParamsParser,
-      GrapeSwagger::Endpoint::PathParamsParser,
-      GrapeSwagger::Endpoint::ContractParser,
-      GrapeSwagger::Endpoint::ParamsParser
+      GrapeSwagger::RequestParamParsers::Headers,
+      GrapeSwagger::RequestParamParsers::Route,
+      GrapeSwagger::RequestParamParsers::Body
     ].freeze
 
     def content_types_for(target_class)

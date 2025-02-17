@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module Endpoint
-    class HeaderParamsParser
+  module RequestParamParsers
+    class Headers
       attr_reader :route
 
       def self.parse(route, params, settings, endpoint)

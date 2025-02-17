@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'dry-schema'
 
 describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `header`' do
   include_context "#{MODEL_PARSER} swagger example"
@@ -68,18 +67,6 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
           end
         end
 
-        namespace :with_dry_schema_params do
-          contract do
-            required(:orders).array(:hash) do
-              required(:name).filled(:string)
-              optional(:volume).maybe(:integer, lt?: 9)
-            end
-          end
-          post do
-            { 'declared_params' => declared(params) }
-          end
-        end
-
         add_swagger_documentation
       end
     end
@@ -91,7 +78,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
 
   describe 'no entity given' do
     subject do
-      get '/swagger_doc/'
+      get '/swagger_doc/wo_entities'
       JSON.parse(last_response.body)
     end
 
@@ -180,18 +167,6 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         },
         'description' => 'put in body with entity'
       )
-    end
-  end
-
-  describe 'with exceed type parser result' do
-    subject do
-      get '/swagger_doc/with_dry_schema_params'
-      JSON.parse(last_response.body)
-    end
-
-    specify do
-      puts JSON.pretty_generate(subject)
-      expect(subject['paths']['/with_dry_schema_params']).to eq({})
     end
   end
 

@@ -7,6 +7,7 @@
 #### Fixes
 
 * your contribution
+* [#948](https://github.com/ruby-grape/grape-swagger/pull/948): Grape 2.3.0 and Ruby 3.5 compatibility - [@numbata](https://github.com/numbata)
 
 
 ### 2.1.2 (Jan 7, 2025)

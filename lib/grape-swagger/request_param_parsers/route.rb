@@ -49,9 +49,13 @@ module GrapeSwagger
       end
 
       def fulfill_params(path_params)
-        route.params.keys
         # Merge path params options into route params
         route.params.each_with_object({}) do |(param, definition), accum|
+          # The route.params hash includes both parametrized params (with a string as a key)
+          # and well-defined params from body/query (with a symbol as a key).
+          # We avoid overriding well-defined params with parametrized ones.
+          next if param.is_a?(String) && accum.key?(param.to_sym)
+
           value = (path_params[param] || {}).merge(
             definition.is_a?(Hash) ? definition : {}
           )

@@ -9,7 +9,7 @@ describe GrapeSwagger::DocMethods::OperationId do
   specify { expect(subject).to respond_to :build }
 
   describe 'build' do
-    let(:route) { Grape::Router::Route.new(method, '/path', requirements: {}) }
+    let(:route) { RouteHelper.build(method: method, pattern: '/path', options: { requirements: {} }) }
 
     describe 'GET' do
       let(:method) { 'GET' }

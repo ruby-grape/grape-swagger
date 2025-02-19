@@ -37,6 +37,9 @@ group :development, :test do
   unless ENV['MODEL_PARSER'] == 'grape-swagger-entity'
     gem 'grape-swagger-entity', git: 'https://github.com/ruby-grape/grape-swagger-entity'
   end
+
+  # Conditionally load 'ostruct' only if Ruby >= 3.5.0
+  gem 'ostruct' if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3.5.0')
 end
 
 group :test do

@@ -19,25 +19,30 @@ module GrapeSwagger
     end
 
     def register(klass)
+      remove_parser(klass)
       @parsers << klass
     end
 
     def insert_before(before_klass, klass)
-      insert_at = @parsers.index(before_klass)
-      insert_at = @parsers.length - 1 if insert_at.nil?
+      remove_parser(klass)
+      insert_at = @parsers.index(before_klass) || @parsers.size
       @parsers.insert(insert_at, klass)
     end
 
     def insert_after(after_klass, klass)
+      remove_parser(klass)
       insert_at = @parsers.index(after_klass)
-      insert_at = @parsers.length - 1 if insert_at.nil?
-      @parsers.insert(insert_at + 1, klass)
+      @parsers.insert(insert_at ? insert_at + 1 : @parsers.size, klass)
     end
 
-    def each
-      @parsers.each do |klass|
-        yield klass
-      end
+    def each(&)
+      @parsers.each(&)
+    end
+
+    private
+
+    def remove_parser(klass)
+      @parsers.reject! { |k| k == klass }
     end
   end
 end

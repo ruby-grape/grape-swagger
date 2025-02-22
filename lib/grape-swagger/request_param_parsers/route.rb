@@ -18,7 +18,6 @@ module GrapeSwagger
       def parse
         stackable_values = route.app&.inheritable_setting&.namespace_stackable
 
-        get_path_params(stackable_values)
         path_params = build_path_params(stackable_values)
 
         fulfill_params(path_params)
@@ -54,29 +53,13 @@ module GrapeSwagger
           # The route.params hash includes both parametrized params (with a string as a key)
           # and well-defined params from body/query (with a symbol as a key).
           # We avoid overriding well-defined params with parametrized ones.
-          next if param.is_a?(String) && accum.key?(param.to_sym)
+          key = param.is_a?(String) ? param.to_sym : param
+          next if param.is_a?(String) && accum.key?(key)
 
-          value = (path_params[param] || {}).merge(
-            definition.is_a?(Hash) ? definition : {}
-          )
-
-          accum[param.to_sym] = value.empty? ? DEFAULT_PARAM_TYPE : value
+          defined_options = definition.is_a?(Hash) ? definition : {}
+          value = (path_params[param] || {}).merge(defined_options)
+          accum[key] = value.empty? ? DEFAULT_PARAM_TYPE : value
         end
-      end
-
-      # Iterates over namespaces recursively
-      # to build a hash of path params with options, including type
-      def get_path_params(stackable_values)
-        params = {}
-        return param unless stackable_values
-        return params unless stackable_values.is_a? Grape::Util::StackableValues
-
-        stackable_values&.new_values&.dig(:namespace)&.each do |namespace| # rubocop:disable Style/SafeNavigationChainLength
-          space = namespace.space.to_s.gsub(':', '')
-          params[space] = namespace.options || {}
-        end
-        inherited_params = get_path_params(stackable_values.inherited_values)
-        inherited_params.merge(params)
       end
     end
   end

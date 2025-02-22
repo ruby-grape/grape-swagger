@@ -18,10 +18,9 @@ module GrapeSwagger
       def parse
         public_params.each_with_object({}) do |(name, options), memo|
           name = name.to_s
-          param_type = options[:type]
-          param_type = param_type.to_s unless param_type.nil?
+          param_type = options[:type]&.to_s
 
-          if param_type_is_array?(param_type)
+          if array_param?(param_type)
             options[:is_array] = true
             name += '[]' if array_use_braces?
           end
@@ -36,8 +35,8 @@ module GrapeSwagger
         @array_use_braces ||= settings[:array_use_braces] && !includes_body_param?
       end
 
-      def param_type_is_array?(param_type)
-        return false unless param_type
+      def array_param?(param_type)
+        return false if param_type.nil?
         return true if param_type == 'Array'
 
         param_types = param_type.match(/\[(.*)\]$/)

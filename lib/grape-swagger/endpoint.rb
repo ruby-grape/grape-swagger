@@ -8,12 +8,6 @@ require_relative 'request_param_parsers/body'
 
 module Grape
   class Endpoint # rubocop:disable Metrics/ClassLength
-    REQUEST_PARAM_PARSERS = [
-      GrapeSwagger::RequestParamParsers::Headers,
-      GrapeSwagger::RequestParamParsers::Route,
-      GrapeSwagger::RequestParamParsers::Body
-    ].freeze
-
     def content_types_for(target_class)
       content_types = (target_class.content_types || {}).values
 
@@ -389,7 +383,7 @@ module Grape
     end
 
     def build_request_params(route, settings)
-      REQUEST_PARAM_PARSERS.each_with_object({}) do |parser_klass, accum|
+      GrapeSwagger.request_param_parsers.each_with_object({}) do |parser_klass, accum|
         params = parser_klass.parse(
           route,
           accum,

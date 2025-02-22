@@ -109,16 +109,16 @@ describe GrapeSwagger::RequestParamParsers::Body do
     end
   end
 
-  describe '#param_type_is_array?' do
+  describe '#array_param?' do
     it 'returns true if the value passed represents an array' do
-      expect(parser.send(:param_type_is_array?, 'Array')).to be_truthy
-      expect(parser.send(:param_type_is_array?, '[String]')).to be_truthy
-      expect(parser.send(:param_type_is_array?, 'Array[Integer]')).to be_truthy
+      expect(parser.send(:array_param?, 'Array')).to be_truthy
+      expect(parser.send(:array_param?, '[String]')).to be_truthy
+      expect(parser.send(:array_param?, 'Array[Integer]')).to be_truthy
     end
 
     it 'returns false if the value passed does not represent an array' do
-      expect(parser.send(:param_type_is_array?, 'String')).to be_falsey
-      expect(parser.send(:param_type_is_array?, '[String, Integer]')).to be_falsey
+      expect(parser.send(:array_param?, 'String')).to be_falsey
+      expect(parser.send(:array_param?, '[String, Integer]')).to be_falsey
     end
   end
 end

@@ -19,6 +19,7 @@ Bundler.setup :default, :test
 
 require 'rack'
 require 'rack/test'
+require 'super_diff/rspec' if ENV.key?('SUPER_DIFF')
 
 RSpec.configure do |config|
   require 'rspec/expectations'

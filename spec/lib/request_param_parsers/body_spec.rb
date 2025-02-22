@@ -2,15 +2,15 @@
 
 require 'spec_helper'
 
-describe GrapeSwagger::Endpoint::ParamsParser do
+describe GrapeSwagger::RequestParamParsers::Body do
   let(:settings) { {} }
   let(:params) { [] }
   let(:endpoint) { nil }
 
-  let(:parser) { described_class.new(params, settings, endpoint) }
+  let(:parser) { described_class.new(nil, params, settings, endpoint) }
 
   describe '#parse_request_params' do
-    subject(:parse_request_params) { parser.parse_request_params }
+    subject(:parse_request_params) { parser.parse }
 
     context 'when param is of array type' do
       let(:params) { [['param_1', { type: 'Array[String]' }]] }
@@ -39,7 +39,7 @@ describe GrapeSwagger::Endpoint::ParamsParser do
         let(:settings) { { array_use_braces: true } }
 
         it 'does not add braces to the param key' do
-          expect(parser.parse_request_params.keys.first).to eq 'param_1'
+          expect(parser.parse.keys.first).to eq 'param_1'
         end
       end
     end
@@ -109,16 +109,16 @@ describe GrapeSwagger::Endpoint::ParamsParser do
     end
   end
 
-  describe '#param_type_is_array?' do
+  describe '#array_param?' do
     it 'returns true if the value passed represents an array' do
-      expect(parser.send(:param_type_is_array?, 'Array')).to be_truthy
-      expect(parser.send(:param_type_is_array?, '[String]')).to be_truthy
-      expect(parser.send(:param_type_is_array?, 'Array[Integer]')).to be_truthy
+      expect(parser.send(:array_param?, 'Array')).to be_truthy
+      expect(parser.send(:array_param?, '[String]')).to be_truthy
+      expect(parser.send(:array_param?, 'Array[Integer]')).to be_truthy
     end
 
     it 'returns false if the value passed does not represent an array' do
-      expect(parser.send(:param_type_is_array?, 'String')).to be_falsey
-      expect(parser.send(:param_type_is_array?, '[String, Integer]')).to be_falsey
+      expect(parser.send(:array_param?, 'String')).to be_falsey
+      expect(parser.send(:array_param?, '[String, Integer]')).to be_falsey
     end
   end
 end

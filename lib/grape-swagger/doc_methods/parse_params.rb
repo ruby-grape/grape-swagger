@@ -49,6 +49,17 @@ module GrapeSwagger
           values               = settings[:values] || nil
           enum_or_range_values = parse_enum_or_range_values(values)
           @parsed_param.merge!(enum_or_range_values) if enum_or_range_values
+          
+          # OpenAPI 3.0 oneOf, anyOf, allOf support
+          if settings[:type]
+            if settings[:type].to_s == 'oneOf' && settings[:values].is_a?(Array)
+              @parsed_param[:schema] = { oneOf: settings[:values].map { |model| { '$ref' => "#/components/schemas/#{model_name(model)}" } } }
+            elsif settings[:type].to_s == 'anyOf' && settings[:values].is_a?(Array)
+              @parsed_param[:schema] = { anyOf: settings[:values].map { |model| { '$ref' => "#/components/schemas/#{model_name(model)}" } } }
+            elsif settings[:type].to_s == 'allOf' && settings[:values].is_a?(Array)
+              @parsed_param[:schema] = { allOf: settings[:values].map { |model| { '$ref' => "#/components/schemas/#{model_name(model)}" } } }
+            end
+          end
         end
 
         def document_default_value(settings)
@@ -189,6 +200,10 @@ module GrapeSwagger
 
         def parse_range_values(values)
           { minimum: values.begin, maximum: values.end }.compact
+        end
+
+        def model_name(model)
+          GrapeSwagger::DocMethods::DataType.parse_entity_name(model)
         end
       end
     end

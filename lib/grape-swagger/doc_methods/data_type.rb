@@ -26,6 +26,8 @@ module GrapeSwagger
             'long'
           when 'Symbol'
             'string'
+          when 'oneOf', 'anyOf', 'allOf'
+            raw_data_type.to_s
           else
             parse_entity_name(raw_data_type)
           end

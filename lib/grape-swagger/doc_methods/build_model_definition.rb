@@ -20,6 +20,20 @@ module GrapeSwagger
             {
               allOf: parsed
             }
+          elsif parsed_response.is_a?(Hash) && parsed_response.keys.first == :oneOf
+            refs_or_models = parsed_response[:oneOf]
+            parsed = parse_refs_and_models(refs_or_models, model)
+
+            {
+              oneOf: parsed
+            }
+          elsif parsed_response.is_a?(Hash) && parsed_response.keys.first == :anyOf
+            refs_or_models = parsed_response[:anyOf]
+            parsed = parse_refs_and_models(refs_or_models, model)
+
+            {
+              anyOf: parsed
+            }
           else
             properties, required = parsed_response
             unless properties&.any?

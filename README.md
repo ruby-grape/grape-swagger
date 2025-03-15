@@ -1809,3 +1809,31 @@ See [CONTRIBUTING](CONTRIBUTING.md).
 ## Copyright and License
 
 Copyright (c) 2012-2016 Tim Vandecasteele, ruby-grape and contributors. See [LICENSE.txt](LICENSE.txt) for details.
+
+#### OpenAPI 3.0 oneOf, anyOf, allOf support
+
+You can use OpenAPI 3.0's oneOf, anyOf, allOf features to define polymorphic schemas:
+
+```ruby
+# oneOf - exactly one of the schemas must be valid
+expose :pet, documentation: { type: 'oneOf', values: [Cat, Dog] }
+
+# anyOf - at least one of the schemas must be valid
+expose :pet, documentation: { type: 'anyOf', values: [Cat, Dog, Bird] }
+
+# allOf - all of the schemas must be valid
+expose :pet, documentation: { type: 'allOf', values: [Pet, Identifiable] }
+```
+
+This will generate the appropriate OpenAPI 3.0 schema:
+
+```json
+"pet": {
+  "schema": {
+    "oneOf": [
+      { "$ref": "#/components/schemas/Cat" },
+      { "$ref": "#/components/schemas/Dog" }
+    ]
+  }
+}
+```

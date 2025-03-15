@@ -9,6 +9,8 @@ module GrapeSwagger
         attr_accessor :definitions
 
         def can_be_moved?(http_verb, params)
+          # OpenAPI 3.0では、POSTリクエストの場合は常にrequestBodyを生成する
+          return true if %w[POST PUT PATCH].include?(http_verb.to_s.upcase)
           move_methods.include?(http_verb) && includes_body_param?(params)
         end
 
@@ -191,7 +193,8 @@ module GrapeSwagger
         end
 
         def includes_body_param?(params)
-          params.any? { |x| x[:in] == 'body' || x[:param_type] == 'body' }
+          # OpenAPI 3.0では、POSTリクエストの場合は常にrequestBodyを生成する
+          params.any? { |x| x[:in] == 'body' || x[:param_type] == 'body' || x[:method] == 'POST' }
         end
 
         def should_expose_as_array?(params)

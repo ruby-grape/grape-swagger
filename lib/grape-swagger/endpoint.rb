@@ -216,6 +216,8 @@ module Grape
 
       # OpenAPI 3.0では、bodyパラメータをrequestBodyに変換
       request_body_param = parameters.find { |p| p[:openapi_3_request_body] }
+      
+      # POSTリクエストの場合は常にrequestBodyを生成
       if request_body_param
         parameters.delete(request_body_param)
         content_type = consumes&.first || 'application/json'
@@ -225,6 +227,21 @@ module Grape
           content: {
             content_type => {
               schema: request_body_param[:schema]
+            }
+          }
+        }
+      elsif %w[POST PUT PATCH].include?(route.request_method)
+        # パラメータがない場合でも、POSTリクエストの場合はrequestBodyを生成
+        definition_name = GrapeSwagger::DocMethods::OperationId.build(route, path)
+        @schemas[definition_name] ||= { type: 'object', properties: {} }
+        
+        content_type = consumes&.first || 'application/json'
+        route.options[:request_body] = {
+          description: route.description || '',
+          required: true,
+          content: {
+            content_type => {
+              schema: { '$ref' => "#/components/schemas/#{definition_name}" }
             }
           }
         }

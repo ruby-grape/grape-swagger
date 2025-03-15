@@ -50,12 +50,17 @@ module GrapeSwagger
         options
       )
 
-      paths, definitions   = endpoint.path_and_definition_objects(combi_routes, options)
-      tags                 = tags_from(paths, options)
+      paths, components = endpoint.path_and_definition_objects(combi_routes, options)
+      tags = tags_from(paths, options)
 
-      output[:tags]        = tags unless tags.empty? || paths.blank?
-      output[:paths]       = paths unless paths.blank?
-      output[:definitions] = definitions unless definitions.blank?
+      output[:tags] = tags unless tags.empty? || paths.blank?
+      output[:paths] = paths unless paths.blank?
+      
+      # OpenAPI 3.0では、componentsオブジェクトを使用
+      if components && components[:components]
+        output[:components] ||= {}
+        output[:components].merge!(components[:components])
+      end
 
       output
     end

@@ -26,19 +26,32 @@ module Grape
     def swagger_object(target_class, request, options)
       object = {
         info: info_object(options[:info].merge(version: options[:doc_version])),
-        swagger: '2.0',
-        produces: options[:produces] || content_types_for(target_class),
-        consumes: options[:consumes],
-        authorizations: options[:authorizations],
-        securityDefinitions: options[:security_definitions],
+        openapi: '3.0.0',
+        components: {
+          securitySchemes: options[:security_definitions]
+        },
         security: options[:security],
-        host: GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request),
-        basePath: GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request),
-        schemes: options[:schemes].is_a?(String) ? [options[:schemes]] : options[:schemes]
+        servers: build_servers(options, request),
+        paths: {}
       }
 
       GrapeSwagger::DocMethods::Extensions.add_extensions_to_root(options, object)
       object.delete_if { |_, value| value.blank? }
+    end
+
+    # Build servers array for OpenAPI 3.0
+    def build_servers(options, request)
+      host = GrapeSwagger::DocMethods::OptionalObject.build(:host, options, request)
+      base_path = GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, request)
+      
+      return nil if host.blank? && base_path.blank?
+      
+      url = ''
+      url += "#{request.scheme}://" if host.present?
+      url += host.to_s if host.present?
+      url += base_path.to_s if base_path.present?
+      
+      [{ url: url }]
     end
 
     # building info object
@@ -78,13 +91,14 @@ module Grape
     # building path and definitions objects
     def path_and_definition_objects(namespace_routes, options)
       @paths = {}
-      @definitions = {}
+      @schemas = {}
       add_definitions_from options[:models]
       namespace_routes.each_value do |routes|
         path_item(routes, options)
       end
 
-      [@paths, @definitions]
+      # OpenAPI 3.0では、definitionsの代わりにcomponents/schemasを使用
+      [@paths, { components: { schemas: @schemas } }]
     end
 
     def add_definitions_from(models)
@@ -109,7 +123,7 @@ module Grape
           @paths[path.to_s] = { verb => method_object }
         end
 
-        GrapeSwagger::DocMethods::Extensions.add(@paths[path.to_s], @definitions, route)
+        GrapeSwagger::DocMethods::Extensions.add(@paths[path.to_s], @schemas, route)
       end
     end
 
@@ -125,6 +139,10 @@ module Grape
       method[:tags]        = route.options.fetch(:tags, tag_object(route, path))
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method[:deprecated] = deprecated_object(route)
+      
+      # OpenAPI 3.0では、requestBodyを追加
+      method[:requestBody] = route.options[:request_body] if route.options[:request_body]
+      
       method.delete_if { |_, value| value.nil? }
 
       [route.request_method.downcase.to_sym, method]
@@ -187,14 +205,30 @@ module Grape
         elsif value[:type]
           expose_params(value[:type])
         end
-        memo << GrapeSwagger::DocMethods::ParseParams.call(param, value, path, route, @definitions, consumes)
+        memo << GrapeSwagger::DocMethods::ParseParams.call(param, value, path, route, @schemas, consumes)
       end
 
       if GrapeSwagger::DocMethods::MoveParams.can_be_moved?(route.request_method, parameters)
-        parameters = GrapeSwagger::DocMethods::MoveParams.to_definition(path, parameters, route, @definitions)
+        parameters = GrapeSwagger::DocMethods::MoveParams.to_definition(path, parameters, route, @schemas)
       end
 
       GrapeSwagger::DocMethods::FormatData.to_format(parameters)
+
+      # OpenAPI 3.0では、bodyパラメータをrequestBodyに変換
+      request_body_param = parameters.find { |p| p[:openapi_3_request_body] }
+      if request_body_param
+        parameters.delete(request_body_param)
+        content_type = consumes&.first || 'application/json'
+        route.options[:request_body] = {
+          description: request_body_param[:description],
+          required: request_body_param[:required],
+          content: {
+            content_type => {
+              schema: request_body_param[:schema]
+            }
+          }
+        }
+      end
 
       parameters.presence
     end
@@ -205,21 +239,39 @@ module Grape
         memo[value[:code]] = { description: value[:message] ||= '' } unless memo[value[:code]].present?
         memo[value[:code]][:headers] = value[:headers] if value[:headers]
 
-        next build_file_response(memo[value[:code]]) if file_response?(value[:model])
+        if file_response?(value[:model])
+          build_file_response(memo[value[:code]])
+          next
+        end
 
-        next build_delete_response(memo, value) if delete_response?(memo, route, value)
-        next build_response_for_type_parameter(memo, route, value, options) if value[:type]
+        if delete_response?(memo, route, value)
+          build_delete_response(memo, value)
+          next
+        end
+
+        if value[:type]
+          build_response_for_type_parameter(memo, route, value, options)
+          next
+        end
 
         # Explicitly request no model with { model: '' }
         next if value[:model] == ''
 
         response_model = value[:model] ? expose_params_from_model(value[:model]) : @item
-        next unless @definitions[response_model]
+        next unless @schemas[response_model]
         next if response_model.start_with?('Swagger_doc')
 
-        @definitions[response_model][:description] ||= "#{response_model} model"
-        build_memo_schema(memo, route, value, response_model, options)
-        memo[value[:code]][:examples] = value[:examples] if value[:examples]
+        @schemas[response_model][:description] ||= "#{response_model} model"
+        
+        # OpenAPI 3.0では、schemaをcontentの下に移動
+        content_type = produces_object(route, options[:format]).first || 'application/json'
+        memo[value[:code]][:content] ||= {}
+        memo[value[:code]][:content][content_type] = { schema: build_reference(route, value, response_model, options) }
+        
+        # examplesもcontentの下に移動
+        if value[:examples]
+          memo[value[:code]][:content][content_type][:examples] = value[:examples]
+        end
       end
     end
 
@@ -290,36 +342,26 @@ module Grape
       memo.key?(200) && route.request_method == 'DELETE' && value[:model].nil?
     end
 
-    def build_memo_schema(memo, route, value, response_model, options)
-      if memo[value[:code]][:schema] && value[:as]
-        memo[value[:code]][:schema][:properties].merge!(build_reference(route, value, response_model, options))
-
-        if value[:required]
-          memo[value[:code]][:schema][:required] ||= []
-          memo[value[:code]][:schema][:required] << value[:as].to_s
-        end
-
-      elsif value[:as]
-        memo[value[:code]][:schema] = {
-          type: :object,
-          properties: build_reference(route, value, response_model, options)
-        }
-        memo[value[:code]][:schema][:required] = [value[:as].to_s] if value[:required]
-      else
-        memo[value[:code]][:schema] = build_reference(route, value, response_model, options)
-      end
-    end
-
-    def build_response_for_type_parameter(memo, _route, value, _options)
+    def build_response_for_type_parameter(memo, route, value, options)
       type, format = prepare_type_and_format(value)
-
-      if memo[value[:code]].include?(:schema) && value.include?(:as)
-        memo[value[:code]][:schema][:properties].merge!(value[:as] => { type: type, format: format }.compact)
-      elsif value.include?(:as)
-        memo[value[:code]][:schema] =
-          { type: :object, properties: { value[:as] => { type: type, format: format }.compact } }
+      content_type = produces_object(route, options[:format]).first || 'application/json'
+      
+      # OpenAPI 3.0では、schemaをcontentの下に移動
+      memo[value[:code]][:content] ||= {}
+      
+      if value.include?(:as)
+        memo[value[:code]][:content][content_type] = {
+          schema: {
+            type: 'object',
+            properties: {
+              value[:as] => { type: type, format: format }.compact
+            }
+          }
+        }
       else
-        memo[value[:code]][:schema] = { type: type }
+        memo[value[:code]][:content][content_type] = {
+          schema: { type: type, format: format }.compact
+        }
       end
     end
 
@@ -352,7 +394,7 @@ module Grape
     end
 
     def build_reference_hash(response_model)
-      { '$ref' => "#/definitions/#{response_model}" }
+      { '$ref' => "#/components/schemas/#{response_model}" }
     end
 
     def build_reference_array(reference)
@@ -379,7 +421,12 @@ module Grape
     end
 
     def build_file_response(memo)
-      memo['schema'] = { type: 'file' }
+      # OpenAPI 3.0では、ファイルレスポンスはcontent下に配置
+      memo['content'] = {
+        'application/octet-stream' => {
+          'schema' => { 'type' => 'string', 'format' => 'binary' }
+        }
+      }
     end
 
     def build_request_params(route, settings)
@@ -445,16 +492,16 @@ module Grape
       model = model.constantize if model.is_a?(String)
       model_name = model_name(model)
 
-      return model_name if @definitions.key?(model_name)
+      return model_name if @schemas.key?(model_name)
 
-      @definitions[model_name] = nil
+      @schemas[model_name] = nil
 
       parser = GrapeSwagger.model_parsers.find(model)
       raise GrapeSwagger::Errors::UnregisteredParser, "No parser registered for #{model_name}." unless parser
 
       parsed_response = parser.new(model, self).call
 
-      @definitions[model_name] =
+      @schemas[model_name] =
         GrapeSwagger::DocMethods::BuildModelDefinition.parse_params_from_model(parsed_response, model, model_name)
 
       model_name

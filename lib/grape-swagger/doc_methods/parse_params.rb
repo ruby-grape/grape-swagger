@@ -150,12 +150,12 @@ module GrapeSwagger
           if !value_type[:is_array] && value_type[:path].include?("{#{value_type[:param_name]}}")
             'path'
           elsif param_type
-            param_type
+            param_type == 'body' ? 'query' : param_type
           elsif %w[POST PUT PATCH].include?(value_type[:method])
             if consumes.include?('application/x-www-form-urlencoded') || consumes.include?('multipart/form-data')
               'formData'
             else
-              'body'
+              'query'
             end
           elsif value_type[:is_array] && !DataType.query_array_primitive?(value_type[:data_type])
             'formData'

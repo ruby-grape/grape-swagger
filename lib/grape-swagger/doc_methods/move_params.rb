@@ -144,7 +144,8 @@ module GrapeSwagger
             x[:name] = options[:body_name] || name
             x[:in] = 'body'
             x[:required] = true
-            x[:schema] = { '$ref' => "#/definitions/#{name}" }
+            x[:schema] = { '$ref' => "#/components/schemas/#{name}" }
+            x[:openapi_3_request_body] = true
           end
         end
 

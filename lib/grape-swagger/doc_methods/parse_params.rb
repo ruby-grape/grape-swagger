@@ -141,8 +141,10 @@ module GrapeSwagger
         end
 
         def document_example(settings)
-          example = settings[:example]
-          @parsed_param[:example] = example if example
+          return unless settings.key?(:example)
+
+          key = @parsed_param[:in] == 'body' ? :example : :'x-example'
+          @parsed_param[key] = settings[:example]
         end
 
         def param_type(value_type, consumes)

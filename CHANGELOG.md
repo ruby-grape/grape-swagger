@@ -7,6 +7,7 @@
 #### Fixes
 
 * your contribution
+* [#954](https://github.com/ruby-grape/grape-swagger/pull/954): Ruby 3.5 compatibility: add cgi gem, drop runtime rack‑test - [@numbata](https://github.com/numbata)
 * [#948](https://github.com/ruby-grape/grape-swagger/pull/948): Grape 2.3.0 and Ruby 3.5 compatibility - [@numbata](https://github.com/numbata)
 
 

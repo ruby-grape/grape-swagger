@@ -27,6 +27,7 @@ group :development, :test do
     gem 'rack', '< 3.0'
   end
 
+  gem 'cgi'
   gem 'rack-cors'
   gem 'rack-test'
   gem 'rake'

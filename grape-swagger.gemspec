@@ -16,7 +16,6 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 3.1'
   s.add_dependency 'grape', '>= 1.7', '< 3.0'
-  s.add_dependency 'rack-test', '~> 2'
 
   s.files = Dir['lib/**/*', '*.md', 'LICENSE.txt', 'grape-swagger.gemspec']
   s.require_paths = ['lib']

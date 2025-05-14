@@ -20,6 +20,8 @@ Bundler.setup :default, :test
 require 'rack'
 require 'rack/test'
 
+require 'super_diff/rspec'
+
 RSpec.configure do |config|
   require 'rspec/expectations'
   config.include RSpec::Matchers

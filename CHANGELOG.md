@@ -13,7 +13,7 @@
 * [#948](https://github.com/ruby-grape/grape-swagger/pull/948): Grape 2.3.0 and Ruby 3.5 compatibility - [@numbata](https://github.com/numbata).
 
 
-### 2.1.2 (Jan 7, 2025)
+### 2.1.2 (2025-01-07)
 
 #### Features
 
@@ -25,14 +25,14 @@
 * [#944](https://github.com/ruby-grape/grape-swagger/pull/944): Amend a few typographic errors - [@pieterocp](https://github.com/pieterocp).
 
 
-### 2.1.1 (Sep 21, 2024)
+### 2.1.1 (2024-09-21)
 
 #### Fixes
 
 * [#940](https://github.com/ruby-grape/grape-swagger/pull/940): Grape 2.2.0 compatibility - [@padde](https://github.com/padde).
 
 
-### 2.1.0 (May 14, 2024)
+### 2.1.0 (2024-05-14)
 
 #### Features
 
@@ -44,7 +44,7 @@
 * [#926](https://github.com/ruby-grape/grape-swagger/pull/926): Refactor route and namespace combination logic - [@numbata](https://github.com/numbata).
 
 
-### 2.0.3 (April 26, 2024)
+### 2.0.3 (2024-04-26)
 
 #### Fixes
 
@@ -53,14 +53,14 @@
 * [#924](https://github.com/ruby-grape/grape-swagger/pull/924): Use mount_path to narrow down urls_for - [@chibicco](https://github.com/chibicco).
 
 
-### 2.0.2 (Februar 2, 2024)
+### 2.0.2 (2024-02-02)
 
 #### Fixes
 
 * [#918](https://github.com/ruby-grape/grape-swagger/pull/918): Fix params extension does not work when param_type is body - [@numbata](https://github.com/numbata).
 
 
-### 2.0.1 (Januar 2, 2024)
+### 2.0.1 (2024-01-02)
 
 #### Features
 
@@ -71,7 +71,7 @@
 * [#916](https://github.com/ruby-grape/grape-swagger/pull/916): Restore Ruby 3.0 support - [@godfat](https://github.com/godfat).
 
 
-### 2.0.0 (November 7, 2023)
+### 2.0.0 (2023-11-07)
 
 #### Features
 
@@ -82,14 +82,14 @@
 * [#903](https://github.com/ruby-grape/grape-swagger/pull/903): Accept `example` documentation parameter for arrays - [@VladMomotov](https://github.com/VladMomotov).
 
 
-### 1.6.1 (May 21, 2023)
+### 1.6.1 (2023-05-21)
 
 #### Fixes
 
 * [#868](https://github.com/ruby-grape/grape-swagger/pull/896): Fix parsing endless range values - [@dhruvCW](https://github.com/dhruvCW).
 
 
-### 1.6.0 (March 19, 2023)
+### 1.6.0 (2023-03-19)
 
 #### Features
 
@@ -97,7 +97,7 @@
 * [#868](https://github.com/ruby-grape/grape-swagger/pull/868): Add `default` endpoint option to specify default response - [@dhruvCW](https://github.com/dhruvCW).
 
 
-### 1.5.0 (July 28, 2022)
+### 1.5.0 (2022-07-28)
 
 #### Features
 
@@ -116,7 +116,7 @@
 * [#846](https://github.com/ruby-grape/grape-swagger/pull/846): Refactor oapi fetch task - [@Vachman](https://github.com/Vachman).
 * [#850](https://github.com/ruby-grape/grape-swagger/pull/850): Fix value of enum to be Array - [@takahashim](https://github.com/takahashim).
 
-### 1.4.3 (January 5, 2022)
+### 1.4.3 (2022-01-05)
 
 #### Fixes
 
@@ -127,7 +127,7 @@
 * [#844](https://github.com/ruby-grape/grape-swagger/pull/844): Fixes the regexp used for parsing routes - [@senhalil](https://github.com/senhalil).
 * [#862](https://github.com/ruby-grape/grape-swagger/pull/862): Allow using nicknames for body definitions - [@magni-](https://github.com/magni-).
 
-### 1.4.2 (October 22, 2021)
+### 1.4.2 (2021-10-22)
 
 #### Fixes
 
@@ -136,14 +136,14 @@
 * [#839](https://github.com/ruby-grape/grape-swagger/pull/839): Fixes documentation of `false` or `nil` default parameter values - [@magni-](https://github.com/magni-).
 
 
-### 1.4.1 (September 15, 2021)
+### 1.4.1 (2021-09-15)
 
 #### Fixes
 
 * [#833](https://github.com/ruby-grape/grape-swagger/pull/833): Fixes issue of examples not showing for `in: 'body'` parameters - [@stevenou](https://github.com/stevenou).
 
 
-### 1.4.0 (March 20, 2021)
+### 1.4.0 (2021-03-20)
 
 #### Features
 
@@ -155,7 +155,7 @@
 * [#822](https://github.com/ruby-grape/grape-swagger/pull/822): Corrected the related parameter lookup on request params - [@Jack12816](https://github.com/Jack12816).
 
 
-### 1.3.1 (November 1, 2020)
+### 1.3.1 (2020-11-01)
 
 #### Features
 
@@ -166,21 +166,21 @@
 * [#811](https://github.com/ruby-grape/grape-swagger/pull/811): Fixes #809: supports utf8 route names - [@LeFnord](https://github.com/LeFnord).
 
 
-### 1.3.0 (September 3, 2020)
+### 1.3.0 (2020-09-03)
 
 #### Features
 
 * [#804](https://github.com/ruby-grape/grape-swagger/pull/804): Don't overwrite model description with the route description - [@Bhacaz](https://github.com/Bhacaz).
 
 
-### 1.2.1 (July 15, 2020)
+### 1.2.1 (2020-07-15)
 
 #### Fixes
 
 * [#801](https://github.com/ruby-grape/grape-swagger/pull/801): Fixes behaviour after grape upgrade to 1.4.0 - [@LeFnord](https://github.com/LeFnord).
 
 
-### 1.2.0 (July 1, 2020)
+### 1.2.0 (2020-07-01)
 
 #### Features
 
@@ -193,7 +193,7 @@
 * [#796](https://github.com/ruby-grape/grape-swagger/pull/796): Support grape 1.4.0 - [@thedanielhanke](https://github.com/thedanielhanke).
 
 
-### 1.1.0 (April 20, 2020)
+### 1.1.0 (2020-04-20)
 
 #### Features
 
@@ -202,7 +202,7 @@
 * [#786](https://github.com/ruby-grape/grape-swagger/pull/786): Use full entity name as a default - [@mrexox](https://github.com/mrexox).
 
 
-### 1.0.0 (February 10, 2020)
+### 1.0.0 (2020-02-10)
 
 #### Features
 
@@ -210,14 +210,14 @@
 * [#775](https://github.com/ruby-grape/grape-swagger/pull/775): Add in token_owner support to param hidden procs - [@urkle](https://github.com/urkle).
 
 
-### 0.34.2 (January 20, 2020)
+### 0.34.2 (2020-01-20)
 
 #### Fixes
 
 * [#773](https://github.com/ruby-grape/grape-swagger/pull/773): Freeze rack version to 2.0.8 - [@LeFnord](https://github.com/LeFnord).
 
 
-### 0.34.0 (January 11, 2020)
+### 0.34.0 (2020-01-11)
 
 #### Features
 
@@ -233,7 +233,7 @@
 * [#764](https://github.com/ruby-grape/grape-swagger/pull/764): Fix root element for multi-word entities - [@bikolya](https://github.com/bikolya).
 
 
-### 0.33.0 (June 21, 2019)
+### 0.33.0 (2019-06-21)
 
 #### Fixes
 
@@ -243,7 +243,7 @@
 * [#737](https://github.com/ruby-grape/grape-swagger/pull/737): Add swagger endpoint guard to both doc endpoints - [@urkle](https://github.com/urkle).
 
 
-### 0.32.1 (December 7, 2018)
+### 0.32.1 (2018-12-07)
 
 #### Fixes
 
@@ -251,7 +251,7 @@
 * [#729](https://github.com/ruby-grape/grape-swagger/pull/729): Allow empty security array for endpoints - [@fotos](https://github.com/fotos).
 
 
-### 0.32.0 (November 26, 2018)
+### 0.32.0 (2018-11-26)
 
 #### Features
 
@@ -262,14 +262,14 @@
 * [#720](https://github.com/ruby-grape/grape-swagger/pull/720): Fix: corrected `termsOfService` field name in additional info - [@dblock](https://github.com/dblock).
 
 
-### 0.31.1 (October 23, 2018)
+### 0.31.1 (2018-10-23)
 
 #### Features
 
 * [#710](https://github.com/ruby-grape/grape-swagger/issues/710): Re-implement `api_documentation` and `specific_api_documentation` options - [@dblock](https://github.com/dblock).
 
 
-### 0.31.0 (August 22, 2018)
+### 0.31.0 (2018-08-22)
 
 #### Features
 
@@ -280,14 +280,14 @@
 * [#696](https://github.com/ruby-grape/grape-swagger/pull/696): Delegate required properties parsing to model parsers - [@Bugagazavr](https://github.com/Bugagazavr).
 
 
-### 0.30.1 (July 19, 2018)
+### 0.30.1 (2018-07-19)
 
 #### Features
 
 * [#686](https://github.com/ruby-grape/grape-swagger/pull/686): Allow response headers for responses with no content and for files - [@jdmurphy](https://github.com/jdmurphy).
 
 
-### 0.30.0 (July 19, 2018)
+### 0.30.0 (2018-07-19)
 
 #### Features
 
@@ -299,7 +299,7 @@
 * [#683](https://github.com/ruby-grape/grape-swagger/pull/683): Fix handling of arrays of complex entities in params so that valid OpenAPI spec is generated - [@jdmurphy](https://github.com/jdmurphy).
 
 
-### 0.29.0 (May 22, 2018)
+### 0.29.0 (2018-05-22)
 
 #### Features
 
@@ -314,7 +314,7 @@
 * [#672](https://github.com/ruby-grape/grape-swagger/pull/672): Rename 'notes' to 'detail' in README - [@kjleitz](https://github.com/kjleitz).
 
 
-### 0.28.0 (February 3, 2018)
+### 0.28.0 (2018-02-03)
 
 #### Features
 
@@ -331,7 +331,7 @@
 * [#656](https://github.com/ruby-grape/grape-swagger/pull/656): Fix `description` field may be null - [@soranoba](https://github.com/soranoba).
 
 
-### 0.27.3 (July 11, 2017)
+### 0.27.3 (2017-07-11)
 
 #### Features
 
@@ -342,7 +342,7 @@
 * [#616](https://github.com/ruby-grape/grape-swagger/pull/616): Fix swagger to show root path ([#605](https://github.com/ruby-grape/grape-swagger/issue/605)) - [@NightWolf007](https://github.com/NightWolf007).
 
 
-### 0.27.2 (May 11, 2017)
+### 0.27.2 (2017-05-11)
 
 #### Features
 
@@ -351,14 +351,14 @@
 * [#607](https://github.com/ruby-grape/grape-swagger/pull/607): Allow body parameter name to be specified - [@tjwp](https://github.com/tjwp).
 
 
-### 0.27.1 (April 28, 2017)
+### 0.27.1 (2017-04-28)
 
 #### Features
 
 * [#602](https://github.com/ruby-grape/grape-swagger/pull/602): Allow security object to be defined - [@markevich](https://github.com/markevich).
 
 
-### 0.27.0 (March 27, 2017)
+### 0.27.0 (2017-03-27)
 
 #### Features
 
@@ -374,7 +374,7 @@
 * [#593](https://github.com/ruby-grape/grape-swagger/pull/593): Clarify hidden option in readme - [@thogg4](https://github.com/thogg4).
 
 
-### 0.26.1 (February 3, 2017)
+### 0.26.1 (2017-02-03)
 
 #### Features
 
@@ -389,7 +389,7 @@
 * [#574](https://github.com/ruby-grape/grape-swagger/pull/574): Fixes #572: `is_array` should only be applied to success - [@LeFnord](https://github.com/LeFnord).
 
 
-### 0.26.0 (January 9, 2017)
+### 0.26.0 (2017-01-09)
 
 #### Features
 
@@ -402,7 +402,7 @@
 * [#561](https://github.com/ruby-grape/grape-swagger/pull/561): Rename failures to failure in readme - [@justincampbell](https://github.com/justincampbell).
 
 
-### 0.25.3 (December 18, 2016)
+### 0.25.3 (2016-12-18)
 
 #### Features
 
@@ -416,14 +416,14 @@
 * [#553](https://github.com/ruby-grape/grape-swagger/pull/553): Align array params for post, put request - addition to [#540](https://github.com/ruby-grape/grape-swagger/pull/540) - [@LeFnord](https://github.com/LeFnord).
 
 
-### 0.25.2 (November 30, 2016)
+### 0.25.2 (2016-11-30)
 
 #### Fixes
 
 * [#544](https://github.com/ruby-grape/grape-swagger/pull/544): Fixes #539 and #542; not all of 530 was commited - [@LeFnord](https://github.com/LeFnord).
 
 
-### 0.25.1 (November 29, 2016)
+### 0.25.1 (2016-11-29)
 
 #### Features
 
@@ -436,7 +436,7 @@
 * [#509](https://github.com/ruby-grape/grape-swagger/pull/509), [#529](https://github.com/ruby-grape/grape-swagger/pull/529): Making parent-less routes working - [@mur-wtag](https://github.com/mur-wtag).
 
 
-### 0.25.0 (October 31, 2016)
+### 0.25.0 (2016-10-31)
 
 #### Features
 
@@ -452,7 +452,7 @@
 * [#511](https://github.com/ruby-grape/grape-swagger/pull/511): Fix incorrect data type linking for request params of entity types - [@serggl](https://github.com/serggl).
 
 
-### 0.24.0 (September 23, 2016)
+### 0.24.0 (2016-09-23)
 
 #### Features
 
@@ -471,7 +471,7 @@
 * [#505](https://github.com/ruby-grape/grape-swagger/pull/505): Combines namespaces with their mounted paths to allow APIs with specified mount_paths - [@KevinLiddle](https://github.com/KevinLiddle).
 
 
-### 0.23.0 (August 5, 2016)
+### 0.23.0 (2016-08-05)
 
 #### Features
 
@@ -487,7 +487,7 @@
 * [#483](https://github.com/ruby-grape/grape-swagger/pull/483): Added support for nicknamed routes - [@pbendersky](https://github.com/pbendersky).
 
 
-### 0.22.0 (July 12, 2016)
+### 0.22.0 (2016-07-12)
 
 #### Features
 
@@ -512,7 +512,7 @@
 * [#457](https://github.com/ruby-grape/grape-swagger/issues/457): Using camel case on namespace throws exception on add_swagger_documentation method - [@rayko](https://github.com/rayko).
 
 
-### 0.21.0 (June 1, 2016)
+### 0.21.0 (2016-06-01)
 
 #### Features
 
@@ -528,7 +528,7 @@
 * [#438](https://github.com/ruby-grape/grape-swagger/pull/438): Route version was missing in :options passed to PathString, so Endpoint.path_and_definitions_objects wasn't returning a versioned path when required - [@texpert](https://github.com/texpert).
 
 
-### 0.20.3 (May 9, 2016)
+### 0.20.3 (2016-05-09)
 
 #### Features
 
@@ -543,7 +543,7 @@
 * [#399](https://github.com/ruby-grape/grape-swagger/pull/399), [#395](https://github.com/ruby-grape/grape-swagger/issues/395): Make param description optional - [@LeFnord](https://github.com/LeFnord).
 
 
-### 0.20.2 (April 22, 2016)
+### 0.20.2 (2016-04-22)
 
 #### Fixes
 
@@ -552,7 +552,7 @@
 * [#389](https://github.com/ruby-grape/grape-swagger/pull/389): Respect X-Forwarded-Host - [@edvakf](https://github.com/edvakf).
 
 
-### 0.20.1 (April 17, 2016)
+### 0.20.1 (2016-04-17)
 
 #### Features
 
@@ -564,7 +564,7 @@
 * [#383](https://github.com/ruby-grape/grape-swagger/pull/383): Fixed support for Grape 0.12.0 through 0.14.0 - [@LeFnord](https://github.com/LeFnord).
 
 
-### 0.20.0 (April 9, 2016)
+### 0.20.0 (2016-04-09)
 
 #### Features
 
@@ -578,12 +578,12 @@
 * [#353](https://github.com/ruby-grape/grape-swagger/pull/353), [#352](https://github.com/ruby-grape/grape-swagger/pull/353): Fixed exception with routes having a dynamic `:section` - [@LeFnord](https://github.com/LeFnord).
 
 
-### 0.10.5 (April 12, 2016)
+### 0.10.5 (2016-04-12)
 
 * [#344](https://github.com/ruby-grape/grape-swagger/pull/344): Namespace based tag included in Swagger JSON - [@LeFnord](https://github.com/LeFnord).
 
 
-### 0.10.2 (August 19, 2015)
+### 0.10.2 (2015-08-19)
 
 #### Features
 
@@ -608,13 +608,13 @@
 * [#286](https://github.com/ruby-grape/grape-swagger/pull/286): Use `detail` value for `notes` - fix an issue where `detail` value specified in a block passed to `desc` was ignored - [@rngtng](https://github.com/rngtng).
 
 
-### 0.10.1 (March 11, 2015)
+### 0.10.1 (2015-03-11)
 
 * [#227](https://github.com/ruby-grape/grape-swagger/issues/227): Fix: nested routes under prefix not documented - [@dblock](https://github.com/dblock).
 * [#226](https://github.com/ruby-grape/grape-swagger/issues/226): Fix: be defensive with nil exposure types - [@dblock](https://github.com/dblock).
 
 
-### 0.10.0 (March 10, 2015)
+### 0.10.0 (2015-03-10)
 
 #### Features
 
@@ -634,7 +634,7 @@
 * [#216](https://github.com/ruby-grape/grape-swagger/pull/216), [#192](https://github.com/ruby-grape/grape-swagger/issues/192), [#189](https://github.com/ruby-grape/grape-swagger/issues/189): Fixed API route paths matching for root endpoints with `grape ~> 0.10.0`, specific `format` and `:path` versioning - [@dm1try](https://github.com/dm1try), [@minch](https://github.com/minch).
 
 
-### 0.9.0 (December 19, 2014)
+### 0.9.0 (2014-12-19)
 
 * [#91](https://github.com/ruby-grape/grape-swagger/issues/91): Fixed empty field for group parameters' name with type hash or Array - [@dukedave](https://github.com/dukedave).
 * [#154](https://github.com/ruby-grape/grape-swagger/pull/154): Allow classes for type declarations inside documentation - [@mrmargolis](https://github.com/mrmargolis).
@@ -649,7 +649,7 @@
 * [#185](https://github.com/ruby-grape/grape-swagger/pull/185): Support strings in `Grape::Entity.expose`'s `:using` option - [@jhollinger](https://github.com/jhollinger).
 
 
-### 0.8.0 (August 30, 2014)
+### 0.8.0 (2014-08-30)
 
 #### Features
 
@@ -679,7 +679,7 @@
 * Added Rubocop, Ruby-style linter - [@dblock](https://github.com/dblock).
 
 
-### 0.7.2 (February 6, 2014)
+### 0.7.2 (2014-02-06)
 
 * [#84](https://github.com/ruby-grape/grape-swagger/pull/84): Markdown is now Github Flavored Markdown - [@jeromegn](https://github.com/jeromegn).
 * [#83](https://github.com/ruby-grape/grape-swagger/pull/83): Improved support for nested Entity types - [@jeromegn](https://github.com/jeromegn).
@@ -697,7 +697,7 @@
 * [#46](https://github.com/ruby-grape/grape-swagger/pull/46): Fixed translating parameter `type` to String, enables using Mongoid fields as parameter definitions - [@dblock](https://github.com/dblock).
 
 
-### 0.6.0 (June 19, 2013)
+### 0.6.0 (2013-06-19)
 
 * Added Rails 4 support - [@jrhe](https://github.com/jrhe).
 * Fix: document APIs at root level - [@dblock](https://github.com/dblock).
@@ -706,17 +706,17 @@
 * Fix: allow parameters such as `name[]` - [@dblock](https://github.com/dblock).
 
 
-### 0.5.0 (March 28, 2013)
+### 0.5.0 (2013-03-28)
 
 * Added Grape 0.5.0 support - [@ruby-grape](https://github.com/ruby-grape).
 
 
-### 0.4.0 (March 28, 2013)
+### 0.4.0 (2013-03-28)
 
 * Support https - [@cutalion](https://github.com/cutalion).
 
 
-### 0.3.0 (October 19, 2012)
+### 0.3.0 (2012-10-19)
 
 * Added version support - [@agileanimal](https://github.com/agileanimal), [@fknappe](https://github.com/fknappe).
 * Added support for nested parameters - [@ruby-grape](https://github.com/ruby-grape).
@@ -724,27 +724,27 @@
 * Add possibility to hide the documentation paths in the generated swagger documentation - [@ruby-grape](https://github.com/ruby-grape).
 
 
-### 0.2.1 (August 17, 2012)
+### 0.2.1 (2012-08-17)
 
 * Added support for markdown in notes field - [@ruby-grape](https://github.com/ruby-grape).
 * Fix: compatibility with Rails - [@qwert666](https://github.com/qwert666).
 * Fix: swagger UI history - [@ruby-grape](https://github.com/ruby-grape).
 
 
-### 0.2.0 (July 27, 2012)
+### 0.2.0 (2012-07-27)
 
 * Use resource as root for swagger - [@ruby-grape](https://github.com/ruby-grape).
 * Added support for file uploads, and proper `paramType` - [@ruby-grape](https://github.com/ruby-grape).
 * Added tests - [@nathanvda](https://github.com/nathanvda).
 
 
-### 0.1.0 (July 19, 2012)
+### 0.1.0 (2012-07-19)
 
 * Added some configurability to the generated documentation - [@ruby-grape](https://github.com/ruby-grape).
 * Adapted to rails plugin structure - [@ruby-grape](https://github.com/ruby-grape).
 * Allowed cross origin, so swagger can be used from official site - [@ruby-grape](https://github.com/ruby-grape).
 
 
-### 0.0.0 (July 19, 2012)
+### 0.0.0 (2012-07-19)
 
 * Initial public release - [@ruby-grape](https://github.com/ruby-grape).

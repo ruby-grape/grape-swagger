@@ -44,6 +44,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'ruby-grape-danger', '~> 0.2', require: false
   gem 'simplecov', require: false
   gem 'super_diff', require: false
 end

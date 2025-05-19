@@ -2,7 +2,7 @@
 
 #### Features
 
-* your contribution
+* Your contribution here.
 * [#956](https://github.com/ruby-grape/grape-swagger/pull/956): Add danger - [@numbata](https://github.com/numbata).
 * [#953](https://github.com/ruby-grape/grape-swagger/pull/953): Added super_diff gem for improved diffing in tests - [@numbata](https://github.com/numbata).
 
@@ -50,7 +50,7 @@
 
 * [#922](https://github.com/ruby-grape/grape-swagger/pull/922): Force request body to be an schema object - [@numbata](https://github.com/numbata).
 * [#923](https://github.com/ruby-grape/grape-swagger/pull/923): Enabled schema definitions for body parameters in DELETE requests - [@numbata](https://github.com/numbata).
-* [#924](https://github.com/ruby-grape/grape-swagger/pull/924): fix: Use mount_path to narrow down urls_for - [@chibicco](https://github.com/chibicco).
+* [#924](https://github.com/ruby-grape/grape-swagger/pull/924): Use mount_path to narrow down urls_for - [@chibicco](https://github.com/chibicco).
 
 
 ### 2.0.2 (Februar 2, 2024)
@@ -105,23 +105,23 @@
 
 #### Fixes
 
-* [#860](https://github.com/ruby-grape/grape-swagger/pull/860) chore: Included githubactions in the dependabot config [@naveensrinivasan](https://github.com/naveensrinivasan).
-* [#843](https://github.com/ruby-grape/grape-swagger/pull/843) Syntax errors in README.md examples [@remvee](https://github.com/remvee).
-* [#844](https://github.com/ruby-grape/grape-swagger/pull/844) Fixes the regexp used for parsing routes [@senhalil](https://github.com/senhalil).
-* [#847](https://github.com/ruby-grape/grape-swagger/pull/847) Parse route_param type for nested endpoints [@dmoss18](https://github.com/dmoss18).
-* [#856](https://github.com/ruby-grape/grape-swagger/pull/856) Remove unused methods in GrapeSwagger::DocMethods::BuildModelDefinition [@takahashim](https://github.com/takahashim).
-* [#858](https://github.com/ruby-grape/grape-swagger/pull/858): Set permissions for GitHub actions [@naveensrinivasan](https://github.com/naveensrinivasan).
-* [#853](https://github.com/ruby-grape/grape-swagger/pull/853): Add webrick to support Ruby 3.x [@takahashim](https://github.com/takahashim).
-* [#852](https://github.com/ruby-grape/grape-swagger/pull/852): Fix example to work [@takahashim](https://github.com/takahashim).
-* [#846](https://github.com/ruby-grape/grape-swagger/pull/846): Refactor oapi fetch task [@Vachman](https://github.com/Vachman).
-* [#850](https://github.com/ruby-grape/grape-swagger/pull/850): Fix value of enum to be Array [@takahashim](https://github.com/takahashim).
+* [#860](https://github.com/ruby-grape/grape-swagger/pull/860): Included githubactions in the dependabot config - [@naveensrinivasan](https://github.com/naveensrinivasan).
+* [#843](https://github.com/ruby-grape/grape-swagger/pull/843): Syntax errors in README.md examples - [@remvee](https://github.com/remvee).
+* [#844](https://github.com/ruby-grape/grape-swagger/pull/844): Fixes the regexp used for parsing routes - [@senhalil](https://github.com/senhalil).
+* [#847](https://github.com/ruby-grape/grape-swagger/pull/847): Parse route_param type for nested endpoints - [@dmoss18](https://github.com/dmoss18).
+* [#856](https://github.com/ruby-grape/grape-swagger/pull/856): Remove unused methods in GrapeSwagger::DocMethods::BuildModelDefinition - [@takahashim](https://github.com/takahashim).
+* [#858](https://github.com/ruby-grape/grape-swagger/pull/858): Set permissions for GitHub actions  - [@naveensrinivasan](https://github.com/naveensrinivasan).
+* [#853](https://github.com/ruby-grape/grape-swagger/pull/853): Add webrick to support Ruby 3.x - [@takahashim](https://github.com/takahashim).
+* [#852](https://github.com/ruby-grape/grape-swagger/pull/852): Fix example to work - [@takahashim](https://github.com/takahashim).
+* [#846](https://github.com/ruby-grape/grape-swagger/pull/846): Refactor oapi fetch task - [@Vachman](https://github.com/Vachman).
+* [#850](https://github.com/ruby-grape/grape-swagger/pull/850): Fix value of enum to be Array - [@takahashim](https://github.com/takahashim).
 
 ### 1.4.3 (January 5, 2022)
 
 #### Fixes
 
 * [#850](https://github.com/ruby-grape/grape-swagger/pull/850): Fix value of `enum` to be `Array` - [@takahashim](https://github.com/takahashim).
-* [#846](https://github.com/ruby-grape/grape-swagger/pull/846): Fixes oapi rake tasks, allows generating sepcs for different API versions. [@Vachman](https://github.com/Vachman).
+* [#846](https://github.com/ruby-grape/grape-swagger/pull/846): Fixes oapi rake tasks, allows generating sepcs for different API versions - [@Vachman](https://github.com/Vachman).
 * [#852](https://github.com/ruby-grape/grape-swagger/pull/852): Fix example to work without error - [@takahashim](https://github.com/takahashim).
 * [#853](https://github.com/ruby-grape/grape-swagger/pull/853): Add webrick gem so that example works in Ruby 3.x - [@takahashim](https://github.com/takahashim).
 * [#844](https://github.com/ruby-grape/grape-swagger/pull/844): Fixes the regexp used for parsing routes - [@senhalil](https://github.com/senhalil).

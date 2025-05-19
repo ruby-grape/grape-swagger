@@ -3,6 +3,7 @@
 #### Features
 
 * your contribution
+* [#956](https://github.com/ruby-grape/grape-swagger/pull/956): Add danger - [@numbata](https://github.com/numbata).
 * [#953](https://github.com/ruby-grape/grape-swagger/pull/953): Added super_diff gem for improved diffing in tests - [@numbata](https://github.com/numbata)
 
 #### Fixes

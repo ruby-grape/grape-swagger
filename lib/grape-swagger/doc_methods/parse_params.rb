@@ -17,6 +17,7 @@ module GrapeSwagger
             in: param_type(value_type, consumes),
             name: settings[:full_name] || param
           }
+          fix_name_of_body_array_param(value_type)
 
           # optional properties
           document_description(settings)
@@ -34,6 +35,12 @@ module GrapeSwagger
         end
 
         private
+
+        def fix_name_of_body_array_param(value_type)
+          return unless @parsed_param[:in] == 'body' && value_type[:is_array]
+
+          @parsed_param[:name] = @parsed_param[:name].delete_suffix('[]')
+        end
 
         def document_description(settings)
           description = settings[:desc] || settings[:description]

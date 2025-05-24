@@ -10,22 +10,27 @@ require 'grape-swagger/errors'
 
 require 'grape-swagger/doc_methods'
 require 'grape-swagger/model_parsers'
+require 'grape-swagger/request_param_parser_registry'
 
 module GrapeSwagger
   class << self
     def model_parsers
       @model_parsers ||= GrapeSwagger::ModelParsers.new
     end
+
+    def request_param_parsers
+      @request_param_parsers ||= GrapeSwagger::RequestParamParserRegistry.new
+    end
   end
   autoload :Rake, 'grape-swagger/rake/oapi_tasks'
 
   # Copied from https://github.com/ruby-grape/grape/blob/v2.2.0/lib/grape/formatter.rb
   FORMATTER_DEFAULTS = {
+    xml: Grape::Formatter::Xml,
+    serializable_hash: Grape::Formatter::SerializableHash,
     json: Grape::Formatter::Json,
     jsonapi: Grape::Formatter::Json,
-    serializable_hash: Grape::Formatter::SerializableHash,
-    txt: Grape::Formatter::Txt,
-    xml: Grape::Formatter::Xml
+    txt: Grape::Formatter::Txt
   }.freeze
 
   # Copied from https://github.com/ruby-grape/grape/blob/v2.2.0/lib/grape/content_types.rb

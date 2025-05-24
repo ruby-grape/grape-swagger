@@ -1,27 +1,26 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module Endpoint
-    class ParamsParser
-      attr_reader :params, :settings, :endpoint
+  module RequestParamParsers
+    class Body
+      attr_reader :route, :params, :settings, :endpoint
 
-      def self.parse_request_params(params, settings, endpoint)
-        new(params, settings, endpoint).parse_request_params
+      def self.parse(route, params, settings, endpoint)
+        new(route, params, settings, endpoint).parse
       end
 
-      def initialize(params, settings, endpoint)
+      def initialize(_route, params, settings, endpoint)
         @params = params
         @settings = settings
         @endpoint = endpoint
       end
 
-      def parse_request_params
+      def parse
         public_params.each_with_object({}) do |(name, options), memo|
           name = name.to_s
-          param_type = options[:type]
-          param_type = param_type.to_s unless param_type.nil?
+          param_type = options[:type]&.to_s
 
-          if param_type_is_array?(param_type)
+          if array_param?(param_type)
             options[:is_array] = true
             name += '[]' if array_use_braces?
           end
@@ -36,8 +35,8 @@ module GrapeSwagger
         @array_use_braces ||= settings[:array_use_braces] && !includes_body_param?
       end
 
-      def param_type_is_array?(param_type)
-        return false unless param_type
+      def array_param?(param_type)
+        return false if param_type.nil?
         return true if param_type == 'Array'
 
         param_types = param_type.match(/\[(.*)\]$/)
@@ -48,11 +47,10 @@ module GrapeSwagger
       end
 
       def public_params
-        params.select { |param| public_parameter?(param) }
+        params.select { |_key, param| public_parameter?(param) }
       end
 
-      def public_parameter?(param)
-        param_options = param.last
+      def public_parameter?(param_options)
         return true unless param_options.key?(:documentation) && !param_options[:required]
 
         param_hidden = param_options[:documentation].fetch(:hidden, false)

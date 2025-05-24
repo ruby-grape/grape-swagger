@@ -2,16 +2,16 @@
 
 #### Features
 
+* [#956](https://github.com/ruby-grape/grape-swagger/pull/956): Add `danger` - [@numbata](https://github.com/numbata).
+* [#958](https://github.com/ruby-grape/grape-swagger/pull/958): Drop ruby-head from test matrix - [@numbata](https://github.com/numbata).
+* [#953](https://github.com/ruby-grape/grape-swagger/pull/953): Added `super_diff` - [@numbata](https://github.com/numbata).
 * Your contribution here.
-* [#956](https://github.com/ruby-grape/grape-swagger/pull/956): Add danger - [@numbata](https://github.com/numbata).
-* [#953](https://github.com/ruby-grape/grape-swagger/pull/953): Added super_diff gem for improved diffing in tests - [@numbata](https://github.com/numbata).
 
 #### Fixes
 
-* Your contribution here.
-* [#954](https://github.com/ruby-grape/grape-swagger/pull/954): Ruby 3.5 compatibility: add cgi gem, drop runtime rack‑test - [@numbata](https://github.com/numbata).
+* [#954](https://github.com/ruby-grape/grape-swagger/pull/954): Ruby 3.5 compatibility: add cgi gem, drop runtime `rack‑test` - [@numbata](https://github.com/numbata).
 * [#948](https://github.com/ruby-grape/grape-swagger/pull/948): Grape 2.3.0 and Ruby 3.5 compatibility - [@numbata](https://github.com/numbata).
-
+* Your contribution here.
 
 ### 2.1.2 (2025-01-07)
 

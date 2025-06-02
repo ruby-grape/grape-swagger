@@ -136,7 +136,7 @@ module GrapeSwagger
           return if value.blank?
 
           definition[:required] ||= []
-          definition[:required].push(*value)
+          definition[:required].push(*value).uniq!
         end
 
         def build_body_parameter(name, options)

@@ -5,6 +5,7 @@
 * [#956](https://github.com/ruby-grape/grape-swagger/pull/956): Add `danger` - [@numbata](https://github.com/numbata).
 * [#958](https://github.com/ruby-grape/grape-swagger/pull/958): Drop ruby-head from test matrix - [@numbata](https://github.com/numbata).
 * [#953](https://github.com/ruby-grape/grape-swagger/pull/953): Added `super_diff` - [@numbata](https://github.com/numbata).
+* [#951](https://github.com/ruby-grape/grape-swagger/pull/951): Use `x-example` for non-body parameters - [@olivier-thatch](https://github.com/olivier-thatch).
 * Your contribution here.
 
 #### Fixes

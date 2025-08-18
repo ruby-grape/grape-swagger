@@ -75,6 +75,7 @@
     - [Adding root element to responses ](#adding-root-element-to-responses-)
     - [Multiple present Response ](#multiple-present-response-)
 - [Using Grape Entities ](#using-grape-entities-)
+  - [Documented class/definition](#documented-classdefinition)
   - [Relationships](#relationships)
     - [1xN](#1xn)
     - [1x1](#1x1)
@@ -1515,7 +1516,6 @@ The result will look like following:
 Add the [grape-entity](https://github.com/ruby-grape/grape-entity) and [grape-swagger-entity](https://github.com/ruby-grape/grape-swagger-entity) gem to your Gemfile.
 
 The following example exposes statuses. And exposes statuses documentation adding :type, :desc and :required.
-The documented class/definition name could be set via `#entity_name`.
 
 ```ruby
 module API
@@ -1558,6 +1558,57 @@ module API
 end
 ```
 
+### Documented class/definition
+
+You can set the name of the Entity when being documented via `#entity_name`:
+
+```ruby
+module API
+  module Entities
+    class Status < Grape::Entity
+      expose :text, documentation: { type: 'string', desc: 'Status update text.', required: true }
+    end
+
+    class Link < Grape::Entity
+      expose :href, documentation: { type: 'url' }
+
+      def self.entity_name
+        'LinkedStatus'
+      end
+
+    end
+  end
+end
+```
+Should generate the following definitions in your swagger json:
+
+```json
+{
+  "definitions": {
+    "API_Entities_Status": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Status update text.",
+        },
+      },
+      "required": [
+        "text",
+      ],
+      "description": "API_Entities_Pet model"
+    },
+    "LinkedStatus": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "type": "url",
+        },
+      "description": "LinkedStatus model"
+    }
+  }
+}
+```
 
 ### Relationships
 

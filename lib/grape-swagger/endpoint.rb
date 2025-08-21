@@ -326,7 +326,12 @@ module Grape
       return { value[:as] => build_response_schema(value.except(:as)) } if value.include?(:as)
 
       if value[:type].is_a?(Array)
-        items = build_response_schema({ **value, type: value[:type].first })
+        items = if value[:type].size == 1
+                  build_response_schema({ **value, type: value[:type].first })
+                else
+                  { oneOf: value[:type].map { |type| build_response_schema({ **value, type: type }) } }
+                end
+
         return { type: 'array', items: items }
       end
 

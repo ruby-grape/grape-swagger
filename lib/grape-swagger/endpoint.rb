@@ -323,13 +323,15 @@ module Grape
     end
 
     def build_response_schema(value)
-      type, format = prepare_type_and_format(value)
+      return { value[:as] => build_response_schema(value.except(:as)) } if value.include?(:as)
 
-      if value.include?(:as)
-        return { value[:as] => { type: type, format: format }.compact }
-      else
-        return { type: type }
+      if value[:type].is_a?(Array)
+        items = build_response_schema({ **value, type: value[:type].first })
+        return { type: 'array', items: items }
       end
+
+      type, format = prepare_type_and_format(value)
+      { type: type, format: format }.compact
     end
 
     def prepare_type_and_format(value)

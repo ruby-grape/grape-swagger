@@ -135,33 +135,44 @@ RSpec.shared_context 'entity swagger example' do
 
   let(:swagger_definitions_models) do
     {
-      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } } },
-      'ResponseItem' => { 'type' => 'object', 'properties' => { 'id' => { 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'type' => 'string' } } },
-      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, '$responses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' } } } },
-      'RecursiveModel' => { 'type' => 'object', 'properties' => { 'name' => { 'type' => 'string', 'description' => 'The name.' }, 'children' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/RecursiveModel' }, 'description' => 'The child nodes.' } } },
-      'DocumentedHashAndArrayModel' => { 'type' => 'object', 'properties' => { 'raw_hash' => { 'type' => 'object', 'description' => 'Example Hash.' }, 'raw_array' => { 'type' => 'array', 'description' => 'Example Array' } } }
+      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } }, 'required' => %w[code message] },
+      'ResponseItem' => { 'type' => 'object', 'properties' => { 'id' => { 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'type' => 'string' } }, 'required' => %w[id name] },
+      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, '$responses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' } } }, 'required' => ['description', '$responses'] },
+      'RecursiveModel' => { 'type' => 'object', 'properties' => { 'name' => { 'type' => 'string', 'description' => 'The name.' }, 'children' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/RecursiveModel' }, 'description' => 'The child nodes.' } }, 'required' => %w[name children] },
+      'DocumentedHashAndArrayModel' => { 'type' => 'object', 'properties' => { 'raw_hash' => { 'type' => 'object', 'description' => 'Example Hash.' }, 'raw_array' => { 'type' => 'array', 'description' => 'Example Array' } }, 'required' => %w[raw_hash raw_array] }
     }
   end
 
   let(:swagger_nested_type) do
     {
-      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } }, 'description' => 'ApiError model' },
-      'ResponseItem' => { 'type' => 'object', 'properties' => { 'id' => { 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'type' => 'string' } } },
-      'UseItemResponseAsType' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, 'responses' => { '$ref' => '#/definitions/ResponseItem' } }, 'description' => 'UseItemResponseAsType model' }
+      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } }, 'required' => %w[code message], 'description' => 'ApiError model' },
+      'ResponseItem' => { 'type' => 'object', 'properties' => { 'id' => { 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'type' => 'string' } }, 'required' => %w[id name] },
+      'UseItemResponseAsType' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, 'responses' => { '$ref' => '#/definitions/ResponseItem' } }, 'required' => %w[description responses], 'description' => 'UseItemResponseAsType model' }
     }
   end
 
   let(:swagger_entity_as_response_object) do
     {
-      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } }, 'description' => 'ApiError model' },
-      'ResponseItem' => { 'type' => 'object', 'properties' => { 'id' => { 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'type' => 'string' } } },
-      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, '$responses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' } } }, 'description' => 'UseResponse model' }
+      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } }, 'required' => %w[code message], 'description' => 'ApiError model' },
+      'ResponseItem' => { 'type' => 'object', 'properties' => { 'id' => { 'type' => 'integer', 'format' => 'int32' }, 'name' => { 'type' => 'string' } }, 'required' => %w[id name] },
+      'UseResponse' => { 'type' => 'object', 'properties' => { 'description' => { 'type' => 'string' }, '$responses' => { 'type' => 'array', 'items' => { '$ref' => '#/definitions/ResponseItem' } } }, 'required' => ['description', '$responses'], 'description' => 'UseResponse model' }
     }
   end
 
   let(:swagger_params_as_response_object) do
     {
-      'ApiError' => { 'type' => 'object', 'properties' => { 'code' => { 'description' => 'status code', 'type' => 'integer', 'format' => 'int32' }, 'message' => { 'description' => 'error message', 'type' => 'string' } }, 'description' => 'ApiError model' }
+      'ApiError' => {
+        'type' => 'object',
+        'properties' => {
+          'code' => { 'description' => 'status code', 'type' => 'integer', 'format' => 'int32' },
+          'message' => { 'description' => 'error message', 'type' => 'string' }
+        },
+        'required' => %w[
+          code
+          message
+        ],
+        'description' => 'ApiError model'
+      }
     }
   end
 
@@ -310,6 +321,7 @@ RSpec.shared_context 'entity swagger example' do
         'ApiError' => {
           'type' => 'object',
           'properties' => { 'code' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'status code' }, 'message' => { 'type' => 'string', 'description' => 'error message' } },
+          'required' => %w[code message],
           'description' => 'ApiError model'
         },
         'Something' => {
@@ -320,6 +332,7 @@ RSpec.shared_context 'entity swagger example' do
             'links' => { 'type' => 'array', 'items' => { 'type' => 'link' } },
             'others' => { 'type' => 'text' }
           },
+          'required' => %w[id text links others],
           'description' => 'Something model'
         }
       }

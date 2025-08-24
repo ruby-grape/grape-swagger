@@ -74,7 +74,8 @@ describe '#539 post params given as array' do
           'id' => { 'type' => 'string' },
           'description' => { 'type' => 'string' },
           'role' => { 'type' => 'string' }
-        }
+        },
+        'required' => %w[id description role]
       }
     )
   end

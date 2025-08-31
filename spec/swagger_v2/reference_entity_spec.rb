@@ -90,7 +90,9 @@ describe 'referenceEntity' do
 
       expect(subject['definitions'].keys).to include 'SomethingCustom'
       expect(subject['definitions']['SomethingCustom']).to eq(
-        'type' => 'object', 'properties' => { 'text' => { 'type' => 'string', 'description' => 'Content of something.' } }
+        'type' => 'object',
+        'properties' => { 'text' => { 'type' => 'string', 'description' => 'Content of something.' } },
+        'required' => ['text']
       )
 
       expect(subject['definitions'].keys).to include 'KindCustom'
@@ -103,6 +105,7 @@ describe 'referenceEntity' do
             'description' => 'Something interesting.'
           }
         },
+        'required' => %w[title something],
         'description' => 'KindCustom model'
       )
     end
@@ -122,6 +125,7 @@ describe 'referenceEntity' do
           'title' => { 'type' => 'string', 'description' => 'Title of the parent.' },
           'child' => { 'type' => 'string', 'description' => 'Child property.' }
         },
+        'required' => %w[title child],
         'description' => 'MyAPI::Child model'
       )
     end

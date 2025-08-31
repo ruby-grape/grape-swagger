@@ -22,7 +22,7 @@ module GrapeSwagger
             }
           else
             properties, required = parsed_response
-            unless properties&.any?
+            if properties.nil?
               raise GrapeSwagger::Errors::SwaggerSpec,
                     "Empty model #{model_name}, swagger 2.0 doesn't support empty definitions."
             end

@@ -7,6 +7,7 @@
 * [#953](https://github.com/ruby-grape/grape-swagger/pull/953): Added `super_diff` - [@numbata](https://github.com/numbata).
 * [#951](https://github.com/ruby-grape/grape-swagger/pull/951): Use `x-example` for non-body parameters - [@olivier-thatch](https://github.com/olivier-thatch).
 * [#963](https://github.com/ruby-grape/grape-swagger/pull/963): Allow empty model definitions for swagger 2.0 - [@numbata](https://github.com/numbata).
+* [#964](https://github.com/ruby-grape/grape-swagger/pull/964): Add support for array of primitive data types in responses - [@khiav223577](https://github.com/khiav223577).
 * Your contribution here.
 
 #### Fixes

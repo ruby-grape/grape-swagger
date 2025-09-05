@@ -95,6 +95,27 @@ describe 'Group Params as Array' do
             { 'declared_params' => declared(params) }
           end
 
+          helpers do
+            params :common_params do
+              requires :array_of_string, type: Array[String]
+              requires :array_of_integer, type: Array[Integer]
+            end
+          end
+
+          params do
+            use :common_params
+          end
+          get '/endpoint_with_common_params' do
+            { 'declared_params' => declared(params) }
+          end
+
+          params do
+            use :common_params
+          end
+          post '/endpoint_with_common_params' do
+            { 'declared_params' => declared(params) }
+          end
+
           add_swagger_documentation array_use_braces: array_use_braces
         end
       end
@@ -218,6 +239,53 @@ describe 'Group Params as Array' do
         specify do
           expect(subject['definitions']['ApiError']).not_to be_blank
           expect(subject['paths']['/array_of_entities']['post']['parameters']).to eql(parameters)
+        end
+      end
+
+      describe 'retrieves the documentation for parameters shared between GET and POST endpoints' do
+        subject do
+          get '/swagger_doc/endpoint_with_common_params'
+          JSON.parse(last_response.body)
+        end
+
+        describe 'for non-body parameters' do
+          specify do
+            expect(subject['paths']['/endpoint_with_common_params']['get']['parameters']).to eql(
+              [
+                { 'in' => 'query', 'name' => "array_of_string#{braces}", 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => true },
+                { 'in' => 'query', 'name' => "array_of_integer#{braces}", 'type' => 'array', 'items' => { 'type' => 'integer', 'format' => 'int32' }, 'required' => true }
+              ]
+            )
+          end
+        end
+
+        describe 'for body parameters' do
+          specify do
+            expect(subject['paths']['/endpoint_with_common_params']['post']['parameters']).to eql(
+              [
+                { 'in' => 'body', 'name' => 'postEndpointWithCommonParams', 'schema' => { '$ref' => '#/definitions/postEndpointWithCommonParams' }, 'required' => true }
+              ]
+            )
+            expect(subject['definitions']['postEndpointWithCommonParams']).to eql(
+              'type' => 'object',
+              'properties' => {
+                'array_of_string' => { # no braces, even if array_use_braces is true
+                  'type' => 'array',
+                  'items' => {
+                    'type' => 'string'
+                  }
+                },
+                'array_of_integer' => { # no braces, even if array_use_braces is true
+                  'type' => 'array',
+                  'items' => {
+                    'type' => 'integer',
+                    'format' => 'int32'
+                  }
+                }
+              },
+              'required' => %w[array_of_string array_of_integer]
+            )
+          end
         end
       end
     end

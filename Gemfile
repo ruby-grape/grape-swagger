@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 gemspec
 
 # gem 'grape', git: 'https://github.com/ruby-grape/grape'
-gem 'grape', case version = ENV.fetch('GRAPE_VERSION', '< 3.0')
+gem 'grape', case version = ENV.fetch('GRAPE_VERSION', '< 4.0')
              when 'HEAD'
                { git: 'https://github.com/ruby-grape/grape' }
              else
@@ -20,7 +20,7 @@ group :development, :test do
   gem 'pry', platforms: [:mri]
   gem 'pry-byebug', platforms: [:mri]
 
-  grape_version = ENV.fetch('GRAPE_VERSION', '2.2.0')
+  grape_version = ENV.fetch('GRAPE_VERSION', '2.4.0')
   if grape_version == 'HEAD' || Gem::Version.new(grape_version) >= Gem::Version.new('2.0.0')
     gem 'rack', '>= 3.0'
   else

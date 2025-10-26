@@ -24,6 +24,7 @@ group :development, :test do
   if grape_version == 'HEAD' || Gem::Version.new(grape_version) >= Gem::Version.new('2.0.0')
     gem 'rack', '>= 3.0'
   else
+    gem 'activesupport', '< 7.2'
     gem 'rack', '< 3.0'
   end
 

@@ -11,6 +11,7 @@ require 'grape-swagger/errors'
 require 'grape-swagger/doc_methods'
 require 'grape-swagger/model_parsers'
 require 'grape-swagger/request_param_parser_registry'
+require 'grape-swagger/token_owner_resolver'
 
 module GrapeSwagger
   class << self
@@ -184,12 +185,13 @@ module SwaggerDocumentationAdder
       endpoint = endpoints.shift
 
       endpoints.push(*endpoint.options[:app].endpoints) if endpoint.options[:app]
-      ns = endpoint.namespace_stackable(:namespace).last
+      namespace_stackable = endpoint.inheritable_setting.namespace_stackable
+      ns = (namespace_stackable[:namespace] || []).last
       next unless ns
 
       # use the full namespace here (not the latest level only)
       # and strip leading slash
-      mount_path = (endpoint.namespace_stackable(:mount_path) || []).join('/')
+      mount_path = (namespace_stackable[:mount_path] || []).join('/')
       full_namespace = (mount_path + endpoint.namespace).sub(/\/{2,}/, '/').sub(/^\//, '')
       combined_namespaces[full_namespace] = ns
     end

@@ -54,13 +54,7 @@ module GrapeSwagger
         return true unless param_options.key?(:documentation) && !param_options[:required]
 
         param_hidden = param_options[:documentation].fetch(:hidden, false)
-        if param_hidden.is_a?(Proc)
-          param_hidden = if settings[:token_owner]
-                           param_hidden.call(endpoint.send(settings[:token_owner].to_sym))
-                         else
-                           param_hidden.call
-                         end
-        end
+        param_hidden = evaluate_hidden_proc(param_hidden) if param_hidden.is_a?(Proc)
         !param_hidden
       end
 
@@ -68,6 +62,13 @@ module GrapeSwagger
         params.any? do |_, options|
           options.dig(:documentation, :param_type) == 'body' || options.dig(:documentation, :in) == 'body'
         end
+      end
+
+      def evaluate_hidden_proc(hidden_proc)
+        return hidden_proc.call unless settings[:token_owner]
+
+        token_owner = GrapeSwagger::TokenOwnerResolver.resolve(endpoint, settings[:token_owner])
+        GrapeSwagger::TokenOwnerResolver.evaluate_proc(hidden_proc, token_owner)
       end
     end
   end

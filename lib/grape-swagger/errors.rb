@@ -13,5 +13,7 @@ module GrapeSwagger
         end
       end
     end
+
+    class TokenOwnerNotFound < NoMethodError; end
   end
 end

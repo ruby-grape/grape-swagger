@@ -5,6 +5,7 @@ require 'active_support/core_ext/string/inflections'
 require_relative 'request_param_parsers/headers'
 require_relative 'request_param_parsers/route'
 require_relative 'request_param_parsers/body'
+require_relative 'token_owner_resolver'
 
 module Grape
   class Endpoint # rubocop:disable Metrics/ClassLength
@@ -439,7 +440,10 @@ module Grape
       route_hidden = route.options[:hidden] if route.options.key?(:hidden)
       return route_hidden unless route_hidden.is_a?(Proc)
 
-      options[:token_owner] ? route_hidden.call(send(options[:token_owner].to_sym)) : route_hidden.call
+      return route_hidden.call unless options[:token_owner]
+
+      token_owner = GrapeSwagger::TokenOwnerResolver.resolve(self, options[:token_owner])
+      GrapeSwagger::TokenOwnerResolver.evaluate_proc(route_hidden, token_owner)
     end
 
     def hidden_parameter?(value)

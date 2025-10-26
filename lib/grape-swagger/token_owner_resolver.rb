@@ -16,7 +16,7 @@ module GrapeSwagger
         helper_value = resolve_from_helpers(endpoint, method_name)
         return helper_value unless helper_value.equal?(UNRESOLVED)
 
-        raise NoMethodError, "undefined method `#{method_name}` for #{endpoint.inspect}"
+        raise Errors::TokenOwnerNotFound, "undefined method `#{method_name}` for #{endpoint.inspect}"
       end
 
       def evaluate_proc(callable, token_owner)
@@ -26,12 +26,6 @@ module GrapeSwagger
       end
 
       private
-
-      def accepts_argument?(callable)
-        return false unless callable.respond_to?(:parameters)
-
-        callable.parameters.any? { |type, _| SUPPORTED_ARITY_TYPES.include?(type) }
-      end
 
       def resolve_from_helpers(endpoint, method_name)
         helpers = gather_helpers(endpoint)
@@ -48,30 +42,22 @@ module GrapeSwagger
       def gather_helpers(endpoint)
         return [] if endpoint.nil?
 
-        helpers = []
-        endpoint_helpers = fetch_endpoint_helpers(endpoint)
-        helpers.concat(normalize_helpers(endpoint_helpers)) if endpoint_helpers
-
         stackable_helpers = fetch_stackable_helpers(endpoint)
-        helpers.concat(normalize_helpers(stackable_helpers)) if stackable_helpers
-
-        helpers.compact.uniq
+        normalize_helpers(stackable_helpers)
       end
 
-      def resolve_from_helper(endpoint, helper, method_name)
-        if helper.is_a?(Module)
-          return UNRESOLVED unless helper_method_defined?(helper, method_name)
+      def fetch_stackable_helpers(endpoint)
+        return unless endpoint.respond_to?(:inheritable_setting)
 
-          return helper.instance_method(method_name).bind(endpoint).call
-        end
+        setting = endpoint.inheritable_setting
+        return unless setting.respond_to?(:namespace_stackable)
 
-        helper.respond_to?(method_name, true) ? helper.public_send(method_name) : UNRESOLVED
+        namespace_stackable = setting.namespace_stackable
+        return unless namespace_stackable.respond_to?(:[])
+
+        namespace_stackable[:helpers]
       rescue NameError
-        UNRESOLVED
-      end
-
-      def helper_method_defined?(helper, method_name)
-        helper.method_defined?(method_name) || helper.private_method_defined?(method_name)
+        nil
       end
 
       def normalize_helpers(helpers)
@@ -93,26 +79,22 @@ module GrapeSwagger
         end
       end
 
-      def fetch_endpoint_helpers(endpoint)
-        return unless endpoint.respond_to?(:helpers, true)
+      def resolve_from_helper(endpoint, helper, method_name)
+        return UNRESOLVED unless helper_method_defined?(helper, method_name)
 
-        endpoint.__send__(:helpers)
-      rescue StandardError
-        nil
+        helper.instance_method(method_name).bind(endpoint).call
+      rescue NameError
+        UNRESOLVED
       end
 
-      def fetch_stackable_helpers(endpoint)
-        return unless endpoint.respond_to?(:inheritable_setting, true)
+      def helper_method_defined?(helper, method_name)
+        helper.method_defined?(method_name) || helper.private_method_defined?(method_name)
+      end
 
-        setting = endpoint.__send__(:inheritable_setting)
-        return unless setting.respond_to?(:namespace_stackable)
+      def accepts_argument?(callable)
+        return false unless callable.respond_to?(:parameters)
 
-        namespace_stackable = setting.namespace_stackable
-        return unless namespace_stackable.respond_to?(:[])
-
-        namespace_stackable[:helpers]
-      rescue StandardError
-        nil
+        callable.parameters.any? { |type, _| SUPPORTED_ARITY_TYPES.include?(type) }
       end
     end
   end

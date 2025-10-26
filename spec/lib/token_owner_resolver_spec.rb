@@ -42,7 +42,7 @@ describe GrapeSwagger::TokenOwnerResolver do
     it 'raises when the endpoint does not respond to the method' do
       expect do
         expect(described_class.resolve(endpoint, :unknown))
-      end.to raise_error(NoMethodError, /undefined method `unknown`/)
+      end.to raise_error(GrapeSwagger::Errors::TokenOwnerNotFound, /undefined method `unknown`/)
     end
 
     context 'when helpers are included from a module' do
@@ -78,6 +78,61 @@ describe GrapeSwagger::TokenOwnerResolver do
       end.new
 
       expect(described_class.evaluate_proc(callable, token_owner)).to eq(:undetected)
+    end
+  end
+
+  describe '.resolve_from_helper' do
+    let(:helper_module) do
+      Module.new do
+        def helper_method
+          'helper_result'
+        end
+      end
+    end
+
+    let(:endpoint) { instance_double(Grape::Endpoint) }
+
+    it 'resolves the method from the Module helper' do
+      result = described_class.send(:resolve_from_helper, endpoint, helper_module, :helper_method)
+      expect(result).to eq('helper_result')
+    end
+
+    it 'returns a frozen sentinel object when method does not exist on the Module' do
+      result = described_class.send(:resolve_from_helper, endpoint, helper_module, :nonexistent)
+      # UNRESOLVED is a private constant, so we check by type and behavior
+      expect(result).to be_a(Object)
+      expect(result).to be_frozen
+      # Verify it's the same object on repeated calls (singleton pattern)
+      result2 = described_class.send(:resolve_from_helper, endpoint, helper_module, :nonexistent)
+      expect(result).to equal(result2)
+    end
+  end
+
+  describe 'endpoint helpers access' do
+    let(:helper_module) do
+      Module.new do
+        def current_user
+          { id: 42, name: 'Test User' }
+        end
+      end
+    end
+
+    let(:api_class) do
+      mod = helper_module
+      Class.new(Grape::API) do
+        helpers mod
+
+        get('/test') { { ok: true } }
+      end
+    end
+
+    before { api_class.compile! }
+
+    let(:endpoint) { api_class.endpoints.first }
+
+    it 'resolves helper methods from namespace stack' do
+      resolved_value = described_class.resolve(endpoint, :current_user)
+      expect(resolved_value).to eq(id: 42, name: 'Test User')
     end
   end
 end

@@ -14,6 +14,7 @@
 * [#966](https://github.com/ruby-grape/grape-swagger/pull/966): Grape 3.0 compatibility - [@numbata](https://github.com/numbata).
 * [#954](https://github.com/ruby-grape/grape-swagger/pull/954): Ruby 3.5 compatibility: add cgi gem, drop runtime `rack‑test` - [@numbata](https://github.com/numbata).
 * [#948](https://github.com/ruby-grape/grape-swagger/pull/948): Grape 2.3.0 and Ruby 3.5 compatibility - [@numbata](https://github.com/numbata).
+* [#957](https://github.com/ruby-grape/grape-swagger/pull/957): Fix issue where array params are sometimes omitted when `array_use_braces` is true - [@olivier-thatch](https://github.com/olivier-thatch).
 * Your contribution here.
 
 ### 2.1.2 (2025-01-07)

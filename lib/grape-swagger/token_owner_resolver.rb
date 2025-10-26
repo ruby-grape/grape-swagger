@@ -16,7 +16,7 @@ module GrapeSwagger
         helper_value = resolve_from_helpers(endpoint, method_name)
         return helper_value unless helper_value.equal?(UNRESOLVED)
 
-        raise Errors::TokenOwnerNotFound, "undefined method `#{method_name}` for #{endpoint.inspect}"
+        raise Errors::TokenOwnerNotFound, "undefined method `#{method_name}` for #{endpoint.class}"
       end
 
       def evaluate_proc(callable, token_owner)

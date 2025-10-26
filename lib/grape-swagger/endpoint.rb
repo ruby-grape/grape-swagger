@@ -312,16 +312,32 @@ module Grape
     end
 
     def build_response_for_type_parameter(memo, _route, value, _options)
-      type, format = prepare_type_and_format(value)
+      schema = build_response_schema(value)
 
       if memo[value[:code]].include?(:schema) && value.include?(:as)
-        memo[value[:code]][:schema][:properties].merge!(value[:as] => { type: type, format: format }.compact)
+        memo[value[:code]][:schema][:properties].merge!(schema)
       elsif value.include?(:as)
-        memo[value[:code]][:schema] =
-          { type: :object, properties: { value[:as] => { type: type, format: format }.compact } }
+        memo[value[:code]][:schema] = { type: :object, properties: schema }
       else
-        memo[value[:code]][:schema] = { type: type }
+        memo[value[:code]][:schema] = schema
       end
+    end
+
+    def build_response_schema(value)
+      return { value[:as] => build_response_schema(value.except(:as)) } if value.include?(:as)
+
+      if value[:type].is_a?(Array)
+        items = if value[:type].size == 1
+                  build_response_schema({ **value, type: value[:type].first })
+                else
+                  { oneOf: value[:type].map { |type| build_response_schema({ **value, type: type }) } }
+                end
+
+        return { type: 'array', items: items }
+      end
+
+      type, format = prepare_type_and_format(value)
+      { type: type, format: format }.compact
     end
 
     def prepare_type_and_format(value)

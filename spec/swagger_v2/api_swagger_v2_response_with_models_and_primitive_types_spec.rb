@@ -16,7 +16,13 @@ describe 'response' do
                { model: Entities::UseResponse, as: :user_response },
                { type: 'String', as: :string_response },
                { type: 'Float', as: :float_response },
-               { type: 'Hash', as: :hash_response }
+               { type: 'Hash', as: :hash_response },
+               { type: Array[Integer], as: :array_of_integer_response },
+               { type: Array[String], as: :array_of_string_response },
+               { type: Array[Float], as: :array_of_float_response },
+               { type: Array[Hash], as: :array_of_hash_response },
+               { type: Array[Array[Float]], as: :array_of_array_of_float_response },
+               { type: Array[Integer, String], as: :array_of_integer_or_string_response }
              ],
              failure: [
                { code: 400, message: 'NotFound', model: '' },
@@ -56,7 +62,52 @@ describe 'response' do
                 'integer_response' => { 'type' => 'integer', 'format' => 'int32' },
                 'string_response' => { 'type' => 'string' },
                 'float_response' => { 'type' => 'number', 'format' => 'float' },
-                'hash_response' => { 'type' => 'object' }
+                'hash_response' => { 'type' => 'object' },
+                'array_of_integer_response' => {
+                  'type' => 'array',
+                  'items' => {
+                    'type' => 'integer',
+                    'format' => 'int32'
+                  }
+                },
+                'array_of_string_response' => {
+                  'type' => 'array',
+                  'items' => {
+                    'type' => 'string'
+                  }
+                },
+                'array_of_float_response' => {
+                  'type' => 'array',
+                  'items' => {
+                    'type' => 'number',
+                    'format' => 'float'
+                  }
+                },
+                'array_of_hash_response' => {
+                  'type' => 'array',
+                  'items' => {
+                    'type' => 'object'
+                  }
+                },
+                'array_of_array_of_float_response' => {
+                  'type' => 'array',
+                  'items' => {
+                    'type' => 'array',
+                    'items' => {
+                      'type' => 'number',
+                      'format' => 'float'
+                    }
+                  }
+                },
+                'array_of_integer_or_string_response' => {
+                  'type' => 'array',
+                  'items' => {
+                    'oneOf' => [
+                      { 'type' => 'integer', 'format' => 'int32' },
+                      { 'type' => 'string' }
+                    ]
+                  }
+                }
               }
             }
           },

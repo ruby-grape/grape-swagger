@@ -109,13 +109,21 @@ module GrapeSwagger
 
         # Build parameters
         if operation_hash[:parameters]
+          form_data_params = []
           operation_hash[:parameters].each do |param_hash|
             param = build_parameter(param_hash)
             if param.location == 'body'
               build_request_body_from_param(operation, param, operation_hash[:consumes] || @spec.consumes)
+            elsif param.location == 'formData'
+              form_data_params << param
             else
               operation.add_parameter(param)
             end
+          end
+
+          # Convert formData params to requestBody for OAS3
+          if form_data_params.any?
+            build_request_body_from_form_data(operation, form_data_params, operation_hash[:consumes] || @spec.consumes)
           end
         end
 
@@ -180,6 +188,32 @@ module GrapeSwagger
         content_types = consumes || ['application/json']
         content_types.each do |content_type|
           schema = body_param.schema || @schema_builder.build_from_param(body_param.to_swagger2_h)
+          request_body.add_media_type(content_type, schema: schema)
+        end
+
+        operation.request_body = request_body
+      end
+
+      def build_request_body_from_form_data(operation, form_data_params, consumes)
+        request_body = ApiModel::RequestBody.new
+
+        # Check if any param is required
+        request_body.required = form_data_params.any?(&:required)
+
+        # Build schema with all form data params as properties
+        schema = ApiModel::Schema.new(type: 'object')
+        form_data_params.each do |param|
+          prop_schema = param.schema || @schema_builder.build_from_param(param.to_swagger2_h)
+          schema.add_property(param.name, prop_schema)
+          schema.mark_required(param.name) if param.required
+        end
+
+        # Determine content type - use multipart if file present, otherwise form-urlencoded
+        has_file = form_data_params.any? { |p| p.schema&.format == 'binary' || p.type == 'file' }
+        default_content_type = has_file ? 'multipart/form-data' : 'application/x-www-form-urlencoded'
+
+        content_types = consumes&.any? ? consumes : [default_content_type]
+        content_types.each do |content_type|
           request_body.add_media_type(content_type, schema: schema)
         end
 

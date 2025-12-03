@@ -93,10 +93,10 @@ describe '#962 polymorphic entity with custom documentation' do
   end
 
   specify do
+    # hidden_prop is hidden, so it shouldn't appear in properties or required
     expect(hidden_entity_definition).to eql({
       'type' => 'object',
-      'properties' => {},
-      'required' => ['hidden_prop']
+      'properties' => {}
     })
   end
 

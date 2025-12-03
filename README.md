@@ -19,6 +19,8 @@
   - [CORS](#cors)
 - [Configure ](#configure-)
     - [openapi_version: ](#openapi_version-)
+    - [json_schema_dialect: (OAS 3.1 only)](#json_schema_dialect-)
+    - [webhooks: (OAS 3.1 only)](#webhooks-)
     - [host: ](#host-)
     - [base_path: ](#base_path-)
     - [mount_path: ](#mount_path-)
@@ -264,6 +266,8 @@ end
 ## Configure <a name="configure"></a>
 
 * [openapi_version](#openapi_version)
+* [json_schema_dialect (OAS 3.1 only)](#json_schema_dialect)
+* [webhooks (OAS 3.1 only)](#webhooks)
 * [host](#host)
 * [base_path](#base_path)
 * [mount_path](#mount_path)
@@ -325,6 +329,85 @@ Key differences when using OpenAPI 3.x:
 - Parameters include a `schema` wrapper
 - `host`, `basePath`, and `schemes` are converted to a `servers` array
 - OpenAPI 3.1 uses `type: ["string", "null"]` instead of `nullable: true`
+
+
+#### json_schema_dialect: <a name="json_schema_dialect"></a>
+**OpenAPI 3.1 only.** Specifies the JSON Schema dialect used in the document. This option is ignored for OpenAPI 3.0 and Swagger 2.0.
+
+```ruby
+add_swagger_documentation \
+   openapi_version: '3.1',
+   json_schema_dialect: 'https://json-schema.org/draft/2020-12/schema'
+```
+
+This adds `jsonSchemaDialect` to the OpenAPI 3.1 output:
+```json
+{
+  "openapi": "3.1.0",
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  ...
+}
+```
+
+
+#### webhooks: <a name="webhooks"></a>
+**OpenAPI 3.1 only.** Defines webhook endpoints that your API can call. This option is ignored for OpenAPI 3.0 and Swagger 2.0.
+
+```ruby
+add_swagger_documentation \
+   openapi_version: '3.1',
+   webhooks: {
+     newPetAvailable: {
+       post: {
+         summary: 'New pet available',
+         description: 'A new pet has been added to the store',
+         operationId: 'newPetWebhook',
+         tags: ['pets'],
+         requestBody: {
+           required: true,
+           content: {
+             'application/json': {
+               schema: {
+                 type: 'object',
+                 properties: {
+                   petId: { type: 'integer', description: 'Pet ID' },
+                   petName: { type: 'string', description: 'Pet name' }
+                 },
+                 required: %w[petId petName]
+               }
+             }
+           }
+         },
+         responses: {
+           '200': { description: 'Webhook received successfully' },
+           '400': { description: 'Invalid payload' }
+         }
+       }
+     }
+   }
+```
+
+You can also reference existing schemas:
+```ruby
+webhooks: {
+  petCreated: {
+    post: {
+      summary: 'Pet created',
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: { '$ref': '#/components/schemas/Pet' }
+          }
+        }
+      },
+      responses: {
+        '200': { description: 'OK' }
+      }
+    }
+  }
+}
+```
 
 
 #### host: <a name="host"></a>

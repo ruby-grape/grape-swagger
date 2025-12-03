@@ -44,16 +44,23 @@ module GrapeSwagger
         end
       end
 
-      # Remove nil/empty values from hash
-      def compact_hash(hash)
+      # Remove nil values and empty containers from hash, but preserve intentionally empty arrays
+      # like security: [] or scopes: []
+      def compact_hash(hash, preserve_empty_arrays: false)
         case hash
         when Hash
           hash.each_with_object({}) do |(k, v), result|
-            compacted = compact_hash(v)
-            result[k] = compacted unless blank?(compacted)
+            # Preserve empty arrays in certain contexts (e.g., security scopes)
+            if v.is_a?(Array) && v.empty?
+              result[k] = v
+            else
+              compacted = compact_hash(v, preserve_empty_arrays: true)
+              result[k] = compacted unless blank?(compacted)
+            end
           end
         when Array
-          hash.map { |v| compact_hash(v) }.reject { |v| blank?(v) }
+          # Don't reject empty hashes from arrays (e.g., security: [{api_key: []}])
+          hash.map { |v| compact_hash(v, preserve_empty_arrays: true) }.reject(&:nil?)
         else
           hash
         end
@@ -61,7 +68,8 @@ module GrapeSwagger
 
       def blank?(value)
         return true if value.nil?
-        return value.empty? if value.respond_to?(:empty?)
+        # Only consider empty if it's an empty hash (not array - arrays can be intentionally empty)
+        return true if value.is_a?(Hash) && value.empty?
 
         false
       end

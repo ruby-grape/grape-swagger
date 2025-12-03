@@ -13,7 +13,7 @@ module GrapeSwagger
         output[:tags] = export_tags if spec.tags.any?
         output[:paths] = export_paths if spec.paths.any?
         output[:components] = export_components unless components_empty?
-        output[:security] = spec.security if spec.security&.any?
+        output[:security] = spec.security unless spec.security.nil?
 
         # Extensions
         spec.extensions.each { |k, v| output[k] = v }
@@ -124,7 +124,7 @@ module GrapeSwagger
         output[:description] = operation.description if operation.description
         output[:tags] = operation.tags if operation.tags&.any?
         output[:deprecated] = operation.deprecated if operation.deprecated
-        output[:security] = operation.security if operation.security&.any?
+        output[:security] = operation.security unless operation.security.nil?
 
         # Parameters (OAS3 style with schema wrapper)
         params = operation.parameters.map { |p| export_parameter(p) }

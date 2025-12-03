@@ -299,6 +299,14 @@ module GrapeSwagger
         return export_hash_schema(schema) if schema.is_a?(Hash)
 
         output = {}
+
+        # Handle null type - OAS 3.0 doesn't support type: null directly
+        if schema.type == 'null'
+          # In OAS 3.0, we represent a null-only type as an empty object with nullable
+          output[:nullable] = true if nullable_keyword?
+          return output
+        end
+
         output[:type] = schema.type if schema.type
         output[:format] = schema.format if schema.format
         output[:description] = schema.description if schema.description

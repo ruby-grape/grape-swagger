@@ -17,7 +17,9 @@ module GrapeSwagger
         'dateTime' => { type: 'string', format: 'date-time' },
         'password' => { type: 'string', format: 'password' },
         'email' => { type: 'string', format: 'email' },
-        'uuid' => { type: 'string', format: 'uuid' }
+        'uuid' => { type: 'string', format: 'uuid' },
+        # OAS 3.1 supports null as a type
+        'null' => { type: 'null' }
       }.freeze
 
       RUBY_TYPE_MAPPINGS = {
@@ -38,7 +40,9 @@ module GrapeSwagger
         'JSON' => 'object',
         'Array' => 'array',
         'Rack::Multipart::UploadedFile' => 'file',
-        'File' => 'file'
+        'File' => 'file',
+        # OAS 3.1 supports null as a type
+        'NilClass' => 'null'
       }.freeze
 
       def initialize(definitions = {})

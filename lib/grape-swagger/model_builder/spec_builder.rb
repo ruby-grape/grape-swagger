@@ -160,7 +160,7 @@ module GrapeSwagger
         # Build schema for OAS3
         if param_hash[:schema]
           param.schema = @schema_builder.build_from_definition(param_hash[:schema])
-        elsif param.location != 'body'
+        else
           param.schema = @schema_builder.build_from_param(param_hash)
         end
 

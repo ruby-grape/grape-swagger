@@ -122,6 +122,15 @@ module GrapeSwagger
       def build_from_definition(definition)
         schema = ApiModel::Schema.new
 
+        # Handle $ref - extract model name from reference
+        if definition['$ref'] || definition[:$ref]
+          ref = definition['$ref'] || definition[:$ref]
+          # Extract model name from "#/definitions/ModelName" or "#/components/schemas/ModelName"
+          model_name = ref.split('/').last
+          schema.canonical_name = model_name
+          return schema
+        end
+
         schema.type = definition[:type] if definition[:type]
         schema.description = definition[:description] if definition[:description]
 

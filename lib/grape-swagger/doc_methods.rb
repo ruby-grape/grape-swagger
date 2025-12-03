@@ -37,12 +37,15 @@ module GrapeSwagger
         specific_api_documentation: { desc: 'Swagger compatible API description for specific API' },
         endpoint_auth_wrapper: nil,
         swagger_endpoint_guard: nil,
-        token_owner: nil
+        token_owner: nil,
+        # OpenAPI version: nil (Swagger 2.0), '3.0', or '3.1'
+        openapi_version: nil
       }.freeze
 
     FORMATTER_METHOD = %i[format default_format default_error_formatter].freeze
 
     def self.output_path_definitions(combi_routes, endpoint, target_class, options)
+      # Generate Swagger 2.0 output (always, as base)
       output = endpoint.swagger_object(
         target_class,
         endpoint.request,
@@ -56,7 +59,21 @@ module GrapeSwagger
       output[:paths]       = paths unless paths.blank?
       output[:definitions] = definitions unless definitions.blank?
 
+      # Convert to OpenAPI 3.x if requested
+      if options[:openapi_version]
+        output = convert_to_openapi3(output, options[:openapi_version])
+      end
+
       output
+    end
+
+    def self.convert_to_openapi3(swagger_output, version)
+      # Build API model from Swagger output
+      spec_builder = GrapeSwagger::ModelBuilder::SpecBuilder.new
+      spec = spec_builder.build_from_swagger_hash(swagger_output)
+
+      # Export to requested OpenAPI version
+      GrapeSwagger::Exporter.export(spec, version: version)
     end
 
     def self.tags_from(paths, options)

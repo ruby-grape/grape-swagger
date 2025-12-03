@@ -13,6 +13,11 @@ require 'grape-swagger/model_parsers'
 require 'grape-swagger/request_param_parser_registry'
 require 'grape-swagger/token_owner_resolver'
 
+# OpenAPI 3.x support
+require 'grape-swagger/api_model'
+require 'grape-swagger/model_builder'
+require 'grape-swagger/exporter'
+
 module GrapeSwagger
   class << self
     def model_parsers

@@ -18,6 +18,8 @@ module GrapeSwagger
         'password' => { type: 'string', format: 'password' },
         'email' => { type: 'string', format: 'email' },
         'uuid' => { type: 'string', format: 'uuid' },
+        # JSON type maps to object
+        'json' => { type: 'object' },
         # OAS 3.1 supports null as a type
         'null' => { type: 'null' }
       }.freeze

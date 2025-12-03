@@ -18,6 +18,7 @@
     - [insert_after](#insert_after)
   - [CORS](#cors)
 - [Configure ](#configure-)
+    - [openapi_version: ](#openapi_version-)
     - [host: ](#host-)
     - [base_path: ](#base_path-)
     - [mount_path: ](#mount_path-)
@@ -130,7 +131,9 @@ The following versions of grape, grape-entity and grape-swagger can currently be
 
 ## Swagger-Spec <a name="swagger-spec"></a>
 
-Grape-swagger generates documentation per [Swagger / OpenAPI Spec 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md).
+Grape-swagger generates documentation per [Swagger / OpenAPI Spec 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) by default.
+
+It also supports [OpenAPI 3.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md) and [OpenAPI 3.1](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.1.0.md). See the [openapi_version configuration option](#openapi_version) for details.
 
 <!-- validating it with: http://bigstickcarpet.com/swagger-parser/www/index.html -->
 
@@ -260,6 +263,7 @@ end
 
 ## Configure <a name="configure"></a>
 
+* [openapi_version](#openapi_version)
 * [host](#host)
 * [base_path](#base_path)
 * [mount_path](#mount_path)
@@ -292,6 +296,35 @@ The `host` and `base_path` options also accept a `proc` or a `lambda` to evaluat
 add_swagger_documentation \
   base_path: proc { |request| request.host =~ /^example/ ? '/api-example' : '/api' }
 ```
+
+
+#### openapi_version: <a name="openapi_version"></a>
+Specifies which OpenAPI/Swagger version to generate. By default (`nil`), Swagger 2.0 is generated.
+
+Available options:
+- `nil` - Swagger 2.0 (default, for backward compatibility)
+- `'3.0'` - OpenAPI 3.0.3
+- `'3.1'` - OpenAPI 3.1.0
+
+```ruby
+# Swagger 2.0 (default)
+add_swagger_documentation
+
+# OpenAPI 3.0
+add_swagger_documentation \
+   openapi_version: '3.0'
+
+# OpenAPI 3.1
+add_swagger_documentation \
+   openapi_version: '3.1'
+```
+
+Key differences when using OpenAPI 3.x:
+- Body parameters are converted to `requestBody` with content type wrappers
+- Schema references use `#/components/schemas/` instead of `#/definitions/`
+- Parameters include a `schema` wrapper
+- `host`, `basePath`, and `schemes` are converted to a `servers` array
+- OpenAPI 3.1 uses `type: ["string", "null"]` instead of `nullable: true`
 
 
 #### host: <a name="host"></a>

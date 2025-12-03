@@ -64,8 +64,8 @@ module GrapeSwagger
       end
 
       def export_paths
-        spec.paths.each_with_object({}) do |(path, path_item), result|
-          result[path] = export_path_item(path_item)
+        spec.paths.transform_values do |path_item|
+          export_path_item(path_item)
         end
       end
 
@@ -111,9 +111,7 @@ module GrapeSwagger
         params = operation.parameters.map { |p| export_parameter(p) }
 
         # Convert request body back to body parameter
-        if operation.request_body
-          params << export_request_body_as_parameter(operation.request_body)
-        end
+        params << export_request_body_as_parameter(operation.request_body) if operation.request_body
 
         params.compact
       end
@@ -192,8 +190,8 @@ module GrapeSwagger
         output[:schema] = export_schema(schema) if schema
 
         if response.headers.any?
-          output[:headers] = response.headers.each_with_object({}) do |(name, header), h|
-            h[name] = export_header(header)
+          output[:headers] = response.headers.transform_values do |header|
+            export_header(header)
           end
         end
 
@@ -214,8 +212,8 @@ module GrapeSwagger
       end
 
       def export_definitions
-        spec.components.schemas.each_with_object({}) do |(name, schema), result|
-          result[name] = export_schema(schema)
+        spec.components.schemas.transform_values do |schema|
+          export_schema(schema)
         end
       end
 
@@ -223,9 +221,7 @@ module GrapeSwagger
         return nil unless schema
 
         # Handle reference
-        if schema.canonical_name && !schema.type
-          return { '$ref' => "#/definitions/#{schema.canonical_name}" }
-        end
+        return { '$ref' => "#/definitions/#{schema.canonical_name}" } if schema.canonical_name && !schema.type
 
         output = {}
         output[:type] = schema.type if schema.type
@@ -254,8 +250,8 @@ module GrapeSwagger
 
         # Object
         if schema.properties.any?
-          output[:properties] = schema.properties.each_with_object({}) do |(prop_name, prop_schema), props|
-            props[prop_name] = export_schema(prop_schema)
+          output[:properties] = schema.properties.transform_values do |prop_schema|
+            export_schema(prop_schema)
           end
         end
         output[:required] = schema.required if schema.required.any?
@@ -266,7 +262,7 @@ module GrapeSwagger
         output[:discriminator] = schema.discriminator if schema.discriminator
 
         # Extensions
-        schema.extensions.each { |k, v| output[k] = v } if schema.extensions
+        schema.extensions&.each { |k, v| output[k] = v }
 
         output
       end
@@ -279,8 +275,8 @@ module GrapeSwagger
       end
 
       def export_security_definitions
-        spec.components.security_schemes.each_with_object({}) do |(name, scheme), result|
-          result[name] = export_security_scheme(scheme)
+        spec.components.security_schemes.transform_values do |scheme|
+          export_security_scheme(scheme)
         end
       end
 

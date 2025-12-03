@@ -210,7 +210,7 @@ describe 'OpenAPI 3.x Integration Tests' do
         expect(info['license']['name']).to eq('MIT')
       end
 
-      # Note: contact info requires contact_name, contact_email, contact_url options
+      # NOTE: contact info requires contact_name, contact_email, contact_url options
       # The nested hash format under info: { contact: {} } may not be fully supported
 
       it 'has servers section' do
@@ -343,9 +343,7 @@ describe 'OpenAPI 3.x Integration Tests' do
         user_schema = schemas.find { |name, _| name.include?('User') && !name.include?('List') && !name.include?('Request') }
         if user_schema
           props = user_schema[1]['properties']
-          if props && props['address']
-            expect(props['address']['$ref'] || props['address']['description']).to be_present
-          end
+          expect(props['address']['$ref'] || props['address']['description']).to be_present if props && props['address']
         end
       end
     end

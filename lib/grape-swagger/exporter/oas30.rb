@@ -94,8 +94,8 @@ module GrapeSwagger
       end
 
       def export_paths
-        spec.paths.each_with_object({}) do |(path, path_item), result|
-          result[path] = export_path_item(path_item)
+        spec.paths.transform_values do |path_item|
+          export_path_item(path_item)
         end
       end
 
@@ -236,8 +236,8 @@ module GrapeSwagger
         end
 
         if response.headers.any?
-          output[:headers] = response.headers.each_with_object({}) do |(name, header), h|
-            h[name] = export_header(header)
+          output[:headers] = response.headers.transform_values do |header|
+            export_header(header)
           end
         end
 
@@ -273,14 +273,14 @@ module GrapeSwagger
         output = {}
 
         if spec.components.schemas.any?
-          output[:schemas] = spec.components.schemas.each_with_object({}) do |(name, schema), result|
-            result[name] = export_schema(schema)
+          output[:schemas] = spec.components.schemas.transform_values do |schema|
+            export_schema(schema)
           end
         end
 
         if spec.components.security_schemes.any?
-          output[:securitySchemes] = spec.components.security_schemes.each_with_object({}) do |(name, scheme), result|
-            result[name] = export_security_scheme(scheme)
+          output[:securitySchemes] = spec.components.security_schemes.transform_values do |scheme|
+            export_security_scheme(scheme)
           end
         end
 
@@ -318,9 +318,9 @@ module GrapeSwagger
         if schema.nullable
           if nullable_keyword?
             output[:nullable] = true
-          else
+          elsif output[:type]
             # OAS 3.1 uses type array
-            output[:type] = [output[:type], 'null'] if output[:type]
+            output[:type] = [output[:type], 'null']
           end
         end
 
@@ -347,8 +347,8 @@ module GrapeSwagger
 
         # Object
         if schema.properties.any?
-          output[:properties] = schema.properties.each_with_object({}) do |(prop_name, prop_schema), props|
-            props[prop_name] = export_schema(prop_schema)
+          output[:properties] = schema.properties.transform_values do |prop_schema|
+            export_schema(prop_schema)
           end
         end
         output[:required] = schema.required if schema.required.any?

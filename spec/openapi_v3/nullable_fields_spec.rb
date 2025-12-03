@@ -86,7 +86,7 @@ describe 'Nullable fields' do
   end
 
   describe 'OAS 3.0 vs 3.1 nullable handling' do
-    # Note: This tests the structural difference in how nullable is represented
+    # NOTE: This tests the structural difference in how nullable is represented
     # OAS 3.0: uses "nullable: true"
     # OAS 3.1: uses type array like ["string", "null"]
 
@@ -120,7 +120,7 @@ describe 'Nullable fields' do
       exporter = GrapeSwagger::Exporter::OAS31.new(spec)
       output = exporter.export
 
-      expect(output[:components][:schemas]['Test'][:type]).to eq(['string', 'null'])
+      expect(output[:components][:schemas]['Test'][:type]).to eq(%w[string null])
       expect(output[:components][:schemas]['Test']).not_to have_key(:nullable)
     end
   end

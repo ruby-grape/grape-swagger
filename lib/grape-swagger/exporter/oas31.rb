@@ -46,16 +46,14 @@ module GrapeSwagger
 
         # OAS 3.1 supports identifier OR url (not both)
         # If identifier is present, prefer it over url
-        if license[:identifier]
-          license.delete(:url)
-        end
+        license.delete(:url) if license[:identifier]
 
         license
       end
 
       def export_webhooks
-        spec.webhooks.each_with_object({}) do |(name, path_item), result|
-          result[name] = export_path_item(path_item)
+        spec.webhooks.transform_values do |path_item|
+          export_path_item(path_item)
         end
       end
 
@@ -73,7 +71,7 @@ module GrapeSwagger
         output = {}
 
         # OAS 3.1: $schema keyword for root schemas in components
-        output[:'$schema'] = schema.json_schema if schema.respond_to?(:json_schema) && schema.json_schema
+        output[:$schema] = schema.json_schema if schema.respond_to?(:json_schema) && schema.json_schema
 
         output[:type] = schema.type if schema.type
         output[:format] = schema.format if schema.format
@@ -91,9 +89,7 @@ module GrapeSwagger
         end
 
         # Nullable handling - OAS 3.1 uses type array
-        if schema.nullable
-          output[:type] = [output[:type], 'null'] if output[:type]
-        end
+        output[:type] = [output[:type], 'null'] if schema.nullable && output[:type]
 
         output[:readOnly] = schema.read_only if schema.read_only
         output[:writeOnly] = schema.write_only if schema.write_only
@@ -118,8 +114,8 @@ module GrapeSwagger
 
         # Object
         if schema.properties.any?
-          output[:properties] = schema.properties.each_with_object({}) do |(prop_name, prop_schema), props|
-            props[prop_name] = export_schema(prop_schema)
+          output[:properties] = schema.properties.transform_values do |prop_schema|
+            export_schema(prop_schema)
           end
         end
         output[:required] = schema.required if schema.required.any?

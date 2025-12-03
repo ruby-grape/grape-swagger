@@ -12,7 +12,9 @@ module GrapeSwagger
       end
 
       # Build an operation from route and parsed parameters/responses
+      # rubocop:disable Lint/UnusedMethodArgument
       def build(method:, params:, responses:, route_options:, content_types: {})
+        # rubocop:enable Lint/UnusedMethodArgument
         operation = ApiModel::Operation.new
 
         # Basic info
@@ -76,7 +78,7 @@ module GrapeSwagger
         operation.request_body = request_body
       end
 
-      def add_form_param_to_request_body(operation, form_param, consumes)
+      def add_form_param_to_request_body(operation, form_param, _consumes)
         request_body = operation.request_body || ApiModel::RequestBody.new
 
         # Determine content type for form data
@@ -102,9 +104,7 @@ module GrapeSwagger
         )
 
         # Convert file type for OAS3
-        if form_param.type == 'file'
-          prop_schema = ApiModel::Schema.new(type: 'string', format: 'binary')
-        end
+        prop_schema = ApiModel::Schema.new(type: 'string', format: 'binary') if form_param.type == 'file'
 
         form_schema.add_property(form_param.name, prop_schema)
         form_schema.mark_required(form_param.name) if form_param.required

@@ -23,7 +23,7 @@ module GrapeSwagger
         param.name = param_hash[:name]
         param.location = normalize_location(param_hash[:in])
         param.description = param_hash[:description]
-        param.required = param.path? ? true : param_hash[:required]
+        param.required = param.path? || param_hash[:required]
         param.deprecated = param_hash[:deprecated] if param_hash.key?(:deprecated)
 
         # Build schema from type info

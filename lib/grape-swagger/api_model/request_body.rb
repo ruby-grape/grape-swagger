@@ -42,12 +42,14 @@ module GrapeSwagger
         primary_media_type = media_types.first
         return nil unless primary_media_type
 
+        schema = primary_media_type.schema
+        schema_hash = schema.respond_to?(:to_h) ? schema.to_h : schema
         {
           name: 'body',
           in: 'body',
           required: required,
           description: description,
-          schema: primary_media_type.schema.respond_to?(:to_h) ? primary_media_type.schema.to_h : primary_media_type.schema
+          schema: schema_hash
         }.compact
       end
     end

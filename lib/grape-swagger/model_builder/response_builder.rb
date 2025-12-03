@@ -24,14 +24,12 @@ module GrapeSwagger
         end
 
         # Handle headers
-        if response_hash[:headers]
-          response_hash[:headers].each do |name, header_def|
-            response.add_header(
-              name,
-              schema: @schema_builder.build_from_param(header_def),
-              description: header_def[:description]
-            )
-          end
+        response_hash[:headers]&.each do |name, header_def|
+          response.add_header(
+            name,
+            schema: @schema_builder.build_from_param(header_def),
+            description: header_def[:description]
+          )
         end
 
         # Handle examples

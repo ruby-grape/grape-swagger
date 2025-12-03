@@ -11,18 +11,15 @@ module GrapeSwagger
     # Each exporter produces a version-specific OpenAPI/Swagger document.
 
     class << self
+      VERSION_EXPORTERS = {
+        swagger_20: Swagger2,
+        oas_30: OAS30,
+        oas_31: OAS31
+      }.freeze
+
       # Factory method to get the appropriate exporter for a version
       def for_version(version)
-        case normalize_version(version)
-        when :swagger_20, nil
-          Swagger2
-        when :oas_30
-          OAS30
-        when :oas_31
-          OAS31
-        else
-          Swagger2
-        end
+        VERSION_EXPORTERS[normalize_version(version)] || Swagger2
       end
 
       # Export a spec using the specified version
@@ -43,8 +40,6 @@ module GrapeSwagger
           :oas_30
         when '3.1', '3.1.0', 'oas31', 'openapi31', 'openapi_31'
           :oas_31
-        else
-          nil
         end
       end
     end

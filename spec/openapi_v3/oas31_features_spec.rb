@@ -204,7 +204,7 @@ describe 'OpenAPI 3.1 schema $schema keyword' do
     exporter = GrapeSwagger::Exporter::OAS31.new(spec)
     output = exporter.export
 
-    expect(output[:components][:schemas]['MyModel'][:'$schema']).to eq('https://json-schema.org/draft/2020-12/schema')
+    expect(output[:components][:schemas]['MyModel'][:$schema]).to eq('https://json-schema.org/draft/2020-12/schema')
   end
 end
 

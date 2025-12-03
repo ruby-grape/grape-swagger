@@ -7,7 +7,7 @@ module GrapeSwagger
     class Parameter
       LOCATIONS = %w[query path header cookie].freeze
 
-      attr_accessor :name, :location, :description, :required,
+      attr_accessor :name, :location, :description,
                     :deprecated, :allow_empty_value,
                     :schema, :style, :explode, :allow_reserved,
                     :example, :examples,
@@ -38,20 +38,25 @@ module GrapeSwagger
         location == 'cookie'
       end
 
+      # Set required value
+      attr_writer :required
+
       # Ensure path parameters are always required
       def required
-        path? ? true : @required
+        path? || @required
       end
 
       # Convert Swagger 2.0 collectionFormat to OAS3 style/explode
+      COLLECTION_FORMAT_STYLES = {
+        'csv' => 'form',
+        'ssv' => 'spaceDelimited',
+        'tsv' => 'pipeDelimited',
+        'pipes' => 'pipeDelimited',
+        'multi' => 'form'
+      }.freeze
+
       def style_from_collection_format
-        case collection_format
-        when 'csv' then 'form'
-        when 'ssv' then 'spaceDelimited'
-        when 'tsv' then 'pipeDelimited'
-        when 'pipes' then 'pipeDelimited'
-        when 'multi' then 'form'
-        end
+        COLLECTION_FORMAT_STYLES[collection_format]
       end
 
       def explode_from_collection_format

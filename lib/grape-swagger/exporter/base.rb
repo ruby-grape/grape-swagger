@@ -11,7 +11,7 @@ module GrapeSwagger
       end
 
       def export
-        raise NotImplementedError, "Subclasses must implement #export"
+        raise NotImplementedError, 'Subclasses must implement #export'
       end
 
       protected
@@ -51,7 +51,7 @@ module GrapeSwagger
         when Hash
           hash.each_with_object({}) do |(k, v), result|
             # Preserve empty arrays in certain contexts (e.g., security scopes)
-            if v.is_a?(Array) && v.empty?
+            if v.is_a?(Array) && v.empty? && preserve_empty_arrays
               result[k] = v
             else
               compacted = compact_hash(v, preserve_empty_arrays: true)
@@ -60,7 +60,7 @@ module GrapeSwagger
           end
         when Array
           # Don't reject empty hashes from arrays (e.g., security: [{api_key: []}])
-          hash.map { |v| compact_hash(v, preserve_empty_arrays: true) }.reject(&:nil?)
+          hash.map { |v| compact_hash(v, preserve_empty_arrays: preserve_empty_arrays) }.compact
         else
           hash
         end

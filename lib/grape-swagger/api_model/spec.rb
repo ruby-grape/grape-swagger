@@ -74,14 +74,15 @@ module GrapeSwagger
         hash.compact
       end
 
+      VERSION_MAPPINGS = {
+        '3.0' => '3.0.3', '3.0.0' => '3.0.3', '3.0.3' => '3.0.3',
+        '3.1' => '3.1.0', '3.1.0' => '3.1.0'
+      }.freeze
+
       private
 
       def version_string(version)
-        case version.to_s
-        when '3.0', '3.0.0', '3.0.3' then '3.0.3'
-        when '3.1', '3.1.0' then '3.1.0'
-        else '3.0.3'
-        end
+        VERSION_MAPPINGS[version.to_s] || '3.0.3'
       end
 
       def servers_for_oas3
@@ -98,7 +99,7 @@ module GrapeSwagger
         # Remove license identifier for Swagger 2.0
         info_hash = info.to_h
         if info_hash[:license].is_a?(Hash)
-          info_hash[:license] = info_hash[:license].reject { |k, _| k == :identifier }
+          info_hash[:license] = info_hash[:license].except(:identifier)
           info_hash[:license] = nil if info_hash[:license].empty?
         end
         info_hash.compact

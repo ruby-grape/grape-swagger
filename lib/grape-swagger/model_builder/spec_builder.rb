@@ -60,17 +60,17 @@ module GrapeSwagger
         @spec.schemes = Array(swagger_hash[:schemes]) if swagger_hash[:schemes]
 
         # Build servers for OAS3
-        if swagger_hash[:host]
-          schemes = swagger_hash[:schemes] || ['https']
-          schemes.each do |scheme|
-            @spec.add_server(
-              ApiModel::Server.from_swagger2(
-                host: swagger_hash[:host],
-                base_path: swagger_hash[:basePath],
-                scheme: scheme
-              )
+        return unless swagger_hash[:host]
+
+        schemes = swagger_hash[:schemes] || ['https']
+        schemes.each do |scheme|
+          @spec.add_server(
+            ApiModel::Server.from_swagger2(
+              host: swagger_hash[:host],
+              base_path: swagger_hash[:basePath],
+              scheme: scheme
             )
-          end
+          )
         end
       end
 
@@ -96,7 +96,7 @@ module GrapeSwagger
         end
       end
 
-      def build_operation(method, operation_hash)
+      def build_operation(_method, operation_hash)
         operation = ApiModel::Operation.new
 
         operation.operation_id = operation_hash[:operationId]
@@ -167,11 +167,11 @@ module GrapeSwagger
         param.pattern = param_hash[:pattern]
 
         # Build schema for OAS3
-        if param_hash[:schema]
-          param.schema = @schema_builder.build_from_definition(param_hash[:schema])
-        else
-          param.schema = @schema_builder.build_from_param(param_hash)
-        end
+        param.schema = if param_hash[:schema]
+                         @schema_builder.build_from_definition(param_hash[:schema])
+                       else
+                         @schema_builder.build_from_param(param_hash)
+                       end
 
         # Copy extensions
         param_hash.each do |key, value|
@@ -240,17 +240,15 @@ module GrapeSwagger
           end
         end
 
-        if response_hash[:headers]
-          response_hash[:headers].each do |name, header_hash|
-            header = ApiModel::Header.new(
-              name: name,
-              description: header_hash[:description],
-              type: header_hash[:type],
-              format: header_hash[:format]
-            )
-            header.schema = @schema_builder.build_from_param(header_hash)
-            response.headers[name] = header
-          end
+        response_hash[:headers]&.each do |name, header_hash|
+          header = ApiModel::Header.new(
+            name: name,
+            description: header_hash[:description],
+            type: header_hash[:type],
+            format: header_hash[:format]
+          )
+          header.schema = @schema_builder.build_from_param(header_hash)
+          response.headers[name] = header
         end
 
         response.examples = response_hash[:examples] if response_hash[:examples]
@@ -275,11 +273,9 @@ module GrapeSwagger
       end
 
       def build_security(swagger_hash)
-        if swagger_hash[:securityDefinitions]
-          swagger_hash[:securityDefinitions].each do |name, definition|
-            scheme = build_security_scheme(definition)
-            @spec.components.add_security_scheme(name, scheme)
-          end
+        swagger_hash[:securityDefinitions]&.each do |name, definition|
+          scheme = build_security_scheme(definition)
+          @spec.components.add_security_scheme(name, scheme)
         end
 
         @spec.security = swagger_hash[:security] if swagger_hash[:security]

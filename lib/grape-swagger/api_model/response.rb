@@ -94,8 +94,8 @@ module GrapeSwagger
       def to_swagger2_h
         hash = {}
         hash[:description] = description if description
-        hash[:type] = type || (schema&.type) if type || schema&.type
-        hash[:format] = format || (schema&.format) if format || schema&.format
+        hash[:type] = type || schema&.type if type || schema&.type
+        hash[:format] = format || schema&.format if format || schema&.format
         hash[:items] = items.respond_to?(:to_h) ? items.to_h : items if items
         extensions.each { |k, v| hash[k] = v } if extensions.any?
         hash

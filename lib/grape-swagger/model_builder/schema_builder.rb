@@ -91,11 +91,11 @@ module GrapeSwagger
             schema.format = param[:format] || mapping[:format]
           elsif type_string == 'array'
             schema.type = 'array'
-            if param[:items]
-              schema.items = build_from_param(param[:items])
-            else
-              schema.items = ApiModel::Schema.new(type: 'string')
-            end
+            schema.items = if param[:items]
+                             build_from_param(param[:items])
+                           else
+                             ApiModel::Schema.new(type: 'string')
+                           end
           elsif type_string == 'object'
             schema.type = 'object'
           elsif type_string == 'file'
@@ -140,23 +140,15 @@ module GrapeSwagger
         schema.type = definition[:type] if definition[:type]
         schema.description = definition[:description] if definition[:description]
 
-        if definition[:properties]
-          definition[:properties].each do |name, prop|
-            schema.add_property(name, build_from_param(prop))
-          end
+        definition[:properties]&.each do |name, prop|
+          schema.add_property(name, build_from_param(prop))
         end
 
-        if definition[:required].is_a?(Array)
-          definition[:required].each { |name| schema.mark_required(name) }
-        end
+        definition[:required].each { |name| schema.mark_required(name) } if definition[:required].is_a?(Array)
 
-        if definition[:items]
-          schema.items = build_from_definition(definition[:items])
-        end
+        schema.items = build_from_definition(definition[:items]) if definition[:items]
 
-        if definition[:allOf]
-          schema.all_of = definition[:allOf].map { |d| build_from_definition(d) }
-        end
+        schema.all_of = definition[:allOf].map { |d| build_from_definition(d) } if definition[:allOf]
 
         schema.additional_properties = definition[:additionalProperties] if definition.key?(:additionalProperties)
 
@@ -185,19 +177,19 @@ module GrapeSwagger
 
       def build_array_schema(schema, options)
         schema.type = 'array'
-        if options[:items]
-          schema.items = build(options[:items][:type] || 'string', options[:items])
-        else
-          schema.items = ApiModel::Schema.new(type: 'string')
-        end
+        schema.items = if options[:items]
+                         build(options[:items][:type] || 'string', options[:items])
+                       else
+                         ApiModel::Schema.new(type: 'string')
+                       end
       end
 
       def build_object_schema(schema, options)
         schema.type = 'object'
-        if options[:properties]
-          options[:properties].each do |name, prop_options|
-            schema.add_property(name, build(prop_options[:type] || 'string', prop_options))
-          end
+        return unless options[:properties]
+
+        options[:properties].each do |name, prop_options|
+          schema.add_property(name, build(prop_options[:type] || 'string', prop_options))
         end
       end
 

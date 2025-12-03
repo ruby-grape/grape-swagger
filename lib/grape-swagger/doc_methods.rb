@@ -39,7 +39,10 @@ module GrapeSwagger
         swagger_endpoint_guard: nil,
         token_owner: nil,
         # OpenAPI version: nil (Swagger 2.0), '3.0', or '3.1'
-        openapi_version: nil
+        openapi_version: nil,
+        # OpenAPI 3.1 specific options
+        json_schema_dialect: nil,
+        webhooks: nil
       }.freeze
 
     FORMATTER_METHOD = %i[format default_format default_error_formatter].freeze
@@ -61,19 +64,111 @@ module GrapeSwagger
 
       # Convert to OpenAPI 3.x if requested
       if options[:openapi_version]
-        output = convert_to_openapi3(output, options[:openapi_version])
+        output = convert_to_openapi3(output, options)
       end
 
       output
     end
 
-    def self.convert_to_openapi3(swagger_output, version)
+    def self.convert_to_openapi3(swagger_output, options)
+      version = options[:openapi_version]
+
       # Build API model from Swagger output
       spec_builder = GrapeSwagger::ModelBuilder::SpecBuilder.new
       spec = spec_builder.build_from_swagger_hash(swagger_output)
 
+      # Apply OAS 3.1 specific options
+      if version.to_s.start_with?('3.1')
+        spec.json_schema_dialect = options[:json_schema_dialect] if options[:json_schema_dialect]
+        apply_webhooks(spec, options[:webhooks]) if options[:webhooks]
+      end
+
       # Export to requested OpenAPI version
       GrapeSwagger::Exporter.export(spec, version: version)
+    end
+
+    def self.apply_webhooks(spec, webhooks_config)
+      return unless webhooks_config.is_a?(Hash)
+
+      webhooks_config.each do |name, webhook_def|
+        path_item = build_webhook_path_item(webhook_def)
+        spec.add_webhook(name.to_s, path_item)
+      end
+    end
+
+    def self.build_webhook_path_item(webhook_def)
+      path_item = GrapeSwagger::ApiModel::PathItem.new
+
+      webhook_def.each do |method, operation_def|
+        next unless %i[get post put patch delete].include?(method.to_sym)
+
+        operation = GrapeSwagger::ApiModel::Operation.new
+        operation.summary = operation_def[:summary]
+        operation.description = operation_def[:description]
+        operation.operation_id = operation_def[:operationId] || operation_def[:operation_id]
+        operation.tags = operation_def[:tags]
+
+        # Build request body if present
+        if operation_def[:requestBody]
+          request_body = build_webhook_request_body(operation_def[:requestBody])
+          operation.request_body = request_body
+        end
+
+        # Build responses
+        if operation_def[:responses]
+          operation_def[:responses].each do |code, response_def|
+            response = GrapeSwagger::ApiModel::Response.new
+            response.description = response_def[:description] || ''
+            operation.add_response(code.to_s, response)
+          end
+        end
+
+        path_item.add_operation(method.to_sym, operation)
+      end
+
+      path_item
+    end
+
+    def self.build_webhook_request_body(request_body_def)
+      request_body = GrapeSwagger::ApiModel::RequestBody.new
+      request_body.description = request_body_def[:description]
+      request_body.required = request_body_def[:required]
+
+      if request_body_def[:content]
+        request_body_def[:content].each do |content_type, content_def|
+          schema = build_webhook_schema(content_def[:schema]) if content_def[:schema]
+          request_body.add_media_type(content_type.to_s, schema: schema)
+        end
+      end
+
+      request_body
+    end
+
+    def self.build_webhook_schema(schema_def)
+      return nil unless schema_def
+
+      if schema_def[:$ref] || schema_def['$ref']
+        ref = schema_def[:$ref] || schema_def['$ref']
+        schema = GrapeSwagger::ApiModel::Schema.new
+        schema.canonical_name = ref.split('/').last
+        return schema
+      end
+
+      schema = GrapeSwagger::ApiModel::Schema.new
+      schema.type = schema_def[:type]
+      schema.format = schema_def[:format]
+      schema.description = schema_def[:description]
+
+      if schema_def[:properties]
+        schema_def[:properties].each do |prop_name, prop_def|
+          prop_schema = build_webhook_schema(prop_def)
+          schema.add_property(prop_name.to_s, prop_schema)
+        end
+      end
+
+      schema.required = Array(schema_def[:required]) if schema_def[:required]
+
+      schema
     end
 
     def self.tags_from(paths, options)

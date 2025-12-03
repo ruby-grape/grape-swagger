@@ -3,11 +3,33 @@
 require 'spec_helper'
 
 describe 'Nested entities in OpenAPI 3.0' do
-  include_context "#{MODEL_PARSER} swagger example"
-
   before :all do
-    module TheApi
-      class NestedEntitiesOAS3Api < Grape::API
+    module NestedEntitiesOAS3
+      module Entities
+        class ResponseItem < Grape::Entity
+          expose :id, documentation: { type: Integer, desc: 'Item ID', required: true }
+          expose :name, documentation: { type: String, desc: 'Item name', required: true }
+        end
+
+        class UseResponse < Grape::Entity
+          expose :description, documentation: { type: String, desc: 'Description', required: true }
+          expose :items, documentation: { type: ResponseItem, is_array: true, desc: 'Items', required: true }
+        end
+
+        class ThirdLevel < Grape::Entity
+          expose :text, documentation: { type: String, desc: 'Text', required: true }
+        end
+
+        class SecondLevel < Grape::Entity
+          expose :parts, documentation: { type: ThirdLevel, desc: 'Parts', required: true }
+        end
+
+        class FirstLevel < Grape::Entity
+          expose :parts, documentation: { type: SecondLevel, desc: 'Parts', required: true }
+        end
+      end
+
+      class API < Grape::API
         format :json
 
         desc 'Get nested response',
@@ -28,7 +50,7 @@ describe 'Nested entities in OpenAPI 3.0' do
   end
 
   def app
-    TheApi::NestedEntitiesOAS3Api
+    NestedEntitiesOAS3::API
   end
 
   subject do
@@ -44,11 +66,14 @@ describe 'Nested entities in OpenAPI 3.0' do
     end
 
     it 'places entity schemas in components/schemas' do
-      expect(subject['components']['schemas']).to have_key('UseResponse')
+      schemas = subject['components']['schemas']
+      # Schema names may include module path
+      expect(schemas.keys.any? { |k| k.include?('UseResponse') }).to be true
     end
 
     it 'places response entity schemas in components/schemas' do
-      expect(subject['components']['schemas']).to have_key('FirstLevel')
+      schemas = subject['components']['schemas']
+      expect(schemas.keys.any? { |k| k.include?('FirstLevel') }).to be true
     end
   end
 
@@ -57,7 +82,7 @@ describe 'Nested entities in OpenAPI 3.0' do
 
     it 'references schema in content' do
       content = nested_response['content']['application/json']
-      expect(content['schema']['$ref']).to eq('#/components/schemas/UseResponse')
+      expect(content['schema']['$ref']).to match(%r{#/components/schemas/.*UseResponse})
     end
   end
 
@@ -66,7 +91,7 @@ describe 'Nested entities in OpenAPI 3.0' do
 
     it 'references first level schema in response' do
       content = deep_response['content']['application/json']
-      expect(content['schema']['$ref']).to eq('#/components/schemas/FirstLevel')
+      expect(content['schema']['$ref']).to match(%r{#/components/schemas/.*FirstLevel})
     end
   end
 end

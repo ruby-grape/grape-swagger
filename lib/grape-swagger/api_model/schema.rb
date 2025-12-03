@@ -14,7 +14,9 @@ module GrapeSwagger
                     :discriminator,
                     :canonical_name, :description, :example, :examples,
                     :read_only, :write_only, :deprecated,
-                    :extensions
+                    :extensions,
+                    # OpenAPI 3.1 specific
+                    :json_schema, :content_media_type, :content_encoding
 
       def initialize(attrs = {})
         attrs.each { |k, v| public_send("#{k}=", v) if respond_to?("#{k}=") }

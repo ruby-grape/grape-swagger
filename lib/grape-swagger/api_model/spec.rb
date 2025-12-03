@@ -7,6 +7,8 @@ module GrapeSwagger
       attr_accessor :info, :servers, :paths, :components,
                     :security, :tags, :external_docs,
                     :extensions,
+                    # OpenAPI 3.1 specific
+                    :webhooks, :json_schema_dialect,
                     # Swagger 2.0 specific
                     :host, :base_path, :schemes,
                     :produces, :consumes
@@ -15,11 +17,16 @@ module GrapeSwagger
         @info = Info.new
         @servers = []
         @paths = {}
+        @webhooks = {}
         @components = Components.new
         @security = []
         @tags = []
         @extensions = {}
         @schemes = []
+      end
+
+      def add_webhook(name, path_item)
+        @webhooks[name] = path_item
       end
 
       def add_path(path_string, path_item)

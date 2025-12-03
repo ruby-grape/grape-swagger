@@ -44,7 +44,8 @@ module GrapeSwagger
           contact_email: info_hash.dig(:contact, :email),
           contact_url: info_hash.dig(:contact, :url),
           license_name: info_hash.dig(:license, :name),
-          license_url: info_hash.dig(:license, :url)
+          license_url: info_hash.dig(:license, :url),
+          license_identifier: info_hash.dig(:license, :identifier)
         )
 
         # Copy extensions

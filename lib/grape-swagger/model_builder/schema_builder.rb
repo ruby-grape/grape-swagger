@@ -152,6 +152,7 @@ module GrapeSwagger
         schema.pattern = param[:pattern] if param[:pattern]
         schema.description = param[:description] if param[:description]
         schema.example = param[:example] if param.key?(:example)
+        schema.nullable = param[:nullable] if param[:nullable]
       end
 
       # Build schema from a model definition hash

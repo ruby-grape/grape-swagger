@@ -29,6 +29,7 @@ module GrapeSwagger
           document_additional_properties(definitions, settings) unless value_type[:is_array]
           document_add_extensions(settings)
           document_example(settings)
+          document_nullable(settings)
 
           @parsed_param
         end
@@ -191,6 +192,10 @@ module GrapeSwagger
 
         def parse_range_values(values)
           { minimum: values.begin, maximum: values.end }.compact
+        end
+
+        def document_nullable(settings)
+          @parsed_param[:nullable] = true if settings[:nullable]
         end
       end
     end

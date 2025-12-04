@@ -79,9 +79,12 @@ add_swagger_documentation(openapi_version: '3.1')
 
 ### Data Flow
 
-1. **Grape Endpoint** generates Swagger 2.0 hash (existing behavior)
-2. **SpecBuilder** converts Swagger hash → ApiModel::Spec
-3. **Exporter** (OAS30/OAS31) converts ApiModel::Spec → OpenAPI output
+**When `openapi_version: '3.0'` or `'3.1'` is set:**
+1. **DirectSpecBuilder** builds ApiModel::Spec directly from Grape routes
+2. **Exporter** (OAS30/OAS31) converts ApiModel::Spec → OpenAPI output
+
+**When no `openapi_version` is set (default):**
+1. **Grape Endpoint** generates Swagger 2.0 hash (existing behavior unchanged)
 
 ---
 
@@ -347,9 +350,27 @@ Extends OAS30 with 3.1-specific features:
 
 ## Model Builders
 
-### SpecBuilder
+### DirectSpecBuilder (Primary for OAS 3.x)
 
-Main entry point that orchestrates the conversion:
+Builds ApiModel::Spec directly from Grape routes without going through Swagger 2.0 format. This is the recommended approach for OAS 3.x as it preserves all route options and properly handles nested entities.
+
+```ruby
+builder = GrapeSwagger::ModelBuilder::DirectSpecBuilder.new(
+  endpoint, target_class, request, options
+)
+spec = builder.build(namespace_routes)
+```
+
+Key features:
+- Direct route introspection (no information loss)
+- Proper nested entity handling via model parsers
+- Full support for requestBody, components, servers
+- Handles Array[Entity] types and inline schemas
+- Recursive exposure of $ref nested entities
+
+### SpecBuilder (Conversion-based)
+
+Converts existing Swagger 2.0 hash to ApiModel::Spec. Used when converting legacy specs:
 
 ```ruby
 builder = GrapeSwagger::ModelBuilder::SpecBuilder.new(options)

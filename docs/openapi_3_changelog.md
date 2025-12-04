@@ -31,7 +31,8 @@ This document summarizes all changes made to add OpenAPI 3.0 and 3.1 support.
 
 | File | Purpose |
 |------|---------|
-| `spec_builder.rb` | Converts Swagger hash → API Model |
+| `direct_spec_builder.rb` | **Primary** - Builds API Model directly from Grape routes |
+| `spec_builder.rb` | Converts Swagger hash → API Model (legacy conversion) |
 | `operation_builder.rb` | Builds operations from route |
 | `parameter_builder.rb` | Builds parameters |
 | `response_builder.rb` | Builds responses |

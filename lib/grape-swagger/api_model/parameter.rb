@@ -110,18 +110,24 @@ module GrapeSwagger
 
       # Swagger 2.0 style output
       def to_swagger2_h
-        hash = {
-          name: name,
-          in: location,
-          required: required
-        }
+        hash = { name: name, in: location, required: required }
         hash[:description] = description if description
+        add_swagger2_type_fields(hash)
+        add_swagger2_constraints(hash)
+        extensions.each { |k, v| hash[k] = v } if extensions.any?
+        hash
+      end
 
-        # Inline type properties
+      private
+
+      def add_swagger2_type_fields(hash)
         hash[:type] = type if type
         hash[:format] = format if format
         hash[:items] = items.respond_to?(:to_h) ? items.to_h : items if items
         hash[:collectionFormat] = collection_format if collection_format
+      end
+
+      def add_swagger2_constraints(hash)
         hash[:default] = default unless default.nil?
         hash[:enum] = enum if enum&.any?
         hash[:minimum] = minimum if minimum
@@ -129,10 +135,6 @@ module GrapeSwagger
         hash[:minLength] = min_length if min_length
         hash[:maxLength] = max_length if max_length
         hash[:pattern] = pattern if pattern
-
-        extensions.each { |k, v| hash[k] = v } if extensions.any?
-
-        hash
       end
     end
   end

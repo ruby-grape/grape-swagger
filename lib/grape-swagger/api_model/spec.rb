@@ -57,21 +57,32 @@ module GrapeSwagger
 
       # Swagger 2.0 output
       def to_swagger2_h
-        hash = { swagger: '2.0' }
-        hash[:info] = swagger2_info
+        hash = { swagger: '2.0', info: swagger2_info }
+        add_swagger2_server_fields(hash)
+        add_swagger2_content_types(hash)
+        add_swagger2_main_sections(hash)
+        extensions.each { |k, v| hash[k] = v } if extensions.any?
+        hash.compact
+      end
+
+      def add_swagger2_server_fields(hash)
         hash[:host] = host if host
         hash[:basePath] = base_path if base_path
         hash[:schemes] = schemes if schemes.any?
+      end
+
+      def add_swagger2_content_types(hash)
         hash[:produces] = produces if produces&.any?
         hash[:consumes] = consumes if consumes&.any?
+      end
+
+      def add_swagger2_main_sections(hash)
         hash[:tags] = tags.map(&:to_h) if tags.any?
         hash[:paths] = paths.transform_values(&:to_swagger2_h) if paths.any?
         hash[:definitions] = components.definitions_h if components.schemas.any?
         hash[:securityDefinitions] = components.security_definitions_h if components.security_schemes.any?
         hash[:security] = security if security.any?
         hash[:externalDocs] = external_docs.to_h if external_docs
-        extensions.each { |k, v| hash[k] = v } if extensions.any?
-        hash.compact
       end
 
       VERSION_MAPPINGS = {

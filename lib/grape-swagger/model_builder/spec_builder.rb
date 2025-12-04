@@ -98,7 +98,14 @@ module GrapeSwagger
 
       def build_operation(_method, operation_hash)
         operation = ApiModel::Operation.new
+        set_operation_basics(operation, operation_hash)
+        build_operation_parameters(operation, operation_hash)
+        build_operation_responses(operation, operation_hash)
+        copy_operation_extensions(operation, operation_hash)
+        operation
+      end
 
+      def set_operation_basics(operation, operation_hash)
         operation.operation_id = operation_hash[:operationId]
         operation.summary = operation_hash[:summary]
         operation.description = operation_hash[:description]
@@ -107,42 +114,49 @@ module GrapeSwagger
         operation.produces = operation_hash[:produces] if operation_hash[:produces]
         operation.consumes = operation_hash[:consumes] if operation_hash[:consumes]
         operation.security = operation_hash[:security] if operation_hash[:security]
+      end
 
-        # Build parameters
-        if operation_hash[:parameters]
-          form_data_params = []
-          operation_hash[:parameters].each do |param_hash|
-            param = build_parameter(param_hash)
-            if param.location == 'body'
-              build_request_body_from_param(operation, param, operation_hash[:consumes] || @spec.consumes)
-            elsif param.location == 'formData'
-              form_data_params << param
-            else
-              operation.add_parameter(param)
-            end
-          end
+      def build_operation_parameters(operation, operation_hash)
+        return unless operation_hash[:parameters]
 
-          # Convert formData params to requestBody for OAS3
-          if form_data_params.any?
-            build_request_body_from_form_data(operation, form_data_params, operation_hash[:consumes] || @spec.consumes)
-          end
+        form_data_params = []
+        operation_hash[:parameters].each do |param_hash|
+          param = build_parameter(param_hash)
+          form_data_params = process_param(operation, param, operation_hash, form_data_params)
         end
+        build_form_data_request_body(operation, form_data_params, operation_hash) if form_data_params.any?
+      end
 
-        # Build responses
-        if operation_hash[:responses]
-          produces = operation_hash[:produces] || @spec.produces || ['application/json']
-          operation_hash[:responses].each do |code, response_hash|
-            response = build_response(code, response_hash, produces)
-            operation.add_response(code, response)
-          end
+      def process_param(operation, param, operation_hash, form_data_params)
+        case param.location
+        when 'body'
+          build_request_body_from_param(operation, param, operation_hash[:consumes] || @spec.consumes)
+        when 'formData'
+          form_data_params << param
+        else
+          operation.add_parameter(param)
         end
+        form_data_params
+      end
 
-        # Copy extensions
+      def build_form_data_request_body(operation, form_data_params, operation_hash)
+        build_request_body_from_form_data(operation, form_data_params, operation_hash[:consumes] || @spec.consumes)
+      end
+
+      def build_operation_responses(operation, operation_hash)
+        return unless operation_hash[:responses]
+
+        produces = operation_hash[:produces] || @spec.produces || ['application/json']
+        operation_hash[:responses].each do |code, response_hash|
+          response = build_response(code, response_hash, produces)
+          operation.add_response(code, response)
+        end
+      end
+
+      def copy_operation_extensions(operation, operation_hash)
         operation_hash.each do |key, value|
           operation.extensions[key] = value if key.to_s.start_with?('x-')
         end
-
-        operation
       end
 
       def build_parameter(param_hash)
@@ -225,40 +239,42 @@ module GrapeSwagger
         response = ApiModel::Response.new
         response.status_code = code.to_s
         response.description = response_hash[:description] || ''
+        build_response_schema(response, response_hash, produces)
+        build_response_headers(response, response_hash)
+        response.examples = response_hash[:examples] if response_hash[:examples]
+        copy_response_extensions(response, response_hash)
+        response
+      end
 
-        if response_hash[:schema]
-          schema = @schema_builder.build_from_definition(response_hash[:schema])
-          response.schema = schema
+      def build_response_schema(response, response_hash, produces)
+        return unless response_hash[:schema]
 
-          # Add media types for OAS3
-          if schema.type == 'string' && schema.format == 'binary'
-            response.add_media_type('application/octet-stream', schema: schema)
-          else
-            produces.each do |content_type|
-              response.add_media_type(content_type, schema: schema)
-            end
-          end
+        schema = @schema_builder.build_from_definition(response_hash[:schema])
+        response.schema = schema
+        add_response_media_types(response, schema, produces)
+      end
+
+      def add_response_media_types(response, schema, produces)
+        if schema.type == 'string' && schema.format == 'binary'
+          response.add_media_type('application/octet-stream', schema: schema)
+        else
+          produces.each { |content_type| response.add_media_type(content_type, schema: schema) }
         end
+      end
 
+      def build_response_headers(response, response_hash)
         response_hash[:headers]&.each do |name, header_hash|
           header = ApiModel::Header.new(
-            name: name,
-            description: header_hash[:description],
-            type: header_hash[:type],
-            format: header_hash[:format]
+            name: name, description: header_hash[:description],
+            type: header_hash[:type], format: header_hash[:format]
           )
           header.schema = @schema_builder.build_from_param(header_hash)
           response.headers[name] = header
         end
+      end
 
-        response.examples = response_hash[:examples] if response_hash[:examples]
-
-        # Copy extensions
-        response_hash.each do |key, value|
-          response.extensions[key] = value if key.to_s.start_with?('x-')
-        end
-
-        response
+      def copy_response_extensions(response, response_hash)
+        response_hash.each { |key, value| response.extensions[key] = value if key.to_s.start_with?('x-') }
       end
 
       def build_definitions(definitions_hash)

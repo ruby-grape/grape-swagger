@@ -57,81 +57,38 @@ module GrapeSwagger
         end
       end
 
-      def export_schema(schema)
-        return nil unless schema
-
-        # Handle reference
-        if schema.respond_to?(:canonical_name) && schema.canonical_name && !schema.type
-          return { '$ref' => "#/components/schemas/#{schema.canonical_name}" }
-        end
-
-        # Handle hash input
-        return export_hash_schema(schema) if schema.is_a?(Hash)
-
+      # OAS 3.1 specific schema building - extends parent with 3.1 features
+      def build_schema_output(schema)
         output = {}
+        add_oas31_json_schema(output, schema)
+        add_schema_basic_fields(output, schema)
+        add_oas31_content_fields(output, schema)
+        add_schema_nullable(output, schema)
+        add_schema_flags(output, schema)
+        add_schema_numeric_constraints(output, schema)
+        add_schema_string_constraints(output, schema)
+        add_schema_array_fields(output, schema)
+        add_schema_object_fields(output, schema)
+        add_schema_composition(output, schema)
+        add_schema_extensions(output, schema)
+        output
+      end
 
-        # OAS 3.1: $schema keyword for root schemas in components
-        output[:$schema] = schema.json_schema if schema.respond_to?(:json_schema) && schema.json_schema
+      private
 
-        output[:type] = schema.type if schema.type
-        output[:format] = schema.format if schema.format
-        output[:description] = schema.description if schema.description
-        output[:enum] = schema.enum if schema.enum&.any?
-        output[:default] = schema.default unless schema.default.nil?
-        output[:example] = schema.example unless schema.example.nil?
+      def add_oas31_json_schema(output, schema)
+        return unless schema.respond_to?(:json_schema) && schema.json_schema
 
-        # OAS 3.1: contentMediaType and contentEncoding for binary data
+        output[:$schema] = schema.json_schema
+      end
+
+      def add_oas31_content_fields(output, schema)
         if schema.respond_to?(:content_media_type) && schema.content_media_type
           output[:contentMediaType] = schema.content_media_type
         end
-        if schema.respond_to?(:content_encoding) && schema.content_encoding
-          output[:contentEncoding] = schema.content_encoding
-        end
+        return unless schema.respond_to?(:content_encoding) && schema.content_encoding
 
-        # Nullable handling - OAS 3.1 uses type array
-        output[:type] = [output[:type], 'null'] if schema.nullable && output[:type]
-
-        output[:readOnly] = schema.read_only if schema.read_only
-        output[:writeOnly] = schema.write_only if schema.write_only
-        output[:deprecated] = schema.deprecated if schema.deprecated
-
-        # Numeric constraints
-        output[:minimum] = schema.minimum if schema.minimum
-        output[:maximum] = schema.maximum if schema.maximum
-        output[:exclusiveMinimum] = schema.exclusive_minimum if schema.exclusive_minimum
-        output[:exclusiveMaximum] = schema.exclusive_maximum if schema.exclusive_maximum
-        output[:multipleOf] = schema.multiple_of if schema.multiple_of
-
-        # String constraints
-        output[:minLength] = schema.min_length if schema.min_length
-        output[:maxLength] = schema.max_length if schema.max_length
-        output[:pattern] = schema.pattern if schema.pattern
-
-        # Array
-        output[:items] = export_schema(schema.items) if schema.items
-        output[:minItems] = schema.min_items if schema.min_items
-        output[:maxItems] = schema.max_items if schema.max_items
-
-        # Object
-        if schema.properties.any?
-          output[:properties] = schema.properties.transform_values do |prop_schema|
-            export_schema(prop_schema)
-          end
-        end
-        output[:required] = schema.required if schema.required.any?
-        output[:additionalProperties] = schema.additional_properties unless schema.additional_properties.nil?
-
-        # Composition
-        output[:allOf] = schema.all_of.map { |s| export_schema(s) } if schema.all_of&.any?
-        output[:oneOf] = schema.one_of.map { |s| export_schema(s) } if schema.one_of&.any?
-        output[:anyOf] = schema.any_of.map { |s| export_schema(s) } if schema.any_of&.any?
-        output[:not] = export_schema(schema.not) if schema.not
-        output[:discriminator] = schema.discriminator if schema.discriminator
-
-        # Extensions
-        schema.extensions&.each { |k, v| output[k] = v }
-
-        output
+        output[:contentEncoding] = schema.content_encoding
       end
     end
   end

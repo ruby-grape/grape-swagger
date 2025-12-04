@@ -81,34 +81,43 @@ module GrapeSwagger
       # Build a schema from a parameter hash (Swagger 2.0 style)
       def build_from_param(param)
         schema = ApiModel::Schema.new
+        apply_type_from_param(schema, param) if param[:type]
+        apply_param_constraints(schema, param)
+        schema
+      end
 
-        if param[:type]
-          type_string = normalize_type(param[:type])
+      def apply_type_from_param(schema, param)
+        type_string = normalize_type(param[:type])
+        apply_typed_schema(schema, type_string, param)
+      end
 
-          if primitive?(type_string)
-            mapping = PRIMITIVE_MAPPINGS[type_string] || { type: type_string }
-            schema.type = mapping[:type]
-            schema.format = param[:format] || mapping[:format]
-          elsif type_string == 'array'
-            schema.type = 'array'
-            schema.items = if param[:items]
-                             build_from_param(param[:items])
-                           else
-                             ApiModel::Schema.new(type: 'string')
-                           end
-          elsif type_string == 'object'
-            schema.type = 'object'
-          elsif type_string == 'file'
-            schema.type = 'string'
-            schema.format = 'binary'
-          elsif @definitions.key?(type_string)
-            schema.canonical_name = type_string
-          else
-            schema.type = type_string
-          end
+      def apply_typed_schema(schema, type_string, param)
+        if primitive?(type_string)
+          apply_primitive_from_param(schema, type_string, param)
+        elsif type_string == 'array'
+          apply_array_from_param(schema, param)
+        elsif type_string == 'file'
+          schema.type = 'string'
+          schema.format = 'binary'
+        elsif @definitions.key?(type_string)
+          schema.canonical_name = type_string
+        else
+          schema.type = type_string == 'object' ? 'object' : type_string
         end
+      end
 
-        # Apply constraints
+      def apply_primitive_from_param(schema, type_string, param)
+        mapping = PRIMITIVE_MAPPINGS[type_string] || { type: type_string }
+        schema.type = mapping[:type]
+        schema.format = param[:format] || mapping[:format]
+      end
+
+      def apply_array_from_param(schema, param)
+        schema.type = 'array'
+        schema.items = param[:items] ? build_from_param(param[:items]) : ApiModel::Schema.new(type: 'string')
+      end
+
+      def apply_param_constraints(schema, param)
         schema.enum = param[:enum] if param[:enum]
         schema.default = param[:default] if param.key?(:default)
         schema.minimum = param[:minimum] if param[:minimum]
@@ -120,8 +129,6 @@ module GrapeSwagger
         schema.pattern = param[:pattern] if param[:pattern]
         schema.description = param[:description] if param[:description]
         schema.example = param[:example] if param.key?(:example)
-
-        schema
       end
 
       # Build schema from a model definition hash

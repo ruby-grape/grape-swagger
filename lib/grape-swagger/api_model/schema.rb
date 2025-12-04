@@ -55,6 +55,19 @@ module GrapeSwagger
 
       def to_h
         hash = {}
+        add_basic_fields(hash)
+        add_numeric_constraints(hash)
+        add_string_constraints(hash)
+        add_array_fields(hash)
+        add_object_fields(hash)
+        add_composition_fields(hash)
+        add_extensions(hash)
+        hash
+      end
+
+      private
+
+      def add_basic_fields(hash)
         hash[:type] = type if type
         hash[:format] = format if format
         hash[:description] = description if description
@@ -66,40 +79,44 @@ module GrapeSwagger
         hash[:readOnly] = read_only if read_only
         hash[:writeOnly] = write_only if write_only
         hash[:deprecated] = deprecated if deprecated
+      end
 
-        # Numeric constraints
+      def add_numeric_constraints(hash)
         hash[:minimum] = minimum if minimum
         hash[:maximum] = maximum if maximum
         hash[:exclusiveMinimum] = exclusive_minimum if exclusive_minimum
         hash[:exclusiveMaximum] = exclusive_maximum if exclusive_maximum
         hash[:multipleOf] = multiple_of if multiple_of
+      end
 
-        # String constraints
+      def add_string_constraints(hash)
         hash[:minLength] = min_length if min_length
         hash[:maxLength] = max_length if max_length
         hash[:pattern] = pattern if pattern
+      end
 
-        # Array constraints
+      def add_array_fields(hash)
         hash[:minItems] = min_items if min_items
         hash[:maxItems] = max_items if max_items
         hash[:items] = items.to_h if items
+      end
 
-        # Object properties
+      def add_object_fields(hash)
         hash[:properties] = properties.transform_values(&:to_h) if properties.any?
         hash[:required] = required if required.any?
         hash[:additionalProperties] = additional_properties unless additional_properties.nil?
+      end
 
-        # Composition
+      def add_composition_fields(hash)
         hash[:allOf] = all_of.map(&:to_h) if all_of&.any?
         hash[:oneOf] = one_of.map(&:to_h) if one_of&.any?
         hash[:anyOf] = any_of.map(&:to_h) if any_of&.any?
         hash[:not] = self.not.to_h if self.not
         hash[:discriminator] = discriminator if discriminator
+      end
 
-        # Extensions
+      def add_extensions(hash)
         extensions.each { |k, v| hash[k] = v } if extensions.any?
-
-        hash
       end
     end
   end

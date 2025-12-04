@@ -63,9 +63,7 @@ module GrapeSwagger
       output[:definitions] = definitions unless definitions.blank?
 
       # Convert to OpenAPI 3.x if requested
-      if options[:openapi_version]
-        output = convert_to_openapi3(output, options)
-      end
+      output = convert_to_openapi3(output, options) if options[:openapi_version]
 
       output
     end
@@ -115,12 +113,10 @@ module GrapeSwagger
         end
 
         # Build responses
-        if operation_def[:responses]
-          operation_def[:responses].each do |code, response_def|
-            response = GrapeSwagger::ApiModel::Response.new
-            response.description = response_def[:description] || ''
-            operation.add_response(code.to_s, response)
-          end
+        operation_def[:responses]&.each do |code, response_def|
+          response = GrapeSwagger::ApiModel::Response.new
+          response.description = response_def[:description] || ''
+          operation.add_response(code.to_s, response)
         end
 
         path_item.add_operation(method.to_sym, operation)
@@ -134,11 +130,9 @@ module GrapeSwagger
       request_body.description = request_body_def[:description]
       request_body.required = request_body_def[:required]
 
-      if request_body_def[:content]
-        request_body_def[:content].each do |content_type, content_def|
-          schema = build_webhook_schema(content_def[:schema]) if content_def[:schema]
-          request_body.add_media_type(content_type.to_s, schema: schema)
-        end
+      request_body_def[:content]&.each do |content_type, content_def|
+        schema = build_webhook_schema(content_def[:schema]) if content_def[:schema]
+        request_body.add_media_type(content_type.to_s, schema: schema)
       end
 
       request_body
@@ -159,11 +153,9 @@ module GrapeSwagger
       schema.format = schema_def[:format]
       schema.description = schema_def[:description]
 
-      if schema_def[:properties]
-        schema_def[:properties].each do |prop_name, prop_def|
-          prop_schema = build_webhook_schema(prop_def)
-          schema.add_property(prop_name.to_s, prop_schema)
-        end
+      schema_def[:properties]&.each do |prop_name, prop_def|
+        prop_schema = build_webhook_schema(prop_def)
+        schema.add_property(prop_name.to_s, prop_schema)
       end
 
       schema.required = Array(schema_def[:required]) if schema_def[:required]

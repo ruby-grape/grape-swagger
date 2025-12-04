@@ -5,29 +5,42 @@ module GrapeSwagger
     # Exports ApiModel::Spec to Swagger 2.0 format.
     # This exporter produces output compatible with the original grape-swagger format.
     class Swagger2 < Base
-      def export
-        output = {}
+      OAUTH_FLOW_MAP = {
+        'implicit' => 'implicit',
+        'password' => 'password',
+        'clientCredentials' => 'application',
+        'authorizationCode' => 'accessCode'
+      }.freeze
 
-        output[:swagger] = '2.0'
-        output[:info] = export_info
+      def export
+        output = { swagger: '2.0', info: export_info }
+        add_root_fields(output)
+        add_content_types(output)
+        add_main_sections(output)
+        spec.extensions.each { |k, v| output[k] = v }
+        compact_hash(output)
+      end
+
+      private
+
+      def add_root_fields(output)
         output[:host] = spec.host if spec.host
         output[:basePath] = spec.base_path if spec.base_path
         output[:schemes] = spec.schemes if spec.schemes&.any?
+      end
+
+      def add_content_types(output)
         output[:produces] = spec.produces if spec.produces&.any?
         output[:consumes] = spec.consumes if spec.consumes&.any?
+      end
+
+      def add_main_sections(output)
         output[:tags] = export_tags if spec.tags.any?
         output[:paths] = export_paths if spec.paths.any?
         output[:definitions] = export_definitions if spec.components.schemas.any?
         output[:securityDefinitions] = export_security_definitions if spec.components.security_schemes.any?
         output[:security] = spec.security if spec.security&.any?
-
-        # Extensions
-        spec.extensions.each { |k, v| output[k] = v }
-
-        compact_hash(output)
       end
-
-      private
 
       def export_info
         info = {}
@@ -117,44 +130,44 @@ module GrapeSwagger
       end
 
       def export_parameter(param)
-        output = {}
-
-        output[:name] = param.name
-        output[:in] = param.location
+        output = { name: param.name, in: param.location, required: param.required }
         output[:description] = param.description if param.description
-        output[:required] = param.required
-
-        # Inline type properties for Swagger 2.0
-        if param.type
-          output[:type] = param.type
-          output[:format] = param.format if param.format
-          output[:items] = export_items(param.items) if param.items
-          output[:collectionFormat] = param.collection_format if param.collection_format
-          output[:default] = param.default unless param.default.nil?
-          output[:enum] = param.enum if param.enum&.any?
-          output[:minimum] = param.minimum if param.minimum
-          output[:maximum] = param.maximum if param.maximum
-          output[:minLength] = param.min_length if param.min_length
-          output[:maxLength] = param.max_length if param.max_length
-          output[:pattern] = param.pattern if param.pattern
-        elsif param.schema
-          # If only schema is set, extract inline properties
-          schema = param.schema
-          output[:type] = schema.type if schema.type
-          output[:format] = schema.format if schema.format
-          output[:items] = export_schema(schema.items) if schema.items
-          output[:default] = schema.default unless schema.default.nil?
-          output[:enum] = schema.enum if schema.enum&.any?
-          output[:minimum] = schema.minimum if schema.minimum
-          output[:maximum] = schema.maximum if schema.maximum
-          output[:minLength] = schema.min_length if schema.min_length
-          output[:maxLength] = schema.max_length if schema.max_length
-          output[:pattern] = schema.pattern if schema.pattern
-        end
-
+        add_param_type_fields(output, param)
         param.extensions.each { |k, v| output[k] = v }
-
         output
+      end
+
+      def add_param_type_fields(output, param)
+        if param.type
+          add_inline_type_fields(output, param)
+        elsif param.schema
+          add_schema_type_fields(output, param.schema)
+        end
+      end
+
+      def add_inline_type_fields(output, param)
+        output[:type] = param.type
+        output[:format] = param.format if param.format
+        output[:items] = export_items(param.items) if param.items
+        output[:collectionFormat] = param.collection_format if param.collection_format
+        add_common_constraints(output, param)
+      end
+
+      def add_schema_type_fields(output, schema)
+        output[:type] = schema.type if schema.type
+        output[:format] = schema.format if schema.format
+        output[:items] = export_schema(schema.items) if schema.items
+        add_common_constraints(output, schema)
+      end
+
+      def add_common_constraints(output, source)
+        output[:default] = source.default unless source.default.nil?
+        output[:enum] = source.enum if source.enum&.any?
+        output[:minimum] = source.minimum if source.minimum
+        output[:maximum] = source.maximum if source.maximum
+        output[:minLength] = source.min_length if source.min_length
+        output[:maxLength] = source.max_length if source.max_length
+        output[:pattern] = source.pattern if source.pattern
       end
 
       def export_request_body_as_parameter(request_body)
@@ -219,52 +232,61 @@ module GrapeSwagger
 
       def export_schema(schema)
         return nil unless schema
-
-        # Handle reference
         return { '$ref' => "#/definitions/#{schema.canonical_name}" } if schema.canonical_name && !schema.type
 
+        build_swagger2_schema(schema)
+      end
+
+      def build_swagger2_schema(schema)
         output = {}
+        add_swagger2_basic_fields(output, schema)
+        add_swagger2_numeric_constraints(output, schema)
+        add_swagger2_string_constraints(output, schema)
+        add_swagger2_array_fields(output, schema)
+        add_swagger2_object_fields(output, schema)
+        add_swagger2_composition(output, schema)
+        schema.extensions&.each { |k, v| output[k] = v }
+        output
+      end
+
+      def add_swagger2_basic_fields(output, schema)
         output[:type] = schema.type if schema.type
         output[:format] = schema.format if schema.format
         output[:description] = schema.description if schema.description
         output[:enum] = schema.enum if schema.enum&.any?
         output[:default] = schema.default unless schema.default.nil?
         output[:example] = schema.example unless schema.example.nil?
+      end
 
-        # Numeric constraints
+      def add_swagger2_numeric_constraints(output, schema)
         output[:minimum] = schema.minimum if schema.minimum
         output[:maximum] = schema.maximum if schema.maximum
         output[:exclusiveMinimum] = schema.exclusive_minimum if schema.exclusive_minimum
         output[:exclusiveMaximum] = schema.exclusive_maximum if schema.exclusive_maximum
         output[:multipleOf] = schema.multiple_of if schema.multiple_of
+      end
 
-        # String constraints
+      def add_swagger2_string_constraints(output, schema)
         output[:minLength] = schema.min_length if schema.min_length
         output[:maxLength] = schema.max_length if schema.max_length
         output[:pattern] = schema.pattern if schema.pattern
+      end
 
-        # Array
+      def add_swagger2_array_fields(output, schema)
         output[:items] = export_schema(schema.items) if schema.items
         output[:minItems] = schema.min_items if schema.min_items
         output[:maxItems] = schema.max_items if schema.max_items
+      end
 
-        # Object
-        if schema.properties.any?
-          output[:properties] = schema.properties.transform_values do |prop_schema|
-            export_schema(prop_schema)
-          end
-        end
+      def add_swagger2_object_fields(output, schema)
+        output[:properties] = schema.properties.transform_values { |s| export_schema(s) } if schema.properties.any?
         output[:required] = schema.required if schema.required.any?
         output[:additionalProperties] = schema.additional_properties unless schema.additional_properties.nil?
+      end
 
-        # Composition
+      def add_swagger2_composition(output, schema)
         output[:allOf] = schema.all_of.map { |s| export_schema(s) } if schema.all_of&.any?
         output[:discriminator] = schema.discriminator if schema.discriminator
-
-        # Extensions
-        schema.extensions&.each { |k, v| output[k] = v }
-
-        output
       end
 
       def export_items(items)
@@ -281,49 +303,43 @@ module GrapeSwagger
       end
 
       def export_security_scheme(scheme)
-        output = {}
-
-        # Convert OAS3 types back to Swagger 2.0
-        case scheme.type
-        when 'http'
-          if scheme.scheme == 'basic'
-            output[:type] = 'basic'
-          else
-            output[:type] = 'apiKey'
-            output[:name] = scheme.name || 'Authorization'
-            output[:in] = 'header'
-          end
-        when 'apiKey'
-          output[:type] = 'apiKey'
-          output[:name] = scheme.name
-          output[:in] = scheme.location
-        when 'oauth2'
-          output[:type] = 'oauth2'
-          if scheme.flows
-            flow_type, flow = scheme.flows.first
-            output[:flow] = convert_oauth_flow_type(flow_type)
-            output[:authorizationUrl] = flow[:authorizationUrl] if flow[:authorizationUrl]
-            output[:tokenUrl] = flow[:tokenUrl] if flow[:tokenUrl]
-            output[:scopes] = flow[:scopes] if flow[:scopes]
-          end
-        else
-          output[:type] = scheme.type
-        end
-
+        output = build_security_type_fields(scheme)
         output[:description] = scheme.description if scheme.description
         scheme.extensions.each { |k, v| output[k] = v }
+        output
+      end
 
+      def build_security_type_fields(scheme)
+        case scheme.type
+        when 'http' then build_http_security(scheme)
+        when 'apiKey' then { type: 'apiKey', name: scheme.name, in: scheme.location }
+        when 'oauth2' then build_oauth2_security(scheme)
+        else { type: scheme.type }
+        end
+      end
+
+      def build_http_security(scheme)
+        if scheme.scheme == 'basic'
+          { type: 'basic' }
+        else
+          { type: 'apiKey', name: scheme.name || 'Authorization', in: 'header' }
+        end
+      end
+
+      def build_oauth2_security(scheme)
+        output = { type: 'oauth2' }
+        return output unless scheme.flows
+
+        flow_type, flow = scheme.flows.first
+        output[:flow] = convert_oauth_flow_type(flow_type)
+        output[:authorizationUrl] = flow[:authorizationUrl] if flow[:authorizationUrl]
+        output[:tokenUrl] = flow[:tokenUrl] if flow[:tokenUrl]
+        output[:scopes] = flow[:scopes] if flow[:scopes]
         output
       end
 
       def convert_oauth_flow_type(oas3_flow)
-        case oas3_flow.to_s
-        when 'implicit' then 'implicit'
-        when 'password' then 'password'
-        when 'clientCredentials' then 'application'
-        when 'authorizationCode' then 'accessCode'
-        else oas3_flow.to_s
-        end
+        OAUTH_FLOW_MAP[oas3_flow.to_s] || oas3_flow.to_s
       end
     end
   end

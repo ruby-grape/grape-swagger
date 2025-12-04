@@ -37,15 +37,8 @@ module GrapeSwagger
 
       def to_h
         hash = {}
-        hash[:schemas] = schemas.transform_values { |s| s.respond_to?(:to_h) ? s.to_h : s } if schemas.any?
-        hash[:responses] = responses.transform_values(&:to_h) if responses.any?
-        hash[:parameters] = parameters.transform_values(&:to_h) if parameters.any?
-        hash[:examples] = examples if examples.any?
-        hash[:requestBodies] = request_bodies.transform_values(&:to_h) if request_bodies.any?
-        hash[:headers] = headers.transform_values(&:to_h) if headers.any?
-        hash[:securitySchemes] = security_schemes.transform_values(&:to_h) if security_schemes.any?
-        hash[:links] = links if links.any?
-        hash[:callbacks] = callbacks if callbacks.any?
+        add_schema_components(hash)
+        add_other_components(hash)
         extensions.each { |k, v| hash[k] = v } if extensions.any?
         hash
       end
@@ -57,6 +50,23 @@ module GrapeSwagger
 
       def security_definitions_h
         security_schemes.transform_values(&:to_swagger2_h)
+      end
+
+      private
+
+      def add_schema_components(hash)
+        hash[:schemas] = schemas.transform_values { |s| s.respond_to?(:to_h) ? s.to_h : s } if schemas.any?
+        hash[:responses] = responses.transform_values(&:to_h) if responses.any?
+        hash[:parameters] = parameters.transform_values(&:to_h) if parameters.any?
+        hash[:examples] = examples if examples.any?
+        hash[:requestBodies] = request_bodies.transform_values(&:to_h) if request_bodies.any?
+      end
+
+      def add_other_components(hash)
+        hash[:headers] = headers.transform_values(&:to_h) if headers.any?
+        hash[:securitySchemes] = security_schemes.transform_values(&:to_h) if security_schemes.any?
+        hash[:links] = links if links.any?
+        hash[:callbacks] = callbacks if callbacks.any?
       end
     end
   end

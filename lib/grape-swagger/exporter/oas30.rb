@@ -47,7 +47,10 @@ module GrapeSwagger
       end
 
       def components_empty?
-        spec.components.schemas.empty? && spec.components.security_schemes.empty?
+        spec.components.schemas.empty? &&
+          spec.components.security_schemes.empty? &&
+          spec.components.links.empty? &&
+          spec.components.callbacks.empty?
       end
 
       private
@@ -135,6 +138,9 @@ module GrapeSwagger
 
         # Responses
         output[:responses] = export_responses(operation.responses) if operation.responses.any?
+
+        # Callbacks (OAS3 specific)
+        output[:callbacks] = operation.callbacks if operation.callbacks&.any?
 
         operation.extensions.each { |k, v| output[k] = v }
 
@@ -284,6 +290,10 @@ module GrapeSwagger
           end
         end
 
+        # OAS3 components: links and callbacks
+        output[:links] = spec.components.links if spec.components.links.any?
+        output[:callbacks] = spec.components.callbacks if spec.components.callbacks.any?
+
         output
       end
 
@@ -375,7 +385,23 @@ module GrapeSwagger
       def add_schema_object_fields(output, schema)
         output[:properties] = schema.properties.transform_values { |s| export_schema(s) } if schema.properties.any?
         output[:required] = schema.required if schema.required.any?
-        output[:additionalProperties] = schema.additional_properties unless schema.additional_properties.nil?
+        output[:additionalProperties] = export_additional_properties(schema.additional_properties) unless schema.additional_properties.nil?
+      end
+
+      def export_additional_properties(additional_props)
+        return additional_props if [true, false].include?(additional_props)
+
+        # Handle hash with $ref - convert Swagger 2.0 refs to OAS3
+        if additional_props.is_a?(Hash)
+          if additional_props['$ref'] || additional_props[:$ref]
+            ref = additional_props['$ref'] || additional_props[:$ref]
+            ref = ref.gsub('#/definitions/', '#/components/schemas/')
+            return { '$ref' => ref }
+          end
+          return additional_props
+        end
+
+        additional_props
       end
 
       def add_schema_composition(output, schema)

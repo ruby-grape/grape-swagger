@@ -182,6 +182,7 @@ module GrapeSwagger
         schema.one_of = definition[:oneOf].map { |d| build_from_definition(d) } if definition[:oneOf]
         schema.any_of = definition[:anyOf].map { |d| build_from_definition(d) } if definition[:anyOf]
 
+        schema.discriminator = definition[:discriminator] if definition[:discriminator]
         schema.additional_properties = definition[:additionalProperties] if definition.key?(:additionalProperties)
 
         schema

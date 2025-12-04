@@ -48,7 +48,16 @@ module GrapeSwagger
     FORMATTER_METHOD = %i[format default_format default_error_formatter].freeze
 
     def self.output_path_definitions(combi_routes, endpoint, target_class, options)
-      # Generate Swagger 2.0 output (always, as base)
+      if options[:openapi_version]
+        # Build OpenAPI 3.x directly from Grape routes (no information loss)
+        build_openapi3_directly(combi_routes, endpoint, target_class, options)
+      else
+        # Generate Swagger 2.0 output (original flow)
+        build_swagger2_output(combi_routes, endpoint, target_class, options)
+      end
+    end
+
+    def self.build_swagger2_output(combi_routes, endpoint, target_class, options)
       output = endpoint.swagger_object(
         target_class,
         endpoint.request,
@@ -62,10 +71,26 @@ module GrapeSwagger
       output[:paths]       = paths unless paths.blank?
       output[:definitions] = definitions unless definitions.blank?
 
-      # Convert to OpenAPI 3.x if requested
-      output = convert_to_openapi3(output, options) if options[:openapi_version]
-
       output
+    end
+
+    def self.build_openapi3_directly(combi_routes, endpoint, target_class, options)
+      version = options[:openapi_version]
+
+      # Build API model directly from Grape routes (preserves all options)
+      builder = GrapeSwagger::ModelBuilder::DirectSpecBuilder.new(
+        endpoint, target_class, endpoint.request, options
+      )
+      spec = builder.build(combi_routes)
+
+      # Apply OAS 3.1 specific options
+      if version.to_s.start_with?('3.1')
+        spec.json_schema_dialect = options[:json_schema_dialect] if options[:json_schema_dialect]
+        apply_webhooks(spec, options[:webhooks]) if options[:webhooks]
+      end
+
+      # Export to requested OpenAPI version
+      GrapeSwagger::Exporter.export(spec, version: version)
     end
 
     def self.convert_to_openapi3(swagger_output, options)

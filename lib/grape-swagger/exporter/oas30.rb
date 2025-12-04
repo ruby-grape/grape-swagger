@@ -300,17 +300,30 @@ module GrapeSwagger
       def export_schema(schema)
         return nil unless schema
         return schema_ref(schema) if schema_is_ref?(schema)
+        return schema_ref_with_description(schema) if schema_is_ref_with_description?(schema)
         return export_hash_schema(schema) if schema.is_a?(Hash)
 
         build_schema_output(schema)
       end
 
+      def schema_is_ref_with_description?(schema)
+        schema.respond_to?(:canonical_name) && schema.canonical_name && !schema.type && schema.description
+      end
+
       def schema_is_ref?(schema)
-        schema.respond_to?(:canonical_name) && schema.canonical_name && !schema.type
+        schema.respond_to?(:canonical_name) && schema.canonical_name && !schema.type && !schema.description
       end
 
       def schema_ref(schema)
         { '$ref' => "#/components/schemas/#{schema.canonical_name}" }
+      end
+
+      def schema_ref_with_description(schema)
+        # Use allOf to combine $ref with description
+        {
+          'allOf' => [{ '$ref' => "#/components/schemas/#{schema.canonical_name}" }],
+          'description' => schema.description
+        }
       end
 
       def build_schema_output(schema)
@@ -391,12 +404,16 @@ module GrapeSwagger
       def export_additional_properties(additional_props)
         return additional_props if [true, false].include?(additional_props)
 
-        # Handle hash with $ref - convert Swagger 2.0 refs to OAS3
+        # Handle hash with $ref or canonical_name
         if additional_props.is_a?(Hash)
           if additional_props['$ref'] || additional_props[:$ref]
             ref = additional_props['$ref'] || additional_props[:$ref]
             ref = ref.gsub('#/definitions/', '#/components/schemas/')
             return { '$ref' => ref }
+          end
+          # Handle canonical_name (from DirectSpecBuilder)
+          if additional_props[:canonical_name]
+            return { '$ref' => "#/components/schemas/#{additional_props[:canonical_name]}" }
           end
           return additional_props
         end

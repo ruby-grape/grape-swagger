@@ -96,14 +96,37 @@ module GrapeSwagger
           apply_primitive_from_param(schema, type_string, param)
         elsif type_string == 'array'
           apply_array_from_param(schema, param)
+        elsif type_string == 'object'
+          apply_object_from_param(schema, param)
         elsif type_string == 'file'
           schema.type = 'string'
           schema.format = 'binary'
         elsif @definitions.key?(type_string)
           schema.canonical_name = type_string
         else
-          schema.type = type_string == 'object' ? 'object' : type_string
+          schema.type = type_string
         end
+      end
+
+      def apply_object_from_param(schema, param)
+        schema.type = 'object'
+        schema.additional_properties = param[:additionalProperties] if param.key?(:additionalProperties)
+        apply_object_properties(schema, param)
+        apply_object_required(schema, param)
+      end
+
+      def apply_object_properties(schema, param)
+        return unless param[:properties]
+
+        param[:properties].each do |name, prop|
+          schema.add_property(name.to_s, build_from_param(prop))
+        end
+      end
+
+      def apply_object_required(schema, param)
+        return unless param[:required].is_a?(Array)
+
+        param[:required].each { |name| schema.mark_required(name.to_s) }
       end
 
       def apply_primitive_from_param(schema, type_string, param)
@@ -156,6 +179,8 @@ module GrapeSwagger
         schema.items = build_from_definition(definition[:items]) if definition[:items]
 
         schema.all_of = definition[:allOf].map { |d| build_from_definition(d) } if definition[:allOf]
+        schema.one_of = definition[:oneOf].map { |d| build_from_definition(d) } if definition[:oneOf]
+        schema.any_of = definition[:anyOf].map { |d| build_from_definition(d) } if definition[:anyOf]
 
         schema.additional_properties = definition[:additionalProperties] if definition.key?(:additionalProperties)
 

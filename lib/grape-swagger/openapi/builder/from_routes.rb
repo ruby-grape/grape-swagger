@@ -3,19 +3,14 @@
 module GrapeSwagger
   module OpenAPI
     module Builder
-    # Builds OpenAPI::Spec directly from Grape routes without intermediate Swagger 2.0 hash.
+    # Builds OpenAPI::Document directly from Grape routes without intermediate Swagger 2.0 hash.
     # This preserves all Grape options that would otherwise be lost in conversion (e.g., allow_blank → nullable).
     #
     # Architecture:
-    #   Grape Routes → DirectSpecBuilder → API Model → Exporter → OAS3 Output
+    #   Grape Routes → FromRoutes → OpenAPI Model → Exporter → OAS3 Output
     #
     # This is the active path for OAS3 generation. The Swagger 2.0 path remains unchanged:
     #   Grape Routes → endpoint.rb → Swagger Hash
-    #
-    # Known limitations (22 failing tests):
-    # - Nested body parameters need deeper integration with param parsers
-    # - Additional properties on schemas need entity parser support
-    # - Some complex entity scenarios need work
     class FromRoutes
       attr_reader :spec, :definitions, :options
 

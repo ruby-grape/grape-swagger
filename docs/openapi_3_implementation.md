@@ -527,7 +527,7 @@ The implementation maintains 100% backward compatibility:
 
 Potential areas for future development:
 
-1. **Dry-types/Dry-validation support** - Model parser for Dry contracts schema extraction
+1. **Dry-types/Dry-validation support** - New model parser gem (e.g., `grape-swagger-dry`)
 2. **Reusable components** - responses, parameters, requestBodies in components
 3. **XML support** - Schema XML properties
 4. **Complex parameter serialization** - `content` instead of `schema`

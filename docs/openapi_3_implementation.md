@@ -527,10 +527,11 @@ The implementation maintains 100% backward compatibility:
 
 Potential areas for future development:
 
-1. **Reusable components** - responses, parameters, requestBodies in components
-2. **XML support** - Schema XML properties
-3. **Complex parameter serialization** - `content` instead of `schema`
-4. **OpenAPI 3.2** - When specification is finalized
+1. **Dry-types/Dry-validation support** - Model parser for Dry contracts schema extraction
+2. **Reusable components** - responses, parameters, requestBodies in components
+3. **XML support** - Schema XML properties
+4. **Complex parameter serialization** - `content` instead of `schema`
+5. **OpenAPI 3.2** - When specification is finalized
 
 ---
 
@@ -538,8 +539,8 @@ Potential areas for future development:
 
 When adding new OAS3 features:
 
-1. Add to appropriate API Model class
-2. Update SpecBuilder if needed
+1. Add to appropriate OpenAPI model class
+2. Update FromRoutes/FromHash builders if needed
 3. Update OAS30 exporter (and OAS31 if different)
 4. Add comprehensive tests
 5. Update this documentation

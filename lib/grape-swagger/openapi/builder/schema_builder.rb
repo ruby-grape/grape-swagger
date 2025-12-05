@@ -158,36 +158,49 @@ module GrapeSwagger
 
         # Build schema from a model definition hash
         def build_from_definition(definition)
+          return build_ref_schema(definition) if definition_is_ref?(definition)
+
           schema = OpenAPI::Schema.new
-
-          # Handle $ref - extract model name from reference
-          if definition['$ref'] || definition[:$ref]
-            ref = definition['$ref'] || definition[:$ref]
-            # Extract model name from "#/definitions/ModelName" or "#/components/schemas/ModelName"
-            model_name = ref.split('/').last
-            schema.canonical_name = model_name
-            return schema
-          end
-
           schema.type = definition[:type] if definition[:type]
           schema.description = definition[:description] if definition[:description]
 
-          definition[:properties]&.each do |name, prop|
-            schema.add_property(name, build_from_param(prop))
-          end
-
-          definition[:required].each { |name| schema.mark_required(name) } if definition[:required].is_a?(Array)
-
-          schema.items = build_from_definition(definition[:items]) if definition[:items]
-
-          schema.all_of = definition[:allOf].map { |d| build_from_definition(d) } if definition[:allOf]
-          schema.one_of = definition[:oneOf].map { |d| build_from_definition(d) } if definition[:oneOf]
-          schema.any_of = definition[:anyOf].map { |d| build_from_definition(d) } if definition[:anyOf]
+          build_definition_properties(schema, definition)
+          build_definition_items(schema, definition)
+          build_definition_composition(schema, definition)
 
           schema.discriminator = definition[:discriminator] if definition[:discriminator]
           schema.additional_properties = definition[:additionalProperties] if definition.key?(:additionalProperties)
 
           schema
+        end
+
+        def definition_is_ref?(definition)
+          definition['$ref'] || definition[:$ref]
+        end
+
+        def build_ref_schema(definition)
+          ref = definition['$ref'] || definition[:$ref]
+          model_name = ref.split('/').last
+          schema = OpenAPI::Schema.new
+          schema.canonical_name = model_name
+          schema
+        end
+
+        def build_definition_properties(schema, definition)
+          definition[:properties]&.each do |name, prop|
+            schema.add_property(name, build_from_param(prop))
+          end
+          definition[:required].each { |name| schema.mark_required(name) } if definition[:required].is_a?(Array)
+        end
+
+        def build_definition_items(schema, definition)
+          schema.items = build_from_definition(definition[:items]) if definition[:items]
+        end
+
+        def build_definition_composition(schema, definition)
+          schema.all_of = definition[:allOf].map { |d| build_from_definition(d) } if definition[:allOf]
+          schema.one_of = definition[:oneOf].map { |d| build_from_definition(d) } if definition[:oneOf]
+          schema.any_of = definition[:anyOf].map { |d| build_from_definition(d) } if definition[:anyOf]
         end
 
         private

@@ -1,88 +1,99 @@
 # frozen_string_literal: true
 
+require_relative 'param_schema_builder'
+
 module GrapeSwagger
   module OpenAPI
     module Builder
-      # Builds OpenAPI::Parameter objects from Grape route parameters.
-      class ParameterBuilder
-        PARAM_LOCATIONS = {
-          'path' => 'path',
-          'query' => 'query',
-          'header' => 'header',
-          'formData' => 'formData',
-          'body' => 'body'
-        }.freeze
+      # Builds OpenAPI parameters from Grape route parameters
+      module ParameterBuilder
+        include ParamSchemaBuilder
 
-        def initialize(schema_builder)
-          @schema_builder = schema_builder
-        end
+        def build_operation_parameters(operation, route, path)
+          raw_params = build_request_params(route)
+          consumes = operation.consumes || @spec.consumes
 
-        # Build a parameter from parsed param hash
-        def build(param_hash)
-          param = OpenAPI::Parameter.new
+          body_params = []
+          form_data_params = []
 
-          param.name = param_hash[:name]
-          param.location = normalize_location(param_hash[:in])
-          param.description = param_hash[:description]
-          param.required = param.path? || param_hash[:required]
-          param.deprecated = param_hash[:deprecated] if param_hash.key?(:deprecated)
+          raw_params.each do |name, param_options|
+            next if hidden_parameter?(param_options)
 
-          # Build schema from type info
-          if param_hash[:schema]
-            param.schema = @schema_builder.build_from_param(param_hash[:schema])
-          else
-            build_inline_schema(param, param_hash)
+            param = build_parameter(name, param_options, route, path, consumes)
+            is_nested = name.to_s.include?('[')
+
+            case param.location
+            when 'body'
+              body_params << { name: name, options: param_options, param: param }
+            when 'formData'
+              if is_nested
+                body_params << { name: name, options: param_options, param: param }
+              else
+                form_data_params << param
+              end
+            else
+              operation.add_parameter(param)
+            end
           end
 
-          # Collection format (Swagger 2.0)
-          param.collection_format = param_hash[:collectionFormat] if param_hash[:collectionFormat]
-
-          # Convert to OAS3 style/explode
-          if param.collection_format
-            param.style = param.style_from_collection_format
-            param.explode = param.explode_from_collection_format
+          if body_params.any?
+            build_request_body_from_params(operation, body_params, consumes, route, path)
+          elsif form_data_params.any?
+            build_request_body_from_form_data(operation, form_data_params, consumes)
           end
-
-          # Copy extension fields
-          param_hash.each do |key, value|
-            param.extensions[key] = value if key.to_s.start_with?('x-')
-          end
-
-          param
-        end
-
-        # Build parameters from a list of param hashes
-        def build_all(param_list)
-          param_list.map { |p| build(p) }
-        end
-
-        # Separate body params from non-body params
-        # Returns [regular_params, body_params]
-        def partition_body_params(params)
-          params.partition { |p| p.location != 'body' }
         end
 
         private
 
-        def normalize_location(location)
-          PARAM_LOCATIONS[location.to_s] || location.to_s
+        def build_request_params(route)
+          GrapeSwagger.request_param_parsers.each_with_object({}) do |parser_klass, accum|
+            params = parser_klass.parse(route, accum, options, @endpoint)
+            accum.merge!(params.stringify_keys)
+          end
         end
 
-        def build_inline_schema(param, param_hash)
-          # Store inline type info for Swagger 2.0 compat
-          param.type = param_hash[:type]
-          param.format = param_hash[:format]
-          param.items = param_hash[:items]
-          param.default = param_hash[:default]
-          param.enum = param_hash[:enum]
-          param.minimum = param_hash[:minimum]
-          param.maximum = param_hash[:maximum]
-          param.min_length = param_hash[:minLength]
-          param.max_length = param_hash[:maxLength]
-          param.pattern = param_hash[:pattern]
+        def build_parameter(name, param_options, route, path, consumes)
+          param = OpenAPI::Parameter.new
+          param.name = param_options[:full_name] || name
+          param.location = determine_param_location(name, param_options, route, path, consumes)
+          param.description = param_options[:desc] || param_options[:description]
+          param.required = param.location == 'path' || param_options[:required] || false
+          param.schema = build_param_schema(param_options)
+          param.deprecated = param_options[:deprecated] if param_options.key?(:deprecated)
+          copy_param_extensions(param, param_options)
+          param
+        end
 
-          # Also build a schema object for OAS3
-          param.schema = @schema_builder.build_from_param(param_hash)
+        def determine_param_location(name, param_options, route, path, consumes)
+          return 'path' if path.include?("{#{name}}")
+
+          doc = param_options[:documentation] || {}
+          return doc[:param_type] if doc[:param_type]
+          return doc[:in] if doc[:in]
+
+          if %w[POST PUT PATCH].include?(route.request_method)
+            consumes&.any? { |c| c.include?('form') } ? 'formData' : 'body'
+          else
+            'query'
+          end
+        end
+
+        def build_param_schema(param_options)
+          schema = OpenAPI::Schema.new
+          data_type = GrapeSwagger::DocMethods::DataType.call(param_options)
+          apply_type_to_schema(schema, data_type, param_options)
+
+          schema.nullable = true if param_options[:allow_blank]
+          doc = param_options[:documentation] || {}
+          schema.nullable = true if doc[:nullable]
+
+          if doc.key?(:additional_properties)
+            target = schema.type == 'array' && schema.items ? schema.items : schema
+            apply_additional_properties(target, doc[:additional_properties])
+          end
+
+          apply_constraints_to_schema(schema, param_options)
+          schema
         end
       end
     end

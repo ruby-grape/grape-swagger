@@ -116,6 +116,5 @@ module GrapeSwagger
         info_hash.compact
       end
     end
-
   end
 end

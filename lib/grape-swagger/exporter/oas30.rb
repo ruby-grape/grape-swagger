@@ -398,7 +398,10 @@ module GrapeSwagger
       def add_schema_object_fields(output, schema)
         output[:properties] = schema.properties.transform_values { |s| export_schema(s) } if schema.properties.any?
         output[:required] = schema.required if schema.required.any?
-        output[:additionalProperties] = export_additional_properties(schema.additional_properties) unless schema.additional_properties.nil?
+        return if schema.additional_properties.nil?
+
+        output[:additionalProperties] =
+          export_additional_properties(schema.additional_properties)
       end
 
       def export_additional_properties(additional_props)
@@ -415,6 +418,7 @@ module GrapeSwagger
           if additional_props[:canonical_name]
             return { '$ref' => "#/components/schemas/#{additional_props[:canonical_name]}" }
           end
+
           return additional_props
         end
 

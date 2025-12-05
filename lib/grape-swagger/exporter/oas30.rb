@@ -2,7 +2,7 @@
 
 module GrapeSwagger
   module Exporter
-    # Exports ApiModel::Spec to OpenAPI 3.0 format.
+    # Exports OpenAPI::Document to OpenAPI 3.0 format.
     class OAS30 < Base
       def export
         output = {}
@@ -38,7 +38,7 @@ module GrapeSwagger
         # Build servers from Swagger 2.0 host/basePath/schemes
         schemes = spec.schemes.presence || ['https']
         schemes.map do |scheme|
-          ApiModel::Server.from_swagger2(
+          OpenAPI::Server.from_swagger2(
             host: spec.host,
             base_path: spec.base_path,
             scheme: scheme

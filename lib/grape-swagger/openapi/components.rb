@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module ApiModel
+  module OpenAPI
     # Components container (OAS3) / Definitions container (Swagger 2.0).
     class Components
       attr_accessor :schemas, :responses, :parameters, :examples,

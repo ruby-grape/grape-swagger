@@ -2,7 +2,7 @@
 
 module GrapeSwagger
   module Exporter
-    # Base exporter class for converting ApiModel::Spec to output format.
+    # Base exporter class for converting OpenAPI::Document to output format.
     class Base
       attr_reader :spec
 

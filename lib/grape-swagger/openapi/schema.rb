@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module ApiModel
+  module OpenAPI
     # Version-agnostic JSON Schema representation.
     # Used for request/response bodies, parameters, and component schemas.
     class Schema

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module ApiModel
+  module OpenAPI
     # Path item containing operations for a specific path.
     class PathItem
       HTTP_METHODS = %w[get put post delete options head patch trace].freeze

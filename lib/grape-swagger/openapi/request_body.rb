@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module ApiModel
+  module OpenAPI
     # Request body definition for OAS3.
     # In Swagger 2.0, this is converted to a body parameter.
     class RequestBody

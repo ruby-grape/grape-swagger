@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module ApiModel
+  module OpenAPI
     # Parameter definition for query, path, header, or cookie parameters.
     # Note: body parameters in OAS2 become RequestBody in OAS3.
     class Parameter

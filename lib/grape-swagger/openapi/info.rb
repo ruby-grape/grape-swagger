@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module ApiModel
+  module OpenAPI
     # API metadata information.
     class Info
       attr_accessor :title, :description, :terms_of_service, :version,

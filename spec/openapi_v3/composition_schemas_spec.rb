@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe 'SchemaBuilder composition support' do
   let(:definitions) { {} }
-  let(:builder) { GrapeSwagger::ModelBuilder::SchemaBuilder.new(definitions) }
+  let(:builder) { GrapeSwagger::OpenAPI::Builder::SchemaBuilder.new(definitions) }
 
   describe '#build_from_definition with allOf' do
     let(:definition) do
@@ -113,35 +113,35 @@ end
 
 describe 'OAS30 exporter composition support' do
   let(:spec) do
-    GrapeSwagger::ApiModel::Spec.new.tap do |s|
-      s.info = GrapeSwagger::ApiModel::Info.new(title: 'Test', version: '1.0')
+    GrapeSwagger::OpenAPI::Document.new.tap do |s|
+      s.info = GrapeSwagger::OpenAPI::Info.new(title: 'Test', version: '1.0')
     end
   end
 
   let(:schema_with_one_of) do
-    GrapeSwagger::ApiModel::Schema.new.tap do |s|
+    GrapeSwagger::OpenAPI::Schema.new.tap do |s|
       s.one_of = [
-        GrapeSwagger::ApiModel::Schema.new(canonical_name: 'Cat'),
-        GrapeSwagger::ApiModel::Schema.new(canonical_name: 'Dog')
+        GrapeSwagger::OpenAPI::Schema.new(canonical_name: 'Cat'),
+        GrapeSwagger::OpenAPI::Schema.new(canonical_name: 'Dog')
       ]
     end
   end
 
   let(:schema_with_any_of) do
-    GrapeSwagger::ApiModel::Schema.new.tap do |s|
+    GrapeSwagger::OpenAPI::Schema.new.tap do |s|
       s.any_of = [
-        GrapeSwagger::ApiModel::Schema.new(type: 'string'),
-        GrapeSwagger::ApiModel::Schema.new(type: 'integer')
+        GrapeSwagger::OpenAPI::Schema.new(type: 'string'),
+        GrapeSwagger::OpenAPI::Schema.new(type: 'integer')
       ]
     end
   end
 
   let(:schema_with_all_of) do
-    GrapeSwagger::ApiModel::Schema.new.tap do |s|
+    GrapeSwagger::OpenAPI::Schema.new.tap do |s|
       s.all_of = [
-        GrapeSwagger::ApiModel::Schema.new(canonical_name: 'Base'),
-        GrapeSwagger::ApiModel::Schema.new(type: 'object').tap do |obj|
-          obj.add_property('extra', GrapeSwagger::ApiModel::Schema.new(type: 'string'))
+        GrapeSwagger::OpenAPI::Schema.new(canonical_name: 'Base'),
+        GrapeSwagger::OpenAPI::Schema.new(type: 'object').tap do |obj|
+          obj.add_property('extra', GrapeSwagger::OpenAPI::Schema.new(type: 'string'))
         end
       ]
     end

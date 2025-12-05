@@ -91,18 +91,18 @@ describe 'Nullable fields' do
     # OAS 3.1: uses type array like ["string", "null"]
 
     it 'OAS 3.0 exporter uses nullable_keyword' do
-      exporter = GrapeSwagger::Exporter::OAS30.new(GrapeSwagger::ApiModel::Spec.new)
+      exporter = GrapeSwagger::Exporter::OAS30.new(GrapeSwagger::OpenAPI::Document.new)
       expect(exporter.send(:nullable_keyword?)).to be true
     end
 
     it 'OAS 3.1 exporter does not use nullable_keyword' do
-      exporter = GrapeSwagger::Exporter::OAS31.new(GrapeSwagger::ApiModel::Spec.new)
+      exporter = GrapeSwagger::Exporter::OAS31.new(GrapeSwagger::OpenAPI::Document.new)
       expect(exporter.send(:nullable_keyword?)).to be false
     end
 
     it 'exports nullable schema correctly in OAS 3.0' do
-      schema = GrapeSwagger::ApiModel::Schema.new(type: 'string', nullable: true)
-      spec = GrapeSwagger::ApiModel::Spec.new
+      schema = GrapeSwagger::OpenAPI::Schema.new(type: 'string', nullable: true)
+      spec = GrapeSwagger::OpenAPI::Document.new
       spec.components.add_schema('Test', schema)
 
       exporter = GrapeSwagger::Exporter::OAS30.new(spec)
@@ -113,8 +113,8 @@ describe 'Nullable fields' do
     end
 
     it 'exports nullable schema correctly in OAS 3.1' do
-      schema = GrapeSwagger::ApiModel::Schema.new(type: 'string', nullable: true)
-      spec = GrapeSwagger::ApiModel::Spec.new
+      schema = GrapeSwagger::OpenAPI::Schema.new(type: 'string', nullable: true)
+      spec = GrapeSwagger::OpenAPI::Document.new
       spec.components.add_schema('Test', schema)
 
       exporter = GrapeSwagger::Exporter::OAS31.new(spec)

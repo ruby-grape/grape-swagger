@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module ApiModel
+  module OpenAPI
     # Response definition.
     class Response
       attr_accessor :status_code, :description, :media_types, :headers,

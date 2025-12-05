@@ -98,10 +98,10 @@ end
 
 describe 'Reference path conversion' do
   it 'converts definitions refs to components/schemas refs' do
-    schema = GrapeSwagger::ApiModel::Schema.new
+    schema = GrapeSwagger::OpenAPI::Schema.new
     schema.canonical_name = 'TestModel'
 
-    spec = GrapeSwagger::ApiModel::Spec.new
+    spec = GrapeSwagger::OpenAPI::Document.new
     spec.components.add_schema('TestModel', schema)
 
     exporter = GrapeSwagger::Exporter::OAS30.new(spec)
@@ -113,7 +113,7 @@ describe 'Reference path conversion' do
   end
 
   it 'converts inline refs in hash schemas' do
-    spec = GrapeSwagger::ApiModel::Spec.new
+    spec = GrapeSwagger::OpenAPI::Document.new
     exporter = GrapeSwagger::Exporter::OAS30.new(spec)
 
     # Simulate a hash with Swagger 2.0 style ref

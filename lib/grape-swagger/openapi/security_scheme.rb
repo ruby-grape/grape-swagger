@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module ApiModel
+  module OpenAPI
     # Security scheme definition.
     class SecurityScheme
       TYPES = %w[apiKey http oauth2 openIdConnect].freeze

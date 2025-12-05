@@ -5,7 +5,7 @@ require 'spec_helper'
 describe 'Discriminator in OpenAPI 3.0' do
   describe 'SchemaBuilder preserves discriminator' do
     let(:definitions) { {} }
-    let(:builder) { GrapeSwagger::ModelBuilder::SchemaBuilder.new(definitions) }
+    let(:builder) { GrapeSwagger::OpenAPI::Builder::SchemaBuilder.new(definitions) }
 
     it 'preserves discriminator field from definition' do
       definition = {
@@ -25,28 +25,28 @@ describe 'Discriminator in OpenAPI 3.0' do
 
   describe 'OAS30 exporter handles discriminator' do
     let(:spec) do
-      GrapeSwagger::ApiModel::Spec.new.tap do |s|
-        s.info = GrapeSwagger::ApiModel::Info.new(title: 'Test', version: '1.0')
+      GrapeSwagger::OpenAPI::Document.new.tap do |s|
+        s.info = GrapeSwagger::OpenAPI::Info.new(title: 'Test', version: '1.0')
       end
     end
 
     let(:pet_schema) do
-      GrapeSwagger::ApiModel::Schema.new.tap do |s|
+      GrapeSwagger::OpenAPI::Schema.new.tap do |s|
         s.type = 'object'
         s.discriminator = 'type'
-        s.add_property('type', GrapeSwagger::ApiModel::Schema.new(type: 'string'))
-        s.add_property('name', GrapeSwagger::ApiModel::Schema.new(type: 'string'))
+        s.add_property('type', GrapeSwagger::OpenAPI::Schema.new(type: 'string'))
+        s.add_property('name', GrapeSwagger::OpenAPI::Schema.new(type: 'string'))
         s.mark_required('type')
         s.mark_required('name')
       end
     end
 
     let(:cat_schema) do
-      GrapeSwagger::ApiModel::Schema.new.tap do |s|
+      GrapeSwagger::OpenAPI::Schema.new.tap do |s|
         s.all_of = [
-          GrapeSwagger::ApiModel::Schema.new(canonical_name: 'Pet'),
-          GrapeSwagger::ApiModel::Schema.new(type: 'object').tap do |props|
-            props.add_property('huntingSkill', GrapeSwagger::ApiModel::Schema.new(type: 'string'))
+          GrapeSwagger::OpenAPI::Schema.new(canonical_name: 'Pet'),
+          GrapeSwagger::OpenAPI::Schema.new(type: 'object').tap do |props|
+            props.add_property('huntingSkill', GrapeSwagger::OpenAPI::Schema.new(type: 'string'))
           end
         ]
       end
@@ -84,13 +84,13 @@ describe 'Discriminator in OpenAPI 3.0' do
 
   describe 'OAS3 discriminator object format' do
     let(:spec) do
-      GrapeSwagger::ApiModel::Spec.new.tap do |s|
-        s.info = GrapeSwagger::ApiModel::Info.new(title: 'Test', version: '1.0')
+      GrapeSwagger::OpenAPI::Document.new.tap do |s|
+        s.info = GrapeSwagger::OpenAPI::Info.new(title: 'Test', version: '1.0')
       end
     end
 
     let(:pet_schema_with_mapping) do
-      GrapeSwagger::ApiModel::Schema.new.tap do |s|
+      GrapeSwagger::OpenAPI::Schema.new.tap do |s|
         s.type = 'object'
         # OAS3 discriminator object format
         s.discriminator = {
@@ -100,7 +100,7 @@ describe 'Discriminator in OpenAPI 3.0' do
             'dog' => '#/components/schemas/Dog'
           }
         }
-        s.add_property('petType', GrapeSwagger::ApiModel::Schema.new(type: 'string'))
+        s.add_property('petType', GrapeSwagger::OpenAPI::Schema.new(type: 'string'))
       end
     end
 

@@ -8,11 +8,11 @@ This document summarizes all changes made to add OpenAPI 3.0 and 3.1 support.
 
 ## New Files Added
 
-### API Model Layer (`lib/grape-swagger/api_model/`)
+### OpenAPI Model Layer (`lib/grape-swagger/openapi/`)
 
 | File | Purpose |
 |------|---------|
-| `spec.rb` | Root specification container |
+| `document.rb` | Root specification container |
 | `info.rb` | Info object (title, version, license, contact) |
 | `server.rb` | Server definition with variables support |
 | `path_item.rb` | Path with operations |
@@ -27,12 +27,12 @@ This document summarizes all changes made to add OpenAPI 3.0 and 3.1 support.
 | `header.rb` | Response header definition |
 | `tag.rb` | Tag definition |
 
-### Model Builders (`lib/grape-swagger/model_builder/`)
+### Builders (`lib/grape-swagger/openapi/builder/`)
 
 | File | Purpose |
 |------|---------|
-| `direct_spec_builder.rb` | **Primary** - Builds API Model directly from Grape routes |
-| `spec_builder.rb` | Converts Swagger hash → API Model (legacy conversion) |
+| `from_routes.rb` | **Primary** - Builds OpenAPI model directly from Grape routes |
+| `from_hash.rb` | Converts Swagger hash → OpenAPI model (legacy conversion) |
 | `operation_builder.rb` | Builds operations from route |
 | `parameter_builder.rb` | Builds parameters |
 | `response_builder.rb` | Builds responses |
@@ -51,8 +51,8 @@ This document summarizes all changes made to add OpenAPI 3.0 and 3.1 support.
 
 | File | Purpose |
 |------|---------|
-| `api_model.rb` | Loads all API Model classes |
-| `model_builder.rb` | Loads all Model Builder classes |
+| `openapi.rb` | Loads all OpenAPI model classes |
+| `openapi/builder.rb` | Loads all builder classes |
 | `exporter.rb` | Loads all Exporter classes |
 
 ---
@@ -73,7 +73,7 @@ This document summarizes all changes made to add OpenAPI 3.0 and 3.1 support.
 |------|---------|
 | `lib/grape-swagger/doc_methods/parse_params.rb` | Added `document_nullable` method |
 | `lib/grape-swagger/doc_methods/move_params.rb` | Added `nullable` to `property_keys` |
-| `lib/grape-swagger/model_builder/schema_builder.rb` | Added nullable to `apply_param_constraints` |
+| `lib/grape-swagger/openapi/builder/schema_builder.rb` | Added nullable to `apply_param_constraints` |
 
 ---
 

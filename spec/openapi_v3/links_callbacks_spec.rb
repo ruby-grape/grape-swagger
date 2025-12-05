@@ -5,13 +5,13 @@ require 'spec_helper'
 describe 'Links and Callbacks in OpenAPI 3.0' do
   describe 'Response links' do
     let(:spec) do
-      GrapeSwagger::ApiModel::Spec.new.tap do |s|
-        s.info = GrapeSwagger::ApiModel::Info.new(title: 'Test', version: '1.0')
+      GrapeSwagger::OpenAPI::Document.new.tap do |s|
+        s.info = GrapeSwagger::OpenAPI::Info.new(title: 'Test', version: '1.0')
       end
     end
 
     let(:response_with_links) do
-      GrapeSwagger::ApiModel::Response.new.tap do |r|
+      GrapeSwagger::OpenAPI::Response.new.tap do |r|
         r.description = 'Successful response'
         r.links = {
           'GetUserById' => {
@@ -25,14 +25,14 @@ describe 'Links and Callbacks in OpenAPI 3.0' do
     end
 
     let(:operation) do
-      GrapeSwagger::ApiModel::Operation.new.tap do |op|
+      GrapeSwagger::OpenAPI::Operation.new.tap do |op|
         op.operation_id = 'createUser'
         op.add_response('201', response_with_links)
       end
     end
 
     let(:path_item) do
-      GrapeSwagger::ApiModel::PathItem.new.tap do |pi|
+      GrapeSwagger::OpenAPI::PathItem.new.tap do |pi|
         pi.add_operation(:post, operation)
       end
     end
@@ -61,13 +61,13 @@ describe 'Links and Callbacks in OpenAPI 3.0' do
 
   describe 'Operation callbacks' do
     let(:spec) do
-      GrapeSwagger::ApiModel::Spec.new.tap do |s|
-        s.info = GrapeSwagger::ApiModel::Info.new(title: 'Test', version: '1.0')
+      GrapeSwagger::OpenAPI::Document.new.tap do |s|
+        s.info = GrapeSwagger::OpenAPI::Info.new(title: 'Test', version: '1.0')
       end
     end
 
     let(:operation_with_callbacks) do
-      GrapeSwagger::ApiModel::Operation.new.tap do |op|
+      GrapeSwagger::OpenAPI::Operation.new.tap do |op|
         op.operation_id = 'createSubscription'
         op.callbacks = {
           'onData' => {
@@ -87,12 +87,12 @@ describe 'Links and Callbacks in OpenAPI 3.0' do
             }
           }
         }
-        op.add_response('201', GrapeSwagger::ApiModel::Response.new(description: 'Created'))
+        op.add_response('201', GrapeSwagger::OpenAPI::Response.new(description: 'Created'))
       end
     end
 
     let(:path_item) do
-      GrapeSwagger::ApiModel::PathItem.new.tap do |pi|
+      GrapeSwagger::OpenAPI::PathItem.new.tap do |pi|
         pi.add_operation(:post, operation_with_callbacks)
       end
     end
@@ -127,8 +127,8 @@ describe 'Links and Callbacks in OpenAPI 3.0' do
 
   describe 'Components links' do
     let(:spec) do
-      GrapeSwagger::ApiModel::Spec.new.tap do |s|
-        s.info = GrapeSwagger::ApiModel::Info.new(title: 'Test', version: '1.0')
+      GrapeSwagger::OpenAPI::Document.new.tap do |s|
+        s.info = GrapeSwagger::OpenAPI::Info.new(title: 'Test', version: '1.0')
       end
     end
 
@@ -153,8 +153,8 @@ describe 'Links and Callbacks in OpenAPI 3.0' do
 
   describe 'Components callbacks' do
     let(:spec) do
-      GrapeSwagger::ApiModel::Spec.new.tap do |s|
-        s.info = GrapeSwagger::ApiModel::Info.new(title: 'Test', version: '1.0')
+      GrapeSwagger::OpenAPI::Document.new.tap do |s|
+        s.info = GrapeSwagger::OpenAPI::Info.new(title: 'Test', version: '1.0')
       end
     end
 

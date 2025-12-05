@@ -14,8 +14,8 @@ require 'grape-swagger/request_param_parser_registry'
 require 'grape-swagger/token_owner_resolver'
 
 # OpenAPI 3.x support
-require 'grape-swagger/api_model'
-require 'grape-swagger/model_builder'
+require 'grape-swagger/openapi'
+require 'grape-swagger/openapi/builder'
 require 'grape-swagger/exporter'
 
 module GrapeSwagger

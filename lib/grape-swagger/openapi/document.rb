@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module ApiModel
+  module OpenAPI
     # Root specification container - version agnostic.
-    class Spec
+    class Document
       attr_accessor :info, :servers, :paths, :components,
                     :security, :tags, :external_docs,
                     :extensions,
@@ -116,5 +116,6 @@ module GrapeSwagger
         info_hash.compact
       end
     end
+
   end
 end

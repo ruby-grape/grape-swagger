@@ -121,24 +121,24 @@ describe 'OpenAPI 3.1 webhooks' do
   describe 'manual webhook configuration' do
     it 'exports webhooks in OAS 3.1 format' do
       # Create API Model manually to test webhooks export
-      spec = GrapeSwagger::ApiModel::Spec.new
+      spec = GrapeSwagger::OpenAPI::Document.new
       spec.info.title = 'Webhook Test API'
       spec.info.version = '1.0'
 
       # Create a webhook path item
-      webhook_path = GrapeSwagger::ApiModel::PathItem.new
-      webhook_op = GrapeSwagger::ApiModel::Operation.new
+      webhook_path = GrapeSwagger::OpenAPI::PathItem.new
+      webhook_op = GrapeSwagger::OpenAPI::Operation.new
       webhook_op.summary = 'New pet notification'
       webhook_op.description = 'Receives notification when a new pet is added'
 
-      request_body = GrapeSwagger::ApiModel::RequestBody.new
+      request_body = GrapeSwagger::OpenAPI::RequestBody.new
       request_body.required = true
-      schema = GrapeSwagger::ApiModel::Schema.new(type: 'object')
-      schema.add_property('petName', GrapeSwagger::ApiModel::Schema.new(type: 'string'))
+      schema = GrapeSwagger::OpenAPI::Schema.new(type: 'object')
+      schema.add_property('petName', GrapeSwagger::OpenAPI::Schema.new(type: 'string'))
       request_body.add_media_type('application/json', schema: schema)
       webhook_op.request_body = request_body
 
-      response = GrapeSwagger::ApiModel::Response.new
+      response = GrapeSwagger::OpenAPI::Response.new
       response.description = 'Webhook received successfully'
       webhook_op.add_response(200, response)
 
@@ -159,7 +159,7 @@ end
 
 describe 'OpenAPI 3.1 jsonSchemaDialect' do
   it 'exports jsonSchemaDialect when set' do
-    spec = GrapeSwagger::ApiModel::Spec.new
+    spec = GrapeSwagger::OpenAPI::Document.new
     spec.info.title = 'Test API'
     spec.info.version = '1.0'
     spec.json_schema_dialect = 'https://json-schema.org/draft/2020-12/schema'
@@ -171,7 +171,7 @@ describe 'OpenAPI 3.1 jsonSchemaDialect' do
   end
 
   it 'places jsonSchemaDialect after openapi version' do
-    spec = GrapeSwagger::ApiModel::Spec.new
+    spec = GrapeSwagger::OpenAPI::Document.new
     spec.info.title = 'Test API'
     spec.info.version = '1.0'
     spec.json_schema_dialect = 'https://json-schema.org/draft/2020-12/schema'
@@ -191,13 +191,13 @@ end
 
 describe 'OpenAPI 3.1 schema $schema keyword' do
   it 'exports $schema keyword when set on schema' do
-    spec = GrapeSwagger::ApiModel::Spec.new
+    spec = GrapeSwagger::OpenAPI::Document.new
     spec.info.title = 'Test API'
     spec.info.version = '1.0'
 
-    schema = GrapeSwagger::ApiModel::Schema.new(type: 'object')
+    schema = GrapeSwagger::OpenAPI::Schema.new(type: 'object')
     schema.json_schema = 'https://json-schema.org/draft/2020-12/schema'
-    schema.add_property('name', GrapeSwagger::ApiModel::Schema.new(type: 'string'))
+    schema.add_property('name', GrapeSwagger::OpenAPI::Schema.new(type: 'string'))
 
     spec.components.add_schema('MyModel', schema)
 
@@ -210,11 +210,11 @@ end
 
 describe 'OpenAPI 3.1 contentMediaType and contentEncoding' do
   it 'exports contentMediaType for binary content' do
-    spec = GrapeSwagger::ApiModel::Spec.new
+    spec = GrapeSwagger::OpenAPI::Document.new
     spec.info.title = 'Test API'
     spec.info.version = '1.0'
 
-    schema = GrapeSwagger::ApiModel::Schema.new(type: 'string')
+    schema = GrapeSwagger::OpenAPI::Schema.new(type: 'string')
     schema.content_media_type = 'image/png'
     schema.content_encoding = 'base64'
 
@@ -229,11 +229,11 @@ describe 'OpenAPI 3.1 contentMediaType and contentEncoding' do
   end
 
   it 'does not export contentMediaType in OAS 3.0' do
-    spec = GrapeSwagger::ApiModel::Spec.new
+    spec = GrapeSwagger::OpenAPI::Document.new
     spec.info.title = 'Test API'
     spec.info.version = '1.0'
 
-    schema = GrapeSwagger::ApiModel::Schema.new(type: 'string')
+    schema = GrapeSwagger::OpenAPI::Schema.new(type: 'string')
     schema.content_media_type = 'image/png'
     schema.content_encoding = 'base64'
 

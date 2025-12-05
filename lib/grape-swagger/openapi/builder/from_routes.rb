@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module ModelBuilder
-    # Builds ApiModel::Spec directly from Grape routes without intermediate Swagger 2.0 hash.
+  module OpenAPI
+    module Builder
+    # Builds OpenAPI::Spec directly from Grape routes without intermediate Swagger 2.0 hash.
     # This preserves all Grape options that would otherwise be lost in conversion (e.g., allow_blank → nullable).
     #
     # Architecture:
@@ -15,7 +16,7 @@ module GrapeSwagger
     # - Nested body parameters need deeper integration with param parsers
     # - Additional properties on schemas need entity parser support
     # - Some complex entity scenarios need work
-    class DirectSpecBuilder
+    class FromRoutes
       attr_reader :spec, :definitions, :options
 
       def initialize(endpoint, target_class, request, options)
@@ -24,7 +25,7 @@ module GrapeSwagger
         @request = request
         @options = options
         @definitions = {}
-        @spec = ApiModel::Spec.new
+        @spec = OpenAPI::Document.new
         @schema_builder = SchemaBuilder.new(@definitions)
       end
 
@@ -49,7 +50,7 @@ module GrapeSwagger
 
       def build_info
         info_options = options[:info] || {}
-        @spec.info = ApiModel::Info.new(
+        @spec.info = OpenAPI::Info.new(
           title: info_options[:title] || 'API title',
           description: info_options[:description],
           terms_of_service: info_options[:terms_of_service_url],
@@ -100,7 +101,7 @@ module GrapeSwagger
 
         (schemes.presence || ['https']).each do |scheme|
           @spec.add_server(
-            ApiModel::Server.from_swagger2(host: host, base_path: base_path, scheme: scheme)
+            OpenAPI::Server.from_swagger2(host: host, base_path: base_path, scheme: scheme)
           )
         end
       end
@@ -136,7 +137,7 @@ module GrapeSwagger
       end
 
       def build_security_scheme(definition)
-        scheme = ApiModel::SecurityScheme.new
+        scheme = OpenAPI::SecurityScheme.new
         scheme.type = convert_security_type(definition[:type])
         scheme.description = definition[:description]
         scheme.name = definition[:name]
@@ -203,7 +204,7 @@ module GrapeSwagger
         @current_item, path = GrapeSwagger::DocMethods::PathString.build(route, options)
         @current_entity = route.entity || route.options[:success]
 
-        path_item = @spec.paths[path] || ApiModel::PathItem.new(path: path)
+        path_item = @spec.paths[path] || OpenAPI::PathItem.new(path: path)
         operation = build_operation(route, path)
         path_item.add_operation(route.request_method.downcase.to_sym, operation)
 
@@ -225,7 +226,7 @@ module GrapeSwagger
       # ==================== Operations ====================
 
       def build_operation(route, path)
-        operation = ApiModel::Operation.new
+        operation = OpenAPI::Operation.new
         operation.operation_id = GrapeSwagger::DocMethods::OperationId.build(route, path)
         operation.summary = build_summary(route)
         operation.description = build_description(route)
@@ -350,7 +351,7 @@ module GrapeSwagger
       end
 
       def build_parameter(name, param_options, route, path, consumes)
-        param = ApiModel::Parameter.new
+        param = OpenAPI::Parameter.new
         param.name = param_options[:full_name] || name
 
         # Determine location
@@ -396,7 +397,7 @@ module GrapeSwagger
       end
 
       def build_param_schema(param_options)
-        schema = ApiModel::Schema.new
+        schema = OpenAPI::Schema.new
 
         # Get type info
         data_type = GrapeSwagger::DocMethods::DataType.call(param_options)
@@ -465,7 +466,7 @@ module GrapeSwagger
           if has_parser
             # Expose the entity and create a ref
             model_name = expose_params_from_model(element_class)
-            items = ApiModel::Schema.new
+            items = OpenAPI::Schema.new
             items.canonical_name = model_name if model_name
             schema.items = items
           else
@@ -545,7 +546,7 @@ module GrapeSwagger
       end
 
       def build_array_items_schema(param_options, data_type = nil)
-        items = ApiModel::Schema.new
+        items = OpenAPI::Schema.new
         doc = param_options[:documentation] || {}
 
         # Determine item type from documentation, data_type, or default to string
@@ -620,7 +621,7 @@ module GrapeSwagger
       # ==================== Request Body ====================
 
       def build_request_body_from_params(operation, body_params, consumes, route, path)
-        request_body = ApiModel::RequestBody.new
+        request_body = OpenAPI::RequestBody.new
         request_body.required = body_params.any? { |bp| bp[:options][:required] }
         request_body.description = route.description
 
@@ -633,7 +634,7 @@ module GrapeSwagger
         @spec.components.add_schema(definition_name, schema)
 
         # Create a reference schema for the requestBody
-        ref_schema = ApiModel::Schema.new
+        ref_schema = OpenAPI::Schema.new
         ref_schema.canonical_name = definition_name
 
         content_types = consumes || ['application/json']
@@ -645,7 +646,7 @@ module GrapeSwagger
       end
 
       def build_nested_body_schema(body_params, route)
-        schema = ApiModel::Schema.new(type: 'object')
+        schema = OpenAPI::Schema.new(type: 'object')
         schema.description = route.description
 
         # Separate top-level params from nested params
@@ -739,10 +740,10 @@ module GrapeSwagger
       end
 
       def build_request_body_from_form_data(operation, form_data_params, consumes)
-        request_body = ApiModel::RequestBody.new
+        request_body = OpenAPI::RequestBody.new
         request_body.required = form_data_params.any?(&:required)
 
-        schema = ApiModel::Schema.new(type: 'object')
+        schema = OpenAPI::Schema.new(type: 'object')
         form_data_params.each do |param|
           schema.add_property(param.name, param.schema)
           schema.mark_required(param.name) if param.required
@@ -845,13 +846,13 @@ module GrapeSwagger
       end
 
       def build_response(code_info, route)
-        response = ApiModel::Response.new
+        response = OpenAPI::Response.new
         response.status_code = code_info[:code].to_s
         response.description = code_info[:message] || ''
 
         # Handle file response
         if file_response?(code_info[:model])
-          schema = ApiModel::Schema.new(type: 'string', format: 'binary')
+          schema = OpenAPI::Schema.new(type: 'string', format: 'binary')
           response.add_media_type('application/octet-stream', schema: schema)
           return response
         end
@@ -867,12 +868,12 @@ module GrapeSwagger
                        end
 
           if model_name && @definitions[model_name]
-            schema = ApiModel::Schema.new
+            schema = OpenAPI::Schema.new
             schema.canonical_name = model_name
 
             # Handle array responses
             if route.options[:is_array] || code_info[:is_array]
-              array_schema = ApiModel::Schema.new(type: 'array', items: schema)
+              array_schema = OpenAPI::Schema.new(type: 'array', items: schema)
               schema = array_schema
             end
 
@@ -885,7 +886,7 @@ module GrapeSwagger
 
         # Headers
         code_info[:headers]&.each do |name, header_info|
-          header = ApiModel::Header.new(
+          header = OpenAPI::Header.new(
             name: name,
             description: header_info[:description],
             type: header_info[:type],
@@ -912,7 +913,7 @@ module GrapeSwagger
 
         # Build tag objects with descriptions
         all_tags.each do |tag_name|
-          tag = ApiModel::Tag.new(
+          tag = OpenAPI::Tag.new(
             name: tag_name,
             description: "Operations about #{tag_name.to_s.pluralize}"
           )
@@ -925,7 +926,7 @@ module GrapeSwagger
           @spec.tags.reject! { |t| user_tag_names.include?(t.name) }
 
           options[:tags].each do |tag_hash|
-            tag = ApiModel::Tag.new(
+            tag = OpenAPI::Tag.new(
               name: tag_hash[:name],
               description: tag_hash[:description]
             )
@@ -1034,5 +1035,6 @@ module GrapeSwagger
         end
       end
     end
+  end
   end
 end

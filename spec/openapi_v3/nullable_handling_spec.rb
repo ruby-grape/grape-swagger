@@ -106,8 +106,8 @@ describe 'Nullable handling in OAS 3.0 vs 3.1' do
 
   describe 'Direct exporter tests' do
     it 'OAS 3.0: converts schema.nullable to nullable: true' do
-      schema = GrapeSwagger::ApiModel::Schema.new(type: 'string', nullable: true)
-      spec = GrapeSwagger::ApiModel::Spec.new
+      schema = GrapeSwagger::OpenAPI::Schema.new(type: 'string', nullable: true)
+      spec = GrapeSwagger::OpenAPI::Document.new
       spec.components.add_schema('Test', schema)
 
       exporter = GrapeSwagger::Exporter::OAS30.new(spec)
@@ -118,8 +118,8 @@ describe 'Nullable handling in OAS 3.0 vs 3.1' do
     end
 
     it 'OAS 3.1: converts schema.nullable to type array' do
-      schema = GrapeSwagger::ApiModel::Schema.new(type: 'string', nullable: true)
-      spec = GrapeSwagger::ApiModel::Spec.new
+      schema = GrapeSwagger::OpenAPI::Schema.new(type: 'string', nullable: true)
+      spec = GrapeSwagger::OpenAPI::Document.new
       spec.components.add_schema('Test', schema)
 
       exporter = GrapeSwagger::Exporter::OAS31.new(spec)
@@ -130,12 +130,12 @@ describe 'Nullable handling in OAS 3.0 vs 3.1' do
     end
 
     it 'OAS 3.0: nested property with nullable' do
-      schema = GrapeSwagger::ApiModel::Schema.new(type: 'object')
-      schema.add_property('name', GrapeSwagger::ApiModel::Schema.new(type: 'string'))
-      nullable_prop = GrapeSwagger::ApiModel::Schema.new(type: 'string', nullable: true)
+      schema = GrapeSwagger::OpenAPI::Schema.new(type: 'object')
+      schema.add_property('name', GrapeSwagger::OpenAPI::Schema.new(type: 'string'))
+      nullable_prop = GrapeSwagger::OpenAPI::Schema.new(type: 'string', nullable: true)
       schema.add_property('nickname', nullable_prop)
 
-      spec = GrapeSwagger::ApiModel::Spec.new
+      spec = GrapeSwagger::OpenAPI::Document.new
       spec.components.add_schema('Test', schema)
 
       exporter = GrapeSwagger::Exporter::OAS30.new(spec)
@@ -145,12 +145,12 @@ describe 'Nullable handling in OAS 3.0 vs 3.1' do
     end
 
     it 'OAS 3.1: nested property with nullable' do
-      schema = GrapeSwagger::ApiModel::Schema.new(type: 'object')
-      schema.add_property('name', GrapeSwagger::ApiModel::Schema.new(type: 'string'))
-      nullable_prop = GrapeSwagger::ApiModel::Schema.new(type: 'string', nullable: true)
+      schema = GrapeSwagger::OpenAPI::Schema.new(type: 'object')
+      schema.add_property('name', GrapeSwagger::OpenAPI::Schema.new(type: 'string'))
+      nullable_prop = GrapeSwagger::OpenAPI::Schema.new(type: 'string', nullable: true)
       schema.add_property('nickname', nullable_prop)
 
-      spec = GrapeSwagger::ApiModel::Spec.new
+      spec = GrapeSwagger::OpenAPI::Document.new
       spec.components.add_schema('Test', schema)
 
       exporter = GrapeSwagger::Exporter::OAS31.new(spec)
@@ -161,10 +161,10 @@ describe 'Nullable handling in OAS 3.0 vs 3.1' do
     end
 
     it 'OAS 3.0: array items with nullable' do
-      items_schema = GrapeSwagger::ApiModel::Schema.new(type: 'string', nullable: true)
-      schema = GrapeSwagger::ApiModel::Schema.new(type: 'array', items: items_schema)
+      items_schema = GrapeSwagger::OpenAPI::Schema.new(type: 'string', nullable: true)
+      schema = GrapeSwagger::OpenAPI::Schema.new(type: 'array', items: items_schema)
 
-      spec = GrapeSwagger::ApiModel::Spec.new
+      spec = GrapeSwagger::OpenAPI::Document.new
       spec.components.add_schema('Test', schema)
 
       exporter = GrapeSwagger::Exporter::OAS30.new(spec)
@@ -174,10 +174,10 @@ describe 'Nullable handling in OAS 3.0 vs 3.1' do
     end
 
     it 'OAS 3.1: array items with nullable' do
-      items_schema = GrapeSwagger::ApiModel::Schema.new(type: 'string', nullable: true)
-      schema = GrapeSwagger::ApiModel::Schema.new(type: 'array', items: items_schema)
+      items_schema = GrapeSwagger::OpenAPI::Schema.new(type: 'string', nullable: true)
+      schema = GrapeSwagger::OpenAPI::Schema.new(type: 'array', items: items_schema)
 
-      spec = GrapeSwagger::ApiModel::Spec.new
+      spec = GrapeSwagger::OpenAPI::Document.new
       spec.components.add_schema('Test', schema)
 
       exporter = GrapeSwagger::Exporter::OAS31.new(spec)

@@ -2,7 +2,7 @@
 
 module GrapeSwagger
   module Exporter
-    # Exports ApiModel::Spec to Swagger 2.0 format.
+    # Exports OpenAPI::Document to Swagger 2.0 format.
     # This exporter produces output compatible with the original grape-swagger format.
     class Swagger2 < Base
       OAUTH_FLOW_MAP = {
@@ -291,7 +291,7 @@ module GrapeSwagger
 
       def export_items(items)
         return items if items.is_a?(Hash)
-        return export_schema(items) if items.is_a?(ApiModel::Schema)
+        return export_schema(items) if items.is_a?(OpenAPI::Schema)
 
         items
       end

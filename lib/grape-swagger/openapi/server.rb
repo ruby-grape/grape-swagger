@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module ApiModel
+  module OpenAPI
     # Server definition for OpenAPI 3.x.
     # For Swagger 2.0, this is converted to host/basePath/schemes.
     class Server

@@ -10,9 +10,9 @@ This document provides a comprehensive overview of the OpenAPI 3.0 and 3.1 suppo
 4. [Key Differences from Swagger 2.0](#key-differences-from-swagger-20)
 5. [Implementation Details](#implementation-details)
 6. [File Structure](#file-structure)
-7. [API Model Layer](#api-model-layer)
+7. [OpenAPI Model Layer](#openapi-model-layer)
 8. [Exporters](#exporters)
-9. [Model Builders](#model-builders)
+9. [Builders](#builders)
 10. [OAS 3.0 vs 3.1 Differences](#oas-30-vs-31-differences)
 11. [Test Coverage](#test-coverage)
 
@@ -25,7 +25,7 @@ This document provides a comprehensive overview of the OpenAPI 3.0 and 3.1 suppo
 The implementation adds full OpenAPI 3.0 and 3.1 support to grape-swagger while maintaining complete backward compatibility with Swagger 2.0. The key addition is a **layered architecture** that separates:
 
 1. **Route Introspection** - Existing Grape endpoint analysis (unchanged)
-2. **API Model Layer** - Version-agnostic internal representation (NEW)
+2. **OpenAPI Model Layer** - Version-agnostic internal representation (NEW)
 3. **Exporters** - Version-specific output formatters (NEW)
 
 ### Purpose
@@ -60,11 +60,11 @@ add_swagger_documentation(openapi_version: '3.1')
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    API Model Layer (NEW)                     │
+│                   OpenAPI Model Layer (NEW)                  │
 │   Version-agnostic internal representation (DTOs)           │
-│   - ApiModel::Spec, Info, Server                            │
-│   - ApiModel::PathItem, Operation, Parameter                │
-│   - ApiModel::Response, RequestBody, Schema                 │
+│   - OpenAPI::Document, Info, Server                         │
+│   - OpenAPI::PathItem, Operation, Parameter                 │
+│   - OpenAPI::Response, RequestBody, Schema                  │
 └─────────────────────────────────────────────────────────────┘
                               │
               ┌───────────────┼───────────────┐
@@ -80,8 +80,8 @@ add_swagger_documentation(openapi_version: '3.1')
 ### Data Flow
 
 **When `openapi_version: '3.0'` or `'3.1'` is set:**
-1. **DirectSpecBuilder** builds ApiModel::Spec directly from Grape routes
-2. **Exporter** (OAS30/OAS31) converts ApiModel::Spec → OpenAPI output
+1. **FromRoutes** builder creates OpenAPI::Document directly from Grape routes
+2. **Exporter** (OAS30/OAS31) converts OpenAPI::Document → OpenAPI output
 
 **When no `openapi_version` is set (default):**
 1. **Grape Endpoint** generates Swagger 2.0 hash (existing behavior unchanged)
@@ -225,8 +225,8 @@ end
 
 ```
 lib/grape-swagger/
-├── api_model/                    # Version-agnostic model classes
-│   ├── spec.rb                   # Root specification container
+├── openapi/                      # Version-agnostic model classes
+│   ├── document.rb               # Root specification container
 │   ├── info.rb                   # Info object (title, version, license)
 │   ├── server.rb                 # Server definition
 │   ├── path_item.rb              # Path with operations
@@ -239,14 +239,15 @@ lib/grape-swagger/
 │   ├── components.rb             # Components container
 │   ├── security_scheme.rb        # Security definition
 │   ├── header.rb                 # Response header
-│   └── tag.rb                    # Tag definition
-│
-├── model_builder/                # Builds API Model from Swagger hash
-│   ├── spec_builder.rb           # Main builder, orchestrates conversion
-│   ├── operation_builder.rb      # Builds operations
-│   ├── parameter_builder.rb      # Builds parameters
-│   ├── response_builder.rb       # Builds responses
-│   └── schema_builder.rb         # Builds schemas
+│   ├── tag.rb                    # Tag definition
+│   │
+│   └── builder/                  # Builds OpenAPI model from various sources
+│       ├── from_routes.rb        # Primary: builds directly from Grape routes
+│       ├── from_hash.rb          # Converts Swagger hash → OpenAPI model
+│       ├── operation_builder.rb  # Builds operations
+│       ├── parameter_builder.rb  # Builds parameters
+│       ├── response_builder.rb   # Builds responses
+│       └── schema_builder.rb     # Builds schemas
 │
 ├── exporter/                     # Version-specific exporters
 │   ├── base.rb                   # Abstract base exporter
@@ -254,50 +255,50 @@ lib/grape-swagger/
 │   ├── oas30.rb                  # OpenAPI 3.0 output
 │   └── oas31.rb                  # OpenAPI 3.1 output (extends oas30)
 │
-└── api_model.rb                  # Module loader
+└── openapi.rb                    # Module loader
 ```
 
 ---
 
-## API Model Layer
+## OpenAPI Model Layer
 
-The API Model layer provides version-agnostic data structures:
+The OpenAPI Model layer provides version-agnostic data structures:
 
-### ApiModel::Spec
+### OpenAPI::Document
 
 Root container for the entire specification:
 
 ```ruby
-spec = GrapeSwagger::ApiModel::Spec.new
+spec = GrapeSwagger::OpenAPI::Document.new
 spec.info.title = "My API"
 spec.info.version = "1.0"
-spec.add_server(GrapeSwagger::ApiModel::Server.new(url: "https://api.example.com"))
+spec.add_server(GrapeSwagger::OpenAPI::Server.new(url: "https://api.example.com"))
 spec.add_path("/users", path_item)
 spec.components.add_schema("User", user_schema)
 ```
 
-### ApiModel::Schema
+### OpenAPI::Schema
 
 Represents JSON Schema, used for request/response bodies and parameters:
 
 ```ruby
-schema = GrapeSwagger::ApiModel::Schema.new(
+schema = GrapeSwagger::OpenAPI::Schema.new(
   type: 'object',
   nullable: true,
   description: 'A user object'
 )
-schema.add_property('name', GrapeSwagger::ApiModel::Schema.new(type: 'string'))
-schema.add_property('email', GrapeSwagger::ApiModel::Schema.new(type: 'string'))
+schema.add_property('name', GrapeSwagger::OpenAPI::Schema.new(type: 'string'))
+schema.add_property('email', GrapeSwagger::OpenAPI::Schema.new(type: 'string'))
 schema.mark_required('name')
 schema.mark_required('email')
 ```
 
-### ApiModel::Operation
+### OpenAPI::Operation
 
 Represents an HTTP operation:
 
 ```ruby
-operation = GrapeSwagger::ApiModel::Operation.new
+operation = GrapeSwagger::OpenAPI::Operation.new
 operation.operation_id = "getUsers"
 operation.summary = "List all users"
 operation.tags = ["Users"]
@@ -317,7 +318,7 @@ Provides common functionality for all exporters:
 ```ruby
 class GrapeSwagger::Exporter::Base
   def initialize(spec)
-    @spec = spec
+    @spec = spec  # OpenAPI::Document instance
   end
 
   def export
@@ -328,7 +329,7 @@ end
 
 ### OAS30 Exporter
 
-Converts API Model to OpenAPI 3.0 format:
+Converts OpenAPI::Document to OpenAPI 3.0 format:
 
 - Outputs `openapi: '3.0.3'`
 - Converts `#/definitions/` → `#/components/schemas/`
@@ -348,14 +349,14 @@ Extends OAS30 with 3.1-specific features:
 
 ---
 
-## Model Builders
+## Builders
 
-### DirectSpecBuilder (Primary for OAS 3.x)
+### FromRoutes (Primary for OAS 3.x)
 
-Builds ApiModel::Spec directly from Grape routes without going through Swagger 2.0 format. This is the recommended approach for OAS 3.x as it preserves all route options and properly handles nested entities.
+Builds OpenAPI::Document directly from Grape routes without going through Swagger 2.0 format. This is the recommended approach for OAS 3.x as it preserves all route options and properly handles nested entities.
 
 ```ruby
-builder = GrapeSwagger::ModelBuilder::DirectSpecBuilder.new(
+builder = GrapeSwagger::OpenAPI::Builder::FromRoutes.new(
   endpoint, target_class, request, options
 )
 spec = builder.build(namespace_routes)
@@ -368,12 +369,12 @@ Key features:
 - Handles Array[Entity] types and inline schemas
 - Recursive exposure of $ref nested entities
 
-### SpecBuilder (Conversion-based)
+### FromHash (Conversion-based)
 
-Converts existing Swagger 2.0 hash to ApiModel::Spec. Used when converting legacy specs:
+Converts existing Swagger 2.0 hash to OpenAPI::Document. Used when converting legacy specs:
 
 ```ruby
-builder = GrapeSwagger::ModelBuilder::SpecBuilder.new(options)
+builder = GrapeSwagger::OpenAPI::Builder::FromHash.new(options)
 spec = builder.build_from_swagger_hash(swagger_hash)
 ```
 
@@ -389,7 +390,7 @@ Handles:
 Builds Schema objects from various inputs:
 
 ```ruby
-builder = GrapeSwagger::ModelBuilder::SchemaBuilder.new(definitions)
+builder = GrapeSwagger::OpenAPI::Builder::SchemaBuilder.new(definitions)
 
 # From type
 schema = builder.build(String, nullable: true)

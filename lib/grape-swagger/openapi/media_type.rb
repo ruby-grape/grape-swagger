@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module ApiModel
+  module OpenAPI
     # Media type object wrapping a schema with content-type.
     # Used in requestBody and responses for OAS3.
     class MediaType

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GrapeSwagger
-  module ApiModel
+  module OpenAPI
     # HTTP operation (GET, POST, etc.) definition.
     class Operation
       attr_accessor :operation_id, :summary, :description,

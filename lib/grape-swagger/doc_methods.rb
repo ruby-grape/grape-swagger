@@ -78,7 +78,7 @@ module GrapeSwagger
       version = options[:openapi_version]
 
       # Build API model directly from Grape routes (preserves all options)
-      builder = GrapeSwagger::ModelBuilder::DirectSpecBuilder.new(
+      builder = GrapeSwagger::OpenAPI::Builder::FromRoutes.new(
         endpoint, target_class, endpoint.request, options
       )
       spec = builder.build(combi_routes)
@@ -97,7 +97,7 @@ module GrapeSwagger
       version = options[:openapi_version]
 
       # Build API model from Swagger output
-      spec_builder = GrapeSwagger::ModelBuilder::SpecBuilder.new
+      spec_builder = GrapeSwagger::OpenAPI::Builder::FromHash.new
       spec = spec_builder.build_from_swagger_hash(swagger_output)
 
       # Apply OAS 3.1 specific options
@@ -120,12 +120,12 @@ module GrapeSwagger
     end
 
     def self.build_webhook_path_item(webhook_def)
-      path_item = GrapeSwagger::ApiModel::PathItem.new
+      path_item = GrapeSwagger::OpenAPI::PathItem.new
 
       webhook_def.each do |method, operation_def|
         next unless %i[get post put patch delete].include?(method.to_sym)
 
-        operation = GrapeSwagger::ApiModel::Operation.new
+        operation = GrapeSwagger::OpenAPI::Operation.new
         operation.summary = operation_def[:summary]
         operation.description = operation_def[:description]
         operation.operation_id = operation_def[:operationId] || operation_def[:operation_id]
@@ -139,7 +139,7 @@ module GrapeSwagger
 
         # Build responses
         operation_def[:responses]&.each do |code, response_def|
-          response = GrapeSwagger::ApiModel::Response.new
+          response = GrapeSwagger::OpenAPI::Response.new
           response.description = response_def[:description] || ''
           operation.add_response(code.to_s, response)
         end
@@ -151,7 +151,7 @@ module GrapeSwagger
     end
 
     def self.build_webhook_request_body(request_body_def)
-      request_body = GrapeSwagger::ApiModel::RequestBody.new
+      request_body = GrapeSwagger::OpenAPI::RequestBody.new
       request_body.description = request_body_def[:description]
       request_body.required = request_body_def[:required]
 
@@ -168,12 +168,12 @@ module GrapeSwagger
 
       if schema_def[:$ref] || schema_def['$ref']
         ref = schema_def[:$ref] || schema_def['$ref']
-        schema = GrapeSwagger::ApiModel::Schema.new
+        schema = GrapeSwagger::OpenAPI::Schema.new
         schema.canonical_name = ref.split('/').last
         return schema
       end
 
-      schema = GrapeSwagger::ApiModel::Schema.new
+      schema = GrapeSwagger::OpenAPI::Schema.new
       schema.type = schema_def[:type]
       schema.format = schema_def[:format]
       schema.description = schema_def[:description]

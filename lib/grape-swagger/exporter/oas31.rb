@@ -2,7 +2,7 @@
 
 module GrapeSwagger
   module Exporter
-    # Exports ApiModel::Spec to OpenAPI 3.1 format.
+    # Exports OpenAPI::Document to OpenAPI 3.1 format.
     # Extends OAS30 with 3.1-specific differences.
     class OAS31 < OAS30
       def export

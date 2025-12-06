@@ -307,19 +307,16 @@ module GrapeSwagger
         # ==================== Tags ====================
 
         def build_tags
-          # Collect unique tags from all operations
-          all_tags = Set.new
+          all_tags = []
           @spec.paths.each_value do |path_item|
-            # operations returns array of [method, operation] pairs, not a hash
             path_item.operations.each do |_method, operation| # rubocop:disable Style/HashEachMethods
               next unless operation&.tags
 
-              operation.tags.each { |tag| all_tags << tag }
+              all_tags.concat(operation.tags)
             end
           end
 
-          # Build tag objects with descriptions
-          all_tags.each do |tag_name|
+          all_tags.uniq.each do |tag_name|
             tag = OpenAPI::Tag.new(
               name: tag_name,
               description: "Operations about #{tag_name.to_s.pluralize}"

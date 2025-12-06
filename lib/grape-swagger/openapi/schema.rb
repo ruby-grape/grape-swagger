@@ -98,20 +98,22 @@ module GrapeSwagger
       def add_array_fields(hash)
         hash[:minItems] = min_items if min_items
         hash[:maxItems] = max_items if max_items
-        hash[:items] = items.to_h if items
+        hash[:items] = items.is_a?(Schema) ? items.to_h : items if items
       end
 
       def add_object_fields(hash)
-        hash[:properties] = properties.transform_values(&:to_h) if properties.any?
+        if properties.any?
+          hash[:properties] = properties.transform_values { |p| p.is_a?(Schema) ? p.to_h : p }
+        end
         hash[:required] = required if required.any?
         hash[:additionalProperties] = additional_properties unless additional_properties.nil?
       end
 
       def add_composition_fields(hash)
-        hash[:allOf] = all_of.map(&:to_h) if all_of&.any?
-        hash[:oneOf] = one_of.map(&:to_h) if one_of&.any?
-        hash[:anyOf] = any_of.map(&:to_h) if any_of&.any?
-        hash[:not] = self.not.to_h if self.not
+        hash[:allOf] = all_of.map { |s| s.is_a?(Schema) ? s.to_h : s } if all_of&.any?
+        hash[:oneOf] = one_of.map { |s| s.is_a?(Schema) ? s.to_h : s } if one_of&.any?
+        hash[:anyOf] = any_of.map { |s| s.is_a?(Schema) ? s.to_h : s } if any_of&.any?
+        hash[:not] = self.not.is_a?(Schema) ? self.not.to_h : self.not if self.not
         hash[:discriminator] = discriminator if discriminator
       end
 

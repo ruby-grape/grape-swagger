@@ -307,13 +307,8 @@ module GrapeSwagger
         # ==================== Tags ====================
 
         def build_tags
-          all_tags = []
-          @spec.paths.each_value do |path_item|
-            path_item.operations.each do |_method, operation| # rubocop:disable Style/HashEachMethods
-              next unless operation&.tags
-
-              all_tags.concat(operation.tags)
-            end
+          all_tags = @spec.paths.each_value.flat_map do |path_item|
+            path_item.operations.flat_map { |_method, operation| operation&.tags || [] }
           end
 
           all_tags.uniq.each do |tag_name|
@@ -417,34 +412,25 @@ module GrapeSwagger
           model_name
         end
 
-        # Recursively find and expose $ref references in a definition
         def expose_nested_refs(obj)
-          return unless obj.is_a?(Hash)
-
-          # Check for $ref at current level
-          if obj['$ref'] || obj[:$ref]
+          case obj
+          when Hash
             ref = obj['$ref'] || obj[:$ref]
-            ref_name = ref.split('/').last
-            # Only expose if not already defined
-            unless @definitions.key?(ref_name)
-              # Try to find the model class and expose it
-              begin
-                klass = Object.const_get(ref_name)
-                expose_params_from_model(klass) if GrapeSwagger.model_parsers.find(klass)
-              rescue NameError
-                # Class not found - that's ok, might be defined elsewhere
-              end
-            end
+            expose_ref_if_needed(ref) if ref
+            obj.each_value { |v| expose_nested_refs(v) }
+          when Array
+            obj.each { |item| expose_nested_refs(item) }
           end
+        end
 
-          # Recursively check nested structures
-          obj.each_value do |value|
-            if value.is_a?(Hash)
-              expose_nested_refs(value)
-            elsif value.is_a?(Array)
-              value.each { |item| expose_nested_refs(item) if item.is_a?(Hash) }
-            end
-          end
+        def expose_ref_if_needed(ref)
+          ref_name = ref.split('/').last
+          return if @definitions.key?(ref_name)
+
+          klass = Object.const_get(ref_name)
+          expose_params_from_model(klass) if GrapeSwagger.model_parsers.find(klass)
+        rescue NameError
+          nil
         end
       end
     end

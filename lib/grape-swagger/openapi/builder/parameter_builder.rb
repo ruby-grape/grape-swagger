@@ -85,9 +85,8 @@ module GrapeSwagger
           data_type = GrapeSwagger::DocMethods::DataType.call(param_options)
           apply_type_to_schema(schema, data_type, param_options)
 
-          schema.nullable = true if param_options[:allow_blank]
           doc = param_options[:documentation] || {}
-          schema.nullable = true if doc[:nullable]
+          schema.nullable = true if param_options[:allow_blank] || doc[:nullable]
 
           if doc.key?(:additional_properties)
             target = schema.type == 'array' && schema.items ? schema.items : schema

@@ -189,9 +189,34 @@ describe 'OAS 3.0 type format settings' do
       expect(subject['components']['schemas']['TypedDefinition']).to be_present
     end
 
-    it 'has expected properties for TypedDefinition' do
-      typed_def = subject['components']['schemas']['TypedDefinition']
-      expect(typed_def['properties']).to eq(swagger_typed_definition)
+    # Only run detailed property tests with entity parser since mock parser returns different structure
+    context 'with entity parser', if: MODEL_PARSER == 'entity' do
+      # OAS 3.0 uses different type representations than Swagger 2.0
+      # - 'file' becomes 'string' with format 'binary'
+      # - 'json' becomes 'object'
+      let(:oas3_typed_definition) do
+        {
+          'prop_boolean' => { 'description' => 'prop_boolean description', 'type' => 'boolean' },
+          'prop_date' => { 'description' => 'prop_date description', 'type' => 'string', 'format' => 'date' },
+          'prop_date_time' => { 'description' => 'prop_date_time description', 'type' => 'string', 'format' => 'date-time' },
+          'prop_double' => { 'description' => 'prop_double description', 'type' => 'number', 'format' => 'double' },
+          'prop_email' => { 'description' => 'prop_email description', 'type' => 'string', 'format' => 'email' },
+          'prop_file' => { 'description' => 'prop_file description', 'type' => 'string', 'format' => 'binary' },
+          'prop_float' => { 'description' => 'prop_float description', 'type' => 'number', 'format' => 'float' },
+          'prop_integer' => { 'description' => 'prop_integer description', 'type' => 'integer', 'format' => 'int32' },
+          'prop_json' => { 'description' => 'prop_json description', 'type' => 'object' },
+          'prop_long' => { 'description' => 'prop_long description', 'type' => 'integer', 'format' => 'int64' },
+          'prop_password' => { 'description' => 'prop_password description', 'type' => 'string', 'format' => 'password' },
+          'prop_string' => { 'description' => 'prop_string description', 'type' => 'string' },
+          'prop_symbol' => { 'description' => 'prop_symbol description', 'type' => 'string' },
+          'prop_time' => { 'description' => 'prop_time description', 'type' => 'string', 'format' => 'date-time' }
+        }
+      end
+
+      it 'has expected properties for TypedDefinition' do
+        typed_def = subject['components']['schemas']['TypedDefinition']
+        expect(typed_def['properties']).to eq(oas3_typed_definition)
+      end
     end
   end
 end

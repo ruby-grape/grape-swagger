@@ -7,6 +7,7 @@ module GrapeSwagger
     # Exports OpenAPI::Document to OpenAPI 3.0 format.
     class OAS30 < Base
       include SchemaExporter
+
       def export
         output = {}
 

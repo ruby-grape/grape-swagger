@@ -72,7 +72,9 @@ module GrapeSwagger
           return doc[:in] if doc[:in]
 
           if %w[POST PUT PATCH].include?(route.request_method)
-            consumes&.any? { |c| c.include?('form') } ? 'formData' : 'body'
+            # Normalize consumes to array (can be string like 'multipart/form-data')
+            consumes_array = Array(consumes)
+            consumes_array.any? { |c| c.to_s.include?('form') } ? 'formData' : 'body'
           else
             'query'
           end

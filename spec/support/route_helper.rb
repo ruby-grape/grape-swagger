@@ -7,7 +7,7 @@ module RouteHelper
       pattern_obj = Grape::Router::Pattern.new(
         origin: origin || pattern,
         suffix: '',
-        anchor: options[:anchor] || true,
+        anchor: options.fetch(:anchor, true),
         params: options[:params] || {},
         format: nil,
         version: nil,

@@ -393,8 +393,16 @@ module GrapeSwagger
           parser = GrapeSwagger.model_parsers.find(model)
           raise GrapeSwagger::Errors::UnregisteredParser, "No parser registered for #{model_name}." unless parser
 
-          # Pass self instead of @endpoint so nested entities can call expose_params_from_model
           parsed_response = parser.new(model, self).call
+
+          if parsed_response.is_a?(OpenAPI::Schema)
+            schema = parsed_response
+            schema.canonical_name ||= model_name
+            @definitions[model_name] = schema.to_h
+            @spec.components.add_schema(model_name, schema)
+            return model_name
+          end
+
           definition = GrapeSwagger::DocMethods::BuildModelDefinition.parse_params_from_model(
             parsed_response, model, model_name
           )

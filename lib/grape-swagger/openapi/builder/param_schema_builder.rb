@@ -19,13 +19,7 @@ module GrapeSwagger
         end
 
         def apply_additional_properties_class(schema, klass)
-          is_entity = begin
-            klass < Grape::Entity
-          rescue StandardError
-            false
-          end
-
-          if is_entity
+          if has_model_parser?(klass)
             model_name = expose_params_from_model(klass)
             schema.additional_properties = { canonical_name: model_name } if model_name
           else

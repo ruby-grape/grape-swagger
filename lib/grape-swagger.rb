@@ -20,12 +20,33 @@ require 'grape-swagger/exporter'
 
 module GrapeSwagger
   class << self
+    attr_writer :schema_name_generator
+
     def model_parsers
       @model_parsers ||= GrapeSwagger::ModelParsers.new
     end
 
     def request_param_parsers
       @request_param_parsers ||= GrapeSwagger::RequestParamParserRegistry.new
+    end
+
+    def schema_name_generator
+      @schema_name_generator ||= default_schema_name_generator
+    end
+
+    private
+
+    def default_schema_name_generator
+      lambda { |model|
+        model_string = model.to_s
+        if model_string.end_with?('::Entity', '::Entities')
+          model_string.split('::')[0..-2].join('_')
+        elsif model_string.start_with?('Entity::', 'Entities::', 'Representable::')
+          model_string.split('::')[1..-1].join('_')
+        else
+          model_string.split('::').join('_')
+        end
+      }
     end
   end
   autoload :Rake, 'grape-swagger/rake/oapi_tasks'

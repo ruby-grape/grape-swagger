@@ -19,6 +19,8 @@ module GrapeSwagger
         end
 
         def parse_params_from_model(parsed_response, model, model_name)
+          return parsed_response.to_h if parsed_response.is_a?(GrapeSwagger::OpenAPI::Schema)
+
           if parsed_response.is_a?(Hash) && parsed_response.keys.first == :allOf
             refs_or_models = parsed_response[:allOf]
             parsed = parse_refs_and_models(refs_or_models, model)

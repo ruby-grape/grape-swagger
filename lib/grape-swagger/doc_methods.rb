@@ -13,6 +13,8 @@ require 'grape-swagger/doc_methods/parse_params'
 require 'grape-swagger/doc_methods/move_params'
 require 'grape-swagger/doc_methods/build_model_definition'
 require 'grape-swagger/doc_methods/version'
+require 'grape-swagger/doc_methods/webhooks'
+require 'grape-swagger/doc_methods/output_builder'
 
 module GrapeSwagger
   module DocMethods
@@ -37,38 +39,18 @@ module GrapeSwagger
         specific_api_documentation: { desc: 'Swagger compatible API description for specific API' },
         endpoint_auth_wrapper: nil,
         swagger_endpoint_guard: nil,
-        token_owner: nil
+        token_owner: nil,
+        # OpenAPI version: nil (Swagger 2.0), '3.0', or '3.1'
+        openapi_version: nil,
+        # OpenAPI 3.1 specific options
+        json_schema_dialect: nil,
+        webhooks: nil
       }.freeze
 
     FORMATTER_METHOD = %i[format default_format default_error_formatter].freeze
 
     def self.output_path_definitions(combi_routes, endpoint, target_class, options)
-      output = endpoint.swagger_object(
-        target_class,
-        endpoint.request,
-        options
-      )
-
-      paths, definitions   = endpoint.path_and_definition_objects(combi_routes, options)
-      tags                 = tags_from(paths, options)
-
-      output[:tags]        = tags unless tags.empty? || paths.blank?
-      output[:paths]       = paths unless paths.blank?
-      output[:definitions] = definitions unless definitions.blank?
-
-      output
-    end
-
-    def self.tags_from(paths, options)
-      tags = GrapeSwagger::DocMethods::TagNameDescription.build(paths)
-
-      if options[:tags]
-        names = options[:tags].map { |t| t[:name] }
-        tags.reject! { |t| names.include?(t[:name]) }
-        tags += options[:tags]
-      end
-
-      tags
+      OutputBuilder.build(combi_routes, endpoint, target_class, options)
     end
 
     def hide_documentation_path

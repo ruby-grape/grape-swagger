@@ -11,7 +11,7 @@ describe 'referenceEntity' do
             'SomethingCustom'
           end
 
-          expose :text, documentation: { type: 'string', desc: 'Content of something.' }
+          expose :text, documentation: { type: 'string', desc: 'Content of something.', required: true }
         end
 
         class Kind < Grape::Entity
@@ -19,8 +19,8 @@ describe 'referenceEntity' do
             'KindCustom'
           end
 
-          expose :title, documentation: { type: 'string', desc: 'Title of the kind.' }
-          expose :something, documentation: { type: Something, desc: 'Something interesting.' }
+          expose :title, documentation: { type: 'string', desc: 'Title of the kind.', required: true }
+          expose :something, documentation: { type: Something, desc: 'Something interesting.', required: true }
         end
 
         class Base < Grape::Entity
@@ -30,11 +30,11 @@ describe 'referenceEntity' do
             "MyAPI::#{parts.last}"
           end
 
-          expose :title, documentation: { type: 'string', desc: 'Title of the parent.' }
+          expose :title, documentation: { type: 'string', desc: 'Title of the parent.', required: true }
         end
 
         class Child < Base
-          expose :child, documentation: { type: 'string', desc: 'Child property.' }
+          expose :child, documentation: { type: 'string', desc: 'Child property.', required: true }
         end
       end
 
@@ -85,7 +85,7 @@ describe 'referenceEntity' do
         'name' => 'something',
         'description' => 'Something interesting.',
         'type' => 'SomethingCustom',
-        'required' => false
+        'required' => true
       }]
 
       expect(subject['definitions'].keys).to include 'SomethingCustom'

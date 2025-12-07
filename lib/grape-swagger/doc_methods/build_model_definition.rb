@@ -7,12 +7,20 @@ module GrapeSwagger
         def build(_model, properties, required, other_def_properties = {})
           definition = { type: 'object', properties: properties }.merge(other_def_properties)
 
-          definition[:required] = required if required.is_a?(Array) && required.any?
+          if required.is_a?(Array) && required.any?
+            # Filter required to only include properties that actually exist
+            # (handles hidden properties that are removed from properties but left in required)
+            property_keys = properties.keys.map(&:to_s)
+            valid_required = required.select { |r| property_keys.include?(r.to_s) }
+            definition[:required] = valid_required if valid_required.any?
+          end
 
           definition
         end
 
         def parse_params_from_model(parsed_response, model, model_name)
+          return parsed_response.to_h if parsed_response.is_a?(GrapeSwagger::OpenAPI::Schema)
+
           if parsed_response.is_a?(Hash) && parsed_response.keys.first == :allOf
             refs_or_models = parsed_response[:allOf]
             parsed = parse_refs_and_models(refs_or_models, model)

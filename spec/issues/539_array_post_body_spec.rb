@@ -7,9 +7,9 @@ describe '#539 post params given as array' do
     Class.new(Grape::API) do
       namespace :issue_539 do
         class Element < Grape::Entity
-          expose :id
-          expose :description
-          expose :role
+          expose :id, documentation: { type: String, required: true }
+          expose :description, documentation: { type: String, required: true }
+          expose :role, documentation: { type: String, required: true }
         end
 
         class ArrayOfElements < Grape::Entity

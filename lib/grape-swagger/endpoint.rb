@@ -61,10 +61,22 @@ module Grape
     # sub-objects of info object
     # license
     def license_object(infos)
-      {
-        name: infos.delete(:license),
-        url: infos.delete(:license_url)
-      }.delete_if { |_, value| value.blank? }
+      license = infos.delete(:license)
+      license_url = infos.delete(:license_url)
+
+      # Support both string and hash format for license
+      # Note: identifier is OAS 3.1 only, not included in Swagger 2.0 output
+      if license.is_a?(Hash)
+        {
+          name: license[:name],
+          url: license[:url] || license_url
+        }.delete_if { |_, value| value.blank? }
+      else
+        {
+          name: license,
+          url: license_url
+        }.delete_if { |_, value| value.blank? }
+      end
     end
 
     # contact
@@ -155,8 +167,8 @@ module Grape
     end
 
     def produces_object(route, format)
-      return ['application/octet-stream'] if file_response?(route.attributes.success) &&
-                                             !route.attributes.produces.present?
+      return ['application/octet-stream'] if file_response?(route.options[:success]) &&
+                                             !route.options[:produces].present?
 
       mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format)
 

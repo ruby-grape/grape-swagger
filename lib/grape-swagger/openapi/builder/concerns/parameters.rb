@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'param_schema_builder'
+require_relative 'param_schemas'
 
 module GrapeSwagger
   module OpenAPI

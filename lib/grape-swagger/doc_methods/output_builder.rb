@@ -35,7 +35,7 @@ module GrapeSwagger
         def build_openapi3(combi_routes, endpoint, target_class, options)
           version = options[:openapi_version]
 
-          builder = GrapeSwagger::OpenAPI::Builder::FromRoutes.new(
+          builder = GrapeSwagger::OpenAPI::Builder::Spec.new(
             endpoint, target_class, endpoint.request, options
           )
           spec = builder.build(combi_routes)

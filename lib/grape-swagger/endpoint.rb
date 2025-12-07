@@ -65,11 +65,11 @@ module Grape
       license_url = infos.delete(:license_url)
 
       # Support both string and hash format for license
+      # Note: identifier is OAS 3.1 only, not included in Swagger 2.0 output
       if license.is_a?(Hash)
         {
           name: license[:name],
-          url: license[:url] || license_url,
-          identifier: license[:identifier]
+          url: license[:url] || license_url
         }.delete_if { |_, value| value.blank? }
       else
         {

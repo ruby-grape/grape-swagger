@@ -195,7 +195,7 @@ module GrapeSwagger
         end
 
         def document_nullable(settings)
-          @parsed_param[:nullable] = true if settings[:nullable]
+          @parsed_param[:'x-nullable'] = true if settings[:nullable]
         end
       end
     end

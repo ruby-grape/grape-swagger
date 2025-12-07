@@ -61,14 +61,25 @@ add_swagger_documentation(
 ## Nullable Fields
 
 ```ruby
+# Recommended syntax
 params do
   optional :nickname, type: String, documentation: { nullable: true }
 end
+
+# Also supported (for backward compatibility with Swagger 2.0 code)
+params do
+  optional :nickname, type: String, documentation: { x: { nullable: true } }
+end
 ```
 
-**OAS 3.0:** `{ "type": "string", "nullable": true }`
+Both syntaxes produce version-appropriate output:
 
-**OAS 3.1:** `{ "type": ["string", "null"] }`
+| Syntax | Swagger 2.0 | OAS 3.0 | OAS 3.1 |
+|--------|-------------|---------|---------|
+| `documentation: { nullable: true }` | `x-nullable: true` | `nullable: true` | `type: ["string", "null"]` |
+| `documentation: { x: { nullable: true } }` | `x-nullable: true` | `nullable: true` | `type: ["string", "null"]` |
+
+This means existing Swagger 2.0 code using `x: { nullable: true }` works seamlessly when switching to OAS 3.x.
 
 ## Architecture
 

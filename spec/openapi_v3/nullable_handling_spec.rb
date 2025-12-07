@@ -26,6 +26,8 @@ describe 'Nullable handling in OAS 3.0 vs 3.1' do
             requires :name, type: String, desc: 'Name'
             optional :nickname, type: String, documentation: { nullable: true }, desc: 'Nullable nickname'
             optional :age, type: Integer, allow_blank: true, desc: 'Optional age (allow_blank)'
+            # Backward compatible: x: { nullable: true } should also work
+            optional :alias, type: String, documentation: { x: { nullable: true } }, desc: 'Nullable via x extension'
           end
           post '/items' do
             present({}, with: Entities::Item)
@@ -52,6 +54,11 @@ describe 'Nullable handling in OAS 3.0 vs 3.1' do
         nickname = request_schema['properties']['nickname']
         expect(nickname['nullable']).to eq(true)
       end
+
+      it 'marks field with x: { nullable: true } as nullable (backward compatibility)' do
+        alias_field = request_schema['properties']['alias']
+        expect(alias_field['nullable']).to eq(true)
+      end
     end
   end
 
@@ -74,6 +81,8 @@ describe 'Nullable handling in OAS 3.0 vs 3.1' do
           params do
             requires :name, type: String, desc: 'Name'
             optional :nickname, type: String, documentation: { nullable: true }, desc: 'Nullable nickname'
+            # Backward compatible: x: { nullable: true } should also work
+            optional :alias, type: String, documentation: { x: { nullable: true } }, desc: 'Nullable via x extension'
           end
           post '/items' do
             present({}, with: Entities::Item)
@@ -100,6 +109,12 @@ describe 'Nullable handling in OAS 3.0 vs 3.1' do
         nickname = request_schema['properties']['nickname']
         expect(nickname['type']).to eq(%w[string null])
         expect(nickname).not_to have_key('nullable')
+      end
+
+      it 'uses type array for x: { nullable: true } (backward compatibility)' do
+        alias_field = request_schema['properties']['alias']
+        expect(alias_field['type']).to eq(%w[string null])
+        expect(alias_field).not_to have_key('nullable')
       end
     end
   end

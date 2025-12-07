@@ -86,7 +86,8 @@ module GrapeSwagger
           apply_type_to_schema(schema, data_type, param_options)
 
           doc = param_options[:documentation] || {}
-          schema.nullable = true if param_options[:allow_blank] || doc[:nullable]
+          # Support both documentation: { nullable: true } and x: { nullable: true } for backward compatibility
+          schema.nullable = true if param_options[:allow_blank] || doc[:nullable] || doc.dig(:x, :nullable)
 
           if doc.key?(:additional_properties)
             target = schema.type == 'array' && schema.items ? schema.items : schema

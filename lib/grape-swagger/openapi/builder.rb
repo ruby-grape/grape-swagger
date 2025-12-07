@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+require_relative 'builder/concerns/info'
+require_relative 'builder/concerns/servers'
+require_relative 'builder/concerns/security'
+require_relative 'builder/concerns/operations'
+require_relative 'builder/concerns/tags'
 require_relative 'builder/concerns/parameters'
 require_relative 'builder/concerns/request_body'
 require_relative 'builder/concerns/responses'
@@ -17,6 +22,11 @@ module GrapeSwagger
       # This is the active path for OAS3 generation. The Swagger 2.0 path remains unchanged:
       #   Grape Routes → endpoint.rb → Swagger Hash
       class Spec
+        include InfoBuilder
+        include ServerBuilder
+        include SecurityBuilder
+        include OperationBuilder
+        include TagBuilder
         include ParameterBuilder
         include RequestBodyBuilder
         include ResponseBuilder
@@ -50,72 +60,6 @@ module GrapeSwagger
 
         private
 
-        # ==================== Info ====================
-
-        def build_info
-          info_options = options[:info] || {}
-          @spec.info = OpenAPI::Info.new(
-            title: info_options[:title] || 'API title',
-            description: info_options[:description],
-            terms_of_service: info_options[:terms_of_service_url],
-            version: options[:doc_version] || info_options[:version] || '1.0',
-            contact_name: info_options[:contact_name],
-            contact_email: info_options[:contact_email],
-            contact_url: info_options[:contact_url]
-          )
-
-          build_license(info_options)
-          copy_info_extensions(info_options)
-        end
-
-        def build_license(info_options)
-          license = info_options[:license]
-          return unless license
-
-          if license.is_a?(Hash)
-            @spec.info.license_name = license[:name]
-            @spec.info.license_url = license[:url] || info_options[:license_url]
-            @spec.info.license_identifier = license[:identifier]
-          else
-            @spec.info.license_name = license
-            @spec.info.license_url = info_options[:license_url]
-          end
-        end
-
-        def copy_info_extensions(info_options)
-          info_options.each do |key, value|
-            @spec.info.extensions[key] = value if key.to_s.start_with?('x-')
-          end
-        end
-
-        # ==================== Servers ====================
-
-        def build_servers
-          host = GrapeSwagger::DocMethods::OptionalObject.build(:host, options, @request)
-          base_path = GrapeSwagger::DocMethods::OptionalObject.build(:base_path, options, @request)
-          schemes = normalize_schemes(options[:schemes])
-
-          # Store for Swagger 2.0 compatibility
-          @spec.host = host
-          @spec.base_path = base_path
-          @spec.schemes = schemes
-
-          # Build OAS3 servers
-          return unless host
-
-          (schemes.presence || ['https']).each do |scheme|
-            @spec.add_server(
-              OpenAPI::Server.from_swagger2(host: host, base_path: base_path, scheme: scheme)
-            )
-          end
-        end
-
-        def normalize_schemes(schemes)
-          return [] unless schemes
-
-          schemes.is_a?(String) ? [schemes] : Array(schemes)
-        end
-
         # ==================== Content Types ====================
 
         def build_content_types
@@ -125,62 +69,6 @@ module GrapeSwagger
 
         def content_types_for_target
           @endpoint.content_types_for(@target_class)
-        end
-
-        # ==================== Security ====================
-
-        def build_security_definitions
-          return unless options[:security_definitions]
-
-          options[:security_definitions].each do |name, definition|
-            scheme = build_security_scheme(definition)
-            @spec.components.add_security_scheme(name, scheme)
-          end
-
-          @spec.security = options[:security] if options[:security]
-        end
-
-        def build_security_scheme(definition)
-          scheme = OpenAPI::SecurityScheme.new
-          scheme.type = convert_security_type(definition[:type])
-          scheme.description = definition[:description]
-          scheme.name = definition[:name]
-          scheme.location = definition[:in]
-
-          case definition[:type]
-          when 'basic'
-            scheme.type = 'http'
-            scheme.scheme = 'basic'
-          when 'oauth2'
-            scheme.flows = build_oauth_flows(definition)
-          end
-
-          scheme
-        end
-
-        def convert_security_type(type)
-          case type
-          when 'basic' then 'http'
-          else type
-          end
-        end
-
-        def build_oauth_flows(definition)
-          flow_type = case definition[:flow]
-                      when 'implicit' then 'implicit'
-                      when 'password' then 'password'
-                      when 'application' then 'clientCredentials'
-                      when 'accessCode' then 'authorizationCode'
-                      else definition[:flow]
-                      end
-
-          {
-            flow_type => {
-              authorizationUrl: definition[:authorizationUrl],
-              tokenUrl: definition[:tokenUrl],
-              scopes: definition[:scopes]
-            }.compact
-          }
         end
 
         # ==================== Paths ====================
@@ -224,114 +112,6 @@ module GrapeSwagger
 
           x_path.each do |key, value|
             path_item.extensions["x-#{key}"] = value
-          end
-        end
-
-        # ==================== Operations ====================
-
-        def build_operation(route, path)
-          operation = OpenAPI::Operation.new
-          operation.operation_id = GrapeSwagger::DocMethods::OperationId.build(route, path)
-          operation.summary = build_summary(route)
-          operation.description = build_description(route)
-          operation.deprecated = route.options[:deprecated] if route.options.key?(:deprecated)
-          operation.tags = route.options.fetch(:tags, build_tags_for_route(route, path))
-          operation.security = route.options[:security] if route.options.key?(:security)
-          operation.produces = build_produces(route)
-          operation.consumes = build_consumes(route)
-
-          build_operation_parameters(operation, route, path)
-          build_operation_responses(operation, route)
-          add_operation_extensions(operation, route)
-
-          operation
-        end
-
-        def build_summary(route)
-          summary = route.options[:desc] if route.options.key?(:desc)
-          summary = route.description if route.description.present? && route.options.key?(:detail)
-          summary = route.options[:summary] if route.options.key?(:summary)
-          summary
-        end
-
-        def build_description(route)
-          description = route.description if route.description.present?
-          description = route.options[:detail] if route.options.key?(:detail)
-          description
-        end
-
-        def build_produces(route)
-          return ['application/octet-stream'] if file_response?(route.options[:success]) &&
-                                                 !route.options[:produces].present?
-
-          format = options[:produces] || options[:format]
-          mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format)
-
-          route_mime_types = %i[formats content_types produces].filter_map do |producer|
-            possible = route.options[producer]
-            GrapeSwagger::DocMethods::ProducesConsumes.call(possible) if possible.present?
-          end.flatten.uniq
-
-          route_mime_types.presence || mime_types
-        end
-
-        def build_consumes(route)
-          return unless %i[post put patch].include?(route.request_method.downcase.to_sym)
-
-          format = options[:consumes] || options[:format]
-          GrapeSwagger::DocMethods::ProducesConsumes.call(
-            route.settings.dig(:description, :consumes) || format
-          )
-        end
-
-        def build_tags_for_route(route, path)
-          version = GrapeSwagger::DocMethods::Version.get(route)
-          version = Array(version)
-          prefix = route.prefix.to_s.split('/').reject(&:empty?)
-
-          Array(
-            path.split('{')[0].split('/').reject(&:empty?).delete_if do |i|
-              prefix.include?(i) || version.map(&:to_s).include?(i)
-            end.first
-          ).presence
-        end
-
-        def add_operation_extensions(operation, route)
-          x_operation = route.settings[:x_operation]
-          return unless x_operation
-
-          x_operation.each do |key, value|
-            operation.extensions["x-#{key}"] = value
-          end
-        end
-
-        # ==================== Tags ====================
-
-        def build_tags
-          all_tags = @spec.paths.each_value.flat_map do |path_item|
-            path_item.operations.flat_map { |_method, operation| operation&.tags || [] }
-          end
-
-          all_tags.uniq.each do |tag_name|
-            tag = OpenAPI::Tag.new(
-              name: tag_name,
-              description: "Operations about #{tag_name.to_s.pluralize}"
-            )
-            @spec.add_tag(tag)
-          end
-
-          # Merge with user-provided tags
-          return unless options[:tags]
-
-          user_tag_names = options[:tags].map { |t| t[:name] }
-          @spec.tags.reject! { |t| user_tag_names.include?(t.name) }
-
-          options[:tags].each do |tag_hash|
-            tag = OpenAPI::Tag.new(
-              name: tag_hash[:name],
-              description: tag_hash[:description]
-            )
-            @spec.add_tag(tag)
           end
         end
 

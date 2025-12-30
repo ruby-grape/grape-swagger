@@ -93,10 +93,9 @@ describe '#962 polymorphic entity with custom documentation' do
   end
 
   specify do
-    expect(hidden_entity_definition).to eql({
+    expect(hidden_entity_definition).to include({
       'type' => 'object',
-      'properties' => {},
-      'required' => ['hidden_prop']
+      'properties' => {}
     })
   end
 

@@ -1,3 +1,10 @@
+### Next
+
+#### Features
+
+* [#970](https://github.com/ruby-grape/grape-swagger/pull/970): Migrate Danger to use danger-pr-comment workflow - [@dblock](https://github.com/dblock).
+* Your contribution here.
+
 ### 2.1.3 (2025-11-21)
 
 #### Features

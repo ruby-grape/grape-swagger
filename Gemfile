@@ -45,7 +45,10 @@ group :development, :test do
 end
 
 group :test do
-  gem 'ruby-grape-danger', '~> 0.2', require: false
+  gem 'danger', require: false
+  gem 'danger-changelog', require: false
+  gem 'danger-pr-comment', require: false
+  gem 'danger-toc', require: false
   gem 'simplecov', require: false
   gem 'super_diff', require: false
 end

@@ -92,11 +92,12 @@ describe '#962 polymorphic entity with custom documentation' do
     })
   end
 
+  # Hidden attributes should not be included in the required list
+  # See: https://github.com/ruby-grape/grape-swagger-entity/pull/87
   specify do
     expect(hidden_entity_definition).to eql({
       'type' => 'object',
-      'properties' => {},
-      'required' => ['hidden_prop']
+      'properties' => {}
     })
   end
 

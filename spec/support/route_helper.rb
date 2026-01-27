@@ -2,7 +2,20 @@
 
 module RouteHelper
   def self.build(method:, pattern:, options:, origin: nil)
-    if GrapeVersion.satisfy?('>= 2.3.0')
+    if GrapeVersion.satisfy?('>= 3.1.0')
+      # Grape 3.1.0+ changed Route constructor to (endpoint, method, pattern, options)
+      # and Pattern now takes keyword arguments
+      pattern_obj = Grape::Router::Pattern.new(
+        origin: origin || pattern,
+        suffix: nil,
+        anchor: options[:anchor] || true,
+        params: options[:params] || {},
+        format: nil,
+        version: nil,
+        requirements: options[:requirements] || {}
+      )
+      Grape::Router::Route.new(nil, method, pattern_obj, options)
+    elsif GrapeVersion.satisfy?('>= 2.3.0')
       Grape::Router::Route.new(method, origin || pattern, pattern, options)
     else
       Grape::Router::Route.new(method, pattern, **options)

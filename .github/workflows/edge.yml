@@ -1,0 +1,43 @@
+name: Edge
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Every Sunday at midnight UTC
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ['3.3', '3.4']
+    name: test (ruby=${{ matrix.ruby }}, grape=HEAD)
+    runs-on: ubuntu-latest
+    env:
+      GRAPE_VERSION: HEAD
+    steps:
+    - name: Check out branch
+      uses: actions/checkout@v6
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - name: Run rspec wo model parser
+      run: |
+        bundle update
+        bundle exec rspec
+    - name: Run rspec w entity parser
+      env:
+        MODEL_PARSER: grape-swagger-entity
+      run: |
+        bundle update
+        bundle exec rspec
+    - name: Run rspec w representable parser
+      env:
+        MODEL_PARSER: grape-swagger-representable
+      run: |
+        bundle update
+        bundle exec rspec

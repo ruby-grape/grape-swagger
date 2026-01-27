@@ -155,8 +155,8 @@ module Grape
     end
 
     def produces_object(route, format)
-      return ['application/octet-stream'] if file_response?(route.attributes.success) &&
-                                             !route.attributes.produces.present?
+      return ['application/octet-stream'] if file_response?(route.options[:success]) &&
+                                             !route.options[:produces].present?
 
       mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format)
 

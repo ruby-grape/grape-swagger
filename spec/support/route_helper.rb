@@ -8,11 +8,11 @@ module RouteHelper
       pattern_obj = Grape::Router::Pattern.new(
         origin: origin || pattern,
         suffix: nil,
-        anchor: options[:anchor] || true,
-        params: options[:params] || {},
+        anchor: options.fetch(:anchor, true),
+        params: options.fetch(:params, {}),
         format: nil,
         version: nil,
-        requirements: options[:requirements] || {}
+        requirements: options.fetch(:requirements, {})
       )
       Grape::Router::Route.new(nil, method, pattern_obj, options)
     elsif GrapeVersion.satisfy?('>= 2.3.0')

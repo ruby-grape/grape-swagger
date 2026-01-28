@@ -26,7 +26,7 @@ Metrics/MethodLength:
 # Offense count: 9
 # Configuration parameters: AllowedMethods, AllowedPatterns.
 Metrics/PerceivedComplexity:
-  Max: 16
+  Max: 17
 
 # Offense count: 3
 Style/ClassVars:

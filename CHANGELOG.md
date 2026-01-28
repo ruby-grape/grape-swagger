@@ -9,6 +9,7 @@
 #### Fixes
 
 * [#972](https://github.com/ruby-grape/grape-swagger/pull/972): Grape 3.1.0 and grape-swagger-entity 0.7.1 compatibility - [@numbata](https://github.com/numbata).
+* Your contribution here.
 
 ### 2.1.3 (2025-11-21)
 

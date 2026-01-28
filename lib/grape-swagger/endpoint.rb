@@ -219,6 +219,7 @@ module Grape
         next if response_model.start_with?('Swagger_doc')
 
         @definitions[response_model][:description] ||= model_description(value[:model]) || "#{response_model} model"
+        @definitions[response_model][:example] ||= model_example(value[:model])
         build_memo_schema(memo, route, value, response_model, options)
         memo[value[:code]][:examples] = value[:examples] if value[:examples]
       end
@@ -461,6 +462,13 @@ module Grape
 
       doc = model.documentation
       doc[:desc] if doc.is_a?(Hash)
+    end
+
+    def model_example(model)
+      return unless model.respond_to?(:documentation)
+
+      doc = model.documentation
+      doc[:example] if doc.is_a?(Hash)
     end
 
     def success_code_from_entity(route, entity)

@@ -101,7 +101,7 @@ describe 'referenceEntity' do
         'properties' => {
           'title' => { 'type' => 'string', 'description' => 'Title of the kind.' },
           'something' => {
-            '$ref' => '#/definitions/SomethingCustom',
+            'allOf' => [{ '$ref' => '#/definitions/SomethingCustom' }],
             'description' => 'Something interesting.'
           }
         },

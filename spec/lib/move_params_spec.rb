@@ -197,8 +197,7 @@ describe GrapeSwagger::DocMethods::MoveParams do
     describe 'build_definition' do
       let(:params) { [{ in: 'body', name: 'address[street][name]', description: 'street', type: 'string', required: true }] }
       before do
-        subject.instance_variable_set(:@definitions, definitions)
-        subject.send(:build_definition, name, params)
+        subject.send(:build_definition, name, params, definitions)
       end
 
       let(:name) { 'FooBar' }

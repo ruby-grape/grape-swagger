@@ -6,43 +6,40 @@ module GrapeSwagger
   module DocMethods
     class MoveParams
       class << self
-        attr_accessor :definitions
-
         def can_be_moved?(http_verb, params)
           move_methods.include?(http_verb) && includes_body_param?(params)
         end
 
         def to_definition(path, params, route, definitions)
-          @definitions = definitions
           unify!(params)
 
           params_to_move = movable_params(params)
 
-          params << parent_definition_of_params(params_to_move, path, route)
+          params << parent_definition_of_params(params_to_move, path, route, definitions)
 
           params
         end
 
         private
 
-        def parent_definition_of_params(params, path, route)
+        def parent_definition_of_params(params, path, route, definitions)
           definition_name = OperationId.build(route, path)
           # NOTE: Parent definition is always object
-          @definitions[definition_name] = object_type
-          definition = @definitions[definition_name]
-          move_params_to_new(definition, params)
+          definitions[definition_name] = object_type
+          definition = definitions[definition_name]
+          move_params_to_new(definition, params, definitions)
 
           definition[:description] = route.description if route.try(:description)
 
           build_body_parameter(definition_name, route.options)
         end
 
-        def move_params_to_new(definition, params)
+        def move_params_to_new(definition, params, definitions)
           params, nested_params = params.partition { |x| !x[:name].to_s.include?('[') }
           params.each do |param|
             property = param[:name]
 
-            param_properties, param_required = build_properties([param])
+            param_properties, param_required = build_properties([param], definitions)
             add_properties_to_definition(definition, param_properties, param_required)
             related_nested_params, nested_params = nested_params.partition { |x| x[:name].start_with?("#{property}[") }
             prepare_nested_names(property, related_nested_params)
@@ -50,9 +47,9 @@ module GrapeSwagger
             next if related_nested_params.blank?
 
             nested_definition = if should_expose_as_array?([param])
-                                  move_params_to_new(array_type, related_nested_params)
+                                  move_params_to_new(array_type, related_nested_params, definitions)
                                 else
-                                  move_params_to_new(object_type, related_nested_params)
+                                  move_params_to_new(object_type, related_nested_params, definitions)
                                 end
             if definition.key?(:items)
               definition[:items][:properties][property.to_sym].deep_merge!(nested_definition)
@@ -63,7 +60,7 @@ module GrapeSwagger
           definition
         end
 
-        def build_properties(params)
+        def build_properties(params, definitions)
           properties = {}
           required = []
 
@@ -73,7 +70,7 @@ module GrapeSwagger
             properties[name] = if should_expose_as_array?([param])
                                  document_as_array(param)
                                else
-                                 document_as_property(param)
+                                 document_as_property(param, definitions)
                                end
             add_extension_properties(properties[name], param)
 
@@ -98,12 +95,12 @@ module GrapeSwagger
           end
         end
 
-        def document_as_property(param)
+        def document_as_property(param, definitions = {})
           property_keys.each_with_object({}) do |x, memo|
             next unless param.key?(x)
 
             value = param[x]
-            if x == :type && @definitions[value].present?
+            if x == :type && definitions[value].present?
               memo['$ref'] = "#/definitions/#{value}"
             else
               memo[x] = value
@@ -148,8 +145,8 @@ module GrapeSwagger
           end
         end
 
-        def build_definition(name, params)
-          @definitions[name] = should_expose_as_array?(params) ? array_type : object_type
+        def build_definition(name, params, definitions)
+          definitions[name] = should_expose_as_array?(params) ? array_type : object_type
 
           name
         end

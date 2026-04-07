@@ -16,16 +16,14 @@ describe GrapeSwagger::DocMethods::Extensions do
   describe '#find_definition' do
     subject { described_class }
 
-    let(:method) { :get }
     let(:status) { 200 }
-
-    before { allow(subject).to receive(:method).and_return(method) }
+    let(:route) { double('route', request_method: 'GET') }
 
     describe 'no response for status' do
       let(:path) { { get: { responses: {} } } }
 
       specify do
-        definition = subject.find_definition(status, path)
+        definition = subject.find_definition(status, path, route)
         expect(definition).to be_nil
       end
     end
@@ -38,7 +36,7 @@ describe GrapeSwagger::DocMethods::Extensions do
           { get: { responses: { 200 => { schema: { '$ref' => "#/definitions/#{model}" } } } } }
         end
         specify do
-          definition = subject.find_definition(status, path)
+          definition = subject.find_definition(status, path, route)
           expect(definition).to eql model
         end
       end
@@ -48,7 +46,7 @@ describe GrapeSwagger::DocMethods::Extensions do
           { get: { responses: { 200 => { schema: { 'items' => { '$ref' => "#/definitions/#{model}" } } } } } }
         end
         specify do
-          definition = subject.find_definition(status, path)
+          definition = subject.find_definition(status, path, route)
           expect(definition).to eql model
         end
       end

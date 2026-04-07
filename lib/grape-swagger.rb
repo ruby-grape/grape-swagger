@@ -12,9 +12,11 @@ require 'grape-swagger/doc_methods'
 require 'grape-swagger/model_parsers'
 
 module GrapeSwagger
+  MODEL_PARSERS = GrapeSwagger::ModelParsers.new
+
   class << self
     def model_parsers
-      @model_parsers ||= GrapeSwagger::ModelParsers.new
+      MODEL_PARSERS
     end
   end
   autoload :Rake, 'grape-swagger/rake/oapi_tasks'

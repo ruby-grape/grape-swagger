@@ -5,15 +5,13 @@ module GrapeSwagger
     class Extensions
       class << self
         def add(path, definitions, route)
-          @route = route
-
           description = route.settings[:description]
-          add_extension_to(path[method], extension(description)) if description && extended?(description, :x)
+          add_extension_to(path[http_method(route)], extension(description)) if description && extended?(description, :x)
 
           settings = route.settings
           add_extensions_to_operation(settings, path, route) if settings && extended?(settings, :x_operation)
           add_extensions_to_path(settings, path) if settings && extended?(settings, :x_path)
-          add_extensions_to_definition(settings, path, definitions) if settings && extended?(settings, :x_def)
+          add_extensions_to_definition(settings, path, definitions, route) if settings && extended?(settings, :x_def)
         end
 
         def add_extensions_to_root(settings, object)
@@ -32,27 +30,27 @@ module GrapeSwagger
           add_extension_to(path, extension(settings, :x_path))
         end
 
-        def add_extensions_to_definition(settings, path, definitions)
+        def add_extensions_to_definition(settings, path, definitions, route)
           def_extension = extension(settings, :x_def)
 
           if def_extension[:x_def].is_a?(Array)
-            def_extension[:x_def].each { |extension| setup_definition(extension, path, definitions) }
+            def_extension[:x_def].each { |extension| setup_definition(extension, path, definitions, route) }
           else
-            setup_definition(def_extension[:x_def], path, definitions)
+            setup_definition(def_extension[:x_def], path, definitions, route)
           end
         end
 
-        def setup_definition(def_extension, path, definitions)
+        def setup_definition(def_extension, path, definitions, route)
           return unless def_extension.key?(:for)
 
           status = def_extension[:for]
 
-          definition = find_definition(status, path)
+          definition = find_definition(status, path, route)
           add_extension_to(definitions[definition], x_def: def_extension)
         end
 
-        def find_definition(status, path)
-          response = path[method][:responses][status]
+        def find_definition(status, path, route)
+          response = path[http_method(route)][:responses][status]
           return if response.nil?
 
           return response[:schema]['$ref'].split('/').last if response[:schema].key?('$ref')
@@ -88,13 +86,10 @@ module GrapeSwagger
           part.select { |x| x == identifier }
         end
 
-        def method(*args)
-          # We're shadowing Object.method(:symbol) here so we provide
-          # a compatibility layer for code that introspects the methods
-          # of this class
-          return super if args.size.positive?
+        private
 
-          @route.request_method.downcase.to_sym
+        def http_method(route)
+          route.request_method.downcase.to_sym
         end
       end
     end

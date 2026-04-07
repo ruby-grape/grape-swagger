@@ -32,7 +32,8 @@ group :development, :test do
   gem 'rake'
   gem 'rdoc'
   gem 'rspec', '~> 3.9'
-  gem 'rubocop', '~> 1.50', require: false
+  gem 'rubocop', '~> 1.79', require: false
+  gem 'rubocop-thread_safety', require: false
 
   unless ENV['MODEL_PARSER'] == 'grape-swagger-entity'
     gem 'grape-swagger-entity', git: 'https://github.com/ruby-grape/grape-swagger-entity'

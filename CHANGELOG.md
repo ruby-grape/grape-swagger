@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#976](https://github.com/ruby-grape/grape-swagger/pull/976): Ruby 3.4 and refactor swagger documentation modules - [@moskvin](https://github.com/moskvin).
 * Your contribution here.
 
 #### Fixes

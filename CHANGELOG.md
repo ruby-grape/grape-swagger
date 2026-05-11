@@ -1,5 +1,12 @@
 ### 2.2.0 (Next)
 
+#### Features
+
+* [#976](https://github.com/ruby-grape/grape-swagger/pull/976): Ruby 3.4 and refactor swagger documentation modules - [@moskvin](https://github.com/moskvin).
+* Your contribution here.
+
+#### Fixes
+
 * [#978](https://github.com/ruby-grape/grape-swagger/pull/978): Fix Grape 3.2+ compatibility: desc kwargs, custom types, multi-type param recovery; bump Grape to `>= 2.1, < 5.0`. See [UPGRADING](UPGRADING.md) - [@numbata](https://github.com/numbata).
 * Your contribution here.
 

@@ -49,7 +49,7 @@ module GrapeSwagger
 
       def fulfill_params(path_params)
         # Merge path params options into route params
-        route.params.each_with_object({}) do |(param, definition), accum|
+        route_params.each_with_object({}) do |(param, definition), accum|
           # The route.params hash includes both parametrized params (with a string as a key)
           # and well-defined params from body/query (with a symbol as a key).
           # We avoid overriding well-defined params with parametrized ones.
@@ -57,9 +57,37 @@ module GrapeSwagger
           next if param.is_a?(String) && accum.key?(key)
 
           defined_options = definition.is_a?(Hash) ? definition : {}
-          value = (path_params[param] || {}).merge(defined_options)
+          path_options = path_params[param] || path_params[param.to_s] || path_params[param.to_sym] || {}
+          value = path_options.merge(defined_options)
           accum[key] = value.empty? ? DEFAULT_PARAM_TYPE : value
         end
+      end
+
+      def route_params
+        route.params
+      rescue NoMethodError => e
+        raise unless e.message.include?('named_captures')
+
+        fallback_route_params
+      end
+
+      def fallback_route_params
+        path_params = extract_path_param_names.to_h { |param| [param, {}] }
+        defined_params = route.respond_to?(:options) ? route.options[:params] : nil
+        return path_params unless defined_params.is_a?(Hash)
+
+        path_params.merge(defined_params)
+      end
+
+      def extract_path_param_names
+        return [] unless route.respond_to?(:pattern_regexp)
+
+        regexp = route.pattern_regexp
+        return [] unless regexp.respond_to?(:named_captures)
+
+        regexp.named_captures.keys
+      rescue StandardError
+        []
       end
     end
   end

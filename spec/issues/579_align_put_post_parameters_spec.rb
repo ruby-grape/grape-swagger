@@ -12,7 +12,7 @@ describe '#579 put / post parameters spec' do
           expose :content, documentation: { type: String, in: 'body' }
         end
 
-        class Spec < Grape::Entity
+        class Issue579Spec < Grape::Entity
           expose :guid, documentation: { type: String, format: 'guid' }
           expose :name, documentation: { type: String }
           expose :content, documentation: { type: String }
@@ -32,8 +32,8 @@ describe '#579 put / post parameters spec' do
           namespace :form_parameter do
             desc 'update spec',
                  consumes: ['application/x-www-form-urlencoded'],
-                 success: Spec,
-                 params: Spec.documentation
+                 success: Issue579Spec,
+                 params: Issue579Spec.documentation
             put ':guid' do
               # your code goes here
             end
@@ -57,8 +57,8 @@ describe '#579 put / post parameters spec' do
           namespace :form_parameter do
             desc 'update spec',
                  consumes: ['application/x-www-form-urlencoded'],
-                 success: Spec,
-                 params: Spec.documentation
+                 success: Issue579Spec,
+                 params: Issue579Spec.documentation
             params do
               requires :guid
             end
@@ -83,8 +83,8 @@ describe '#579 put / post parameters spec' do
             namespace :form_parameter do
               desc 'update spec',
                    consumes: ['application/x-www-form-urlencoded'],
-                   success: Spec,
-                   params: Spec.documentation
+                   success: Issue579Spec,
+                   params: Issue579Spec.documentation
               put do
                 # your code goes here
               end

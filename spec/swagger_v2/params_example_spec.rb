@@ -11,7 +11,7 @@ describe 'Param example' do
         params :common_params do
           requires :id, type: Integer, documentation: { example: 123 }
           optional :name, type: String, documentation: { example: 'Person' }
-          optional :obj, type: 'Object', documentation: { example: { 'foo' => 'bar' } }
+          optional :obj, type: Hash, documentation: { type: 'Object', example: { 'foo' => 'bar' } }
         end
       end
 

@@ -57,5 +57,24 @@ describe GrapeSwagger::RequestParamParsers::Route do
         )
       end
     end
+
+    context 'when fallback extracts path params from route.path' do
+      before do
+        allow(route).to receive(:params).and_raise(
+          NoMethodError,
+          "undefined method `named_captures' for an instance of Mustermann::Grape"
+        )
+        allow(route).to receive(:pattern_regexp).and_raise(StandardError, 'failed to build regexp')
+        allow(route).to receive(:path).and_return('/bookings/:id(.json)')
+        allow(route).to receive(:options).and_return(params: { 'name' => { required: false, type: 'String' } })
+      end
+
+      it 'keeps inferred path params when regexp extraction is not available' do
+        expect(parse_request_params).to eq(
+          id: { required: true, type: 'Integer' },
+          name: { required: false, type: 'String' }
+        )
+      end
+    end
   end
 end

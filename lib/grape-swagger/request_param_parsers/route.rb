@@ -140,14 +140,21 @@ module GrapeSwagger
       end
 
       def extract_path_param_names
-        return [] unless route.respond_to?(:pattern_regexp)
+        return extract_path_param_names_from_path unless route.respond_to?(:pattern_regexp)
 
         regexp = route.pattern_regexp
-        return [] unless regexp.respond_to?(:named_captures)
+        return extract_path_param_names_from_path unless regexp.respond_to?(:named_captures)
 
-        regexp.named_captures.keys
+        names = regexp.named_captures.keys
+        names.empty? ? extract_path_param_names_from_path : names
       rescue StandardError
-        []
+        extract_path_param_names_from_path
+      end
+
+      def extract_path_param_names_from_path
+        return [] unless route.respond_to?(:path)
+
+        route.path.scan(/:([a-zA-Z_][a-zA-Z0-9_]*)/).flatten.reject { |name| name == 'format' }
       end
     end
   end

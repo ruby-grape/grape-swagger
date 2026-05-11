@@ -40,5 +40,22 @@ describe GrapeSwagger::RequestParamParsers::Route do
         )
       end
     end
+
+    context 'when path param extraction raises an error' do
+      before do
+        allow(route).to receive(:params).and_raise(
+          NoMethodError,
+          "undefined method `named_captures' for an instance of Mustermann::Grape"
+        )
+        allow(route).to receive(:pattern_regexp).and_raise(StandardError, 'failed to build regexp')
+        allow(route).to receive(:options).and_return(params: { 'name' => { required: false, type: 'String' } })
+      end
+
+      it 'falls back to options params without raising' do
+        expect(parse_request_params).to eq(
+          name: { required: false, type: 'String' }
+        )
+      end
+    end
   end
 end

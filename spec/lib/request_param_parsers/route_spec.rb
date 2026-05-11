@@ -76,5 +76,23 @@ describe GrapeSwagger::RequestParamParsers::Route do
         )
       end
     end
+
+    context 'when route path contains an implicit version placeholder' do
+      before do
+        allow(route).to receive(:params).and_raise(
+          NoMethodError,
+          "undefined method `named_captures' for an instance of Mustermann::Grape"
+        )
+        allow(route).to receive(:pattern_regexp).and_raise(StandardError, 'failed to build regexp')
+        allow(route).to receive(:path).and_return('/:version/other_thing/:elements(.json)')
+        allow(route).to receive(:options).and_return(params: { 'elements' => { required: true, type: 'Array[String]' } })
+      end
+
+      it 'does not add version as a synthetic request parameter' do
+        expect(parse_request_params).to eq(
+          elements: { required: true, type: 'Array[String]' }
+        )
+      end
+    end
   end
 end

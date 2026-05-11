@@ -79,4 +79,19 @@ describe GrapeSwagger::DocMethods::ParseParams do
       end
     end
   end
+
+  describe '#parse_additional_properties' do
+    let(:definitions) { {} }
+
+    it 'warns and reads deprecated additionalProperties option' do
+      settings = { additionalProperties: true }
+      allow(GrapeSwagger::Errors::SwaggerSpecDeprecated).to receive(:tell!)
+
+      parsed = subject.send(:parse_additional_properties, definitions, settings)
+
+      expect(GrapeSwagger::Errors::SwaggerSpecDeprecated)
+        .to have_received(:tell!).with(:additionalProperties)
+      expect(parsed).to eql([true, true])
+    end
+  end
 end

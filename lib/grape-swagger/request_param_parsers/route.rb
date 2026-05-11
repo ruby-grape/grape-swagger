@@ -4,6 +4,7 @@ module GrapeSwagger
   module RequestParamParsers
     class Route
       DEFAULT_PARAM_TYPE = { required: true, type: 'Integer' }.freeze
+      IGNORED_FALLBACK_PATH_PARAMS = %w[format version].freeze
 
       attr_reader :route
 
@@ -94,7 +95,10 @@ module GrapeSwagger
       def extract_path_param_names_from_path
         return [] unless route.respond_to?(:path)
 
-        route.path.scan(/:([a-zA-Z_][a-zA-Z0-9_]*)/).flatten.reject { |name| name == 'format' }
+        route.path
+             .scan(/:([a-zA-Z_][a-zA-Z0-9_]*)/)
+             .flatten
+             .reject { |name| IGNORED_FALLBACK_PATH_PARAMS.include?(name) }
       end
     end
   end

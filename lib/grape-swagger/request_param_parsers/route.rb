@@ -4,7 +4,6 @@ module GrapeSwagger
   module RequestParamParsers
     class Route
       DEFAULT_PARAM_TYPE = { required: true, type: 'Integer' }.freeze
-      IGNORED_FALLBACK_PATH_PARAMS = %w[format version].freeze
 
       attr_reader :route
 
@@ -102,7 +101,7 @@ module GrapeSwagger
 
       def fulfill_params(path_params, variant_types)
         # Merge path params options into route params
-        route_params.each_with_object({}) do |(param, definition), accum|
+        route.params.each_with_object({}) do |(param, definition), accum|
           # The route.params hash includes both parametrized params (with a string as a key)
           # and well-defined params from body/query (with a symbol as a key).
           # We avoid overriding well-defined params with parametrized ones.
@@ -122,43 +121,6 @@ module GrapeSwagger
         return defined_options unless types
 
         defined_options.merge(type: types)
-      end
-
-      def route_params
-        route.params
-      rescue NoMethodError => e
-        raise unless e.message.include?('named_captures')
-
-        fallback_route_params
-      end
-
-      def fallback_route_params
-        path_params = extract_path_param_names.to_h { |param| [param, {}] }
-        defined_params = route.respond_to?(:options) ? route.options[:params] : nil
-        return path_params unless defined_params.is_a?(Hash)
-
-        path_params.merge(defined_params)
-      end
-
-      def extract_path_param_names
-        return extract_path_param_names_from_path unless route.respond_to?(:pattern_regexp)
-
-        regexp = route.pattern_regexp
-        return extract_path_param_names_from_path unless regexp.respond_to?(:named_captures)
-
-        names = regexp.named_captures.keys
-        names.empty? ? extract_path_param_names_from_path : names
-      rescue StandardError
-        extract_path_param_names_from_path
-      end
-
-      def extract_path_param_names_from_path
-        return [] unless route.respond_to?(:path)
-
-        route.path
-             .scan(/:([a-zA-Z_][a-zA-Z0-9_]*)/)
-             .flatten
-             .reject { |name| IGNORED_FALLBACK_PATH_PARAMS.include?(name) }
       end
     end
   end

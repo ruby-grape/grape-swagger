@@ -2,6 +2,7 @@
 
 describe GrapeSwagger::RequestParamParsers::Route do
   let(:route) { instance_double('route', app: nil) }
+  let(:parser) { described_class.new(route, nil, nil, nil) }
 
   describe '#parse' do
     subject(:parse_request_params) { described_class.parse(route, nil, nil, nil) }
@@ -44,6 +45,42 @@ describe GrapeSwagger::RequestParamParsers::Route do
         expect(parse_request_params).to eq(
           id: { required: true, type: 'String' },
           name: { required: false, type: 'String' }
+        )
+      end
+    end
+  end
+
+  describe '#fulfill_params' do
+    subject(:fulfilled_params) { parser.send(:fulfill_params, path_params) }
+
+    context 'when route.params uses symbol keys and path params use string keys' do
+      let(:path_params) { { 'id' => { required: true, type: 'Integer' } } }
+
+      before do
+        allow(route).to receive(:params).and_return(
+          id: {}
+        )
+      end
+
+      it 'looks up path options via param.to_s' do
+        expect(fulfilled_params).to eq(
+          id: { required: true, type: 'Integer' }
+        )
+      end
+    end
+
+    context 'when route.params uses string keys and path params use symbol keys' do
+      let(:path_params) { { id: { required: true, type: 'Integer' } } }
+
+      before do
+        allow(route).to receive(:params).and_return(
+          'id' => {}
+        )
+      end
+
+      it 'looks up path options via param.to_sym' do
+        expect(fulfilled_params).to eq(
+          id: { required: true, type: 'Integer' }
         )
       end
     end

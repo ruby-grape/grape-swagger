@@ -114,7 +114,7 @@ This screenshot is based on the [Hussars](https://github.com/LeFnord/hussars) sa
 The following versions of grape, grape-entity and grape-swagger can currently be used together.
 
 | grape-swagger         | swagger spec | grape                   | grape-entity | representable |
-| --------------------- | ------------ | ----------------------- | ------------ | ------------- |
+|-----------------------|--------------|-------------------------|--------------|---------------|
 | 0.10.5                | 1.2          | >= 0.10.0 ... <= 0.14.0 | < 0.5.0      | n/a           |
 | 0.11.0                | 1.2          | >= 0.16.2               | < 0.5.0      | n/a           |
 | 0.25.2                | 2.0          | >= 0.14.0 ... <= 0.18.0 | <= 0.6.0     | >= 2.4.1      |
@@ -123,9 +123,8 @@ The following versions of grape, grape-entity and grape-swagger can currently be
 | 0.32.0                | 2.0          | >= 0.16.2               | >= 0.5.0     | >= 2.4.1      |
 | 0.34.0                | 2.0          | >= 0.16.2 ... < 1.3.0   | >= 0.5.0     | >= 2.4.1      |
 | >= 1.0.0              | 2.0          | >= 1.3.0                | >= 0.5.0     | >= 2.4.1      |
-| >= 2.0.0              | 2.0          | >= 1.7.0                | >= 0.5.0     | >= 2.4.1      |
 | >= 2.0.0 ... <= 2.1.2 | 2.0          | >= 1.8.0 ... < 2.3.0    | >= 0.5.0     | >= 2.4.1      |
-| > 2.1.2               | 2.0          | >= 1.8.0 ... < 4.0      | >= 0.5.0     | >= 2.4.1      |
+| > 2.1.2               | 2.0          | >= 2.4.0 ... < 4.0      | >= 0.5.0     | >= 2.4.1      |
 
 
 ## Swagger-Spec <a name="swagger-spec"></a>

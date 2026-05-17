@@ -10,9 +10,6 @@ module GrapeSwagger
         route_match = route_path.split(/^.*?#{route.prefix}/).last
         next unless route_match
 
-        # want to match emojis ... ;)
-        # route_match = route_match
-        #   .match('\/([\p{Alnum}p{Emoji}\-\_]*?)[\.\/\(]') || route_match.match('\/([\p{Alpha}\p{Emoji}\-\_]*)$')
         route_match = route_match.match('\/([\p{Alnum}\-\_]*?)[\.\/\(]') || route_match.match('\/([\p{Alpha}\-\_]*)$')
         next unless route_match
 

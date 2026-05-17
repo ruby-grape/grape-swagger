@@ -33,7 +33,7 @@ module GrapeSwagger
     def combine_namespace_routes(namespaces, routes)
       combined_namespace_routes = {}
       # iterate over each single namespace
-      namespaces.each_key do |name, _|
+      namespaces.each_key do |name|
         # get the parent route for the namespace
         parent_route_name = extract_parent_route(name)
         parent_route = routes[parent_route_name]

@@ -48,6 +48,24 @@ describe GrapeSwagger::RequestParamParsers::Route do
         )
       end
     end
+
+    context 'when route.params has symbol keys but namespace options use string keys' do
+      let(:stackable) { Grape::Util::StackableValues.new }
+      let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: stackable) }
+      let(:app) { instance_double('app', inheritable_setting:) }
+
+      before do
+        stackable[:namespace] = instance_double('namespace', space: ':id', options: { required: true, type: 'Integer' })
+        allow(route).to receive(:app).and_return(app)
+        allow(route).to receive(:params).and_return(id: {})
+      end
+
+      it 'merges namespace options into the symbol-keyed route param' do
+        expect(parse_request_params).to eq(
+          id: { required: true, type: 'Integer' }
+        )
+      end
+    end
   end
 
   describe '#fulfill_params' do
@@ -63,22 +81,6 @@ describe GrapeSwagger::RequestParamParsers::Route do
       end
 
       it 'uses normalized symbol keys for path options' do
-        expect(fulfilled_params).to eq(
-          id: { required: true, type: 'Integer', format: 'int64' }
-        )
-      end
-    end
-
-    context 'when route.params uses string keys and path params use symbol keys' do
-      let(:path_params) { { id: { required: true, type: 'Integer', format: 'int64' } } }
-
-      before do
-        allow(route).to receive(:params).and_return(
-          'id' => {}
-        )
-      end
-
-      it 'looks up path options via param.to_sym' do
         expect(fulfilled_params).to eq(
           id: { required: true, type: 'Integer', format: 'int64' }
         )

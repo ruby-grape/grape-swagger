@@ -46,4 +46,4 @@ module GrapeSwagger
   }.freeze
 end
 
-GrapeInstance.extend(SwaggerDocumentationAdder)
+GrapeInstance.extend(GrapeSwagger::SwaggerDocumentationAdder)

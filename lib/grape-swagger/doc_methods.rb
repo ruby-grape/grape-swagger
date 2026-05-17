@@ -93,7 +93,7 @@ module GrapeSwagger
 
       setup_formatter(options[:format])
 
-      desc api_doc.delete(:desc), api_doc
+      desc api_doc.delete(:desc), **api_doc
 
       instance_eval(guard) unless guard.nil?
 
@@ -105,7 +105,7 @@ module GrapeSwagger
           .output_path_definitions(target_class.combined_namespace_routes, self, target_class, options)
       end
 
-      desc specific_api_doc.delete(:desc), { params: specific_api_doc.delete(:params) || {}, **specific_api_doc }
+      desc specific_api_doc.delete(:desc), params: specific_api_doc.delete(:params) || {}, **specific_api_doc
 
       params do
         requires :name, type: String, desc: 'Resource name of mounted API'

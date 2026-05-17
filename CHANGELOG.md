@@ -6,7 +6,7 @@
 
 #### Fixes
 
-* Your contribution here.
+* [#977](https://github.com/ruby-grape/grape-swagger/issues/977): Pass keyword arguments to `desc` to fix deprecation warning from Grape - [@numbata](https://github.com/numbata).
 
 ### 2.1.4 (2026-02-02)
 

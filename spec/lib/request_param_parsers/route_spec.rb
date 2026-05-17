@@ -53,8 +53,8 @@ describe GrapeSwagger::RequestParamParsers::Route do
   describe '#fulfill_params' do
     subject(:fulfilled_params) { parser.send(:fulfill_params, path_params) }
 
-    context 'when route.params uses symbol keys and path params use string keys' do
-      let(:path_params) { { 'id' => { required: true, type: 'Integer' } } }
+    context 'when route.params and path params use symbol keys' do
+      let(:path_params) { { id: { required: true, type: 'Integer', format: 'int64' } } }
 
       before do
         allow(route).to receive(:params).and_return(
@@ -62,15 +62,15 @@ describe GrapeSwagger::RequestParamParsers::Route do
         )
       end
 
-      it 'looks up path options via param.to_s' do
+      it 'uses normalized symbol keys for path options' do
         expect(fulfilled_params).to eq(
-          id: { required: true, type: 'Integer' }
+          id: { required: true, type: 'Integer', format: 'int64' }
         )
       end
     end
 
     context 'when route.params uses string keys and path params use symbol keys' do
-      let(:path_params) { { id: { required: true, type: 'Integer' } } }
+      let(:path_params) { { id: { required: true, type: 'Integer', format: 'int64' } } }
 
       before do
         allow(route).to receive(:params).and_return(
@@ -80,7 +80,7 @@ describe GrapeSwagger::RequestParamParsers::Route do
 
       it 'looks up path options via param.to_sym' do
         expect(fulfilled_params).to eq(
-          id: { required: true, type: 'Integer' }
+          id: { required: true, type: 'Integer', format: 'int64' }
         )
       end
     end

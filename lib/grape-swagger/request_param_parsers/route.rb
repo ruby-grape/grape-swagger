@@ -44,7 +44,7 @@ module GrapeSwagger
 
         namespaces.each_with_object({}) do |namespace, params|
           space = namespace.space.to_s.gsub(':', '')
-          params[space] = namespace.options || {}
+          params[space.to_sym] = namespace.options || {}
         end
       end
 
@@ -110,7 +110,7 @@ module GrapeSwagger
 
           defined_options = definition.is_a?(Hash) ? definition : {}
           defined_options = restore_variant_type(defined_options, param, variant_types)
-          path_options = path_params[param] || path_params[param.to_s] || path_params[param.to_sym] || {}
+          path_options = path_params[key] || {}
           value = path_options.merge(defined_options)
           accum[key] = value.empty? ? DEFAULT_PARAM_TYPE : value
         end

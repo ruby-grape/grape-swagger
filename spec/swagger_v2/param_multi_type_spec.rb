@@ -50,6 +50,35 @@ describe 'Params Multi Types' do
     ]
   end
 
+  describe 'with non-string primary type' do
+    def app
+      Class.new(Grape::API) do
+        format :json
+
+        desc 'action' do
+          consumes ['application/x-www-form-urlencoded']
+        end
+        params do
+          requires :int_first, type: [Integer, Float]
+          requires :nested_group, type: Hash do
+            requires :nested_int, type: [Integer, Float]
+          end
+        end
+        post :action do
+          { message: 'hi' }
+        end
+
+        add_swagger_documentation
+      end
+    end
+
+    it 'recovers the first variant type, not a hardcoded fallback' do
+      types = subject.to_h { |p| [p['name'], p['type']] }
+      expect(types['int_first']).to eq('integer')
+      expect(types['nested_group[nested_int]']).to eq('integer')
+    end
+  end
+
   describe 'header params' do
     def app
       Class.new(Grape::API) do

@@ -86,14 +86,14 @@ module GrapeSwagger
       # for available options see #defaults
       target_class     = options[:target_class]
       guard            = options[:swagger_endpoint_guard]
-      api_doc          = options[:api_documentation].dup
-      specific_api_doc = options[:specific_api_documentation].dup
+      api_doc          = options[:api_documentation].transform_keys(&:to_sym)
+      specific_api_doc = options[:specific_api_documentation].transform_keys(&:to_sym)
 
       class_variables_from(options)
 
       setup_formatter(options[:format])
 
-      desc api_doc.delete(:desc), **api_doc
+      desc(pop_desc(api_doc), **api_doc)
 
       instance_eval(guard) unless guard.nil?
 
@@ -105,7 +105,9 @@ module GrapeSwagger
           .output_path_definitions(target_class.combined_namespace_routes, self, target_class, options)
       end
 
-      desc specific_api_doc.delete(:desc), params: specific_api_doc.delete(:params) || {}, **specific_api_doc
+      specific_desc   = pop_desc(specific_api_doc)
+      specific_params = specific_api_doc.delete(:params) || {}
+      desc(specific_desc, params: specific_params, **specific_api_doc)
 
       params do
         requires :name, type: String, desc: 'Resource name of mounted API'
@@ -135,6 +137,14 @@ module GrapeSwagger
       return unless formatter
 
       FORMATTER_METHOD.each { |method| send(method, formatter) }
+    end
+
+    private
+
+    # :desc takes precedence over :description; explicit nil under :desc wins
+    # (don't fall through on nil — that would silently substitute :description).
+    def pop_desc(doc)
+      doc.key?(:desc) ? doc.delete(:desc) : doc.delete(:description)
     end
   end
 end

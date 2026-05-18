@@ -125,7 +125,8 @@ The following versions of grape, grape-entity and grape-swagger can currently be
 | >= 1.0.0              | 2.0          | >= 1.3.0                | >= 0.5.0     | >= 2.4.1      |
 | >= 2.0.0              | 2.0          | >= 1.7.0                | >= 0.5.0     | >= 2.4.1      |
 | >= 2.0.0 ... <= 2.1.2 | 2.0          | >= 1.8.0 ... < 2.3.0    | >= 0.5.0     | >= 2.4.1      |
-| > 2.1.2               | 2.0          | >= 1.8.0 ... < 4.0      | >= 0.5.0     | >= 2.4.1      |
+| >= 2.1.3 ... < 2.2.0  | 2.0          | >= 1.8.0 ... < 4.0      | >= 0.5.0     | >= 2.4.1      |
+| >= 2.2.0              | 2.0          | >= 2.1 ... < 4.0        | >= 0.5.0     | >= 2.4.1      |
 
 
 ## Swagger-Spec <a name="swagger-spec"></a>
@@ -497,6 +498,8 @@ Customize the Swagger API documentation route, typically contains a `desc` field
 add_swagger_documentation \
    api_documentation: { desc: 'Reticulated splines API swagger-compatible documentation.' }
 ```
+
+`:description` is accepted as an alias for `:desc` (when both are supplied, `:desc` wins; an explicit `desc: nil` is respected and does not fall through). String keys (e.g. when loading from YAML/JSON) are accepted too.
 
 #### specific_api_documentation
 

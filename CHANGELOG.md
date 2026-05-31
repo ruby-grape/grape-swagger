@@ -5,15 +5,18 @@
 * [#978](https://github.com/ruby-grape/grape-swagger/pull/978): Bump minimum Grape to `>= 2.1` (was `>= 1.7`); drop Grape 1.8/2.0 CI rows. See [UPGRADING](UPGRADING.md) - [@numbata](https://github.com/numbata).
 * [#978](https://github.com/ruby-grape/grape-swagger/pull/978): On Grape 3.2+, declare swagger-only types under `documentation: { type: 'Object' }` instead of `params { type: 'Object' }` - [@numbata](https://github.com/numbata).
 * [#978](https://github.com/ruby-grape/grape-swagger/pull/978): On Grape 3.2+, custom type classes used via `type: MyClass` must implement `MyClass.parse(value)` - [@numbata](https://github.com/numbata).
+* Your contribution here.
 
 #### Features
 
 * [#978](https://github.com/ruby-grape/grape-swagger/pull/978): Accept string-keyed `api_documentation` / `specific_api_documentation` and a `:description` alias for `:desc` - [@numbata](https://github.com/numbata).
+* Your contribution here.
 
 #### Fixes
 
 * [#978](https://github.com/ruby-grape/grape-swagger/pull/978): Pass keyword arguments to `desc` to fix Grape 3.2 deprecation - [@numbata](https://github.com/numbata).
 * [#978](https://github.com/ruby-grape/grape-swagger/pull/978): On Grape 3.3+, recover multi-type params (`type: [A, B]`) from `VariantCollectionCoercer` so swagger reflects the first declared type instead of the coercer's `#inspect` string - [@numbata](https://github.com/numbata).
+* Your contribution here.
 
 ### 2.1.4 (2026-02-02)
 

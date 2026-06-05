@@ -11,9 +11,7 @@ describe 'Param example' do
         params :common_params do
           requires :id, type: Integer, documentation: { example: 123 }
           optional :name, type: String, documentation: { example: 'Person' }
-          # 'Object' is not a valid Grape coercion type; it is a swagger documentation-only hint.
-          # Grape 3.2+ rejects string type names in params blocks, so the type lives in
-          # documentation: where grape-swagger picks it up via ParseParams#call settings merge.
+          # type: 'Object' moved to documentation: because Grape 3.2+ rejects string type names in params blocks.
           optional :obj, documentation: { type: 'Object', example: { 'foo' => 'bar' } }
         end
       end

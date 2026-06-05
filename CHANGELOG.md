@@ -14,8 +14,8 @@
 
 #### Fixes
 
-* [#978](https://github.com/ruby-grape/grape-swagger/pull/978): Pass keyword arguments to `desc` to fix Grape 3.2 deprecation - [@numbata](https://github.com/numbata).
-* [#978](https://github.com/ruby-grape/grape-swagger/pull/978): On Grape 3.3+, recover multi-type params (`type: [A, B]`) from `VariantCollectionCoercer` so swagger reflects the first declared type instead of the coercer's `#inspect` string - [@numbata](https://github.com/numbata).
+* [#978](https://github.com/ruby-grape/grape-swagger/pull/978): Pass keyword arguments to `desc` to fix Grape 3.3+ deprecation warnings - [@numbata](https://github.com/numbata).
+* [#978](https://github.com/ruby-grape/grape-swagger/pull/978): On Grape 3.2+, recover multi-type params (`type: [A, B]`) from `VariantCollectionCoercer` so swagger reflects the first declared type instead of the coercer's `#inspect` string - [@numbata](https://github.com/numbata).
 * Your contribution here.
 
 ### 2.1.4 (2026-02-02)

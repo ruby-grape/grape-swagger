@@ -68,7 +68,48 @@ describe 'API with additional options' do
     end
 
     it 'respects the explicit nil and does not fall through to :description' do
+      expect { api }.not_to raise_error
       expect(subject.pluck(:description)).not_to include('fallback')
+      expect(subject.first[:description]).to be_nil
+    end
+  end
+
+  context 'when api_documentation is nil' do
+    let(:api) do
+      Class.new(Grape::API) do
+        add_swagger_documentation api_documentation: nil
+      end
+    end
+
+    it 'treats it as empty documentation options' do
+      expect { api }.not_to raise_error
+      expect(subject.first[:description]).to be_nil
+    end
+  end
+
+  context 'when api_documentation includes params' do
+    let(:api) do
+      Class.new(Grape::API) do
+        add_swagger_documentation api_documentation: { desc: 'With params', params: {} }
+      end
+    end
+
+    it 'passes params through to the main desc call' do
+      expect { api }.not_to raise_error
+      expect(subject.first[:description]).to eq('With params')
+    end
+  end
+
+  context 'when specific_api_documentation is nil' do
+    let(:api) do
+      Class.new(Grape::API) do
+        add_swagger_documentation specific_api_documentation: nil
+      end
+    end
+
+    it 'treats it as empty documentation options' do
+      expect { api }.not_to raise_error
+      expect(subject.last[:description]).to be_nil
     end
   end
 

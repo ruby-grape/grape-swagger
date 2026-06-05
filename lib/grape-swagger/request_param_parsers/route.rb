@@ -48,48 +48,54 @@ module GrapeSwagger
         end
       end
 
-      # On Grape >= 3.3 `type: [A, B]` is documented in route.params via the
-      # VariantCollectionCoercer's `#to_s`, which loses the original type list.
-      # On earlier versions the same param appears as the stringified Array
-      # `"[A, B]"` and the existing regex in DataType.parse_multi_type already
-      # handles it; the recovery here is a no-op for those versions.
-      #
-      # The live coercer is still reachable through the CoerceValidator's
-      # @converter, so we rebuild a name => types map keyed by the fully-qualified
-      # param name (e.g. "group[inner]") to match route.params keys and avoid
-      # clobbering same-named params at outer scopes.
-      #
-      # NOTE: @converter, @types, and @scope are private Grape ivars. If Grape
-      # renames them, this method silently returns {} and swagger falls back to
-      # the pre-fix broken output (coercer inspect string) — not a crash.
+      # Grape 3.2+ serializes `type: [A, B]` via VariantCollectionCoercer#to_s, losing the type list.
+      # Recover it from the matching CoerceValidator entry in stackable_values[:validations].
+      # If the internal structure changes in a future Grape version this silently returns {}.
       def collect_variant_types(stackable_values)
         variant_types = {}
         return variant_types unless defined?(Grape::Validations::Types::VariantCollectionCoercer) &&
                                     defined?(Grape::Validations::Validators::CoerceValidator) &&
                                     stackable_values.respond_to?(:[])
 
-        # StackableValues#[] concatenates inheritance levels and always returns
-        # a flat Array of validator instances — no wrapping or flattening needed.
-        stackable_values[:validations].each do |validator|
-          next unless validator.is_a?(Grape::Validations::Validators::CoerceValidator)
-
-          converter = validator.instance_variable_get(:@converter)
+        # StackableValues#[] concatenates this level and all inherited levels;
+        # no explicit chain walk is needed here.
+        (stackable_values[:validations] || []).each do |validator|
+          attrs, scope, converter = extract_variant_validator_parts(validator)
+          next unless attrs
           next unless converter.is_a?(Grape::Validations::Types::VariantCollectionCoercer)
 
-          # `.to_a` preserves the user-declared order for both Array and Set
-          # storage shapes; `DataType.parse_multi_type` uses `.first` downstream.
+          # TODO: use a public API once Grape exposes VariantCollectionCoercer#types.
           types = converter.instance_variable_get(:@types).to_a
           next if types.empty?
 
-          scope = validator.instance_variable_get(:@scope)
           next unless scope.respond_to?(:full_name)
 
-          validator.attrs.each do |attr|
+          attrs.each do |attr|
+            # Key format must match param.to_s in restore_variant_type.
             variant_types[scope.full_name(attr)] = types
           end
         end
 
         variant_types
+      end
+
+      def extract_variant_validator_parts(validator)
+        if validator.is_a?(Hash)
+          return unless validator[:validator_class] == Grape::Validations::Validators::CoerceValidator
+
+          attrs = Array(validator[:attributes])
+          scope = validator[:params_scope]
+          converter = validator[:options].is_a?(Hash) ? validator[:options][:type] : nil
+          return [attrs, scope, converter]
+        end
+
+        return unless validator.is_a?(Grape::Validations::Validators::CoerceValidator)
+        return unless validator.respond_to?(:attrs)
+
+        attrs = Array(validator.attrs)
+        scope = validator.instance_variable_get(:@scope)
+        converter = validator.instance_variable_get(:@converter)
+        [attrs, scope, converter]
       end
 
       def fulfill_params(path_params, variant_types)

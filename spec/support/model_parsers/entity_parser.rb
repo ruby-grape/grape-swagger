@@ -60,6 +60,7 @@ RSpec.shared_context 'entity swagger example' do
       end
 
       module NestedModule
+        # Grape::Entity already implements .parse; no shim needed here.
         class ApiResponse < Grape::Entity
           expose :status, documentation: { type: String }
           expose :error, documentation: { type: ::Entities::ApiError }

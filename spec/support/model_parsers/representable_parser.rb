@@ -100,9 +100,7 @@ RSpec.shared_context 'representable swagger example' do
           property :status, documentation: { type: String }
           property :error, documentation: { type: ::Entities::ApiError }
 
-          # Grape 3.2+ requires unknown types to implement .parse (arity 1) to pass the
-          # Types.custom? check. Representable::Decorator does not define parse, so we add
-          # a minimal pass-through sufficient for documentation-generation tests.
+          # Grape 3.2+ requires unknown types to implement .parse (arity 1)
           def self.parse(val) = val
         end
       end

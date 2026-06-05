@@ -86,13 +86,15 @@ module GrapeSwagger
       # for available options see #defaults
       target_class     = options[:target_class]
       guard            = options[:swagger_endpoint_guard]
-      api_doc          = options[:api_documentation].transform_keys(&:to_sym)
-      specific_api_doc = options[:specific_api_documentation].transform_keys(&:to_sym)
+      # transform_keys normalizes string-keyed input, e.g. loaded from YAML/JSON.
+      api_doc          = (options[:api_documentation] || {}).transform_keys(&:to_sym)
+      specific_api_doc = (options[:specific_api_documentation] || {}).transform_keys(&:to_sym)
 
       class_variables_from(options)
 
       setup_formatter(options[:format])
 
+      # Only the named-resource endpoint extracts :params for its required route param below.
       desc(pop_desc(api_doc), **api_doc)
 
       instance_eval(guard) unless guard.nil?
@@ -141,10 +143,13 @@ module GrapeSwagger
 
     private
 
-    # :desc takes precedence over :description; explicit nil under :desc wins
-    # (don't fall through on nil — that would silently substitute :description).
+    # explicit nil under :desc wins — don't fall through to :description
     def pop_desc(doc)
-      doc.key?(:desc) ? doc.delete(:desc) : doc.delete(:description)
+      result = doc.key?(:desc) ? doc.delete(:desc) : doc.delete(:description)
+      # Also remove the alias so it does not leak into **doc kwargs.
+      # This is a no-op when :desc was absent.
+      doc.delete(:description)
+      result
     end
   end
 end

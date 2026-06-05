@@ -73,10 +73,7 @@ RSpec.shared_context 'mock swagger example' do
 
       module NestedModule
         class ApiResponse < OpenStruct
-          # Grape 3.2+ requires unknown types to implement .parse (arity 1) to pass the
-          # Types.custom? check and avoid a dry-types lookup that would raise ArgumentError.
-          # The implementation is minimal because these tests exercise swagger doc generation
-          # only, not actual request coercion.
+          # Grape 3.2+ requires unknown types to implement .parse (arity 1)
           def self.parse(val) = val
         end
       end

@@ -112,7 +112,9 @@ describe 'Params Multi Types' do
   end
 
   # Canary tests for Grape internals used by collect_variant_types.
-  # Fails after a Grape upgrade? Update collect_variant_types private-ivar reads.
+  # Fails after a Grape upgrade? Update collect_variant_types to match the new
+  # validator shape. Grape 3.2+: Hash entries (key lookups). Older supported
+  # versions: object instances (private-ivar reads).
   describe 'Grape internal contract for collect_variant_types' do
     before { skip unless defined?(Grape::Validations::Types::VariantCollectionCoercer) }
 
@@ -147,7 +149,7 @@ describe 'Params Multi Types' do
         expect(coerce_validator).not_to be_nil
       end
 
-      it 'recovers types from the Hash-shaped validator path' do
+      it 'processes a Hash-shaped validator entry (unit test of entry-parsing logic)' do
         scope = Struct.new(:name) do
           def full_name(attr)
             attr.to_s
@@ -198,6 +200,7 @@ describe 'Params Multi Types' do
     end
 
     it 'uses the last-declared type' do
+      # Relies on validators being iterated in declaration order; last write wins.
       types = subject.to_h { |p| [p['name'], p['type']] }
       expect(types['n']).to eq('string')
     end

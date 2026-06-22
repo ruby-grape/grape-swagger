@@ -68,7 +68,6 @@ describe 'API with additional options' do
     end
 
     it 'respects the explicit nil and does not fall through to :description' do
-      expect { api }.not_to raise_error
       expect(subject.pluck(:description)).not_to include('fallback')
       expect(subject.first[:description]).to be_nil
     end
@@ -95,7 +94,6 @@ describe 'API with additional options' do
     end
 
     it 'passes params through to the main desc call' do
-      expect { api }.not_to raise_error
       expect(subject.first[:description]).to eq('With params')
     end
   end

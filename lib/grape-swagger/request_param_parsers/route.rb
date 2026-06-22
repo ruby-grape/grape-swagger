@@ -49,7 +49,6 @@ module GrapeSwagger
       end
 
       # Grape 3.2+ serializes `type: [A, B]` via VariantCollectionCoercer#to_s, losing the type list.
-      # Recover it from the matching CoerceValidator entry in stackable_values[:validations].
       # Grape 3.2+ stores validator metadata as Hash entries; older supported versions use
       # CoerceValidator object instances and require private-ivar reads below.
       # If the internal structure changes in a future Grape version this silently returns {}.

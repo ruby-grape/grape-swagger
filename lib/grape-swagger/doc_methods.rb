@@ -147,7 +147,6 @@ module GrapeSwagger
     def pop_desc(doc)
       result = doc.key?(:desc) ? doc.delete(:desc) : doc.delete(:description)
       # Also remove the alias so it does not leak into **doc kwargs.
-      # This is a no-op when :desc was absent.
       doc.delete(:description)
       result
     end

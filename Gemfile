@@ -29,6 +29,7 @@ group :development, :test do
   end
 
   gem 'cgi'
+  gem 'multi_json'
   gem 'rack-cors'
   gem 'rack-test'
   gem 'rake'

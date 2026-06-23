@@ -1,5 +1,26 @@
 ## Upgrading Grape-swagger
 
+### Upgrading to >= 2.2.0
+
+- **Minimum Grape version is now `>= 2.1`** (was `>= 1.7`). Grape 1.8.0 and 2.0.0 cannot be used on Ruby 3.3+ because of an upstream Mustermann/forwardable incompatibility; the CI rows for those combinations were already failing on `master` and have been removed.
+- **`type: 'Object'` (and other string type names) in `params` blocks**: Grape 3.2+ rejects string type names. If you previously declared a swagger-only documentation hint via `params { optional :foo, type: 'Object' }`, move the type under `documentation:`:
+
+  ```ruby
+  optional :foo, documentation: { type: 'Object' }
+  ```
+
+  grape-swagger picks the type up from the merged settings unchanged, so the swagger output is identical.
+- **Custom type classes** used via `type: MyClass` must implement `MyClass.parse(value)` (arity 1) on Grape 3.2+; otherwise Grape's dry-types lookup raises `ArgumentError`. `Grape::Entity` already provides `parse`; `Representable::Decorator` and plain Ruby classes need to define it explicitly:
+
+  ```ruby
+  class MyType
+    def self.parse(value) = new(value)
+    # ...
+  end
+  ```
+
+- **Multi-type params (`type: [A, B]`) on Grape 3.2+**: swagger output now reflects the first declared type (e.g. `type: [Integer, Float]` produces `"integer"`). Previously, Grape 3.2+ serialized the `VariantCollectionCoercer` wrapper via `#to_s`, leaking `"#<Grape::Validations::Types::VariantCollectionCoercer:0x...>"` into the documentation. No action required, but if you were programmatically post-processing that string, the fix will change the output.
+
 ### Upgrading to >= x.y.z
 
 - Grape-swagger now documents array parameters within an object schema in Swagger. This aligns with grape's JSON structure requirements and ensures the documentation is correct.

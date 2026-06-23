@@ -72,7 +72,10 @@ RSpec.shared_context 'mock swagger example' do
       class DocumentedHashAndArrayModel < OpenStruct; end
 
       module NestedModule
-        class ApiResponse < OpenStruct; end
+        class ApiResponse < OpenStruct
+          # Grape 3.2+ requires unknown types to implement .parse (arity 1)
+          def self.parse(val) = val
+        end
       end
     end
   end

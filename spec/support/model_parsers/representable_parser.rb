@@ -99,6 +99,9 @@ RSpec.shared_context 'representable swagger example' do
 
           property :status, documentation: { type: String }
           property :error, documentation: { type: ::Entities::ApiError }
+
+          # Grape 3.2+ requires unknown types to implement .parse (arity 1)
+          def self.parse(val) = val
         end
       end
 

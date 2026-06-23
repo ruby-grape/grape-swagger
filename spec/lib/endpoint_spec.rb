@@ -4,7 +4,8 @@ require 'spec_helper'
 
 describe Grape::Endpoint do
   subject do
-    described_class.new(Grape::Util::InheritableSetting.new, path: '/', method: :get)
+    # Grape >= HEAD requires :for (the owner API class) when constructing an Endpoint.
+    described_class.new(Grape::Util::InheritableSetting.new, path: '/', method: :get, for: Class.new(Grape::API))
   end
 
   describe '.content_types_for' do

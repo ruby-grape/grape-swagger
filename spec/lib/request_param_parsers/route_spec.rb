@@ -69,7 +69,7 @@ describe GrapeSwagger::RequestParamParsers::Route do
   end
 
   describe '#fulfill_params' do
-    subject(:fulfilled_params) { parser.send(:fulfill_params, path_params) }
+    subject(:fulfilled_params) { parser.send(:fulfill_params, path_params, {}) }
 
     context 'when route.params and path params use symbol keys' do
       let(:path_params) { { id: { required: true, type: 'Integer', format: 'int64' } } }

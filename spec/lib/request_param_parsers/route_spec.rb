@@ -89,6 +89,73 @@ describe GrapeSwagger::RequestParamParsers::Route do
         )
       end
     end
+
+    context 'when inherited namespace stackable values partially override the same path param' do
+      let(:root_stackable) { Grape::Util::StackableValues.new }
+      let(:nested_stackable) { Grape::Util::StackableValues.new(root_stackable) }
+      let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: nested_stackable) }
+      let(:app) { instance_double('app', inheritable_setting:) }
+
+      before do
+        root_stackable[:namespace] = instance_double(
+          'namespace',
+          space: ':id',
+          options: { documentation: { type: 'integer', format: 'int64' } }
+        )
+        nested_stackable[:namespace] = instance_double(
+          'namespace',
+          space: ':id',
+          options: { desc: 'inner description' }
+        )
+
+        allow(route).to receive(:app).and_return(app)
+        allow(route).to receive(:params).and_return(
+          'id' => {}
+        )
+      end
+
+      it 'preserves outer metadata while applying inner overrides' do
+        expect(parse_request_params).to eq(
+          id: {
+            documentation: { type: 'integer', format: 'int64' },
+            desc: 'inner description'
+          }
+        )
+      end
+    end
+
+    context 'when inherited namespace stackable values partially override nested documentation' do
+      let(:root_stackable) { Grape::Util::StackableValues.new }
+      let(:nested_stackable) { Grape::Util::StackableValues.new(root_stackable) }
+      let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: nested_stackable) }
+      let(:app) { instance_double('app', inheritable_setting:) }
+
+      before do
+        root_stackable[:namespace] = instance_double(
+          'namespace',
+          space: ':id',
+          options: { documentation: { type: 'integer', format: 'int64' } }
+        )
+        nested_stackable[:namespace] = instance_double(
+          'namespace',
+          space: ':id',
+          options: { documentation: { desc: 'inner description' } }
+        )
+
+        allow(route).to receive(:app).and_return(app)
+        allow(route).to receive(:params).and_return(
+          'id' => {}
+        )
+      end
+
+      it 'deep merges nested documentation hashes' do
+        expect(parse_request_params).to eq(
+          id: {
+            documentation: { type: 'integer', format: 'int64', desc: 'inner description' }
+          }
+        )
+      end
+    end
   end
 
   describe '#fulfill_params' do

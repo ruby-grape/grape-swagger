@@ -30,11 +30,25 @@ module GrapeSwagger
         params = {}
 
         while stackable_values.is_a?(Grape::Util::StackableValues)
-          params = fetch_inherited_params(stackable_values).merge(params)
+          params = merge_path_params(fetch_inherited_params(stackable_values), params)
           stackable_values = stackable_values.inherited_values
         end
 
         params
+      end
+
+      def merge_path_params(outer_params, inner_params)
+        outer_params.merge(inner_params) do |_key, outer_options, inner_options|
+          merge_path_param_options(outer_options, inner_options)
+        end
+      end
+
+      def merge_path_param_options(outer_options, inner_options)
+        return inner_options unless outer_options.is_a?(Hash) && inner_options.is_a?(Hash)
+
+        outer_options.merge(inner_options) do |_key, outer_value, inner_value|
+          merge_path_param_options(outer_value, inner_value)
+        end
       end
 
       def fetch_inherited_params(stackable_values)

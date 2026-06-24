@@ -53,7 +53,7 @@ module GrapeSwagger
         # use the full namespace here (not the latest level only)
         # and strip leading slash
         mount_path = (namespace_stackable[:mount_path] || []).join('/')
-        full_namespace = (mount_path + endpoint.namespace).sub(/\/{2,}/, '/').sub(/^\//, '')
+        full_namespace = (mount_path + endpoint.namespace).gsub(/\/{2,}/, '/').sub(/^\//, '')
         combined_namespaces[full_namespace] = ns
       end
 

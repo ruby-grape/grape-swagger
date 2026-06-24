@@ -73,6 +73,7 @@ module GrapeSwagger
     end
 
     def route_path_start_with?(route, name)
+      # String#start_with? is a literal prefix check, so Regexp.escape is not needed here.
       patterns = if route.prefix
                    ["/#{route.prefix}/#{name}", "/#{route.prefix}/:version/#{name}"]
                  else

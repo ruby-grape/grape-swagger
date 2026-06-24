@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'swagger_routing'
+
 module GrapeSwagger
   module SwaggerDocumentationAdder
     attr_accessor :combined_namespaces, :combined_routes, :combined_namespace_routes

@@ -6,6 +6,7 @@ describe GrapeSwagger::SwaggerRouting do
       include GrapeSwagger::SwaggerRouting
     end.new
   end
+  let(:namespace) { instance_double('namespace', options: {}) }
 
   describe '#combine_routes' do
     let(:app) { instance_double('app', routes: routes) }
@@ -27,6 +28,26 @@ describe GrapeSwagger::SwaggerRouting do
 
       it 'hides the literal documentation route' do
         expect(routing.send(:combine_routes, app, doc_klass)).to eq('swagger' => [])
+      end
+    end
+
+    context 'when joined mount paths contain multiple double-slash runs' do
+      it 'normalizes all doubled slashes in the namespace key' do
+        namespace_stackable = Grape::Util::StackableValues.new
+        namespace_stackable[:namespace] = namespace
+        namespace_stackable[:mount_path] = ['//foo/', '/bar']
+        endpoint = instance_double(
+          'endpoint',
+          options: {},
+          namespace: '/bar/widgets',
+          inheritable_setting: instance_double('inheritable_setting', namespace_stackable: namespace_stackable)
+        )
+        app = Class.new
+        app.extend(GrapeSwagger::SwaggerDocumentationAdder)
+
+        allow(app).to receive(:endpoints).and_return([endpoint])
+
+        expect(app.send(:combine_namespaces, app)).to eq('foo/bar/bar/widgets' => namespace)
       end
     end
   end

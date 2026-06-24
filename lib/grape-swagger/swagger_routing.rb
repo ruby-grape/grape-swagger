@@ -7,7 +7,7 @@ module GrapeSwagger
     def combine_routes(app, doc_klass)
       app.routes.each_with_object({}) do |route, combined_routes|
         route_path = route.path
-        route_match = route_path.split(/^.*?#{route.prefix}/).last
+        route_match = route_path.split(/^.*?#{Regexp.escape(route.prefix.to_s)}/).last
         next unless route_match
 
         route_match = route_match.match('\/([\p{Alnum}\-\_]*?)[\.\/\(]') || route_match.match('\/([\p{Alpha}\-\_]*)$')
@@ -32,6 +32,13 @@ module GrapeSwagger
 
     def combine_namespace_routes(namespaces, routes)
       combined_namespace_routes = {}
+      # default case when not explicitly specified or nested == true
+      standalone_namespaces = namespaces.reject do |_, ns|
+        !ns.options.key?(:swagger) ||
+          !ns.options[:swagger].key?(:nested) ||
+          ns.options[:swagger][:nested] != false
+      end
+
       # iterate over each single namespace
       namespaces.each_key do |name|
         # get the parent route for the namespace
@@ -39,13 +46,6 @@ module GrapeSwagger
         parent_route = routes[parent_route_name]
         # fetch all routes that are within the current namespace
         namespace_routes = determine_namespaced_routes(name, parent_route, routes)
-
-        # default case when not explicitly specified or nested == true
-        standalone_namespaces = namespaces.reject do |_, ns|
-          !ns.options.key?(:swagger) ||
-            !ns.options[:swagger].key?(:nested) ||
-            ns.options[:swagger][:nested] != false
-        end
 
         parent_standalone_namespaces = standalone_namespaces.select { |ns_name, _| name.start_with?(ns_name) }
         # add only to the main route
@@ -71,24 +71,15 @@ module GrapeSwagger
     end
 
     def route_namespace_equals?(route, name)
-      patterns = Enumerator.new do |yielder|
-        yielder << "/#{name}"
-        yielder << "/:version/#{name}"
-      end
-
-      patterns.any? { |p| route.namespace == p }
+      ["/#{name}", "/:version/#{name}"].any? { |p| route.namespace == p }
     end
 
     def route_path_start_with?(route, name)
-      patterns = Enumerator.new do |yielder|
-        if route.prefix
-          yielder << "/#{route.prefix}/#{name}"
-          yielder << "/#{route.prefix}/:version/#{name}"
-        else
-          yielder << "/#{name}"
-          yielder << "/:version/#{name}"
-        end
-      end
+      patterns = if route.prefix
+                   ["/#{route.prefix}/#{name}", "/#{route.prefix}/:version/#{name}"]
+                 else
+                   ["/#{name}", "/:version/#{name}"]
+                 end
 
       patterns.any? { |p| route.path.start_with?(p) }
     end

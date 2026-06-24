@@ -4,7 +4,7 @@ module GrapeSwagger
   module DocMethods
     class PathString
       class << self
-        def build(route, options = {})
+        def build(route, options = {}, request = nil)
           path = route.path.dup
           # always removing format
           path.sub!(/\(\.\w+?\)$/, '')
@@ -25,7 +25,7 @@ module GrapeSwagger
             path.sub!('/{version}', '')
           end
 
-          path = "#{OptionalObject.build(:base_path, options)}#{path}" if options[:add_base_path]
+          path = "#{OptionalObject.build(:base_path, options, request)}#{path}" if options[:add_base_path]
 
           [item, path.start_with?('/') ? path : "/#{path}"]
         end

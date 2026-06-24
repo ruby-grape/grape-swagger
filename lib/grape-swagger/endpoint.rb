@@ -77,12 +77,12 @@ module Grape
     end
 
     # building path and definitions objects
-    def path_and_definition_objects(namespace_routes, options)
+    def path_and_definition_objects(namespace_routes, options, request = nil)
       @paths = {}
       @definitions = {}
       add_definitions_from options[:models]
       namespace_routes.each_value do |routes|
-        path_item(routes, options)
+        path_item(routes, options, request)
       end
 
       [@paths, @definitions]
@@ -95,11 +95,11 @@ module Grape
     end
 
     # path object
-    def path_item(routes, options)
+    def path_item(routes, options, request = nil)
       routes.each do |route|
         next if hidden?(route, options)
 
-        @item, path = GrapeSwagger::DocMethods::PathString.build(route, options)
+        @item, path = GrapeSwagger::DocMethods::PathString.build(route, options, request)
         @entity = route.entity || route.options[:success]
 
         verb, method_object = method_object(route, options, path)

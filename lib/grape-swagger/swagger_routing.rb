@@ -43,7 +43,9 @@ module GrapeSwagger
         # fetch all routes that are within the current namespace
         namespace_routes = determine_namespaced_routes(name, parent_route, routes)
 
-        parent_standalone_namespaces = standalone_namespaces.select { |ns_name, _| name.start_with?(ns_name) }
+        parent_standalone_namespaces = standalone_namespaces.select do |ns_name, _|
+          name == ns_name || name.start_with?("#{ns_name}/")
+        end
         # add only to the main route
         # if the namespace is not within any other namespace appearing as standalone resource
         # rubocop:disable Style/Next

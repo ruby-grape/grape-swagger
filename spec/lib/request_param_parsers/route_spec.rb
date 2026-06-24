@@ -49,7 +49,7 @@ describe GrapeSwagger::RequestParamParsers::Route do
       end
     end
 
-    context 'when route.params has symbol keys but namespace options use string keys' do
+    context 'when route.params contains only symbol-keyed params' do
       let(:stackable) { Grape::Util::StackableValues.new }
       let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: stackable) }
       let(:app) { instance_double('app', inheritable_setting:) }

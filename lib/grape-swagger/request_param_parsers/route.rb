@@ -57,7 +57,7 @@ module GrapeSwagger
         namespaces = stackable_values.new_values[:namespace] || []
 
         namespaces.each_with_object({}) do |namespace, params|
-          space = namespace.space.to_s.gsub(':', '')
+          space = namespace.space.to_s.delete_prefix(':')
           params[space.to_sym] = namespace.options || {}
         end
       end

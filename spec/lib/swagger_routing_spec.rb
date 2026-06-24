@@ -30,4 +30,30 @@ describe GrapeSwagger::SwaggerRouting do
       end
     end
   end
+
+  describe '#combine_namespace_routes' do
+    let(:user_namespace) { instance_double('namespace', options: { swagger: { nested: false } }) }
+    let(:users_namespace) { instance_double('namespace', options: { swagger: { nested: true } }) }
+
+    it 'does not treat sibling namespaces with common prefixes as parent-child' do
+      namespaces = {
+        'user' => user_namespace,
+        'users' => users_namespace
+      }
+      user_route = instance_double('route')
+      users_route = instance_double('route')
+      routes = {
+        'user' => [user_route],
+        'users' => [users_route]
+      }
+
+      allow(routing).to receive(:determine_namespaced_routes) do |name, _, _|
+        routes.fetch(name)
+      end
+
+      expect(routing.send(:combine_namespace_routes, namespaces, routes)).to eq(
+        'users' => [users_route]
+      )
+    end
+  end
 end

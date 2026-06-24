@@ -16,7 +16,7 @@ module GrapeSwagger
         resource = route_match.captures.first
         resource = '/' if resource.empty?
         combined_routes[resource] ||= []
-        next if doc_klass.hide_documentation_path && route.path.match(/#{doc_klass.mount_path}($|\/|\(\.)/)
+        next if doc_klass.hide_documentation_path && route.path.match(/#{Regexp.escape(doc_klass.mount_path)}($|\/|\(\.)/)
 
         combined_routes[resource] << route
       end

@@ -40,7 +40,7 @@ module GrapeSwagger
 
     def combine_namespaces(app)
       combined_namespaces = {}
-      endpoints = app.endpoints.clone
+      endpoints = app.endpoints.dup
 
       while endpoints.any?
         endpoint = endpoints.shift

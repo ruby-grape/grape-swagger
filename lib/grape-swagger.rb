@@ -50,5 +50,6 @@ end
 # the pre-namespace constants directly.
 SwaggerRouting = GrapeSwagger::SwaggerRouting
 SwaggerDocumentationAdder = GrapeSwagger::SwaggerDocumentationAdder
+Object.send(:deprecate_constant, :SwaggerRouting, :SwaggerDocumentationAdder)
 
 GrapeInstance.extend(GrapeSwagger::SwaggerDocumentationAdder)

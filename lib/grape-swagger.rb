@@ -46,4 +46,9 @@ module GrapeSwagger
   }.freeze
 end
 
+# Temporary compatibility aliases for downstream code that still references
+# the pre-namespace constants directly.
+SwaggerRouting = GrapeSwagger::SwaggerRouting
+SwaggerDocumentationAdder = GrapeSwagger::SwaggerDocumentationAdder
+
 GrapeInstance.extend(GrapeSwagger::SwaggerDocumentationAdder)

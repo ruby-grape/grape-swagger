@@ -15,3 +15,13 @@ describe GrapeInstance do
     expect(described_class).to respond_to :combined_namespaces
   end
 end
+
+describe 'top-level compatibility aliases' do
+  it 'keeps SwaggerRouting available at the top level' do
+    expect(SwaggerRouting).to equal(GrapeSwagger::SwaggerRouting)
+  end
+
+  it 'keeps SwaggerDocumentationAdder available at the top level' do
+    expect(SwaggerDocumentationAdder).to equal(GrapeSwagger::SwaggerDocumentationAdder)
+  end
+end

@@ -3,6 +3,7 @@
 ### Upgrading to >= 2.2.0
 
 - **Minimum Grape version is now `>= 2.1`** (was `>= 1.7`). Grape 1.8.0 and 2.0.0 cannot be used on Ruby 3.3+ because of an upstream Mustermann/forwardable incompatibility; the CI rows for those combinations were already failing on `master` and have been removed.
+- **`SwaggerRouting` and `SwaggerDocumentationAdder` are now also namespaced under `GrapeSwagger::`**. The top-level constants remain as compatibility aliases for now; prefer `GrapeSwagger::SwaggerRouting` and `GrapeSwagger::SwaggerDocumentationAdder` in downstream code.
 - **`type: 'Object'` (and other string type names) in `params` blocks**: Grape 3.2+ rejects string type names. If you previously declared a swagger-only documentation hint via `params { optional :foo, type: 'Object' }`, move the type under `documentation:`:
 
   ```ruby

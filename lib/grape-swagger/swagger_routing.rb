@@ -33,11 +33,7 @@ module GrapeSwagger
     def combine_namespace_routes(namespaces, routes)
       combined_namespace_routes = {}
       # default case when not explicitly specified or nested == true
-      standalone_namespaces = namespaces.reject do |_, ns|
-        !ns.options.key?(:swagger) ||
-          !ns.options[:swagger].key?(:nested) ||
-          ns.options[:swagger][:nested] != false
-      end
+      standalone_namespaces = namespaces.select { |_, ns| ns.options.dig(:swagger, :nested) == false }
 
       # iterate over each single namespace
       namespaces.each_key do |name|

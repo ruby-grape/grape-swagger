@@ -30,7 +30,7 @@ module GrapeSwagger
         params = {}
 
         while stackable_values.is_a?(Grape::Util::StackableValues)
-          params.merge!(fetch_inherited_params(stackable_values))
+          params = fetch_inherited_params(stackable_values).merge(params)
           stackable_values = stackable_values.inherited_values
         end
 

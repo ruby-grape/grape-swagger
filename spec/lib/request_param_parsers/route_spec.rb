@@ -66,6 +66,29 @@ describe GrapeSwagger::RequestParamParsers::Route do
         )
       end
     end
+
+    context 'when inherited namespace stackable values redefine the same path param' do
+      let(:root_stackable) { Grape::Util::StackableValues.new }
+      let(:nested_stackable) { Grape::Util::StackableValues.new(root_stackable) }
+      let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: nested_stackable) }
+      let(:app) { instance_double('app', inheritable_setting:) }
+
+      before do
+        root_stackable[:namespace] = instance_double('namespace', space: ':id', options: { required: true, type: 'Integer' })
+        nested_stackable[:namespace] = instance_double('namespace', space: ':id', options: { required: true, type: 'String' })
+
+        allow(route).to receive(:app).and_return(app)
+        allow(route).to receive(:params).and_return(
+          'id' => {}
+        )
+      end
+
+      it 'keeps the innermost namespace options for the path param' do
+        expect(parse_request_params).to eq(
+          id: { required: true, type: 'String' }
+        )
+      end
+    end
   end
 
   describe '#fulfill_params' do

@@ -32,25 +32,18 @@ module GrapeSwagger
 
     def combine_namespace_routes(namespaces, routes)
       combined_namespace_routes = {}
-      # default case when not explicitly specified or nested == true
       standalone_namespaces = namespaces.select { |_, ns| ns.options.dig(:swagger, :nested) == false }
 
-      # iterate over each single namespace
       namespaces.each_key do |name|
-        # get the parent route for the namespace
         parent_route_name = extract_parent_route(name)
         parent_route = routes[parent_route_name]
-        # fetch all routes that are within the current namespace
         namespace_routes = determine_namespaced_routes(name, parent_route, routes)
 
         parent_standalone_namespaces = standalone_namespaces.select do |ns_name, _|
           name == ns_name || name.start_with?("#{ns_name}/")
         end
-        # add only to the main route
-        # if the namespace is not within any other namespace appearing as standalone resource
         # rubocop:disable Style/Next
         if parent_standalone_namespaces.empty?
-          # default option, append namespace methods to parent route
           combined_namespace_routes[parent_route_name] ||= []
           combined_namespace_routes[parent_route_name].push(*namespace_routes)
         end

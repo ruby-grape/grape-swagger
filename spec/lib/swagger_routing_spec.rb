@@ -21,6 +21,16 @@ describe GrapeSwagger::SwaggerRouting do
       end
     end
 
+    context 'when route.prefix is nil' do
+      let(:route) { instance_double('route', path: '/widgets', prefix: nil) }
+      let(:routes) { [route] }
+      let(:doc_klass) { instance_double('doc_klass', hide_documentation_path: false) }
+
+      it 'treats the prefix as an empty string when extracting the resource name' do
+        expect(routing.send(:combine_routes, app, doc_klass)).to eq('widgets' => [route])
+      end
+    end
+
     context 'when mount_path contains regexp metacharacters' do
       let(:route) { instance_double('route', path: '/swagger.doc+v1', prefix: nil) }
       let(:routes) { [route] }
@@ -48,6 +58,16 @@ describe GrapeSwagger::SwaggerRouting do
         allow(app).to receive(:endpoints).and_return([endpoint])
 
         expect(app.send(:combine_namespaces, app)).to eq('foo/bar/bar/widgets' => namespace)
+      end
+    end
+  end
+
+  describe '#route_path_start_with?' do
+    context 'when route.prefix is an empty string' do
+      let(:route) { instance_double('route', prefix: '', path: '/widgets/details') }
+
+      it 'treats the route as unprefixed' do
+        expect(routing.send(:route_path_start_with?, route, 'widgets')).to be(true)
       end
     end
   end

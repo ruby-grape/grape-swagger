@@ -225,6 +225,39 @@ describe GrapeSwagger::RequestParamParsers::Route do
         )
       end
     end
+
+    context 'when inherited namespace stackable values override array options' do
+      let(:root_stackable) { Grape::Util::StackableValues.new }
+      let(:nested_stackable) { Grape::Util::StackableValues.new(root_stackable) }
+      let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: nested_stackable) }
+      let(:app) { instance_double('app', inheritable_setting:) }
+
+      before do
+        root_stackable[:namespace] = instance_double(
+          'namespace',
+          space: ':id',
+          options: { documentation: { values: %w[outer-a outer-b] } }
+        )
+        nested_stackable[:namespace] = instance_double(
+          'namespace',
+          space: ':id',
+          options: { documentation: { values: %w[inner-a inner-b] } }
+        )
+
+        allow(route).to receive(:app).and_return(app)
+        allow(route).to receive(:params).and_return(
+          'id' => {}
+        )
+      end
+
+      it 'replaces outer arrays with inner arrays' do
+        expect(parse_request_params).to eq(
+          id: {
+            documentation: { values: %w[inner-a inner-b] }
+          }
+        )
+      end
+    end
   end
 
   describe '#fulfill_params' do

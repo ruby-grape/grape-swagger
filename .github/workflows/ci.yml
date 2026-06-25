@@ -51,7 +51,6 @@ jobs:
           - { ruby: '3.3', grape: '3.2.1' }
           - { ruby: '3.4', grape: '3.2.1' }
           - { ruby: 'head', grape: '3.2.1' }
-          - { ruby: '3.2', grape: 'HEAD' }
           - { ruby: '3.3', grape: 'HEAD' }
           - { ruby: '3.4', grape: 'HEAD' }
     name: test (ruby=${{ matrix.entry.ruby }}, grape=${{ matrix.entry.grape }})

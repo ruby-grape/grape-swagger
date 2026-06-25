@@ -67,6 +67,42 @@ describe GrapeSwagger::RequestParamParsers::Route do
       end
     end
 
+    context 'when namespace space is a colon-prefixed string for a symbol-keyed param' do
+      let(:stackable) { Grape::Util::StackableValues.new }
+      let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: stackable) }
+      let(:app) { instance_double('app', inheritable_setting:) }
+
+      before do
+        stackable[:namespace] = instance_double('namespace', space: ':account_id', options: { required: true, type: 'Integer' })
+        allow(route).to receive(:app).and_return(app)
+        allow(route).to receive(:params).and_return(account_id: {})
+      end
+
+      it 'resolves the namespace space to the matching symbol key' do
+        expect(parse_request_params).to eq(
+          account_id: { required: true, type: 'Integer' }
+        )
+      end
+    end
+
+    context 'when namespace space has more than one leading colon' do
+      let(:stackable) { Grape::Util::StackableValues.new }
+      let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: stackable) }
+      let(:app) { instance_double('app', inheritable_setting:) }
+
+      before do
+        stackable[:namespace] = instance_double('namespace', space: '::id', options: { required: true, type: 'Integer' })
+        allow(route).to receive(:app).and_return(app)
+        allow(route).to receive(:params).and_return(':id' => {})
+      end
+
+      it 'strips only one leading colon from the namespace space' do
+        expect(parse_request_params).to eq(
+          ':id': { required: true, type: 'Integer' }
+        )
+      end
+    end
+
     context 'when inherited namespace stackable values redefine the same path param' do
       let(:root_stackable) { Grape::Util::StackableValues.new }
       let(:nested_stackable) { Grape::Util::StackableValues.new(root_stackable) }
@@ -152,6 +188,39 @@ describe GrapeSwagger::RequestParamParsers::Route do
         expect(parse_request_params).to eq(
           id: {
             documentation: { type: 'integer', format: 'int64', desc: 'inner description' }
+          }
+        )
+      end
+    end
+
+    context 'when inherited namespace stackable values partially override deeply nested hashes' do
+      let(:root_stackable) { Grape::Util::StackableValues.new }
+      let(:nested_stackable) { Grape::Util::StackableValues.new(root_stackable) }
+      let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: nested_stackable) }
+      let(:app) { instance_double('app', inheritable_setting:) }
+
+      before do
+        root_stackable[:namespace] = instance_double(
+          'namespace',
+          space: ':id',
+          options: { documentation: { schema: { type: 'integer', format: 'int64' } } }
+        )
+        nested_stackable[:namespace] = instance_double(
+          'namespace',
+          space: ':id',
+          options: { documentation: { schema: { desc: 'inner description' } } }
+        )
+
+        allow(route).to receive(:app).and_return(app)
+        allow(route).to receive(:params).and_return(
+          'id' => {}
+        )
+      end
+
+      it 'deep merges beyond one nested hash level' do
+        expect(parse_request_params).to eq(
+          id: {
+            documentation: { schema: { type: 'integer', format: 'int64', desc: 'inner description' } }
           }
         )
       end

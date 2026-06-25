@@ -48,10 +48,8 @@ end
 
 # Temporary compatibility aliases for downstream code that still references
 # the pre-namespace constants directly.
-unless defined?(SwaggerRouting)
-  SwaggerRouting = GrapeSwagger::SwaggerRouting
-  SwaggerDocumentationAdder = GrapeSwagger::SwaggerDocumentationAdder
-  Object.send(:deprecate_constant, :SwaggerRouting, :SwaggerDocumentationAdder)
-end
+SwaggerRouting = GrapeSwagger::SwaggerRouting
+SwaggerDocumentationAdder = GrapeSwagger::SwaggerDocumentationAdder
+Object.send(:deprecate_constant, :SwaggerRouting, :SwaggerDocumentationAdder)
 
 GrapeInstance.extend(GrapeSwagger::SwaggerDocumentationAdder)

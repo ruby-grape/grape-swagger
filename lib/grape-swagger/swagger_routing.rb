@@ -16,7 +16,9 @@ module GrapeSwagger
         resource = route_match.captures.first
         resource = '/' if resource.empty?
         combined_routes[resource] ||= []
-        next if doc_klass.hide_documentation_path && route.path.match(/#{Regexp.escape(doc_klass.mount_path)}($|\/|\(\.)/)
+        if doc_klass.hide_documentation_path && route.path.match(/#{Regexp.escape(doc_klass.mount_path)}($|\/|\(\.)/)
+          next
+        end
 
         combined_routes[resource] << route
       end
@@ -42,12 +44,10 @@ module GrapeSwagger
         parent_standalone_namespaces = standalone_namespaces.select do |ns_name, _|
           name == ns_name || name.start_with?("#{ns_name}/")
         end
-        # rubocop:disable Style/Next
         if parent_standalone_namespaces.empty?
           combined_namespace_routes[parent_route_name] ||= []
           combined_namespace_routes[parent_route_name].push(*namespace_routes)
         end
-        # rubocop:enable Style/Next
       end
 
       combined_namespace_routes

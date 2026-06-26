@@ -30,11 +30,25 @@ module GrapeSwagger
         params = {}
 
         while stackable_values.is_a?(Grape::Util::StackableValues)
-          params.merge!(fetch_inherited_params(stackable_values))
+          params = merge_path_params(fetch_inherited_params(stackable_values), params)
           stackable_values = stackable_values.inherited_values
         end
 
         params
+      end
+
+      def merge_path_params(outer_params, inner_params)
+        outer_params.merge(inner_params) do |_key, outer_options, inner_options|
+          merge_path_param_options(outer_options, inner_options)
+        end
+      end
+
+      def merge_path_param_options(outer_options, inner_options)
+        return inner_options unless outer_options.is_a?(Hash) && inner_options.is_a?(Hash)
+
+        outer_options.merge(inner_options) do |_key, outer_value, inner_value|
+          merge_path_param_options(outer_value, inner_value)
+        end
       end
 
       def fetch_inherited_params(stackable_values)
@@ -43,8 +57,8 @@ module GrapeSwagger
         namespaces = stackable_values.new_values[:namespace] || []
 
         namespaces.each_with_object({}) do |namespace, params|
-          space = namespace.space.to_s.gsub(':', '')
-          params[space] = namespace.options || {}
+          space = namespace.space.to_s.delete_prefix(':')
+          params[space.to_sym] = namespace.options || {}
         end
       end
 
@@ -110,7 +124,8 @@ module GrapeSwagger
 
           defined_options = definition.is_a?(Hash) ? definition : {}
           defined_options = restore_variant_type(defined_options, param, variant_types)
-          value = (path_params[param] || {}).merge(defined_options)
+          path_options = path_params[key] || {}
+          value = path_options.merge(defined_options)
           accum[key] = value.empty? ? DEFAULT_PARAM_TYPE : value
         end
       end

@@ -59,7 +59,7 @@ describe 'setting of param type, such as `query`, `path`, `formData`, `body`, `h
         namespace :with_entity_param do
           desc 'put in body with entity parameter'
           params do
-            optional :data, type: ::Entities::NestedModule::ApiResponse, documentation: { desc: 'request data' }
+            optional :data, type: String, documentation: { type: ::Entities::NestedModule::ApiResponse, desc: 'request data' }
           end
 
           post do

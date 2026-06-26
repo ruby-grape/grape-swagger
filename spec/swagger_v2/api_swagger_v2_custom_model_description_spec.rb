@@ -88,11 +88,11 @@ describe 'custom model documentation' do
       end
 
       it 'does not include example when not provided' do
-        expect(subject['definitions']['EntityWithDescriptionOnly']['example']).to be_nil
+        expect(subject['definitions']['EntityWithDescriptionOnly']).not_to have_key('example')
       end
 
       it 'does not include example when no documentation method' do
-        expect(subject['definitions']['EntityWithoutDocumentation']['example']).to be_nil
+        expect(subject['definitions']['EntityWithoutDocumentation']).not_to have_key('example')
       end
     end
   end

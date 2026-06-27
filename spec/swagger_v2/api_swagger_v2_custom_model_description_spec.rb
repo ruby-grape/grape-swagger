@@ -115,5 +115,15 @@ describe 'custom model documentation' do
         expect(subject['definitions']['EntityWithFieldLevelDocumentation']).not_to have_key('example')
       end
     end
+
+    context 'with schema properties' do
+      it 'includes documented fields when custom model documentation is defined' do
+        expect(subject['definitions']['EntityWithCustomDocumentation']['properties'])
+          .to eq(
+            'id' => { 'type' => 'integer', 'format' => 'int32', 'description' => 'ID' },
+            'name' => { 'type' => 'string', 'description' => 'Name' }
+          )
+      end
+    end
   end
 end

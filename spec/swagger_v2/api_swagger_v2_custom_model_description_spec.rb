@@ -30,6 +30,11 @@ describe 'custom model documentation' do
       class EntityWithoutDocumentation < Grape::Entity
         expose :id, documentation: { type: Integer, desc: 'ID' }
       end
+
+      class EntityWithFieldLevelDocumentation < Grape::Entity
+        expose :desc, documentation: { type: String, desc: 'Description field' }
+        expose :example, documentation: { type: String, desc: 'Example field' }
+      end
     end
 
     module TheApi
@@ -52,6 +57,12 @@ describe 'custom model documentation' do
              entity: Entities::EntityWithoutDocumentation
         get '/without-documentation' do
           { id: 1 }
+        end
+
+        desc 'Returns entity with field-level documentation',
+             entity: Entities::EntityWithFieldLevelDocumentation
+        get '/with-field-level-documentation' do
+          { desc: 'Description', example: 'Example' }
         end
 
         add_swagger_documentation
@@ -79,6 +90,11 @@ describe 'custom model documentation' do
         expect(subject['definitions']['EntityWithoutDocumentation']['description'])
           .to eq('EntityWithoutDocumentation model')
       end
+
+      it 'does not use field documentation as a custom description' do
+        expect(subject['definitions']['EntityWithFieldLevelDocumentation']['description'])
+          .to eq('EntityWithFieldLevelDocumentation model')
+      end
     end
 
     context 'with custom example' do
@@ -93,6 +109,10 @@ describe 'custom model documentation' do
 
       it 'does not include example when no documentation method' do
         expect(subject['definitions']['EntityWithoutDocumentation']).not_to have_key('example')
+      end
+
+      it 'does not use field documentation as a custom example' do
+        expect(subject['definitions']['EntityWithFieldLevelDocumentation']).not_to have_key('example')
       end
     end
   end

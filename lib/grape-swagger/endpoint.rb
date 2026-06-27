@@ -470,7 +470,12 @@ module Grape
       return unless model.respond_to?(:documentation)
 
       doc = model.documentation
-      doc[:example] if doc.is_a?(Hash)
+      return unless doc.is_a?(Hash)
+
+      example = doc[:example]
+      return if example.is_a?(Hash) && (example.key?(:type) || example.key?(:desc))
+
+      example
     end
 
     def success_code_from_entity(route, entity)

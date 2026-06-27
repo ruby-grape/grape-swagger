@@ -462,7 +462,8 @@ module Grape
       return unless model.respond_to?(:documentation)
 
       doc = model.documentation
-      doc[:desc] if doc.is_a?(Hash)
+      desc = doc[:desc] if doc.is_a?(Hash)
+      desc if desc.is_a?(String)
     end
 
     def model_example(model)

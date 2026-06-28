@@ -47,7 +47,30 @@ describe 'custom model documentation' do
         expose :desc, documentation: { type: String, desc: 'Description field' }
         expose :example, documentation: { type: String, desc: 'Example field' }
       end
+
+      class ModelWithExamplePropertyDocumentation
+        def self.documentation
+          {
+            example: { type: String, desc: 'Example field' },
+            name: { type: String, desc: 'Name' }
+          }
+        end
+
+        def self.parse(value)
+          value
+        end
+      end
     end
+
+    class ExamplePropertyDocumentationParser
+      def initialize(model, endpoint); end
+
+      def call
+        Entities::ModelWithExamplePropertyDocumentation.documentation
+      end
+    end
+
+    GrapeSwagger.model_parsers.register(ExamplePropertyDocumentationParser, Entities::ModelWithExamplePropertyDocumentation)
 
     module TheApi
       class CustomModelDocumentationApi < Grape::API
@@ -81,6 +104,12 @@ describe 'custom model documentation' do
              entity: Entities::EntityWithFieldLevelDocumentation
         get '/with-field-level-documentation' do
           { desc: 'Description', example: 'Example' }
+        end
+
+        desc 'Returns model with an example property',
+             entity: Entities::ModelWithExamplePropertyDocumentation
+        get '/with-example-property-documentation' do
+          { example: 'Example', name: 'Jane' }
         end
 
         add_swagger_documentation
@@ -136,6 +165,10 @@ describe 'custom model documentation' do
 
       it 'does not use field documentation as a custom example' do
         expect(subject['definitions']['EntityWithFieldLevelDocumentation']).not_to have_key('example')
+      end
+
+      it 'does not use non-entity property documentation as a custom example' do
+        expect(subject['definitions']['ModelWithExamplePropertyDocumentation']).not_to have_key('example')
       end
     end
 

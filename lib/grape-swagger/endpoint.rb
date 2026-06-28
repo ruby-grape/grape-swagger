@@ -474,7 +474,23 @@ module Grape
       return if defined?(Grape::Entity) && model.method(:documentation).owner == Grape::Entity.singleton_class
 
       doc = model.documentation
-      doc if doc.is_a?(Hash)
+      return unless doc.is_a?(Hash)
+      return unless (doc.keys - %i[desc example]).empty?
+      return if field_documentation?(doc[:example])
+
+      doc
+    end
+
+    def field_documentation?(value)
+      return false unless value.is_a?(Hash) && value[:type]
+      return false unless value.key?(:desc) || value.key?(:is_array) || value.key?(:required)
+
+      documentation_type?(value[:type])
+    end
+
+    def documentation_type?(value)
+      value.is_a?(Class) || value.is_a?(Module) || value.is_a?(Symbol) ||
+        %w[array boolean file integer link number object string text].include?(value)
     end
 
     def success_code_from_entity(route, entity)

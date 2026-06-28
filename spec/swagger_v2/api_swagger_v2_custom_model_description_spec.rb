@@ -27,6 +27,18 @@ describe 'custom model documentation' do
         expose :id, documentation: { type: Integer, desc: 'ID' }
       end
 
+      class EntityWithExampleTypeField < Grape::Entity
+        def self.documentation
+          {
+            example: { type: 'admin', desc: 'Administrator', name: 'Jane' }
+          }
+        end
+
+        expose :type, documentation: { type: String, desc: 'Type' }
+        expose :desc, documentation: { type: String, desc: 'Description' }
+        expose :name, documentation: { type: String, desc: 'Name' }
+      end
+
       class EntityWithoutDocumentation < Grape::Entity
         expose :id, documentation: { type: Integer, desc: 'ID' }
       end
@@ -51,6 +63,12 @@ describe 'custom model documentation' do
              entity: Entities::EntityWithDescriptionOnly
         get '/with-description-only' do
           { id: 1 }
+        end
+
+        desc 'Returns entity with example type field',
+             entity: Entities::EntityWithExampleTypeField
+        get '/with-example-type-field' do
+          { type: 'admin', desc: 'Administrator', name: 'Jane' }
         end
 
         desc 'Returns entity without documentation method',
@@ -101,6 +119,11 @@ describe 'custom model documentation' do
       it 'uses custom example from documentation method' do
         expect(subject['definitions']['EntityWithCustomDocumentation']['example'])
           .to eq({ 'id' => 123, 'name' => 'Example Name' })
+      end
+
+      it 'uses custom example with type and desc fields' do
+        expect(subject['definitions']['EntityWithExampleTypeField']['example'])
+          .to eq({ 'type' => 'admin', 'desc' => 'Administrator', 'name' => 'Jane' })
       end
 
       it 'does not include example when not provided' do

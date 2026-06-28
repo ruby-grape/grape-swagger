@@ -459,23 +459,22 @@ module Grape
     end
 
     def model_description(model)
-      return unless model.respond_to?(:documentation)
-
-      doc = model.documentation
-      desc = doc[:desc] if doc.is_a?(Hash)
+      doc = model_documentation(model)
+      desc = doc[:desc] if doc
       desc if desc.is_a?(String)
     end
 
     def model_example(model)
+      doc = model_documentation(model)
+      doc[:example] if doc
+    end
+
+    def model_documentation(model)
       return unless model.respond_to?(:documentation)
+      return if defined?(Grape::Entity) && model.method(:documentation).owner == Grape::Entity.singleton_class
 
       doc = model.documentation
-      return unless doc.is_a?(Hash)
-
-      example = doc[:example]
-      return if example.is_a?(Hash) && (example.key?(:type) || example.key?(:desc))
-
-      example
+      doc if doc.is_a?(Hash)
     end
 
     def success_code_from_entity(route, entity)

@@ -482,10 +482,15 @@ module Grape
     end
 
     def field_documentation?(value)
-      return false unless value.is_a?(Hash) && value[:type]
-      return false unless value.key?(:desc) || value.key?(:is_array) || value.key?(:required)
+      return false unless value.is_a?(Hash)
+      return false unless (value.keys - documentation_keys).empty?
+      return true unless value[:type]
 
       documentation_type?(value[:type])
+    end
+
+    def documentation_keys
+      %i[default desc documentation hidden is_array param_type required type values]
     end
 
     def documentation_type?(value)

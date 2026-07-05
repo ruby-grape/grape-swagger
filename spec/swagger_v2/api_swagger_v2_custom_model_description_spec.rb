@@ -39,6 +39,16 @@ describe 'custom model documentation' do
         expose :name, documentation: { type: String, desc: 'Name' }
       end
 
+      class EntityWithExampleDescriptionField < Grape::Entity
+        def self.documentation
+          {
+            example: { type: 'string', description: 'Not real example data', format: 'email', in: 'body' }
+          }
+        end
+
+        expose :type, documentation: { type: String, desc: 'Type' }
+      end
+
       class EntityWithoutDocumentation < Grape::Entity
         expose :id, documentation: { type: Integer, desc: 'ID' }
       end
@@ -96,6 +106,12 @@ describe 'custom model documentation' do
              entity: Entities::EntityWithExampleTypeField
         get '/with-example-type-field' do
           { type: 'admin', desc: 'Administrator', name: 'Jane' }
+        end
+
+        desc 'Returns entity with example description field',
+             entity: Entities::EntityWithExampleDescriptionField
+        get '/with-example-description-field' do
+          { type: 'admin' }
         end
 
         desc 'Returns entity without documentation method',
@@ -183,6 +199,10 @@ describe 'custom model documentation' do
 
       it 'does not use non-entity property documentation as a custom example' do
         expect(subject['definitions']['ModelWithExamplePropertyDocumentation']).not_to have_key('example')
+      end
+
+      it 'does not use field documentation with description/format/in keys as a custom example' do
+        expect(subject['definitions']['EntityWithExampleDescriptionField']).not_to have_key('example')
       end
     end
 

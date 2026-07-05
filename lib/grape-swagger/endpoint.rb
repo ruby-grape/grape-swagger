@@ -494,7 +494,10 @@ module Grape
     end
 
     def documentation_keys
-      %i[default desc documentation hidden is_array param_type required type values]
+      %i[
+        collectionFormat default desc description documentation format hidden
+        in is_array param_type required type values
+      ]
     end
 
     def documentation_type?(value)

@@ -8,6 +8,7 @@
 #### Fixes
 
 * [#978](https://github.com/ruby-grape/grape-swagger/pull/978): Fix Grape 3.2+ compatibility: desc kwargs, custom types, multi-type param recovery; bump Grape to `>= 2.1, < 5.0`. See [UPGRADING](UPGRADING.md) - [@numbata](https://github.com/numbata).
+* [#982](https://github.com/ruby-grape/grape-swagger/pull/982): Fix test suite compatibility with Grape 4.0 (grape=HEAD CI) - [@numbata](https://github.com/numbata).
 * Your contribution here.
 
 ### 2.1.4 (2026-02-02)

@@ -2,7 +2,17 @@
 
 module RouteHelper
   def self.build(method:, pattern:, options:, origin: nil)
-    if GrapeVersion.satisfy?('>= 3.1.0')
+    if GrapeVersion.satisfy?('>= 4.0.0')
+      pattern_obj = Grape::Router::Pattern.new(
+        origin: origin || pattern,
+        suffix: nil,
+        anchor: options.fetch(:anchor, true),
+        params: options.fetch(:params, {}),
+        version: nil,
+        requirements: options.fetch(:requirements, {})
+      )
+      Grape::Router::Route.new(nil, method, pattern_obj, options, forward_match: options.fetch(:forward_match, false))
+    elsif GrapeVersion.satisfy?('>= 3.1.0')
       pattern_obj = Grape::Router::Pattern.new(
         origin: origin || pattern,
         suffix: nil,

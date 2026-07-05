@@ -49,6 +49,16 @@ describe 'custom model documentation' do
         expose :type, documentation: { type: String, desc: 'Type' }
       end
 
+      class EntityWithCapitalizedTypeExampleField < Grape::Entity
+        def self.documentation
+          {
+            example: { type: 'String', desc: 'Not real example data' }
+          }
+        end
+
+        expose :value, documentation: { type: String, desc: 'Value' }
+      end
+
       class EntityWithoutDocumentation < Grape::Entity
         expose :id, documentation: { type: Integer, desc: 'ID' }
       end
@@ -141,6 +151,12 @@ describe 'custom model documentation' do
              entity: Entities::EntityWithExampleDescriptionField
         get '/with-example-description-field' do
           { type: 'admin' }
+        end
+
+        desc 'Returns entity with capitalized string type in example field',
+             entity: Entities::EntityWithCapitalizedTypeExampleField
+        get '/with-capitalized-type-example-field' do
+          { value: 'ok' }
         end
 
         desc 'Returns entity without documentation method',
@@ -250,6 +266,10 @@ describe 'custom model documentation' do
 
       it 'does not use field documentation with description/format/in keys as a custom example' do
         expect(subject['definitions']['EntityWithExampleDescriptionField']).not_to have_key('example')
+      end
+
+      it 'does not use field documentation with a capitalized string type as a custom example' do
+        expect(subject['definitions']['EntityWithCapitalizedTypeExampleField']).not_to have_key('example')
       end
     end
 

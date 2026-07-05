@@ -505,8 +505,10 @@ module Grape
     end
 
     def documentation_type?(value)
-      value.is_a?(Class) || value.is_a?(Module) || value.is_a?(Symbol) ||
-        %w[array boolean file integer link number object string text].include?(value)
+      return true if value.is_a?(Class) || value.is_a?(Module) || value.is_a?(Symbol)
+      return false unless value.is_a?(String)
+
+      %w[array boolean file integer link number object string text].include?(value.downcase)
     end
 
     def success_code_from_entity(route, entity)

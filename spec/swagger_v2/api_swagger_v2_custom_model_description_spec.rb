@@ -53,6 +53,35 @@ describe 'custom model documentation' do
         expose :id, documentation: { type: Integer, desc: 'ID' }
       end
 
+      class EntityOnlyReferencedByString < Grape::Entity
+        def self.documentation
+          { desc: 'Referenced only via a string model name', example: { value: 'ok' } }
+        end
+
+        expose :value, documentation: { type: String, desc: 'Value' }
+      end
+
+      class EntityWithCallCountingDocumentation < Grape::Entity
+        def self.documentation_call_count
+          @documentation_call_count ||= 0
+        end
+
+        def self.documentation
+          @documentation_call_count = documentation_call_count + 1
+          { desc: "Description from call #{documentation_call_count}", example: { call: documentation_call_count } }
+        end
+
+        expose :call, documentation: { type: Integer, desc: 'Call' }
+      end
+
+      class EntityWithRaisingDocumentation < Grape::Entity
+        def self.documentation
+          raise 'boom'
+        end
+
+        expose :id, documentation: { type: Integer, desc: 'ID' }
+      end
+
       class EntityWithFieldLevelDocumentation < Grape::Entity
         expose :desc, documentation: { type: String, desc: 'Description field' }
         expose :example, documentation: { type: String, desc: 'Example field' }
@@ -117,6 +146,24 @@ describe 'custom model documentation' do
         desc 'Returns entity without documentation method',
              entity: Entities::EntityWithoutDocumentation
         get '/without-documentation' do
+          { id: 1 }
+        end
+
+        desc 'Returns entity referenced by a string model name',
+             failure: [{ code: 400, message: 'Error', model: 'Entities::EntityOnlyReferencedByString' }]
+        get '/with-string-model-reference' do
+          { value: 'ok' }
+        end
+
+        desc 'Returns entity with call-counting documentation',
+             entity: Entities::EntityWithCallCountingDocumentation
+        get '/with-call-counting-documentation' do
+          { call: 1 }
+        end
+
+        desc 'Returns entity whose documentation method raises',
+             entity: Entities::EntityWithRaisingDocumentation
+        get '/with-raising-documentation' do
           { id: 1 }
         end
 
@@ -203,6 +250,34 @@ describe 'custom model documentation' do
 
       it 'does not use field documentation with description/format/in keys as a custom example' do
         expect(subject['definitions']['EntityWithExampleDescriptionField']).not_to have_key('example')
+      end
+    end
+
+    context 'with a model referenced by string' do
+      it 'applies custom documentation when the model is referenced by a string class name' do
+        expect(subject['definitions']['EntityOnlyReferencedByString']['description'])
+          .to eq('Referenced only via a string model name')
+        expect(subject['definitions']['EntityOnlyReferencedByString']['example'])
+          .to eq({ 'value' => 'ok' })
+      end
+    end
+
+    context 'with a non-idempotent documentation method' do
+      it 'derives description and example from a single documentation invocation' do
+        description = subject['definitions']['EntityWithCallCountingDocumentation']['description']
+        example = subject['definitions']['EntityWithCallCountingDocumentation']['example']
+
+        expect(description).to eq("Description from call #{example['call']}")
+      end
+    end
+
+    context 'when the documentation method raises' do
+      it 'does not crash swagger doc generation and falls back to the default description' do
+        documentation = subject
+
+        expect(last_response.status).to eq(200)
+        expect(documentation['definitions']['EntityWithRaisingDocumentation']['description'])
+          .to eq('EntityWithRaisingDocumentation model')
       end
     end
 

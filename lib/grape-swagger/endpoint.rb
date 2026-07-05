@@ -218,7 +218,8 @@ module Grape
         next unless @definitions[response_model]
         next if response_model.start_with?('Swagger_doc')
 
-        apply_model_documentation(response_model, value[:model])
+        model_for_documentation = value[:model].is_a?(String) ? value[:model].constantize : value[:model]
+        apply_model_documentation(response_model, model_for_documentation)
         build_memo_schema(memo, route, value, response_model, options)
         memo[value[:code]][:examples] = value[:examples] if value[:examples]
       end
@@ -457,19 +458,18 @@ module Grape
     end
 
     def apply_model_documentation(response_model, model)
-      @definitions[response_model][:description] ||= model_description(model) || "#{response_model} model"
-      example = model_example(model)
+      doc = model_documentation(model)
+      @definitions[response_model][:description] ||= model_description(doc) || "#{response_model} model"
+      example = model_example(doc)
       @definitions[response_model][:example] ||= example unless example.nil?
     end
 
-    def model_description(model)
-      doc = model_documentation(model)
+    def model_description(doc)
       desc = doc[:desc] if doc
       desc if desc.is_a?(String)
     end
 
-    def model_example(model)
-      doc = model_documentation(model)
+    def model_example(doc)
       doc[:example] if doc
     end
 
@@ -477,7 +477,11 @@ module Grape
       return unless model.respond_to?(:documentation)
       return if defined?(Grape::Entity) && model.method(:documentation).owner == Grape::Entity.singleton_class
 
-      doc = model.documentation
+      doc = begin
+        model.documentation
+      rescue StandardError
+        nil
+      end
       return unless doc.is_a?(Hash)
       return unless (doc.keys - %i[desc example]).empty?
       return if field_documentation?(doc[:example])

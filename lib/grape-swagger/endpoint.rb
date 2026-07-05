@@ -218,9 +218,7 @@ module Grape
         next unless @definitions[response_model]
         next if response_model.start_with?('Swagger_doc')
 
-        @definitions[response_model][:description] ||= model_description(value[:model]) || "#{response_model} model"
-        example = model_example(value[:model])
-        @definitions[response_model][:example] ||= example unless example.nil?
+        apply_model_documentation(response_model, value[:model])
         build_memo_schema(memo, route, value, response_model, options)
         memo[value[:code]][:examples] = value[:examples] if value[:examples]
       end
@@ -456,6 +454,12 @@ module Grape
       else
         value.dig(:documentation, :hidden)
       end
+    end
+
+    def apply_model_documentation(response_model, model)
+      @definitions[response_model][:description] ||= model_description(model) || "#{response_model} model"
+      example = model_example(model)
+      @definitions[response_model][:example] ||= example unless example.nil?
     end
 
     def model_description(model)

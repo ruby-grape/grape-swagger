@@ -100,7 +100,7 @@ module Grape
         next if hidden?(route, options)
 
         @item, path = GrapeSwagger::DocMethods::PathString.build(route, options)
-        @entity = route.entity || route.options[:success]
+        @entity = route.entity || route.success
 
         verb, method_object = method_object(route, options, path)
 
@@ -123,7 +123,7 @@ module Grape
       method[:parameters]  = params_object(route, options, path, method[:consumes])
       method[:security]    = security_object(route)
       method[:responses]   = response_object(route, options)
-      method[:tags]        = route.options.fetch(:tags, tag_object(route, path))
+      method[:tags]        = route.options.key?(:tags) ? route.tags : tag_object(route, path)
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method[:deprecated] = deprecated_object(route)
       method.delete_if { |_, value| value.nil? }
@@ -132,36 +132,36 @@ module Grape
     end
 
     def deprecated_object(route)
-      route.options[:deprecated] if route.options.key?(:deprecated)
+      route.deprecated
     end
 
     def security_object(route)
-      route.options[:security] if route.options.key?(:security)
+      route.security
     end
 
     def summary_object(route)
-      summary = route.options[:desc] if route.options.key?(:desc)
-      summary = route.description if route.description.present? && route.options.key?(:detail)
-      summary = route.options[:summary] if route.options.key?(:summary)
+      summary = route.desc if route.desc
+      summary = route.description if route.description.present? && route.detail
+      summary = route.summary if route.summary
 
       summary
     end
 
     def description_object(route)
       description = route.description if route.description.present?
-      description = route.options[:detail] if route.options.key?(:detail)
+      description = route.detail if route.detail
 
       description
     end
 
     def produces_object(route, format)
-      return ['application/octet-stream'] if file_response?(route.options[:success]) &&
-                                             !route.options[:produces].present?
+      return ['application/octet-stream'] if file_response?(route.success) &&
+                                             !route.produces.present?
 
       mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format)
 
       route_mime_types = %i[formats content_types produces].map do |producer|
-        possible = route.options[producer]
+        possible = route.public_send(producer)
         GrapeSwagger::DocMethods::ProducesConsumes.call(possible) if possible.present?
       end.flatten.compact.uniq
 
@@ -241,7 +241,7 @@ module Grape
         route.http_codes.clone
       else
         success_codes_from_route(route) + default_code_from_route(route) +
-          (route.http_codes || route.options[:failure] || [])
+          (route.http_codes || route.failure || [])
       end
     end
 
@@ -269,7 +269,7 @@ module Grape
     private
 
     def default_code_from_route(route)
-      entity = route.options[:default_response]
+      entity = route.default_response
       return [] if entity.nil?
 
       default_code = { code: 'default', message: 'Default Response' }
@@ -346,7 +346,7 @@ module Grape
 
       if value.key?(:as) && value.key?(:is_array)
         reference[value[:as]] = build_reference_array(reference[value[:as]])
-      elsif route.options[:is_array]
+      elsif route.is_array
         reference = build_reference_array(reference)
       end
 
@@ -363,7 +363,7 @@ module Grape
 
     def build_root(route, reference, response_model, settings)
       default_root = response_model.underscore
-      default_root = default_root.pluralize if route.options[:is_array]
+      default_root = default_root.pluralize if route.is_array
       case route.settings.dig(:swagger, :root)
       when true
         { type: 'object', properties: { default_root => reference } }
@@ -438,7 +438,8 @@ module Grape
 
     def hidden?(route, options)
       route_hidden = route.settings.try(:[], :swagger).try(:[], :hidden)
-      route_hidden = route.options[:hidden] if route.options.key?(:hidden)
+      hidden_val = route.hidden
+      route_hidden = hidden_val unless hidden_val.nil?
       return route_hidden unless route_hidden.is_a?(Proc)
 
       return route_hidden.call unless options[:token_owner]

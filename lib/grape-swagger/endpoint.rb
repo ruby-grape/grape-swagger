@@ -218,7 +218,8 @@ module Grape
         next unless @definitions[response_model]
         next if response_model.start_with?('Swagger_doc')
 
-        @definitions[response_model][:description] ||= "#{response_model} model"
+        model_for_documentation = value[:model].is_a?(String) ? value[:model].constantize : value[:model]
+        apply_model_documentation(response_model, model_for_documentation)
         build_memo_schema(memo, route, value, response_model, options)
         memo[value[:code]][:examples] = value[:examples] if value[:examples]
       end
@@ -454,6 +455,60 @@ module Grape
       else
         value.dig(:documentation, :hidden)
       end
+    end
+
+    def apply_model_documentation(response_model, model)
+      doc = model_documentation(model)
+      @definitions[response_model][:description] ||= model_description(doc) || "#{response_model} model"
+      example = model_example(doc)
+      @definitions[response_model][:example] ||= example unless example.nil?
+    end
+
+    def model_description(doc)
+      desc = doc[:desc] if doc
+      desc if desc.is_a?(String)
+    end
+
+    def model_example(doc)
+      doc[:example] if doc
+    end
+
+    def model_documentation(model)
+      return unless model.respond_to?(:documentation)
+      return if defined?(Grape::Entity) && model.method(:documentation).owner == Grape::Entity.singleton_class
+
+      doc = begin
+        model.documentation
+      rescue StandardError
+        nil
+      end
+      return unless doc.is_a?(Hash)
+      return unless (doc.keys - %i[desc example]).empty?
+      return if field_documentation?(doc[:example])
+
+      doc
+    end
+
+    def field_documentation?(value)
+      return false unless value.is_a?(Hash)
+      return false unless (value.keys - documentation_keys).empty?
+      return true unless value[:type]
+
+      documentation_type?(value[:type])
+    end
+
+    def documentation_keys
+      %i[
+        collectionFormat default desc description documentation format hidden
+        in is_array param_type required type values
+      ]
+    end
+
+    def documentation_type?(value)
+      return true if value.is_a?(Class) || value.is_a?(Module) || value.is_a?(Symbol)
+      return false unless value.is_a?(String)
+
+      %w[array boolean file integer link number object string text].include?(value.downcase)
     end
 
     def success_code_from_entity(route, entity)

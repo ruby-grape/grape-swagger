@@ -76,6 +76,7 @@
     - [Multiple present Response ](#multiple-present-response-)
 - [Using Grape Entities ](#using-grape-entities-)
   - [Documented class/definition](#documented-classdefinition)
+  - [Custom Model Description and Example](#custom-model-description-and-example)
   - [Relationships](#relationships)
     - [1xN](#1xn)
     - [1x1](#1x1)
@@ -1608,6 +1609,48 @@ Should generate the following definitions in your swagger json:
           "type": "url",
         },
       "description": "LinkedStatus model"
+    }
+  }
+}
+```
+
+### Custom Model Description and Example
+
+By default, a model's `description` in the generated swagger definition falls back to `"#{ModelName} model"`, and no `example` is set. You can override both by defining a `self.documentation` class method on the entity that returns a hash with `:desc` and/or `:example` keys. This is separate from field-level `documentation:` options passed to `expose`, and does not affect them:
+
+```ruby
+module API
+  module Entities
+    class User < Grape::Entity
+      def self.documentation
+        {
+          desc: 'Represents a user account',
+          example: { id: 1, name: 'John Doe', email: 'john@example.com' }
+        }
+      end
+
+      expose :id, documentation: { type: 'integer' }
+      expose :name, documentation: { type: 'string' }
+      expose :email, documentation: { type: 'string' }
+    end
+  end
+end
+```
+
+Should generate the following definition in your swagger json:
+
+```json
+{
+  "definitions": {
+    "API_Entities_User": {
+      "type": "object",
+      "description": "Represents a user account",
+      "example": { "id": 1, "name": "John Doe", "email": "john@example.com" },
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "email": { "type": "string" }
+      }
     }
   }
 }

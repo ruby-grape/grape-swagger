@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#973](https://github.com/ruby-grape/grape-swagger/pull/973): Support custom model descriptions and examples - [@numbata](https://github.com/numbata).
 * [#976](https://github.com/ruby-grape/grape-swagger/pull/976): Ruby 3.4 and refactor swagger documentation modules; deprecate top-level `SwaggerRouting` and `SwaggerDocumentationAdder` aliases in favor of `GrapeSwagger::...` - [@moskvin](https://github.com/moskvin).
 * Your contribution here.
 

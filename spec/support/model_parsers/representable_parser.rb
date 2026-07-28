@@ -91,6 +91,10 @@ RSpec.shared_context 'representable swagger example' do
 
         property :code, documentation: { type: Integer, desc: 'status code' }
         property :message, documentation: { type: String, desc: 'error message' }
+
+        # Custom types need a one-argument .parse for Grape to coerce them:
+        # `type: X` since Grape 3.2, `type: Array[X]` since Grape 4.0 (grape#2817).
+        def self.parse(val) = val
       end
 
       module NestedModule
@@ -100,7 +104,8 @@ RSpec.shared_context 'representable swagger example' do
           property :status, documentation: { type: String }
           property :error, documentation: { type: ::Entities::ApiError }
 
-          # Grape 3.2+ requires unknown types to implement .parse (arity 1)
+          # Custom types need a one-argument .parse for Grape to coerce them:
+          # `type: X` since Grape 3.2, `type: Array[X]` since Grape 4.0 (grape#2817).
           def self.parse(val) = val
         end
       end

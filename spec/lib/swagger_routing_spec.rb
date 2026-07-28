@@ -1,6 +1,17 @@
 # frozen_string_literal: true
 
 describe GrapeSwagger::SwaggerRouting do
+  # Grape::Util::StackableValues's constructor and writers are Grape-internal
+  # details that differ across supported Grape versions (and grape=HEAD), where
+  # the class is a read-only view with no `.new(0 args)` and no `[]=`.
+  # `combine_namespaces` only ever reads keys off it, so these specs stub that
+  # contract — `[](key) => Array` — rather than building a real instance.
+  def namespace_stackable_double(values)
+    instance_double('namespace_stackable').tap do |stackable|
+      allow(stackable).to receive(:[]) { |key| values[key] }
+    end
+  end
+
   let(:routing) do
     Class.new do
       include GrapeSwagger::SwaggerRouting
@@ -43,9 +54,10 @@ describe GrapeSwagger::SwaggerRouting do
 
     context 'when joined mount paths contain multiple double-slash runs' do
       it 'normalizes all doubled slashes in the namespace key' do
-        namespace_stackable = Grape::Util::StackableValues.new
-        namespace_stackable[:namespace] = namespace
-        namespace_stackable[:mount_path] = ['//foo/', '/bar']
+        namespace_stackable = namespace_stackable_double(
+          namespace: [namespace],
+          mount_path: ['//foo/', '/bar']
+        )
         endpoint = instance_double(
           'endpoint',
           endpoints: nil,
@@ -63,14 +75,16 @@ describe GrapeSwagger::SwaggerRouting do
 
     context 'when an endpoint exposes nested endpoints' do
       it 'processes sub-endpoints returned by the endpoint accessor' do
-        parent_namespace_stackable = Grape::Util::StackableValues.new
-        parent_namespace_stackable[:namespace] = namespace
-        parent_namespace_stackable[:mount_path] = ['/api']
+        parent_namespace_stackable = namespace_stackable_double(
+          namespace: [namespace],
+          mount_path: ['/api']
+        )
 
         child_namespace = instance_double('child_namespace', options: {})
-        child_namespace_stackable = Grape::Util::StackableValues.new
-        child_namespace_stackable[:namespace] = child_namespace
-        child_namespace_stackable[:mount_path] = ['/api', '/v1']
+        child_namespace_stackable = namespace_stackable_double(
+          namespace: [child_namespace],
+          mount_path: ['/api', '/v1']
+        )
 
         child_endpoint = instance_double(
           'child_endpoint',

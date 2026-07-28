@@ -1,6 +1,19 @@
 # frozen_string_literal: true
 
 describe GrapeSwagger::RequestParamParsers::Route do
+  # Grape::Util::StackableValues's constructor signature is a Grape-internal
+  # detail that differs across supported Grape versions (and grape=HEAD), so
+  # rather than calling `.new` directly, these specs harvest a real instance
+  # through the public API and stub its readers for the scenario under test.
+  def stackable_values_double(new_values, inherited_values = {})
+    harvested = Class.new(Grape::API) do
+      namespace(':harvest') { get('/probe') {} }
+    end.routes.first.app.inheritable_setting.namespace_stackable
+
+    allow(harvested).to receive_messages(new_values: new_values, inherited_values: inherited_values)
+    harvested
+  end
+
   let(:route) { instance_double('route', app: nil) }
   let(:parser) { described_class.new(route, nil, nil, nil) }
 
@@ -8,15 +21,16 @@ describe GrapeSwagger::RequestParamParsers::Route do
     subject(:parse_request_params) { described_class.parse(route, nil, nil, nil) }
 
     context 'when inherited namespace stackable values contain path params across levels' do
-      let(:root_stackable) { Grape::Util::StackableValues.new }
-      let(:nested_stackable) { Grape::Util::StackableValues.new(root_stackable) }
+      let(:root_stackable) do
+        stackable_values_double(namespace: [instance_double('namespace', space: ':account_id', options: { required: true, type: 'Integer' })])
+      end
+      let(:nested_stackable) do
+        stackable_values_double({ namespace: [instance_double('namespace', space: ':id', options: { required: true, type: 'String' })] }, root_stackable)
+      end
       let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: nested_stackable) }
       let(:app) { instance_double('app', inheritable_setting: inheritable_setting) }
 
       before do
-        root_stackable[:namespace] = instance_double('namespace', space: ':account_id', options: { required: true, type: 'Integer' })
-        nested_stackable[:namespace] = instance_double('namespace', space: ':id', options: { required: true, type: 'String' })
-
         allow(route).to receive(:app).and_return(app)
         allow(route).to receive(:params).and_return(
           'account_id' => {},
@@ -50,12 +64,13 @@ describe GrapeSwagger::RequestParamParsers::Route do
     end
 
     context 'when route.params contains only symbol-keyed params' do
-      let(:stackable) { Grape::Util::StackableValues.new }
+      let(:stackable) do
+        stackable_values_double(namespace: [instance_double('namespace', space: ':id', options: { required: true, type: 'Integer' })])
+      end
       let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: stackable) }
       let(:app) { instance_double('app', inheritable_setting:) }
 
       before do
-        stackable[:namespace] = instance_double('namespace', space: ':id', options: { required: true, type: 'Integer' })
         allow(route).to receive(:app).and_return(app)
         allow(route).to receive(:params).and_return(id: {})
       end
@@ -68,12 +83,13 @@ describe GrapeSwagger::RequestParamParsers::Route do
     end
 
     context 'when namespace space is a colon-prefixed string for a symbol-keyed param' do
-      let(:stackable) { Grape::Util::StackableValues.new }
+      let(:stackable) do
+        stackable_values_double(namespace: [instance_double('namespace', space: ':account_id', options: { required: true, type: 'Integer' })])
+      end
       let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: stackable) }
       let(:app) { instance_double('app', inheritable_setting:) }
 
       before do
-        stackable[:namespace] = instance_double('namespace', space: ':account_id', options: { required: true, type: 'Integer' })
         allow(route).to receive(:app).and_return(app)
         allow(route).to receive(:params).and_return(account_id: {})
       end
@@ -86,12 +102,13 @@ describe GrapeSwagger::RequestParamParsers::Route do
     end
 
     context 'when namespace space has more than one leading colon' do
-      let(:stackable) { Grape::Util::StackableValues.new }
+      let(:stackable) do
+        stackable_values_double(namespace: [instance_double('namespace', space: '::id', options: { required: true, type: 'Integer' })])
+      end
       let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: stackable) }
       let(:app) { instance_double('app', inheritable_setting:) }
 
       before do
-        stackable[:namespace] = instance_double('namespace', space: '::id', options: { required: true, type: 'Integer' })
         allow(route).to receive(:app).and_return(app)
         allow(route).to receive(:params).and_return(':id' => {})
       end
@@ -104,15 +121,16 @@ describe GrapeSwagger::RequestParamParsers::Route do
     end
 
     context 'when inherited namespace stackable values redefine the same path param' do
-      let(:root_stackable) { Grape::Util::StackableValues.new }
-      let(:nested_stackable) { Grape::Util::StackableValues.new(root_stackable) }
+      let(:root_stackable) do
+        stackable_values_double(namespace: [instance_double('namespace', space: ':id', options: { required: true, type: 'Integer' })])
+      end
+      let(:nested_stackable) do
+        stackable_values_double({ namespace: [instance_double('namespace', space: ':id', options: { required: true, type: 'String' })] }, root_stackable)
+      end
       let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: nested_stackable) }
       let(:app) { instance_double('app', inheritable_setting:) }
 
       before do
-        root_stackable[:namespace] = instance_double('namespace', space: ':id', options: { required: true, type: 'Integer' })
-        nested_stackable[:namespace] = instance_double('namespace', space: ':id', options: { required: true, type: 'String' })
-
         allow(route).to receive(:app).and_return(app)
         allow(route).to receive(:params).and_return(
           'id' => {}
@@ -127,23 +145,28 @@ describe GrapeSwagger::RequestParamParsers::Route do
     end
 
     context 'when inherited namespace stackable values partially override the same path param' do
-      let(:root_stackable) { Grape::Util::StackableValues.new }
-      let(:nested_stackable) { Grape::Util::StackableValues.new(root_stackable) }
+      let(:root_stackable) do
+        stackable_values_double(
+          namespace: [instance_double(
+            'namespace',
+            space: ':id',
+            options: { documentation: { type: 'integer', format: 'int64' } }
+          )]
+        )
+      end
+      let(:nested_stackable) do
+        stackable_values_double(
+          { namespace: [instance_double(
+            'namespace',
+            space: ':id',
+            options: { desc: 'inner description' }
+          )] }, root_stackable
+        )
+      end
       let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: nested_stackable) }
       let(:app) { instance_double('app', inheritable_setting:) }
 
       before do
-        root_stackable[:namespace] = instance_double(
-          'namespace',
-          space: ':id',
-          options: { documentation: { type: 'integer', format: 'int64' } }
-        )
-        nested_stackable[:namespace] = instance_double(
-          'namespace',
-          space: ':id',
-          options: { desc: 'inner description' }
-        )
-
         allow(route).to receive(:app).and_return(app)
         allow(route).to receive(:params).and_return(
           'id' => {}
@@ -161,23 +184,28 @@ describe GrapeSwagger::RequestParamParsers::Route do
     end
 
     context 'when inherited namespace stackable values partially override nested documentation' do
-      let(:root_stackable) { Grape::Util::StackableValues.new }
-      let(:nested_stackable) { Grape::Util::StackableValues.new(root_stackable) }
+      let(:root_stackable) do
+        stackable_values_double(
+          namespace: [instance_double(
+            'namespace',
+            space: ':id',
+            options: { documentation: { type: 'integer', format: 'int64' } }
+          )]
+        )
+      end
+      let(:nested_stackable) do
+        stackable_values_double(
+          { namespace: [instance_double(
+            'namespace',
+            space: ':id',
+            options: { documentation: { desc: 'inner description' } }
+          )] }, root_stackable
+        )
+      end
       let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: nested_stackable) }
       let(:app) { instance_double('app', inheritable_setting:) }
 
       before do
-        root_stackable[:namespace] = instance_double(
-          'namespace',
-          space: ':id',
-          options: { documentation: { type: 'integer', format: 'int64' } }
-        )
-        nested_stackable[:namespace] = instance_double(
-          'namespace',
-          space: ':id',
-          options: { documentation: { desc: 'inner description' } }
-        )
-
         allow(route).to receive(:app).and_return(app)
         allow(route).to receive(:params).and_return(
           'id' => {}
@@ -194,23 +222,28 @@ describe GrapeSwagger::RequestParamParsers::Route do
     end
 
     context 'when inherited namespace stackable values partially override deeply nested hashes' do
-      let(:root_stackable) { Grape::Util::StackableValues.new }
-      let(:nested_stackable) { Grape::Util::StackableValues.new(root_stackable) }
+      let(:root_stackable) do
+        stackable_values_double(
+          namespace: [instance_double(
+            'namespace',
+            space: ':id',
+            options: { documentation: { schema: { type: 'integer', format: 'int64' } } }
+          )]
+        )
+      end
+      let(:nested_stackable) do
+        stackable_values_double(
+          { namespace: [instance_double(
+            'namespace',
+            space: ':id',
+            options: { documentation: { schema: { desc: 'inner description' } } }
+          )] }, root_stackable
+        )
+      end
       let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: nested_stackable) }
       let(:app) { instance_double('app', inheritable_setting:) }
 
       before do
-        root_stackable[:namespace] = instance_double(
-          'namespace',
-          space: ':id',
-          options: { documentation: { schema: { type: 'integer', format: 'int64' } } }
-        )
-        nested_stackable[:namespace] = instance_double(
-          'namespace',
-          space: ':id',
-          options: { documentation: { schema: { desc: 'inner description' } } }
-        )
-
         allow(route).to receive(:app).and_return(app)
         allow(route).to receive(:params).and_return(
           'id' => {}
@@ -227,23 +260,28 @@ describe GrapeSwagger::RequestParamParsers::Route do
     end
 
     context 'when inherited namespace stackable values override array options' do
-      let(:root_stackable) { Grape::Util::StackableValues.new }
-      let(:nested_stackable) { Grape::Util::StackableValues.new(root_stackable) }
+      let(:root_stackable) do
+        stackable_values_double(
+          namespace: [instance_double(
+            'namespace',
+            space: ':id',
+            options: { documentation: { values: %w[outer-a outer-b] } }
+          )]
+        )
+      end
+      let(:nested_stackable) do
+        stackable_values_double(
+          { namespace: [instance_double(
+            'namespace',
+            space: ':id',
+            options: { documentation: { values: %w[inner-a inner-b] } }
+          )] }, root_stackable
+        )
+      end
       let(:inheritable_setting) { instance_double('inheritable_setting', namespace_stackable: nested_stackable) }
       let(:app) { instance_double('app', inheritable_setting:) }
 
       before do
-        root_stackable[:namespace] = instance_double(
-          'namespace',
-          space: ':id',
-          options: { documentation: { values: %w[outer-a outer-b] } }
-        )
-        nested_stackable[:namespace] = instance_double(
-          'namespace',
-          space: ':id',
-          options: { documentation: { values: %w[inner-a inner-b] } }
-        )
-
         allow(route).to receive(:app).and_return(app)
         allow(route).to receive(:params).and_return(
           'id' => {}

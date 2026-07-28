@@ -7,7 +7,7 @@ describe GrapeSwagger::RequestParamParsers::Route do
   # through the public API and stub its readers for the scenario under test.
   def stackable_values_double(new_values, inherited_values = {})
     harvested = Class.new(Grape::API) do
-      namespace(':harvest') { get('/probe') {} }
+      namespace(':harvest') { get('/probe') { 'probe' } }
     end.routes.first.app.inheritable_setting.namespace_stackable
 
     allow(harvested).to receive_messages(new_values: new_values, inherited_values: inherited_values)

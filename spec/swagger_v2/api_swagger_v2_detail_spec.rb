@@ -48,6 +48,12 @@ describe 'details' do
             { 'declared_params' => declared(params) }
           end
 
+          desc 'This returns something', detail: nil, entity: Entities::UseResponse,
+                                         failure: [{ code: 400, model: Entities::ApiError }]
+          get '/use_detail_nil' do
+            { 'declared_params' => declared(params) }
+          end
+
           add_swagger_documentation
         end
       end
@@ -74,6 +80,15 @@ describe 'details' do
       expect(subject['paths']['/use_detail_block']['get']['summary']).to eql 'This returns something'
       expect(subject['paths']['/use_detail_block']['get']).to include('description')
       expect(subject['paths']['/use_detail_block']['get']['description']).to eql 'detailed description of the route inside the `desc` block'
+    end
+
+    # Reading metadata through route readers (instead of route.options.key?(:detail))
+    # means an explicit `detail: nil` is treated the same as an absent detail:
+    # the description holds the text and there is no separate summary.
+    specify do
+      expect(subject['paths']['/use_detail_nil']['get']).not_to include('summary')
+      expect(subject['paths']['/use_detail_nil']['get']).to include('description')
+      expect(subject['paths']['/use_detail_nil']['get']['description']).to eql 'This returns something'
     end
   end
 end

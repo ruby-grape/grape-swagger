@@ -21,6 +21,7 @@
   ```
 
 - **Multi-type params (`type: [A, B]`) on Grape 3.2+**: swagger output now reflects the first declared type (e.g. `type: [Integer, Float]` produces `"integer"`). Previously, Grape 3.2+ serialized the `VariantCollectionCoercer` wrapper via `#to_s`, leaking `"#<Grape::Validations::Types::VariantCollectionCoercer:0x...>"` into the documentation. No action required, but if you were programmatically post-processing that string, the fix will change the output.
+- **`desc(..., formats:)` and `desc(..., content_types:)` no longer set the swagger `produces` field.** These were undocumented aliases for `produces:`. Use `produces:` instead (e.g. `desc 'x', produces: ['application/xml']`), which is unchanged.
 
 ### Upgrading to >= x.y.z
 

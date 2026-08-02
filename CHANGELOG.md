@@ -11,6 +11,8 @@
 * [#978](https://github.com/ruby-grape/grape-swagger/pull/978): Fix Grape 3.2+ compatibility: desc kwargs, custom types, multi-type param recovery; bump Grape to `>= 2.1, < 5.0`. See [UPGRADING](UPGRADING.md) - [@numbata](https://github.com/numbata).
 * [#982](https://github.com/ruby-grape/grape-swagger/pull/982): Fix test suite compatibility with Grape 4.0 (grape=HEAD CI) - [@numbata](https://github.com/numbata).
 * [#981](https://github.com/ruby-grape/grape-swagger/pull/981): Use `endpoint.endpoints` instead of `endpoint.options[:app]` - [@ericproulx](https://github.com/ericproulx).
+* [#983](https://github.com/ruby-grape/grape-swagger/pull/983): Read route metadata via reader methods instead of `route.options[...]` - [@ericproulx](https://github.com/ericproulx).
+* [#984](https://github.com/ruby-grape/grape-swagger/pull/984): Drop the undocumented `formats:` / `content_types:` aliases for `produces:` - [@ericproulx](https://github.com/ericproulx).
 * Your contribution here.
 
 ### 2.1.4 (2026-02-02)

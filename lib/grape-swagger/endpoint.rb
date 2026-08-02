@@ -155,17 +155,11 @@ module Grape
     end
 
     def produces_object(route, format)
-      return ['application/octet-stream'] if file_response?(route.success) &&
-                                             !route.produces.present?
+      produces = route.produces
+      return ['application/octet-stream'] if file_response?(route.success) && !produces.present?
 
-      mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(format)
-
-      route_mime_types = %i[formats content_types produces].map do |producer|
-        possible = route.public_send(producer)
-        GrapeSwagger::DocMethods::ProducesConsumes.call(possible) if possible.present?
-      end.flatten.compact.uniq
-
-      route_mime_types.present? ? route_mime_types : mime_types
+      route_mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(produces) if produces.present?
+      route_mime_types.presence || GrapeSwagger::DocMethods::ProducesConsumes.call(format)
     end
 
     SUPPORTS_CONSUMES = %i[post put patch].freeze

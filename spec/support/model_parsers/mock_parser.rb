@@ -63,7 +63,11 @@ RSpec.shared_context 'mock swagger example' do
 
       class QueryInput < OpenStruct; end
 
-      class ApiError < OpenStruct; end
+      class ApiError < OpenStruct
+        # Custom types need a one-argument .parse for Grape to coerce them:
+        # `type: X` since Grape 3.2, `type: Array[X]` since Grape 4.0 (grape#2817).
+        def self.parse(val) = val
+      end
 
       class SecondApiError < OpenStruct; end
 
@@ -73,7 +77,8 @@ RSpec.shared_context 'mock swagger example' do
 
       module NestedModule
         class ApiResponse < OpenStruct
-          # Grape 3.2+ requires unknown types to implement .parse (arity 1)
+          # Custom types need a one-argument .parse for Grape to coerce them:
+          # `type: X` since Grape 3.2, `type: Array[X]` since Grape 4.0 (grape#2817).
           def self.parse(val) = val
         end
       end

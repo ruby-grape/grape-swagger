@@ -5,12 +5,18 @@ describe GrapeSwagger::RequestParamParsers::Route do
   # detail that differs across supported Grape versions (and grape=HEAD), so
   # rather than calling `.new` directly, these specs harvest a real instance
   # through the public API and stub its readers for the scenario under test.
+  # `instance_double` won't pass `route.rb`'s `is_a?(Grape::Util::StackableValues)`
+  # check, hence harvesting a real instance instead of building a plain double.
+  # `#[]` reads Grape's own ivars, not the stubbed readers below, so it is
+  # stubbed too -- otherwise it would silently return the harvest probe's real
+  # (empty) namespace instead of the fixture if a caller ever read through `[]`.
   def stackable_values_double(new_values, inherited_values = {})
     harvested = Class.new(Grape::API) do
       namespace(':harvest') { get('/probe') { 'probe' } }
     end.routes.first.app.inheritable_setting.namespace_stackable
 
     allow(harvested).to receive_messages(new_values: new_values, inherited_values: inherited_values)
+    allow(harvested).to receive(:[]) { |key| new_values[key] || inherited_values[key] }
     harvested
   end
 

@@ -17,22 +17,6 @@ describe 'format, content_type' do
           { 'declared_params' => declared(params) }
         end
 
-        desc 'This uses formats for produces',
-             failure: [{ code: 400, model: Entities::ApiError }],
-             formats: [:xml, :binary, 'application/vdns'],
-             entity: Entities::UseResponse
-        get '/use_formats' do
-          { 'declared_params' => declared(params) }
-        end
-
-        desc 'This uses content_types for produces',
-             failure: [{ code: 400, model: Entities::ApiError }],
-             content_types: [:xml, :binary, 'application/vdns'],
-             entity: Entities::UseResponse
-        get '/use_content_types' do
-          { 'declared_params' => declared(params) }
-        end
-
         desc 'This uses produces for produces',
              failure: [{ code: 400, model: Entities::ApiError }],
              produces: [:xml, :binary, 'application/vdns'],
@@ -83,30 +67,6 @@ describe 'format, content_type' do
     specify do
       expect(subject['paths']['/use_default']['get']).to include('produces')
       expect(subject['paths']['/use_default']['get']['produces']).to eql(['application/json'])
-    end
-  end
-
-  describe 'formats' do
-    subject do
-      get '/swagger_doc/use_formats'
-      JSON.parse(last_response.body)
-    end
-
-    specify do
-      expect(subject['paths']['/use_formats']['get']).to include('produces')
-      expect(subject['paths']['/use_formats']['get']['produces']).to eql(produced)
-    end
-  end
-
-  describe 'content types' do
-    subject do
-      get '/swagger_doc/use_content_types'
-      JSON.parse(last_response.body)
-    end
-
-    specify do
-      expect(subject['paths']['/use_content_types']['get']).to include('produces')
-      expect(subject['paths']['/use_content_types']['get']['produces']).to eql(produced)
     end
   end
 

@@ -34,7 +34,7 @@ module GrapeSwagger
 
           definition[:description] = route.description if route.try(:description)
 
-          build_body_parameter(definition_name, route.options)
+          build_body_parameter(definition_name, route.body_name)
         end
 
         def move_params_to_new(definition, params)
@@ -139,9 +139,9 @@ module GrapeSwagger
           definition[:required].push(*value)
         end
 
-        def build_body_parameter(name, options)
+        def build_body_parameter(name, body_name)
           {}.tap do |x|
-            x[:name] = options[:body_name] || name
+            x[:name] = body_name || name
             x[:in] = 'body'
             x[:required] = true
             x[:schema] = { '$ref' => "#/definitions/#{name}" }

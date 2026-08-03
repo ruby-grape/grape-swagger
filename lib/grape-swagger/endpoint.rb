@@ -123,7 +123,7 @@ module Grape
       method[:parameters]  = params_object(route, options, path, method[:consumes])
       method[:security]    = security_object(route)
       method[:responses]   = response_object(route, options)
-      method[:tags]        = route.tags || tag_object(route, path)
+      method[:tags]        = route.options.key?(:tags) ? route.tags : tag_object(route, path)
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method[:deprecated] = deprecated_object(route)
       method.delete_if { |_, value| value.nil? }

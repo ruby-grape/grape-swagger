@@ -53,6 +53,23 @@ describe 'Grape::Endpoint#path_and_definitions' do
       end
     end
 
+    context 'when tags are explicitly set to nil' do
+      let(:item) do
+        Class.new(Grape::API) do
+          version 'v1', using: :path
+
+          resource :item do
+            desc 'Item description', tags: nil
+            get '/'
+          end
+        end
+      end
+
+      it 'omits the tags key instead of falling back to the default tag' do
+        expect(subject.first['/v1/item'][:get]).not_to have_key(:tags)
+      end
+    end
+
     context 'when parameter with a custom type is specified' do
       let(:item) do
         Class.new(Grape::API) do

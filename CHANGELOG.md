@@ -1,10 +1,9 @@
-### 2.2.0 (Next)
+### 2.2.0 (2026-08-06)
 
 #### Features
 
 * [#973](https://github.com/ruby-grape/grape-swagger/pull/973): Support custom model descriptions and examples - [@numbata](https://github.com/numbata).
 * [#976](https://github.com/ruby-grape/grape-swagger/pull/976): Ruby 3.4 and refactor swagger documentation modules; deprecate top-level `SwaggerRouting` and `SwaggerDocumentationAdder` aliases in favor of `GrapeSwagger::...` - [@moskvin](https://github.com/moskvin).
-* Your contribution here.
 
 #### Fixes
 
@@ -14,7 +13,6 @@
 * [#985](https://github.com/ruby-grape/grape-swagger/pull/985): Fix the test suite against unreleased Grape 4.0: give collection custom types a `parse`, and stop building `Grape::Util::StackableValues` directly now that it is a read-only view. See [UPGRADING](UPGRADING.md) - [@ericproulx](https://github.com/ericproulx).
 * [#983](https://github.com/ruby-grape/grape-swagger/pull/983): Read route metadata via reader methods instead of `route.options[...]` - [@ericproulx](https://github.com/ericproulx).
 * [#984](https://github.com/ruby-grape/grape-swagger/pull/984): Drop the undocumented `formats:` / `content_types:` aliases for `produces:` - [@ericproulx](https://github.com/ericproulx).
-* Your contribution here.
 
 ### 2.1.4 (2026-02-02)
 

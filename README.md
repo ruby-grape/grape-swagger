@@ -648,6 +648,8 @@ end
 Tags are used for logical grouping of operations by resources or any other qualifier. To override the
 tags array, add `tags: ['tag1', 'tag2']` after the description.
 
+When `tags:` is not given, or is `nil` or empty, the tag is derived from the path.
+
 ```ruby
 namespace 'order' do
   desc 'This will be your summary', tags: ['orders']

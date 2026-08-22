@@ -1,5 +1,11 @@
 ## Upgrading Grape-swagger
 
+### Upgrading to >= 2.3.0
+
+- **A blank `desc(..., tags:)` now means "not specified".** `tags: nil` no longer suppresses the tag and `tags: []` no longer emits an empty `"tags": []`; both derive the tag from the path, as if `tags:` had been omitted. `tags:` is an override, and only a non-empty list overrides anything.
+
+  The old `nil` behaviour was never a deliberate one: [#523](https://github.com/ruby-grape/grape-swagger/pull/523) introduced route-level tags to *override* path-derived grouping and read them with `route.options.fetch(:tags, tag_object(route))`, whose default-on-absence semantics happened to give `nil` a meaning of its own. It was never documented or tested.
+
 ### Upgrading to >= 2.2.0
 
 - **Minimum Grape version is now `>= 2.1`** (was `>= 1.7`). Grape 1.8.0 and 2.0.0 cannot be used on Ruby 3.3+ because of an upstream Mustermann/forwardable incompatibility; the CI rows for those combinations were already failing on `master` and have been removed.

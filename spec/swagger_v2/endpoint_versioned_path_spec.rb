@@ -65,8 +65,25 @@ describe 'Grape::Endpoint#path_and_definitions' do
         end
       end
 
-      it 'omits the tags key instead of falling back to the default tag' do
-        expect(subject.first['/v1/item'][:get]).not_to have_key(:tags)
+      it 'falls back to the default tag' do
+        expect(subject.first['/v1/item'][:get][:tags]).to eq ['item']
+      end
+    end
+
+    context 'when tags are explicitly empty' do
+      let(:item) do
+        Class.new(Grape::API) do
+          version 'v1', using: :path
+
+          resource :item do
+            desc 'Item description', tags: []
+            get '/'
+          end
+        end
+      end
+
+      it 'falls back to the default tag' do
+        expect(subject.first['/v1/item'][:get][:tags]).to eq ['item']
       end
     end
 

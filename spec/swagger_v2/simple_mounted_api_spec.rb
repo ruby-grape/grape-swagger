@@ -4,9 +4,8 @@ require 'spec_helper'
 
 describe 'a simple mounted api' do
   before :all do
-    # rubocop:disable Lint/EmptyClass
+    # rubocop:disable-next Lint/EmptyClass
     class CustomType; end
-    # rubocop:enable Lint/EmptyClass
 
     class SimpleMountedApi < Grape::API
       desc 'Document root',

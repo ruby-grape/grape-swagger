@@ -55,7 +55,7 @@ describe 'response' do
 
   # Grape HEAD remaps `default:` onto `default_response:` and warns; this
   # example is the released-Grape README spelling that grape-swagger used to ignore.
-  describe 'uses the documented default: spelling', unless: Grape::Util::ApiDescription::DSL_METHODS.include?(:default_response) do
+  describe 'uses the documented default: spelling', unless: GrapeVersion.default_response_in_dsl? do
     before :all do
       module TheApi
         class ResponseApiDefaultAlias < Grape::API

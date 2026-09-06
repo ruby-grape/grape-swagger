@@ -6,6 +6,7 @@
 
 #### Fixes
 
+* [#989](https://github.com/ruby-grape/grape-swagger/issues/989): Honor the documented `desc ..., default:` spelling for a default response (alongside `default_response:`), and stop reading `route.desc` (`get '/', desc:` is no longer a swagger summary). See [UPGRADING](UPGRADING.md) - [@numbata](https://github.com/numbata).
 * [#986](https://github.com/ruby-grape/grape-swagger/pull/986): Read a route's tags through `route.tags` instead of `route.options`; a blank `tags:` (`nil` or `[]`) now means "not specified" and derives the tag from the path. See [UPGRADING](UPGRADING.md) - [@ericproulx](https://github.com/ericproulx).
 * Your contribution here.
 

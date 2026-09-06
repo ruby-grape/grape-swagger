@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/EmptyClass
+# rubocop:disable-next Lint/EmptyClass
 class EmptyClass
 end
-# rubocop:enable Lint/EmptyClass
 
 module GrapeSwagger
   class EmptyModelParser

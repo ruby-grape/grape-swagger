@@ -11,10 +11,12 @@ class GrapeVersion
     end
 
     # Grape HEAD stores the desc key as :default_response and deprecates :default.
-    # Older Grape has no ApiDescription constant at all (e.g. 2.1.3).
+    # Older Grape has no ApiDescription (2.1) or no DSL_METHODS on it (3.0).
     def default_response_in_dsl?
-      defined?(Grape::Util::ApiDescription) &&
-        Grape::Util::ApiDescription::DSL_METHODS.include?(:default_response)
+      return false unless defined?(Grape::Util::ApiDescription)
+
+      desc = Grape::Util::ApiDescription
+      desc.const_defined?(:DSL_METHODS) && desc::DSL_METHODS.include?(:default_response)
     end
   end
 end

@@ -82,7 +82,7 @@ module GrapeSwagger
 
       # helper methods
       #
-      # rubocop:disable Style/StringConcatenation
+      # rubocop:disable-next Style/StringConcatenation
       def make_request(url)
         get url
 
@@ -90,7 +90,6 @@ module GrapeSwagger
           JSON.parse(last_response.body, symbolize_names: true)
         ) + "\n"
       end
-      # rubocop:enable Style/StringConcatenation
 
       def urls_for(api_class)
         api_class.routes

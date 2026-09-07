@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#874](https://github.com/ruby-grape/grape-swagger/pull/874): Add support for wildcard segments path parameters - [@spaceraccoon](https://github.com/spaceraccoon)
 * Your contribution here.
 
 #### Fixes

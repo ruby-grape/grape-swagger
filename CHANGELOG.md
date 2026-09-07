@@ -10,6 +10,7 @@
 * [#988](https://github.com/ruby-grape/grape-swagger/pull/988): Fix CI by replacing single-statement `rubocop:disable`/`enable` pairs with `rubocop:disable-next`, per rubocop 1.90's new `Style/DirectiveScope` cop - [@numbata](https://github.com/numbata).
 * [#992](https://github.com/ruby-grape/grape-swagger/pull/992): Fix CI by pinning `json` to `< 3.0` in the Gemfile; `json` 3.0 dropped support for the `quirks_mode:` keyword that `multi_json`'s adapter still passes by default, breaking JSON request parsing wherever Grape resolves `Grape::Json` to `MultiJson` - [@numbata](https://github.com/numbata).
 * [#993](https://github.com/ruby-grape/grape-swagger/pull/993): Add Grape 4.0.0 to the CI test matrix and raise the Gemfile's default `grape` upper bound from `< 4.0` to `< 5.0`, matching the gemspec's already-declared support range - [@numbata](https://github.com/numbata).
+* [#994](https://github.com/ruby-grape/grape-swagger/pull/994): Publish a GitHub Release with CHANGELOG notes whenever a version tag is pushed - [@numbata](https://github.com/numbata).
 * Your contribution here.
 
 ### 2.2.0 (2026-08-06)

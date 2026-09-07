@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 gemspec
 
 # gem 'grape', git: 'https://github.com/ruby-grape/grape'
-gem 'grape', case version = ENV.fetch('GRAPE_VERSION', '< 4.0')
+gem 'grape', case version = ENV.fetch('GRAPE_VERSION', '< 5.0')
              when 'HEAD'
                { git: 'https://github.com/ruby-grape/grape' }
              else

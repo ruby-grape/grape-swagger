@@ -4,12 +4,16 @@ source 'https://rubygems.org'
 
 gemspec
 
+grape_version = ENV.fetch('GRAPE_VERSION', nil)
+
 # gem 'grape', git: 'https://github.com/ruby-grape/grape'
-gem 'grape', case version = ENV.fetch('GRAPE_VERSION', '< 5.0')
+gem 'grape', case grape_version
+             when nil
+               '< 5.0'
              when 'HEAD'
                { git: 'https://github.com/ruby-grape/grape' }
              else
-               version
+               grape_version
              end
 
 gem ENV.fetch('MODEL_PARSER', nil) if ENV.key?('MODEL_PARSER')
@@ -20,8 +24,7 @@ group :development, :test do
   gem 'pry', platforms: [:mri]
   gem 'pry-byebug', platforms: [:mri]
 
-  grape_version = ENV.fetch('GRAPE_VERSION', '4.0.0')
-  if grape_version == 'HEAD' || Gem::Version.new(grape_version) >= Gem::Version.new('2.0.0')
+  if grape_version.nil? || grape_version == 'HEAD' || Gem::Version.new(grape_version) >= Gem::Version.new('2.0.0')
     gem 'rack', '>= 3.0'
   else
     gem 'activesupport', '< 7.2'

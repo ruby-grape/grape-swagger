@@ -32,9 +32,10 @@ group :development, :test do
   end
 
   gem 'cgi'
-  # multi_json's json_gem adapter still passes quirks_mode: true by default,
-  # a keyword json 3.0 dropped support for (https://github.com/intridea/multi_json/issues/163).
-  gem 'json', '< 3.0'
+  # ActiveSupport's Object#to_json calls JSON.generate(quirks_mode: true), a keyword
+  # json 3.0 dropped support for. Fixed in activesupport 8.1, which requires Ruby >= 3.2,
+  # so older Rubies still need json pinned below 3.0.
+  gem 'json', '< 3.0' if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('3.2.0')
   gem 'multi_json'
   gem 'rack-cors'
   gem 'rack-test'

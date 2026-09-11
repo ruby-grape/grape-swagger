@@ -36,6 +36,7 @@ group :development, :test do
   # json 3.0 dropped support for. Fixed in activesupport 8.1, which requires Ruby >= 3.2,
   # so older Rubies still need json pinned below 3.0.
   gem 'json', '< 3.0' if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('3.2.0')
+  gem 'multi_json'
   gem 'rack-cors'
   gem 'rack-test'
   gem 'rake'

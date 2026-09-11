@@ -34,7 +34,7 @@ group :development, :test do
   gem 'cgi'
   # multi_json's json_gem adapter still passes quirks_mode: true by default,
   # a keyword json 3.0 dropped support for (https://github.com/intridea/multi_json/issues/163).
-  gem 'json', '< 3.0'
+  gem 'json', '< 4.0'
   gem 'multi_json'
   gem 'rack-cors'
   gem 'rack-test'

@@ -6,6 +6,7 @@
 
 #### Fixes
 
+* [#990](https://github.com/ruby-grape/grape-swagger/pull/990): Honor the documented `desc ..., default:` spelling for a default response (alongside `default_response:`), and stop reading `route.desc` (`get '/', desc:` is no longer a swagger summary). See [UPGRADING](UPGRADING.md) - [@numbata](https://github.com/numbata).
 * [#986](https://github.com/ruby-grape/grape-swagger/pull/986): Read a route's tags through `route.tags` instead of `route.options`; a blank `tags:` (`nil` or `[]`) now means "not specified" and derives the tag from the path. See [UPGRADING](UPGRADING.md) - [@ericproulx](https://github.com/ericproulx).
 * [#988](https://github.com/ruby-grape/grape-swagger/pull/988): Fix CI by replacing single-statement `rubocop:disable`/`enable` pairs with `rubocop:disable-next`, per rubocop 1.90's new `Style/DirectiveScope` cop - [@numbata](https://github.com/numbata).
 * [#992](https://github.com/ruby-grape/grape-swagger/pull/992): Fix CI by pinning `json` to `< 3.0` in the Gemfile; `json` 3.0 dropped support for the `quirks_mode:` keyword that `multi_json`'s adapter still passes by default, breaking JSON request parsing wherever Grape resolves `Grape::Json` to `MultiJson` - [@numbata](https://github.com/numbata).

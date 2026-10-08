@@ -1123,13 +1123,13 @@ end
 
 #### Default response <a name="default-response"></a>
 
-By setting the `default` option you can also define a default response that is the result returned for all unspecified status codes.
-The definition supports the same syntax as `success` or `failure`.
+By setting the `default_response` option you can also define a default response that is the result returned for all unspecified status codes.
+The definition supports the same syntax as `success` or `failure`. Prefer `default_response:`; `default:` is still read until grape-swagger 3.0.
 
 In the following cases, the schema ref would be taken from route.
 
 ```ruby
-desc 'thing', default: { message: 'the default response' }
+desc 'thing', default_response: { message: 'the default response' }
 get '/thing' do
   # ...
 end
@@ -1147,7 +1147,7 @@ Just like with `success` or `failure` you can also provide a `model` parameter.
 
 ```ruby
 desc 'Get a list of stuff',
-    default: { model: Entities::UseResponse, message: 'the default response' }
+    default_response: { model: Entities::UseResponse, message: 'the default response' }
 get do
   # your code comes here
 end

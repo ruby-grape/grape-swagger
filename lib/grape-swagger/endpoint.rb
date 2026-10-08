@@ -140,7 +140,6 @@ module Grape
     end
 
     def summary_object(route)
-      summary = route.desc if route.desc
       summary = route.description if route.description.present? && route.detail
       summary = route.summary if route.summary
 
@@ -263,7 +262,8 @@ module Grape
     private
 
     def default_code_from_route(route)
-      entity = route.default_response
+      # `route.default` is OrderedOptions / Hash#default, not the desc key.
+      entity = route.try(:default_response) || route.settings.dig(:description, :default)
       return [] if entity.nil?
 
       default_code = { code: 'default', message: 'Default Response' }

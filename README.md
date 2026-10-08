@@ -865,7 +865,7 @@ Grape allows for an additional documentation hash to be passed to a parameter.
 ```ruby
 params do
   requires :id, type: Integer, desc: 'Coffee ID'
-  requires :temperature, type: Integer, desc: 'Temperature of the coffee in celcius', documentation: { default: 72 }
+  requires :temperature, type: Integer, desc: 'Temperature of the coffee in Celsius', documentation: { default: 72 }
 end
 ```
 
@@ -874,7 +874,7 @@ Grape uses the option `default` to set a default value for optional parameters. 
 ```ruby
 params do
   requires :id, type: Integer, desc: 'Coffee ID'
-  optional :temperature, type: Integer, desc: 'Temperature of the coffee in celcius', default: 72
+  optional :temperature, type: Integer, desc: 'Temperature of the coffee in Celsius', default: 72
 end
 ```
 

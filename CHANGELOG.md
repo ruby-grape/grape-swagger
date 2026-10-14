@@ -18,6 +18,7 @@
 * [#993](https://github.com/ruby-grape/grape-swagger/pull/993): Add Grape 4.0.0 to the CI test matrix and raise the Gemfile's default `grape` upper bound from `< 4.0` to `< 5.0`, matching the gemspec's already-declared support range - [@numbata](https://github.com/numbata).
 * [#994](https://github.com/ruby-grape/grape-swagger/pull/994): Publish a GitHub Release with CHANGELOG notes whenever a version tag is pushed - [@numbata](https://github.com/numbata).
 * [#1005](https://github.com/ruby-grape/grape-swagger/pull/1005): Validate generated OpenAPI 3.x documents against the official meta-schemas in the specs - [@numbata](https://github.com/numbata).
+* [#1006](https://github.com/ruby-grape/grape-swagger/pull/1006): Document OpenAPI 3.x support in the README and `docs/openapi_3.md` - [@numbata](https://github.com/numbata).
 * Your contribution here.
 
 ### 2.2.0 (2026-08-06)

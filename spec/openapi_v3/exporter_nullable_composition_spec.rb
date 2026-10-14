@@ -183,4 +183,40 @@ describe 'OAS 3.x exporters: nullable references and composition' do
       expect(discriminator(:kind)).to eq(propertyName: 'kind')
     end
   end
+
+  describe 'through a route' do
+    def schema_for(version)
+      api = Class.new(Grape::API) do
+        format :json
+
+        params do
+          optional :status, type: String, values: %w[a b], documentation: { nullable: true }
+          optional :flag, type: Grape::API::Boolean, values: [false]
+        end
+        post '/items' do
+          {}
+        end
+
+        add_swagger_documentation(openapi_version: version)
+      end
+
+      session = Rack::Test::Session.new(Rack::MockSession.new(api))
+      session.get '/swagger_doc'
+      JSON.parse(session.last_response.body)['components']['schemas']['postItems']['properties']
+    end
+
+    it 'emits nullable and boolean enums for OAS 3.0' do
+      props = schema_for('3.0')
+
+      expect(props['status']).to include('nullable' => true, 'enum' => ['a', 'b', nil])
+      expect(props['flag']['enum']).to eq([false])
+    end
+
+    it 'emits nullable and boolean enums for OAS 3.1' do
+      props = schema_for('3.1')
+
+      expect(props['status']).to include('type' => %w[string null], 'enum' => ['a', 'b', nil])
+      expect(props['flag']['enum']).to eq([false])
+    end
+  end
 end

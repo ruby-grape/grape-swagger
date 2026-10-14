@@ -17,6 +17,7 @@ module GrapeSwagger
           operation.security = route.options[:security] if route.options.key?(:security)
           operation.consumes = build_consumes(route)
 
+          build_operation_parameters(operation, route, path)
           add_operation_extensions(operation, route)
 
           operation

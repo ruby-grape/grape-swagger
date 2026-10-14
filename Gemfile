@@ -21,6 +21,7 @@ gem ENV.fetch('MODEL_PARSER', nil) if ENV.key?('MODEL_PARSER')
 group :development, :test do
   gem 'bundler'
   gem 'grape-entity'
+  gem 'json_schemer' # validates generated OpenAPI 3.x documents against its bundled meta-schemas
   gem 'pry', platforms: [:mri]
   gem 'pry-byebug', platforms: [:mri]
 

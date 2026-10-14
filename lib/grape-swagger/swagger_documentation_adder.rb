@@ -9,6 +9,7 @@ module GrapeSwagger
     include GrapeSwagger::SwaggerRouting
 
     def add_swagger_documentation(options = {})
+      GrapeSwagger::Exporter.validate_version!(options[:openapi_version])
       documentation_class = create_documentation_class
 
       version_for(options)

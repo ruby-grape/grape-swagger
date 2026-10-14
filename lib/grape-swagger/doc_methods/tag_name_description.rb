@@ -20,8 +20,6 @@ module GrapeSwagger
           end.uniq
         end
 
-        private
-
         def build_memo(tag)
           {
             name: tag,

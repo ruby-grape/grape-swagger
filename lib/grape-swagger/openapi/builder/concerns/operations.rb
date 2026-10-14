@@ -18,6 +18,7 @@ module GrapeSwagger
           operation.consumes = build_consumes(route)
 
           build_operation_parameters(operation, route, path)
+          build_operation_responses(operation, route)
           add_operation_extensions(operation, route)
 
           operation

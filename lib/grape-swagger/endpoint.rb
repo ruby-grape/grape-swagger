@@ -61,10 +61,22 @@ module Grape
     # sub-objects of info object
     # license
     def license_object(infos)
-      {
-        name: infos.delete(:license),
-        url: infos.delete(:license_url)
-      }.delete_if { |_, value| value.blank? }
+      license = infos.delete(:license)
+      license_url = infos.delete(:license_url)
+
+      # Support both string and hash format for license
+      # Note: identifier is OAS 3.1 only, not included in Swagger 2.0 output
+      if license.is_a?(Hash)
+        {
+          name: license[:name],
+          url: license[:url] || license_url
+        }.delete_if { |_, value| value.blank? }
+      else
+        {
+          name: license,
+          url: license_url
+        }.delete_if { |_, value| value.blank? }
+      end
     end
 
     # contact
@@ -123,7 +135,7 @@ module Grape
       method[:parameters]  = params_object(route, options, path, method[:consumes])
       method[:security]    = security_object(route)
       method[:responses]   = response_object(route, options)
-      method[:tags]        = route.tags.presence || tag_object(route, path)
+      method[:tags]        = GrapeSwagger::DocMethods::RouteRules.tag_names(route, path)
       method[:operationId] = GrapeSwagger::DocMethods::OperationId.build(route, path)
       method[:deprecated] = deprecated_object(route)
       method.delete_if { |_, value| value.nil? }
@@ -155,19 +167,11 @@ module Grape
     end
 
     def produces_object(route, format)
-      produces = route.produces
-      return ['application/octet-stream'] if file_response?(route.success) && !produces.present?
-
-      route_mime_types = GrapeSwagger::DocMethods::ProducesConsumes.call(produces) if produces.present?
-      route_mime_types.presence || GrapeSwagger::DocMethods::ProducesConsumes.call(format)
+      GrapeSwagger::DocMethods::RouteRules.produces(route, format)
     end
 
-    SUPPORTS_CONSUMES = %i[post put patch].freeze
-
     def consumes_object(route, format)
-      return unless SUPPORTS_CONSUMES.include?(route.request_method.downcase.to_sym)
-
-      GrapeSwagger::DocMethods::ProducesConsumes.call(route.settings.dig(:description, :consumes) || format)
+      GrapeSwagger::DocMethods::RouteRules.consumes(route, format)
     end
 
     def params_object(route, options, path, consumes)
@@ -250,31 +254,13 @@ module Grape
     end
 
     def tag_object(route, path)
-      version = GrapeSwagger::DocMethods::Version.get(route)
-      version = Array(version)
-      prefix = route.prefix.to_s.split('/').reject(&:empty?)
-      Array(
-        path.split('{')[0].split('/').reject(&:empty?).delete_if do |i|
-          prefix.include?(i) || version.map(&:to_s).include?(i)
-        end.first
-      ).presence
+      GrapeSwagger::DocMethods::RouteRules.derived_tags(route, path)
     end
 
     private
 
     def default_code_from_route(route)
-      entity = route.default_response
-      return [] if entity.nil?
-
-      default_code = { code: 'default', message: 'Default Response' }
-      if entity.is_a?(Hash)
-        default_code[:message] = entity[:message] || default_code[:message]
-        default_code[:model] = entity[:model] if entity[:model].present?
-      else
-        default_code[:model] = entity
-      end
-
-      [default_code]
+      [GrapeSwagger::DocMethods::RouteRules.default_response_code(route)].compact
     end
 
     def build_delete_response(memo, value)
@@ -371,7 +357,7 @@ module Grape
     end
 
     def file_response?(value)
-      value.to_s.casecmp('file').zero?
+      GrapeSwagger::DocMethods::RouteRules.file_response?(value)
     end
 
     def build_file_response(memo)
@@ -431,25 +417,11 @@ module Grape
     end
 
     def hidden?(route, options)
-      route_hidden = route.settings.try(:[], :swagger).try(:[], :hidden)
-      hidden_val = route.hidden
-      route_hidden = hidden_val unless hidden_val.nil?
-      return route_hidden unless route_hidden.is_a?(Proc)
-
-      return route_hidden.call unless options[:token_owner]
-
-      token_owner = GrapeSwagger::TokenOwnerResolver.resolve(self, options[:token_owner])
-      GrapeSwagger::TokenOwnerResolver.evaluate_proc(route_hidden, token_owner)
+      GrapeSwagger::DocMethods::RouteRules.hidden_route?(route, options, self)
     end
 
     def hidden_parameter?(value)
-      return false if value[:required]
-
-      if value.dig(:documentation, :hidden).is_a?(Proc)
-        value.dig(:documentation, :hidden).call
-      else
-        value.dig(:documentation, :hidden)
-      end
+      GrapeSwagger::DocMethods::RouteRules.hidden_parameter?(value)
     end
 
     def apply_model_documentation(response_model, model)

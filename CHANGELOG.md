@@ -2,10 +2,14 @@
 
 #### Features
 
+* Emit `x-nullable` for parameters documented with `documentation: { nullable: true }` in Swagger 2.0 output - [@numbata](https://github.com/numbata).
+* Accept a hash for the `license:` info option (`name`, `url`) in Swagger 2.0 output - [@numbata](https://github.com/numbata).
+* Add a public `GrapeSwagger.schema_name_generator=` to customize how model names become schema names - [@numbata](https://github.com/numbata).
 * Your contribution here.
 
 #### Fixes
 
+* Drop hidden properties from a definition's `required` list so it only names properties that exist - [@numbata](https://github.com/numbata).
 * [#986](https://github.com/ruby-grape/grape-swagger/pull/986): Read a route's tags through `route.tags` instead of `route.options`; a blank `tags:` (`nil` or `[]`) now means "not specified" and derives the tag from the path. See [UPGRADING](UPGRADING.md) - [@ericproulx](https://github.com/ericproulx).
 * [#988](https://github.com/ruby-grape/grape-swagger/pull/988): Fix CI by replacing single-statement `rubocop:disable`/`enable` pairs with `rubocop:disable-next`, per rubocop 1.90's new `Style/DirectiveScope` cop - [@numbata](https://github.com/numbata).
 * [#992](https://github.com/ruby-grape/grape-swagger/pull/992): Fix CI by pinning `json` to `< 3.0` in the Gemfile; `json` 3.0 dropped support for the `quirks_mode:` keyword that `multi_json`'s adapter still passes by default, breaking JSON request parsing wherever Grape resolves `Grape::Json` to `MultiJson` - [@numbata](https://github.com/numbata).

@@ -7,6 +7,7 @@
 * [#1001](https://github.com/ruby-grape/grape-swagger/pull/1001): Add OpenAPI 3.0 and 3.1 output behind the new `openapi_version` option (info, servers, security schemes, tags, paths and operations) - [@numbata](https://github.com/numbata).
 * [#1002](https://github.com/ruby-grape/grape-swagger/pull/1002): Document request parameters and request bodies in OpenAPI 3.x output - [@numbata](https://github.com/numbata).
 * [#1003](https://github.com/ruby-grape/grape-swagger/pull/1003): Document responses and reference registered models in OpenAPI 3.x output - [@numbata](https://github.com/numbata).
+* [#1004](https://github.com/ruby-grape/grape-swagger/pull/1004): Add the OpenAPI 3.1 `webhooks` and `json_schema_dialect` options - [@numbata](https://github.com/numbata).
 * Your contribution here.
 
 #### Fixes

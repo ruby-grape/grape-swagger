@@ -46,7 +46,15 @@ module GrapeSwagger
           )
           spec = builder.build(combi_routes)
 
+          oas31 = GrapeSwagger::Exporter.for_version(version) == GrapeSwagger::Exporter::OAS31
+          apply_oas31_options(spec, options) if oas31
+
           GrapeSwagger::Exporter.export(spec, version: version)
+        end
+
+        def apply_oas31_options(spec, options)
+          spec.json_schema_dialect = options[:json_schema_dialect] if options[:json_schema_dialect]
+          Webhooks.apply(spec, options[:webhooks]) if options[:webhooks]
         end
 
         def tags_from(paths, options)

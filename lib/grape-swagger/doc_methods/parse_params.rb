@@ -181,7 +181,7 @@ module GrapeSwagger
           when Proc
             parse_enum_or_range_values(values.call) if values.parameters.empty?
           when Range
-            parse_range_values(values) if values.first.is_a?(Integer)
+            parse_range_values(values) if values.first.is_a?(Integer) || values.first.is_a?(Float)
           when Array
             { enum: values }
           else

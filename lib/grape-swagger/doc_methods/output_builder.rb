@@ -2,10 +2,26 @@
 
 module GrapeSwagger
   module DocMethods
-    # Builds the Swagger 2.0 document (info, tags, paths, definitions) from the documented routes
+    # Builds output from routes in either Swagger 2.0 or OpenAPI 3.x format
     module OutputBuilder
       class << self
         def build(combi_routes, endpoint, target_class, options)
+          if openapi3?(options[:openapi_version])
+            build_openapi3(combi_routes, endpoint, target_class, options)
+          else
+            build_swagger2(combi_routes, endpoint, target_class, options)
+          end
+        end
+
+        private
+
+        # Swagger 2.0 (including an explicit '2.0') always uses the original generator,
+        # so there is a single producer of Swagger 2.0 output.
+        def openapi3?(version)
+          !GrapeSwagger::Exporter.legacy?(version)
+        end
+
+        def build_swagger2(combi_routes, endpoint, target_class, options)
           output = endpoint.swagger_object(
             target_class,
             endpoint.request,
@@ -22,7 +38,16 @@ module GrapeSwagger
           output
         end
 
-        private
+        def build_openapi3(combi_routes, endpoint, target_class, options)
+          version = options[:openapi_version]
+
+          builder = GrapeSwagger::OpenAPI::Builder::Spec.new(
+            endpoint, target_class, endpoint.request, options
+          )
+          spec = builder.build(combi_routes)
+
+          GrapeSwagger::Exporter.export(spec, version: version)
+        end
 
         def tags_from(paths, options)
           tags = GrapeSwagger::DocMethods::TagNameDescription.build(paths)

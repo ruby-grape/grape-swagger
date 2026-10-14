@@ -3,6 +3,26 @@
 require 'spec_helper'
 
 describe 'Discriminator in OpenAPI 3.0' do
+  describe 'SchemaBuilder preserves discriminator' do
+    let(:definitions) { {} }
+    let(:builder) { GrapeSwagger::OpenAPI::Builder::SchemaBuilder.new(definitions) }
+
+    it 'preserves discriminator field from definition' do
+      definition = {
+        type: 'object',
+        properties: {
+          type: { type: 'string' },
+          name: { type: 'string' }
+        },
+        discriminator: 'type'
+      }
+
+      schema = builder.build_from_definition(definition)
+
+      expect(schema.discriminator).to eq('type')
+    end
+  end
+
   describe 'OAS30 exporter handles discriminator' do
     let(:spec) do
       GrapeSwagger::OpenAPI::Document.new.tap do |s|

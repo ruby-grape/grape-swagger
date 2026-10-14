@@ -4,6 +4,7 @@
 
 * [#999](https://github.com/ruby-grape/grape-swagger/pull/999): Share per-route documentation rules between the Swagger 2.0 and OpenAPI 3 generators; Swagger 2.0 output now emits `x-nullable` for parameters documented with `documentation: { nullable: true }`, accepts a hash for `license:`, exposes `GrapeSwagger.schema_name_generator=`, and no longer lists hidden properties in a definition's `required` - [@numbata](https://github.com/numbata).
 * [#1000](https://github.com/ruby-grape/grape-swagger/pull/1000): Add a version-neutral OpenAPI document model and OpenAPI 3.0/3.1 exporters (not yet reachable from `add_swagger_documentation`) - [@numbata](https://github.com/numbata).
+* [#1001](https://github.com/ruby-grape/grape-swagger/pull/1001): Add OpenAPI 3.0 and 3.1 output behind the new `openapi_version` option (info, servers, security schemes, tags, paths and operations) - [@numbata](https://github.com/numbata).
 * Your contribution here.
 
 #### Fixes

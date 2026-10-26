@@ -48,8 +48,7 @@ describe 'body parameter definitions' do
 
   %i[post put patch].each do |request_method|
     context "with length limits on #{request_method.to_s.upcase} body parameters" do
-      def app
-        request_method = http_method
+      let(:app) do
         Class.new(Grape::API) do
           format :json
 
@@ -58,6 +57,9 @@ describe 'body parameter definitions' do
             requires :tags, type: Array[String], length: { min: 0, max: 3 }
             optional :unlimited_name, type: String
             optional :unlimited_tags, type: Array[String]
+            optional :records, type: Array[JSON], length: { min: 1, max: 5 } do
+              optional :code, type: String, length: { max: 3 }
+            end
             optional :details, type: Hash do
               optional :name, type: String, length: { min: 0, max: 20 }
               optional :tags, type: Array[String], length: { min: 1, max: 2 }
@@ -69,9 +71,8 @@ describe 'body parameter definitions' do
         end
       end
 
-      let(:http_method) { request_method }
       let(:properties) do
-        parameter = subject.fetch('paths').fetch('/things').fetch(http_method.to_s).fetch('parameters').first
+        parameter = subject.fetch('paths').fetch('/things').fetch(request_method.to_s).fetch('parameters').first
         definition = parameter.fetch('schema').fetch('$ref').split('/').last
         subject.fetch('definitions').fetch(definition).fetch('properties')
       end
@@ -87,9 +88,16 @@ describe 'body parameter definitions' do
       end
 
       it 'preserves length limits within nested objects' do
-        expect(properties.fetch('details').fetch('properties')).to include(
+        expect(properties.fetch('details').fetch('properties')).to eq(
           'name' => { 'type' => 'string', 'minLength' => 0, 'maxLength' => 20 },
           'tags' => { 'type' => 'array', 'items' => { 'type' => 'string' }, 'minItems' => 1, 'maxItems' => 2 }
+        )
+      end
+
+      it 'preserves length limits on arrays of objects' do
+        expect(properties.fetch('records')).to eq(
+          'type' => 'array', 'minItems' => 1, 'maxItems' => 5,
+          'items' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'string', 'maxLength' => 3 } } }
         )
       end
 

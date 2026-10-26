@@ -89,6 +89,7 @@ module GrapeSwagger
             property[:description] = param.delete(:description) unless param[:description].nil?
             property[:example] = param.delete(:example) unless param[:example].nil?
             property[:items] = document_as_property(param)[:items]
+            property.merge!(param.slice(:minItems, :maxItems))
           end
         end
 
@@ -178,7 +179,7 @@ module GrapeSwagger
 
         def property_keys
           %i[type format description minimum maximum items enum default additional_properties additionalProperties
-             example]
+             example minLength maxLength]
         end
 
         def deletable?(param)

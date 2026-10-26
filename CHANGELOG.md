@@ -6,6 +6,7 @@
 
 #### Fixes
 
+* Preserve string length and array item limits in body parameter definitions - [@numbata](https://github.com/numbata).
 * [#1009](https://github.com/ruby-grape/grape-swagger/pull/1009): Bump the Danger `danger-comment.yml` workflow from 0.1.0 to 0.1.1 - [@dependabot[bot]](https://github.com/dependabot%5Bbot%5D).
 * [#1008](https://github.com/ruby-grape/grape-swagger/pull/1008): Bump the Danger `danger-run.yml` workflow from 0.1.0 to 0.1.1 - [@dependabot[bot]](https://github.com/dependabot%5Bbot%5D).
 * [#986](https://github.com/ruby-grape/grape-swagger/pull/986): Read a route's tags through `route.tags` instead of `route.options`; a blank `tags:` (`nil` or `[]`) now means "not specified" and derives the tag from the path. See [UPGRADING](UPGRADING.md) - [@ericproulx](https://github.com/ericproulx).

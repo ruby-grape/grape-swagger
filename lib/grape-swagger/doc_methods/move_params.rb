@@ -89,7 +89,7 @@ module GrapeSwagger
             property[:description] = param.delete(:description) unless param[:description].nil?
             property[:example] = param.delete(:example) unless param[:example].nil?
             property[:items] = document_as_property(param)[:items]
-            property.merge!(param.slice(*array_property_keys))
+            property.merge!(param.slice(*array_schema_keys))
           end
         end
 
@@ -182,7 +182,7 @@ module GrapeSwagger
              example minLength maxLength]
         end
 
-        def array_property_keys
+        def array_schema_keys
           %i[minItems maxItems]
         end
 

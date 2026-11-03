@@ -1,0 +1,133 @@
+# OpenAPI 3.0/3.1 Support
+
+## Quick Start
+
+```ruby
+# Swagger 2.0 (default, unchanged)
+add_swagger_documentation
+
+# OpenAPI 3.0
+add_swagger_documentation(openapi_version: '3.0')
+
+# OpenAPI 3.1
+add_swagger_documentation(openapi_version: '3.1')
+```
+
+## Configuration Options
+
+```ruby
+add_swagger_documentation(
+  openapi_version: '3.1',
+  info: {
+    title: 'My API',
+    version: '1.0',
+    description: 'API description',
+    license: {
+      name: 'MIT',
+      url: 'https://opensource.org/licenses/MIT',
+      identifier: 'MIT'  # OAS 3.1 only (SPDX)
+    }
+  },
+  security_definitions: {
+    bearer: { type: 'http', scheme: 'bearer' }
+  },
+  # OAS 3.1 specific
+  json_schema_dialect: 'https://json-schema.org/draft/2020-12/schema',
+  webhooks: {
+    newUser: {
+      post: {
+        summary: 'New user webhook',
+        requestBody: { ... },
+        responses: { '200' => { description: 'OK' } }
+      }
+    }
+  }
+)
+```
+
+## Key Differences from Swagger 2.0
+
+| Aspect | Swagger 2.0 | OpenAPI 3.x |
+|--------|-------------|-------------|
+| Version | `swagger: '2.0'` | `openapi: '3.0.3'` / `'3.1.0'` |
+| Body params | `in: body` parameter | `requestBody` object |
+| Form params | `in: formData` | `requestBody` with content-type |
+| File upload | `type: file` | `type: string, format: binary` |
+| Schema refs | `#/definitions/X` | `#/components/schemas/X` |
+| Host | `host`, `basePath`, `schemes` | `servers: [{url: "..."}]` |
+| Security defs | `securityDefinitions` | `components/securitySchemes` |
+| Param types | inline `type`, `format` | wrapped in `schema` |
+
+## Nullable Fields
+
+```ruby
+# Recommended syntax
+params do
+  optional :nickname, type: String, documentation: { nullable: true }
+end
+
+# Also supported (for backward compatibility with Swagger 2.0 code)
+params do
+  optional :nickname, type: String, documentation: { x: { nullable: true } }
+end
+```
+
+Both syntaxes produce version-appropriate output:
+
+| Syntax | Swagger 2.0 | OAS 3.0 | OAS 3.1 |
+|--------|-------------|---------|---------|
+| `documentation: { nullable: true }` | `x-nullable: true` | `nullable: true` | `type: ["string", "null"]` |
+| `documentation: { x: { nullable: true } }` | `x-nullable: true` | `nullable: true` | `type: ["string", "null"]` |
+
+This means existing Swagger 2.0 code using `x: { nullable: true }` works seamlessly when switching to OAS 3.x.
+
+`allow_blank: true` does not make a parameter nullable. For entity exposures, the grape-swagger-entity parser forwards only `x: { nullable: true }`; a plain `documentation: { nullable: true }` on an exposure is not passed on.
+
+## Differences and Limitations
+
+- **Nullable** comes only from `documentation: { nullable: true }` or `documentation: { x: { nullable: true } }` on parameters, and from `x: { nullable: true }` on entity exposures. `allow_blank: true` is ignored.
+- **Legacy parity.** The OAS 3.x output follows the Swagger 2.0 generator where the two could differ:
+  - params declared inside `given` blocks keep the `required` flag they have in Swagger 2.0 output;
+  - bodyless statuses (`204`, `304`) keep their schema instead of omitting `content`;
+  - an unrecognised `param_type`/`in` value is emitted verbatim and not validated.
+- **Symbolic response statuses** such as `:created` or `:not_found` are resolved to HTTP codes. A symbol Rack does not know (for example a typo such as `:not_foud`) is skipped with a warning (once per symbol). An unknown symbol as the success `code` falls back to the method's default success status.
+- **Hash and array-of-object container params on GET** emit both the container parameter (`f`) and its member parameters (`f[x]`) as query parameters; the Swagger 2.0 output emits only `f[x]`. For a nested `Array do ... end` the extra container parameter is typed as an array of strings, which is not the item type. With `array_use_braces: true` the nested names are documented as `items[name]`, whereas Grape expects `items[][name]` (Swagger 2.0 emits the latter).
+- **Tags**: Swagger 2.0 derives the tag list from the first operation of each path and emits no user `tags:` when the API has no routes. OpenAPI 3.x collects tags from every operation and always emits user-supplied `tags:`.
+- **`array_use_braces: true`** keeps `ids[]` as the name of flat array query, header and form-encoded fields, as in Swagger 2.0. JSON request bodies use the bare name, and arrays nested in objects or groups (`o[a][]`, or a flat array declared next to a nested group in a form body) are expressed through the schema without braces, so a client must add the brackets itself when encoding such form fields.
+- **`openapi_version`** accepts `'3.0'` and `'3.1'` as well as patch versions (`'3.0.3'`, `'3.1.0'`). `'2.0'` and `nil` mean Swagger 2.0. Other spellings (`'oas30'`, `'oas31'`, `'swagger'` and similar) are accepted as undocumented aliases. Any other value, including a typo, raises `ArgumentError` when `add_swagger_documentation` is called.
+- **`openapi_version: '2.0'`** is generated by the original Swagger 2.0 generator, the same as leaving the option out.
+- **`collectionFormat`** on array parameters becomes `style` and `explode`: in a query `csv` is `form` with `explode: false`, `ssv` is `spaceDelimited`, `pipes` is `pipeDelimited` (all with `explode: false`) and `multi` is `form` with `explode: true`; in a path or header `csv` is `simple`. `tsv` and `brackets` have no OAS 3 equivalent, so no `style` is emitted for them.
+- **Webhooks** are written as OpenAPI path items and emitted as given; only `#/definitions/` references are rewritten to `#/components/schemas/`.
+- **3.1 only options** (`json_schema_dialect`, `webhooks`, license `identifier`) are left out of OpenAPI 3.0 and Swagger 2.0 documents.
+
+## Architecture
+
+```
+Grape Routes
+     │
+     ▼
+┌─────────────────────────────┐
+│  Builder::Spec              │
+│  (lib/grape-swagger/openapi)│
+└─────────────────────────────┘
+     │
+     ▼
+┌─────────────────────────────┐
+│  OpenAPI Model Layer        │
+│  (Document, Schema, etc.)   │
+└─────────────────────────────┘
+     │
+     ├──────────────┐
+     ▼              ▼
+┌──────────┐  ┌──────────┐
+│  OAS30   │  │  OAS31   │
+│ Exporter │  │ Exporter │
+└──────────┘  └──────────┘
+```
+
+## Backward Compatibility
+
+- **Default unchanged**: Without `openapi_version`, Swagger 2.0 is generated
+- **Shared options**: `info`, `host`, `base_path`, `schemes`, `produces`, `consumes`, `tags`, `models`, `security_definitions` and `security` are read by both generators; Swagger 2.0 only fields such as `host` and `schemes` become `servers`, and `securityDefinitions` become `components/securitySchemes`
+- **Model parsers unchanged**: grape-entity, representable, etc. work as before
+- **Parser authors**: when generating OpenAPI 3.x, the second argument to `Parser#initialize` is a `GrapeSwagger::OpenAPI::Builder::ParserContext`. It exposes only `expose_params_from_model(model)` (registers a nested model and returns its definition name), which is all the grape-swagger-entity and -representable parsers call. Definitions are owned by the builder, not the Grape endpoint. The legacy Swagger 2.0 path still passes the Grape endpoint.

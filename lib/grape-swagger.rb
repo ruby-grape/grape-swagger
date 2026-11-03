@@ -17,6 +17,7 @@ require 'grape-swagger/token_owner_resolver'
 
 # OpenAPI 3.x support
 require 'grape-swagger/openapi'
+require 'grape-swagger/openapi/builder'
 require 'grape-swagger/exporter'
 
 module GrapeSwagger

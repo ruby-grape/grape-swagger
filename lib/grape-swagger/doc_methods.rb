@@ -39,7 +39,9 @@ module GrapeSwagger
         specific_api_documentation: { desc: 'Swagger compatible API description for specific API' },
         endpoint_auth_wrapper: nil,
         swagger_endpoint_guard: nil,
-        token_owner: nil
+        token_owner: nil,
+        # OpenAPI version: nil (Swagger 2.0), '3.0', or '3.1'
+        openapi_version: nil
       }.freeze
 
     FORMATTER_METHOD = %i[format default_format default_error_formatter].freeze

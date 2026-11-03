@@ -100,8 +100,7 @@ module GrapeSwagger
         end
 
         def document_as_property(param)
-          keys = param[:type] == 'string' ? property_keys + string_schema_keys : property_keys
-          keys.each_with_object({}) do |x, memo|
+          property_keys.each_with_object({}) do |x, memo|
             next unless param.key?(x)
 
             value = param[x]
@@ -180,11 +179,7 @@ module GrapeSwagger
 
         def property_keys
           %i[type format description minimum maximum items enum default additional_properties additionalProperties
-             example]
-        end
-
-        def string_schema_keys
-          %i[minLength maxLength]
+             example minLength maxLength minProperties maxProperties]
         end
 
         def array_schema_keys

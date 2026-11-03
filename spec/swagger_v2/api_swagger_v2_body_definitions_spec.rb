@@ -104,8 +104,11 @@ describe 'body parameter definitions' do
       end
 
       it 'does not put string length limits on non-string types' do
-        expect(properties.fetch('ratio')).not_to include('maxLength')
-        expect(properties.fetch('meta')).not_to include('maxLength')
+        expect(properties.fetch('ratio')).to eq('type' => 'number', 'format' => 'float')
+      end
+
+      it 'maps Hash length limits to property counts' do
+        expect(properties.fetch('meta')).to eq('type' => 'object', 'maxProperties' => 3)
       end
 
       it 'leaves unconstrained properties unchanged' do

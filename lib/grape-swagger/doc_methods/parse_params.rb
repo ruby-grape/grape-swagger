@@ -89,9 +89,14 @@ module GrapeSwagger
             value_type
           )
 
-          @parsed_param[:items] = array_items
+          @parsed_param[:items] = nest_array_items(array_items, value_type[:type])
           @parsed_param[:type] = 'array'
           @parsed_param[:collectionFormat] = collection_format if DataType.collections.include?(collection_format)
+        end
+
+        def nest_array_items(items, declared_type)
+          depth = declared_type.to_s[/\A\[*/].size
+          (depth - 1).times.reduce(items) { |inner, _| { type: 'array', items: inner } }
         end
 
         def parse_array_item(definitions, type, value_type)

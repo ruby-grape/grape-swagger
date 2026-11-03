@@ -164,6 +164,21 @@ describe 'Group Params as Array' do
             { 'declared_params' => declared(params) }
           end
 
+          params do
+            requires :matrix, type: Array[Array[String]]
+            requires :cube, type: Array[Array[Array[Integer]]]
+          end
+          post '/nested_arrays_body' do
+            { 'declared_params' => declared(params) }
+          end
+
+          params do
+            requires :matrix, type: Array[Array[String]]
+          end
+          get '/nested_arrays_query' do
+            { 'declared_params' => declared(params) }
+          end
+
           add_swagger_documentation array_use_braces: array_use_braces
         end
       end
@@ -426,6 +441,48 @@ describe 'Group Params as Array' do
         specify do
           expect(subject['paths']['/form_encoded_array']['post']['parameters']).to eql(
             [{ 'in' => 'formData', 'name' => "array_of_string#{braces}", 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => true }]
+          )
+        end
+      end
+
+      describe 'retrieves the documentation for nested arrays sent as body' do
+        subject do
+          get '/swagger_doc/nested_arrays_body'
+          JSON.parse(last_response.body)
+        end
+
+        specify do
+          expect(subject['definitions']['postNestedArraysBody']).to eql(
+            'type' => 'object',
+            'properties' => {
+              'matrix' => { 'type' => 'array', 'items' => { 'type' => 'array', 'items' => { 'type' => 'string' } } },
+              'cube' => {
+                'type' => 'array',
+                'items' => {
+                  'type' => 'array',
+                  'items' => { 'type' => 'array', 'items' => { 'type' => 'integer', 'format' => 'int32' } }
+                }
+              }
+            },
+            'required' => %w[matrix cube]
+          )
+        end
+      end
+
+      describe 'retrieves the documentation for nested arrays sent as query' do
+        subject do
+          get '/swagger_doc/nested_arrays_query'
+          JSON.parse(last_response.body)
+        end
+
+        specify do
+          expect(subject['paths']['/nested_arrays_query']['get']['parameters']).to eql(
+            [
+              {
+                'in' => 'query', 'name' => "matrix#{braces}", 'type' => 'array', 'required' => true,
+                'items' => { 'type' => 'array', 'items' => { 'type' => 'string' } }
+              }
+            ]
           )
         end
       end

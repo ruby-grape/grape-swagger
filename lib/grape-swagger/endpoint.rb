@@ -185,6 +185,9 @@ module Grape
         memo << GrapeSwagger::DocMethods::ParseParams.call(param, value, path, route, @definitions, consumes)
       end
 
+      # braced array names collapse onto their unbraced twins once body params are renamed
+      parameters.uniq! { |param| [param[:name], param[:in]] }
+
       if GrapeSwagger::DocMethods::MoveParams.can_be_moved?(route.request_method, parameters)
         parameters = GrapeSwagger::DocMethods::MoveParams.to_definition(path, parameters, route, @definitions)
       end

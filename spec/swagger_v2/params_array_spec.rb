@@ -116,6 +116,16 @@ describe 'Group Params as Array' do
             { 'declared_params' => declared(params) }
           end
 
+          params do
+            requires :typed_group, type: Array do
+              requires :id, type: Integer
+              optional :tags, type: Array[String]
+            end
+          end
+          post '/nested_group_body' do
+            { 'declared_params' => declared(params) }
+          end
+
           add_swagger_documentation array_use_braces: array_use_braces
         end
       end
@@ -286,6 +296,33 @@ describe 'Group Params as Array' do
               'required' => %w[array_of_string array_of_integer]
             )
           end
+        end
+      end
+
+      describe 'retrieves the documentation for a group of parameters sent as body' do
+        subject do
+          get '/swagger_doc/nested_group_body'
+          JSON.parse(last_response.body)
+        end
+
+        specify do
+          expect(subject['definitions']['postNestedGroupBody']).to eql(
+            'type' => 'object',
+            'properties' => {
+              'typed_group' => {
+                'type' => 'array',
+                'items' => {
+                  'type' => 'object',
+                  'properties' => {
+                    'id' => { 'type' => 'integer', 'format' => 'int32' },
+                    'tags' => { 'type' => 'array', 'items' => { 'type' => 'string' } }
+                  },
+                  'required' => ['id']
+                }
+              }
+            },
+            'required' => ['typed_group']
+          )
         end
       end
     end

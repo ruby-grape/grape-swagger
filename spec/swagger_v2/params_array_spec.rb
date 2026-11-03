@@ -142,6 +142,28 @@ describe 'Group Params as Array' do
             { 'declared_params' => declared(params) }
           end
 
+          params do
+            requires :array_of_string, type: Array[String]
+          end
+          put '/put_array' do
+            { 'declared_params' => declared(params) }
+          end
+
+          params do
+            requires :array_of_string, type: Array[String]
+          end
+          patch '/patch_array' do
+            { 'declared_params' => declared(params) }
+          end
+
+          params do
+            requires :array_of_string, type: Array[String]
+          end
+          desc 'form encoded array', consumes: ['application/x-www-form-urlencoded']
+          post '/form_encoded_array' do
+            { 'declared_params' => declared(params) }
+          end
+
           add_swagger_documentation array_use_braces: array_use_braces
         end
       end
@@ -374,6 +396,36 @@ describe 'Group Params as Array' do
               'implicit_body_array' => { 'type' => 'array', 'items' => { 'type' => 'integer', 'format' => 'int32' } }
             },
             'required' => %w[explicit_body_array implicit_body_array]
+          )
+        end
+      end
+
+      %w[put patch].each do |verb|
+        describe "retrieves the documentation for an array sent as body of a #{verb.upcase} endpoint" do
+          subject do
+            get "/swagger_doc/#{verb}_array"
+            JSON.parse(last_response.body)
+          end
+
+          specify do
+            expect(subject['definitions']["#{verb}#{verb.capitalize}Array"]).to eql(
+              'type' => 'object',
+              'properties' => { 'array_of_string' => { 'type' => 'array', 'items' => { 'type' => 'string' } } },
+              'required' => ['array_of_string']
+            )
+          end
+        end
+      end
+
+      describe 'retrieves the documentation for an array sent form encoded' do
+        subject do
+          get '/swagger_doc/form_encoded_array'
+          JSON.parse(last_response.body)
+        end
+
+        specify do
+          expect(subject['paths']['/form_encoded_array']['post']['parameters']).to eql(
+            [{ 'in' => 'formData', 'name' => "array_of_string#{braces}", 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => true }]
           )
         end
       end

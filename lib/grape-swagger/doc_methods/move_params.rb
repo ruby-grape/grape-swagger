@@ -183,7 +183,7 @@ module GrapeSwagger
         end
 
         def array_schema_keys
-          %i[minItems maxItems]
+          %i[minItems maxItems default]
         end
 
         def deletable?(param)

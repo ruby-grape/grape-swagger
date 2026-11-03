@@ -100,7 +100,12 @@ module GrapeSwagger
           enum_or_range_values = parse_enum_or_range_values(values)
           array_items.merge!(enum_or_range_values) if enum_or_range_values
 
-          array_items[:default] = value_type[:default] if value_type[:default].present?
+          default = value_type[:default]
+          if default.is_a?(Array)
+            @parsed_param[:default] = default
+          elsif default.present?
+            array_items[:default] = default
+          end
 
           set_additional_properties, additional_properties = parse_additional_properties(definitions, value_type)
           array_items[:additionalProperties] = additional_properties if set_additional_properties

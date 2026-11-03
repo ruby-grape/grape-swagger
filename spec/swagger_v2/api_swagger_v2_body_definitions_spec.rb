@@ -56,6 +56,8 @@ describe 'body parameter definitions' do
             requires :name, type: String, length: { min: 1, max: 50 }
             requires :tags, type: Array[String], length: { min: 0, max: 3 }
             optional :unlimited_name, type: String
+            optional :ratio, type: Float, length: { max: 3 }
+            optional :meta, type: Hash, length: { max: 3 }
             optional :unlimited_tags, type: Array[String]
             optional :records, type: Array[JSON], length: { min: 1, max: 5 } do
               optional :code, type: String, length: { max: 3 }
@@ -99,6 +101,11 @@ describe 'body parameter definitions' do
           'type' => 'array', 'minItems' => 1, 'maxItems' => 5,
           'items' => { 'type' => 'object', 'properties' => { 'code' => { 'type' => 'string', 'maxLength' => 3 } } }
         )
+      end
+
+      it 'does not put string length limits on non-string types' do
+        expect(properties.fetch('ratio')).not_to include('maxLength')
+        expect(properties.fetch('meta')).not_to include('maxLength')
       end
 
       it 'leaves unconstrained properties unchanged' do

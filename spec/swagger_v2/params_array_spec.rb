@@ -126,6 +126,22 @@ describe 'Group Params as Array' do
             { 'declared_params' => declared(params) }
           end
 
+          params do
+            requires :query_array, type: Array[String], documentation: { param_type: 'query' }
+            requires :body_array, type: Array[Integer]
+          end
+          post '/mixed_param_types' do
+            { 'declared_params' => declared(params) }
+          end
+
+          params do
+            requires :explicit_body_array, type: Array[String], documentation: { param_type: 'body' }
+            requires :implicit_body_array, type: Array[Integer]
+          end
+          post '/explicit_body' do
+            { 'declared_params' => declared(params) }
+          end
+
           add_swagger_documentation array_use_braces: array_use_braces
         end
       end
@@ -322,6 +338,42 @@ describe 'Group Params as Array' do
               }
             },
             'required' => ['typed_group']
+          )
+        end
+      end
+
+      describe 'retrieves the documentation for an array that stays a query parameter on a POST endpoint' do
+        subject do
+          get '/swagger_doc/mixed_param_types'
+          JSON.parse(last_response.body)
+        end
+
+        specify do
+          expect(subject['paths']['/mixed_param_types']['post']['parameters'].first).to eql(
+            'in' => 'query', 'name' => "query_array#{braces}", 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => true
+          )
+          expect(subject['definitions']['postMixedParamTypes']).to eql(
+            'type' => 'object',
+            'properties' => { 'body_array' => { 'type' => 'array', 'items' => { 'type' => 'integer', 'format' => 'int32' } } },
+            'required' => ['body_array']
+          )
+        end
+      end
+
+      describe 'retrieves the documentation for arrays when a body parameter is declared explicitly' do
+        subject do
+          get '/swagger_doc/explicit_body'
+          JSON.parse(last_response.body)
+        end
+
+        specify do
+          expect(subject['definitions']['postExplicitBody']).to eql(
+            'type' => 'object',
+            'properties' => {
+              'explicit_body_array' => { 'type' => 'array', 'items' => { 'type' => 'string' } },
+              'implicit_body_array' => { 'type' => 'array', 'items' => { 'type' => 'integer', 'format' => 'int32' } }
+            },
+            'required' => %w[explicit_body_array implicit_body_array]
           )
         end
       end

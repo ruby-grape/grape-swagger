@@ -28,6 +28,22 @@ describe GrapeSwagger::OpenAPI::Builder::ParserContext do
       end
     end
 
+    %w[3.0.0 3.1.0].each do |version|
+      it "puts parser-produced definitions in components.schemas for #{version}" do
+        api = Class.new(Grape::API) do
+          format :json
+          desc 'Post', success: ParserContextSpec::Post
+          get('/post') { {} }
+          add_swagger_documentation(openapi_version: version)
+        end
+        session = Rack::Test::Session.new(Rack::MockSession.new(api))
+        session.get '/swagger_doc'
+        schemas = JSON.parse(session.last_response.body)['components']['schemas']
+
+        expect(schemas.keys).to include('ParserContextSpec_Post', 'ParserContextSpec_Tag')
+      end
+    end
+
     it 'does not touch the endpoint it builds for' do
       endpoint = Object.new
 

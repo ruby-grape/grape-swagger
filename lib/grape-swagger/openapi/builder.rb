@@ -8,6 +8,7 @@ require_relative 'builder/concerns/operations'
 require_relative 'builder/concerns/tags'
 require_relative 'builder/concerns/parameters'
 require_relative 'builder/concerns/request_body'
+require_relative 'builder/concerns/responses'
 require_relative 'builder/concerns/schemas'
 
 module GrapeSwagger
@@ -30,6 +31,7 @@ module GrapeSwagger
         include TagBuilder
         include ParameterBuilder
         include RequestBodyBuilder
+        include ResponseBuilder
 
         attr_reader :spec, :definitions, :options
 

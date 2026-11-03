@@ -14,6 +14,7 @@ require 'grape-swagger/doc_methods/move_params'
 require 'grape-swagger/doc_methods/build_model_definition'
 require 'grape-swagger/doc_methods/version'
 require 'grape-swagger/doc_methods/route_rules'
+require 'grape-swagger/doc_methods/webhooks'
 require 'grape-swagger/doc_methods/output_builder'
 
 module GrapeSwagger
@@ -41,7 +42,10 @@ module GrapeSwagger
         swagger_endpoint_guard: nil,
         token_owner: nil,
         # OpenAPI version: nil (Swagger 2.0), '3.0', or '3.1'
-        openapi_version: nil
+        openapi_version: nil,
+        # OpenAPI 3.1 specific options
+        json_schema_dialect: nil,
+        webhooks: nil
       }.freeze
 
     FORMATTER_METHOD = %i[format default_format default_error_formatter].freeze

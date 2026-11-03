@@ -6,6 +6,7 @@
 
 #### Fixes
 
+* [#1013](https://github.com/ruby-grape/grape-swagger/pull/1013): Fix array `default` values being placed inside `items` instead of on the array parameter or property - [@numbata](https://github.com/numbata).
 * [#1012](https://github.com/ruby-grape/grape-swagger/pull/1012): Keep the Danger PR check running in CI by pinning `git` below 6 - [@numbata](https://github.com/numbata).
 * [#1011](https://github.com/ruby-grape/grape-swagger/pull/1011): Preserve string length, array item and object property limits in body parameter definitions, and emit `minLength`/`maxLength` only for strings (`minProperties`/`maxProperties` for hashes) instead of any non-array type - [@numbata](https://github.com/numbata).
 * [#1009](https://github.com/ruby-grape/grape-swagger/pull/1009): Bump the Danger `danger-comment.yml` workflow from 0.1.0 to 0.1.1 - [@dependabot[bot]](https://github.com/dependabot%5Bbot%5D).

@@ -95,6 +95,90 @@ describe 'Group Params as Array' do
             { 'declared_params' => declared(params) }
           end
 
+          helpers do
+            params :common_params do
+              requires :array_of_string, type: Array[String]
+              requires :array_of_integer, type: Array[Integer]
+            end
+          end
+
+          params do
+            use :common_params
+          end
+          get '/endpoint_with_common_params' do
+            { 'declared_params' => declared(params) }
+          end
+
+          params do
+            use :common_params
+          end
+          post '/endpoint_with_common_params' do
+            { 'declared_params' => declared(params) }
+          end
+
+          params do
+            requires :typed_group, type: Array do
+              requires :id, type: Integer
+              optional :tags, type: Array[String]
+            end
+          end
+          post '/nested_group_body' do
+            { 'declared_params' => declared(params) }
+          end
+
+          params do
+            requires :query_array, type: Array[String], documentation: { param_type: 'query' }
+            requires :body_array, type: Array[Integer]
+          end
+          post '/mixed_param_types' do
+            { 'declared_params' => declared(params) }
+          end
+
+          params do
+            requires :explicit_body_array, type: Array[String], documentation: { param_type: 'body' }
+            requires :implicit_body_array, type: Array[Integer]
+          end
+          post '/explicit_body' do
+            { 'declared_params' => declared(params) }
+          end
+
+          params do
+            requires :array_of_string, type: Array[String]
+          end
+          put '/put_array' do
+            { 'declared_params' => declared(params) }
+          end
+
+          params do
+            requires :array_of_string, type: Array[String]
+          end
+          patch '/patch_array' do
+            { 'declared_params' => declared(params) }
+          end
+
+          params do
+            requires :array_of_string, type: Array[String]
+          end
+          desc 'form encoded array', consumes: ['application/x-www-form-urlencoded']
+          post '/form_encoded_array' do
+            { 'declared_params' => declared(params) }
+          end
+
+          params do
+            requires :matrix, type: Array[Array[String]]
+            requires :cube, type: Array[Array[Array[Integer]]]
+          end
+          post '/nested_arrays_body' do
+            { 'declared_params' => declared(params) }
+          end
+
+          params do
+            requires :matrix, type: Array[Array[String]]
+          end
+          get '/nested_arrays_query' do
+            { 'declared_params' => declared(params) }
+          end
+
           add_swagger_documentation array_use_braces: array_use_braces
         end
       end
@@ -218,6 +302,188 @@ describe 'Group Params as Array' do
         specify do
           expect(subject['definitions']['ApiError']).not_to be_blank
           expect(subject['paths']['/array_of_entities']['post']['parameters']).to eql(parameters)
+        end
+      end
+
+      describe 'retrieves the documentation for parameters shared between GET and POST endpoints' do
+        subject do
+          get '/swagger_doc/endpoint_with_common_params'
+          JSON.parse(last_response.body)
+        end
+
+        describe 'for non-body parameters' do
+          specify do
+            expect(subject['paths']['/endpoint_with_common_params']['get']['parameters']).to eql(
+              [
+                { 'in' => 'query', 'name' => "array_of_string#{braces}", 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => true },
+                { 'in' => 'query', 'name' => "array_of_integer#{braces}", 'type' => 'array', 'items' => { 'type' => 'integer', 'format' => 'int32' }, 'required' => true }
+              ]
+            )
+          end
+        end
+
+        describe 'for body parameters' do
+          specify do
+            expect(subject['paths']['/endpoint_with_common_params']['post']['parameters']).to eql(
+              [
+                { 'in' => 'body', 'name' => 'postEndpointWithCommonParams', 'schema' => { '$ref' => '#/definitions/postEndpointWithCommonParams' }, 'required' => true }
+              ]
+            )
+            expect(subject['definitions']['postEndpointWithCommonParams']).to eql(
+              'type' => 'object',
+              'properties' => {
+                'array_of_string' => { # no braces, even if array_use_braces is true
+                  'type' => 'array',
+                  'items' => {
+                    'type' => 'string'
+                  }
+                },
+                'array_of_integer' => { # no braces, even if array_use_braces is true
+                  'type' => 'array',
+                  'items' => {
+                    'type' => 'integer',
+                    'format' => 'int32'
+                  }
+                }
+              },
+              'required' => %w[array_of_string array_of_integer]
+            )
+          end
+        end
+      end
+
+      describe 'retrieves the documentation for a group of parameters sent as body' do
+        subject do
+          get '/swagger_doc/nested_group_body'
+          JSON.parse(last_response.body)
+        end
+
+        specify do
+          expect(subject['definitions']['postNestedGroupBody']).to eql(
+            'type' => 'object',
+            'properties' => {
+              'typed_group' => {
+                'type' => 'array',
+                'items' => {
+                  'type' => 'object',
+                  'properties' => {
+                    'id' => { 'type' => 'integer', 'format' => 'int32' },
+                    'tags' => { 'type' => 'array', 'items' => { 'type' => 'string' } }
+                  },
+                  'required' => ['id']
+                }
+              }
+            },
+            'required' => ['typed_group']
+          )
+        end
+      end
+
+      describe 'retrieves the documentation for an array that stays a query parameter on a POST endpoint' do
+        subject do
+          get '/swagger_doc/mixed_param_types'
+          JSON.parse(last_response.body)
+        end
+
+        specify do
+          expect(subject['paths']['/mixed_param_types']['post']['parameters'].first).to eql(
+            'in' => 'query', 'name' => "query_array#{braces}", 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => true
+          )
+          expect(subject['definitions']['postMixedParamTypes']).to eql(
+            'type' => 'object',
+            'properties' => { 'body_array' => { 'type' => 'array', 'items' => { 'type' => 'integer', 'format' => 'int32' } } },
+            'required' => ['body_array']
+          )
+        end
+      end
+
+      describe 'retrieves the documentation for arrays when a body parameter is declared explicitly' do
+        subject do
+          get '/swagger_doc/explicit_body'
+          JSON.parse(last_response.body)
+        end
+
+        specify do
+          expect(subject['definitions']['postExplicitBody']).to eql(
+            'type' => 'object',
+            'properties' => {
+              'explicit_body_array' => { 'type' => 'array', 'items' => { 'type' => 'string' } },
+              'implicit_body_array' => { 'type' => 'array', 'items' => { 'type' => 'integer', 'format' => 'int32' } }
+            },
+            'required' => %w[explicit_body_array implicit_body_array]
+          )
+        end
+      end
+
+      %w[put patch].each do |verb|
+        describe "retrieves the documentation for an array sent as body of a #{verb.upcase} endpoint" do
+          subject do
+            get "/swagger_doc/#{verb}_array"
+            JSON.parse(last_response.body)
+          end
+
+          specify do
+            expect(subject['definitions']["#{verb}#{verb.capitalize}Array"]).to eql(
+              'type' => 'object',
+              'properties' => { 'array_of_string' => { 'type' => 'array', 'items' => { 'type' => 'string' } } },
+              'required' => ['array_of_string']
+            )
+          end
+        end
+      end
+
+      describe 'retrieves the documentation for an array sent form encoded' do
+        subject do
+          get '/swagger_doc/form_encoded_array'
+          JSON.parse(last_response.body)
+        end
+
+        specify do
+          expect(subject['paths']['/form_encoded_array']['post']['parameters']).to eql(
+            [{ 'in' => 'formData', 'name' => "array_of_string#{braces}", 'type' => 'array', 'items' => { 'type' => 'string' }, 'required' => true }]
+          )
+        end
+      end
+
+      describe 'retrieves the documentation for nested arrays sent as body' do
+        subject do
+          get '/swagger_doc/nested_arrays_body'
+          JSON.parse(last_response.body)
+        end
+
+        specify do
+          expect(subject['definitions']['postNestedArraysBody']).to eql(
+            'type' => 'object',
+            'properties' => {
+              'matrix' => { 'type' => 'array', 'items' => { 'type' => 'array', 'items' => { 'type' => 'string' } } },
+              'cube' => {
+                'type' => 'array',
+                'items' => {
+                  'type' => 'array',
+                  'items' => { 'type' => 'array', 'items' => { 'type' => 'integer', 'format' => 'int32' } }
+                }
+              }
+            },
+            'required' => %w[matrix cube]
+          )
+        end
+      end
+
+      describe 'retrieves the documentation for nested arrays sent as query' do
+        subject do
+          get '/swagger_doc/nested_arrays_query'
+          JSON.parse(last_response.body)
+        end
+
+        specify do
+          expect(subject['paths']['/nested_arrays_query']['get']['parameters']).to eql(
+            [
+              {
+                'in' => 'query', 'name' => "matrix#{braces}", 'type' => 'array', 'required' => true,
+                'items' => { 'type' => 'array', 'items' => { 'type' => 'string' } }
+              }
+            ]
+          )
         end
       end
     end

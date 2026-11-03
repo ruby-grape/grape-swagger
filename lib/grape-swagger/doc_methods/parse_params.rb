@@ -17,6 +17,7 @@ module GrapeSwagger
             in: param_type(value_type, consumes),
             name: settings[:full_name] || param
           }
+          fix_name_of_body_array_param(value_type)
 
           # optional properties
           document_description(settings)
@@ -34,6 +35,12 @@ module GrapeSwagger
         end
 
         private
+
+        def fix_name_of_body_array_param(value_type)
+          return unless @parsed_param[:in] == 'body' && value_type[:is_array]
+
+          @parsed_param[:name] = @parsed_param[:name].delete_suffix('[]')
+        end
 
         def document_description(settings)
           description = settings[:desc] || settings[:description]
@@ -82,9 +89,14 @@ module GrapeSwagger
             value_type
           )
 
-          @parsed_param[:items] = array_items
+          @parsed_param[:items] = nest_array_items(array_items, value_type[:type])
           @parsed_param[:type] = 'array'
           @parsed_param[:collectionFormat] = collection_format if DataType.collections.include?(collection_format)
+        end
+
+        def nest_array_items(items, declared_type)
+          depth = declared_type.to_s[/\A\[*/].size
+          (depth - 1).times.reduce(items) { |inner, _| { type: 'array', items: inner } }
         end
 
         def parse_array_item(definitions, type, value_type)

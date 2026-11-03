@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#999](https://github.com/ruby-grape/grape-swagger/pull/999): Share per-route documentation rules between the Swagger 2.0 and OpenAPI 3 generators; Swagger 2.0 output now emits `x-nullable` for parameters documented with `documentation: { nullable: true }`, accepts a hash for `license:`, exposes `GrapeSwagger.schema_name_generator=`, and no longer lists hidden properties in a definition's `required` - [@numbata](https://github.com/numbata).
 * Your contribution here.
 
 #### Fixes

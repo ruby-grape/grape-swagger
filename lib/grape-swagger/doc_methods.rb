@@ -13,6 +13,8 @@ require 'grape-swagger/doc_methods/parse_params'
 require 'grape-swagger/doc_methods/move_params'
 require 'grape-swagger/doc_methods/build_model_definition'
 require 'grape-swagger/doc_methods/version'
+require 'grape-swagger/doc_methods/route_rules'
+require 'grape-swagger/doc_methods/output_builder'
 
 module GrapeSwagger
   module DocMethods
@@ -43,32 +45,7 @@ module GrapeSwagger
     FORMATTER_METHOD = %i[format default_format default_error_formatter].freeze
 
     def self.output_path_definitions(combi_routes, endpoint, target_class, options)
-      output = endpoint.swagger_object(
-        target_class,
-        endpoint.request,
-        options
-      )
-
-      paths, definitions   = endpoint.path_and_definition_objects(combi_routes, options)
-      tags                 = tags_from(paths, options)
-
-      output[:tags]        = tags unless tags.empty? || paths.blank?
-      output[:paths]       = paths unless paths.blank?
-      output[:definitions] = definitions unless definitions.blank?
-
-      output
-    end
-
-    def self.tags_from(paths, options)
-      tags = GrapeSwagger::DocMethods::TagNameDescription.build(paths)
-
-      if options[:tags]
-        names = options[:tags].map { |t| t[:name] }
-        tags.reject! { |t| names.include?(t[:name]) }
-        tags += options[:tags]
-      end
-
-      tags
+      OutputBuilder.build(combi_routes, endpoint, target_class, options)
     end
 
     def hide_documentation_path

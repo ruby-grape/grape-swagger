@@ -167,12 +167,19 @@ module GrapeSwagger
         end
 
         def document_length_limits(value_type)
-          if value_type[:is_array]
-            @parsed_param[:minItems] = value_type[:min_length] if value_type.key?(:min_length)
-            @parsed_param[:maxItems] = value_type[:max_length] if value_type.key?(:max_length)
-          else
-            @parsed_param[:minLength] = value_type[:min_length] if value_type.key?(:min_length)
-            @parsed_param[:maxLength] = value_type[:max_length] if value_type.key?(:max_length)
+          min_key, max_key = length_limit_keys(value_type)
+          return unless min_key
+
+          @parsed_param[min_key] = value_type[:min_length] if value_type.key?(:min_length)
+          @parsed_param[max_key] = value_type[:max_length] if value_type.key?(:max_length)
+        end
+
+        def length_limit_keys(value_type)
+          return %i[minItems maxItems] if value_type[:is_array]
+
+          case value_type[:data_type]
+          when 'string' then %i[minLength maxLength]
+          when 'object' then %i[minProperties maxProperties]
           end
         end
 

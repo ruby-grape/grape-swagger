@@ -5,9 +5,7 @@ require 'spec_helper'
 describe 'hidden parameter with nested children' do
   def parameter_names(path, verb = 'get')
     get '/swagger_doc'
-    parameters = JSON.parse(last_response.body).dig('paths', path, verb, 'parameters')
-    expect(parameters).not_to be_nil
-    parameters.map { |p| p['name'] }
+    Array(JSON.parse(last_response.body).dig('paths', path, verb, 'parameters')).map { |p| p['name'] }
   end
 
   context 'with query parameters' do
@@ -51,18 +49,21 @@ describe 'hidden parameter with nested children' do
 
   context 'with a hidden proc that receives the token owner' do
     let(:app) do
+      current = owner
+
       Class.new(Grape::API) do
         format :json
 
         helpers do
-          def current_user
-            :admin
-          end
+          define_method(:current_user) { current }
         end
 
         params do
           optional :query, type: String
-          optional :filters, type: Hash, documentation: { hidden: ->(user) { user == :admin } } do
+          optional :admin_hidden, type: Hash, documentation: { hidden: ->(user) { user == :admin } } do
+            optional :status, type: String
+          end
+          optional :guest_hidden, type: Hash, documentation: { hidden: ->(user) { user == :guest } } do
             optional :status, type: String
           end
         end
@@ -72,8 +73,20 @@ describe 'hidden parameter with nested children' do
       end
     end
 
-    it 'evaluates the proc with the token owner' do
-      expect(parameter_names('/search')).to eq(%w[query])
+    context 'when the owner makes the proc truthy' do
+      let(:owner) { :admin }
+
+      it 'hides the parent and its children' do
+        expect(parameter_names('/search')).to eq(%w[query guest_hidden[status]])
+      end
+    end
+
+    context 'when the owner makes the proc falsy' do
+      let(:owner) { :guest }
+
+      it 'keeps the parent and its children' do
+        expect(parameter_names('/search')).to eq(%w[query admin_hidden[status]])
+      end
     end
   end
 
@@ -94,10 +107,11 @@ describe 'hidden parameter with nested children' do
       end
     end
 
+    # regression guard: body params were already handled before nested hiding was added
     it 'leaves no hidden children in the body definition' do
       get '/swagger_doc'
       json = JSON.parse(last_response.body)
-      definition = json['definitions'].values.first
+      definition = json['definitions']['postSearch']
       expect(definition['properties'].keys).to eq(%w[query])
     end
   end

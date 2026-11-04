@@ -172,7 +172,8 @@ module Grape
 
     def params_object(route, options, path, consumes)
       request_params = build_request_params(route, options)
-      hidden_roots = request_params.select { |_, value| hidden_parameter?(value, options) }.keys
+      token_owner = lazy_token_owner(options)
+      hidden_roots = request_params.select { |_, value| hidden_parameter?(value, token_owner) }.keys
 
       parameters = request_params.each_with_object([]) do |(param, value), memo|
         next if hidden_roots.any? { |root| param == root || param.start_with?("#{root}[") }
@@ -437,21 +438,35 @@ module Grape
       route_hidden = route.settings.try(:[], :swagger).try(:[], :hidden)
       hidden_val = route.hidden
       route_hidden = hidden_val unless hidden_val.nil?
-      evaluate_hidden(route_hidden, options)
+      evaluate_hidden(route_hidden, lazy_token_owner(options))
     end
 
-    def hidden_parameter?(value, options)
+    def hidden_parameter?(value, token_owner)
       return false if value[:required]
 
-      evaluate_hidden(value.dig(:documentation, :hidden), options)
+      evaluate_hidden(value.dig(:documentation, :hidden), token_owner)
     end
 
-    def evaluate_hidden(hidden, options)
+    def evaluate_hidden(hidden, token_owner)
       return hidden unless hidden.is_a?(Proc)
-      return hidden.call unless options[:token_owner]
+      return hidden.call unless token_owner
 
-      token_owner = GrapeSwagger::TokenOwnerResolver.resolve(self, options[:token_owner])
-      GrapeSwagger::TokenOwnerResolver.evaluate_proc(hidden, token_owner)
+      GrapeSwagger::TokenOwnerResolver.evaluate_proc(hidden, token_owner.call)
+    end
+
+    # Resolves the token owner at most once, and only if a hidden proc asks for it.
+    def lazy_token_owner(options)
+      return unless options[:token_owner]
+
+      resolved = false
+      owner = nil
+      lambda do
+        unless resolved
+          owner = GrapeSwagger::TokenOwnerResolver.resolve(self, options[:token_owner])
+          resolved = true
+        end
+        owner
+      end
     end
 
     def apply_model_documentation(response_model, model)

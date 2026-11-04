@@ -172,10 +172,10 @@ module Grape
 
     def params_object(route, options, path, consumes)
       request_params = build_request_params(route, options)
-      hidden_roots = request_params.select { |_, value| hidden_parameter?(value) }.keys
+      hidden_roots = request_params.select { |_, value| hidden_parameter?(value, options) }.keys
 
       parameters = request_params.each_with_object([]) do |(param, value), memo|
-        next if hidden_roots.include?(param) || hidden_roots.any? { |root| param.start_with?("#{root}[") }
+        next if hidden_roots.any? { |root| param == root || param.start_with?("#{root}[") }
 
         value = { required: false }.merge(value) if value.is_a?(Hash)
         _, value = default_type([[param, value]]).first if value == ''
@@ -437,22 +437,21 @@ module Grape
       route_hidden = route.settings.try(:[], :swagger).try(:[], :hidden)
       hidden_val = route.hidden
       route_hidden = hidden_val unless hidden_val.nil?
-      return route_hidden unless route_hidden.is_a?(Proc)
-
-      return route_hidden.call unless options[:token_owner]
-
-      token_owner = GrapeSwagger::TokenOwnerResolver.resolve(self, options[:token_owner])
-      GrapeSwagger::TokenOwnerResolver.evaluate_proc(route_hidden, token_owner)
+      evaluate_hidden(route_hidden, options)
     end
 
-    def hidden_parameter?(value)
+    def hidden_parameter?(value, options)
       return false if value[:required]
 
-      if value.dig(:documentation, :hidden).is_a?(Proc)
-        value.dig(:documentation, :hidden).call
-      else
-        value.dig(:documentation, :hidden)
-      end
+      evaluate_hidden(value.dig(:documentation, :hidden), options)
+    end
+
+    def evaluate_hidden(hidden, options)
+      return hidden unless hidden.is_a?(Proc)
+      return hidden.call unless options[:token_owner]
+
+      token_owner = GrapeSwagger::TokenOwnerResolver.resolve(self, options[:token_owner])
+      GrapeSwagger::TokenOwnerResolver.evaluate_proc(hidden, token_owner)
     end
 
     def apply_model_documentation(response_model, model)

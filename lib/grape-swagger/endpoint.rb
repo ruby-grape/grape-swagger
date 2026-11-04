@@ -171,8 +171,11 @@ module Grape
     end
 
     def params_object(route, options, path, consumes)
-      parameters = build_request_params(route, options).each_with_object([]) do |(param, value), memo|
-        next if hidden_parameter?(value)
+      request_params = build_request_params(route, options)
+      hidden_roots = request_params.select { |_, value| hidden_parameter?(value) }.keys
+
+      parameters = request_params.each_with_object([]) do |(param, value), memo|
+        next if hidden_roots.include?(param) || hidden_roots.any? { |root| param.start_with?("#{root}[") }
 
         value = { required: false }.merge(value) if value.is_a?(Hash)
         _, value = default_type([[param, value]]).first if value == ''

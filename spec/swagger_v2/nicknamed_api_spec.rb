@@ -3,9 +3,17 @@
 require 'spec_helper'
 
 describe 'a nicknamed mounted api' do
+  class Test < Grape::Entity
+    expose :at do
+      Time.now
+    end
+  end
+
   def app
     Class.new(Grape::API) do
-      desc 'Show this endpoint', nickname: 'simple'
+      desc 'Show this endpoint', nickname: 'simple' do
+        success Test
+      end
       get '/simple' do
         { foo: 'bar' }
       end

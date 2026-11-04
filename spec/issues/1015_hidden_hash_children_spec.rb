@@ -24,6 +24,10 @@ describe 'hidden parameter with nested children' do
             end
           end
           optional :filters_extra, type: String
+          optional :partial, type: Hash do
+            optional :shown, type: String
+            optional :secret, type: String, documentation: { hidden: true }
+          end
           optional :other, type: Hash do
             optional :visible, type: String
           end
@@ -41,7 +45,7 @@ describe 'hidden parameter with nested children' do
     end
 
     it 'hides the nested children together with the parent only' do
-      expect(parameter_names('/search')).to eq(%w[query filters_extra other[visible]])
+      expect(parameter_names('/search')).to eq(%w[query filters_extra partial[shown] other[visible]])
     end
   end
 

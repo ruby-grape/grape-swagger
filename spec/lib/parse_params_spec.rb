@@ -37,6 +37,13 @@ describe GrapeSwagger::DocMethods::ParseParams do
         end
       end
 
+      describe 'first Float' do
+        specify do
+          parsed_range = subject.send(:parse_enum_or_range_values, -5.0..5.0)
+          expect(parsed_range).to eql(minimum: -5.0, maximum: 5.0)
+        end
+      end
+
       describe 'first String' do
         specify do
           parsed_range = subject.send(:parse_enum_or_range_values, 'a'..'z')

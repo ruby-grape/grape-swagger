@@ -167,13 +167,15 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
   context 'Range values' do
     subject(:range_float) { first_parameter_info('range_float') }
 
-    it 'has float range values as string' do
+    it 'has float range values as minimum and maximum' do
       expect(range_float).to eq [{
         'in' => 'formData',
         'name' => 'float',
         'type' => 'number',
         'required' => true,
-        'format' => 'float'
+        'format' => 'float',
+        'minimum' => -5.0,
+        'maximum' => 5.0
       }]
     end
   end

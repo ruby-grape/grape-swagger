@@ -42,6 +42,13 @@ describe '#950 array default belongs to the array, not its items' do
       end
 
       params do
+        optional :dns_servers, type: [String], default: 'z'
+      end
+      post '/scalar_body' do
+        {}
+      end
+
+      params do
         optional :things, type: [JSON], default: [{ 'a' => 1 }] do
           optional :a, type: Integer
         end
@@ -98,6 +105,12 @@ describe '#950 array default belongs to the array, not its items' do
         { 'in' => 'query', 'name' => 'dns_servers', 'type' => 'array',
           'items' => { 'type' => 'string', 'default' => 'z' }, 'required' => false }
       ]
+    )
+  end
+
+  it 'keeps a scalar default of an array body property in items' do
+    expect(subject['definitions']['postScalarBody']['properties']['dns_servers']).to eql(
+      'type' => 'array', 'items' => { 'type' => 'string', 'default' => 'z' }
     )
   end
 

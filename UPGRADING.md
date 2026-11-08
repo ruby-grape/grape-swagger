@@ -5,6 +5,7 @@
 - **A blank `desc(..., tags:)` now means "not specified".** `tags: nil` no longer suppresses the tag and `tags: []` no longer emits an empty `"tags": []`; both derive the tag from the path, as if `tags:` had been omitted. `tags:` is an override, and only a non-empty list overrides anything.
 
   The old `nil` behaviour was never a deliberate one: [#523](https://github.com/ruby-grape/grape-swagger/pull/523) introduced route-level tags to *override* path-derived grouping and read them with `route.options.fetch(:tags, tag_object(route))`, whose default-on-absence semantics happened to give `nil` a meaning of its own. It was never documented or tested.
+- **An `Array` default on an array parameter is now documented on the array, not inside `items`.** `optional :ids, type: [String], default: %w[a b]` emits `default: ["a", "b"]` next to `type: array` (as a body property or a query/formData parameter) instead of `items.default`, which is not a valid place for a list. Consumers that read `items.default` for such a default must read the parameter/property `default` instead; scalar defaults on array parameters still land in `items.default`. An empty array default (`default: []`) is now emitted as well. See [#1013](https://github.com/ruby-grape/grape-swagger/pull/1013).
 
 ### Upgrading to >= 2.2.0
 

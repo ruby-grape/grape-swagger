@@ -139,6 +139,16 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
         { message: 'hi' }
       end
 
+      desc 'range_infinite_float' do
+        consumes ['application/x-www-form-urlencoded']
+      end
+      params do
+        requires :float, type: Float, values: 1.0..Float::INFINITY
+      end
+      post :range_infinite_float do
+        { message: 'hi' }
+      end
+
       add_swagger_documentation
     end
   end
@@ -176,6 +186,21 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
         'format' => 'float',
         'minimum' => -5.0,
         'maximum' => 5.0
+      }]
+    end
+  end
+
+  context 'Range values with an infinite end' do
+    subject(:range_infinite_float) { first_parameter_info('range_infinite_float') }
+
+    it 'has only the finite bound as minimum' do
+      expect(range_infinite_float).to eq [{
+        'in' => 'formData',
+        'name' => 'float',
+        'type' => 'number',
+        'required' => true,
+        'format' => 'float',
+        'minimum' => 1.0
       }]
     end
   end

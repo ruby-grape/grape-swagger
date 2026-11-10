@@ -44,6 +44,41 @@ describe GrapeSwagger::DocMethods::ParseParams do
         end
       end
 
+      describe 'with an infinite end' do
+        specify do
+          expect(subject.send(:parse_enum_or_range_values, 1.0..Float::INFINITY)).to eql(minimum: 1.0)
+          expect(subject.send(:parse_enum_or_range_values, 1..Float::INFINITY)).to eql(minimum: 1)
+        end
+      end
+
+      describe 'with an infinite begin' do
+        specify do
+          parsed_range = subject.send(:parse_enum_or_range_values, -Float::INFINITY..5.0)
+          expect(parsed_range).to eql(maximum: 5.0)
+        end
+      end
+
+      describe 'beginless' do
+        specify do
+          expect(subject.send(:parse_enum_or_range_values, ..5.0)).to eql(maximum: 5.0)
+          expect(subject.send(:parse_enum_or_range_values, ..5)).to eql(maximum: 5)
+        end
+      end
+
+      describe 'endless Float' do
+        specify do
+          parsed_range = subject.send(:parse_enum_or_range_values, 1.5..)
+          expect(parsed_range).to eql(minimum: 1.5)
+        end
+      end
+
+      describe 'BigDecimal' do
+        specify do
+          parsed_range = subject.send(:parse_enum_or_range_values, BigDecimal('1')..BigDecimal('2'))
+          expect(parsed_range).to eql(minimum: 1.0, maximum: 2.0)
+        end
+      end
+
       describe 'first String' do
         specify do
           parsed_range = subject.send(:parse_enum_or_range_values, 'a'..'z')

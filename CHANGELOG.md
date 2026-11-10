@@ -6,7 +6,7 @@
 
 #### Fixes
 
-* [#905](https://github.com/ruby-grape/grape-swagger/pull/905): Allow Float ranges in `values` to set `minimum` and `maximum` - [@artyomb](https://github.com/artyomb).
+* [#905](https://github.com/ruby-grape/grape-swagger/pull/905): Allow Float, BigDecimal and beginless ranges in `values` to set `minimum` and `maximum`, and skip infinite bounds that cannot be serialized to JSON - [@artyomb](https://github.com/artyomb).
 * [#1016](https://github.com/ruby-grape/grape-swagger/pull/1016): Hide the nested parameters of a Hash parameter marked `documentation: { hidden: true }`, and pass the resolved `token_owner` to parameter-level `hidden:` procs like route-level ones (raising `TokenOwnerNotFound` if the configured method is missing) - [@numbata](https://github.com/numbata).
 * [#1013](https://github.com/ruby-grape/grape-swagger/pull/1013): Fix array `default` values being placed inside `items` instead of on the array parameter or property, and emit an empty array `default` - [@numbata](https://github.com/numbata).
 * [#1012](https://github.com/ruby-grape/grape-swagger/pull/1012): Keep the Danger PR check running in CI by pinning `git` below 6 - [@numbata](https://github.com/numbata).

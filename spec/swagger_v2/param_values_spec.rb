@@ -170,6 +170,16 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
         { message: 'hi' }
       end
 
+      desc 'range_exclusive_query_array' do
+        consumes ['application/json']
+      end
+      params do
+        requires :list, type: Array[Integer], values: 1...5
+      end
+      get :range_exclusive_query_array do
+        { message: 'hi' }
+      end
+
       add_swagger_documentation
     end
   end
@@ -216,6 +226,14 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
 
     it 'flags the maximum as exclusive' do
       expect(range_exclusive_float.first).to include('minimum' => 0.0, 'maximum' => 1.0, 'exclusiveMaximum' => true)
+    end
+  end
+
+  context 'Range values with an exclusive end in a query array' do
+    it 'keeps exclusiveMaximum on the array items' do
+      get '/swagger_doc/range_exclusive_query_array'
+      parameters = JSON.parse(last_response.body)['paths']['/range_exclusive_query_array']['get']['parameters']
+      expect(parameters.first['items']).to include('minimum' => 1, 'maximum' => 5, 'exclusiveMaximum' => true)
     end
   end
 

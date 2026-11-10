@@ -74,8 +74,32 @@ describe GrapeSwagger::DocMethods::ParseParams do
 
       describe 'BigDecimal' do
         specify do
-          parsed_range = subject.send(:parse_enum_or_range_values, BigDecimal('1')..BigDecimal('2'))
-          expect(parsed_range).to eql(minimum: 1.0, maximum: 2.0)
+          parsed_range = subject.send(:parse_enum_or_range_values, BigDecimal('1')..BigDecimal('2.5'))
+          expect(parsed_range).to eql(minimum: 1, maximum: 2.5)
+        end
+
+        it 'keeps whole values beyond Float precision exact' do
+          parsed_range = subject.send(:parse_enum_or_range_values, BigDecimal('9007199254740993')..)
+          expect(parsed_range).to eql(minimum: 9_007_199_254_740_993)
+        end
+
+        it 'skips NaN and infinite bounds' do
+          expect(subject.send(:parse_enum_or_range_values, ..BigDecimal('NaN'))).to eql({})
+          expect(subject.send(:parse_enum_or_range_values, BigDecimal('-Infinity')..BigDecimal('3'))).to eql(maximum: 3)
+        end
+      end
+
+      describe 'Rational' do
+        specify do
+          parsed_range = subject.send(:parse_enum_or_range_values, 1r..3/2r)
+          expect(parsed_range).to eql(minimum: 1, maximum: 1.5)
+        end
+      end
+
+      describe 'Float NaN' do
+        specify do
+          parsed_range = subject.send(:parse_enum_or_range_values, Float::NAN..)
+          expect(parsed_range).to eql({})
         end
       end
 

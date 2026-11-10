@@ -211,12 +211,12 @@ module GrapeSwagger
           bound.is_a?(Numeric) && bound.real?
         end
 
-        # Only finite numbers are valid JSON; BigDecimal and Rational are emitted as Float.
+        # Only finite numbers are valid JSON; BigDecimal and Rational are emitted as Integer when whole, else Float.
         def range_bound(bound)
-          return unless real_number?(bound)
+          return unless real_number?(bound) && bound.finite?
+          return bound if bound.is_a?(Integer) || bound.is_a?(Float)
 
-          bound = bound.to_f unless bound.is_a?(Integer) || bound.is_a?(Float)
-          bound if bound.finite?
+          bound.to_i == bound ? bound.to_i : bound.to_f
         end
       end
     end

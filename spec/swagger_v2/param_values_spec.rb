@@ -149,6 +149,27 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
         { message: 'hi' }
       end
 
+      desc 'range_exclusive_float' do
+        consumes ['application/x-www-form-urlencoded']
+      end
+      params do
+        requires :float, type: Float, values: 0.0...1.0
+      end
+      post :range_exclusive_float do
+        { message: 'hi' }
+      end
+
+      desc 'range_exclusive_body' do
+        consumes ['application/json']
+      end
+      params do
+        requires :float, type: Float, values: 0.0...1.0
+        requires :list, type: Array[Integer], values: 1...5
+      end
+      post :range_exclusive_body do
+        { message: 'hi' }
+      end
+
       add_swagger_documentation
     end
   end
@@ -187,6 +208,23 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
         'minimum' => -5.0,
         'maximum' => 5.0
       }]
+    end
+  end
+
+  context 'Range values with an exclusive end' do
+    subject(:range_exclusive_float) { first_parameter_info('range_exclusive_float') }
+
+    it 'flags the maximum as exclusive' do
+      expect(range_exclusive_float.first).to include('minimum' => 0.0, 'maximum' => 1.0, 'exclusiveMaximum' => true)
+    end
+  end
+
+  context 'Range values with an exclusive end in a body definition' do
+    it 'keeps exclusiveMaximum on properties and array items' do
+      get '/swagger_doc/range_exclusive_body'
+      props = JSON.parse(last_response.body)['definitions']['postRangeExclusiveBody']['properties']
+      expect(props['float']).to include('maximum' => 1.0, 'exclusiveMaximum' => true)
+      expect(props['list']['items']).to include('minimum' => 1, 'maximum' => 5, 'exclusiveMaximum' => true)
     end
   end
 

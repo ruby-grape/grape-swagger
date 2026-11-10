@@ -193,7 +193,7 @@ module GrapeSwagger
           when Proc
             parse_enum_or_range_values(values.call) if values.parameters.empty?
           when Range
-            parse_range_values(values) if (values.begin || values.end).is_a?(Numeric)
+            parse_range_values(values) if real_number?(values.begin || values.end)
           when Array
             { enum: values }
           else
@@ -202,12 +202,18 @@ module GrapeSwagger
         end
 
         def parse_range_values(values)
-          { minimum: range_bound(values.begin), maximum: range_bound(values.end) }.compact
+          range = { minimum: range_bound(values.begin), maximum: range_bound(values.end) }.compact
+          range[:exclusiveMaximum] = true if values.exclude_end? && range.key?(:maximum)
+          range
+        end
+
+        def real_number?(bound)
+          bound.is_a?(Numeric) && bound.real?
         end
 
         # Only finite numbers are valid JSON; BigDecimal and Rational are emitted as Float.
         def range_bound(bound)
-          return unless bound.is_a?(Numeric)
+          return unless real_number?(bound)
 
           bound = bound.to_f unless bound.is_a?(Integer) || bound.is_a?(Float)
           bound if bound.finite?

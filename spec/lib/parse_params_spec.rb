@@ -79,6 +79,27 @@ describe GrapeSwagger::DocMethods::ParseParams do
         end
       end
 
+      describe 'with an exclusive end' do
+        specify do
+          expect(subject.send(:parse_enum_or_range_values, 1...5))
+            .to eql(minimum: 1, maximum: 5, exclusiveMaximum: true)
+          expect(subject.send(:parse_enum_or_range_values, 0.0...1.0))
+            .to eql(minimum: 0.0, maximum: 1.0, exclusiveMaximum: true)
+        end
+
+        it 'does not flag an endless or infinite end' do
+          expect(subject.send(:parse_enum_or_range_values, 1...)).to eql(minimum: 1)
+          expect(subject.send(:parse_enum_or_range_values, 1.0...Float::INFINITY)).to eql(minimum: 1.0)
+        end
+      end
+
+      describe 'with Complex bounds' do
+        specify do
+          expect(subject.send(:parse_enum_or_range_values, ..Complex(1, 2))).to be_nil
+          expect(subject.send(:parse_enum_or_range_values, Complex(1, 2)..)).to be_nil
+        end
+      end
+
       describe 'first String' do
         specify do
           parsed_range = subject.send(:parse_enum_or_range_values, 'a'..'z')

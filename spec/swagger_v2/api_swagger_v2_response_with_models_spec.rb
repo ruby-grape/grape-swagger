@@ -52,4 +52,45 @@ describe 'response' do
       expect(subject['definitions']).to eql(swagger_entity_as_response_object)
     end
   end
+
+  # The README spelling that grape-swagger used to ignore. Grape 2.x/3.x keep it as
+  # `:default`, which grape-swagger reads itself; Grape 4 remaps it onto `default_response:`
+  # and deprecates it, so there the example only covers Grape's remap.
+  describe 'uses the documented default: spelling' do
+    before :all do
+      module TheApi
+        class ResponseApiDefaultAlias < Grape::API
+          format :json
+
+          # Grape 4 emits its `default:` deprecation from `desc`.
+          Grape.deprecator.silence do
+            desc 'This returns something',
+                 success: [{ code: 200 }],
+                 default: { message: 'Error', model: Entities::ApiError }
+          end
+          get '/use-default' do
+            { 'declared_params' => declared(params) }
+          end
+
+          add_swagger_documentation(models: [Entities::UseResponse])
+        end
+      end
+    end
+
+    def app
+      TheApi::ResponseApiDefaultAlias
+    end
+
+    subject do
+      get '/swagger_doc/use-default'
+      JSON.parse(last_response.body)
+    end
+
+    specify do
+      expect(subject['paths']['/use-default']['get']['responses']['default']).to eql(
+        'description' => 'Error',
+        'schema' => { '$ref' => '#/definitions/ApiError' }
+      )
+    end
+  end
 end

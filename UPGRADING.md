@@ -2,6 +2,8 @@
 
 ### Upgrading to >= 2.3.0
 
+- **`desc(..., default_response:)` is the supported spelling for a default response.** The README previously documented `default:`, but grape-swagger only ever read `default_response:`, so the documented form was a silent no-op. 2.3 reads both. Prefer `default_response:`; `default:` remains until grape-swagger 3.0. (Grape itself is also renaming that key; see [ruby-grape/grape#2862](https://github.com/ruby-grape/grape/pull/2862).)
+- **`get '/', desc: '…'` no longer sets the swagger `summary`.** That option is a passthrough onto the route, not Grape's `desc` DSL (which stores `:description`). Use `desc '…'` for the operation description, or `desc '…', summary: '…'` for a summary.
 - **A blank `desc(..., tags:)` now means "not specified".** `tags: nil` no longer suppresses the tag and `tags: []` no longer emits an empty `"tags": []`; both derive the tag from the path, as if `tags:` had been omitted. `tags:` is an override, and only a non-empty list overrides anything.
 
   The old `nil` behaviour was never a deliberate one: [#523](https://github.com/ruby-grape/grape-swagger/pull/523) introduced route-level tags to *override* path-derived grouping and read them with `route.options.fetch(:tags, tag_object(route))`, whose default-on-absence semantics happened to give `nil` a meaning of its own. It was never documented or tested.

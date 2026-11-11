@@ -7,7 +7,8 @@ describe 'namespace' do
     def app
       Class.new(Grape::API) do
         namespace :aspace do
-          get '/', desc: 'Description for aspace'
+          desc 'Description for aspace'
+          get '/'
         end
         add_swagger_documentation format: :json
       end
@@ -18,8 +19,8 @@ describe 'namespace' do
       JSON.parse(last_response.body)['paths']['/aspace']['get']
     end
 
-    it 'shows the namespace summary in the json spec' do
-      expect(subject['summary']).to eql('Description for aspace')
+    it 'shows the namespace description in the json spec' do
+      expect(subject['description']).to eql('Description for aspace')
     end
   end
 
@@ -27,7 +28,8 @@ describe 'namespace' do
     def app
       Class.new(Grape::API) do
         namespace :camelCases do
-          get '/', desc: 'Look! An endpoint.'
+          desc 'Look! An endpoint.'
+          get '/'
         end
         add_swagger_documentation format: :json
       end
@@ -38,8 +40,8 @@ describe 'namespace' do
       JSON.parse(last_response.body)['paths']['/camelCases']['get']
     end
 
-    it 'shows the namespace summary in the json spec' do
-      expect(subject['summary']).to eql('Look! An endpoint.')
+    it 'shows the namespace description in the json spec' do
+      expect(subject['description']).to eql('Look! An endpoint.')
     end
   end
 
@@ -47,7 +49,8 @@ describe 'namespace' do
     def app
       namespaced_api = Class.new(Grape::API) do
         namespace :bspace do
-          get '/', desc: 'Description for aspace'
+          desc 'Description for aspace'
+          get '/'
         end
       end
 
@@ -62,8 +65,8 @@ describe 'namespace' do
       JSON.parse(last_response.body)['paths']['/bspace']['get']
     end
 
-    it 'shows the namespace summary in the json spec' do
-      expect(subject['summary']).to eql('Description for aspace')
+    it 'shows the namespace description in the json spec' do
+      expect(subject['description']).to eql('Description for aspace')
     end
   end
 
@@ -71,7 +74,8 @@ describe 'namespace' do
     def app
       namespaced_api = Class.new(Grape::API) do
         namespace :bspace do
-          get '/', desc: 'Description for aspace'
+          desc 'Description for aspace'
+          get '/'
         end
       end
 
@@ -86,8 +90,8 @@ describe 'namespace' do
       JSON.parse(last_response.body)['paths']['/mounted/bspace']['get']
     end
 
-    it 'shows the namespace summary in the json spec' do
-      expect(subject['summary']).to eql('Description for aspace')
+    it 'shows the namespace description in the json spec' do
+      expect(subject['description']).to eql('Description for aspace')
     end
   end
 
@@ -95,7 +99,8 @@ describe 'namespace' do
     def app
       inner_namespaced_api = Class.new(Grape::API) do
         namespace :bspace do
-          get '/', desc: 'Description for aspace'
+          desc 'Description for aspace'
+          get '/'
         end
       end
 
@@ -114,8 +119,29 @@ describe 'namespace' do
       JSON.parse(last_response.body)['paths']['/mounted/bspace']['get']
     end
 
-    it 'shows the namespace summary in the json spec' do
-      expect(subject['summary']).to eql('Description for aspace')
+    it 'shows the namespace description in the json spec' do
+      expect(subject['description']).to eql('Description for aspace')
+    end
+  end
+
+  context 'get with desc: option' do
+    def app
+      Class.new(Grape::API) do
+        namespace :aspace do
+          get '/', desc: 'passthrough, not the desc DSL'
+        end
+        add_swagger_documentation format: :json
+      end
+    end
+
+    subject do
+      get '/swagger_doc'
+      JSON.parse(last_response.body)['paths']['/aspace']['get']
+    end
+
+    it 'does not treat get desc: as a swagger summary or description' do
+      expect(subject).not_to include('summary')
+      expect(subject).not_to include('description')
     end
   end
 end

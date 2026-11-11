@@ -121,6 +121,7 @@ describe GrapeSwagger::DocMethods::ParseParams do
         specify do
           expect(subject.send(:parse_enum_or_range_values, ..Complex(1, 2))).to be_nil
           expect(subject.send(:parse_enum_or_range_values, Complex(1, 2)..)).to be_nil
+          expect(subject.send(:parse_enum_or_range_values, 1..Complex(2, 0))).to be_nil
         end
       end
 

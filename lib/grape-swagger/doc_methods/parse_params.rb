@@ -193,7 +193,7 @@ module GrapeSwagger
           when Proc
             parse_enum_or_range_values(values.call) if values.parameters.empty?
           when Range
-            parse_range_values(values) if real_number?(values.begin || values.end)
+            parse_range_values(values) if range_bounds_real?(values)
           when Array
             { enum: values }
           else
@@ -205,6 +205,11 @@ module GrapeSwagger
           range = { minimum: range_bound(values.begin), maximum: range_bound(values.end) }.compact
           range[:exclusiveMaximum] = true if values.exclude_end? && range.key?(:maximum)
           range
+        end
+
+        def range_bounds_real?(values)
+          bounds = [values.begin, values.end].compact
+          bounds.any? && bounds.all? { |bound| real_number?(bound) }
         end
 
         def real_number?(bound)

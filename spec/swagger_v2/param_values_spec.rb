@@ -139,6 +139,47 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
         { message: 'hi' }
       end
 
+      desc 'range_infinite_float' do
+        consumes ['application/x-www-form-urlencoded']
+      end
+      params do
+        requires :float, type: Float, values: 1.0..Float::INFINITY
+      end
+      post :range_infinite_float do
+        { message: 'hi' }
+      end
+
+      desc 'range_exclusive_float' do
+        consumes ['application/x-www-form-urlencoded']
+      end
+      params do
+        requires :float, type: Float, values: 0.0...1.0
+      end
+      post :range_exclusive_float do
+        { message: 'hi' }
+      end
+
+      desc 'range_exclusive_body' do
+        consumes ['application/json']
+      end
+      params do
+        requires :float, type: Float, values: 0.0...1.0
+        requires :list, type: Array[Integer], values: 1...5
+      end
+      post :range_exclusive_body do
+        { message: 'hi' }
+      end
+
+      desc 'range_exclusive_query_array' do
+        consumes ['application/json']
+      end
+      params do
+        requires :list, type: Array[Integer], values: 1...5
+      end
+      get :range_exclusive_query_array do
+        { message: 'hi' }
+      end
+
       add_swagger_documentation
     end
   end
@@ -167,13 +208,55 @@ describe 'Convert values to enum for float range and not arrays inside a proc', 
   context 'Range values' do
     subject(:range_float) { first_parameter_info('range_float') }
 
-    it 'has float range values as string' do
+    it 'has float range values as minimum and maximum' do
       expect(range_float).to eq [{
         'in' => 'formData',
         'name' => 'float',
         'type' => 'number',
         'required' => true,
-        'format' => 'float'
+        'format' => 'float',
+        'minimum' => -5.0,
+        'maximum' => 5.0
+      }]
+    end
+  end
+
+  context 'Range values with an exclusive end' do
+    subject(:range_exclusive_float) { first_parameter_info('range_exclusive_float') }
+
+    it 'flags the maximum as exclusive' do
+      expect(range_exclusive_float.first).to include('minimum' => 0.0, 'maximum' => 1.0, 'exclusiveMaximum' => true)
+    end
+  end
+
+  context 'Range values with an exclusive end in a query array' do
+    it 'keeps exclusiveMaximum on the array items' do
+      get '/swagger_doc/range_exclusive_query_array'
+      parameters = JSON.parse(last_response.body)['paths']['/range_exclusive_query_array']['get']['parameters']
+      expect(parameters.first['items']).to include('minimum' => 1, 'maximum' => 5, 'exclusiveMaximum' => true)
+    end
+  end
+
+  context 'Range values with an exclusive end in a body definition' do
+    it 'keeps exclusiveMaximum on properties and array items' do
+      get '/swagger_doc/range_exclusive_body'
+      props = JSON.parse(last_response.body)['definitions']['postRangeExclusiveBody']['properties']
+      expect(props['float']).to include('maximum' => 1.0, 'exclusiveMaximum' => true)
+      expect(props['list']['items']).to include('minimum' => 1, 'maximum' => 5, 'exclusiveMaximum' => true)
+    end
+  end
+
+  context 'Range values with an infinite end' do
+    subject(:range_infinite_float) { first_parameter_info('range_infinite_float') }
+
+    it 'has only the finite bound as minimum' do
+      expect(range_infinite_float).to eq [{
+        'in' => 'formData',
+        'name' => 'float',
+        'type' => 'number',
+        'required' => true,
+        'format' => 'float',
+        'minimum' => 1.0
       }]
     end
   end

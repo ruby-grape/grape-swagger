@@ -37,6 +37,94 @@ describe GrapeSwagger::DocMethods::ParseParams do
         end
       end
 
+      describe 'first Float' do
+        specify do
+          parsed_range = subject.send(:parse_enum_or_range_values, -5.0..5.0)
+          expect(parsed_range).to eql(minimum: -5.0, maximum: 5.0)
+        end
+      end
+
+      describe 'with an infinite end' do
+        specify do
+          expect(subject.send(:parse_enum_or_range_values, 1.0..Float::INFINITY)).to eql(minimum: 1.0)
+          expect(subject.send(:parse_enum_or_range_values, 1..Float::INFINITY)).to eql(minimum: 1)
+        end
+      end
+
+      describe 'with an infinite begin' do
+        specify do
+          parsed_range = subject.send(:parse_enum_or_range_values, -Float::INFINITY..5.0)
+          expect(parsed_range).to eql(maximum: 5.0)
+        end
+      end
+
+      describe 'beginless' do
+        specify do
+          expect(subject.send(:parse_enum_or_range_values, ..5.0)).to eql(maximum: 5.0)
+          expect(subject.send(:parse_enum_or_range_values, ..5)).to eql(maximum: 5)
+        end
+      end
+
+      describe 'endless Float' do
+        specify do
+          parsed_range = subject.send(:parse_enum_or_range_values, 1.5..)
+          expect(parsed_range).to eql(minimum: 1.5)
+        end
+      end
+
+      describe 'BigDecimal' do
+        specify do
+          parsed_range = subject.send(:parse_enum_or_range_values, BigDecimal('1')..BigDecimal('2.5'))
+          expect(parsed_range).to eql(minimum: 1, maximum: 2.5)
+        end
+
+        it 'keeps whole values beyond Float precision exact' do
+          parsed_range = subject.send(:parse_enum_or_range_values, BigDecimal('9007199254740993')..)
+          expect(parsed_range).to eql(minimum: 9_007_199_254_740_993)
+        end
+
+        it 'skips NaN and infinite bounds' do
+          expect(subject.send(:parse_enum_or_range_values, ..BigDecimal('NaN'))).to eql({})
+          expect(subject.send(:parse_enum_or_range_values, BigDecimal('-Infinity')..BigDecimal('3'))).to eql(maximum: 3)
+        end
+      end
+
+      describe 'Rational' do
+        specify do
+          parsed_range = subject.send(:parse_enum_or_range_values, 1r..3/2r)
+          expect(parsed_range).to eql(minimum: 1, maximum: 1.5)
+        end
+      end
+
+      describe 'Float NaN' do
+        specify do
+          parsed_range = subject.send(:parse_enum_or_range_values, Float::NAN..)
+          expect(parsed_range).to eql({})
+        end
+      end
+
+      describe 'with an exclusive end' do
+        specify do
+          expect(subject.send(:parse_enum_or_range_values, 1...5))
+            .to eql(minimum: 1, maximum: 5, exclusiveMaximum: true)
+          expect(subject.send(:parse_enum_or_range_values, 0.0...1.0))
+            .to eql(minimum: 0.0, maximum: 1.0, exclusiveMaximum: true)
+        end
+
+        it 'does not flag an endless or infinite end' do
+          expect(subject.send(:parse_enum_or_range_values, 1...)).to eql(minimum: 1)
+          expect(subject.send(:parse_enum_or_range_values, 1.0...Float::INFINITY)).to eql(minimum: 1.0)
+        end
+      end
+
+      describe 'with Complex bounds' do
+        specify do
+          expect(subject.send(:parse_enum_or_range_values, ..Complex(1, 2))).to be_nil
+          expect(subject.send(:parse_enum_or_range_values, Complex(1, 2)..)).to be_nil
+          expect(subject.send(:parse_enum_or_range_values, 1..Complex(2, 0))).to be_nil
+        end
+      end
+
       describe 'first String' do
         specify do
           parsed_range = subject.send(:parse_enum_or_range_values, 'a'..'z')

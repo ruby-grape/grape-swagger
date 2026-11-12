@@ -178,8 +178,8 @@ module GrapeSwagger
         end
 
         def property_keys
-          %i[type format description minimum maximum items enum default additional_properties additionalProperties
-             example minLength maxLength minProperties maxProperties]
+          %i[type format description minimum maximum exclusiveMaximum items enum default additional_properties
+             additionalProperties example minLength maxLength minProperties maxProperties]
         end
 
         def array_schema_keys

@@ -1,44 +1,25 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Optional release version overriding the checked-in version.
+        type: string
+        required: false
+      rubygems-owner:
+        description: RubyGems account ID for first publication; omit for an existing gem.
+        type: string
+        required: false
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   release:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-      - name: Extract changelog
-        id: changelog
-        shell: bash
-        run: |
-          set -euo pipefail
-          tag="${GITHUB_REF_NAME}"
-          version="${tag#v}"
-          notes="$(awk -v version="$version" '
-            $0 ~ "^### " version " " {found=1; next}
-            found && $0 ~ "^### " {exit}
-            found {print}
-          ' CHANGELOG.md)"
-          if [[ -z "${notes// }" ]]; then
-            echo "No changelog entry found for ${version}" >&2
-            exit 1
-          fi
-          {
-            echo "notes<<EOF"
-            echo "$notes"
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-      - name: Create GitHub release
-        uses: softprops/action-gh-release@v3
-        with:
-          tag_name: ${{ github.ref_name }}
-          name: ${{ github.ref_name }}
-          body: ${{ steps.changelog.outputs.notes }}
+    uses: dblock/ruby-gem-release/.github/workflows/release.yml@v0.6.0
+    with:
+      ruby-version: '3.4'
+      version: ${{ inputs.version }}
+      rubygems-owner: ${{ inputs.rubygems-owner }}

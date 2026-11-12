@@ -7,10 +7,6 @@ on:
         description: Optional release version overriding the checked-in version.
         type: string
         required: false
-      rubygems-owner:
-        description: RubyGems account ID for first publication; omit for an existing gem.
-        type: string
-        required: false
 
 permissions:
   contents: write
@@ -22,4 +18,3 @@ jobs:
     with:
       ruby-version: '3.4'
       version: ${{ inputs.version }}
-      rubygems-owner: ${{ inputs.rubygems-owner }}

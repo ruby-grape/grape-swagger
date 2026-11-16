@@ -7,5 +7,9 @@ on:
 
 jobs:
   comment:
-    uses: numbata/danger-pr-comment/.github/workflows/danger-comment.yml@v0.1.1
+    permissions:
+      actions: read
+      issues: write
+      pull-requests: write
+    uses: dangernumbata/danger-pr-comment/.github/workflows/danger-comment.yml@v0.2.0
     secrets: inherit

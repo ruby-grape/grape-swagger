@@ -22,7 +22,9 @@ if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3.3.0')
 
   RubyGemRelease::Workflow::RubyGem.new(
     version: RubyGemRelease::Version::RubyConstant.new(path: 'lib/grape-swagger/version.rb', constant: 'VERSION'),
-    changelog: RubyGemRelease::Changelog::Intridea.new(path: 'CHANGELOG.md', placeholder: '* Your contribution here.')
+    changelog: RubyGemRelease::Changelog::Intridea.new(
+      path: 'CHANGELOG.md', placeholder: '* Your contribution here.', date_format: '%Y-%m-%d'
+    )
   ).install_tasks
 end
 

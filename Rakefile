@@ -9,11 +9,11 @@ require 'rake'
 
 Bundler::GemHelper.install_tasks
 
-# Publish only through the Release workflow, never a local push to rubygems.org.
-Rake::Task['release'].clear
-desc 'Publish through the Release workflow'
-task :release do
-  abort 'Dispatch the Release workflow instead: gh workflow run release.yml'
+# Disable Bundler's local release tasks so the Release workflow is the only release path.
+# `clear` also drops their prerequisites, so nothing is built or tagged before the abort.
+%w[release release:rubygem_push release:source_control_push].each do |name|
+  Rake::Task[name].clear
+  task(name) { abort "#{name} is disabled; dispatch the Release workflow instead: gh workflow run release.yml" }
 end
 
 if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3.3.0')

@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   release:
-    uses: dblock/ruby-gem-release/.github/workflows/release.yml@v0.8.0
+    uses: dblock/ruby-gem-release/.github/workflows/release.yml@af40fdfc7a55a7d0577cacc042b2baf952f64e4f # v0.8.0
     with:
       ruby-version: '3.4'
       version: ${{ inputs.version }}

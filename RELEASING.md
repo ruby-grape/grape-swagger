@@ -43,6 +43,8 @@ Maintainers set these up once before the first release:
 - A `release` environment in the repository settings, with required reviewers and a deployment branch rule that only allows `master`.
 - Permission for the Actions token to push the release commit and tag to `master`.
 
+Then dispatch the Release workflow once with `dry-run` enabled (`gh workflow run release.yml -f dry-run=true`). It checks the prerequisites, including Trusted Publishing, without publishing anything.
+
 ### Make an Announcement
 
 Make an announcement on the [ruby-grape@googlegroups.com](mailto:ruby-grape@googlegroups.com) mailing list. The general format is as follows.

@@ -43,9 +43,6 @@ group :development, :test do
   gem 'rdoc'
   gem 'rspec', '~> 3.9'
   gem 'rubocop', '~> 1.50', require: false
-  # ruby-gem-release requires Ruby 3.3+; older CI Rubies skip it.
-  gem 'commonmarker', '~> 2.10', require: false if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3.3.0')
-  gem 'ruby-gem-release', '0.8.0', require: false if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3.3.0')
 
   unless ENV['MODEL_PARSER'] == 'grape-swagger-entity'
     gem 'grape-swagger-entity', git: 'https://github.com/ruby-grape/grape-swagger-entity'
@@ -64,4 +61,10 @@ group :test do
   gem 'git', '< 6', require: false
   gem 'simplecov', require: false
   gem 'super_diff', require: false
+end
+
+# ruby-gem-release requires Ruby 3.3+; older CI Rubies skip it.
+if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3.3.0')
+  gem 'commonmarker', '~> 2.10', require: false
+  gem 'ruby-gem-release', '0.8.0', require: false
 end

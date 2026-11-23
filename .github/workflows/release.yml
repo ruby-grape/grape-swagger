@@ -7,6 +7,10 @@ on:
         description: Optional release version overriding the checked-in version.
         type: string
         required: false
+      dry-run:
+        description: Check the release prerequisites without publishing.
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -18,3 +22,4 @@ jobs:
     with:
       ruby-version: '3.4'
       version: ${{ inputs.version }}
+      dry-run: ${{ inputs.dry-run }}

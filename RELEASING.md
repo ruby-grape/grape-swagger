@@ -4,67 +4,46 @@ There are no particular rules about when to release grape-swagger. Any co-mainta
 
 ### Release
 
-Run tests, check that all tests succeed locally.
+Run tests locally and make sure they pass.
 
 ```
 bundle install
 rake
 ```
 
-Check that the last build succeeded in [Travis CI](https://travis-ci.org/ruby-grape/grape-swagger) for all supported platforms.
+Make sure the "Next" section in [CHANGELOG.md](CHANGELOG.md) lists the changes for the release. A release with only placeholder notes is refused. Keep at least one `* Your contribution here.` line in the section (until ruby-gem-release includes #90 and #91), because the workflow removes the placeholder lines and refuses a section that has none.
 
-Change "Next" in [CHANGELOG.md](CHANGELOG.md) to the current date.
-
-```
-### 2.2.0 (2025-11-21)
-```
-
-Remove the lines with "Your contribution here.", since there will be no more contributions to this release.
-
-Commit your changes.
+Dispatch the Release workflow from the `master` branch, either from the Actions tab or from the command line. Leave `version` empty to release the version in [lib/grape-swagger/version.rb](lib/grape-swagger/version.rb).
 
 ```
-git add CHANGELOG.md lib/grape-swagger/version.rb
-git commit -m "Preparing for release, 2.2.0."
-git push origin master
+gh workflow run release.yml
 ```
 
-Release.
+The workflow:
 
-```
-$ rake release
+- Validates the release and builds the gem.
+- Publishes the gem to RubyGems through Trusted Publishing, so no API key is needed.
+- Changes "Next" in [CHANGELOG.md](CHANGELOG.md) to the release version and the current date, and removes the "Your contribution here." lines.
+- Tags the release, creates the GitHub Release, and pushes the commit to `master`.
+- Bumps the version and opens the next "Next" section in [CHANGELOG.md](CHANGELOG.md).
 
-grape-swagger 2.2.0 built to pkg/grape-swagger-2.2.0.gem.
-Tagged v2.2.0.
-Pushed git commits and tags.
-Pushed grape-swagger 2.2.0 to rubygems.org.
-```
+The local Bundler release tasks (`rake release`, `release:rubygem_push`, and `release:source_control_push`) are disabled. They stop with a message that points to the workflow.
 
-### Prepare for the Next Version
+The `release` environment in GitHub requires an approval before the workflow publishes. Maintainers listed as reviewers approve the run.
 
-Increment the minor version, the third number, modify [lib/grape-swagger/version.rb](lib/grape-swagger/version.rb). For example, change `0.7.1` to `0.7.2`. Major versions are incremented in pull requests that require it.
+### If a Release Fails
 
-Add the next release to [CHANGELOG.md](CHANGELOG.md).
+Do not merge anything into `master` while a release runs. If `master` moves before the gem is published, the release stops safely and a new dispatch starts clean. If it moves after publication, the gem is on RubyGems but the push fails with `Default branch advanced; start a new release`, leaving no tag, release commit, GitHub Release, or next version, and a new dispatch does not repair that. Recover from the artifacts the run preserved, following [Default Branch Advanced During Publication](https://github.com/dblock/ruby-gem-release/blob/master/docs/actions/release.md#default-branch-advanced-during-publication) in the ruby-gem-release documentation.
 
-```
-### 2.2.1 (Next)
+### One-time Setup
 
-#### Features
+Maintainers set these up once before the first release:
 
-* Your contribution here.
+- A RubyGems trusted publisher for `grape-swagger` that points to `ruby-grape/grape-swagger`, the `release.yml` workflow, and the `release` environment. The workflow is a reusable one, so also set the separate workflow repository owner and name fields to `dblock` and `ruby-gem-release`.
+- A `release` environment in the repository settings, with required reviewers and a deployment branch rule that only allows `master`.
+- Permission for the Actions token to push the release commit and tag to `master`.
 
-#### Fixes
-
-* Your contribution here.
-```
-
-Commit your changes.
-
-```
-git add CHANGELOG.md lib/grape-swagger/version.rb
-git commit -m "Preparing for next developer iteration, 2.2.1."
-git push origin master
-```
+Then dispatch the Release workflow once with `dry-run` enabled (`gh workflow run release.yml -f dry-run=true`). It checks Trusted Publishing and the token's push permissions without publishing anything, and waits for the same `release` environment approval as a real run. It does not validate the changelog, so a green dry run does not guarantee the real run passes.
 
 ### Make an Announcement
 

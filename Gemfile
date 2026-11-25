@@ -62,3 +62,9 @@ group :test do
   gem 'simplecov', require: false
   gem 'super_diff', require: false
 end
+
+# ruby-gem-release requires Ruby 3.3+; older CI Rubies and contributors on Ruby 3.1 or 3.2 skip it.
+if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3.3.0')
+  gem 'commonmarker', '~> 2.10', require: false
+  gem 'ruby-gem-release', '0.9.0', require: false
+end

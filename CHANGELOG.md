@@ -2,6 +2,7 @@
 
 #### Features
 
+* [#1017](https://github.com/ruby-grape/grape-swagger/pull/1017): Release through the manual Release workflow with `ruby-gem-release` and RubyGems Trusted Publishing, replacing the tag-triggered GitHub Release workflow and local `rake release` - [@numbata](https://github.com/numbata).
 * Your contribution here.
 
 #### Fixes

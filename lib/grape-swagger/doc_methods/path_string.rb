@@ -12,6 +12,7 @@ module GrapeSwagger
 
           # ... format path params
           path.gsub!(/:(\w+)/, '{\1}')
+          path.gsub!(/\*(\w+)/, '{\1}')
 
           # set item from path, this could be used for the definitions object
           path_name = path.gsub(%r{/{(.+?)}}, '').split('/').last

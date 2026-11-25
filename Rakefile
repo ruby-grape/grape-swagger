@@ -16,7 +16,7 @@ Bundler::GemHelper.install_tasks
   task(name) { abort "#{name} is disabled; dispatch the Release workflow instead: gh workflow run release.yml" }
 end
 
-if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3.3.0')
+if Gem.loaded_specs.key?('ruby-gem-release')
   require 'ruby-gem-release/workflow/ruby_gem'
   require 'ruby-gem-release/changelog'
 

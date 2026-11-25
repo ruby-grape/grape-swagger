@@ -11,7 +11,7 @@ bundle install
 rake
 ```
 
-Make sure the "Next" section in [CHANGELOG.md](CHANGELOG.md) lists the changes for the release. A release with only placeholder notes is refused. Keep at least one `* Your contribution here.` line in the section, because the workflow removes the placeholder lines and refuses a section that has none.
+Make sure the "Next" section in [CHANGELOG.md](CHANGELOG.md) lists the changes for the release. A release with only placeholder notes is refused. Keep at least one `* Your contribution here.` line in the section (until ruby-gem-release includes #90 and #91), because the workflow removes the placeholder lines and refuses a section that has none.
 
 Dispatch the Release workflow from the `master` branch, either from the Actions tab or from the command line. Leave `version` empty to release the version in [lib/grape-swagger/version.rb](lib/grape-swagger/version.rb).
 
@@ -43,7 +43,7 @@ Maintainers set these up once before the first release:
 - A `release` environment in the repository settings, with required reviewers and a deployment branch rule that only allows `master`.
 - Permission for the Actions token to push the release commit and tag to `master`.
 
-Then dispatch the Release workflow once with `dry-run` enabled (`gh workflow run release.yml -f dry-run=true`). It checks the prerequisites, including Trusted Publishing, without publishing anything.
+Then dispatch the Release workflow once with `dry-run` enabled (`gh workflow run release.yml -f dry-run=true`). It checks Trusted Publishing and the token's push permissions without publishing anything, and waits for the same `release` environment approval as a real run. It does not validate the changelog, so a green dry run does not guarantee the real run passes.
 
 ### Make an Announcement
 

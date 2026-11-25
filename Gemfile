@@ -66,5 +66,5 @@ end
 # ruby-gem-release requires Ruby 3.3+; older CI Rubies skip it.
 if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3.3.0')
   gem 'commonmarker', '~> 2.10', require: false
-  gem 'ruby-gem-release', '0.8.0', require: false
+  gem 'ruby-gem-release', '0.9.0', require: false
 end
